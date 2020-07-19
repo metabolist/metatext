@@ -1,9 +1,4 @@
-//
-//  ContentView.swift
-//  Shared
-//
-//  Created by Justin Mazzocchi on 7/18/20.
-//
+// Copyright © 2020 Metabolist. All rights reserved.
 
 import SwiftUI
 
