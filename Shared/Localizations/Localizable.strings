@@ -1,0 +1,5 @@
+// Copyright © 2020 Metabolist. All rights reserved.
+
+"go" = "Go";
+"add-identity.instance-url" = "Instance URL";
+"oauth.error.code-not-found" = "OAuth error: code not found";

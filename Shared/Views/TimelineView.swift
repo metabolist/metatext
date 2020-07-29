@@ -2,14 +2,14 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct TimelineView: View {
     var body: some View {
-        Text("Hello, world!").padding()
+        Text("Time of my life")
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct TimelineView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        TimelineView()
     }
 }
