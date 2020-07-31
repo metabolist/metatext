@@ -8,8 +8,10 @@ struct TimelineView: View {
     }
 }
 
+#if DEBUG
 struct TimelineView_Previews: PreviewProvider {
     static var previews: some View {
         TimelineView()
     }
 }
+#endif

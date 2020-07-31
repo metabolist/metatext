@@ -7,8 +7,8 @@ struct ContentView: View {
     @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
-        if sceneViewModel.identity != nil {
-            mainNavigation
+        if let identity = sceneViewModel.identity {
+            mainNavigation(identity: identity)
                 .onChange(of: scenePhase) {
                     if case .active = $0 {
                         sceneViewModel.refreshIdentity()
@@ -22,11 +22,11 @@ struct ContentView: View {
 }
 
 private extension ContentView {
-    private var mainNavigation: some View {
+    private func mainNavigation(identity: Identity) -> some View {
         #if os(macOS)
         return SidebarNavigation().frame(minWidth: 900, maxWidth: .infinity, minHeight: 500, maxHeight: .infinity)
         #else
-        return TabNavigation()
+        return TabNavigation(identity: identity)
         #endif
     }
 
@@ -35,8 +35,11 @@ private extension ContentView {
     }
 }
 
-//struct ContentView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ContentView()
-//    }
-//}
+#if DEBUG
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+            .environmentObject(SceneViewModel.development)
+    }
+}
+#endif

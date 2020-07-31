@@ -20,6 +20,7 @@ class SceneViewModel: ObservableObject {
     }
 
     @Published var alertItem: AlertItem?
+    @Published var presentingSettings = false
     var selectedTopLevelNavigation: TopLevelNavigation? = .timelines
 
     private let networkClient: MastodonClient
