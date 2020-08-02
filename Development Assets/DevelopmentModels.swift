@@ -56,7 +56,16 @@ extension IdentityDatabase {
 }
 
 extension Identity {
-    static let development = try! IdentityDatabase.development.identity(id: devIdentityID)!
+    static let development: Identity = {
+        var identity: Identity?
+
+        IdentityDatabase.development.identityObservation(id: devIdentityID)
+            .assertNoFailure()
+            .sink(receiveValue: { identity = $0 })
+            .store(in: &cancellables)
+
+        return identity!
+    }()
 }
 
 extension SceneViewModel {

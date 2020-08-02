@@ -26,16 +26,12 @@ struct IdentityDatabase {
 }
 
 extension IdentityDatabase {
-    func createIdentity(id: String, url: URL) -> AnyPublisher<Identity, Error> {
-        databaseQueue.writePublisher {
-            try StoredIdentity(id: id, url: url, instanceURI: nil).save($0)
-
-            return Identity(id: id, url: url, instance: nil, account: nil)
-        }
-        .eraseToAnyPublisher()
+    func createIdentity(id: String, url: URL) -> AnyPublisher<Void, Error> {
+        databaseQueue.writePublisher(updates: StoredIdentity(id: id, url: url, instanceURI: nil).save)
+            .eraseToAnyPublisher()
     }
 
-    func updateInstance(_ instance: Instance, forIdentityID identityID: String) -> AnyPublisher<Identity?, Error> {
+    func updateInstance(_ instance: Instance, forIdentityID identityID: String) -> AnyPublisher<Void, Error> {
         databaseQueue.writePublisher {
             try Identity.Instance(
                 uri: instance.uri,
@@ -46,15 +42,13 @@ extension IdentityDatabase {
             try StoredIdentity
                 .filter(Column("id") == identityID)
                 .updateAll($0, Column("instanceURI").set(to: instance.uri))
-
-            return try Self.fetchIdentity(id: identityID, db: $0)
         }
         .eraseToAnyPublisher()
     }
 
-    func updateAccount(_ account: Account, forIdentityID identityID: String) -> AnyPublisher<Identity?, Error> {
-        databaseQueue.writePublisher {
-            try Identity.Account(
+    func updateAccount(_ account: Account, forIdentityID identityID: String) -> AnyPublisher<Void, Error> {
+        databaseQueue.writePublisher(
+            updates: Identity.Account(
                 id: account.id,
                 identityID: identityID,
                 username: account.username,
@@ -63,15 +57,26 @@ extension IdentityDatabase {
                 avatarStatic: account.avatarStatic,
                 header: account.header,
                 headerStatic: account.headerStatic)
-                .save($0)
-
-            return try Self.fetchIdentity(id: identityID, db: $0)
-        }
-        .eraseToAnyPublisher()
+                .save)
+            .eraseToAnyPublisher()
     }
 
-    func identity(id: String) throws -> Identity? {
-        try databaseQueue.read { try Self.fetchIdentity(id: id, db: $0) }
+    func identityObservation(id: String) -> AnyPublisher<Identity?, Error> {
+        ValueObservation.tracking(
+            StoredIdentity
+                .filter(Column("id") == id)
+                .including(optional: StoredIdentity.instance)
+                .including(optional: StoredIdentity.account)
+                .asRequest(of: IdentityResult.self)
+                .fetchOne)
+            .removeDuplicates()
+            .publisher(in: databaseQueue, scheduling: .immediate)
+            .map {
+                guard let result = $0 else { return nil }
+
+                return Identity(result: result)
+            }
+            .eraseToAnyPublisher()
     }
 }
 
@@ -111,19 +116,6 @@ private extension IdentityDatabase {
         }
 
         try migrator.migrate(writer)
-    }
-
-    private static func fetchIdentity(id: String, db: Database) throws -> Identity? {
-        if let result = try StoredIdentity
-            .filter(Column("id") == id)
-            .including(optional: StoredIdentity.instance)
-            .including(optional: StoredIdentity.account)
-            .asRequest(of: IdentityResult.self)
-            .fetchOne(db) {
-            return Identity(result: result)
-        }
-
-        return nil
     }
 }
 

@@ -8,15 +8,13 @@ class AddIdentityViewModel: ObservableObject {
     @Published var urlFieldText = ""
     @Published var alertItem: AlertItem?
     @Published private(set) var loading = false
-    private(set) var addedIdentity: AnyPublisher<Identity, Never>
+    @Published private(set) var addedIdentityID: String?
 
     private let networkClient: HTTPClient
     private let identityDatabase: IdentityDatabase
     private let secrets: Secrets
     private let webAuthenticationSessionType: WebAuthenticationSessionType.Type
     private let webAuthenticationSessionContextProvider = WebAuthenticationSessionContextProvider()
-    private let addedIdentityInput = PassthroughSubject<Identity, Never>()
-    private var cancellables = Set<AnyCancellable>()
 
     init(
         networkClient: HTTPClient,
@@ -27,7 +25,6 @@ class AddIdentityViewModel: ObservableObject {
         self.identityDatabase = identityDatabase
         self.secrets = secrets
         self.webAuthenticationSessionType = webAuthenticationSessionType
-        addedIdentity = addedIdentityInput.eraseToAnyPublisher()
     }
 
     func goTapped() {
@@ -65,11 +62,12 @@ class AddIdentityViewModel: ObservableObject {
                 identityDatabase: identityDatabase,
                 secrets: secrets)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
+            .receive(on: RunLoop.main)
             .handleEvents(
                 receiveSubscription: { [weak self] _ in self?.loading = true },
                 receiveCompletion: { [weak self] _ in self?.loading = false  })
-            .sink(receiveValue: addedIdentityInput.send)
-            .store(in: &cancellables)
+            .map { $0 as String? }
+            .assign(to: &$addedIdentityID)
     }
 }
 
@@ -196,13 +194,14 @@ private extension Publisher where Output == AccessToken {
         id: String,
         instanceURL: URL,
         identityDatabase: IdentityDatabase,
-        secrets: Secrets) -> AnyPublisher<Identity, Error> {
+        secrets: Secrets) -> AnyPublisher<String, Error> {
         tryMap { accessToken -> (String, URL) in
             try secrets.set(accessToken.accessToken, forItem: .accessToken, forIdentityID: id)
 
             return (id, instanceURL)
         }
         .flatMap(identityDatabase.createIdentity)
+        .map { id }
         .eraseToAnyPublisher()
     }
 }

@@ -4,21 +4,7 @@ import Foundation
 import Combine
 
 class SceneViewModel: ObservableObject {
-    @Published private(set) var identity: Identity? {
-        didSet {
-            if let identity = identity {
-                recentIdentityID = identity.id
-                networkClient.instanceURL = identity.url
-
-                do {
-                    networkClient.accessToken = try secrets.item(.accessToken, forIdentityID: identity.id)
-                } catch {
-                    alertItem = AlertItem(error: error)
-                }
-            }
-        }
-    }
-
+    @Published private(set) var identity: Identity?
     @Published var alertItem: AlertItem?
     @Published var presentingSettings = false
     var selectedTopLevelNavigation: TopLevelNavigation? = .timelines
@@ -39,8 +25,7 @@ class SceneViewModel: ObservableObject {
         self.userDefaults = userDefaults
 
         if let recentIdentityID = recentIdentityID {
-            identity = try? identityDatabase.identity(id: recentIdentityID)
-            refreshIdentity()
+            changeIdentity(id: recentIdentityID)
         }
     }
 }
@@ -54,7 +39,7 @@ extension SceneViewModel {
                 .map { ($0, identity.id) }
                 .flatMap(identityDatabase.updateAccount)
                 .assignErrorsToAlertItem(to: \.alertItem, on: self)
-                .assign(to: \.identity, on: self)
+                .sink(receiveValue: {})
                 .store(in: &cancellables)
         }
 
@@ -62,7 +47,7 @@ extension SceneViewModel {
             .map { ($0, identity.id) }
             .flatMap(identityDatabase.updateInstance)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
-            .assign(to: \.identity, on: self)
+            .sink(receiveValue: {})
             .store(in: &cancellables)
     }
 
@@ -72,8 +57,9 @@ extension SceneViewModel {
             identityDatabase: identityDatabase,
             secrets: secrets)
 
-        addAccountViewModel.addedIdentity
-            .sink(receiveValue: addIdentity(_:))
+        addAccountViewModel.$addedIdentityID
+            .compactMap { $0 }
+            .sink(receiveValue: changeIdentity(id:))
             .store(in: &cancellables)
 
         return addAccountViewModel
@@ -88,8 +74,23 @@ private extension SceneViewModel {
         set { userDefaults.set(newValue, forKey: Self.recentIdentityIDKey) }
     }
 
-    private func addIdentity(_ identity: Identity) {
-        self.identity = identity
+    private func changeIdentity(id: String) {
+        identityDatabase.identityObservation(id: id)
+            .assignErrorsToAlertItem(to: \.alertItem, on: self)
+            .handleEvents(receiveOutput: { [weak self] in
+                guard let self = self, let identity = $0 else { return }
+
+                self.recentIdentityID = identity.id
+                self.networkClient.instanceURL = identity.url
+
+                do {
+                    self.networkClient.accessToken = try self.secrets.item(.accessToken, forIdentityID: identity.id)
+                } catch {
+                    self.alertItem = AlertItem(error: error)
+                }
+            })
+            .assign(to: &$identity)
+
         refreshIdentity()
     }
 }

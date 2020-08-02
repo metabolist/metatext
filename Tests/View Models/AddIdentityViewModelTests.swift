@@ -23,23 +23,26 @@ class AddIdentityViewModelTests: XCTestCase {
             identityDatabase: identityDatabase,
             secrets: secrets,
             webAuthenticationSessionType: SuccessfulStubbingWebAuthenticationSession.self)
-        let recorder = sut.addedIdentity.record()
+        let addedIDRecorder = sut.$addedIdentityID.record()
+        _ = try wait(for: addedIDRecorder.next(), timeout: 1)
 
         sut.urlFieldText = "https://mastodon.social"
         sut.goTapped()
 
-        let addedIdentity = try wait(for: recorder.next(), timeout: 1)
+        let addedIdentityID = try wait(for: addedIDRecorder.next(), timeout: 1)!
+        let identityRecorder = identityDatabase.identityObservation(id: addedIdentityID).record()
+        let addedIdentity = try wait(for: identityRecorder.next(), timeout: 1)!
 
-        XCTAssertEqual(try identityDatabase.identity(id: addedIdentity.id), addedIdentity)
+        XCTAssertEqual(addedIdentity.id, addedIdentityID)
         XCTAssertEqual(addedIdentity.url, URL(string: "https://mastodon.social")!)
         XCTAssertEqual(
-            try secrets.item(.clientID, forIdentityID: addedIdentity.id) as String?,
+            try secrets.item(.clientID, forIdentityID: addedIdentityID) as String?,
             "AUTHORIZATION_CLIENT_ID_STUB_VALUE")
         XCTAssertEqual(
-            try secrets.item(.clientSecret, forIdentityID: addedIdentity.id) as String?,
+            try secrets.item(.clientSecret, forIdentityID: addedIdentityID) as String?,
             "AUTHORIZATION_CLIENT_SECRET_STUB_VALUE")
         XCTAssertEqual(
-            try secrets.item(.accessToken, forIdentityID: addedIdentity.id) as String?,
+            try secrets.item(.accessToken, forIdentityID: addedIdentityID) as String?,
             "ACCESS_TOKEN_STUB_VALUE")
     }
 
@@ -49,14 +52,16 @@ class AddIdentityViewModelTests: XCTestCase {
             identityDatabase: identityDatabase,
             secrets: secrets,
             webAuthenticationSessionType: SuccessfulStubbingWebAuthenticationSession.self)
-        let recorder = sut.addedIdentity.record()
+        let addedIDRecorder = sut.$addedIdentityID.record()
+        _ = try wait(for: addedIDRecorder.next(), timeout: 1)
 
         sut.urlFieldText = "mastodon.social"
         sut.goTapped()
 
-        let addedIdentity = try wait(for: recorder.next(), timeout: 1)
+        let addedIdentityID = try wait(for: addedIDRecorder.next(), timeout: 1)!
+        let identityRecorder = identityDatabase.identityObservation(id: addedIdentityID).record()
+        let addedIdentity = try wait(for: identityRecorder.next(), timeout: 1)!
 
-        XCTAssertEqual(try identityDatabase.identity(id: addedIdentity.id), addedIdentity)
         XCTAssertEqual(addedIdentity.url, URL(string: "https://mastodon.social")!)
     }
 
