@@ -48,7 +48,7 @@ private extension TabNavigation {
                                             DownsamplingImageProcessor(size: CGSize(width: 28, height: 28))
                                                 .append(another: RoundCornerImageProcessor(radius: .widthFraction(0.5)))
                                         ),
-                                        .scaleFactor(UIScreen.main.scale),
+                                        .scaleFactor(Screen.scale),
                                         .cacheOriginalImage
                                     ])
                                 .placeholder { Image(systemName: "gear") }
