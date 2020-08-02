@@ -10,21 +10,14 @@ class SceneViewModel: ObservableObject {
     var selectedTopLevelNavigation: TopLevelNavigation? = .timelines
 
     private let networkClient: MastodonClient
-    private let identityDatabase: IdentityDatabase
-    private let secrets: Secrets
-    private let userDefaults: UserDefaults
+    private let environment: AppEnvironment
     private var cancellables = Set<AnyCancellable>()
 
-    init(networkClient: MastodonClient,
-         identityDatabase: IdentityDatabase,
-         secrets: Secrets,
-         userDefaults: UserDefaults = .standard) {
+    init(networkClient: MastodonClient, environment: AppEnvironment) {
         self.networkClient = networkClient
-        self.identityDatabase = identityDatabase
-        self.secrets = secrets
-        self.userDefaults = userDefaults
+        self.environment = environment
 
-        if let recentIdentityID = recentIdentityID {
+        if let recentIdentityID = environment.preferences[.recentIdentityID] as String? {
             changeIdentity(id: recentIdentityID)
         }
     }
@@ -37,7 +30,7 @@ extension SceneViewModel {
         if networkClient.accessToken != nil {
             networkClient.request(AccountEndpoint.verifyCredentials)
                 .map { ($0, identity.id) }
-                .flatMap(identityDatabase.updateAccount)
+                .flatMap(environment.identityDatabase.updateAccount)
                 .assignErrorsToAlertItem(to: \.alertItem, on: self)
                 .sink(receiveValue: {})
                 .store(in: &cancellables)
@@ -45,17 +38,14 @@ extension SceneViewModel {
 
         networkClient.request(InstanceEndpoint.instance)
             .map { ($0, identity.id) }
-            .flatMap(identityDatabase.updateInstance)
+            .flatMap(environment.identityDatabase.updateInstance)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .sink(receiveValue: {})
             .store(in: &cancellables)
     }
 
     func addIdentityViewModel() -> AddIdentityViewModel {
-        let addAccountViewModel = AddIdentityViewModel(
-            networkClient: networkClient,
-            identityDatabase: identityDatabase,
-            secrets: secrets)
+        let addAccountViewModel = AddIdentityViewModel(networkClient: networkClient, environment: environment)
 
         addAccountViewModel.$addedIdentityID
             .compactMap { $0 }
@@ -67,24 +57,17 @@ extension SceneViewModel {
 }
 
 private extension SceneViewModel {
-    private static let recentIdentityIDKey = "recentIdentityID"
-
-    private var recentIdentityID: String? {
-        get { userDefaults.value(forKey: Self.recentIdentityIDKey) as? String }
-        set { userDefaults.set(newValue, forKey: Self.recentIdentityIDKey) }
-    }
-
     private func changeIdentity(id: String) {
-        identityDatabase.identityObservation(id: id)
+        environment.identityDatabase.identityObservation(id: id)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .handleEvents(receiveOutput: { [weak self] in
                 guard let self = self, let identity = $0 else { return }
 
-                self.recentIdentityID = identity.id
                 self.networkClient.instanceURL = identity.url
 
                 do {
-                    self.networkClient.accessToken = try self.secrets.item(.accessToken, forIdentityID: identity.id)
+                    self.networkClient.accessToken =
+                        try self.environment.secrets.item(.accessToken, forIdentityID: identity.id)
                 } catch {
                     self.alertItem = AlertItem(error: error)
                 }

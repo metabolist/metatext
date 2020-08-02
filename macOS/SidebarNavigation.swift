@@ -3,6 +3,7 @@
 import SwiftUI
 
 struct SidebarNavigation: View {
+    let identity: Identity
     @EnvironmentObject var sceneViewModel: SceneViewModel
 
     var sidebar: some View {
@@ -40,8 +41,11 @@ private extension SidebarNavigation {
     }
 }
 
+#if DEBUG
 struct SidebarNavigation_Previews: PreviewProvider {
     static var previews: some View {
-        SidebarNavigation()
+        SidebarNavigation(identity: .development)
+            .environmentObject(SceneViewModel.development)
     }
 }
+#endif

@@ -24,7 +24,8 @@ struct ContentView: View {
 private extension ContentView {
     private func mainNavigation(identity: Identity) -> some View {
         #if os(macOS)
-        return SidebarNavigation().frame(minWidth: 900, maxWidth: .infinity, minHeight: 500, maxHeight: .infinity)
+        return SidebarNavigation(identity: identity)
+            .frame(minWidth: 900, maxWidth: .infinity, minHeight: 500, maxHeight: .infinity)
         #else
         return TabNavigation(identity: identity)
         #endif

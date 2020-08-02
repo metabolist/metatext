@@ -1,18 +1,17 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import Foundation
-import AuthenticationServices
 
-class StubbingWebAuthenticationSession: WebAuthenticationSessionType {
-    let completionHandler: ASWebAuthenticationSession.CompletionHandler
+class StubbingWebAuthSession: WebAuthSession {
+    let completionHandler: WebAuthSessionCompletionHandler
     let url: URL
     let callbackURLScheme: String?
-    var presentationContextProvider: ASWebAuthenticationPresentationContextProviding?
+    var presentationContextProvider: WebAuthPresentationContextProviding?
 
     required init(
         url URL: URL,
         callbackURLScheme: String?,
-        completionHandler: @escaping ASWebAuthenticationSession.CompletionHandler) {
+        completionHandler: @escaping WebAuthSessionCompletionHandler) {
         self.url = URL
         self.callbackURLScheme = callbackURLScheme
         self.completionHandler = completionHandler
@@ -33,15 +32,13 @@ class StubbingWebAuthenticationSession: WebAuthenticationSessionType {
     }
 }
 
-// swiftlint:disable type_name
-class SuccessfulStubbingWebAuthenticationSession: StubbingWebAuthenticationSession {
-// swiftlint:enable type_name
+class SuccessfulStubbingWebAuthSession: StubbingWebAuthSession {
     private let redirectURL: URL
 
     required init(
         url URL: URL,
         callbackURLScheme: String?,
-        completionHandler: @escaping ASWebAuthenticationSession.CompletionHandler) {
+        completionHandler: @escaping WebAuthSessionCompletionHandler) {
         redirectURL = Foundation.URL(
             string: URLComponents(url: URL, resolvingAgainstBaseURL: true)!
                 .queryItems!.first(where: { $0.name == "redirect_uri" })!.value!)!
@@ -62,10 +59,8 @@ class SuccessfulStubbingWebAuthenticationSession: StubbingWebAuthenticationSessi
     }
 }
 
-// swiftlint:disable type_name
-class CanceledLoginStubbingWebAuthenticationSession: StubbingWebAuthenticationSession {
-// swiftlint:enable type_name
+class CanceledLoginStubbingWebAuthSession: StubbingWebAuthSession {
     override var completionHandlerError: Error? {
-        ASWebAuthenticationSessionError(.canceledLogin)
+        WebAuthSessionError(.canceledLogin)
     }
 }

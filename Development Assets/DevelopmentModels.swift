@@ -6,22 +6,47 @@ import Combine
 // swiftlint:disable force_try
 private let decoder = MastodonDecoder()
 private var cancellables = Set<AnyCancellable>()
+private let devInstanceURL = URL(string: "https://mastodon.social")!
 private let devIdentityID = "DEVELOPMENT_IDENTITY_ID"
+private let devAccessToken = "DEVELOPMENT_ACCESS_TOKEN"
 
 extension Secrets {
+    static func fresh() -> Secrets { Secrets(keychain: FakeKeychain()) }
+
     static let development: Secrets = {
-        let secrets = Secrets(keychain: FakeKeychain())
+        let secrets = Secrets.fresh()
 
         try! secrets.set("DEVELOPMENT_CLIENT_ID", forItem: .clientID, forIdentityID: devIdentityID)
         try! secrets.set("DEVELOPMENT_CLIENT_SECRET", forItem: .clientSecret, forIdentityID: devIdentityID)
-        try! secrets.set("DEVELOPMENT_ACCESS_TOKEN", forItem: .accessToken, forIdentityID: devIdentityID)
+        try! secrets.set(devAccessToken, forItem: .accessToken, forIdentityID: devIdentityID)
 
         return secrets
     }()
 }
 
+extension Preferences {
+    static func fresh() -> Preferences { Preferences(userDefaults: FakeUserDefaults()) }
+
+    static let development: Preferences = {
+        let preferences = Preferences.fresh()
+
+        preferences[.recentIdentityID] = devIdentityID
+
+        return preferences
+    }()
+}
+
 extension MastodonClient {
-    static let development = MastodonClient(configuration: .stubbing)
+    static func fresh() -> MastodonClient { MastodonClient(configuration: .stubbing) }
+
+    static let development: MastodonClient = {
+        let client = MastodonClient.fresh()
+
+        client.instanceURL = devInstanceURL
+        client.accessToken = devAccessToken
+
+        return client
+    }()
 }
 
 extension Account {
@@ -33,10 +58,12 @@ extension Instance {
 }
 
 extension IdentityDatabase {
-    static var development: IdentityDatabase = {
-        let db = try! IdentityDatabase(inMemory: true)
+    static func fresh() -> IdentityDatabase { try! IdentityDatabase(inMemory: true) }
 
-        db.createIdentity(id: devIdentityID, url: URL(string: "https://mastodon.social")!)
+    static var development: IdentityDatabase = {
+        let db = IdentityDatabase.fresh()
+
+        db.createIdentity(id: devIdentityID, url: devInstanceURL)
             .receive(on: ImmediateScheduler.shared)
             .sink(receiveCompletion: { _ in }, receiveValue: { _ in })
             .store(in: &cancellables)
@@ -68,11 +95,28 @@ extension Identity {
     }()
 }
 
-extension SceneViewModel {
-    static let development = SceneViewModel(
-        networkClient: .development,
+extension AppEnvironment {
+    static func fresh(
+        identityDatabase: IdentityDatabase = .fresh(),
+        preferences: Preferences = .fresh(),
+        secrets: Secrets = .fresh(),
+        webAuthSessionType: WebAuthSession.Type = SuccessfulStubbingWebAuthSession.self) -> AppEnvironment {
+        AppEnvironment(
+            identityDatabase: identityDatabase,
+            preferences: preferences,
+            secrets: secrets,
+            webAuthSessionType: webAuthSessionType)
+    }
+
+    static let development = AppEnvironment(
         identityDatabase: .development,
-        secrets: .development)
+        preferences: .development,
+        secrets: .development,
+        webAuthSessionType: SuccessfulStubbingWebAuthSession.self)
+}
+
+extension SceneViewModel {
+    static let development = SceneViewModel(networkClient: .development, environment: .development)
 }
 
 // swiftlint:enable force_try

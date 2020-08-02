@@ -4,15 +4,22 @@ import SwiftUI
 
 @main
 struct MetatextApp: App {
-    private let identityDatabase: IdentityDatabase
-    private let secrets = Secrets(keychain: Keychain(service: "com.metabolist.metatext"))
+    private let environment: AppEnvironment
 
     init() {
+        let identityDatabase: IdentityDatabase
+
         do {
             try identityDatabase = IdentityDatabase()
         } catch {
             fatalError("Failed to initialize identity database")
         }
+
+        environment = AppEnvironment(
+            identityDatabase: identityDatabase,
+            preferences: Preferences(userDefaults: .standard),
+            secrets: Secrets(keychain: Keychain(service: "com.metabolist.metatext")),
+            webAuthSessionType: RealWebAuthSession.self)
     }
 
     var body: some Scene {
@@ -21,8 +28,7 @@ struct MetatextApp: App {
                 .environmentObject(
                     SceneViewModel(
                         networkClient: MastodonClient(),
-                        identityDatabase: identityDatabase,
-                        secrets: secrets))
+                        environment: environment))
         }
     }
 }

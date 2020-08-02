@@ -2,7 +2,6 @@
 
 import Foundation
 import Combine
-import AuthenticationServices
 
 class AddIdentityViewModel: ObservableObject {
     @Published var urlFieldText = ""
@@ -11,20 +10,12 @@ class AddIdentityViewModel: ObservableObject {
     @Published private(set) var addedIdentityID: String?
 
     private let networkClient: HTTPClient
-    private let identityDatabase: IdentityDatabase
-    private let secrets: Secrets
-    private let webAuthenticationSessionType: WebAuthenticationSessionType.Type
-    private let webAuthenticationSessionContextProvider = WebAuthenticationSessionContextProvider()
+    private let environment: AppEnvironment
+    private let webAuthSessionContextProvider = WebAuthSessionContextProvider()
 
-    init(
-        networkClient: HTTPClient,
-        identityDatabase: IdentityDatabase,
-        secrets: Secrets,
-        webAuthenticationSessionType: WebAuthenticationSessionType.Type = ASWebAuthenticationSession.self) {
+    init(networkClient: HTTPClient, environment: AppEnvironment) {
         self.networkClient = networkClient
-        self.identityDatabase = identityDatabase
-        self.secrets = secrets
-        self.webAuthenticationSessionType = webAuthenticationSessionType
+        self.environment = environment
     }
 
     func goTapped() {
@@ -45,22 +36,19 @@ class AddIdentityViewModel: ObservableObject {
             identityID: identityID,
             instanceURL: instanceURL,
             redirectURL: redirectURL,
-            secrets: secrets)
+            secrets: environment.secrets)
             .authenticationURL(instanceURL: instanceURL, redirectURL: redirectURL)
             .authenticate(
-                webAuthenticationSessionType: webAuthenticationSessionType,
-                contextProvider: webAuthenticationSessionContextProvider,
+                webAuthSessionType: environment.webAuthSessionType,
+                contextProvider: webAuthSessionContextProvider,
                 callbackURLScheme: MastodonAPI.OAuth.callbackURLScheme)
             .extractCode()
             .requestAccessToken(
                 networkClient: networkClient,
                 identityID: identityID,
-                instanceURL: instanceURL)
-            .createIdentity(
-                id: identityID,
                 instanceURL: instanceURL,
-                identityDatabase: identityDatabase,
-                secrets: secrets)
+                redirectURL: redirectURL)
+            .createIdentity(id: identityID, instanceURL: instanceURL, environment: environment)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .receive(on: RunLoop.main)
             .handleEvents(
@@ -72,12 +60,6 @@ class AddIdentityViewModel: ObservableObject {
 }
 
 private extension AddIdentityViewModel {
-    private class WebAuthenticationSessionContextProvider: NSObject, ASWebAuthenticationPresentationContextProviding {
-        func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
-            ASPresentationAnchor()
-        }
-    }
-
     private func authorizeApp(
         identityID: String,
         instanceURL: URL,
@@ -102,9 +84,7 @@ private extension AddIdentityViewModel {
 }
 
 private extension Publisher where Output == AppAuthorization {
-    func authenticationURL(
-        instanceURL: URL,
-        redirectURL: URL) -> AnyPublisher<(AppAuthorization, URL), Error> {
+    func authenticationURL(instanceURL: URL, redirectURL: URL) -> AnyPublisher<(AppAuthorization, URL), Error> {
         tryMap { appAuthorization in
             guard var authorizationURLComponents = URLComponents(url: instanceURL, resolvingAgainstBaseURL: true) else {
                 throw URLError(.badURL)
@@ -131,16 +111,16 @@ private extension Publisher where Output == AppAuthorization {
 
 private extension Publisher where Output == (AppAuthorization, URL), Failure == Error {
     func authenticate(
-        webAuthenticationSessionType: WebAuthenticationSessionType.Type,
-        contextProvider: ASWebAuthenticationPresentationContextProviding,
+        webAuthSessionType: WebAuthSession.Type,
+        contextProvider: WebAuthSessionContextProvider,
         callbackURLScheme: String) -> AnyPublisher<(AppAuthorization, URL), Error> {
         flatMap { appAuthorization, url in
-            webAuthenticationSessionType.publisher(
+            webAuthSessionType.publisher(
                 url: url,
                 callbackURLScheme: callbackURLScheme,
                 presentationContextProvider: contextProvider)
                 .tryCatch { error -> AnyPublisher<URL?, Error> in
-                    if (error as? ASWebAuthenticationSessionError)?.code == .canceledLogin {
+                    if (error as? WebAuthSessionError)?.code == .canceledLogin {
                         return Just(nil).setFailureType(to: Error.self).eraseToAnyPublisher()
                     }
 
@@ -154,33 +134,32 @@ private extension Publisher where Output == (AppAuthorization, URL), Failure == 
 }
 
 private extension Publisher where Output == (AppAuthorization, URL) {
-    // swiftlint:disable large_tuple
-    func extractCode() -> AnyPublisher<(AppAuthorization, URL, String), Error> {
-        tryMap { appAuthorization, url -> (AppAuthorization, URL, String) in
+    func extractCode() -> AnyPublisher<(AppAuthorization, String), Error> {
+        tryMap { appAuthorization, url -> (AppAuthorization, String) in
             guard let queryItems = URLComponents(url: url, resolvingAgainstBaseURL: true)?.queryItems,
                   let code = queryItems.first(where: { $0.name == MastodonAPI.OAuth.codeCallbackQueryItemName })?.value
             else { throw MastodonAPI.OAuthError.codeNotFound }
 
-            return (appAuthorization, url, code)
+            return (appAuthorization, code)
         }
         .eraseToAnyPublisher()
     }
-    // swiftlint:enable large_tuple
 }
 
-private extension Publisher where Output == (AppAuthorization, URL, String), Failure == Error {
+private extension Publisher where Output == (AppAuthorization, String), Failure == Error {
     func requestAccessToken(
         networkClient: HTTPClient,
         identityID: String,
-        instanceURL: URL) -> AnyPublisher<AccessToken, Error> {
-        flatMap { appAuthorization, url, code -> AnyPublisher<AccessToken, Error> in
+        instanceURL: URL,
+        redirectURL: URL) -> AnyPublisher<AccessToken, Error> {
+        flatMap { appAuthorization, code -> AnyPublisher<AccessToken, Error> in
             let endpoint = AccessTokenEndpoint.oauthToken(
                 clientID: appAuthorization.clientId,
                 clientSecret: appAuthorization.clientSecret,
                 code: code,
                 grantType: MastodonAPI.OAuth.grantType,
                 scopes: MastodonAPI.OAuth.scopes,
-                redirectURI: url.absoluteString)
+                redirectURI: redirectURL.absoluteString)
             let target = MastodonTarget(baseURL: instanceURL, endpoint: endpoint, accessToken: nil)
 
             return networkClient.request(target)
@@ -190,18 +169,18 @@ private extension Publisher where Output == (AppAuthorization, URL, String), Fai
 }
 
 private extension Publisher where Output == AccessToken {
-    func createIdentity(
-        id: String,
-        instanceURL: URL,
-        identityDatabase: IdentityDatabase,
-        secrets: Secrets) -> AnyPublisher<String, Error> {
+    func createIdentity(id: String, instanceURL: URL, environment: AppEnvironment) -> AnyPublisher<String, Error> {
         tryMap { accessToken -> (String, URL) in
-            try secrets.set(accessToken.accessToken, forItem: .accessToken, forIdentityID: id)
+            try environment.secrets.set(accessToken.accessToken, forItem: .accessToken, forIdentityID: id)
 
             return (id, instanceURL)
         }
-        .flatMap(identityDatabase.createIdentity)
-        .map { id }
+        .flatMap(environment.identityDatabase.createIdentity)
+        .map {
+            environment.preferences[.recentIdentityID] = id
+
+            return id
+        }
         .eraseToAnyPublisher()
     }
 }

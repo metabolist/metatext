@@ -21,6 +21,13 @@
 		D04FD73D24D4A83A007D572D /* InstanceEndpoint+Stubbing.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04FD73B24D4A83A007D572D /* InstanceEndpoint+Stubbing.swift */; };
 		D04FD74224D4AA34007D572D /* DevelopmentModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04FD74124D4AA34007D572D /* DevelopmentModels.swift */; };
 		D04FD74324D4AA34007D572D /* DevelopmentModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04FD74124D4AA34007D572D /* DevelopmentModels.swift */; };
+		D052BBC724D749C800A80A7A /* SceneViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D052BBC624D749C800A80A7A /* SceneViewModelTests.swift */; };
+		D052BBCA24D74C9200A80A7A /* FakeUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = D052BBC824D74B6400A80A7A /* FakeUserDefaults.swift */; };
+		D052BBCB24D74C9300A80A7A /* FakeUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = D052BBC824D74B6400A80A7A /* FakeUserDefaults.swift */; };
+		D052BBCF24D750C000A80A7A /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = D052BBCE24D750C000A80A7A /* Preferences.swift */; };
+		D052BBD024D750C000A80A7A /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = D052BBCE24D750C000A80A7A /* Preferences.swift */; };
+		D052BBD124D750CA00A80A7A /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D052BBCC24D750A100A80A7A /* AppEnvironment.swift */; };
+		D052BBD224D750CB00A80A7A /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D052BBCC24D750A100A80A7A /* AppEnvironment.swift */; };
 		D065F53924D37E5100741304 /* CombineExpectations in Frameworks */ = {isa = PBXBuildFile; productRef = D065F53824D37E5100741304 /* CombineExpectations */; };
 		D065F53B24D3B33A00741304 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D065F53A24D3B33A00741304 /* View+Extensions.swift */; };
 		D065F53C24D3B33A00741304 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D065F53A24D3B33A00741304 /* View+Extensions.swift */; };
@@ -54,8 +61,8 @@
 		D06B492024D3FB8000642749 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D06B491E24D3F7FE00642749 /* Localizable.strings */; };
 		D06B492324D4611300642749 /* KingfisherSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = D06B492224D4611300642749 /* KingfisherSwiftUI */; };
 		D06B492524D4612400642749 /* KingfisherSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = D06B492424D4612400642749 /* KingfisherSwiftUI */; };
-		D074577724D29006004758DB /* StubbingWebAuthenticationSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D074577624D29006004758DB /* StubbingWebAuthenticationSession.swift */; };
-		D074577824D29006004758DB /* StubbingWebAuthenticationSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D074577624D29006004758DB /* StubbingWebAuthenticationSession.swift */; };
+		D074577724D29006004758DB /* StubbingWebAuthSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D074577624D29006004758DB /* StubbingWebAuthSession.swift */; };
+		D074577824D29006004758DB /* StubbingWebAuthSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D074577624D29006004758DB /* StubbingWebAuthSession.swift */; };
 		D074577A24D29366004758DB /* URLSessionConfiguration+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D074577924D29366004758DB /* URLSessionConfiguration+Extensions.swift */; };
 		D074577B24D29366004758DB /* URLSessionConfiguration+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D074577924D29366004758DB /* URLSessionConfiguration+Extensions.swift */; };
 		D081A40524D0F1A8001B016E /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D081A40424D0F1A8001B016E /* String+Extensions.swift */; };
@@ -103,8 +110,8 @@
 		D0DC177724D0CF2600A75C65 /* FakeKeychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DC177624D0CF2600A75C65 /* FakeKeychain.swift */; };
 		D0DC177824D0CF2600A75C65 /* FakeKeychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DC177624D0CF2600A75C65 /* FakeKeychain.swift */; };
 		D0ED1B6E24CE100C00B4899C /* AddIdentityViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ED1B6D24CE100C00B4899C /* AddIdentityViewModelTests.swift */; };
-		D0ED1BB724CE47F400B4899C /* WebAuthenticationSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ED1BB624CE47F400B4899C /* WebAuthenticationSession.swift */; };
-		D0ED1BB824CE47F400B4899C /* WebAuthenticationSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ED1BB624CE47F400B4899C /* WebAuthenticationSession.swift */; };
+		D0ED1BB724CE47F400B4899C /* WebAuthSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ED1BB624CE47F400B4899C /* WebAuthSession.swift */; };
+		D0ED1BB824CE47F400B4899C /* WebAuthSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ED1BB624CE47F400B4899C /* WebAuthSession.swift */; };
 		D0ED1BC124CED48800B4899C /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ED1BC024CED48800B4899C /* HTTPClient.swift */; };
 		D0ED1BC224CED48800B4899C /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ED1BC024CED48800B4899C /* HTTPClient.swift */; };
 		D0ED1BC424CED54D00B4899C /* HTTPTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ED1BC324CED54D00B4899C /* HTTPTarget.swift */; };
@@ -150,6 +157,10 @@
 		D04FD73824D4A7B4007D572D /* AccountEndpoint+Stubbing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AccountEndpoint+Stubbing.swift"; sourceTree = "<group>"; };
 		D04FD73B24D4A83A007D572D /* InstanceEndpoint+Stubbing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InstanceEndpoint+Stubbing.swift"; sourceTree = "<group>"; };
 		D04FD74124D4AA34007D572D /* DevelopmentModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevelopmentModels.swift; sourceTree = "<group>"; };
+		D052BBC624D749C800A80A7A /* SceneViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneViewModelTests.swift; sourceTree = "<group>"; };
+		D052BBC824D74B6400A80A7A /* FakeUserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeUserDefaults.swift; sourceTree = "<group>"; };
+		D052BBCC24D750A100A80A7A /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
+		D052BBCE24D750C000A80A7A /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 		D065F53A24D3B33A00741304 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		D065F53D24D3D20300741304 /* InstanceEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstanceEndpoint.swift; sourceTree = "<group>"; };
 		D0666A2124C677B400F3F04B /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -166,7 +177,7 @@
 		D0666A6E24C6DFB300F3F04B /* AccessToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessToken.swift; sourceTree = "<group>"; };
 		D0666A7124C6E0D300F3F04B /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 		D06B491E24D3F7FE00642749 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
-		D074577624D29006004758DB /* StubbingWebAuthenticationSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StubbingWebAuthenticationSession.swift; sourceTree = "<group>"; };
+		D074577624D29006004758DB /* StubbingWebAuthSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StubbingWebAuthSession.swift; sourceTree = "<group>"; };
 		D074577924D29366004758DB /* URLSessionConfiguration+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSessionConfiguration+Extensions.swift"; sourceTree = "<group>"; };
 		D081A40424D0F1A8001B016E /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		D0B23F0C24D210E90066F411 /* NSError+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSError+Extensions.swift"; sourceTree = "<group>"; };
@@ -191,7 +202,7 @@
 		D0DC177324D0B58800A75C65 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		D0DC177624D0CF2600A75C65 /* FakeKeychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeKeychain.swift; sourceTree = "<group>"; };
 		D0ED1B6D24CE100C00B4899C /* AddIdentityViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIdentityViewModelTests.swift; sourceTree = "<group>"; };
-		D0ED1BB624CE47F400B4899C /* WebAuthenticationSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebAuthenticationSession.swift; sourceTree = "<group>"; };
+		D0ED1BB624CE47F400B4899C /* WebAuthSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebAuthSession.swift; sourceTree = "<group>"; };
 		D0ED1BC024CED48800B4899C /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 		D0ED1BC324CED54D00B4899C /* HTTPTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPTarget.swift; sourceTree = "<group>"; };
 		D0ED1BCA24CF744200B4899C /* MastodonClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MastodonClient.swift; sourceTree = "<group>"; };
@@ -309,6 +320,7 @@
 				D0666A5024C6C3BC00F3F04B /* Account.swift */,
 				D0C963FA24CC359D003BD330 /* AlertItem.swift */,
 				D0666A6224C6DC6C00F3F04B /* AppAuthorization.swift */,
+				D052BBCC24D750A100A80A7A /* AppEnvironment.swift */,
 				D0ED1BD624CF94B200B4899C /* Application.swift */,
 				D0666A4424C6BC0A00F3F04B /* DatabaseError.swift */,
 				D0666A5324C6C3E500F3F04B /* Emoji.swift */,
@@ -317,6 +329,7 @@
 				D0666A4D24C6C39600F3F04B /* Instance.swift */,
 				D0DC177324D0B58800A75C65 /* Keychain.swift */,
 				D0ED1BE224CFA84400B4899C /* MastodonError.swift */,
+				D052BBCE24D750C000A80A7A /* Preferences.swift */,
 				D0666A7124C6E0D300F3F04B /* Secrets.swift */,
 			);
 			path = Model;
@@ -357,7 +370,7 @@
 				D0ED1BC024CED48800B4899C /* HTTPClient.swift */,
 				D0666A5624C6C63400F3F04B /* MastodonDecoder.swift */,
 				D0666A5924C6C64100F3F04B /* MastodonEncoder.swift */,
-				D0ED1BB624CE47F400B4899C /* WebAuthenticationSession.swift */,
+				D0ED1BB624CE47F400B4899C /* WebAuthSession.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -400,6 +413,7 @@
 			isa = PBXGroup;
 			children = (
 				D0ED1B6D24CE100C00B4899C /* AddIdentityViewModelTests.swift */,
+				D052BBC624D749C800A80A7A /* SceneViewModelTests.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -409,11 +423,12 @@
 			children = (
 				D04FD74124D4AA34007D572D /* DevelopmentModels.swift */,
 				D0DC177624D0CF2600A75C65 /* FakeKeychain.swift */,
+				D052BBC824D74B6400A80A7A /* FakeUserDefaults.swift */,
 				D0DC175724D0130800A75C65 /* HTTPStubs.swift */,
 				D0DC174824CFF13700A75C65 /* Mastodon API Stubs */,
 				D0DC174C24CFF1F100A75C65 /* Stubbing.swift */,
 				D0DC174524CFEC2000A75C65 /* StubbingURLProtocol.swift */,
-				D074577624D29006004758DB /* StubbingWebAuthenticationSession.swift */,
+				D074577624D29006004758DB /* StubbingWebAuthSession.swift */,
 				D074577924D29366004758DB /* URLSessionConfiguration+Extensions.swift */,
 			);
 			path = "Development Assets";
@@ -630,6 +645,7 @@
 				D0BEC94724CA22C400E864C4 /* TimelineViewModel.swift in Sources */,
 				D0666A4E24C6C39600F3F04B /* Instance.swift in Sources */,
 				D0ED1BDA24CF963E00B4899C /* AppAuthorizationEndpoint.swift in Sources */,
+				D052BBCF24D750C000A80A7A /* Preferences.swift in Sources */,
 				D0ED1BE324CFA84400B4899C /* MastodonError.swift in Sources */,
 				D0666A6324C6DC6C00F3F04B /* AppAuthorization.swift in Sources */,
 				D065F53B24D3B33A00741304 /* View+Extensions.swift in Sources */,
@@ -639,6 +655,7 @@
 				D0666A5124C6C3BC00F3F04B /* Account.swift in Sources */,
 				D0ED1BE024CF98FB00B4899C /* AccountEndpoint.swift in Sources */,
 				D0B93B3024D55098007AF646 /* Screen.swift in Sources */,
+				D052BBD224D750CB00A80A7A /* AppEnvironment.swift in Sources */,
 				D081A40524D0F1A8001B016E /* String+Extensions.swift in Sources */,
 				D0BEC93824C9632800E864C4 /* SceneViewModel.swift in Sources */,
 				D0ED1BC124CED48800B4899C /* HTTPClient.swift in Sources */,
@@ -648,6 +665,7 @@
 				D0666A5424C6C3E500F3F04B /* Emoji.swift in Sources */,
 				D0DC175524D00F0A00A75C65 /* AccessTokenEndpoint+Stubbing.swift in Sources */,
 				D0B23F0D24D210E90066F411 /* NSError+Extensions.swift in Sources */,
+				D052BBCA24D74C9200A80A7A /* FakeUserDefaults.swift in Sources */,
 				D0DC175224D008E300A75C65 /* MastodonTarget+Stubbing.swift in Sources */,
 				D0666A4224C6BB7B00F3F04B /* IdentityDatabase.swift in Sources */,
 				D0BEC94A24CA231200E864C4 /* TimelineView.swift in Sources */,
@@ -662,10 +680,10 @@
 				D0666A5724C6C63400F3F04B /* MastodonDecoder.swift in Sources */,
 				D0DB6EF424C5228A00D965FE /* AddIdentityView.swift in Sources */,
 				D0DC177424D0B58800A75C65 /* Keychain.swift in Sources */,
-				D074577724D29006004758DB /* StubbingWebAuthenticationSession.swift in Sources */,
+				D074577724D29006004758DB /* StubbingWebAuthSession.swift in Sources */,
 				D0ED1BCE24CF768200B4899C /* MastodonEndpoint.swift in Sources */,
 				D074577A24D29366004758DB /* URLSessionConfiguration+Extensions.swift in Sources */,
-				D0ED1BB724CE47F400B4899C /* WebAuthenticationSession.swift in Sources */,
+				D0ED1BB724CE47F400B4899C /* WebAuthSession.swift in Sources */,
 				D0666A7224C6E0D300F3F04B /* Secrets.swift in Sources */,
 				D0BEC95124CA2B7E00E864C4 /* TabNavigation.swift in Sources */,
 				D0ED1BC424CED54D00B4899C /* HTTPTarget.swift in Sources */,
@@ -690,6 +708,7 @@
 				D0BEC94824CA22C400E864C4 /* TimelineViewModel.swift in Sources */,
 				D0666A4F24C6C39600F3F04B /* Instance.swift in Sources */,
 				D0ED1BDB24CF963E00B4899C /* AppAuthorizationEndpoint.swift in Sources */,
+				D052BBD024D750C000A80A7A /* Preferences.swift in Sources */,
 				D0ED1BE424CFA84400B4899C /* MastodonError.swift in Sources */,
 				D0666A6424C6DC6C00F3F04B /* AppAuthorization.swift in Sources */,
 				D065F53C24D3B33A00741304 /* View+Extensions.swift in Sources */,
@@ -699,6 +718,7 @@
 				D0666A5224C6C3BC00F3F04B /* Account.swift in Sources */,
 				D0ED1BE124CF98FB00B4899C /* AccountEndpoint.swift in Sources */,
 				D0B93B3124D55098007AF646 /* Screen.swift in Sources */,
+				D052BBD124D750CA00A80A7A /* AppEnvironment.swift in Sources */,
 				D081A40624D0F1A8001B016E /* String+Extensions.swift in Sources */,
 				D0BEC93924C9632800E864C4 /* SceneViewModel.swift in Sources */,
 				D0ED1BC224CED48800B4899C /* HTTPClient.swift in Sources */,
@@ -708,6 +728,7 @@
 				D0666A5524C6C3E500F3F04B /* Emoji.swift in Sources */,
 				D0DC175624D00F0A00A75C65 /* AccessTokenEndpoint+Stubbing.swift in Sources */,
 				D0B23F0E24D210E90066F411 /* NSError+Extensions.swift in Sources */,
+				D052BBCB24D74C9300A80A7A /* FakeUserDefaults.swift in Sources */,
 				D0DC175324D008E300A75C65 /* MastodonTarget+Stubbing.swift in Sources */,
 				D0666A4324C6BB7B00F3F04B /* IdentityDatabase.swift in Sources */,
 				D0BEC94B24CA231200E864C4 /* TimelineView.swift in Sources */,
@@ -722,10 +743,10 @@
 				D0666A5824C6C63400F3F04B /* MastodonDecoder.swift in Sources */,
 				D0DB6EF524C5233E00D965FE /* AddIdentityView.swift in Sources */,
 				D0DC177524D0B58800A75C65 /* Keychain.swift in Sources */,
-				D074577824D29006004758DB /* StubbingWebAuthenticationSession.swift in Sources */,
+				D074577824D29006004758DB /* StubbingWebAuthSession.swift in Sources */,
 				D0ED1BCF24CF768200B4899C /* MastodonEndpoint.swift in Sources */,
 				D074577B24D29366004758DB /* URLSessionConfiguration+Extensions.swift in Sources */,
-				D0ED1BB824CE47F400B4899C /* WebAuthenticationSession.swift in Sources */,
+				D0ED1BB824CE47F400B4899C /* WebAuthSession.swift in Sources */,
 				D0BEC94F24CA2B5300E864C4 /* SidebarNavigation.swift in Sources */,
 				D0666A7324C6E0D300F3F04B /* Secrets.swift in Sources */,
 				D0ED1BC524CED54D00B4899C /* HTTPTarget.swift in Sources */,
@@ -744,6 +765,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0ED1B6E24CE100C00B4899C /* AddIdentityViewModelTests.swift in Sources */,
+				D052BBC724D749C800A80A7A /* SceneViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

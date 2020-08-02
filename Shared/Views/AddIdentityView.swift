@@ -41,10 +41,7 @@ struct AddAccountView_Previews: PreviewProvider {
     static var previews: some View {
         AddIdentityView(viewModel: AddIdentityViewModel(
                             networkClient: MastodonClient.development,
-                            // swiftlint:disable force_try
-                            identityDatabase: try! IdentityDatabase(inMemory: true),
-                            // swiftlint:enable force_try
-                            secrets: Secrets(keychain: FakeKeychain())))
+                            environment: .development))
     }
 }
 #endif
