@@ -7,6 +7,7 @@ struct AddIdentityView: View {
 
     var body: some View {
         Form {
+            Spacer()
             #if os(iOS)
             urlTextField
                 .autocapitalization(.none)
@@ -25,7 +26,9 @@ struct AddIdentityView: View {
                 }
             }
             .frame(maxWidth: .infinity, alignment: .center)
+            Spacer()
         }
+        .padding()
         .alertItem($viewModel.alertItem)
     }
 }

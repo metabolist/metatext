@@ -10,25 +10,40 @@ struct SettingsView: View {
     @EnvironmentObject var sceneViewModel: SceneViewModel
 
     var body: some View {
-        NavigationView {
-            Form {
-                HStack {
-                    KFImage(viewModel.identity.account?.avatar,
-                            options: [
-                                .processor(
-                                    DownsamplingImageProcessor(size: CGSize(width: 50, height: 50))
-                                        .append(another: RoundCornerImageProcessor(radius: .widthFraction(0.5)))
-                                ),
-                                .scaleFactor(Screen.scale),
-                                .cacheOriginalImage
-                            ])
-                    Text(viewModel.identity.handle)
-                        .font(.subheadline)
+        VStack(spacing: 0) {
+            NavigationView {
+                Form {
+                    HStack {
+                        KFImage(viewModel.identity.account?.avatar,
+                                options: [
+                                    .processor(
+                                        DownsamplingImageProcessor(size: CGSize(width: 50, height: 50))
+                                            .append(another: RoundCornerImageProcessor(radius: .widthFraction(0.5)))
+                                    ),
+                                    .scaleFactor(Screen.scale),
+                                    .cacheOriginalImage
+                                ])
+                        Text(viewModel.identity.handle)
+                            .font(.subheadline)
+                    }
                 }
+                .navigationBarTitleAndItems(sceneViewModel: sceneViewModel)
             }
-            .navigationBarTitleAndItems(sceneViewModel: sceneViewModel)
+            .navigationViewStyle
+            #if os(macOS)
+            Divider()
+            HStack {
+                Spacer()
+                Button(action: { sceneViewModel.presentingSettings.toggle() }) {
+                    Text("Done")
+                }
+                .keyboardShortcut(.defaultAction)
+            }
+            .padding()
+
+            #endif
         }
-        .navigationViewStyle
+        .frame
     }
 }
 
@@ -50,6 +65,14 @@ private extension View {
     var navigationViewStyle: some View {
         #if os(iOS)
         return navigationViewStyle(StackNavigationViewStyle())
+        #else
+        return self
+        #endif
+    }
+
+    var frame: some View {
+        #if os(macOS)
+        return frame(minWidth: 400, maxWidth: 600, minHeight: 350, maxHeight: 500)
         #else
         return self
         #endif
