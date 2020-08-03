@@ -3,38 +3,37 @@
 import SwiftUI
 import KingfisherSwiftUI
 import struct Kingfisher.DownsamplingImageProcessor
-import struct Kingfisher.RoundCornerImageProcessor
 
 struct SettingsView: View {
     @StateObject var viewModel: SettingsViewModel
-    @EnvironmentObject var sceneViewModel: SceneViewModel
+    @EnvironmentObject var mainNavigationViewModel: MainNavigationViewModel
 
     var body: some View {
         VStack(spacing: 0) {
             NavigationView {
                 Form {
                     HStack {
-                        KFImage(viewModel.identity.account?.avatar,
+                        KFImage(mainNavigationViewModel.image,
                                 options: [
                                     .processor(
                                         DownsamplingImageProcessor(size: CGSize(width: 50, height: 50))
-                                            .append(another: RoundCornerImageProcessor(radius: .widthFraction(0.5)))
                                     ),
                                     .scaleFactor(Screen.scale),
                                     .cacheOriginalImage
                                 ])
-                        Text(viewModel.identity.handle)
+                            .clipShape(Circle())
+                        Text(mainNavigationViewModel.handle)
                             .font(.subheadline)
                     }
                 }
-                .navigationBarTitleAndItems(sceneViewModel: sceneViewModel)
+                .navigationBarTitleAndItems(mainNavigationViewModel: mainNavigationViewModel)
             }
             .navigationViewStyle
             #if os(macOS)
             Divider()
             HStack {
                 Spacer()
-                Button(action: { sceneViewModel.presentingSettings.toggle() }) {
+                Button(action: { mainNavigationViewModel.presentingSettings.toggle() }) {
                     Text("Done")
                 }
                 .keyboardShortcut(.defaultAction)
@@ -48,12 +47,12 @@ struct SettingsView: View {
 }
 
 private extension View {
-    func navigationBarTitleAndItems(sceneViewModel: SceneViewModel) -> some View {
+    func navigationBarTitleAndItems(mainNavigationViewModel: MainNavigationViewModel) -> some View {
         #if os(iOS)
         return navigationBarTitle(Text("settings"), displayMode: .inline)
         .navigationBarItems(
             leading: Button {
-                sceneViewModel.presentingSettings.toggle()
+                mainNavigationViewModel.presentingSettings.toggle()
             } label: {
                 Image(systemName: "xmark.circle.fill").imageScale(.large)
             })
@@ -82,8 +81,8 @@ private extension View {
 #if DEBUG
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsView(viewModel: SettingsViewModel(identity: .development))
-            .environmentObject(SceneViewModel.development)
+        SettingsView(viewModel: .development)
+            .environmentObject(MainNavigationViewModel.development)
     }
 }
 #endif

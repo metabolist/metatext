@@ -6,20 +6,19 @@ import struct Kingfisher.DownsamplingImageProcessor
 import struct Kingfisher.RoundCornerImageProcessor
 
 struct SidebarNavigation: View {
-    let identity: Identity
-    @EnvironmentObject var sceneViewModel: SceneViewModel
+    @EnvironmentObject var viewModel: MainNavigationViewModel
 
     var sidebar: some View {
-        List(selection: $sceneViewModel.selectedTopLevelNavigation) {
-            ForEach(SceneViewModel.TopLevelNavigation.allCases) { topLevelNavigation in
-                NavigationLink(destination: view(topLevelNavigation: topLevelNavigation)) {
-                    Label(topLevelNavigation.title, systemImage: topLevelNavigation.systemImageName)
+        List(selection: $viewModel.selectedTab) {
+            ForEach(MainNavigationViewModel.Tab.allCases) { tab in
+                NavigationLink(destination: view(topLevelNavigation: tab)) {
+                    Label(tab.title, systemImage: tab.systemImageName)
                 }
-                .accessibility(label: Text(topLevelNavigation.title))
-                .tag(topLevelNavigation)
+                .accessibility(label: Text(tab.title))
+                .tag(tab)
             }
         }
-        .overlay(Pocket(identity: identity), alignment: .bottom)
+        .overlay(Pocket(), alignment: .bottom)
         .listStyle(SidebarListStyle())
     }
 
@@ -34,7 +33,7 @@ struct SidebarNavigation: View {
 }
 
 private extension SidebarNavigation {
-    func view(topLevelNavigation: SceneViewModel.TopLevelNavigation) -> some View {
+    func view(topLevelNavigation: MainNavigationViewModel.Tab) -> some View {
         Group {
             switch topLevelNavigation {
             case .timelines:
@@ -45,15 +44,13 @@ private extension SidebarNavigation {
     }
 
     struct Pocket: View {
-        let identity: Identity
-        @EnvironmentObject var sceneViewModel: SceneViewModel
+        @EnvironmentObject var viewModel: MainNavigationViewModel
 
         var body: some View {
             VStack(alignment: .leading, spacing: 0) {
                 Divider()
-                Button(action: { sceneViewModel.presentingSettings.toggle() }) {
-                    KFImage(identity.account?.avatar
-                                ?? identity.instance?.thumbnail,
+                Button(action: { viewModel.presentingSettings.toggle() }) {
+                    KFImage(viewModel.image,
                             options: [
                                 .processor(
                                     DownsamplingImageProcessor(size: CGSize(width: 50, height: 50))
@@ -74,9 +71,9 @@ private extension SidebarNavigation {
                 .padding(.horizontal, 16)
                 .buttonStyle(PlainButtonStyle())
             }
-            .sheet(isPresented: $sceneViewModel.presentingSettings) {
-                SettingsView(viewModel: SettingsViewModel(identity: identity))
-                    .environmentObject(sceneViewModel)
+            .sheet(isPresented: $viewModel.presentingSettings) {
+                SettingsView(viewModel: viewModel.settingsViewModel())
+                    .environmentObject(viewModel)
             }
         }
     }
@@ -85,8 +82,8 @@ private extension SidebarNavigation {
 #if DEBUG
 struct SidebarNavigation_Previews: PreviewProvider {
     static var previews: some View {
-        SidebarNavigation(identity: .development)
-            .environmentObject(SceneViewModel.development)
+        SidebarNavigation()
+            .environmentObject(MainNavigationViewModel.development)
     }
 }
 #endif

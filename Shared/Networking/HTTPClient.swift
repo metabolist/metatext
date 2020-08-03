@@ -8,9 +8,7 @@ class HTTPClient {
     private let session: Session
     private let decoder: DataDecoder
 
-    init(
-        configuration: URLSessionConfiguration = URLSessionConfiguration.af.default,
-        decoder: DataDecoder = JSONDecoder()) {
+    init(configuration: URLSessionConfiguration, decoder: DataDecoder = JSONDecoder()) {
         self.session = Session(configuration: configuration)
         self.decoder = decoder
     }

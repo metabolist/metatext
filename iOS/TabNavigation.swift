@@ -3,70 +3,66 @@
 import SwiftUI
 import KingfisherSwiftUI
 import struct Kingfisher.DownsamplingImageProcessor
-import struct Kingfisher.RoundCornerImageProcessor
 
 struct TabNavigation: View {
-    let identity: Identity
-    @EnvironmentObject var sceneViewModel: SceneViewModel
+    @EnvironmentObject var viewModel: MainNavigationViewModel
 
     var body: some View {
-        TabView(selection: $sceneViewModel.selectedTopLevelNavigation) {
-            ForEach(SceneViewModel.TopLevelNavigation.allCases) { topLevelNavigation in
+        TabView(selection: $viewModel.selectedTab) {
+            ForEach(MainNavigationViewModel.Tab.allCases) { tab in
                 NavigationView {
-                    view(topLevelNavigation: topLevelNavigation)
+                    view(tab: tab)
                 }
                 .navigationViewStyle(StackNavigationViewStyle())
                 .tabItem {
-                    Label(topLevelNavigation.title, systemImage: topLevelNavigation.systemImageName)
-                        .accessibility(label: Text(topLevelNavigation.title))
+                    Label(tab.title, systemImage: tab.systemImageName)
+                        .accessibility(label: Text(tab.title))
                 }
-                .tag(topLevelNavigation)
+                .tag(tab)
             }
         }
-        .sheet(isPresented: $sceneViewModel.presentingSettings) {
-            SettingsView(viewModel: SettingsViewModel(identity: identity))
-                .environmentObject(sceneViewModel)
+        .sheet(isPresented: $viewModel.presentingSettings) {
+            SettingsView(viewModel: viewModel.settingsViewModel())
+                .environmentObject(viewModel)
         }
+        .onAppear { viewModel.refreshIdentity() }
     }
 }
 
 private extension TabNavigation {
-    func view(topLevelNavigation: SceneViewModel.TopLevelNavigation) -> some View {
+    func view(tab: MainNavigationViewModel.Tab) -> some View {
         Group {
-            switch topLevelNavigation {
+            switch tab {
             case .timelines:
                 TimelineView()
-                    .navigationBarTitle(identity.handle, displayMode: .inline)
+                    .navigationBarTitle(viewModel.handle, displayMode: .inline)
                     .navigationBarItems(
                         leading: Button {
-                            sceneViewModel.presentingSettings.toggle()
+                            viewModel.presentingSettings.toggle()
                         } label: {
-                            KFImage(identity.account?.avatar
-                                        ?? identity.instance?.thumbnail,
+                            KFImage(viewModel.image,
                                     options: [
                                         .processor(
                                             DownsamplingImageProcessor(size: CGSize(width: 28, height: 28))
-                                                .append(another: RoundCornerImageProcessor(radius: .widthFraction(0.5)))
                                         ),
                                         .scaleFactor(Screen.scale),
                                         .cacheOriginalImage
                                     ])
                                 .placeholder { Image(systemName: "gear") }
                                 .renderingMode(.original)
+                                .clipShape(Circle())
                         })
-            default: Text(topLevelNavigation.title)
+            default: Text(tab.title)
             }
         }
     }
 }
 
-// MARK: Preview
-
 #if DEBUG
 struct TabNavigation_Previews: PreviewProvider {
     static var previews: some View {
-        TabNavigation(identity: .development)
-            .environmentObject(SceneViewModel.development)
+        TabNavigation()
+            .environmentObject(MainNavigationViewModel.development)
     }
 }
 #endif

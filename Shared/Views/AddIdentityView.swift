@@ -7,14 +7,14 @@ struct AddIdentityView: View {
 
     var body: some View {
         Form {
+            #if os(macOS)
             Spacer()
-            #if os(iOS)
+            urlTextField
+            #else
             urlTextField
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
                 .keyboardType(.URL)
-            #else
-            urlTextField
             #endif
             Group {
                 if viewModel.loading {
@@ -26,9 +26,11 @@ struct AddIdentityView: View {
                 }
             }
             .frame(maxWidth: .infinity, alignment: .center)
+            #if os(macOS)
             Spacer()
+            #endif
         }
-        .padding()
+        .paddingIfMac()
         .alertItem($viewModel.alertItem)
     }
 }
@@ -39,12 +41,20 @@ extension AddIdentityView {
     }
 }
 
+private extension View {
+    func paddingIfMac() -> some View {
+        #if os(macOS)
+        return padding()
+        #else
+        return self
+        #endif
+    }
+}
+
 #if DEBUG
 struct AddAccountView_Previews: PreviewProvider {
     static var previews: some View {
-        AddIdentityView(viewModel: AddIdentityViewModel(
-                            networkClient: MastodonClient.development,
-                            environment: .development))
+        AddIdentityView(viewModel: AddIdentityViewModel(environment: .development))
     }
 }
 #endif

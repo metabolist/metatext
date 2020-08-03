@@ -37,4 +37,6 @@ extension Identity {
 
         return instance?.title ?? url.host ?? url.absoluteString
     }
+
+    var image: URL? { account?.avatar ?? instance?.thumbnail }
 }

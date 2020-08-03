@@ -7,15 +7,18 @@ class AddIdentityViewModel: ObservableObject {
     @Published var urlFieldText = ""
     @Published var alertItem: AlertItem?
     @Published private(set) var loading = false
-    @Published private(set) var addedIdentityID: String?
+    let addedIdentityID: AnyPublisher<String, Never>
 
-    private let networkClient: HTTPClient
     private let environment: AppEnvironment
+    private let networkClient: MastodonClient
     private let webAuthSessionContextProvider = WebAuthSessionContextProvider()
+    private let addedIdentityIDInput = PassthroughSubject<String, Never>()
+    private var cancellables = Set<AnyCancellable>()
 
-    init(networkClient: HTTPClient, environment: AppEnvironment) {
-        self.networkClient = networkClient
+    init(environment: AppEnvironment) {
         self.environment = environment
+        self.networkClient = MastodonClient(configuration: environment.URLSessionConfiguration)
+        addedIdentityID = addedIdentityIDInput.eraseToAnyPublisher()
     }
 
     func goTapped() {
@@ -54,8 +57,8 @@ class AddIdentityViewModel: ObservableObject {
             .handleEvents(
                 receiveSubscription: { [weak self] _ in self?.loading = true },
                 receiveCompletion: { [weak self] _ in self?.loading = false  })
-            .map { $0 as String? }
-            .assign(to: &$addedIdentityID)
+            .sink(receiveValue: addedIdentityIDInput.send)
+            .store(in: &cancellables)
     }
 }
 

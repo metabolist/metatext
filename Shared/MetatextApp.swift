@@ -16,6 +16,7 @@ struct MetatextApp: App {
         }
 
         environment = AppEnvironment(
+            URLSessionConfiguration: .default,
             identityDatabase: identityDatabase,
             preferences: Preferences(userDefaults: .standard),
             secrets: Secrets(keychain: Keychain(service: "com.metabolist.metatext")),
@@ -24,11 +25,7 @@ struct MetatextApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environmentObject(
-                    SceneViewModel(
-                        networkClient: MastodonClient(),
-                        environment: environment))
+            RootView(viewModel: RootViewModel(environment: environment))
         }
     }
 }

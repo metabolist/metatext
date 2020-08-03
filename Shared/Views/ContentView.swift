@@ -2,7 +2,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct RootView: View {
     @EnvironmentObject var sceneViewModel: SceneViewModel
     @Environment(\.scenePhase) private var scenePhase
 
@@ -21,7 +21,7 @@ struct ContentView: View {
     }
 }
 
-private extension ContentView {
+private extension RootView {
     private func mainNavigation(identity: Identity) -> some View {
         #if os(macOS)
         return SidebarNavigation(identity: identity)
@@ -39,7 +39,7 @@ private extension ContentView {
 #if DEBUG
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        RootView()
             .environmentObject(SceneViewModel.development)
     }
 }

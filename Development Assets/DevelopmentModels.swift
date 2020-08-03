@@ -97,11 +97,13 @@ extension Identity {
 
 extension AppEnvironment {
     static func fresh(
+        URLSessionConfiguration: URLSessionConfiguration = .stubbing,
         identityDatabase: IdentityDatabase = .fresh(),
         preferences: Preferences = .fresh(),
         secrets: Secrets = .fresh(),
         webAuthSessionType: WebAuthSession.Type = SuccessfulStubbingWebAuthSession.self) -> AppEnvironment {
         AppEnvironment(
+            URLSessionConfiguration: URLSessionConfiguration,
             identityDatabase: identityDatabase,
             preferences: preferences,
             secrets: secrets,
@@ -109,14 +111,23 @@ extension AppEnvironment {
     }
 
     static let development = AppEnvironment(
+        URLSessionConfiguration: .stubbing,
         identityDatabase: .development,
         preferences: .development,
         secrets: .development,
         webAuthSessionType: SuccessfulStubbingWebAuthSession.self)
 }
 
-extension SceneViewModel {
-    static let development = SceneViewModel(networkClient: .development, environment: .development)
+extension RootViewModel {
+    static let development = RootViewModel(environment: .development)
+}
+
+extension MainNavigationViewModel {
+    static let development = RootViewModel.development.mainNavigationViewModel(identityID: devIdentityID)!
+}
+
+extension SettingsViewModel {
+    static let development = MainNavigationViewModel.development.settingsViewModel()
 }
 
 // swiftlint:enable force_try

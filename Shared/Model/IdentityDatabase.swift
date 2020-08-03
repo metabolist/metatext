@@ -4,6 +4,10 @@ import Foundation
 import Combine
 import GRDB
 
+enum IdentityDatabaseError: Error {
+    case identityNotFound
+}
+
 struct IdentityDatabase {
     private let databaseQueue: DatabaseQueue
 
@@ -61,7 +65,7 @@ extension IdentityDatabase {
             .eraseToAnyPublisher()
     }
 
-    func identityObservation(id: String) -> AnyPublisher<Identity?, Error> {
+    func identityObservation(id: String) -> AnyPublisher<Identity, Error> {
         ValueObservation.tracking(
             StoredIdentity
                 .filter(Column("id") == id)
@@ -71,8 +75,8 @@ extension IdentityDatabase {
                 .fetchOne)
             .removeDuplicates()
             .publisher(in: databaseQueue, scheduling: .immediate)
-            .map {
-                guard let result = $0 else { return nil }
+            .tryMap {
+                guard let result = $0 else { throw IdentityDatabaseError.identityNotFound }
 
                 return Identity(result: result)
             }
