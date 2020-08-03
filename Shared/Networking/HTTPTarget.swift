@@ -3,6 +3,12 @@
 import Foundation
 import Alamofire
 
+typealias HTTPMethod = Alamofire.HTTPMethod
+typealias HTTPHeaders = Alamofire.HTTPHeaders
+typealias ParameterEncoding = Alamofire.ParameterEncoding
+typealias URLEncoding = Alamofire.URLEncoding
+typealias JSONEncoding = Alamofire.JSONEncoding
+
 protocol HTTPTarget: URLRequestConvertible {
     var baseURL: URL { get }
     var pathComponents: [String] { get }

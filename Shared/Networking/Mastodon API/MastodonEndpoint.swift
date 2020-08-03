@@ -1,7 +1,6 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import Foundation
-import Alamofire
 
 protocol MastodonEndpoint {
     associatedtype ResultType: Decodable

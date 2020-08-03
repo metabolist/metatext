@@ -2,7 +2,6 @@
 
 import Foundation
 import Combine
-import Alamofire
 
 class MastodonClient: HTTPClient {
     var instanceURL: URL?
