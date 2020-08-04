@@ -6,28 +6,26 @@ struct RootView: View {
     @StateObject var viewModel: RootViewModel
 
     var body: some View {
-        if
-            let identityID = viewModel.identityID,
-            let mainNavigationViewModel = viewModel.mainNavigationViewModel(identityID: identityID) {
-            Self.mainNavigation(viewModel: mainNavigationViewModel)
-        } else {
-            addIdentity
+        ZStack {
+            if let mainNavigationViewModel = viewModel.mainNavigationViewModel {
+                Self.mainNavigation(mainNavigationViewModel: mainNavigationViewModel)
+                    .environmentObject(viewModel)
+            } else {
+                AddIdentityView(viewModel: viewModel.addIdentityViewModel())
+            }
         }
     }
 }
 
 private extension RootView {
-    private static func mainNavigation(viewModel: MainNavigationViewModel) -> some View {
+    @ViewBuilder
+    private static func mainNavigation(mainNavigationViewModel: MainNavigationViewModel) -> some View {
         #if os(macOS)
-        return SidebarNavigation(viewModel: viewModel)
+        SidebarNavigation(viewModel: mainNavigationViewModel)
             .frame(minWidth: 900, maxWidth: .infinity, minHeight: 500, maxHeight: .infinity)
         #else
-        return TabNavigation(viewModel: viewModel)
+        TabNavigation(viewModel: mainNavigationViewModel)
         #endif
-    }
-
-    private var addIdentity: some View {
-        AddIdentityView(viewModel: viewModel.addIdentityViewModel())
     }
 }
 

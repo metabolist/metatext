@@ -4,41 +4,50 @@ import Foundation
 import Combine
 
 class MainNavigationViewModel: ObservableObject {
-    var selectedTab: Tab? = .timelines
+    @Published private(set) var identity: Identity
     @Published var presentingSettings = false
-    @Published private(set) var alertItem: AlertItem?
-    @Published private(set) var handle: String
-    @Published private(set) var image: URL?
+    @Published var alertItem: AlertItem?
+    var selectedTab: Tab? = .timelines
 
     private let environment: AppEnvironment
-    private let identity: CurrentValuePublisher<Identity>
     private let networkClient: MastodonClient
     private var cancellables = Set<AnyCancellable>()
 
-    init(identity: CurrentValuePublisher<Identity>, environment: AppEnvironment) {
-        self.identity = identity
+    init(identityID: String, environment: AppEnvironment) throws {
         self.environment = environment
         networkClient = MastodonClient(configuration: environment.URLSessionConfiguration)
 
-        networkClient.instanceURL = identity.value.url
+        let observation = environment.identityDatabase.identityObservation(id: identityID).share()
+        var initialIdentity: Identity?
+
+        observation.first().sink(
+            receiveCompletion: { _ in },
+            receiveValue: { initialIdentity = $0 })
+            .store(in: &cancellables)
+
+        guard let identity = initialIdentity else { throw IdentityDatabaseError.identityNotFound }
+
+        self.identity = identity
+        networkClient.instanceURL = identity.url
 
         do {
-            networkClient.accessToken = try environment.secrets.item(.accessToken, forIdentityID: identity.value.id)
+            networkClient.accessToken = try environment.secrets.item(.accessToken, forIdentityID: identity.id)
         } catch {
             alertItem = AlertItem(error: error)
         }
 
-        handle = identity.value.handle
-        identity.map(\.handle).assign(to: &$handle)
+        observation.assignErrorsToAlertItem(to: \.alertItem, on: self).assign(to: &$identity)
 
-        image = identity.value.image
-        identity.map(\.image).assign(to: &$image)
+        environment.identityDatabase.updateLastUsedAt(identityID: identityID)
+            .assignErrorsToAlertItem(to: \.alertItem, on: self)
+            .sink(receiveValue: {})
+            .store(in: &cancellables)
     }
 }
 
 extension MainNavigationViewModel {
     func refreshIdentity() {
-        let id = identity.value.id
+        let id = identity.id
 
         if networkClient.accessToken != nil {
             networkClient.request(AccountEndpoint.verifyCredentials)
@@ -58,7 +67,7 @@ extension MainNavigationViewModel {
     }
 
     func settingsViewModel() -> SettingsViewModel {
-        SettingsViewModel(identity: identity, environment: environment)
+        SettingsViewModel(identity: _identity, environment: environment)
     }
 }
 

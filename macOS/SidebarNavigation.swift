@@ -7,6 +7,8 @@ import struct Kingfisher.RoundCornerImageProcessor
 
 struct SidebarNavigation: View {
     @StateObject var viewModel: MainNavigationViewModel
+    @EnvironmentObject var rootViewModel: RootViewModel
+    @Environment(\.displayScale) var displayScale: CGFloat
 
     var sidebar: some View {
         List(selection: $viewModel.selectedTab) {
@@ -18,7 +20,10 @@ struct SidebarNavigation: View {
                 .tag(tab)
             }
         }
-        .overlay(Pocket().environmentObject(viewModel), alignment: .bottom)
+        .overlay(Pocket()
+                    .environmentObject(viewModel)
+                    .environmentObject(rootViewModel),
+                 alignment: .bottom)
         .listStyle(SidebarListStyle())
         .onAppear(perform: viewModel.refreshIdentity)
         .onReceive(NotificationCenter.default
@@ -51,18 +56,19 @@ private extension SidebarNavigation {
 
     struct Pocket: View {
         @EnvironmentObject var viewModel: MainNavigationViewModel
+        @EnvironmentObject var rootViewModel: RootViewModel
 
         var body: some View {
             VStack(alignment: .leading, spacing: 0) {
                 Divider()
                 Button(action: { viewModel.presentingSettings.toggle() }) {
-                    KFImage(viewModel.image,
+                    KFImage(viewModel.identity.image,
                             options: [
                                 .processor(
                                     DownsamplingImageProcessor(size: CGSize(width: 50, height: 50))
                                         .append(another: RoundCornerImageProcessor(radius: .widthFraction(0.5)))
                                 ),
-                                .scaleFactor(Screen.scale),
+                                .scaleFactor(displayScale),
                                 .cacheOriginalImage
                             ])
                         .placeholder { Image(systemName: "gear") }
@@ -80,6 +86,7 @@ private extension SidebarNavigation {
             .sheet(isPresented: $viewModel.presentingSettings) {
                 SettingsView(viewModel: viewModel.settingsViewModel())
                     .environmentObject(viewModel)
+                    .environmentObject(rootViewModel)
             }
         }
     }
@@ -89,6 +96,7 @@ private extension SidebarNavigation {
 struct SidebarNavigation_Previews: PreviewProvider {
     static var previews: some View {
         SidebarNavigation(viewModel: .development)
+            .environmentObject(RootViewModel.development)
     }
 }
 #endif

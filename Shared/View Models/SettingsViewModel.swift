@@ -3,11 +3,17 @@
 import Foundation
 
 class SettingsViewModel: ObservableObject {
-    private let identity: CurrentValuePublisher<Identity>
+    @Published private(set) var identity: Identity
     private let environment: AppEnvironment
 
-    init(identity: CurrentValuePublisher<Identity>, environment: AppEnvironment) {
-        self.identity = identity
+    init(identity: Published<Identity>, environment: AppEnvironment) {
+        _identity = identity
         self.environment = environment
+    }
+}
+
+extension SettingsViewModel {
+    func identitiesViewModel() -> IdentitiesViewModel {
+        IdentitiesViewModel(identity: _identity, environment: environment)
     }
 }

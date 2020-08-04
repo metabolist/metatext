@@ -4,49 +4,39 @@ import Foundation
 import Combine
 
 class RootViewModel: ObservableObject {
-    @Published private(set) var identityID: String?
-    @Published var alertItem: AlertItem?
+    @Published private(set) var mainNavigationViewModel: MainNavigationViewModel?
 
+    @Published private var identityID: String?
     private let environment: AppEnvironment
     private var cancellables = Set<AnyCancellable>()
 
     init(environment: AppEnvironment) {
         self.environment = environment
-        identityID = environment.preferences[.recentIdentityID]
+        identityID = environment.identityDatabase.mostRecentlyUsedIdentityID
+
+        $identityID
+            .tryMap {
+                guard let id = $0 else { return nil }
+
+                return try MainNavigationViewModel(identityID: id, environment: environment)
+            }
+            .replaceError(with: nil)
+            .assign(to: &$mainNavigationViewModel)
     }
 }
 
 extension RootViewModel {
+    func newIdentitySelected(id: String) {
+        identityID = id
+    }
+
     func addIdentityViewModel() -> AddIdentityViewModel {
         let addAccountViewModel = AddIdentityViewModel(environment: environment)
 
-        addAccountViewModel.addedIdentityID.map { $0 as String? }.assign(to: &$identityID)
+        addAccountViewModel.addedIdentityID
+            .sink(receiveValue: newIdentitySelected(id:))
+            .store(in: &cancellables)
 
         return addAccountViewModel
-    }
-
-    func mainNavigationViewModel(identityID: String) -> MainNavigationViewModel? {
-        environment.preferences[.recentIdentityID] = identityID
-
-        let identityObservation = environment.identityDatabase.identityObservation(id: identityID)
-            .share()
-        var initialIdentity: Identity?
-
-        // setting `initialIdentity` works because of immediate scheduling
-        identityObservation.sink(receiveCompletion: { _ in }, receiveValue: { initialIdentity = $0 })
-            .store(in: &cancellables)
-        identityObservation.map { $0.id }
-            .catch { [weak self] _ -> AnyPublisher<String?, Never> in
-                Just(self?.environment.preferences[.recentIdentityID]).eraseToAnyPublisher()
-            }
-            .assign(to: &$identityID)
-
-        guard let presentIdentity = initialIdentity else { return nil }
-
-        return MainNavigationViewModel(
-            identity: CurrentValuePublisher(
-                initial: presentIdentity,
-                then: identityObservation.assignErrorsToAlertItem(to: \.alertItem, on: self)),
-            environment: environment)
     }
 }

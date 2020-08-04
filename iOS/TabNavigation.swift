@@ -5,7 +5,9 @@ import KingfisherSwiftUI
 import struct Kingfisher.DownsamplingImageProcessor
 
 struct TabNavigation: View {
-    @StateObject var viewModel: MainNavigationViewModel
+    @ObservedObject var viewModel: MainNavigationViewModel
+    @EnvironmentObject var rootViewModel: RootViewModel
+    @Environment(\.displayScale) var displayScale: CGFloat
 
     var body: some View {
         TabView(selection: $viewModel.selectedTab) {
@@ -23,9 +25,10 @@ struct TabNavigation: View {
         }
         .sheet(isPresented: $viewModel.presentingSettings) {
             SettingsView(viewModel: viewModel.settingsViewModel())
-                .environmentObject(viewModel)
+                .environmentObject(rootViewModel)
         }
-        .onAppear(perform: viewModel.refreshIdentity)
+        .onReceive(rootViewModel.$mainNavigationViewModel.map { _ in ()},
+                   perform: viewModel.refreshIdentity)
         .onReceive(NotificationCenter.default
                     .publisher(for: UIScene.willEnterForegroundNotification)
                     .map { _ in () },
@@ -39,17 +42,17 @@ private extension TabNavigation {
             switch tab {
             case .timelines:
                 TimelineView()
-                    .navigationBarTitle(viewModel.handle, displayMode: .inline)
+                    .navigationBarTitle(viewModel.identity.handle, displayMode: .inline)
                     .navigationBarItems(
                         leading: Button {
                             viewModel.presentingSettings.toggle()
                         } label: {
-                            KFImage(viewModel.image,
+                            KFImage(viewModel.identity.image,
                                     options: [
                                         .processor(
                                             DownsamplingImageProcessor(size: CGSize(width: 28, height: 28))
                                         ),
-                                        .scaleFactor(Screen.scale),
+                                        .scaleFactor(displayScale),
                                         .cacheOriginalImage
                                     ])
                                 .placeholder { Image(systemName: "gear") }

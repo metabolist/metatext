@@ -8,17 +8,17 @@ import CombineExpectations
 class RootViewModelTests: XCTestCase {
     func testAddIdentity() throws {
         let sut = RootViewModel(environment: .fresh())
-        let identityIDRecorder = sut.$identityID.record()
+        let recorder = sut.$mainNavigationViewModel.record()
 
-        XCTAssertNil(try wait(for: identityIDRecorder.next(), timeout: 1))
+        XCTAssertNil(try wait(for: recorder.next(), timeout: 1))
 
         let addIdentityViewModel = sut.addIdentityViewModel()
 
         addIdentityViewModel.urlFieldText = "https://mastodon.social"
         addIdentityViewModel.goTapped()
 
-        let identityID = try wait(for: identityIDRecorder.next(), timeout: 1)!
+        let mainNavigationViewModel = try wait(for: recorder.next(), timeout: 1)!
 
-        XCTAssertNotNil(identityID)
+        XCTAssertNotNil(mainNavigationViewModel)
     }
 }

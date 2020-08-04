@@ -20,7 +20,6 @@ class AddIdentityViewModelTests: XCTestCase {
 
         XCTAssertEqual(addedIdentity.id, addedIdentityID)
         XCTAssertEqual(addedIdentity.url, URL(string: "https://mastodon.social")!)
-        XCTAssertEqual(environment.preferences[.recentIdentityID], addedIdentity.id)
         XCTAssertEqual(
             try environment.secrets.item(.clientID, forIdentityID: addedIdentityID) as String?,
             "AUTHORIZATION_CLIENT_ID_STUB_VALUE")

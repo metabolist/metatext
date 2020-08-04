@@ -123,11 +123,15 @@ extension RootViewModel {
 }
 
 extension MainNavigationViewModel {
-    static let development = RootViewModel.development.mainNavigationViewModel(identityID: devIdentityID)!
+    static let development = try! MainNavigationViewModel(identityID: devIdentityID, environment: .development)
 }
 
 extension SettingsViewModel {
     static let development = MainNavigationViewModel.development.settingsViewModel()
+}
+
+extension IdentitiesViewModel {
+    static let development = SettingsViewModel.development.identitiesViewModel()
 }
 
 // swiftlint:enable force_try

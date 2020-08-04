@@ -179,11 +179,7 @@ private extension Publisher where Output == AccessToken {
             return (id, instanceURL)
         }
         .flatMap(environment.identityDatabase.createIdentity)
-        .map {
-            environment.preferences[.recentIdentityID] = id
-
-            return id
-        }
+        .map { id }
         .eraseToAnyPublisher()
     }
 }

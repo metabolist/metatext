@@ -31,8 +31,22 @@ struct IdentityDatabase {
 
 extension IdentityDatabase {
     func createIdentity(id: String, url: URL) -> AnyPublisher<Void, Error> {
-        databaseQueue.writePublisher(updates: StoredIdentity(id: id, url: url, instanceURI: nil).save)
+        databaseQueue.writePublisher(
+            updates: StoredIdentity(
+                id: id,
+                url: url,
+                lastUsedAt: Date(),
+                instanceURI: nil).save)
             .eraseToAnyPublisher()
+    }
+
+    func updateLastUsedAt(identityID: String) -> AnyPublisher<Void, Error> {
+        databaseQueue.writePublisher {
+            try StoredIdentity
+                .filter(Column("id") == identityID)
+                .updateAll($0, Column("lastUsedAt").set(to: Date()))
+        }
+        .eraseToAnyPublisher()
     }
 
     func updateInstance(_ instance: Instance, forIdentityID identityID: String) -> AnyPublisher<Void, Error> {
@@ -82,6 +96,29 @@ extension IdentityDatabase {
             }
             .eraseToAnyPublisher()
     }
+
+    func identitiesObservation() -> AnyPublisher<[Identity], Error> {
+        ValueObservation.tracking(
+            StoredIdentity
+                .including(optional: StoredIdentity.instance)
+                .including(optional: StoredIdentity.account)
+                .asRequest(of: IdentityResult.self).fetchAll)
+            .removeDuplicates()
+            .publisher(in: databaseQueue, scheduling: .immediate)
+            .map { $0.map(Identity.init(result:)) }
+            .eraseToAnyPublisher()
+    }
+
+    func identityCountObservation() -> AnyPublisher<Int, Error> {
+        ValueObservation.tracking(StoredIdentity.fetchCount)
+            .removeDuplicates()
+            .publisher(in: databaseQueue, scheduling: .immediate)
+            .eraseToAnyPublisher()
+    }
+
+    var mostRecentlyUsedIdentityID: String? {
+        try? databaseQueue.read(StoredIdentity.select(Column("id")).order(Column("lastUsedAt").desc).fetchOne)
+    }
 }
 
 private extension IdentityDatabase {
@@ -99,6 +136,7 @@ private extension IdentityDatabase {
             try db.create(table: "storedIdentity", ifNotExists: true) { t in
                 t.column("id", .text).notNull().primaryKey(onConflict: .replace)
                 t.column("url", .text).notNull()
+                t.column("lastUsedAt", .datetime).notNull()
                 t.column("instanceURI", .text)
                     .indexed()
                     .references("instance", column: "uri")
@@ -126,6 +164,7 @@ private extension IdentityDatabase {
 private struct StoredIdentity: Codable, Hashable, TableRecord, FetchableRecord, PersistableRecord {
     let id: String
     let url: URL
+    let lastUsedAt: Date
     let instanceURI: String?
 }
 
@@ -150,7 +189,12 @@ private struct IdentityResult: Codable, Hashable, FetchableRecord {
 
 private extension Identity {
     init(result: IdentityResult) {
-        self.init(id: result.identity.id, url: result.identity.url, instance: result.instance, account: result.account)
+        self.init(
+            id: result.identity.id,
+            url: result.identity.url,
+            lastUsedAt: result.identity.lastUsedAt,
+            instance: result.instance,
+            account: result.account)
     }
 }
 

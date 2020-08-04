@@ -2,9 +2,10 @@
 
 import Foundation
 
-struct Identity: Codable, Hashable {
+struct Identity: Codable, Hashable, Identifiable {
     let id: String
     let url: URL
+    let lastUsedAt: Date
     let instance: Identity.Instance?
     let account: Identity.Account?
 }

@@ -6,34 +6,41 @@ import struct Kingfisher.DownsamplingImageProcessor
 
 struct SettingsView: View {
     @StateObject var viewModel: SettingsViewModel
-    @EnvironmentObject var mainNavigationViewModel: MainNavigationViewModel
+    @EnvironmentObject var rootViewModel: RootViewModel
+    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.displayScale) var displayScale: CGFloat
 
     var body: some View {
         VStack(spacing: 0) {
             NavigationView {
                 Form {
                     HStack {
-                        KFImage(mainNavigationViewModel.image,
+                        KFImage(viewModel.identity.image,
                                 options: [
                                     .processor(
                                         DownsamplingImageProcessor(size: CGSize(width: 50, height: 50))
                                     ),
-                                    .scaleFactor(Screen.scale),
+                                    .scaleFactor(displayScale),
                                     .cacheOriginalImage
                                 ])
                             .clipShape(Circle())
-                        Text(mainNavigationViewModel.handle)
+                        Text(viewModel.identity.handle)
                             .font(.subheadline)
                     }
+                    NavigationLink(
+                        "accounts",
+                        destination: IdentitiesView(
+                            viewModel: viewModel.identitiesViewModel())
+                            .environmentObject(rootViewModel))
                 }
-                .navigationBarTitleAndItems(mainNavigationViewModel: mainNavigationViewModel)
+                .navigationBarTitleAndItems(presentationMode: presentationMode)
             }
             .navigationViewStyle
             #if os(macOS)
             Divider()
             HStack {
                 Spacer()
-                Button(action: { mainNavigationViewModel.presentingSettings.toggle() }) {
+                Button(action: { presentationMode.wrappedValue.dismiss() }) {
                     Text("Done")
                 }
                 .keyboardShortcut(.defaultAction)
@@ -47,12 +54,12 @@ struct SettingsView: View {
 }
 
 private extension View {
-    func navigationBarTitleAndItems(mainNavigationViewModel: MainNavigationViewModel) -> some View {
+    func navigationBarTitleAndItems(presentationMode: Binding<PresentationMode>) -> some View {
         #if os(iOS)
         return navigationBarTitle(Text("settings"), displayMode: .inline)
         .navigationBarItems(
             leading: Button {
-                mainNavigationViewModel.presentingSettings.toggle()
+                presentationMode.wrappedValue.dismiss()
             } label: {
                 Image(systemName: "xmark.circle.fill").imageScale(.large)
             })
@@ -83,6 +90,7 @@ struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
         SettingsView(viewModel: .development)
             .environmentObject(MainNavigationViewModel.development)
+            .environmentObject(RootViewModel.development)
     }
 }
 #endif
