@@ -2,23 +2,23 @@
 
 import Combine
 
-// This publisher acts as a `@Published private var` inside ObservableObjects that doesn't trigger `objectWillChange`
-
 class CurrentValuePublisher<Output> {
-    @Published private(set) var value: Output
-    private let internalPublisher: AnyPublisher<Output, Never>
+    @Published private var wrappedValue: Output
 
     init<P>(initial: Output, then: P) where P: Publisher, P.Output == Output, P.Failure == Never {
-        value = initial
-        internalPublisher = then.eraseToAnyPublisher()
-        then.assign(to: &$value)
+        wrappedValue = initial
+        then.assign(to: &$wrappedValue)
     }
+}
+
+extension CurrentValuePublisher {
+    var value: Output { wrappedValue }
 }
 
 extension CurrentValuePublisher: Publisher {
     typealias Failure = Never
 
-    func receive<S>(subscriber: S) where S: Subscriber, Output == S.Input, S.Failure == Never {
-        internalPublisher.receive(subscriber: subscriber)
+    func receive<S>(subscriber: S) where S: Subscriber, S.Input == Output, S.Failure == Never {
+        $wrappedValue.receive(subscriber: subscriber)
     }
 }

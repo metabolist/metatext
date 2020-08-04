@@ -5,7 +5,7 @@ import KingfisherSwiftUI
 import struct Kingfisher.DownsamplingImageProcessor
 
 struct TabNavigation: View {
-    @EnvironmentObject var viewModel: MainNavigationViewModel
+    @StateObject var viewModel: MainNavigationViewModel
 
     var body: some View {
         TabView(selection: $viewModel.selectedTab) {
@@ -25,7 +25,11 @@ struct TabNavigation: View {
             SettingsView(viewModel: viewModel.settingsViewModel())
                 .environmentObject(viewModel)
         }
-        .onAppear { viewModel.refreshIdentity() }
+        .onAppear(perform: viewModel.refreshIdentity)
+        .onReceive(NotificationCenter.default
+                    .publisher(for: UIScene.willEnterForegroundNotification)
+                    .map { _ in () },
+                   perform: viewModel.refreshIdentity)
     }
 }
 
@@ -61,8 +65,7 @@ private extension TabNavigation {
 #if DEBUG
 struct TabNavigation_Previews: PreviewProvider {
     static var previews: some View {
-        TabNavigation()
-            .environmentObject(MainNavigationViewModel.development)
+        TabNavigation(viewModel: .development)
     }
 }
 #endif

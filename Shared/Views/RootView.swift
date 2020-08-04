@@ -19,10 +19,10 @@ struct RootView: View {
 private extension RootView {
     private static func mainNavigation(viewModel: MainNavigationViewModel) -> some View {
         #if os(macOS)
-        return SidebarNavigation().environmentObject(viewModel)
+        return SidebarNavigation(viewModel: viewModel)
             .frame(minWidth: 900, maxWidth: .infinity, minHeight: 500, maxHeight: .infinity)
         #else
-        return TabNavigation().environmentObject(viewModel)
+        return TabNavigation(viewModel: viewModel)
         #endif
     }
 

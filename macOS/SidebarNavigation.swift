@@ -6,7 +6,7 @@ import struct Kingfisher.DownsamplingImageProcessor
 import struct Kingfisher.RoundCornerImageProcessor
 
 struct SidebarNavigation: View {
-    @EnvironmentObject var viewModel: MainNavigationViewModel
+    @StateObject var viewModel: MainNavigationViewModel
 
     var sidebar: some View {
         List(selection: $viewModel.selectedTab) {
@@ -18,8 +18,14 @@ struct SidebarNavigation: View {
                 .tag(tab)
             }
         }
-        .overlay(Pocket(), alignment: .bottom)
+        .overlay(Pocket().environmentObject(viewModel), alignment: .bottom)
         .listStyle(SidebarListStyle())
+        .onAppear(perform: viewModel.refreshIdentity)
+        .onReceive(NotificationCenter.default
+                    .publisher(for: NSWindow.didBecomeKeyNotification)
+                    .dropFirst()
+                    .map { _ in () },
+                   perform: viewModel.refreshIdentity)
     }
 
     var body: some View {
@@ -82,8 +88,7 @@ private extension SidebarNavigation {
 #if DEBUG
 struct SidebarNavigation_Previews: PreviewProvider {
     static var previews: some View {
-        SidebarNavigation()
-            .environmentObject(MainNavigationViewModel.development)
+        SidebarNavigation(viewModel: .development)
     }
 }
 #endif
