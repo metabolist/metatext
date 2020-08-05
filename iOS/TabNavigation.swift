@@ -2,7 +2,6 @@
 
 import SwiftUI
 import KingfisherSwiftUI
-import struct Kingfisher.DownsamplingImageProcessor
 
 struct TabNavigation: View {
     @ObservedObject var viewModel: MainNavigationViewModel
@@ -37,30 +36,37 @@ struct TabNavigation: View {
 }
 
 private extension TabNavigation {
+    @ViewBuilder
     func view(tab: MainNavigationViewModel.Tab) -> some View {
-        Group {
-            switch tab {
-            case .timelines:
-                TimelineView()
-                    .navigationBarTitle(viewModel.identity.handle, displayMode: .inline)
-                    .navigationBarItems(
-                        leading: Button {
-                            viewModel.presentingSettings.toggle()
-                        } label: {
-                            KFImage(viewModel.identity.image,
-                                    options: [
-                                        .processor(
-                                            DownsamplingImageProcessor(size: CGSize(width: 28, height: 28))
-                                        ),
-                                        .scaleFactor(displayScale),
-                                        .cacheOriginalImage
-                                    ])
-                                .placeholder { Image(systemName: "gear") }
-                                .renderingMode(.original)
-                                .clipShape(Circle())
-                        })
-            default: Text(tab.title)
-            }
+        switch tab {
+        case .timelines:
+            TimelineView()
+                .navigationBarTitle(viewModel.identity.handle, displayMode: .inline)
+                .navigationBarItems(
+                    leading: Button {
+                        viewModel.presentingSettings.toggle()
+                    } label: {
+                        KFImage(viewModel.identity.image,
+                                options: .downsampled(dimension: 28, scaleFactor: displayScale))
+                            .placeholder { Image(systemName: "gear") }
+                            .renderingMode(.original)
+                            .contextMenu(ContextMenu {
+                                ForEach(viewModel.recentIdentities) { recentIdentity in
+                                    Button {
+                                        rootViewModel.newIdentitySelected(id: recentIdentity.id)
+                                    } label: {
+                                        Label(
+                                            title: { Text(recentIdentity.handle) },
+                                            icon: {
+                                                KFImage(recentIdentity.image,
+                                                        options: .downsampled(dimension: 28, scaleFactor: displayScale))
+                                                    .renderingMode(.original)
+                                            })
+                                    }
+                                }
+                            })
+                    })
+        default: Text(tab.title)
         }
     }
 }
@@ -69,6 +75,7 @@ private extension TabNavigation {
 struct TabNavigation_Previews: PreviewProvider {
     static var previews: some View {
         TabNavigation(viewModel: .development)
+            .environmentObject(RootViewModel.development)
     }
 }
 #endif

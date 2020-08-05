@@ -29,5 +29,6 @@ struct IdentitiesView: View {
 struct IdentitiesView_Previews: PreviewProvider {
     static var previews: some View {
         IdentitiesView(viewModel: .development)
+            .environmentObject(RootViewModel.development)
     }
 }

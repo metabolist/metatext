@@ -2,7 +2,6 @@
 
 import SwiftUI
 import KingfisherSwiftUI
-import struct Kingfisher.DownsamplingImageProcessor
 
 struct SettingsView: View {
     @StateObject var viewModel: SettingsViewModel
@@ -16,14 +15,7 @@ struct SettingsView: View {
                 Form {
                     HStack {
                         KFImage(viewModel.identity.image,
-                                options: [
-                                    .processor(
-                                        DownsamplingImageProcessor(size: CGSize(width: 50, height: 50))
-                                    ),
-                                    .scaleFactor(displayScale),
-                                    .cacheOriginalImage
-                                ])
-                            .clipShape(Circle())
+                                options: .downsampled(dimension: 50, scaleFactor: displayScale))
                         Text(viewModel.identity.handle)
                             .font(.subheadline)
                     }
@@ -89,7 +81,6 @@ private extension View {
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
         SettingsView(viewModel: .development)
-            .environmentObject(MainNavigationViewModel.development)
             .environmentObject(RootViewModel.development)
     }
 }

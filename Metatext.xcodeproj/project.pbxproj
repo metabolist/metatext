@@ -73,6 +73,8 @@
 		D074577B24D29366004758DB /* URLSessionConfiguration+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D074577924D29366004758DB /* URLSessionConfiguration+Extensions.swift */; };
 		D081A40524D0F1A8001B016E /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D081A40424D0F1A8001B016E /* String+Extensions.swift */; };
 		D081A40624D0F1A8001B016E /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D081A40424D0F1A8001B016E /* String+Extensions.swift */; };
+		D0A1CA7424DAC2F1003063E9 /* KingfisherOptionsInfo+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A1CA7324DAC2F1003063E9 /* KingfisherOptionsInfo+Extensions.swift */; };
+		D0A1CA7524DAC2F1003063E9 /* KingfisherOptionsInfo+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A1CA7324DAC2F1003063E9 /* KingfisherOptionsInfo+Extensions.swift */; };
 		D0B23F0D24D210E90066F411 /* NSError+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B23F0C24D210E90066F411 /* NSError+Extensions.swift */; };
 		D0B23F0E24D210E90066F411 /* NSError+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B23F0C24D210E90066F411 /* NSError+Extensions.swift */; };
 		D0BEC93824C9632800E864C4 /* RootViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEC93724C9632800E864C4 /* RootViewModel.swift */; };
@@ -187,6 +189,7 @@
 		D074577624D29006004758DB /* StubbingWebAuthSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StubbingWebAuthSession.swift; sourceTree = "<group>"; };
 		D074577924D29366004758DB /* URLSessionConfiguration+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSessionConfiguration+Extensions.swift"; sourceTree = "<group>"; };
 		D081A40424D0F1A8001B016E /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
+		D0A1CA7324DAC2F1003063E9 /* KingfisherOptionsInfo+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KingfisherOptionsInfo+Extensions.swift"; sourceTree = "<group>"; };
 		D0B23F0C24D210E90066F411 /* NSError+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSError+Extensions.swift"; sourceTree = "<group>"; };
 		D0BEC93724C9632800E864C4 /* RootViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewModel.swift; sourceTree = "<group>"; };
 		D0BEC93A24C96FD500E864C4 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
@@ -397,6 +400,7 @@
 		D0DB6F1624C665B400D965FE /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				D0A1CA7324DAC2F1003063E9 /* KingfisherOptionsInfo+Extensions.swift */,
 				D0B23F0C24D210E90066F411 /* NSError+Extensions.swift */,
 				D0C963FD24CC3812003BD330 /* Publisher+Extensions.swift */,
 				D081A40424D0F1A8001B016E /* String+Extensions.swift */,
@@ -695,6 +699,7 @@
 				D0ED1BB724CE47F400B4899C /* WebAuthSession.swift in Sources */,
 				D0666A7224C6E0D300F3F04B /* Secrets.swift in Sources */,
 				D0BEC95124CA2B7E00E864C4 /* TabNavigation.swift in Sources */,
+				D0A1CA7424DAC2F1003063E9 /* KingfisherOptionsInfo+Extensions.swift in Sources */,
 				D0ED1BC424CED54D00B4899C /* HTTPTarget.swift in Sources */,
 				D0C963FE24CC3812003BD330 /* Publisher+Extensions.swift in Sources */,
 				D04FD73C24D4A83A007D572D /* InstanceEndpoint+Stubbing.swift in Sources */,
@@ -760,6 +765,7 @@
 				D0ED1BB824CE47F400B4899C /* WebAuthSession.swift in Sources */,
 				D0BEC94F24CA2B5300E864C4 /* SidebarNavigation.swift in Sources */,
 				D0666A7324C6E0D300F3F04B /* Secrets.swift in Sources */,
+				D0A1CA7524DAC2F1003063E9 /* KingfisherOptionsInfo+Extensions.swift in Sources */,
 				D0ED1BC524CED54D00B4899C /* HTTPTarget.swift in Sources */,
 				D0C963FF24CC3812003BD330 /* Publisher+Extensions.swift in Sources */,
 				D04FD73D24D4A83A007D572D /* InstanceEndpoint+Stubbing.swift in Sources */,

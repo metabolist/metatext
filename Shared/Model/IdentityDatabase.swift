@@ -102,17 +102,27 @@ extension IdentityDatabase {
             StoredIdentity
                 .including(optional: StoredIdentity.instance)
                 .including(optional: StoredIdentity.account)
-                .asRequest(of: IdentityResult.self).fetchAll)
+                .asRequest(of: IdentityResult.self)
+                .fetchAll)
             .removeDuplicates()
             .publisher(in: databaseQueue, scheduling: .immediate)
             .map { $0.map(Identity.init(result:)) }
             .eraseToAnyPublisher()
     }
 
-    func identityCountObservation() -> AnyPublisher<Int, Error> {
-        ValueObservation.tracking(StoredIdentity.fetchCount)
+    func recentIdentitiesObservation(excluding: String) -> AnyPublisher<[Identity], Error> {
+        ValueObservation.tracking(
+            StoredIdentity
+                .filter(Column("id") != excluding)
+                .order(Column("lastUsedAt").desc)
+                .limit(10)
+                .including(optional: StoredIdentity.instance)
+                .including(optional: StoredIdentity.account)
+                .asRequest(of: IdentityResult.self)
+                .fetchAll)
             .removeDuplicates()
             .publisher(in: databaseQueue, scheduling: .immediate)
+            .map { $0.map(Identity.init(result:)) }
             .eraseToAnyPublisher()
     }
 

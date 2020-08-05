@@ -5,6 +5,7 @@ import Combine
 
 class MainNavigationViewModel: ObservableObject {
     @Published private(set) var identity: Identity
+    @Published private(set) var recentIdentities = [Identity]()
     @Published var presentingSettings = false
     @Published var alertItem: AlertItem?
     var selectedTab: Tab? = .timelines
@@ -37,6 +38,9 @@ class MainNavigationViewModel: ObservableObject {
         }
 
         observation.assignErrorsToAlertItem(to: \.alertItem, on: self).assign(to: &$identity)
+        environment.identityDatabase.recentIdentitiesObservation(excluding: identityID)
+            .assignErrorsToAlertItem(to: \.alertItem, on: self)
+            .assign(to: &$recentIdentities)
 
         environment.identityDatabase.updateLastUsedAt(identityID: identityID)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
