@@ -5,7 +5,7 @@ import Foundation
 struct AppEnvironment {
     let URLSessionConfiguration: URLSessionConfiguration
     let identityDatabase: IdentityDatabase
-    let preferences: Preferences
+    let defaults: Defaults
     let secrets: Secrets
     let webAuthSessionType: WebAuthSession.Type
 }

@@ -2,7 +2,7 @@
 
 import Foundation
 
-class Preferences {
+class Defaults {
     private let userDefaults: UserDefaults
 
     init(userDefaults: UserDefaults) {
@@ -10,14 +10,14 @@ class Preferences {
     }
 }
 
-extension Preferences {
+extension Defaults {
     enum Item: String {
         case recentIdentityID = "recent-identity-id"
     }
 }
 
-extension Preferences {
-    subscript<T>(index: Preferences.Item) -> T? {
+extension Defaults {
+    subscript<T>(index: Defaults.Item) -> T? {
         get { userDefaults.value(forKey: index.rawValue) as? T }
         set { userDefaults.set(newValue, forKey: index.rawValue) }
     }

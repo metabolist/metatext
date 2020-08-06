@@ -24,8 +24,8 @@
 		D052BBC724D749C800A80A7A /* RootViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D052BBC624D749C800A80A7A /* RootViewModelTests.swift */; };
 		D052BBCA24D74C9200A80A7A /* FakeUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = D052BBC824D74B6400A80A7A /* FakeUserDefaults.swift */; };
 		D052BBCB24D74C9300A80A7A /* FakeUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = D052BBC824D74B6400A80A7A /* FakeUserDefaults.swift */; };
-		D052BBCF24D750C000A80A7A /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = D052BBCE24D750C000A80A7A /* Preferences.swift */; };
-		D052BBD024D750C000A80A7A /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = D052BBCE24D750C000A80A7A /* Preferences.swift */; };
+		D052BBCF24D750C000A80A7A /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = D052BBCE24D750C000A80A7A /* Defaults.swift */; };
+		D052BBD024D750C000A80A7A /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = D052BBCE24D750C000A80A7A /* Defaults.swift */; };
 		D052BBD124D750CA00A80A7A /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D052BBCC24D750A100A80A7A /* AppEnvironment.swift */; };
 		D052BBD224D750CB00A80A7A /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D052BBCC24D750A100A80A7A /* AppEnvironment.swift */; };
 		D052BBE024D805E300A80A7A /* MainNavigationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D052BBDF24D805E300A80A7A /* MainNavigationViewModel.swift */; };
@@ -166,7 +166,7 @@
 		D052BBC624D749C800A80A7A /* RootViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewModelTests.swift; sourceTree = "<group>"; };
 		D052BBC824D74B6400A80A7A /* FakeUserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeUserDefaults.swift; sourceTree = "<group>"; };
 		D052BBCC24D750A100A80A7A /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
-		D052BBCE24D750C000A80A7A /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
+		D052BBCE24D750C000A80A7A /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
 		D052BBDF24D805E300A80A7A /* MainNavigationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationViewModel.swift; sourceTree = "<group>"; };
 		D065F53A24D3B33A00741304 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		D065F53D24D3D20300741304 /* InstanceEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstanceEndpoint.swift; sourceTree = "<group>"; };
@@ -338,7 +338,7 @@
 				D0666A4D24C6C39600F3F04B /* Instance.swift */,
 				D0DC177324D0B58800A75C65 /* Keychain.swift */,
 				D0ED1BE224CFA84400B4899C /* MastodonError.swift */,
-				D052BBCE24D750C000A80A7A /* Preferences.swift */,
+				D052BBCE24D750C000A80A7A /* Defaults.swift */,
 				D0666A7124C6E0D300F3F04B /* Secrets.swift */,
 			);
 			path = Model;
@@ -657,7 +657,7 @@
 				D0BEC94724CA22C400E864C4 /* TimelineViewModel.swift in Sources */,
 				D0666A4E24C6C39600F3F04B /* Instance.swift in Sources */,
 				D0ED1BDA24CF963E00B4899C /* AppAuthorizationEndpoint.swift in Sources */,
-				D052BBCF24D750C000A80A7A /* Preferences.swift in Sources */,
+				D052BBCF24D750C000A80A7A /* Defaults.swift in Sources */,
 				D0ED1BE324CFA84400B4899C /* MastodonError.swift in Sources */,
 				D0666A6324C6DC6C00F3F04B /* AppAuthorization.swift in Sources */,
 				D065F53B24D3B33A00741304 /* View+Extensions.swift in Sources */,
@@ -723,7 +723,7 @@
 				D0BEC94824CA22C400E864C4 /* TimelineViewModel.swift in Sources */,
 				D0666A4F24C6C39600F3F04B /* Instance.swift in Sources */,
 				D0ED1BDB24CF963E00B4899C /* AppAuthorizationEndpoint.swift in Sources */,
-				D052BBD024D750C000A80A7A /* Preferences.swift in Sources */,
+				D052BBD024D750C000A80A7A /* Defaults.swift in Sources */,
 				D0ED1BE424CFA84400B4899C /* MastodonError.swift in Sources */,
 				D0666A6424C6DC6C00F3F04B /* AppAuthorization.swift in Sources */,
 				D065F53C24D3B33A00741304 /* View+Extensions.swift in Sources */,

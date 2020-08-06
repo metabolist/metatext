@@ -18,7 +18,7 @@ struct MetatextApp: App {
         environment = AppEnvironment(
             URLSessionConfiguration: .default,
             identityDatabase: identityDatabase,
-            preferences: Preferences(userDefaults: .standard),
+            defaults: Defaults(userDefaults: .standard),
             secrets: Secrets(keychain: Keychain(service: "com.metabolist.metatext")),
             webAuthSessionType: RealWebAuthSession.self)
     }

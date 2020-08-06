@@ -24,11 +24,11 @@ extension Secrets {
     }()
 }
 
-extension Preferences {
-    static func fresh() -> Preferences { Preferences(userDefaults: FakeUserDefaults()) }
+extension Defaults {
+    static func fresh() -> Defaults { Defaults(userDefaults: FakeUserDefaults()) }
 
-    static let development: Preferences = {
-        let preferences = Preferences.fresh()
+    static let development: Defaults = {
+        let preferences = Defaults.fresh()
 
         preferences[.recentIdentityID] = devIdentityID
 
@@ -99,13 +99,13 @@ extension AppEnvironment {
     static func fresh(
         URLSessionConfiguration: URLSessionConfiguration = .stubbing,
         identityDatabase: IdentityDatabase = .fresh(),
-        preferences: Preferences = .fresh(),
+        defaults: Defaults = .fresh(),
         secrets: Secrets = .fresh(),
         webAuthSessionType: WebAuthSession.Type = SuccessfulStubbingWebAuthSession.self) -> AppEnvironment {
         AppEnvironment(
             URLSessionConfiguration: URLSessionConfiguration,
             identityDatabase: identityDatabase,
-            preferences: preferences,
+            defaults: defaults,
             secrets: secrets,
             webAuthSessionType: webAuthSessionType)
     }
@@ -113,7 +113,7 @@ extension AppEnvironment {
     static let development = AppEnvironment(
         URLSessionConfiguration: .stubbing,
         identityDatabase: .development,
-        preferences: .development,
+        defaults: .development,
         secrets: .development,
         webAuthSessionType: SuccessfulStubbingWebAuthSession.self)
 }
