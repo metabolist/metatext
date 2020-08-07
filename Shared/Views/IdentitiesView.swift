@@ -18,7 +18,9 @@ struct IdentitiesView: View {
             Section {
                 List(viewModel.identities) { identity in
                     Button(identity.handle) {
-                        rootViewModel.newIdentitySelected(id: identity.id)
+                        withAnimation {
+                            rootViewModel.newIdentitySelected(id: identity.id)
+                        }
                     }
                 }
             }

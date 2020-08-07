@@ -4,6 +4,7 @@ import SwiftUI
 
 struct AddIdentityView: View {
     @StateObject var viewModel: AddIdentityViewModel
+    @EnvironmentObject var rootViewModel: RootViewModel
 
     var body: some View {
         Form {
@@ -32,6 +33,11 @@ struct AddIdentityView: View {
         }
         .paddingIfMac()
         .alertItem($viewModel.alertItem)
+        .onReceive(viewModel.addedIdentityID) { id in
+            withAnimation {
+                rootViewModel.newIdentitySelected(id: id)
+            }
+        }
     }
 }
 

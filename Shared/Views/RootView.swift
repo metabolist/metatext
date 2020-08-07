@@ -6,13 +6,16 @@ struct RootView: View {
     @StateObject var viewModel: RootViewModel
 
     var body: some View {
-        ZStack {
-            if let mainNavigationViewModel = viewModel.mainNavigationViewModel {
-                Self.mainNavigation(mainNavigationViewModel: mainNavigationViewModel)
-                    .environmentObject(viewModel)
-            } else {
-                AddIdentityView(viewModel: viewModel.addIdentityViewModel())
-            }
+        if let id = viewModel.identityID,
+           let mainNavigationViewModel = viewModel.mainNavigationViewModel(identityID: id) {
+            Self.mainNavigation(mainNavigationViewModel: mainNavigationViewModel)
+                .id(id)
+                .environmentObject(viewModel)
+                .transition(.opacity)
+        } else {
+            AddIdentityView(viewModel: viewModel.addIdentityViewModel())
+                .environmentObject(viewModel)
+                .transition(.opacity)
         }
     }
 }

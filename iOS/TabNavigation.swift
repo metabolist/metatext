@@ -26,8 +26,8 @@ struct TabNavigation: View {
             SettingsView(viewModel: viewModel.settingsViewModel())
                 .environmentObject(rootViewModel)
         }
-        .onReceive(rootViewModel.$mainNavigationViewModel.map { _ in ()},
-                   perform: viewModel.refreshIdentity)
+        .alertItem($viewModel.alertItem)
+        .onAppear(perform: viewModel.refreshIdentity)
         .onReceive(NotificationCenter.default
                     .publisher(for: UIScene.willEnterForegroundNotification)
                     .map { _ in () },

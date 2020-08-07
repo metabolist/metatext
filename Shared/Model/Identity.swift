@@ -6,6 +6,7 @@ struct Identity: Codable, Hashable, Identifiable {
     let id: String
     let url: URL
     let lastUsedAt: Date
+    let preferences: Identity.Preferences
     let instance: Identity.Instance?
     let account: Identity.Account?
 }
@@ -27,6 +28,16 @@ extension Identity {
         let avatarStatic: URL
         let header: URL
         let headerStatic: URL
+    }
+
+    struct Preferences: Codable, Hashable {
+        var useServerPostingPreferences = true
+        var postingDefaultVisibility = Status.Visibility.public
+        var postingDefaultSensitive = false
+        var postingDefaultLanguage: String?
+        var useServerReadingPreferences = true
+        var readingExpandMedia = MastodonPreferences.ExpandMedia.default
+        var readingExpandSpoilers = false
     }
 }
 

@@ -4,16 +4,17 @@ import Foundation
 
 class SettingsViewModel: ObservableObject {
     @Published private(set) var identity: Identity
-    private let environment: AppEnvironment
+    private let environment: IdentifiedEnvironment
 
-    init(identity: Published<Identity>, environment: AppEnvironment) {
-        _identity = identity
+    init(environment: IdentifiedEnvironment) {
         self.environment = environment
+        identity = environment.identity
+        environment.$identity.dropFirst().assign(to: &$identity)
     }
 }
 
 extension SettingsViewModel {
     func identitiesViewModel() -> IdentitiesViewModel {
-        IdentitiesViewModel(identity: _identity, environment: environment)
+        IdentitiesViewModel(environment: environment)
     }
 }

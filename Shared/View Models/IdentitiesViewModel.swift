@@ -8,24 +8,15 @@ class IdentitiesViewModel: ObservableObject {
     @Published var identities = [Identity]()
     @Published var alertItem: AlertItem?
 
-    private let environment: AppEnvironment
+    private let environment: IdentifiedEnvironment
     private var cancellables = Set<AnyCancellable>()
 
-    init(identity: Published<Identity>, environment: AppEnvironment) {
-        _identity = identity
+    init(environment: IdentifiedEnvironment) {
         self.environment = environment
+        identity = environment.identity
 
-        environment.identityDatabase.identitiesObservation()
+        environment.appEnvironment.identityDatabase.identitiesObservation()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$identities)
-    }
-}
-
-extension IdentitiesViewModel {
-    func identitySelected(id: String) {
-        environment.identityDatabase.updateLastUsedAt(identityID: id)
-            .assignErrorsToAlertItem(to: \.alertItem, on: self)
-            .sink(receiveValue: {})
-            .store(in: &cancellables)
     }
 }

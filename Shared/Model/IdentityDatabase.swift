@@ -36,6 +36,7 @@ extension IdentityDatabase {
                 id: id,
                 url: url,
                 lastUsedAt: Date(),
+                preferences: Identity.Preferences(),
                 instanceURI: nil).save)
             .eraseToAnyPublisher()
     }
@@ -150,6 +151,7 @@ private extension IdentityDatabase {
                 t.column("instanceURI", .text)
                     .indexed()
                     .references("instance", column: "uri")
+                t.column("preferences", .blob).notNull()
             }
 
             try db.create(table: "account", ifNotExists: true) { t in
@@ -175,6 +177,7 @@ private struct StoredIdentity: Codable, Hashable, TableRecord, FetchableRecord, 
     let id: String
     let url: URL
     let lastUsedAt: Date
+    let preferences: Identity.Preferences
     let instanceURI: String?
 }
 
@@ -203,6 +206,7 @@ private extension Identity {
             id: result.identity.id,
             url: result.identity.url,
             lastUsedAt: result.identity.lastUsedAt,
+            preferences: result.identity.preferences,
             instance: result.instance,
             account: result.account)
     }

@@ -10,39 +10,21 @@ class MainNavigationViewModel: ObservableObject {
     @Published var alertItem: AlertItem?
     var selectedTab: Tab? = .timelines
 
-    private let environment: AppEnvironment
-    private let networkClient: MastodonClient
+    private let environment: IdentifiedEnvironment
     private var cancellables = Set<AnyCancellable>()
 
-    init(identityID: String, environment: AppEnvironment) throws {
+    init(environment: IdentifiedEnvironment) {
         self.environment = environment
-        networkClient = MastodonClient(configuration: environment.URLSessionConfiguration)
+        identity = environment.identity
+        environment.$identity.dropFirst().assign(to: &$identity)
 
-        let observation = environment.identityDatabase.identityObservation(id: identityID).share()
-        var initialIdentity: Identity?
-
-        observation.first().sink(
-            receiveCompletion: { _ in },
-            receiveValue: { initialIdentity = $0 })
-            .store(in: &cancellables)
-
-        guard let identity = initialIdentity else { throw IdentityDatabaseError.identityNotFound }
-
-        self.identity = identity
-        networkClient.instanceURL = identity.url
-
-        do {
-            networkClient.accessToken = try environment.secrets.item(.accessToken, forIdentityID: identity.id)
-        } catch {
-            alertItem = AlertItem(error: error)
-        }
-
-        observation.assignErrorsToAlertItem(to: \.alertItem, on: self).assign(to: &$identity)
-        environment.identityDatabase.recentIdentitiesObservation(excluding: identityID)
+        environment.appEnvironment.identityDatabase
+            .recentIdentitiesObservation(excluding: environment.identity.id)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$recentIdentities)
 
-        environment.identityDatabase.updateLastUsedAt(identityID: identityID)
+        environment.appEnvironment.identityDatabase
+            .updateLastUsedAt(identityID: environment.identity.id)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .sink(receiveValue: {})
             .store(in: &cancellables)
@@ -53,25 +35,25 @@ extension MainNavigationViewModel {
     func refreshIdentity() {
         let id = identity.id
 
-        if networkClient.accessToken != nil {
-            networkClient.request(AccountEndpoint.verifyCredentials)
+        if environment.networkClient.accessToken != nil {
+            environment.networkClient.request(AccountEndpoint.verifyCredentials)
                 .map { ($0, id) }
-                .flatMap(environment.identityDatabase.updateAccount)
+                .flatMap(environment.appEnvironment.identityDatabase.updateAccount)
                 .assignErrorsToAlertItem(to: \.alertItem, on: self)
                 .sink(receiveValue: {})
                 .store(in: &cancellables)
         }
 
-        networkClient.request(InstanceEndpoint.instance)
+        environment.networkClient.request(InstanceEndpoint.instance)
             .map { ($0, id) }
-            .flatMap(environment.identityDatabase.updateInstance)
+            .flatMap(environment.appEnvironment.identityDatabase.updateInstance)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .sink(receiveValue: {})
             .store(in: &cancellables)
     }
 
     func settingsViewModel() -> SettingsViewModel {
-        SettingsViewModel(identity: _identity, environment: environment)
+        SettingsViewModel(environment: environment)
     }
 }
 

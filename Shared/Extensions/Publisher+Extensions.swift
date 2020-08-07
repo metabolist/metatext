@@ -7,12 +7,12 @@ extension Publisher {
     func assignErrorsToAlertItem<Root: AnyObject>(
         to keyPath: ReferenceWritableKeyPath<Root, AlertItem?>,
         on object: Root) -> AnyPublisher<Output, Never> {
-        self.catch { [weak object] error -> AnyPublisher<Output, Never> in
+        self.catch { [weak object] error -> Empty<Output, Never> in
             DispatchQueue.main.async {
                 object?[keyPath: keyPath] = AlertItem(error: error)
             }
 
-            return Empty().eraseToAnyPublisher()
+            return Empty()
         }
         .eraseToAnyPublisher()
     }
