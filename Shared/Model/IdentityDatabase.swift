@@ -110,13 +110,8 @@ extension IdentityDatabase {
             .eraseToAnyPublisher()
     }
 
-    func identitiesObservation() -> AnyPublisher<[Identity], Error> {
-        ValueObservation.tracking(
-            StoredIdentity
-                .including(optional: StoredIdentity.instance)
-                .including(optional: StoredIdentity.account)
-                .asRequest(of: IdentityResult.self)
-                .fetchAll)
+    func identitiesObservation(excluding: String) -> AnyPublisher<[Identity], Error> {
+        ValueObservation.tracking(Self.identitiesRequest(excluding: excluding).fetchAll)
             .removeDuplicates()
             .publisher(in: databaseQueue, scheduling: .immediate)
             .map { $0.map(Identity.init(result:)) }
@@ -124,15 +119,7 @@ extension IdentityDatabase {
     }
 
     func recentIdentitiesObservation(excluding: String) -> AnyPublisher<[Identity], Error> {
-        ValueObservation.tracking(
-            StoredIdentity
-                .filter(Column("id") != excluding)
-                .order(Column("lastUsedAt").desc)
-                .limit(10)
-                .including(optional: StoredIdentity.instance)
-                .including(optional: StoredIdentity.account)
-                .asRequest(of: IdentityResult.self)
-                .fetchAll)
+        ValueObservation.tracking(Self.identitiesRequest(excluding: excluding).limit(9).fetchAll)
             .removeDuplicates()
             .publisher(in: databaseQueue, scheduling: .immediate)
             .map { $0.map(Identity.init(result:)) }
@@ -145,6 +132,15 @@ extension IdentityDatabase {
 }
 
 private extension IdentityDatabase {
+    private static func identitiesRequest(excluding: String) -> QueryInterfaceRequest<IdentityResult> {
+        StoredIdentity
+            .filter(Column("id") != excluding)
+            .order(Column("lastUsedAt").desc)
+            .including(optional: StoredIdentity.instance)
+            .including(optional: StoredIdentity.account)
+            .asRequest(of: IdentityResult.self)
+    }
+
     private static func migrate(_ writer: DatabaseWriter) throws {
         var migrator = DatabaseMigrator()
 
