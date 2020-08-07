@@ -18,8 +18,7 @@ class MainNavigationViewModel: ObservableObject {
         identity = environment.identity
         environment.$identity.dropFirst().assign(to: &$identity)
 
-        environment.appEnvironment.identityDatabase
-            .recentIdentitiesObservation(excluding: environment.identity.id)
+        environment.recentIdentitiesObservation()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$recentIdentities)
     }
@@ -27,31 +26,21 @@ class MainNavigationViewModel: ObservableObject {
 
 extension MainNavigationViewModel {
     func refreshIdentity() {
-        let id = identity.id
-
-        if environment.networkClient.accessToken != nil {
-            environment.networkClient.request(AccountEndpoint.verifyCredentials)
-                .map { ($0, id) }
-                .flatMap(environment.appEnvironment.identityDatabase.updateAccount)
+        if environment.isAuthorized {
+            environment.verifyCredentials()
                 .assignErrorsToAlertItem(to: \.alertItem, on: self)
                 .sink(receiveValue: {})
                 .store(in: &cancellables)
 
             if identity.preferences.useServerPostingReadingPreferences {
-                let capturedPreferences = identity.preferences
-
-                environment.networkClient.request(PreferencesEndpoint.preferences)
-                    .map { (capturedPreferences.updated(from: $0), id) }
-                    .flatMap(environment.appEnvironment.identityDatabase.updatePreferences)
+                environment.refreshServerPreferences()
                     .assignErrorsToAlertItem(to: \.alertItem, on: self)
                     .sink(receiveValue: {})
                     .store(in: &cancellables)
             }
         }
 
-        environment.networkClient.request(InstanceEndpoint.instance)
-            .map { ($0, id) }
-            .flatMap(environment.appEnvironment.identityDatabase.updateInstance)
+        environment.refreshInstance()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .sink(receiveValue: {})
             .store(in: &cancellables)

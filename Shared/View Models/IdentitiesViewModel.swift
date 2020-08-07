@@ -15,7 +15,7 @@ class IdentitiesViewModel: ObservableObject {
         self.environment = environment
         identity = environment.identity
 
-        environment.appEnvironment.identityDatabase.identitiesObservation()
+        environment.identitiesObservation()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$identities)
     }

@@ -21,16 +21,13 @@ class PostingReadingPreferencesViewModel: ObservableObject {
             .removeDuplicates()
             .handleEvents(receiveOutput: { [weak self] in
                 if $0.useServerPostingReadingPreferences {
-                    self?.refreshPreferences()
+                    self?.refreshServerPreferences()
                 }
             })
             .assign(to: &$preferences)
 
-        let id = environment.identity.id
-
         $preferences.dropFirst()
-            .map { ($0, id) }
-            .flatMap(environment.appEnvironment.identityDatabase.updatePreferences)
+            .flatMap(environment.updatePreferences)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .sink(receiveValue: {})
             .store(in: &cancellables)
@@ -38,13 +35,8 @@ class PostingReadingPreferencesViewModel: ObservableObject {
 }
 
 extension PostingReadingPreferencesViewModel {
-    func refreshPreferences() {
-        let id = environment.identity.id
-        let capturedPreferences = preferences
-
-        environment.networkClient.request(PreferencesEndpoint.preferences)
-            .map { (capturedPreferences.updated(from: $0), id) }
-            .flatMap(environment.appEnvironment.identityDatabase.updatePreferences)
+    private func refreshServerPreferences() {
+        environment.refreshServerPreferences()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .sink(receiveValue: {})
             .store(in: &cancellables)
