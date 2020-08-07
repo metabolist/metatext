@@ -4,8 +4,9 @@
 "add-identity.instance-url" = "Instance URL";
 "oauth.error.code-not-found" = "OAuth error: code not found";
 "secondary-navigation.accounts" = "Accounts";
-"secondary-navigation.identity-preferences" = "Preferences";
-"preferences.title.%@" = "Preferences for %@";
+"secondary-navigation.preferences" = "Preferences";
+"preferences" = "Preferences";
+"preferences.posting-reading" = "Posting and Reading";
 "preferences.posting" = "Posting";
 "preferences.use-preferences-from-server" = "Use preferences from server";
 "preferences.posting-default-visiblility" = "Default visibility";

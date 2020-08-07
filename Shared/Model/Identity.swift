@@ -31,11 +31,10 @@ extension Identity {
     }
 
     struct Preferences: Codable, Hashable {
-        var useServerPostingPreferences = true
+        var useServerPostingReadingPreferences = true
         var postingDefaultVisibility = Status.Visibility.public
         var postingDefaultSensitive = false
         var postingDefaultLanguage: String?
-        var useServerReadingPreferences = true
         var readingExpandMedia = MastodonPreferences.ExpandMedia.default
         var readingExpandSpoilers = false
     }
@@ -54,18 +53,12 @@ extension Identity {
 }
 
 extension Identity.Preferences {
-    var shouldUseAnyServerPreferences: Bool {
-        useServerPostingPreferences || useServerReadingPreferences
-    }
-
     func updated(from serverPreferences: MastodonPreferences) -> Self {
         var mutable = self
-        if useServerPostingPreferences {
+
+        if useServerPostingReadingPreferences {
             mutable.postingDefaultVisibility = serverPreferences.postingDefaultVisibility
             mutable.postingDefaultSensitive = serverPreferences.postingDefaultSensitive
-        }
-
-        if useServerReadingPreferences {
             mutable.readingExpandMedia = serverPreferences.readingExpandMedia
             mutable.readingExpandSpoilers = serverPreferences.readingExpandSpoilers
         }

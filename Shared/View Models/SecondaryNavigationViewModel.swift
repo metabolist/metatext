@@ -18,7 +18,7 @@ extension SecondaryNavigationViewModel {
         IdentitiesViewModel(environment: environment)
     }
 
-    func identityPreferencesViewModel() -> IdentityPreferencesViewModel {
-        IdentityPreferencesViewModel(environment: environment)
+    func preferencesViewModel() -> PreferencesViewModel {
+        PreferencesViewModel(environment: environment)
     }
 }

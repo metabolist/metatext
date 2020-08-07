@@ -37,7 +37,7 @@ extension MainNavigationViewModel {
                 .sink(receiveValue: {})
                 .store(in: &cancellables)
 
-            if identity.preferences.shouldUseAnyServerPreferences {
+            if identity.preferences.useServerPostingReadingPreferences {
                 let capturedPreferences = identity.preferences
 
                 environment.networkClient.request(PreferencesEndpoint.preferences)

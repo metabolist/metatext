@@ -3,7 +3,7 @@
 import Foundation
 import Combine
 
-class IdentityPreferencesViewModel: ObservableObject {
+class PostingReadingPreferencesViewModel: ObservableObject {
     @Published var preferences: Identity.Preferences
     @Published var alertItem: AlertItem?
     let handle: String
@@ -20,7 +20,7 @@ class IdentityPreferencesViewModel: ObservableObject {
             .dropFirst()
             .removeDuplicates()
             .handleEvents(receiveOutput: { [weak self] in
-                if $0.shouldUseAnyServerPreferences {
+                if $0.useServerPostingReadingPreferences {
                     self?.refreshPreferences()
                 }
             })
@@ -37,7 +37,7 @@ class IdentityPreferencesViewModel: ObservableObject {
     }
 }
 
-extension IdentityPreferencesViewModel {
+extension PostingReadingPreferencesViewModel {
     func refreshPreferences() {
         let id = environment.identity.id
         let capturedPreferences = preferences

@@ -138,8 +138,12 @@ extension IdentitiesViewModel {
     static let development = SecondaryNavigationViewModel.development.identitiesViewModel()
 }
 
-extension IdentityPreferencesViewModel {
-    static let development = SecondaryNavigationViewModel.development.identityPreferencesViewModel()
+extension PreferencesViewModel {
+    static let development = SecondaryNavigationViewModel.development.preferencesViewModel()
+}
+
+extension PostingReadingPreferencesViewModel {
+    static let development = PreferencesViewModel.development.postingReadingPreferencesViewModel()
 }
 
 // swiftlint:enable force_try

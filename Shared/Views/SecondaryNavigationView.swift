@@ -34,9 +34,12 @@ struct SecondaryNavigationView: View {
                                     .padding()
                                 }
                             })
+                    }
+                    Section {
                         NavigationLink(
-                            "secondary-navigation.identity-preferences",
-                            destination: IdentityPreferencesView(viewModel: viewModel.identityPreferencesViewModel()))
+                            "secondary-navigation.preferences",
+                            destination: PreferencesView(
+                                viewModel: viewModel.preferencesViewModel()))
                     }
                 }
                 .navigationItems(presentationMode: presentationMode)
