@@ -52,3 +52,24 @@ extension Identity {
 
     var image: URL? { account?.avatar ?? instance?.thumbnail }
 }
+
+extension Identity.Preferences {
+    var shouldUseAnyServerPreferences: Bool {
+        useServerPostingPreferences || useServerReadingPreferences
+    }
+
+    func updated(from serverPreferences: MastodonPreferences) -> Self {
+        var mutable = self
+        if useServerPostingPreferences {
+            mutable.postingDefaultVisibility = serverPreferences.postingDefaultVisibility
+            mutable.postingDefaultSensitive = serverPreferences.postingDefaultSensitive
+        }
+
+        if useServerReadingPreferences {
+            mutable.readingExpandMedia = serverPreferences.readingExpandMedia
+            mutable.readingExpandSpoilers = serverPreferences.readingExpandSpoilers
+        }
+
+        return mutable
+    }
+}

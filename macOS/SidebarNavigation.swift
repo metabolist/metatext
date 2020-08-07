@@ -8,7 +8,6 @@ import struct Kingfisher.RoundCornerImageProcessor
 struct SidebarNavigation: View {
     @StateObject var viewModel: MainNavigationViewModel
     @EnvironmentObject var rootViewModel: RootViewModel
-    @Environment(\.displayScale) var displayScale: CGFloat
 
     var sidebar: some View {
         List(selection: $viewModel.selectedTab) {
@@ -57,20 +56,14 @@ private extension SidebarNavigation {
     struct Pocket: View {
         @EnvironmentObject var viewModel: MainNavigationViewModel
         @EnvironmentObject var rootViewModel: RootViewModel
+        @Environment(\.displayScale) var displayScale: CGFloat
 
         var body: some View {
             VStack(alignment: .leading, spacing: 0) {
                 Divider()
                 Button(action: { viewModel.presentingSettings.toggle() }) {
                     KFImage(viewModel.identity.image,
-                            options: [
-                                .processor(
-                                    DownsamplingImageProcessor(size: CGSize(width: 50, height: 50))
-                                        .append(another: RoundCornerImageProcessor(radius: .widthFraction(0.5)))
-                                ),
-                                .scaleFactor(displayScale),
-                                .cacheOriginalImage
-                            ])
+                             options: .downsampled(dimension: 28, scaleFactor: displayScale))
                         .placeholder { Image(systemName: "gear") }
                         .renderingMode(.original)
                         .resizable()

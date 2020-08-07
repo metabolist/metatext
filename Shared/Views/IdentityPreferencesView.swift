@@ -4,6 +4,7 @@ import SwiftUI
 
 struct IdentityPreferencesView: View {
     @StateObject var viewModel: IdentityPreferencesViewModel
+
     var body: some View {
         Form {
             Section(header: Text("preferences.posting")) {
@@ -44,6 +45,7 @@ struct IdentityPreferencesView: View {
             }
         }
         .navigationTitle("preferences.title.\(viewModel.handle)")
+        .alertItem($viewModel.alertItem)
     }
 }
 

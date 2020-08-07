@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D0091B6824DC10B30040E8D2 /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0091B6724DC10B30040E8D2 /* PreferencesView.swift */; };
-		D0091B6924DC10B30040E8D2 /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0091B6724DC10B30040E8D2 /* PreferencesView.swift */; };
-		D0091B6B24DC10CE0040E8D2 /* PreferencesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0091B6A24DC10CE0040E8D2 /* PreferencesViewModel.swift */; };
-		D0091B6C24DC10CE0040E8D2 /* PreferencesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0091B6A24DC10CE0040E8D2 /* PreferencesViewModel.swift */; };
+		D0091B6824DC10B30040E8D2 /* IdentityPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0091B6724DC10B30040E8D2 /* IdentityPreferencesView.swift */; };
+		D0091B6924DC10B30040E8D2 /* IdentityPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0091B6724DC10B30040E8D2 /* IdentityPreferencesView.swift */; };
+		D0091B6B24DC10CE0040E8D2 /* IdentityPreferencesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0091B6A24DC10CE0040E8D2 /* IdentityPreferencesViewModel.swift */; };
+		D0091B6C24DC10CE0040E8D2 /* IdentityPreferencesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0091B6A24DC10CE0040E8D2 /* IdentityPreferencesViewModel.swift */; };
 		D047FAAE24C3E21200AF17C5 /* MetatextApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D047FA8524C3E21000AF17C5 /* MetatextApp.swift */; };
 		D047FAAF24C3E21200AF17C5 /* MetatextApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D047FA8524C3E21000AF17C5 /* MetatextApp.swift */; };
 		D047FAB224C3E21200AF17C5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D047FA8724C3E21200AF17C5 /* Assets.xcassets */; };
@@ -163,8 +163,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		D0091B6724DC10B30040E8D2 /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
-		D0091B6A24DC10CE0040E8D2 /* PreferencesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesViewModel.swift; sourceTree = "<group>"; };
+		D0091B6724DC10B30040E8D2 /* IdentityPreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityPreferencesView.swift; sourceTree = "<group>"; };
+		D0091B6A24DC10CE0040E8D2 /* IdentityPreferencesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityPreferencesViewModel.swift; sourceTree = "<group>"; };
 		D047FA8524C3E21000AF17C5 /* MetatextApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetatextApp.swift; sourceTree = "<group>"; };
 		D047FA8724C3E21200AF17C5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D047FA8C24C3E21200AF17C5 /* Metatext.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Metatext.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -385,7 +385,7 @@
 			children = (
 				D0DB6EF324C5228A00D965FE /* AddIdentityView.swift */,
 				D06BAB5024D942CF0081B8FD /* IdentitiesView.swift */,
-				D0091B6724DC10B30040E8D2 /* PreferencesView.swift */,
+				D0091B6724DC10B30040E8D2 /* IdentityPreferencesView.swift */,
 				D0BEC93A24C96FD500E864C4 /* RootView.swift */,
 				D04FD73224D48F37007D572D /* SecondaryNavigationView.swift */,
 				D0BEC94924CA231200E864C4 /* TimelineView.swift */,
@@ -412,7 +412,7 @@
 				D0DB6F0824C65AC000D965FE /* AddIdentityViewModel.swift */,
 				D06BAB4D24D942BC0081B8FD /* IdentitiesViewModel.swift */,
 				D052BBDF24D805E300A80A7A /* MainNavigationViewModel.swift */,
-				D0091B6A24DC10CE0040E8D2 /* PreferencesViewModel.swift */,
+				D0091B6A24DC10CE0040E8D2 /* IdentityPreferencesViewModel.swift */,
 				D0BEC93724C9632800E864C4 /* RootViewModel.swift */,
 				D04FD73524D49506007D572D /* SecondaryNavigationViewModel.swift */,
 				D0BEC94624CA22C400E864C4 /* TimelineViewModel.swift */,
@@ -715,7 +715,7 @@
 				D0C963FB24CC359D003BD330 /* AlertItem.swift in Sources */,
 				D0DC174624CFEC2000A75C65 /* StubbingURLProtocol.swift in Sources */,
 				D0DC174D24CFF1F100A75C65 /* Stubbing.swift in Sources */,
-				D0091B6B24DC10CE0040E8D2 /* PreferencesViewModel.swift in Sources */,
+				D0091B6B24DC10CE0040E8D2 /* IdentityPreferencesViewModel.swift in Sources */,
 				D0666A5724C6C63400F3F04B /* MastodonDecoder.swift in Sources */,
 				D0DB6EF424C5228A00D965FE /* AddIdentityView.swift in Sources */,
 				D0DC177424D0B58800A75C65 /* Keychain.swift in Sources */,
@@ -736,7 +736,7 @@
 				D0CD847C24DBEA9F00CF380C /* Unknowable.swift in Sources */,
 				D0666A6F24C6DFB300F3F04B /* AccessToken.swift in Sources */,
 				D0ED1BCB24CF744200B4899C /* MastodonClient.swift in Sources */,
-				D0091B6824DC10B30040E8D2 /* PreferencesView.swift in Sources */,
+				D0091B6824DC10B30040E8D2 /* IdentityPreferencesView.swift in Sources */,
 				D0CD847624DBDF3C00CF380C /* Status.swift in Sources */,
 				D052BBE024D805E300A80A7A /* MainNavigationViewModel.swift in Sources */,
 			);
@@ -787,7 +787,7 @@
 				D0C963FC24CC359D003BD330 /* AlertItem.swift in Sources */,
 				D0DC174724CFEC2000A75C65 /* StubbingURLProtocol.swift in Sources */,
 				D0DC174E24CFF1F100A75C65 /* Stubbing.swift in Sources */,
-				D0091B6C24DC10CE0040E8D2 /* PreferencesViewModel.swift in Sources */,
+				D0091B6C24DC10CE0040E8D2 /* IdentityPreferencesViewModel.swift in Sources */,
 				D0666A5824C6C63400F3F04B /* MastodonDecoder.swift in Sources */,
 				D0DB6EF524C5233E00D965FE /* AddIdentityView.swift in Sources */,
 				D0DC177524D0B58800A75C65 /* Keychain.swift in Sources */,
@@ -808,7 +808,7 @@
 				D0CD847D24DBEA9F00CF380C /* Unknowable.swift in Sources */,
 				D0666A7024C6DFB300F3F04B /* AccessToken.swift in Sources */,
 				D0ED1BCC24CF744200B4899C /* MastodonClient.swift in Sources */,
-				D0091B6924DC10B30040E8D2 /* PreferencesView.swift in Sources */,
+				D0091B6924DC10B30040E8D2 /* IdentityPreferencesView.swift in Sources */,
 				D0CD847724DBDF3C00CF380C /* Status.swift in Sources */,
 				D052BBE124D805E300A80A7A /* MainNavigationViewModel.swift in Sources */,
 			);

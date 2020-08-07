@@ -11,3 +11,7 @@ extension Unknowable {
         self = Self.allCases.first { $0.rawValue == rawValue } ?? Self.unknownCase
     }
 }
+
+extension Unknowable {
+    static var allCasesExceptUnknown: [Self] { allCases.filter { $0 != unknownCase } }
+}

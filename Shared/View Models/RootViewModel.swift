@@ -17,6 +17,11 @@ class RootViewModel: ObservableObject {
 extension RootViewModel {
     func newIdentitySelected(id: String) {
         identityID = id
+
+        environment.identityDatabase
+            .updateLastUsedAt(identityID: id)
+            .sink(receiveCompletion: { _ in }, receiveValue: {})
+            .store(in: &cancellables)
     }
 
     func addIdentityViewModel() -> AddIdentityViewModel {

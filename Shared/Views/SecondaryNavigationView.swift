@@ -13,24 +13,31 @@ struct SecondaryNavigationView: View {
         VStack(spacing: 0) {
             NavigationView {
                 Form {
-                    NavigationLink(
-                        destination: IdentitiesView(viewModel: viewModel.identitiesViewModel())
-                            .environmentObject(rootViewModel),
-                        label: {
-                            HStack {
-                                KFImage(viewModel.identity.image,
-                                        options: .downsampled(dimension: 50, scaleFactor: displayScale))
-                                VStack {
-                                    Text(viewModel.identity.handle)
-                                        .font(.headline)
-                                        .lineLimit(1)
-                                        .minimumScaleFactor(0.5)
-                                    Spacer()
-                                    Text("accounts").font(.subheadline)
+                    Section {
+                        NavigationLink(
+                            destination: IdentitiesView(viewModel: viewModel.identitiesViewModel())
+                                .environmentObject(rootViewModel),
+                            label: {
+                                HStack {
+                                    KFImage(viewModel.identity.image,
+                                            options: .downsampled(dimension: 50, scaleFactor: displayScale))
+                                    VStack(alignment: .leading) {
+                                        Text(viewModel.identity.handle)
+                                            .font(.headline)
+                                            .lineLimit(1)
+                                            .minimumScaleFactor(0.5)
+                                        Spacer()
+                                        Text("secondary-navigation.accounts")
+                                            .font(.subheadline)
+                                            .foregroundColor(.secondary)
+                                    }
+                                    .padding()
                                 }
-                                .padding()
-                            }
-                        })
+                            })
+                        NavigationLink(
+                            "secondary-navigation.identity-preferences",
+                            destination: IdentityPreferencesView(viewModel: viewModel.identityPreferencesViewModel()))
+                    }
                 }
                 .navigationItems(presentationMode: presentationMode)
             }

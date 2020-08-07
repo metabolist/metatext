@@ -80,6 +80,18 @@ extension IdentityDatabase {
             .eraseToAnyPublisher()
     }
 
+    func updatePreferences(_ preferences: Identity.Preferences,
+                           forIdentityID identityID: String) -> AnyPublisher<Void, Error> {
+        databaseQueue.writePublisher {
+            let data = try StoredIdentity.databaseJSONEncoder(for: "preferences").encode(preferences)
+
+            try StoredIdentity
+                .filter(Column("id") == identityID)
+                .updateAll($0, Column("preferences").set(to: data))
+        }
+        .eraseToAnyPublisher()
+    }
+
     func identityObservation(id: String) -> AnyPublisher<Identity, Error> {
         ValueObservation.tracking(
             StoredIdentity

@@ -22,12 +22,6 @@ class MainNavigationViewModel: ObservableObject {
             .recentIdentitiesObservation(excluding: environment.identity.id)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$recentIdentities)
-
-        environment.appEnvironment.identityDatabase
-            .updateLastUsedAt(identityID: environment.identity.id)
-            .assignErrorsToAlertItem(to: \.alertItem, on: self)
-            .sink(receiveValue: {})
-            .store(in: &cancellables)
     }
 }
 
@@ -42,6 +36,17 @@ extension MainNavigationViewModel {
                 .assignErrorsToAlertItem(to: \.alertItem, on: self)
                 .sink(receiveValue: {})
                 .store(in: &cancellables)
+
+            if identity.preferences.shouldUseAnyServerPreferences {
+                let capturedPreferences = identity.preferences
+
+                environment.networkClient.request(PreferencesEndpoint.preferences)
+                    .map { (capturedPreferences.updated(from: $0), id) }
+                    .flatMap(environment.appEnvironment.identityDatabase.updatePreferences)
+                    .assignErrorsToAlertItem(to: \.alertItem, on: self)
+                    .sink(receiveValue: {})
+                    .store(in: &cancellables)
+            }
         }
 
         environment.networkClient.request(InstanceEndpoint.instance)

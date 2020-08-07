@@ -11,7 +11,7 @@ extension PreferencesEndpoint: MastodonEndpoint {
 
     var pathComponentsInContext: [String] {
         switch self {
-        case .preferences: return ["instance"]
+        case .preferences: return ["preferences"]
         }
     }
 
