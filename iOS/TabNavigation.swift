@@ -23,7 +23,7 @@ struct TabNavigation: View {
             }
         }
         .sheet(isPresented: $viewModel.presentingSettings) {
-            SettingsView(viewModel: viewModel.settingsViewModel())
+            SecondaryNavigationView(viewModel: viewModel.settingsViewModel())
                 .environmentObject(rootViewModel)
         }
         .alertItem($viewModel.alertItem)

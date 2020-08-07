@@ -52,8 +52,8 @@ extension MainNavigationViewModel {
             .store(in: &cancellables)
     }
 
-    func settingsViewModel() -> SettingsViewModel {
-        SettingsViewModel(environment: environment)
+    func settingsViewModel() -> SecondaryNavigationViewModel {
+        SecondaryNavigationViewModel(environment: environment)
     }
 }
 

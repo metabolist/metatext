@@ -24,5 +24,7 @@ extension MastodonPreferences {
         case showAll
         case hideAll
         case unknown
+
+        static var unknownCase: Self { .unknown }
     }
 }

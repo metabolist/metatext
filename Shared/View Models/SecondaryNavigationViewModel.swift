@@ -2,7 +2,7 @@
 
 import Foundation
 
-class SettingsViewModel: ObservableObject {
+class SecondaryNavigationViewModel: ObservableObject {
     @Published private(set) var identity: Identity
     private let environment: IdentifiedEnvironment
 
@@ -13,7 +13,7 @@ class SettingsViewModel: ObservableObject {
     }
 }
 
-extension SettingsViewModel {
+extension SecondaryNavigationViewModel {
     func identitiesViewModel() -> IdentitiesViewModel {
         IdentitiesViewModel(environment: environment)
     }

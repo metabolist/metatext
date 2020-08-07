@@ -3,4 +3,4 @@
 "go" = "Go";
 "add-identity.instance-url" = "Instance URL";
 "oauth.error.code-not-found" = "OAuth error: code not found";
-"settings" = "Settings";
+"accounts" = "Accounts";

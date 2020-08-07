@@ -3,15 +3,11 @@
 import Foundation
 
 protocol Unknowable: RawRepresentable, CaseIterable where RawValue: Equatable {
-    static var unknown: RawValue { get }
+    static var unknownCase: Self { get }
 }
 
 extension Unknowable {
     init(rawValue: RawValue) {
-        self = Self.allCases.first { $0.rawValue == rawValue } ?? Self(rawValue: Self.unknown)
+        self = Self.allCases.first { $0.rawValue == rawValue } ?? Self.unknownCase
     }
-}
-
-extension Unknowable where RawValue == String {
-    static var unknown: String { "unknown" }
 }

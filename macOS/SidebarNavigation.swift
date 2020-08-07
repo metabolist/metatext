@@ -84,7 +84,7 @@ private extension SidebarNavigation {
                 .buttonStyle(PlainButtonStyle())
             }
             .sheet(isPresented: $viewModel.presentingSettings) {
-                SettingsView(viewModel: viewModel.settingsViewModel())
+                SecondaryNavigationView(viewModel: viewModel.settingsViewModel())
                     .environmentObject(viewModel)
                     .environmentObject(rootViewModel)
             }

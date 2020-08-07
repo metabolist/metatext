@@ -9,5 +9,7 @@ struct Status {
         case `private`
         case direct
         case unknown
+
+        static var unknownCase: Self { .unknown }
     }
 }

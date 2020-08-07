@@ -15,10 +15,10 @@
 		D047FAAF24C3E21200AF17C5 /* MetatextApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D047FA8524C3E21000AF17C5 /* MetatextApp.swift */; };
 		D047FAB224C3E21200AF17C5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D047FA8724C3E21200AF17C5 /* Assets.xcassets */; };
 		D047FAB324C3E21200AF17C5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D047FA8724C3E21200AF17C5 /* Assets.xcassets */; };
-		D04FD73324D48F37007D572D /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04FD73224D48F37007D572D /* SettingsView.swift */; };
-		D04FD73424D48F37007D572D /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04FD73224D48F37007D572D /* SettingsView.swift */; };
-		D04FD73624D49506007D572D /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04FD73524D49506007D572D /* SettingsViewModel.swift */; };
-		D04FD73724D49506007D572D /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04FD73524D49506007D572D /* SettingsViewModel.swift */; };
+		D04FD73324D48F37007D572D /* SecondaryNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04FD73224D48F37007D572D /* SecondaryNavigationView.swift */; };
+		D04FD73424D48F37007D572D /* SecondaryNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04FD73224D48F37007D572D /* SecondaryNavigationView.swift */; };
+		D04FD73624D49506007D572D /* SecondaryNavigationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04FD73524D49506007D572D /* SecondaryNavigationViewModel.swift */; };
+		D04FD73724D49506007D572D /* SecondaryNavigationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04FD73524D49506007D572D /* SecondaryNavigationViewModel.swift */; };
 		D04FD73924D4A7B4007D572D /* AccountEndpoint+Stubbing.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04FD73824D4A7B4007D572D /* AccountEndpoint+Stubbing.swift */; };
 		D04FD73A24D4A7B4007D572D /* AccountEndpoint+Stubbing.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04FD73824D4A7B4007D572D /* AccountEndpoint+Stubbing.swift */; };
 		D04FD73C24D4A83A007D572D /* InstanceEndpoint+Stubbing.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04FD73B24D4A83A007D572D /* InstanceEndpoint+Stubbing.swift */; };
@@ -172,8 +172,8 @@
 		D047FA9424C3E21200AF17C5 /* Metatext.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Metatext.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D047FA9624C3E21200AF17C5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D047FA9724C3E21200AF17C5 /* macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macOS.entitlements; sourceTree = "<group>"; };
-		D04FD73224D48F37007D572D /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		D04FD73524D49506007D572D /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		D04FD73224D48F37007D572D /* SecondaryNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondaryNavigationView.swift; sourceTree = "<group>"; };
+		D04FD73524D49506007D572D /* SecondaryNavigationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondaryNavigationViewModel.swift; sourceTree = "<group>"; };
 		D04FD73824D4A7B4007D572D /* AccountEndpoint+Stubbing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AccountEndpoint+Stubbing.swift"; sourceTree = "<group>"; };
 		D04FD73B24D4A83A007D572D /* InstanceEndpoint+Stubbing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InstanceEndpoint+Stubbing.swift"; sourceTree = "<group>"; };
 		D04FD74124D4AA34007D572D /* DevelopmentModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevelopmentModels.swift; sourceTree = "<group>"; };
@@ -387,7 +387,7 @@
 				D06BAB5024D942CF0081B8FD /* IdentitiesView.swift */,
 				D0091B6724DC10B30040E8D2 /* PreferencesView.swift */,
 				D0BEC93A24C96FD500E864C4 /* RootView.swift */,
-				D04FD73224D48F37007D572D /* SettingsView.swift */,
+				D04FD73224D48F37007D572D /* SecondaryNavigationView.swift */,
 				D0BEC94924CA231200E864C4 /* TimelineView.swift */,
 			);
 			path = Views;
@@ -414,7 +414,7 @@
 				D052BBDF24D805E300A80A7A /* MainNavigationViewModel.swift */,
 				D0091B6A24DC10CE0040E8D2 /* PreferencesViewModel.swift */,
 				D0BEC93724C9632800E864C4 /* RootViewModel.swift */,
-				D04FD73524D49506007D572D /* SettingsViewModel.swift */,
+				D04FD73524D49506007D572D /* SecondaryNavigationViewModel.swift */,
 				D0BEC94624CA22C400E864C4 /* TimelineViewModel.swift */,
 			);
 			path = "View Models";
@@ -686,7 +686,7 @@
 				D0ED1BE324CFA84400B4899C /* MastodonError.swift in Sources */,
 				D0666A6324C6DC6C00F3F04B /* AppAuthorization.swift in Sources */,
 				D065F53B24D3B33A00741304 /* View+Extensions.swift in Sources */,
-				D04FD73324D48F37007D572D /* SettingsView.swift in Sources */,
+				D04FD73324D48F37007D572D /* SecondaryNavigationView.swift in Sources */,
 				D0DC174A24CFF15F00A75C65 /* AppAuthorizationEndpoint+Stubbing.swift in Sources */,
 				D0666A5A24C6C64100F3F04B /* MastodonEncoder.swift in Sources */,
 				D0666A5124C6C3BC00F3F04B /* Account.swift in Sources */,
@@ -708,7 +708,7 @@
 				D0666A4224C6BB7B00F3F04B /* IdentityDatabase.swift in Sources */,
 				D0BEC94A24CA231200E864C4 /* TimelineView.swift in Sources */,
 				D0BEC93B24C96FD500E864C4 /* RootView.swift in Sources */,
-				D04FD73624D49506007D572D /* SettingsViewModel.swift in Sources */,
+				D04FD73624D49506007D572D /* SecondaryNavigationViewModel.swift in Sources */,
 				D04FD74224D4AA34007D572D /* DevelopmentModels.swift in Sources */,
 				D0DC175824D0130800A75C65 /* HTTPStubs.swift in Sources */,
 				D0DC177724D0CF2600A75C65 /* FakeKeychain.swift in Sources */,
@@ -758,7 +758,7 @@
 				D0ED1BE424CFA84400B4899C /* MastodonError.swift in Sources */,
 				D0666A6424C6DC6C00F3F04B /* AppAuthorization.swift in Sources */,
 				D065F53C24D3B33A00741304 /* View+Extensions.swift in Sources */,
-				D04FD73424D48F37007D572D /* SettingsView.swift in Sources */,
+				D04FD73424D48F37007D572D /* SecondaryNavigationView.swift in Sources */,
 				D0DC174B24CFF15F00A75C65 /* AppAuthorizationEndpoint+Stubbing.swift in Sources */,
 				D0666A5B24C6C64100F3F04B /* MastodonEncoder.swift in Sources */,
 				D0666A5224C6C3BC00F3F04B /* Account.swift in Sources */,
@@ -780,7 +780,7 @@
 				D0666A4324C6BB7B00F3F04B /* IdentityDatabase.swift in Sources */,
 				D0BEC94B24CA231200E864C4 /* TimelineView.swift in Sources */,
 				D0BEC93C24C96FD500E864C4 /* RootView.swift in Sources */,
-				D04FD73724D49506007D572D /* SettingsViewModel.swift in Sources */,
+				D04FD73724D49506007D572D /* SecondaryNavigationViewModel.swift in Sources */,
 				D04FD74324D4AA34007D572D /* DevelopmentModels.swift in Sources */,
 				D0DC175924D0130800A75C65 /* HTTPStubs.swift in Sources */,
 				D0DC177824D0CF2600A75C65 /* FakeKeychain.swift in Sources */,
