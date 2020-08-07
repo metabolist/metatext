@@ -4,7 +4,7 @@ import Foundation
 import Combine
 
 class RootViewModel: ObservableObject {
-    @Published private(set) var identityID: String?
+    @Published private(set) var identityID: UUID?
     private let environment: AppEnvironment
     private var cancellables = Set<AnyCancellable>()
 
@@ -15,7 +15,7 @@ class RootViewModel: ObservableObject {
 }
 
 extension RootViewModel {
-    func newIdentitySelected(id: String) {
+    func newIdentitySelected(id: UUID) {
         identityID = id
 
         environment.identityDatabase
@@ -28,7 +28,7 @@ extension RootViewModel {
         AddIdentityViewModel(environment: environment)
     }
 
-    func mainNavigationViewModel(identityID: String) -> MainNavigationViewModel? {
+    func mainNavigationViewModel(identityID: UUID) -> MainNavigationViewModel? {
         let identityRepository: IdentityRepository
 
         do {

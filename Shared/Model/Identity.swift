@@ -3,7 +3,7 @@
 import Foundation
 
 struct Identity: Codable, Hashable, Identifiable {
-    let id: String
+    let id: UUID
     let url: URL
     let lastUsedAt: Date
     let preferences: Identity.Preferences
@@ -21,7 +21,7 @@ extension Identity {
 
     struct Account: Codable, Hashable {
         let id: String
-        let identityID: String
+        let identityID: UUID
         let username: String
         let url: URL
         let avatar: URL

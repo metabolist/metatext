@@ -28,24 +28,24 @@ extension Secrets {
 }
 
 extension Secrets {
-    func set(_ data: SecretsStorable, forItem item: Item, forIdentityID identityID: String) throws {
+    func set(_ data: SecretsStorable, forItem item: Item, forIdentityID identityID: UUID) throws {
         try keychain.set(data: data.dataStoredInSecrets, forKey: Self.key(item: item, identityID: identityID))
     }
 
-    func item<T: SecretsStorable>(_ item: Item, forIdentityID identityID: String) throws -> T? {
+    func item<T: SecretsStorable>(_ item: Item, forIdentityID identityID: UUID) throws -> T? {
         guard let data = try keychain.getData(key: Self.key(item: item, identityID: identityID)) else { return nil }
 
         return try T.fromDataStoredInSecrets(data)
     }
 
-    func delete(_ item: Item, forIdentityID identityID: String) throws {
+    func delete(_ item: Item, forIdentityID identityID: UUID) throws {
         try keychain.deleteData(key: Self.key(item: item, identityID: identityID))
     }
 }
 
 private extension Secrets {
-    static func key(item: Item, identityID: String) -> String {
-        identityID + "." + item.rawValue
+    static func key(item: Item, identityID: UUID) -> String {
+        identityID.uuidString + "." + item.rawValue
     }
 }
 

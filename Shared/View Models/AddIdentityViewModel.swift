@@ -7,12 +7,12 @@ class AddIdentityViewModel: ObservableObject {
     @Published var urlFieldText = ""
     @Published var alertItem: AlertItem?
     @Published private(set) var loading = false
-    let addedIdentityID: AnyPublisher<String, Never>
+    let addedIdentityID: AnyPublisher<UUID, Never>
 
     private let environment: AppEnvironment
     private let networkClient: MastodonClient
     private let webAuthSessionContextProvider = WebAuthSessionContextProvider()
-    private let addedIdentityIDInput = PassthroughSubject<String, Never>()
+    private let addedIdentityIDInput = PassthroughSubject<UUID, Never>()
     private var cancellables = Set<AnyCancellable>()
 
     init(environment: AppEnvironment) {
@@ -22,13 +22,13 @@ class AddIdentityViewModel: ObservableObject {
     }
 
     func goTapped() {
-        let identityID = UUID().uuidString
+        let identityID = UUID()
         let instanceURL: URL
         let redirectURL: URL
 
         do {
             instanceURL = try urlFieldText.url()
-            redirectURL = try identityID.url(scheme: MastodonAPI.OAuth.callbackURLScheme)
+            redirectURL = try identityID.uuidString.url(scheme: MastodonAPI.OAuth.callbackURLScheme)
         } catch {
             alertItem = AlertItem(error: error)
 
@@ -64,7 +64,7 @@ class AddIdentityViewModel: ObservableObject {
 
 private extension AddIdentityViewModel {
     private func authorizeApp(
-        identityID: String,
+        identityID: UUID,
         instanceURL: URL,
         redirectURL: URL,
         secrets: Secrets) -> AnyPublisher<AppAuthorization, Error> {
@@ -152,7 +152,7 @@ private extension Publisher where Output == (AppAuthorization, URL) {
 private extension Publisher where Output == (AppAuthorization, String), Failure == Error {
     func requestAccessToken(
         networkClient: HTTPClient,
-        identityID: String,
+        identityID: UUID,
         instanceURL: URL,
         redirectURL: URL) -> AnyPublisher<AccessToken, Error> {
         flatMap { appAuthorization, code -> AnyPublisher<AccessToken, Error> in
@@ -172,8 +172,8 @@ private extension Publisher where Output == (AppAuthorization, String), Failure 
 }
 
 private extension Publisher where Output == AccessToken {
-    func createIdentity(id: String, instanceURL: URL, environment: AppEnvironment) -> AnyPublisher<String, Error> {
-        tryMap { accessToken -> (String, URL) in
+    func createIdentity(id: UUID, instanceURL: URL, environment: AppEnvironment) -> AnyPublisher<UUID, Error> {
+        tryMap { accessToken -> (UUID, URL) in
             try environment.secrets.set(accessToken.accessToken, forItem: .accessToken, forIdentityID: id)
 
             return (id, instanceURL)

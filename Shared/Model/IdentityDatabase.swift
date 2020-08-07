@@ -30,7 +30,7 @@ struct IdentityDatabase {
 }
 
 extension IdentityDatabase {
-    func createIdentity(id: String, url: URL) -> AnyPublisher<Void, Error> {
+    func createIdentity(id: UUID, url: URL) -> AnyPublisher<Void, Error> {
         databaseQueue.writePublisher(
             updates: StoredIdentity(
                 id: id,
@@ -41,7 +41,7 @@ extension IdentityDatabase {
             .eraseToAnyPublisher()
     }
 
-    func updateLastUsedAt(identityID: String) -> AnyPublisher<Void, Error> {
+    func updateLastUsedAt(identityID: UUID) -> AnyPublisher<Void, Error> {
         databaseQueue.writePublisher {
             try StoredIdentity
                 .filter(Column("id") == identityID)
@@ -50,7 +50,7 @@ extension IdentityDatabase {
         .eraseToAnyPublisher()
     }
 
-    func updateInstance(_ instance: Instance, forIdentityID identityID: String) -> AnyPublisher<Void, Error> {
+    func updateInstance(_ instance: Instance, forIdentityID identityID: UUID) -> AnyPublisher<Void, Error> {
         databaseQueue.writePublisher {
             try Identity.Instance(
                 uri: instance.uri,
@@ -65,7 +65,7 @@ extension IdentityDatabase {
         .eraseToAnyPublisher()
     }
 
-    func updateAccount(_ account: Account, forIdentityID identityID: String) -> AnyPublisher<Void, Error> {
+    func updateAccount(_ account: Account, forIdentityID identityID: UUID) -> AnyPublisher<Void, Error> {
         databaseQueue.writePublisher(
             updates: Identity.Account(
                 id: account.id,
@@ -81,7 +81,7 @@ extension IdentityDatabase {
     }
 
     func updatePreferences(_ preferences: Identity.Preferences,
-                           forIdentityID identityID: String) -> AnyPublisher<Void, Error> {
+                           forIdentityID identityID: UUID) -> AnyPublisher<Void, Error> {
         databaseQueue.writePublisher {
             let data = try StoredIdentity.databaseJSONEncoder(for: "preferences").encode(preferences)
 
@@ -92,7 +92,7 @@ extension IdentityDatabase {
         .eraseToAnyPublisher()
     }
 
-    func identityObservation(id: String) -> AnyPublisher<Identity, Error> {
+    func identityObservation(id: UUID) -> AnyPublisher<Identity, Error> {
         ValueObservation.tracking(
             StoredIdentity
                 .filter(Column("id") == id)
@@ -110,7 +110,7 @@ extension IdentityDatabase {
             .eraseToAnyPublisher()
     }
 
-    func identitiesObservation(excluding: String) -> AnyPublisher<[Identity], Error> {
+    func identitiesObservation(excluding: UUID) -> AnyPublisher<[Identity], Error> {
         ValueObservation.tracking(Self.identitiesRequest(excluding: excluding).fetchAll)
             .removeDuplicates()
             .publisher(in: databaseQueue, scheduling: .immediate)
@@ -118,7 +118,7 @@ extension IdentityDatabase {
             .eraseToAnyPublisher()
     }
 
-    func recentIdentitiesObservation(excluding: String) -> AnyPublisher<[Identity], Error> {
+    func recentIdentitiesObservation(excluding: UUID) -> AnyPublisher<[Identity], Error> {
         ValueObservation.tracking(Self.identitiesRequest(excluding: excluding).limit(9).fetchAll)
             .removeDuplicates()
             .publisher(in: databaseQueue, scheduling: .immediate)
@@ -126,13 +126,13 @@ extension IdentityDatabase {
             .eraseToAnyPublisher()
     }
 
-    var mostRecentlyUsedIdentityID: String? {
+    var mostRecentlyUsedIdentityID: UUID? {
         try? databaseQueue.read(StoredIdentity.select(Column("id")).order(Column("lastUsedAt").desc).fetchOne)
     }
 }
 
 private extension IdentityDatabase {
-    private static func identitiesRequest(excluding: String) -> QueryInterfaceRequest<IdentityResult> {
+    private static func identitiesRequest(excluding: UUID) -> QueryInterfaceRequest<IdentityResult> {
         StoredIdentity
             .filter(Column("id") != excluding)
             .order(Column("lastUsedAt").desc)
@@ -182,7 +182,7 @@ private extension IdentityDatabase {
 }
 
 private struct StoredIdentity: Codable, Hashable, TableRecord, FetchableRecord, PersistableRecord {
-    let id: String
+    let id: UUID
     let url: URL
     let lastUsedAt: Date
     let preferences: Identity.Preferences

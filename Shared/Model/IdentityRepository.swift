@@ -12,7 +12,7 @@ class IdentityRepository {
     private let observationErrorsInput = PassthroughSubject<Error, Never>()
     private var cancellables = Set<AnyCancellable>()
 
-    init(identityID: String, appEnvironment: AppEnvironment) throws {
+    init(identityID: UUID, appEnvironment: AppEnvironment) throws {
         self.appEnvironment = appEnvironment
         observationErrors = observationErrorsInput.eraseToAnyPublisher()
         networkClient = MastodonClient(configuration: appEnvironment.URLSessionConfiguration)

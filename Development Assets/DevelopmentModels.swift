@@ -7,7 +7,7 @@ import Combine
 private let decoder = MastodonDecoder()
 private var cancellables = Set<AnyCancellable>()
 private let devInstanceURL = URL(string: "https://mastodon.social")!
-private let devIdentityID = "DEVELOPMENT_IDENTITY_ID"
+private let devIdentityID = UUID(uuidString: "E621E1F8-C36C-495A-93FC-0C247A3E6E5F")!
 private let devAccessToken = "DEVELOPMENT_ACCESS_TOKEN"
 
 extension Secrets {
