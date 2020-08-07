@@ -5,16 +5,16 @@ import Foundation
 class PreferencesViewModel: ObservableObject {
     let handle: String
 
-    private let environment: IdentifiedEnvironment
+    private let identityRepository: IdentityRepository
 
-    init(environment: IdentifiedEnvironment) {
-        self.environment = environment
-        handle = environment.identity.handle
+    init(identityRepository: IdentityRepository) {
+        self.identityRepository = identityRepository
+        handle = identityRepository.identity.handle
     }
 }
 
 extension PreferencesViewModel {
     func postingReadingPreferencesViewModel() -> PostingReadingPreferencesViewModel {
-        PostingReadingPreferencesViewModel(environment: environment)
+        PostingReadingPreferencesViewModel(identityRepository: identityRepository)
     }
 }

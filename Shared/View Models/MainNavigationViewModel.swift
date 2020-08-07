@@ -10,15 +10,15 @@ class MainNavigationViewModel: ObservableObject {
     @Published var alertItem: AlertItem?
     var selectedTab: Tab? = .timelines
 
-    private let environment: IdentifiedEnvironment
+    private let identityRepository: IdentityRepository
     private var cancellables = Set<AnyCancellable>()
 
-    init(environment: IdentifiedEnvironment) {
-        self.environment = environment
-        identity = environment.identity
-        environment.$identity.dropFirst().assign(to: &$identity)
+    init(identityRepository: IdentityRepository) {
+        self.identityRepository = identityRepository
+        identity = identityRepository.identity
+        identityRepository.$identity.dropFirst().assign(to: &$identity)
 
-        environment.recentIdentitiesObservation()
+        identityRepository.recentIdentitiesObservation()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$recentIdentities)
     }
@@ -26,28 +26,28 @@ class MainNavigationViewModel: ObservableObject {
 
 extension MainNavigationViewModel {
     func refreshIdentity() {
-        if environment.isAuthorized {
-            environment.verifyCredentials()
+        if identityRepository.isAuthorized {
+            identityRepository.verifyCredentials()
                 .assignErrorsToAlertItem(to: \.alertItem, on: self)
                 .sink(receiveValue: {})
                 .store(in: &cancellables)
 
             if identity.preferences.useServerPostingReadingPreferences {
-                environment.refreshServerPreferences()
+                identityRepository.refreshServerPreferences()
                     .assignErrorsToAlertItem(to: \.alertItem, on: self)
                     .sink(receiveValue: {})
                     .store(in: &cancellables)
             }
         }
 
-        environment.refreshInstance()
+        identityRepository.refreshInstance()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .sink(receiveValue: {})
             .store(in: &cancellables)
     }
 
     func settingsViewModel() -> SecondaryNavigationViewModel {
-        SecondaryNavigationViewModel(environment: environment)
+        SecondaryNavigationViewModel(identityRepository: identityRepository)
     }
 }
 

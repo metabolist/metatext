@@ -8,15 +8,15 @@ class PostingReadingPreferencesViewModel: ObservableObject {
     @Published var alertItem: AlertItem?
     let handle: String
 
-    private let environment: IdentifiedEnvironment
+    private let identityRepository: IdentityRepository
     private var cancellables = Set<AnyCancellable>()
 
-    init(environment: IdentifiedEnvironment) {
-        self.environment = environment
-        preferences = environment.identity.preferences
-        handle = environment.identity.handle
+    init(identityRepository: IdentityRepository) {
+        self.identityRepository = identityRepository
+        preferences = identityRepository.identity.preferences
+        handle = identityRepository.identity.handle
 
-        environment.$identity.map(\.preferences)
+        identityRepository.$identity.map(\.preferences)
             .dropFirst()
             .removeDuplicates()
             .handleEvents(receiveOutput: { [weak self] in
@@ -27,7 +27,7 @@ class PostingReadingPreferencesViewModel: ObservableObject {
             .assign(to: &$preferences)
 
         $preferences.dropFirst()
-            .flatMap(environment.updatePreferences)
+            .flatMap(identityRepository.updatePreferences)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .sink(receiveValue: {})
             .store(in: &cancellables)
@@ -36,7 +36,7 @@ class PostingReadingPreferencesViewModel: ObservableObject {
 
 extension PostingReadingPreferencesViewModel {
     private func refreshServerPreferences() {
-        environment.refreshServerPreferences()
+        identityRepository.refreshServerPreferences()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .sink(receiveValue: {})
             .store(in: &cancellables)

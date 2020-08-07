@@ -29,19 +29,19 @@ extension RootViewModel {
     }
 
     func mainNavigationViewModel(identityID: String) -> MainNavigationViewModel? {
-        let identifiedEnvironment: IdentifiedEnvironment
+        let identityRepository: IdentityRepository
 
         do {
-            identifiedEnvironment = try IdentifiedEnvironment(identityID: identityID, appEnvironment: environment)
+            identityRepository = try IdentityRepository(identityID: identityID, appEnvironment: environment)
         } catch {
             return nil
         }
 
-        identifiedEnvironment.observationErrors
+        identityRepository.observationErrors
             .receive(on: RunLoop.main)
             .map { [weak self] _ in self?.environment.identityDatabase.mostRecentlyUsedIdentityID }
             .assign(to: &$identityID)
 
-        return MainNavigationViewModel(environment: identifiedEnvironment)
+        return MainNavigationViewModel(identityRepository: identityRepository)
     }
 }

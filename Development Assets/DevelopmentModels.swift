@@ -118,8 +118,8 @@ extension AppEnvironment {
         webAuthSessionType: SuccessfulStubbingWebAuthSession.self)
 }
 
-extension IdentifiedEnvironment {
-    static let development = try! IdentifiedEnvironment(identityID: devIdentityID, appEnvironment: .development)
+extension IdentityRepository {
+    static let development = try! IdentityRepository(identityID: devIdentityID, appEnvironment: .development)
 }
 
 extension RootViewModel {
@@ -127,7 +127,7 @@ extension RootViewModel {
 }
 
 extension MainNavigationViewModel {
-    static let development = MainNavigationViewModel(environment: .development)
+    static let development = MainNavigationViewModel(identityRepository: .development)
 }
 
 extension SecondaryNavigationViewModel {

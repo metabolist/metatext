@@ -3,7 +3,7 @@
 import Foundation
 import Combine
 
-class IdentifiedEnvironment {
+class IdentityRepository {
     @Published var identity: Identity
     let observationErrors: AnyPublisher<Error, Never>
 
@@ -41,7 +41,7 @@ class IdentifiedEnvironment {
     }
 }
 
-extension IdentifiedEnvironment {
+extension IdentityRepository {
     var isAuthorized: Bool { networkClient.accessToken != nil }
 
     func verifyCredentials() -> AnyPublisher<Void, Error> {
