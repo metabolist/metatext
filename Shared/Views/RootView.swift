@@ -2,6 +2,12 @@
 
 import SwiftUI
 
+#if os(macOS)
+typealias MainNavigationViewModel = SidebarNavigationViewModel
+#else
+typealias MainNavigationViewModel = TabNavigationViewModel
+#endif
+
 struct RootView: View {
     @StateObject var viewModel: RootViewModel
 
@@ -24,10 +30,10 @@ private extension RootView {
     @ViewBuilder
     private static func mainNavigation(mainNavigationViewModel: MainNavigationViewModel) -> some View {
         #if os(macOS)
-        SidebarNavigation(viewModel: mainNavigationViewModel)
+        SidebarNavigationView(viewModel: mainNavigationViewModel)
             .frame(minWidth: 900, maxWidth: .infinity, minHeight: 500, maxHeight: .infinity)
         #else
-        TabNavigation(viewModel: mainNavigationViewModel)
+        TabNavigationView(viewModel: mainNavigationViewModel)
         #endif
     }
 }

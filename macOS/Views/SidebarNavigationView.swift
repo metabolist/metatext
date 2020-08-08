@@ -2,16 +2,14 @@
 
 import SwiftUI
 import KingfisherSwiftUI
-import struct Kingfisher.DownsamplingImageProcessor
-import struct Kingfisher.RoundCornerImageProcessor
 
-struct SidebarNavigation: View {
-    @StateObject var viewModel: MainNavigationViewModel
+struct SidebarNavigationView: View {
+    @StateObject var viewModel: SidebarNavigationViewModel
     @EnvironmentObject var rootViewModel: RootViewModel
 
     var sidebar: some View {
         List(selection: $viewModel.selectedTab) {
-            ForEach(MainNavigationViewModel.Tab.allCases) { tab in
+            ForEach(SidebarNavigationViewModel.Tab.allCases) { tab in
                 NavigationLink(destination: view(topLevelNavigation: tab)) {
                     Label(tab.title, systemImage: tab.systemImageName)
                 }
@@ -24,12 +22,6 @@ struct SidebarNavigation: View {
                     .environmentObject(rootViewModel),
                  alignment: .bottom)
         .listStyle(SidebarListStyle())
-        .onAppear(perform: viewModel.refreshIdentity)
-        .onReceive(NotificationCenter.default
-                    .publisher(for: NSWindow.didBecomeKeyNotification)
-                    .dropFirst()
-                    .map { _ in () },
-                   perform: viewModel.refreshIdentity)
     }
 
     var body: some View {
@@ -42,8 +34,8 @@ struct SidebarNavigation: View {
     }
 }
 
-private extension SidebarNavigation {
-    func view(topLevelNavigation: MainNavigationViewModel.Tab) -> some View {
+private extension SidebarNavigationView {
+    func view(topLevelNavigation: SidebarNavigationViewModel.Tab) -> some View {
         Group {
             switch topLevelNavigation {
             case .timelines:
@@ -54,14 +46,14 @@ private extension SidebarNavigation {
     }
 
     struct Pocket: View {
-        @EnvironmentObject var viewModel: MainNavigationViewModel
+        @EnvironmentObject var viewModel: SidebarNavigationViewModel
         @EnvironmentObject var rootViewModel: RootViewModel
         @Environment(\.displayScale) var displayScale: CGFloat
 
         var body: some View {
             VStack(alignment: .leading, spacing: 0) {
                 Divider()
-                Button(action: { viewModel.presentingSecondaryNavigation.toggle() }) {
+                Button(action: { /*viewModel.presentingSecondaryNavigation.toggle()*/ }) {
                     KFImage(viewModel.identity.image,
                              options: .downsampled(dimension: 28, scaleFactor: displayScale))
                         .placeholder { Image(systemName: "gear") }
@@ -76,11 +68,6 @@ private extension SidebarNavigation {
                 .padding(.horizontal, 16)
                 .buttonStyle(PlainButtonStyle())
             }
-            .sheet(isPresented: $viewModel.presentingSecondaryNavigation) {
-                SecondaryNavigationView(viewModel: viewModel.secondaryNavigationViewModel())
-                    .environmentObject(viewModel)
-                    .environmentObject(rootViewModel)
-            }
         }
     }
 }
@@ -88,7 +75,7 @@ private extension SidebarNavigation {
 #if DEBUG
 struct SidebarNavigation_Previews: PreviewProvider {
     static var previews: some View {
-        SidebarNavigation(viewModel: .development)
+        SidebarNavigationView(viewModel: .development)
             .environmentObject(RootViewModel.development)
     }
 }

@@ -3,14 +3,14 @@
 import SwiftUI
 import KingfisherSwiftUI
 
-struct TabNavigation: View {
-    @ObservedObject var viewModel: MainNavigationViewModel
+struct TabNavigationView: View {
+    @ObservedObject var viewModel: TabNavigationViewModel
     @EnvironmentObject var rootViewModel: RootViewModel
     @Environment(\.displayScale) var displayScale: CGFloat
 
     var body: some View {
         TabView(selection: $viewModel.selectedTab) {
-            ForEach(MainNavigationViewModel.Tab.allCases) { tab in
+            ForEach(TabNavigationViewModel.Tab.allCases) { tab in
                 NavigationView {
                     view(tab: tab)
                 }
@@ -35,9 +35,9 @@ struct TabNavigation: View {
     }
 }
 
-private extension TabNavigation {
+private extension TabNavigationView {
     @ViewBuilder
-    func view(tab: MainNavigationViewModel.Tab) -> some View {
+    func view(tab: TabNavigationViewModel.Tab) -> some View {
         switch tab {
         case .timelines:
             TimelineView()
@@ -74,7 +74,7 @@ private extension TabNavigation {
 #if DEBUG
 struct TabNavigation_Previews: PreviewProvider {
     static var previews: some View {
-        TabNavigation(viewModel: .development)
+        TabNavigationView(viewModel: .development)
             .environmentObject(RootViewModel.development)
     }
 }

@@ -3,7 +3,7 @@
 import Foundation
 import Combine
 
-class MainNavigationViewModel: ObservableObject {
+class TabNavigationViewModel: ObservableObject {
     @Published private(set) var identity: Identity
     @Published private(set) var recentIdentities = [Identity]()
     @Published var presentingSecondaryNavigation = false
@@ -24,7 +24,7 @@ class MainNavigationViewModel: ObservableObject {
     }
 }
 
-extension MainNavigationViewModel {
+extension TabNavigationViewModel {
     func refreshIdentity() {
         if identityRepository.isAuthorized {
             identityRepository.verifyCredentials()
@@ -51,7 +51,7 @@ extension MainNavigationViewModel {
     }
 }
 
-extension MainNavigationViewModel {
+extension TabNavigationViewModel {
     enum Tab: CaseIterable {
         case timelines
         case search
@@ -60,7 +60,7 @@ extension MainNavigationViewModel {
     }
 }
 
-extension MainNavigationViewModel.Tab {
+extension TabNavigationViewModel.Tab {
     var title: String {
         switch self {
         case .timelines: return "Timelines"
@@ -72,7 +72,7 @@ extension MainNavigationViewModel.Tab {
 
     var systemImageName: String {
         switch self {
-        case .timelines: return "house"
+        case .timelines: return "scroll"
         case .search: return "magnifyingglass"
         case .notifications: return "bell"
         case .messages: return "envelope"
@@ -80,6 +80,6 @@ extension MainNavigationViewModel.Tab {
     }
 }
 
-extension MainNavigationViewModel.Tab: Identifiable {
+extension TabNavigationViewModel.Tab: Identifiable {
     var id: Self { self }
 }
