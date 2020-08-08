@@ -85,6 +85,8 @@
 		D081A40624D0F1A8001B016E /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D081A40424D0F1A8001B016E /* String+Extensions.swift */; };
 		D0A1CA7424DAC2F1003063E9 /* KingfisherOptionsInfo+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A1CA7324DAC2F1003063E9 /* KingfisherOptionsInfo+Extensions.swift */; };
 		D0A1CA7524DAC2F1003063E9 /* KingfisherOptionsInfo+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A1CA7324DAC2F1003063E9 /* KingfisherOptionsInfo+Extensions.swift */; };
+		D0A652AD24DE3EB6002EA33F /* PreferencesEndpoint+Stubbing.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A652AC24DE3EB6002EA33F /* PreferencesEndpoint+Stubbing.swift */; };
+		D0A652AE24DE3EB6002EA33F /* PreferencesEndpoint+Stubbing.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A652AC24DE3EB6002EA33F /* PreferencesEndpoint+Stubbing.swift */; };
 		D0B23F0D24D210E90066F411 /* NSError+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B23F0C24D210E90066F411 /* NSError+Extensions.swift */; };
 		D0B23F0E24D210E90066F411 /* NSError+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B23F0C24D210E90066F411 /* NSError+Extensions.swift */; };
 		D0BEC93824C9632800E864C4 /* RootViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEC93724C9632800E864C4 /* RootViewModel.swift */; };
@@ -213,6 +215,7 @@
 		D074577924D29366004758DB /* URLSessionConfiguration+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSessionConfiguration+Extensions.swift"; sourceTree = "<group>"; };
 		D081A40424D0F1A8001B016E /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		D0A1CA7324DAC2F1003063E9 /* KingfisherOptionsInfo+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KingfisherOptionsInfo+Extensions.swift"; sourceTree = "<group>"; };
+		D0A652AC24DE3EB6002EA33F /* PreferencesEndpoint+Stubbing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PreferencesEndpoint+Stubbing.swift"; sourceTree = "<group>"; };
 		D0B23F0C24D210E90066F411 /* NSError+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSError+Extensions.swift"; sourceTree = "<group>"; };
 		D0BEC93724C9632800E864C4 /* RootViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewModel.swift; sourceTree = "<group>"; };
 		D0BEC93A24C96FD500E864C4 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
@@ -452,6 +455,7 @@
 				D0DC174924CFF15F00A75C65 /* AppAuthorizationEndpoint+Stubbing.swift */,
 				D04FD73B24D4A83A007D572D /* InstanceEndpoint+Stubbing.swift */,
 				D0DC175124D008E300A75C65 /* MastodonTarget+Stubbing.swift */,
+				D0A652AC24DE3EB6002EA33F /* PreferencesEndpoint+Stubbing.swift */,
 			);
 			path = "Mastodon API Stubs";
 			sourceTree = "<group>";
@@ -713,6 +717,7 @@
 				D0CD847F24DBF1BB00CF380C /* PreferencesEndpoint.swift in Sources */,
 				D0666A4B24C6C37700F3F04B /* Identity.swift in Sources */,
 				D0666A5424C6C3E500F3F04B /* Emoji.swift in Sources */,
+				D0A652AD24DE3EB6002EA33F /* PreferencesEndpoint+Stubbing.swift in Sources */,
 				D0DC175524D00F0A00A75C65 /* AccessTokenEndpoint+Stubbing.swift in Sources */,
 				D0B23F0D24D210E90066F411 /* NSError+Extensions.swift in Sources */,
 				D052BBCA24D74C9200A80A7A /* FakeUserDefaults.swift in Sources */,
@@ -788,6 +793,7 @@
 				D0CD848024DBF1BB00CF380C /* PreferencesEndpoint.swift in Sources */,
 				D0666A4C24C6C37700F3F04B /* Identity.swift in Sources */,
 				D0666A5524C6C3E500F3F04B /* Emoji.swift in Sources */,
+				D0A652AE24DE3EB6002EA33F /* PreferencesEndpoint+Stubbing.swift in Sources */,
 				D0DC175624D00F0A00A75C65 /* AccessTokenEndpoint+Stubbing.swift in Sources */,
 				D0B23F0E24D210E90066F411 /* NSError+Extensions.swift in Sources */,
 				D052BBCB24D74C9300A80A7A /* FakeUserDefaults.swift in Sources */,
