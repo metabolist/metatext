@@ -61,7 +61,7 @@ private extension SidebarNavigation {
         var body: some View {
             VStack(alignment: .leading, spacing: 0) {
                 Divider()
-                Button(action: { viewModel.presentingSettings.toggle() }) {
+                Button(action: { viewModel.presentingSecondaryNavigation.toggle() }) {
                     KFImage(viewModel.identity.image,
                              options: .downsampled(dimension: 28, scaleFactor: displayScale))
                         .placeholder { Image(systemName: "gear") }
@@ -76,8 +76,8 @@ private extension SidebarNavigation {
                 .padding(.horizontal, 16)
                 .buttonStyle(PlainButtonStyle())
             }
-            .sheet(isPresented: $viewModel.presentingSettings) {
-                SecondaryNavigationView(viewModel: viewModel.settingsViewModel())
+            .sheet(isPresented: $viewModel.presentingSecondaryNavigation) {
+                SecondaryNavigationView(viewModel: viewModel.secondaryNavigationViewModel())
                     .environmentObject(viewModel)
                     .environmentObject(rootViewModel)
             }

@@ -22,8 +22,8 @@ struct TabNavigation: View {
                 .tag(tab)
             }
         }
-        .sheet(isPresented: $viewModel.presentingSettings) {
-            SecondaryNavigationView(viewModel: viewModel.settingsViewModel())
+        .sheet(isPresented: $viewModel.presentingSecondaryNavigation) {
+            SecondaryNavigationView(viewModel: viewModel.secondaryNavigationViewModel())
                 .environmentObject(rootViewModel)
         }
         .alertItem($viewModel.alertItem)
@@ -44,7 +44,7 @@ private extension TabNavigation {
                 .navigationBarTitle(viewModel.identity.handle, displayMode: .inline)
                 .navigationBarItems(
                     leading: Button {
-                        viewModel.presentingSettings.toggle()
+                        viewModel.presentingSecondaryNavigation.toggle()
                     } label: {
                         KFImage(viewModel.identity.image,
                                 options: .downsampled(dimension: 28, scaleFactor: displayScale))

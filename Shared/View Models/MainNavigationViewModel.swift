@@ -6,7 +6,7 @@ import Combine
 class MainNavigationViewModel: ObservableObject {
     @Published private(set) var identity: Identity
     @Published private(set) var recentIdentities = [Identity]()
-    @Published var presentingSettings = false
+    @Published var presentingSecondaryNavigation = false
     @Published var alertItem: AlertItem?
     var selectedTab: Tab? = .timelines
 
@@ -46,7 +46,7 @@ extension MainNavigationViewModel {
             .store(in: &cancellables)
     }
 
-    func settingsViewModel() -> SecondaryNavigationViewModel {
+    func secondaryNavigationViewModel() -> SecondaryNavigationViewModel {
         SecondaryNavigationViewModel(identityRepository: identityRepository)
     }
 }

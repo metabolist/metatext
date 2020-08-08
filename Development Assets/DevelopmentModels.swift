@@ -92,20 +92,16 @@ extension AppEnvironment {
         webAuthSessionType: SuccessfulStubbingWebAuthSession.self)
 }
 
-extension IdentityRepository {
-    static let development = try! IdentityRepository(identityID: devIdentityID, appEnvironment: .development)
-}
-
 extension RootViewModel {
     static let development = RootViewModel(environment: .development)
 }
 
 extension MainNavigationViewModel {
-    static let development = MainNavigationViewModel(identityRepository: .development)
+    static let development = RootViewModel.development.mainNavigationViewModel(identityID: devIdentityID)!
 }
 
 extension SecondaryNavigationViewModel {
-    static let development = MainNavigationViewModel.development.settingsViewModel()
+    static let development = MainNavigationViewModel.development.secondaryNavigationViewModel()
 }
 
 extension IdentitiesViewModel {
