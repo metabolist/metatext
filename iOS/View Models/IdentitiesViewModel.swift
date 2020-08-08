@@ -8,14 +8,14 @@ class IdentitiesViewModel: ObservableObject {
     @Published var identities = [Identity]()
     @Published var alertItem: AlertItem?
 
-    private let identityRepository: IdentityRepository
+    private let identityService: IdentityService
     private var cancellables = Set<AnyCancellable>()
 
-    init(identityRepository: IdentityRepository) {
-        self.identityRepository = identityRepository
-        identity = identityRepository.identity
+    init(identityService: IdentityService) {
+        self.identityService = identityService
+        identity = identityService.identity
 
-        identityRepository.identitiesObservation()
+        identityService.identitiesObservation()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$identities)
     }

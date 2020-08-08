@@ -35,19 +35,19 @@ extension RootViewModel {
     }
 
     func mainNavigationViewModel(identityID: UUID) -> MainNavigationViewModel? {
-        let identityRepository: IdentityRepository
+        let identityService: IdentityService
 
         do {
-            identityRepository = try IdentityRepository(identityID: identityID, appEnvironment: environment)
+            identityService = try IdentityService(identityID: identityID, appEnvironment: environment)
         } catch {
             return nil
         }
 
-        identityRepository.observationErrors
+        identityService.observationErrors
             .receive(on: RunLoop.main)
             .map { [weak self] _ in self?.environment.identityDatabase.mostRecentlyUsedIdentityID }
             .assign(to: &$identityID)
 
-        return MainNavigationViewModel(identityRepository: identityRepository)
+        return MainNavigationViewModel(identityService: identityService)
     }
 }

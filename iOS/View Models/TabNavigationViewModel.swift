@@ -10,15 +10,15 @@ class TabNavigationViewModel: ObservableObject {
     @Published var alertItem: AlertItem?
     var selectedTab: Tab? = .timelines
 
-    private let identityRepository: IdentityRepository
+    private let identityService: IdentityService
     private var cancellables = Set<AnyCancellable>()
 
-    init(identityRepository: IdentityRepository) {
-        self.identityRepository = identityRepository
-        identity = identityRepository.identity
-        identityRepository.$identity.dropFirst().assign(to: &$identity)
+    init(identityService: IdentityService) {
+        self.identityService = identityService
+        identity = identityService.identity
+        identityService.$identity.dropFirst().assign(to: &$identity)
 
-        identityRepository.recentIdentitiesObservation()
+        identityService.recentIdentitiesObservation()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$recentIdentities)
     }
@@ -26,28 +26,28 @@ class TabNavigationViewModel: ObservableObject {
 
 extension TabNavigationViewModel {
     func refreshIdentity() {
-        if identityRepository.isAuthorized {
-            identityRepository.verifyCredentials()
+        if identityService.isAuthorized {
+            identityService.verifyCredentials()
                 .assignErrorsToAlertItem(to: \.alertItem, on: self)
                 .sink(receiveValue: {})
                 .store(in: &cancellables)
 
             if identity.preferences.useServerPostingReadingPreferences {
-                identityRepository.refreshServerPreferences()
+                identityService.refreshServerPreferences()
                     .assignErrorsToAlertItem(to: \.alertItem, on: self)
                     .sink(receiveValue: {})
                     .store(in: &cancellables)
             }
         }
 
-        identityRepository.refreshInstance()
+        identityService.refreshInstance()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .sink(receiveValue: {})
             .store(in: &cancellables)
     }
 
     func secondaryNavigationViewModel() -> SecondaryNavigationViewModel {
-        SecondaryNavigationViewModel(identityRepository: identityRepository)
+        SecondaryNavigationViewModel(identityService: identityService)
     }
 }
 

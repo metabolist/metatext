@@ -8,13 +8,13 @@ class SidebarNavigationViewModel: ObservableObject {
     @Published var alertItem: AlertItem?
     var selectedTab: Tab? = .timelines
 
-    private let identityRepository: IdentityRepository
+    private let identityService: IdentityService
     private var cancellables = Set<AnyCancellable>()
 
-    init(identityRepository: IdentityRepository) {
-        self.identityRepository = identityRepository
-        identity = identityRepository.identity
-        identityRepository.$identity.dropFirst().assign(to: &$identity)
+    init(identityService: IdentityService) {
+        self.identityService = identityService
+        identity = identityService.identity
+        identityService.$identity.dropFirst().assign(to: &$identity)
     }
 }
 

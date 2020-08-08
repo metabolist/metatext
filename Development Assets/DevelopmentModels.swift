@@ -92,8 +92,8 @@ extension AppEnvironment {
         webAuthSessionType: SuccessfulStubbingWebAuthSession.self)
 }
 
-extension IdentityRepository {
-    static let development = try! IdentityRepository(identityID: devIdentityID, appEnvironment: .development)
+extension IdentityService {
+    static let development = try! IdentityService(identityID: devIdentityID, appEnvironment: .development)
 }
 
 extension RootViewModel {
@@ -110,16 +110,16 @@ extension SecondaryNavigationViewModel {
 }
 
 extension IdentitiesViewModel {
-    static let development = IdentitiesViewModel(identityRepository: .development)
+    static let development = IdentitiesViewModel(identityService: .development)
 }
 #endif
 
 extension PreferencesViewModel {
-    static let development = PreferencesViewModel(identityRepository: .development)
+    static let development = PreferencesViewModel(identityService: .development)
 }
 
 extension PostingReadingPreferencesViewModel {
-    static let development = PostingReadingPreferencesViewModel(identityRepository: .development)
+    static let development = PostingReadingPreferencesViewModel(identityService: .development)
 }
 
 // swiftlint:enable force_try

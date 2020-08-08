@@ -4,21 +4,21 @@ import Foundation
 
 class SecondaryNavigationViewModel: ObservableObject {
     @Published private(set) var identity: Identity
-    private let identityRepository: IdentityRepository
+    private let identityService: IdentityService
 
-    init(identityRepository: IdentityRepository) {
-        self.identityRepository = identityRepository
-        identity = identityRepository.identity
-        identityRepository.$identity.dropFirst().assign(to: &$identity)
+    init(identityService: IdentityService) {
+        self.identityService = identityService
+        identity = identityService.identity
+        identityService.$identity.dropFirst().assign(to: &$identity)
     }
 }
 
 extension SecondaryNavigationViewModel {
     func identitiesViewModel() -> IdentitiesViewModel {
-        IdentitiesViewModel(identityRepository: identityRepository)
+        IdentitiesViewModel(identityService: identityService)
     }
 
     func preferencesViewModel() -> PreferencesViewModel {
-        PreferencesViewModel(identityRepository: identityRepository)
+        PreferencesViewModel(identityService: identityService)
     }
 }

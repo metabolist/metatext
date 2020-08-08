@@ -3,7 +3,7 @@
 import Foundation
 import Combine
 
-class IdentityRepository {
+class IdentityService {
     @Published var identity: Identity
     let observationErrors: AnyPublisher<Error, Never>
 
@@ -41,7 +41,7 @@ class IdentityRepository {
     }
 }
 
-extension IdentityRepository {
+extension IdentityService {
     var isAuthorized: Bool { networkClient.accessToken != nil }
 
     func verifyCredentials() -> AnyPublisher<Void, Error> {
