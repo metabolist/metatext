@@ -72,7 +72,7 @@ extension TabNavigationViewModel.Tab {
 
     var systemImageName: String {
         switch self {
-        case .timelines: return "scroll"
+        case .timelines: return "newspaper"
         case .search: return "magnifyingglass"
         case .notifications: return "bell"
         case .messages: return "envelope"
