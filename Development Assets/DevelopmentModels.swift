@@ -30,22 +30,9 @@ extension Defaults {
     static let development: Defaults = {
         let preferences = Defaults.fresh()
 
-        preferences[.recentIdentityID] = devIdentityID
+        // Do future setup here
 
         return preferences
-    }()
-}
-
-extension MastodonClient {
-    static func fresh() -> MastodonClient { MastodonClient(configuration: .stubbing) }
-
-    static let development: MastodonClient = {
-        let client = MastodonClient.fresh()
-
-        client.instanceURL = devInstanceURL
-        client.accessToken = devAccessToken
-
-        return client
     }()
 }
 
@@ -79,19 +66,6 @@ extension IdentityDatabase {
             .store(in: &cancellables)
 
         return db
-    }()
-}
-
-extension Identity {
-    static let development: Identity = {
-        var identity: Identity?
-
-        IdentityDatabase.development.identityObservation(id: devIdentityID)
-            .assertNoFailure()
-            .sink(receiveValue: { identity = $0 })
-            .store(in: &cancellables)
-
-        return identity!
     }()
 }
 
