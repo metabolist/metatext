@@ -23,11 +23,13 @@ extension Identity {
         let id: String
         let identityID: UUID
         let username: String
+        let displayName: String
         let url: URL
         let avatar: URL
         let avatarStatic: URL
         let header: URL
         let headerStatic: URL
+        let emojis: [Emoji]
     }
 
     struct Preferences: Codable, Hashable {

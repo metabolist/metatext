@@ -3,7 +3,7 @@
 "go" = "Go";
 "add-identity.instance-url" = "Instance URL";
 "oauth.error.code-not-found" = "OAuth error: code not found";
-"secondary-navigation.accounts" = "Accounts";
+"secondary-navigation.manage-accounts" = "Manage Accounts";
 "secondary-navigation.preferences" = "Preferences";
 "identities.add" = "Add";
 "preferences" = "Preferences";

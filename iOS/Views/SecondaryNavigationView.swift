@@ -21,14 +21,20 @@ struct SecondaryNavigationView: View {
                                 KFImage(viewModel.identity.image,
                                         options: .downsampled(dimension: 50, scaleFactor: displayScale))
                                 VStack(alignment: .leading) {
+                                    if let account = viewModel.identity.account {
+                                        CustomEmojiText(
+                                            text: account.displayName,
+                                            emoji: account.emojis,
+                                            textStyle: .headline)
+                                    }
                                     Text(viewModel.identity.handle)
-                                        .font(.headline)
+                                        .font(.subheadline)
+                                        .foregroundColor(.secondary)
                                         .lineLimit(1)
                                         .minimumScaleFactor(0.5)
                                     Spacer()
-                                    Text("secondary-navigation.accounts")
+                                    Text("secondary-navigation.manage-accounts")
                                         .font(.subheadline)
-                                        .foregroundColor(.secondary)
                                 }
                                 .padding()
                             }

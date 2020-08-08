@@ -25,6 +25,9 @@
 		D0159F9324DE743700E78478 /* SecondaryNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0159F8E24DE743700E78478 /* SecondaryNavigationView.swift */; };
 		D0159F9B24DE748900E78478 /* SidebarNavigationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0159F9524DE743E00E78478 /* SidebarNavigationViewModel.swift */; };
 		D0159F9C24DE748C00E78478 /* SidebarNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0159F9824DE744500E78478 /* SidebarNavigationView.swift */; };
+		D0159FA324DE955900E78478 /* CustomEmojiText.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0159FA224DE955900E78478 /* CustomEmojiText.swift */; };
+		D0159FA524DE989700E78478 /* NSMutableAttributedString+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0159FA424DE989700E78478 /* NSMutableAttributedString+Extensions.swift */; };
+		D0159FA624DE98F600E78478 /* NSMutableAttributedString+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0159FA424DE989700E78478 /* NSMutableAttributedString+Extensions.swift */; };
 		D047FAAE24C3E21200AF17C5 /* MetatextApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D047FA8524C3E21000AF17C5 /* MetatextApp.swift */; };
 		D047FAAF24C3E21200AF17C5 /* MetatextApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D047FA8524C3E21000AF17C5 /* MetatextApp.swift */; };
 		D047FAB224C3E21200AF17C5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D047FA8724C3E21200AF17C5 /* Assets.xcassets */; };
@@ -180,6 +183,8 @@
 		D0159F8E24DE743700E78478 /* SecondaryNavigationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecondaryNavigationView.swift; sourceTree = "<group>"; };
 		D0159F9524DE743E00E78478 /* SidebarNavigationViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SidebarNavigationViewModel.swift; sourceTree = "<group>"; };
 		D0159F9824DE744500E78478 /* SidebarNavigationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SidebarNavigationView.swift; sourceTree = "<group>"; };
+		D0159FA224DE955900E78478 /* CustomEmojiText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomEmojiText.swift; sourceTree = "<group>"; };
+		D0159FA424DE989700E78478 /* NSMutableAttributedString+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSMutableAttributedString+Extensions.swift"; sourceTree = "<group>"; };
 		D047FA8524C3E21000AF17C5 /* MetatextApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetatextApp.swift; sourceTree = "<group>"; };
 		D047FA8724C3E21200AF17C5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D047FA8C24C3E21200AF17C5 /* Metatext.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Metatext.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -286,6 +291,7 @@
 		D0159F7F24DE739000E78478 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D0159FA224DE955900E78478 /* CustomEmojiText.swift */,
 				D0159F8C24DE743700E78478 /* IdentitiesView.swift */,
 				D0159F8E24DE743700E78478 /* SecondaryNavigationView.swift */,
 				D0159F8D24DE743700E78478 /* TabNavigationView.swift */,
@@ -470,6 +476,7 @@
 			children = (
 				D0A1CA7324DAC2F1003063E9 /* KingfisherOptionsInfo+Extensions.swift */,
 				D0B23F0C24D210E90066F411 /* NSError+Extensions.swift */,
+				D0159FA424DE989700E78478 /* NSMutableAttributedString+Extensions.swift */,
 				D0C963FD24CC3812003BD330 /* Publisher+Extensions.swift */,
 				D081A40424D0F1A8001B016E /* String+Extensions.swift */,
 				D065F53A24D3B33A00741304 /* View+Extensions.swift */,
@@ -772,6 +779,7 @@
 				D0DB6EF424C5228A00D965FE /* AddIdentityView.swift in Sources */,
 				D0DC177424D0B58800A75C65 /* Keychain.swift in Sources */,
 				D074577724D29006004758DB /* StubbingWebAuthSession.swift in Sources */,
+				D0159FA524DE989700E78478 /* NSMutableAttributedString+Extensions.swift in Sources */,
 				D0ED1BCE24CF768200B4899C /* MastodonEndpoint.swift in Sources */,
 				D074577A24D29366004758DB /* URLSessionConfiguration+Extensions.swift in Sources */,
 				D0ED1BB724CE47F400B4899C /* WebAuthSession.swift in Sources */,
@@ -779,6 +787,7 @@
 				D0A1CA7424DAC2F1003063E9 /* KingfisherOptionsInfo+Extensions.swift in Sources */,
 				D0159F9124DE743700E78478 /* TabNavigationView.swift in Sources */,
 				D0ED1BC424CED54D00B4899C /* HTTPTarget.swift in Sources */,
+				D0159FA324DE955900E78478 /* CustomEmojiText.swift in Sources */,
 				D0C963FE24CC3812003BD330 /* Publisher+Extensions.swift in Sources */,
 				D04FD73C24D4A83A007D572D /* InstanceEndpoint+Stubbing.swift in Sources */,
 				D0DC175B24D0154F00A75C65 /* MastodonAPI.swift in Sources */,
@@ -802,6 +811,7 @@
 				D0ED1BD824CF94B200B4899C /* Application.swift in Sources */,
 				D047FAAF24C3E21200AF17C5 /* MetatextApp.swift in Sources */,
 				D0BEC94824CA22C400E864C4 /* TimelineViewModel.swift in Sources */,
+				D0159FA624DE98F600E78478 /* NSMutableAttributedString+Extensions.swift in Sources */,
 				D0666A4F24C6C39600F3F04B /* Instance.swift in Sources */,
 				D0ED1BDB24CF963E00B4899C /* AppAuthorizationEndpoint.swift in Sources */,
 				D0091B7524DDF4860040E8D2 /* IdentityRepository.swift in Sources */,

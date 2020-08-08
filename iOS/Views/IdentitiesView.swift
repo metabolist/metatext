@@ -27,8 +27,20 @@ struct IdentitiesView: View {
                         } label: {
                             HStack {
                                 KFImage(identity.image,
-                                        options: .downsampled(dimension: 28, scaleFactor: displayScale))
-                                Text(identity.handle)
+                                        options: .downsampled(dimension: 40, scaleFactor: displayScale))
+                                VStack(alignment: .leading, spacing: 0) {
+                                    Spacer()
+                                    if let account = identity.account {
+                                        CustomEmojiText(
+                                            text: account.displayName,
+                                            emoji: account.emojis,
+                                            textStyle: .headline)
+                                    }
+                                    Text(identity.handle)
+                                        .font(.subheadline)
+                                        .foregroundColor(.secondary)
+                                    Spacer()
+                                }
                                 Spacer()
                                 if identity.id == viewModel.identity.id {
                                     Image(systemName: "checkmark.circle")

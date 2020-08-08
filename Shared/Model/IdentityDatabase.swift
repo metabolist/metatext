@@ -77,11 +77,13 @@ extension IdentityDatabase {
                 id: account.id,
                 identityID: identityID,
                 username: account.username,
+                displayName: account.displayName,
                 url: account.url,
                 avatar: account.avatar,
                 avatarStatic: account.avatarStatic,
                 header: account.header,
-                headerStatic: account.headerStatic)
+                headerStatic: account.headerStatic,
+                emojis: account.emojis)
                 .save)
             .eraseToAnyPublisher()
     }
@@ -178,11 +180,13 @@ private extension IdentityDatabase {
                     .indexed()
                     .references("storedIdentity", column: "id", onDelete: .cascade)
                 t.column("username", .text).notNull()
+                t.column("displayName", .text).notNull()
                 t.column("url", .text).notNull()
                 t.column("avatar", .text).notNull()
                 t.column("avatarStatic", .text).notNull()
                 t.column("header", .text).notNull()
                 t.column("headerStatic", .text).notNull()
+                t.column("emojis", .blob).notNull()
             }
         }
 
