@@ -5,6 +5,7 @@
 "oauth.error.code-not-found" = "OAuth error: code not found";
 "secondary-navigation.accounts" = "Accounts";
 "secondary-navigation.preferences" = "Preferences";
+"identities.add" = "Add";
 "preferences" = "Preferences";
 "preferences.posting-reading" = "Posting and Reading";
 "preferences.posting" = "Posting";

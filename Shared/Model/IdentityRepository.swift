@@ -69,7 +69,7 @@ extension IdentityRepository {
     }
 
     func identitiesObservation() -> AnyPublisher<[Identity], Error> {
-        appEnvironment.identityDatabase.identitiesObservation(excluding: identity.id)
+        appEnvironment.identityDatabase.identitiesObservation()
     }
 
     func recentIdentitiesObservation() -> AnyPublisher<[Identity], Error> {

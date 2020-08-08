@@ -41,6 +41,12 @@ extension IdentityDatabase {
             .eraseToAnyPublisher()
     }
 
+    func deleteIdentity(id: UUID) -> AnyPublisher<Void, Error> {
+        return databaseQueue.writePublisher(updates: StoredIdentity.filter(Column("id") == id).deleteAll)
+            .map { _ in () }
+            .eraseToAnyPublisher()
+    }
+
     func updateLastUsedAt(identityID: UUID) -> AnyPublisher<Void, Error> {
         databaseQueue.writePublisher {
             try StoredIdentity
@@ -110,8 +116,8 @@ extension IdentityDatabase {
             .eraseToAnyPublisher()
     }
 
-    func identitiesObservation(excluding: UUID) -> AnyPublisher<[Identity], Error> {
-        ValueObservation.tracking(Self.identitiesRequest(excluding: excluding).fetchAll)
+    func identitiesObservation() -> AnyPublisher<[Identity], Error> {
+        ValueObservation.tracking(Self.identitiesRequest().fetchAll)
             .removeDuplicates()
             .publisher(in: databaseQueue, scheduling: .immediate)
             .map { $0.map(Identity.init(result:)) }
@@ -119,7 +125,11 @@ extension IdentityDatabase {
     }
 
     func recentIdentitiesObservation(excluding: UUID) -> AnyPublisher<[Identity], Error> {
-        ValueObservation.tracking(Self.identitiesRequest(excluding: excluding).limit(9).fetchAll)
+        ValueObservation.tracking(
+            Self.identitiesRequest()
+                .filter(Column("id") != excluding)
+                .limit(9)
+                .fetchAll)
             .removeDuplicates()
             .publisher(in: databaseQueue, scheduling: .immediate)
             .map { $0.map(Identity.init(result:)) }
@@ -132,9 +142,8 @@ extension IdentityDatabase {
 }
 
 private extension IdentityDatabase {
-    private static func identitiesRequest(excluding: UUID) -> QueryInterfaceRequest<IdentityResult> {
+    private static func identitiesRequest() -> QueryInterfaceRequest<IdentityResult> {
         StoredIdentity
-            .filter(Column("id") != excluding)
             .order(Column("lastUsedAt").desc)
             .including(optional: StoredIdentity.instance)
             .including(optional: StoredIdentity.account)

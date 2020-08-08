@@ -24,6 +24,12 @@ extension RootViewModel {
             .store(in: &cancellables)
     }
 
+    func deleteIdentity(id: UUID) {
+        environment.identityDatabase.deleteIdentity(id: id)
+            .sink(receiveCompletion: { _ in }, receiveValue: {})
+            .store(in: &cancellables)
+    }
+
     func addIdentityViewModel() -> AddIdentityViewModel {
         AddIdentityViewModel(environment: environment)
     }
