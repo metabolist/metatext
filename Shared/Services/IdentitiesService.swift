@@ -7,7 +7,6 @@ class IdentitiesService {
     @Published var mostRecentlyUsedIdentityID: UUID?
 
     private let environment: AppEnvironment
-    private var cancellables = Set<AnyCancellable>()
 
     init(environment: AppEnvironment) {
         self.environment = environment
