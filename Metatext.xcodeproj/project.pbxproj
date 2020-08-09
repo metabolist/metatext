@@ -15,8 +15,6 @@
 		D0091B6F24DD68090040E8D2 /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0091B6D24DD68090040E8D2 /* PreferencesView.swift */; };
 		D0091B7124DD68220040E8D2 /* PreferencesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0091B7024DD68220040E8D2 /* PreferencesViewModel.swift */; };
 		D0091B7224DD68220040E8D2 /* PreferencesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0091B7024DD68220040E8D2 /* PreferencesViewModel.swift */; };
-		D0091B7424DDF4860040E8D2 /* IdentityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0091B7324DDF4860040E8D2 /* IdentityService.swift */; };
-		D0091B7524DDF4860040E8D2 /* IdentityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0091B7324DDF4860040E8D2 /* IdentityService.swift */; };
 		D0159F8624DE742F00E78478 /* TabNavigationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0159F8324DE742F00E78478 /* TabNavigationViewModel.swift */; };
 		D0159F8824DE742F00E78478 /* SecondaryNavigationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0159F8424DE742F00E78478 /* SecondaryNavigationViewModel.swift */; };
 		D0159F8A24DE742F00E78478 /* IdentitiesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0159F8524DE742F00E78478 /* IdentitiesViewModel.swift */; };
@@ -42,6 +40,10 @@
 		D019E6E824DF72E700697C7D /* AccessTokenEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = D019E6DF24DF72E700697C7D /* AccessTokenEndpoint.swift */; };
 		D019E6E924DF72E700697C7D /* InstanceEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = D019E6E024DF72E700697C7D /* InstanceEndpoint.swift */; };
 		D019E6EA24DF72E700697C7D /* InstanceEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = D019E6E024DF72E700697C7D /* InstanceEndpoint.swift */; };
+		D019E6ED24DF7BF300697C7D /* IdentityDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D019E6EC24DF7BF300697C7D /* IdentityDatabase.swift */; };
+		D019E6EE24DF7BF300697C7D /* IdentityDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D019E6EC24DF7BF300697C7D /* IdentityDatabase.swift */; };
+		D019E6F024DF7C2F00697C7D /* DatabaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D019E6EF24DF7C2F00697C7D /* DatabaseError.swift */; };
+		D019E6F124DF7C2F00697C7D /* DatabaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D019E6EF24DF7C2F00697C7D /* DatabaseError.swift */; };
 		D047FAAE24C3E21200AF17C5 /* MetatextApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D047FA8524C3E21000AF17C5 /* MetatextApp.swift */; };
 		D047FAAF24C3E21200AF17C5 /* MetatextApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D047FA8524C3E21000AF17C5 /* MetatextApp.swift */; };
 		D047FAB224C3E21200AF17C5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D047FA8724C3E21200AF17C5 /* Assets.xcassets */; };
@@ -62,10 +64,6 @@
 		D065F53924D37E5100741304 /* CombineExpectations in Frameworks */ = {isa = PBXBuildFile; productRef = D065F53824D37E5100741304 /* CombineExpectations */; };
 		D065F53B24D3B33A00741304 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D065F53A24D3B33A00741304 /* View+Extensions.swift */; };
 		D065F53C24D3B33A00741304 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D065F53A24D3B33A00741304 /* View+Extensions.swift */; };
-		D0666A4224C6BB7B00F3F04B /* IdentityDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0666A4124C6BB7B00F3F04B /* IdentityDatabase.swift */; };
-		D0666A4324C6BB7B00F3F04B /* IdentityDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0666A4124C6BB7B00F3F04B /* IdentityDatabase.swift */; };
-		D0666A4524C6BC0A00F3F04B /* DatabaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0666A4424C6BC0A00F3F04B /* DatabaseError.swift */; };
-		D0666A4624C6BC0A00F3F04B /* DatabaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0666A4424C6BC0A00F3F04B /* DatabaseError.swift */; };
 		D0666A4924C6C1A300F3F04B /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = D0666A4824C6C1A300F3F04B /* GRDB */; };
 		D0666A4B24C6C37700F3F04B /* Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0666A4A24C6C37700F3F04B /* Identity.swift */; };
 		D0666A4C24C6C37700F3F04B /* Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0666A4A24C6C37700F3F04B /* Identity.swift */; };
@@ -140,6 +138,8 @@
 		D0DC177524D0B58800A75C65 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DC177324D0B58800A75C65 /* Keychain.swift */; };
 		D0DC177724D0CF2600A75C65 /* FakeKeychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DC177624D0CF2600A75C65 /* FakeKeychain.swift */; };
 		D0DC177824D0CF2600A75C65 /* FakeKeychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DC177624D0CF2600A75C65 /* FakeKeychain.swift */; };
+		D0EC8DC224DF7D9C00A08489 /* IdentityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DC124DF7D9C00A08489 /* IdentityService.swift */; };
+		D0EC8DC324DF7D9C00A08489 /* IdentityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DC124DF7D9C00A08489 /* IdentityService.swift */; };
 		D0ED1B6E24CE100C00B4899C /* AddIdentityViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ED1B6D24CE100C00B4899C /* AddIdentityViewModelTests.swift */; };
 		D0ED1BB724CE47F400B4899C /* WebAuthSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ED1BB624CE47F400B4899C /* WebAuthSession.swift */; };
 		D0ED1BB824CE47F400B4899C /* WebAuthSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ED1BB624CE47F400B4899C /* WebAuthSession.swift */; };
@@ -174,7 +174,6 @@
 		D0091B6A24DC10CE0040E8D2 /* PostingReadingPreferencesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostingReadingPreferencesViewModel.swift; sourceTree = "<group>"; };
 		D0091B6D24DD68090040E8D2 /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
 		D0091B7024DD68220040E8D2 /* PreferencesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesViewModel.swift; sourceTree = "<group>"; };
-		D0091B7324DDF4860040E8D2 /* IdentityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityService.swift; sourceTree = "<group>"; };
 		D0159F8324DE742F00E78478 /* TabNavigationViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabNavigationViewModel.swift; sourceTree = "<group>"; };
 		D0159F8424DE742F00E78478 /* SecondaryNavigationViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecondaryNavigationViewModel.swift; sourceTree = "<group>"; };
 		D0159F8524DE742F00E78478 /* IdentitiesViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentitiesViewModel.swift; sourceTree = "<group>"; };
@@ -192,6 +191,8 @@
 		D019E6DE24DF72E700697C7D /* AccountEndpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountEndpoint.swift; sourceTree = "<group>"; };
 		D019E6DF24DF72E700697C7D /* AccessTokenEndpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessTokenEndpoint.swift; sourceTree = "<group>"; };
 		D019E6E024DF72E700697C7D /* InstanceEndpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstanceEndpoint.swift; sourceTree = "<group>"; };
+		D019E6EC24DF7BF300697C7D /* IdentityDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityDatabase.swift; sourceTree = "<group>"; };
+		D019E6EF24DF7C2F00697C7D /* DatabaseError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseError.swift; sourceTree = "<group>"; };
 		D047FA8524C3E21000AF17C5 /* MetatextApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetatextApp.swift; sourceTree = "<group>"; };
 		D047FA8724C3E21200AF17C5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D047FA8C24C3E21200AF17C5 /* Metatext.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Metatext.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -209,8 +210,6 @@
 		D065F53A24D3B33A00741304 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		D0666A2124C677B400F3F04B /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0666A2524C677B400F3F04B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D0666A4124C6BB7B00F3F04B /* IdentityDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityDatabase.swift; sourceTree = "<group>"; };
-		D0666A4424C6BC0A00F3F04B /* DatabaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseError.swift; sourceTree = "<group>"; };
 		D0666A4A24C6C37700F3F04B /* Identity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identity.swift; sourceTree = "<group>"; };
 		D0666A4D24C6C39600F3F04B /* Instance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Instance.swift; sourceTree = "<group>"; };
 		D0666A5024C6C3BC00F3F04B /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
@@ -245,6 +244,7 @@
 		D0DC175A24D0154F00A75C65 /* MastodonAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MastodonAPI.swift; sourceTree = "<group>"; };
 		D0DC177324D0B58800A75C65 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		D0DC177624D0CF2600A75C65 /* FakeKeychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeKeychain.swift; sourceTree = "<group>"; };
+		D0EC8DC124DF7D9C00A08489 /* IdentityService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityService.swift; sourceTree = "<group>"; };
 		D0ED1B6D24CE100C00B4899C /* AddIdentityViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIdentityViewModelTests.swift; sourceTree = "<group>"; };
 		D0ED1BB624CE47F400B4899C /* WebAuthSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebAuthSession.swift; sourceTree = "<group>"; };
 		D0ED1BC024CED48800B4899C /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
@@ -337,6 +337,23 @@
 			path = Endpoints;
 			sourceTree = "<group>";
 		};
+		D019E6EB24DF7BB800697C7D /* Databases */ = {
+			isa = PBXGroup;
+			children = (
+				D019E6EF24DF7C2F00697C7D /* DatabaseError.swift */,
+				D019E6EC24DF7BF300697C7D /* IdentityDatabase.swift */,
+			);
+			path = Databases;
+			sourceTree = "<group>";
+		};
+		D019E6F224DF7C9E00697C7D /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				D0EC8DC124DF7D9C00A08489 /* IdentityService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		D047FA7F24C3E21000AF17C5 = {
 			isa = PBXGroup;
 			children = (
@@ -354,11 +371,13 @@
 			isa = PBXGroup;
 			children = (
 				D047FA8724C3E21200AF17C5 /* Assets.xcassets */,
+				D019E6EB24DF7BB800697C7D /* Databases */,
 				D0DB6F1624C665B400D965FE /* Extensions */,
 				D06B491D24D3F78A00642749 /* Localizations */,
 				D047FA8524C3E21000AF17C5 /* MetatextApp.swift */,
 				D0666A3A24C6B56200F3F04B /* Model */,
 				D0DB6EFA24C5730600D965FE /* Networking */,
+				D019E6F224DF7C9E00697C7D /* Services */,
 				D0DB6EFB24C658E400D965FE /* View Models */,
 				D0DB6EF024C5224F00D965FE /* Views */,
 			);
@@ -414,12 +433,9 @@
 				D0666A6224C6DC6C00F3F04B /* AppAuthorization.swift */,
 				D052BBCC24D750A100A80A7A /* AppEnvironment.swift */,
 				D0ED1BD624CF94B200B4899C /* Application.swift */,
-				D0666A4424C6BC0A00F3F04B /* DatabaseError.swift */,
 				D052BBCE24D750C000A80A7A /* Defaults.swift */,
 				D0666A5324C6C3E500F3F04B /* Emoji.swift */,
 				D0666A4A24C6C37700F3F04B /* Identity.swift */,
-				D0666A4124C6BB7B00F3F04B /* IdentityDatabase.swift */,
-				D0091B7324DDF4860040E8D2 /* IdentityService.swift */,
 				D0666A4D24C6C39600F3F04B /* Instance.swift */,
 				D0DC177324D0B58800A75C65 /* Keychain.swift */,
 				D0ED1BE224CFA84400B4899C /* MastodonError.swift */,
@@ -742,7 +758,6 @@
 				D047FAAE24C3E21200AF17C5 /* MetatextApp.swift in Sources */,
 				D0BEC94724CA22C400E864C4 /* TimelineViewModel.swift in Sources */,
 				D0666A4E24C6C39600F3F04B /* Instance.swift in Sources */,
-				D0091B7424DDF4860040E8D2 /* IdentityService.swift in Sources */,
 				D019E6E924DF72E700697C7D /* InstanceEndpoint.swift in Sources */,
 				D052BBCF24D750C000A80A7A /* Defaults.swift in Sources */,
 				D0ED1BE324CFA84400B4899C /* MastodonError.swift in Sources */,
@@ -755,11 +770,11 @@
 				D019E6E124DF72E700697C7D /* AppAuthorizationEndpoint.swift in Sources */,
 				D0159F8824DE742F00E78478 /* SecondaryNavigationViewModel.swift in Sources */,
 				D052BBD224D750CB00A80A7A /* AppEnvironment.swift in Sources */,
+				D019E6ED24DF7BF300697C7D /* IdentityDatabase.swift in Sources */,
 				D081A40524D0F1A8001B016E /* String+Extensions.swift in Sources */,
 				D019E6E724DF72E700697C7D /* AccessTokenEndpoint.swift in Sources */,
 				D0BEC93824C9632800E864C4 /* RootViewModel.swift in Sources */,
 				D0ED1BC124CED48800B4899C /* HTTPClient.swift in Sources */,
-				D0666A4524C6BC0A00F3F04B /* DatabaseError.swift in Sources */,
 				D0159F9324DE743700E78478 /* SecondaryNavigationView.swift in Sources */,
 				D019E6E324DF72E700697C7D /* PreferencesEndpoint.swift in Sources */,
 				D0666A4B24C6C37700F3F04B /* Identity.swift in Sources */,
@@ -770,14 +785,15 @@
 				D019E6D924DF728400697C7D /* MastodonDecoder.swift in Sources */,
 				D052BBCA24D74C9200A80A7A /* FakeUserDefaults.swift in Sources */,
 				D0DC175224D008E300A75C65 /* MastodonTarget+Stubbing.swift in Sources */,
-				D0666A4224C6BB7B00F3F04B /* IdentityDatabase.swift in Sources */,
 				D0BEC94A24CA231200E864C4 /* TimelineView.swift in Sources */,
 				D0BEC93B24C96FD500E864C4 /* RootView.swift in Sources */,
 				D04FD74224D4AA34007D572D /* DevelopmentModels.swift in Sources */,
 				D0DC175824D0130800A75C65 /* HTTPStubs.swift in Sources */,
 				D0DC177724D0CF2600A75C65 /* FakeKeychain.swift in Sources */,
+				D0EC8DC224DF7D9C00A08489 /* IdentityService.swift in Sources */,
 				D0C963FB24CC359D003BD330 /* AlertItem.swift in Sources */,
 				D0DC174624CFEC2000A75C65 /* StubbingURLProtocol.swift in Sources */,
+				D019E6F024DF7C2F00697C7D /* DatabaseError.swift in Sources */,
 				D019E6D724DF728400697C7D /* MastodonEncoder.swift in Sources */,
 				D0091B7124DD68220040E8D2 /* PreferencesViewModel.swift in Sources */,
 				D0DC174D24CFF1F100A75C65 /* Stubbing.swift in Sources */,
@@ -820,8 +836,8 @@
 				D047FAAF24C3E21200AF17C5 /* MetatextApp.swift in Sources */,
 				D0BEC94824CA22C400E864C4 /* TimelineViewModel.swift in Sources */,
 				D0159FA624DE98F600E78478 /* NSMutableAttributedString+Extensions.swift in Sources */,
+				D0EC8DC324DF7D9C00A08489 /* IdentityService.swift in Sources */,
 				D0666A4F24C6C39600F3F04B /* Instance.swift in Sources */,
-				D0091B7524DDF4860040E8D2 /* IdentityService.swift in Sources */,
 				D052BBD024D750C000A80A7A /* Defaults.swift in Sources */,
 				D0ED1BE424CFA84400B4899C /* MastodonError.swift in Sources */,
 				D0666A6424C6DC6C00F3F04B /* AppAuthorization.swift in Sources */,
@@ -832,16 +848,15 @@
 				D081A40624D0F1A8001B016E /* String+Extensions.swift in Sources */,
 				D0BEC93924C9632800E864C4 /* RootViewModel.swift in Sources */,
 				D0ED1BC224CED48800B4899C /* HTTPClient.swift in Sources */,
-				D0666A4624C6BC0A00F3F04B /* DatabaseError.swift in Sources */,
 				D0666A4C24C6C37700F3F04B /* Identity.swift in Sources */,
 				D0666A5524C6C3E500F3F04B /* Emoji.swift in Sources */,
+				D019E6EE24DF7BF300697C7D /* IdentityDatabase.swift in Sources */,
 				D0A652AE24DE3EB6002EA33F /* PreferencesEndpoint+Stubbing.swift in Sources */,
 				D019E6E424DF72E700697C7D /* PreferencesEndpoint.swift in Sources */,
 				D0DC175624D00F0A00A75C65 /* AccessTokenEndpoint+Stubbing.swift in Sources */,
 				D0B23F0E24D210E90066F411 /* NSError+Extensions.swift in Sources */,
 				D052BBCB24D74C9300A80A7A /* FakeUserDefaults.swift in Sources */,
 				D0DC175324D008E300A75C65 /* MastodonTarget+Stubbing.swift in Sources */,
-				D0666A4324C6BB7B00F3F04B /* IdentityDatabase.swift in Sources */,
 				D0BEC94B24CA231200E864C4 /* TimelineView.swift in Sources */,
 				D0BEC93C24C96FD500E864C4 /* RootView.swift in Sources */,
 				D0159F9B24DE748900E78478 /* SidebarNavigationViewModel.swift in Sources */,
@@ -861,6 +876,7 @@
 				D019E6EA24DF72E700697C7D /* InstanceEndpoint.swift in Sources */,
 				D0DC177524D0B58800A75C65 /* Keychain.swift in Sources */,
 				D0159F9C24DE748C00E78478 /* SidebarNavigationView.swift in Sources */,
+				D019E6F124DF7C2F00697C7D /* DatabaseError.swift in Sources */,
 				D074577824D29006004758DB /* StubbingWebAuthSession.swift in Sources */,
 				D0ED1BCF24CF768200B4899C /* MastodonEndpoint.swift in Sources */,
 				D074577B24D29366004758DB /* URLSessionConfiguration+Extensions.swift in Sources */,
