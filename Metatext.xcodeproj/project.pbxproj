@@ -84,8 +84,8 @@
 		D06B492024D3FB8000642749 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D06B491E24D3F7FE00642749 /* Localizable.strings */; };
 		D06B492324D4611300642749 /* KingfisherSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = D06B492224D4611300642749 /* KingfisherSwiftUI */; };
 		D06B492524D4612400642749 /* KingfisherSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = D06B492424D4612400642749 /* KingfisherSwiftUI */; };
-		D074577724D29006004758DB /* StubbingWebAuthSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D074577624D29006004758DB /* StubbingWebAuthSession.swift */; };
-		D074577824D29006004758DB /* StubbingWebAuthSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D074577624D29006004758DB /* StubbingWebAuthSession.swift */; };
+		D074577724D29006004758DB /* MockWebAuthSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D074577624D29006004758DB /* MockWebAuthSession.swift */; };
+		D074577824D29006004758DB /* MockWebAuthSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D074577624D29006004758DB /* MockWebAuthSession.swift */; };
 		D074577A24D29366004758DB /* URLSessionConfiguration+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D074577924D29366004758DB /* URLSessionConfiguration+Extensions.swift */; };
 		D074577B24D29366004758DB /* URLSessionConfiguration+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D074577924D29366004758DB /* URLSessionConfiguration+Extensions.swift */; };
 		D081A40524D0F1A8001B016E /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D081A40424D0F1A8001B016E /* String+Extensions.swift */; };
@@ -218,7 +218,7 @@
 		D0666A6E24C6DFB300F3F04B /* AccessToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessToken.swift; sourceTree = "<group>"; };
 		D0666A7124C6E0D300F3F04B /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 		D06B491E24D3F7FE00642749 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
-		D074577624D29006004758DB /* StubbingWebAuthSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StubbingWebAuthSession.swift; sourceTree = "<group>"; };
+		D074577624D29006004758DB /* MockWebAuthSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockWebAuthSession.swift; sourceTree = "<group>"; };
 		D074577924D29366004758DB /* URLSessionConfiguration+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSessionConfiguration+Extensions.swift"; sourceTree = "<group>"; };
 		D081A40424D0F1A8001B016E /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		D0A1CA7324DAC2F1003063E9 /* KingfisherOptionsInfo+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KingfisherOptionsInfo+Extensions.swift"; sourceTree = "<group>"; };
@@ -536,13 +536,13 @@
 			isa = PBXGroup;
 			children = (
 				D04FD74124D4AA34007D572D /* DevelopmentModels.swift */,
-				D0DC177624D0CF2600A75C65 /* MockKeychainService.swift */,
-				D052BBC824D74B6400A80A7A /* MockUserDefaults.swift */,
 				D0DC175724D0130800A75C65 /* HTTPStubs.swift */,
 				D0DC174824CFF13700A75C65 /* Mastodon API Stubs */,
+				D0DC177624D0CF2600A75C65 /* MockKeychainService.swift */,
+				D052BBC824D74B6400A80A7A /* MockUserDefaults.swift */,
+				D074577624D29006004758DB /* MockWebAuthSession.swift */,
 				D0DC174C24CFF1F100A75C65 /* Stubbing.swift */,
 				D0DC174524CFEC2000A75C65 /* StubbingURLProtocol.swift */,
-				D074577624D29006004758DB /* StubbingWebAuthSession.swift */,
 				D074577924D29366004758DB /* URLSessionConfiguration+Extensions.swift */,
 			);
 			path = "Development Assets";
@@ -803,7 +803,7 @@
 				D0091B6E24DD68090040E8D2 /* PreferencesView.swift in Sources */,
 				D0159F8F24DE743700E78478 /* IdentitiesView.swift in Sources */,
 				D0DB6EF424C5228A00D965FE /* AddIdentityView.swift in Sources */,
-				D074577724D29006004758DB /* StubbingWebAuthSession.swift in Sources */,
+				D074577724D29006004758DB /* MockWebAuthSession.swift in Sources */,
 				D0159FA524DE989700E78478 /* NSMutableAttributedString+Extensions.swift in Sources */,
 				D0ED1BCE24CF768200B4899C /* MastodonEndpoint.swift in Sources */,
 				D074577A24D29366004758DB /* URLSessionConfiguration+Extensions.swift in Sources */,
@@ -876,7 +876,7 @@
 				D019E6EA24DF72E700697C7D /* InstanceEndpoint.swift in Sources */,
 				D0159F9C24DE748C00E78478 /* SidebarNavigationView.swift in Sources */,
 				D019E6F124DF7C2F00697C7D /* DatabaseError.swift in Sources */,
-				D074577824D29006004758DB /* StubbingWebAuthSession.swift in Sources */,
+				D074577824D29006004758DB /* MockWebAuthSession.swift in Sources */,
 				D0ED1BCF24CF768200B4899C /* MastodonEndpoint.swift in Sources */,
 				D074577B24D29366004758DB /* URLSessionConfiguration+Extensions.swift in Sources */,
 				D0ED1BB824CE47F400B4899C /* WebAuthSession.swift in Sources */,

@@ -2,7 +2,7 @@
 
 import Foundation
 
-class StubbingWebAuthSession: WebAuthSession {
+class MockWebAuthSession: WebAuthSessionType {
     let completionHandler: WebAuthSessionCompletionHandler
     let url: URL
     let callbackURLScheme: String?
@@ -32,7 +32,7 @@ class StubbingWebAuthSession: WebAuthSession {
     }
 }
 
-class SuccessfulStubbingWebAuthSession: StubbingWebAuthSession {
+class SuccessfulMockWebAuthSession: MockWebAuthSession {
     private let redirectURL: URL
 
     required init(
@@ -59,7 +59,7 @@ class SuccessfulStubbingWebAuthSession: StubbingWebAuthSession {
     }
 }
 
-class CanceledLoginStubbingWebAuthSession: StubbingWebAuthSession {
+class CanceledLoginMockWebAuthSession: MockWebAuthSession {
     override var completionHandlerError: Error? {
         WebAuthSessionError(.canceledLogin)
     }

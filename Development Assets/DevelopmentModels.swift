@@ -75,7 +75,7 @@ extension AppEnvironment {
         identityDatabase: IdentityDatabase = .fresh(),
         defaults: Defaults = .fresh(),
         secrets: Secrets = .fresh(),
-        webAuthSessionType: WebAuthSession.Type = SuccessfulStubbingWebAuthSession.self) -> AppEnvironment {
+        webAuthSessionType: WebAuthSessionType.Type = SuccessfulMockWebAuthSession.self) -> AppEnvironment {
         AppEnvironment(
             URLSessionConfiguration: URLSessionConfiguration,
             identityDatabase: identityDatabase,
@@ -89,7 +89,7 @@ extension AppEnvironment {
         identityDatabase: .development,
         defaults: .development,
         secrets: .development,
-        webAuthSessionType: SuccessfulStubbingWebAuthSession.self)
+        webAuthSessionType: SuccessfulMockWebAuthSession.self)
 }
 
 extension IdentityService {

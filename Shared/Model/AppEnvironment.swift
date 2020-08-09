@@ -7,5 +7,5 @@ struct AppEnvironment {
     let identityDatabase: IdentityDatabase
     let defaults: Defaults
     let secrets: Secrets
-    let webAuthSessionType: WebAuthSession.Type
+    let webAuthSessionType: WebAuthSessionType.Type
 }

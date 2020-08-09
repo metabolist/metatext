@@ -4,7 +4,7 @@ import Foundation
 import AuthenticationServices
 import Combine
 
-protocol WebAuthSession: AnyObject {
+protocol WebAuthSessionType: AnyObject {
     init(url URL: URL,
          callbackURLScheme: String?,
          completionHandler: @escaping WebAuthSessionCompletionHandler)
@@ -12,7 +12,7 @@ protocol WebAuthSession: AnyObject {
     @discardableResult func start() -> Bool
 }
 
-extension WebAuthSession {
+extension WebAuthSessionType {
     static func publisher(
         url: URL,
         callbackURLScheme: String?,
@@ -44,6 +44,6 @@ class WebAuthSessionContextProvider: NSObject, ASWebAuthenticationPresentationCo
 typealias WebAuthSessionCompletionHandler = ASWebAuthenticationSession.CompletionHandler
 typealias WebAuthSessionError = ASWebAuthenticationSessionError
 typealias WebAuthPresentationContextProviding = ASWebAuthenticationPresentationContextProviding
-typealias RealWebAuthSession = ASWebAuthenticationSession
+typealias WebAuthSession = ASWebAuthenticationSession
 
-extension RealWebAuthSession: WebAuthSession {}
+extension WebAuthSession: WebAuthSessionType {}

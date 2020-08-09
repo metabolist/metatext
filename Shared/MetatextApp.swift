@@ -20,7 +20,7 @@ struct MetatextApp: App {
             identityDatabase: identityDatabase,
             defaults: Defaults(userDefaults: .standard),
             secrets: Secrets(keychainService: KeychainService(serviceName: "com.metabolist.metatext")),
-            webAuthSessionType: RealWebAuthSession.self)
+            webAuthSessionType: WebAuthSession.self)
     }
 
     var body: some Scene {

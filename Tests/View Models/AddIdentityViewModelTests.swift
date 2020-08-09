@@ -61,7 +61,7 @@ class AddIdentityViewModelTests: XCTestCase {
     }
 
     func testDoesNotAlertCanceledLogin() throws {
-        let environment = AppEnvironment.fresh(webAuthSessionType: CanceledLoginStubbingWebAuthSession.self)
+        let environment = AppEnvironment.fresh(webAuthSessionType: CanceledLoginMockWebAuthSession.self)
         let sut = AddIdentityViewModel(environment: environment)
         let recorder = sut.$alertItem.record()
 

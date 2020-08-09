@@ -114,7 +114,7 @@ private extension Publisher where Output == AppAuthorization {
 
 private extension Publisher where Output == (AppAuthorization, URL), Failure == Error {
     func authenticate(
-        webAuthSessionType: WebAuthSession.Type,
+        webAuthSessionType: WebAuthSessionType.Type,
         contextProvider: WebAuthSessionContextProvider,
         callbackURLScheme: String) -> AnyPublisher<(AppAuthorization, URL), Error> {
         flatMap { appAuthorization, url in
