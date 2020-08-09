@@ -10,7 +10,7 @@ struct AuthenticationService {
 
     init(environment: AppEnvironment) {
         self.environment = environment
-        self.networkClient = MastodonClient(configuration: environment.URLSessionConfiguration)
+        networkClient = MastodonClient(configuration: environment.URLSessionConfiguration)
     }
 }
 
