@@ -19,7 +19,7 @@ struct MetatextApp: App {
             URLSessionConfiguration: .default,
             identityDatabase: identityDatabase,
             defaults: Defaults(userDefaults: .standard),
-            secrets: Secrets(keychain: Keychain(service: "com.metabolist.metatext")),
+            secrets: Secrets(keychainService: KeychainService(serviceName: "com.metabolist.metatext")),
             webAuthSessionType: RealWebAuthSession.self)
     }
 

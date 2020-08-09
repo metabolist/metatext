@@ -3,19 +3,19 @@
 import Foundation
 
 class MockKeychainService {
-    private var guts = [String: Data]()
+    private var items = [String: Data]()
 }
 
 extension MockKeychainService: KeychainServiceType {
     func set(data: Data, forKey key: String) throws {
-        guts[key] = data
+        items[key] = data
     }
 
     func deleteData(key: String) throws {
-        guts[key] = nil
+        items[key] = nil
     }
 
     func getData(key: String) throws -> Data? {
-        guts[key]
+        items[key]
     }
 }

@@ -12,10 +12,10 @@ enum SecretsStorableError: Error {
 }
 
 class Secrets {
-    private var keychain: KeychainType
+    private let keychainService: KeychainServiceType
 
-    init(keychain: KeychainType) {
-        self.keychain = keychain
+    init(keychainService: KeychainServiceType) {
+        self.keychainService = keychainService
     }
 }
 
@@ -29,17 +29,19 @@ extension Secrets {
 
 extension Secrets {
     func set(_ data: SecretsStorable, forItem item: Item, forIdentityID identityID: UUID) throws {
-        try keychain.set(data: data.dataStoredInSecrets, forKey: Self.key(item: item, identityID: identityID))
+        try keychainService.set(data: data.dataStoredInSecrets, forKey: Self.key(item: item, identityID: identityID))
     }
 
     func item<T: SecretsStorable>(_ item: Item, forIdentityID identityID: UUID) throws -> T? {
-        guard let data = try keychain.getData(key: Self.key(item: item, identityID: identityID)) else { return nil }
+        guard let data = try keychainService.getData(key: Self.key(item: item, identityID: identityID)) else {
+            return nil
+        }
 
         return try T.fromDataStoredInSecrets(data)
     }
 
     func delete(_ item: Item, forIdentityID identityID: UUID) throws {
-        try keychain.deleteData(key: Self.key(item: item, identityID: identityID))
+        try keychainService.deleteData(key: Self.key(item: item, identityID: identityID))
     }
 }
 

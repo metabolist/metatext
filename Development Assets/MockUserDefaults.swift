@@ -2,7 +2,7 @@
 
 import Foundation
 
-class FakeUserDefaults: UserDefaults {
+class MockUserDefaults: UserDefaults {
     convenience init() {
         self.init(suiteName: Self.suiteName)!
     }
@@ -16,6 +16,6 @@ class FakeUserDefaults: UserDefaults {
     }
 }
 
-private extension FakeUserDefaults {
-    private static let suiteName = "com.metatext.metabolist.fake-user-defaults"
+private extension MockUserDefaults {
+    private static let suiteName = "com.metatext.metabolist.mock-user-defaults"
 }

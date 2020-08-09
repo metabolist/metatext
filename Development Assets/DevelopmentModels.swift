@@ -11,7 +11,7 @@ private let devIdentityID = UUID(uuidString: "E621E1F8-C36C-495A-93FC-0C247A3E6E
 private let devAccessToken = "DEVELOPMENT_ACCESS_TOKEN"
 
 extension Secrets {
-    static func fresh() -> Secrets { Secrets(keychain: FakeKeychain()) }
+    static func fresh() -> Secrets { Secrets(keychainService: MockKeychainService()) }
 
     static let development: Secrets = {
         let secrets = Secrets.fresh()
@@ -25,7 +25,7 @@ extension Secrets {
 }
 
 extension Defaults {
-    static func fresh() -> Defaults { Defaults(userDefaults: FakeUserDefaults()) }
+    static func fresh() -> Defaults { Defaults(userDefaults: MockUserDefaults()) }
 
     static let development: Defaults = {
         let preferences = Defaults.fresh()

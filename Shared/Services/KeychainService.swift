@@ -2,18 +2,18 @@
 
 import Foundation
 
-protocol KeychainType {
-    mutating func set(data: Data, forKey key: String) throws
-    mutating func deleteData(key: String) throws
+protocol KeychainServiceType {
+    func set(data: Data, forKey key: String) throws
+    func deleteData(key: String) throws
     func getData(key: String) throws -> Data?
 }
 
-struct Keychain {
-    let service: String
+struct KeychainService {
+    let serviceName: String
 }
 
-extension Keychain: KeychainType {
-    mutating func set(data: Data, forKey key: String) throws {
+extension KeychainService: KeychainServiceType {
+    func set(data: Data, forKey key: String) throws {
         var query = queryDictionary(key: key)
 
         query[kSecValueData as String] = data
@@ -25,7 +25,7 @@ extension Keychain: KeychainType {
         }
     }
 
-    mutating func deleteData(key: String) throws {
+    func deleteData(key: String) throws {
         let status = SecItemDelete(queryDictionary(key: key) as CFDictionary)
 
         if status != errSecSuccess {
@@ -53,10 +53,10 @@ extension Keychain: KeychainType {
     }
 }
 
-private extension Keychain {
+private extension KeychainService {
     private func queryDictionary(key: String) -> [String: Any] {
         [
-            kSecAttrService as String: service,
+            kSecAttrService as String: serviceName,
             kSecAttrAccount as String: key,
             kSecClass as String: kSecClassGenericPassword
         ]
