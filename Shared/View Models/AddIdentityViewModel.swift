@@ -55,6 +55,7 @@ class AddIdentityViewModel: ObservableObject {
             return
         }
 
+        // TODO: Ensure instance has not disabled public preview
         identitiesService.createIdentity(id: identityID, instanceURL: instanceURL)
             .map { identityID }
             .assignErrorsToAlertItem(to: \.alertItem, on: self)

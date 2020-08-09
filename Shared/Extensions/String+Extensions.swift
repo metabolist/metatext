@@ -3,15 +3,15 @@
 import Foundation
 
 extension String {
-    private static let colonDoubleSlash = "://"
+    private static let HTTPSPrefix = "https://"
 
-    func url(scheme: String = "https") throws -> URL {
+    func url() throws -> URL {
         let url: URL?
 
-        if hasPrefix(scheme + Self.colonDoubleSlash) {
+        if hasPrefix(Self.HTTPSPrefix) {
             url = URL(string: self)
         } else {
-            url = URL(string: scheme + Self.colonDoubleSlash + self)
+            url = URL(string: Self.HTTPSPrefix + self)
         }
 
         guard let validURL = url else { throw URLError(.badURL) }
