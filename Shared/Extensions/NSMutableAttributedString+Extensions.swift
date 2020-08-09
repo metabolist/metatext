@@ -8,7 +8,7 @@ import AppKit
 import Kingfisher
 
 extension NSMutableAttributedString {
-    func insert(emojis: [Emoji], onImageLoad: (() -> Void)?) {
+    func insert(emojis: [Emoji], onImageLoad: @escaping (() -> Void)) {
         for emoji in emojis {
             let token = ":\(emoji.shortcode):"
 
@@ -18,10 +18,11 @@ extension NSMutableAttributedString {
 
                 replaceCharacters(in: NSRange(tokenRange, in: string), with: attachmentAttributedString)
 
-                KingfisherManager.shared.retrieveImage(with: emoji.url) { result in
-                    guard case let .success(value) = result else { return }
+                KingfisherManager.shared.retrieveImage(with: emoji.url) {
+                    guard case let .success(value) = $0 else { return }
+
                     attachment.image = value.image
-                    onImageLoad?()
+                    onImageLoad()
                 }
             }
         }
