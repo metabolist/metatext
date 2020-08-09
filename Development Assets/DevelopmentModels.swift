@@ -10,19 +10,18 @@ private let devInstanceURL = URL(string: "https://mastodon.social")!
 private let devIdentityID = UUID(uuidString: "E621E1F8-C36C-495A-93FC-0C247A3E6E5F")!
 private let devAccessToken = "DEVELOPMENT_ACCESS_TOKEN"
 
-extension Secrets {
-    static func fresh() -> Secrets { Secrets(keychainService: MockKeychainService()) }
+func freshKeychainService() -> KeychainServiceType { MockKeychainService() }
 
-    static let development: Secrets = {
-        let secrets = Secrets.fresh()
+let developmentKeychainService: KeychainServiceType = {
+    let keychainService = MockKeychainService()
+    let secretsService = SecretsService(identityID: devIdentityID, keychainService: keychainService)
 
-        try! secrets.set("DEVELOPMENT_CLIENT_ID", forItem: .clientID, forIdentityID: devIdentityID)
-        try! secrets.set("DEVELOPMENT_CLIENT_SECRET", forItem: .clientSecret, forIdentityID: devIdentityID)
-        try! secrets.set(devAccessToken, forItem: .accessToken, forIdentityID: devIdentityID)
+    try! secretsService.set("DEVELOPMENT_CLIENT_ID", forItem: .clientID)
+    try! secretsService.set("DEVELOPMENT_CLIENT_SECRET", forItem: .clientSecret)
+    try! secretsService.set(devAccessToken, forItem: .accessToken)
 
-        return secrets
-    }()
-}
+    return keychainService
+}()
 
 extension Defaults {
     static func fresh() -> Defaults { Defaults(userDefaults: MockUserDefaults()) }
@@ -74,13 +73,13 @@ extension AppEnvironment {
         URLSessionConfiguration: URLSessionConfiguration = .stubbing,
         identityDatabase: IdentityDatabase = .fresh(),
         defaults: Defaults = .fresh(),
-        secrets: Secrets = .fresh(),
+        keychainService: KeychainServiceType = freshKeychainService(),
         webAuthSessionType: WebAuthSessionType.Type = SuccessfulMockWebAuthSession.self) -> AppEnvironment {
         AppEnvironment(
             URLSessionConfiguration: URLSessionConfiguration,
             identityDatabase: identityDatabase,
             defaults: defaults,
-            secrets: secrets,
+            keychainService: keychainService,
             webAuthSessionType: webAuthSessionType)
     }
 
@@ -88,7 +87,7 @@ extension AppEnvironment {
         URLSessionConfiguration: .stubbing,
         identityDatabase: .development,
         defaults: .development,
-        secrets: .development,
+        keychainService: developmentKeychainService,
         webAuthSessionType: SuccessfulMockWebAuthSession.self)
 }
 

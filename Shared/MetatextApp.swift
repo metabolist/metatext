@@ -19,7 +19,7 @@ struct MetatextApp: App {
             URLSessionConfiguration: .default,
             identityDatabase: identityDatabase,
             defaults: Defaults(userDefaults: .standard),
-            secrets: Secrets(keychainService: KeychainService(serviceName: "com.metabolist.metatext")),
+            keychainService: KeychainService(serviceName: Self.keychainServiceName),
             webAuthSessionType: WebAuthSession.self)
     }
 
@@ -28,4 +28,8 @@ struct MetatextApp: App {
             RootView(viewModel: RootViewModel(environment: environment))
         }
     }
+}
+
+private extension MetatextApp {
+    static let keychainServiceName = "com.metabolist.metatext"
 }

@@ -11,42 +11,46 @@ enum SecretsStorableError: Error {
     case conversionFromDataStoredInSecrets(Data)
 }
 
-class Secrets {
+struct SecretsService {
+    let identityID: UUID
     private let keychainService: KeychainServiceType
 
-    init(keychainService: KeychainServiceType) {
+    init(identityID: UUID, keychainService: KeychainServiceType) {
+        self.identityID = identityID
         self.keychainService = keychainService
     }
 }
 
-extension Secrets {
-    enum Item: String {
+extension SecretsService {
+    enum Item: String, CaseIterable {
         case clientID = "client-id"
         case clientSecret = "client-secret"
         case accessToken = "access-token"
     }
 }
 
-extension Secrets {
-    func set(_ data: SecretsStorable, forItem item: Item, forIdentityID identityID: UUID) throws {
-        try keychainService.set(data: data.dataStoredInSecrets, forKey: Self.key(item: item, identityID: identityID))
+extension SecretsService {
+    func set(_ data: SecretsStorable, forItem item: Item) throws {
+        try keychainService.set(data: data.dataStoredInSecrets, forKey: key(item: item))
     }
 
-    func item<T: SecretsStorable>(_ item: Item, forIdentityID identityID: UUID) throws -> T? {
-        guard let data = try keychainService.getData(key: Self.key(item: item, identityID: identityID)) else {
+    func item<T: SecretsStorable>(_ item: Item) throws -> T? {
+        guard let data = try keychainService.getData(key: key(item: item)) else {
             return nil
         }
 
         return try T.fromDataStoredInSecrets(data)
     }
 
-    func delete(_ item: Item, forIdentityID identityID: UUID) throws {
-        try keychainService.deleteData(key: Self.key(item: item, identityID: identityID))
+    func deleteAllItems() throws {
+        for item in SecretsService.Item.allCases {
+            try keychainService.deleteData(key: key(item: item))
+        }
     }
 }
 
-private extension Secrets {
-    static func key(item: Item, identityID: UUID) -> String {
+private extension SecretsService {
+    func key(item: Item) -> String {
         identityID.uuidString + "." + item.rawValue
     }
 }

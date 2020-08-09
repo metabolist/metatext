@@ -16,7 +16,10 @@ class IdentityService {
         self.appEnvironment = appEnvironment
         observationErrors = observationErrorsInput.eraseToAnyPublisher()
         networkClient = MastodonClient(configuration: appEnvironment.URLSessionConfiguration)
-        networkClient.accessToken = try appEnvironment.secrets.item(.accessToken, forIdentityID: identityID)
+        networkClient.accessToken = try SecretsService(
+            identityID: identityID,
+            keychainService: appEnvironment.keychainService)
+            .item(.accessToken)
 
         let observation = appEnvironment.identityDatabase.identityObservation(id: identityID).share()
 

@@ -6,6 +6,6 @@ struct AppEnvironment {
     let URLSessionConfiguration: URLSessionConfiguration
     let identityDatabase: IdentityDatabase
     let defaults: Defaults
-    let secrets: Secrets
+    let keychainService: KeychainServiceType
     let webAuthSessionType: WebAuthSessionType.Type
 }

@@ -26,6 +26,13 @@ extension RootViewModel {
 
     func deleteIdentity(id: UUID) {
         environment.identityDatabase.deleteIdentity(id: id)
+            .continuingIfWeakReferenceIsStillAlive(to: self)
+            .tryMap {
+                try SecretsService(
+                    identityID: id,
+                    keychainService: $1.environment.keychainService)
+                    .deleteAllItems()
+            }
             .sink(receiveCompletion: { _ in }, receiveValue: {})
             .store(in: &cancellables)
     }

@@ -20,15 +20,15 @@ class AddIdentityViewModelTests: XCTestCase {
 
         XCTAssertEqual(addedIdentity.id, addedIdentityID)
         XCTAssertEqual(addedIdentity.url, URL(string: "https://mastodon.social")!)
+
+        let secretsService = SecretsService(identityID: addedIdentity.id, keychainService: environment.keychainService)
+
         XCTAssertEqual(
-            try environment.secrets.item(.clientID, forIdentityID: addedIdentityID) as String?,
-            "AUTHORIZATION_CLIENT_ID_STUB_VALUE")
+            try secretsService.item(.clientID) as String?, "AUTHORIZATION_CLIENT_ID_STUB_VALUE")
         XCTAssertEqual(
-            try environment.secrets.item(.clientSecret, forIdentityID: addedIdentityID) as String?,
-            "AUTHORIZATION_CLIENT_SECRET_STUB_VALUE")
+            try secretsService.item(.clientSecret) as String?, "AUTHORIZATION_CLIENT_SECRET_STUB_VALUE")
         XCTAssertEqual(
-            try environment.secrets.item(.accessToken, forIdentityID: addedIdentityID) as String?,
-            "ACCESS_TOKEN_STUB_VALUE")
+            try secretsService.item(.accessToken) as String?, "ACCESS_TOKEN_STUB_VALUE")
     }
 
     func testAddIdentityWithoutScheme() throws {

@@ -39,7 +39,7 @@ class AddIdentityViewModel: ObservableObject {
             identityID: identityID,
             instanceURL: instanceURL,
             redirectURL: redirectURL,
-            secrets: environment.secrets)
+            keychainService: environment.keychainService)
             .authenticationURL(instanceURL: instanceURL, redirectURL: redirectURL)
             .authenticate(
                 webAuthSessionType: environment.webAuthSessionType,
@@ -67,7 +67,7 @@ private extension AddIdentityViewModel {
         identityID: UUID,
         instanceURL: URL,
         redirectURL: URL,
-        secrets: Secrets) -> AnyPublisher<AppAuthorization, Error> {
+        keychainService: KeychainServiceType) -> AnyPublisher<AppAuthorization, Error> {
         let endpoint = AppAuthorizationEndpoint.apps(
             clientName: MastodonAPI.OAuth.clientName,
             redirectURI: redirectURL.absoluteString,
@@ -77,8 +77,9 @@ private extension AddIdentityViewModel {
 
         return networkClient.request(target)
             .tryMap {
-                try secrets.set($0.clientId, forItem: .clientID, forIdentityID: identityID)
-                try secrets.set($0.clientSecret, forItem: .clientSecret, forIdentityID: identityID)
+                let secretsService = SecretsService(identityID: identityID, keychainService: keychainService)
+                try secretsService.set($0.clientId, forItem: .clientID)
+                try secretsService.set($0.clientSecret, forItem: .clientSecret)
 
                 return $0
             }
@@ -174,7 +175,9 @@ private extension Publisher where Output == (AppAuthorization, String), Failure 
 private extension Publisher where Output == AccessToken {
     func createIdentity(id: UUID, instanceURL: URL, environment: AppEnvironment) -> AnyPublisher<UUID, Error> {
         tryMap { accessToken -> (UUID, URL) in
-            try environment.secrets.set(accessToken.accessToken, forItem: .accessToken, forIdentityID: id)
+            let secretsService = SecretsService(identityID: id, keychainService: environment.keychainService)
+
+            try secretsService.set(accessToken.accessToken, forItem: .accessToken)
 
             return (id, instanceURL)
         }
