@@ -138,8 +138,11 @@ extension IdentityDatabase {
             .eraseToAnyPublisher()
     }
 
-    var mostRecentlyUsedIdentityID: UUID? {
-        try? databaseQueue.read(StoredIdentity.select(Column("id")).order(Column("lastUsedAt").desc).fetchOne)
+    func mostRecentlyUsedIdentityIDObservation() -> AnyPublisher<UUID?, Error> {
+        ValueObservation.tracking(StoredIdentity.select(Column("id")).order(Column("lastUsedAt").desc).fetchOne)
+            .removeDuplicates()
+            .publisher(in: databaseQueue, scheduling: .immediate)
+            .eraseToAnyPublisher()
     }
 }
 

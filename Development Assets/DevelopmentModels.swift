@@ -91,16 +91,24 @@ extension AppEnvironment {
         webAuthSessionType: SuccessfulMockWebAuthSession.self)
 }
 
+extension IdentitiesService {
+    static let development = IdentitiesService(environment: .development)
+}
+
 extension IdentityService {
-    static let development = try! IdentityService(identityID: devIdentityID, appEnvironment: .development)
+    static let development = try! IdentitiesService.development.identityService(id: devIdentityID)
 }
 
 extension RootViewModel {
-    static let development = RootViewModel(environment: .development)
+    static let development = RootViewModel(identitiesService: .development)
+}
+
+extension AddIdentityViewModel {
+    static let development = RootViewModel.development.addIdentityViewModel()
 }
 
 extension MainNavigationViewModel {
-    static let development = RootViewModel.development.mainNavigationViewModel(identityID: devIdentityID)!
+    static let development = RootViewModel.development.mainNavigationViewModel!
 }
 
 #if os(iOS)

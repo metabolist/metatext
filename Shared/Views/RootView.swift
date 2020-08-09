@@ -12,10 +12,9 @@ struct RootView: View {
     @StateObject var viewModel: RootViewModel
 
     var body: some View {
-        if let id = viewModel.identityID,
-           let mainNavigationViewModel = viewModel.mainNavigationViewModel(identityID: id) {
+        if let mainNavigationViewModel = viewModel.mainNavigationViewModel {
             Self.mainNavigation(mainNavigationViewModel: mainNavigationViewModel)
-                .id(id)
+                .id(UUID())
                 .environmentObject(viewModel)
                 .transition(.opacity)
         } else {

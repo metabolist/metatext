@@ -60,7 +60,7 @@ private extension View {
 #if DEBUG
 struct AddAccountView_Previews: PreviewProvider {
     static var previews: some View {
-        AddIdentityView(viewModel: AddIdentityViewModel(environment: .development))
+        AddIdentityView(viewModel: .development)
     }
 }
 #endif

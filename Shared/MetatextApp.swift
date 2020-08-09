@@ -25,7 +25,7 @@ struct MetatextApp: App {
 
     var body: some Scene {
         WindowGroup {
-            RootView(viewModel: RootViewModel(environment: environment))
+            RootView(viewModel: RootViewModel(identitiesService: IdentitiesService(environment: environment)))
         }
     }
 }

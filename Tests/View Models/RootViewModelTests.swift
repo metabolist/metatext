@@ -9,8 +9,10 @@ class RootViewModelTests: XCTestCase {
     var cancellables = Set<AnyCancellable>()
 
     func testAddIdentity() throws {
-        let sut = RootViewModel(environment: .fresh())
-        let recorder = sut.$identityID.record()
+        let environment = AppEnvironment.fresh()
+        let sut = RootViewModel(
+            identitiesService: IdentitiesService(environment: environment))
+        let recorder = sut.$mainNavigationViewModel.record()
 
         XCTAssertNil(try wait(for: recorder.next(), timeout: 1))
 
@@ -23,9 +25,8 @@ class RootViewModelTests: XCTestCase {
         addIdentityViewModel.urlFieldText = "https://mastodon.social"
         addIdentityViewModel.goTapped()
 
-        let identityID = try wait(for: recorder.next(), timeout: 1)!
+        let mainNavigationViewModel = try wait(for: recorder.next(), timeout: 1)!
 
-        XCTAssertNotNil(identityID)
-        XCTAssertNotNil(sut.mainNavigationViewModel(identityID: identityID))
+        XCTAssertNotNil(mainNavigationViewModel)
     }
 }

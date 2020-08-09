@@ -140,6 +140,10 @@
 		D0EC8DC624DF842700A08489 /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DC424DF842700A08489 /* KeychainService.swift */; };
 		D0EC8DC824DF8B3C00A08489 /* SecretsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DC724DF8B3C00A08489 /* SecretsService.swift */; };
 		D0EC8DC924DF8B3C00A08489 /* SecretsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DC724DF8B3C00A08489 /* SecretsService.swift */; };
+		D0EC8DCB24DFA06700A08489 /* IdentitiesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DCA24DFA06700A08489 /* IdentitiesService.swift */; };
+		D0EC8DCC24DFA06700A08489 /* IdentitiesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DCA24DFA06700A08489 /* IdentitiesService.swift */; };
+		D0EC8DCE24DFB64200A08489 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DCD24DFB64200A08489 /* AuthenticationService.swift */; };
+		D0EC8DCF24DFB64200A08489 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DCD24DFB64200A08489 /* AuthenticationService.swift */; };
 		D0ED1B6E24CE100C00B4899C /* AddIdentityViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ED1B6D24CE100C00B4899C /* AddIdentityViewModelTests.swift */; };
 		D0ED1BB724CE47F400B4899C /* WebAuthSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ED1BB624CE47F400B4899C /* WebAuthSession.swift */; };
 		D0ED1BB824CE47F400B4899C /* WebAuthSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ED1BB624CE47F400B4899C /* WebAuthSession.swift */; };
@@ -245,6 +249,8 @@
 		D0EC8DC124DF7D9C00A08489 /* IdentityService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityService.swift; sourceTree = "<group>"; };
 		D0EC8DC424DF842700A08489 /* KeychainService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
 		D0EC8DC724DF8B3C00A08489 /* SecretsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecretsService.swift; sourceTree = "<group>"; };
+		D0EC8DCA24DFA06700A08489 /* IdentitiesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentitiesService.swift; sourceTree = "<group>"; };
+		D0EC8DCD24DFB64200A08489 /* AuthenticationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
 		D0ED1B6D24CE100C00B4899C /* AddIdentityViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIdentityViewModelTests.swift; sourceTree = "<group>"; };
 		D0ED1BB624CE47F400B4899C /* WebAuthSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebAuthSession.swift; sourceTree = "<group>"; };
 		D0ED1BC024CED48800B4899C /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
@@ -349,6 +355,8 @@
 		D019E6F224DF7C9E00697C7D /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				D0EC8DCD24DFB64200A08489 /* AuthenticationService.swift */,
+				D0EC8DCA24DFA06700A08489 /* IdentitiesService.swift */,
 				D0EC8DC124DF7D9C00A08489 /* IdentityService.swift */,
 				D0EC8DC424DF842700A08489 /* KeychainService.swift */,
 				D0EC8DC724DF8B3C00A08489 /* SecretsService.swift */,
@@ -796,6 +804,7 @@
 				D0DC174624CFEC2000A75C65 /* StubbingURLProtocol.swift in Sources */,
 				D019E6F024DF7C2F00697C7D /* DatabaseError.swift in Sources */,
 				D019E6D724DF728400697C7D /* MastodonEncoder.swift in Sources */,
+				D0EC8DCB24DFA06700A08489 /* IdentitiesService.swift in Sources */,
 				D0091B7124DD68220040E8D2 /* PreferencesViewModel.swift in Sources */,
 				D0DC174D24CFF1F100A75C65 /* Stubbing.swift in Sources */,
 				D0091B6B24DC10CE0040E8D2 /* PostingReadingPreferencesViewModel.swift in Sources */,
@@ -814,6 +823,7 @@
 				D0EC8DC824DF8B3C00A08489 /* SecretsService.swift in Sources */,
 				D0159FA324DE955900E78478 /* CustomEmojiText.swift in Sources */,
 				D0C963FE24CC3812003BD330 /* Publisher+Extensions.swift in Sources */,
+				D0EC8DCE24DFB64200A08489 /* AuthenticationService.swift in Sources */,
 				D04FD73C24D4A83A007D572D /* InstanceEndpoint+Stubbing.swift in Sources */,
 				D0DC175B24D0154F00A75C65 /* MastodonAPI.swift in Sources */,
 				D0ED1BD124CF779B00B4899C /* MastodonTarget.swift in Sources */,
@@ -849,6 +859,7 @@
 				D0BEC93924C9632800E864C4 /* RootViewModel.swift in Sources */,
 				D0ED1BC224CED48800B4899C /* HTTPClient.swift in Sources */,
 				D0666A4C24C6C37700F3F04B /* Identity.swift in Sources */,
+				D0EC8DCC24DFA06700A08489 /* IdentitiesService.swift in Sources */,
 				D0666A5524C6C3E500F3F04B /* Emoji.swift in Sources */,
 				D019E6EE24DF7BF300697C7D /* IdentityDatabase.swift in Sources */,
 				D0A652AE24DE3EB6002EA33F /* PreferencesEndpoint+Stubbing.swift in Sources */,
@@ -875,6 +886,7 @@
 				D0EC8DC924DF8B3C00A08489 /* SecretsService.swift in Sources */,
 				D0DB6EF524C5233E00D965FE /* AddIdentityView.swift in Sources */,
 				D019E6EA24DF72E700697C7D /* InstanceEndpoint.swift in Sources */,
+				D0EC8DCF24DFB64200A08489 /* AuthenticationService.swift in Sources */,
 				D0159F9C24DE748C00E78478 /* SidebarNavigationView.swift in Sources */,
 				D019E6F124DF7C2F00697C7D /* DatabaseError.swift in Sources */,
 				D074577824D29006004758DB /* MockWebAuthSession.swift in Sources */,

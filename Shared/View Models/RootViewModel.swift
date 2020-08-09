@@ -4,57 +4,54 @@ import Foundation
 import Combine
 
 class RootViewModel: ObservableObject {
-    @Published private(set) var identityID: UUID?
-    private let environment: AppEnvironment
+    @Published private(set) var mainNavigationViewModel: MainNavigationViewModel?
+
+    private let identitiesService: IdentitiesService
     private var cancellables = Set<AnyCancellable>()
 
-    init(environment: AppEnvironment) {
-        self.environment = environment
-        identityID = environment.identityDatabase.mostRecentlyUsedIdentityID
+    init(identitiesService: IdentitiesService) {
+        self.identitiesService = identitiesService
+
+        newIdentitySelected(id: identitiesService.mostRecentlyUsedIdentityID)
     }
 }
 
 extension RootViewModel {
-    func newIdentitySelected(id: UUID) {
-        identityID = id
+    func newIdentitySelected(id: UUID?) {
+        guard let id = id else {
+            mainNavigationViewModel = nil
 
-        environment.identityDatabase
-            .updateLastUsedAt(identityID: id)
+            return
+        }
+
+        let identityService: IdentityService
+
+        do {
+            identityService = try identitiesService.identityService(id: id)
+        } catch {
+            return
+        }
+
+        identityService.observationErrors
+            .receive(on: RunLoop.main)
+            .map { [weak self] _ in self?.identitiesService.mostRecentlyUsedIdentityID }
+            .sink(receiveValue: newIdentitySelected(id:))
+            .store(in: &cancellables)
+
+        identityService.updateLastUse()
             .sink(receiveCompletion: { _ in }, receiveValue: {})
             .store(in: &cancellables)
+
+        mainNavigationViewModel = MainNavigationViewModel(identityService: identityService)
     }
 
     func deleteIdentity(id: UUID) {
-        environment.identityDatabase.deleteIdentity(id: id)
-            .continuingIfWeakReferenceIsStillAlive(to: self)
-            .tryMap {
-                try SecretsService(
-                    identityID: id,
-                    keychainService: $1.environment.keychainService)
-                    .deleteAllItems()
-            }
+        identitiesService.deleteIdentity(id: id)
             .sink(receiveCompletion: { _ in }, receiveValue: {})
             .store(in: &cancellables)
     }
 
     func addIdentityViewModel() -> AddIdentityViewModel {
-        AddIdentityViewModel(environment: environment)
-    }
-
-    func mainNavigationViewModel(identityID: UUID) -> MainNavigationViewModel? {
-        let identityService: IdentityService
-
-        do {
-            identityService = try IdentityService(identityID: identityID, appEnvironment: environment)
-        } catch {
-            return nil
-        }
-
-        identityService.observationErrors
-            .receive(on: RunLoop.main)
-            .map { [weak self] _ in self?.environment.identityDatabase.mostRecentlyUsedIdentityID }
-            .assign(to: &$identityID)
-
-        return MainNavigationViewModel(identityService: identityService)
+        AddIdentityViewModel(authenticationService: identitiesService.authenticationService())
     }
 }

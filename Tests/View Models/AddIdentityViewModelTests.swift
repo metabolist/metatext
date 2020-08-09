@@ -8,7 +8,7 @@ import CombineExpectations
 class AddIdentityViewModelTests: XCTestCase {
     func testAddIdentity() throws {
         let environment = AppEnvironment.fresh()
-        let sut = AddIdentityViewModel(environment: environment)
+        let sut = AddIdentityViewModel(authenticationService: AuthenticationService(environment: environment))
         let addedIDRecorder = sut.addedIdentityID.record()
 
         sut.urlFieldText = "https://mastodon.social"
@@ -33,7 +33,7 @@ class AddIdentityViewModelTests: XCTestCase {
 
     func testAddIdentityWithoutScheme() throws {
         let environment = AppEnvironment.fresh()
-        let sut = AddIdentityViewModel(environment: environment)
+        let sut = AddIdentityViewModel(authenticationService: AuthenticationService(environment: environment))
         let addedIDRecorder = sut.addedIdentityID.record()
 
         sut.urlFieldText = "mastodon.social"
@@ -47,7 +47,7 @@ class AddIdentityViewModelTests: XCTestCase {
     }
 
     func testInvalidURL() throws {
-        let sut = AddIdentityViewModel(environment: .fresh())
+        let sut = AddIdentityViewModel(authenticationService: AuthenticationService(environment: .fresh()))
         let recorder = sut.$alertItem.record()
 
         XCTAssertNil(try wait(for: recorder.next(), timeout: 1))
@@ -62,7 +62,7 @@ class AddIdentityViewModelTests: XCTestCase {
 
     func testDoesNotAlertCanceledLogin() throws {
         let environment = AppEnvironment.fresh(webAuthSessionType: CanceledLoginMockWebAuthSession.self)
-        let sut = AddIdentityViewModel(environment: environment)
+        let sut = AddIdentityViewModel(authenticationService: AuthenticationService(environment: environment))
         let recorder = sut.$alertItem.record()
 
         XCTAssertNil(try wait(for: recorder.next(), timeout: 1))
