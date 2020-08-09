@@ -9,24 +9,55 @@ class AddIdentityViewModel: ObservableObject {
     @Published private(set) var loading = false
     let addedIdentityID: AnyPublisher<UUID, Never>
 
-    private let authenticationService: AuthenticationService
+    private let identitiesService: IdentitiesService
     private let addedIdentityIDInput = PassthroughSubject<UUID, Never>()
     private var cancellables = Set<AnyCancellable>()
 
-    init(authenticationService: AuthenticationService) {
-        self.authenticationService = authenticationService
+    init(identitiesService: IdentitiesService) {
+        self.identitiesService = identitiesService
         addedIdentityID = addedIdentityIDInput.eraseToAnyPublisher()
     }
 
-    func goTapped() {
-        Just(urlFieldText)
-            .tryMap { try $0.url() }
-            .flatMap(authenticationService.authenticate(instanceURL:))
+    func logInTapped() {
+        let identityID = UUID()
+        let instanceURL: URL
+
+        do {
+            try instanceURL = urlFieldText.url()
+        } catch {
+            alertItem = AlertItem(error: error)
+
+            return
+        }
+
+        identitiesService.authorizeIdentity(id: identityID, instanceURL: instanceURL)
+            .map { (identityID, instanceURL) }
+            .flatMap(identitiesService.createIdentity(id:instanceURL:))
+            .map { identityID }
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .receive(on: RunLoop.main)
             .handleEvents(
                 receiveSubscription: { [weak self] _ in self?.loading = true },
                 receiveCompletion: { [weak self] _ in self?.loading = false  })
+            .sink(receiveValue: addedIdentityIDInput.send)
+            .store(in: &cancellables)
+    }
+
+    func browseAnonymouslyTapped() {
+        let identityID = UUID()
+        let instanceURL: URL
+
+        do {
+            try instanceURL = urlFieldText.url()
+        } catch {
+            alertItem = AlertItem(error: error)
+
+            return
+        }
+
+        identitiesService.createIdentity(id: identityID, instanceURL: instanceURL)
+            .map { identityID }
+            .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .sink(receiveValue: addedIdentityIDInput.send)
             .store(in: &cancellables)
     }

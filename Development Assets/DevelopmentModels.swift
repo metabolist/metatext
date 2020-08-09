@@ -23,18 +23,6 @@ let developmentKeychainService: KeychainServiceType = {
     return keychainService
 }()
 
-extension Defaults {
-    static func fresh() -> Defaults { Defaults(userDefaults: MockUserDefaults()) }
-
-    static let development: Defaults = {
-        let preferences = Defaults.fresh()
-
-        // Do future setup here
-
-        return preferences
-    }()
-}
-
 extension Account {
     static let development = try! decoder.decode(Account.self, from: Data(officialAccountJSON.utf8))
 }
@@ -69,30 +57,26 @@ extension IdentityDatabase {
 }
 
 extension AppEnvironment {
-    static func fresh(
-        URLSessionConfiguration: URLSessionConfiguration = .stubbing,
-        identityDatabase: IdentityDatabase = .fresh(),
-        defaults: Defaults = .fresh(),
-        keychainService: KeychainServiceType = freshKeychainService(),
-        webAuthSessionType: WebAuthSessionType.Type = SuccessfulMockWebAuthSession.self) -> AppEnvironment {
-        AppEnvironment(
-            URLSessionConfiguration: URLSessionConfiguration,
-            identityDatabase: identityDatabase,
-            defaults: defaults,
-            keychainService: keychainService,
-            webAuthSessionType: webAuthSessionType)
-    }
-
     static let development = AppEnvironment(
         URLSessionConfiguration: .stubbing,
-        identityDatabase: .development,
-        defaults: .development,
-        keychainService: developmentKeychainService,
         webAuthSessionType: SuccessfulMockWebAuthSession.self)
 }
 
 extension IdentitiesService {
-    static let development = IdentitiesService(environment: .development)
+    static func fresh(
+        identityDatabase: IdentityDatabase = .fresh(),
+        keychainService: KeychainServiceType = MockKeychainService(),
+        environment: AppEnvironment = .development) -> IdentitiesService {
+        IdentitiesService(
+            identityDatabase: identityDatabase,
+            keychainService: keychainService,
+            environment: environment)
+    }
+
+    static let development = IdentitiesService(
+        identityDatabase: .development,
+        keychainService: developmentKeychainService,
+        environment: .development)
 }
 
 extension IdentityService {

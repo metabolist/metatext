@@ -4,28 +4,27 @@ import SwiftUI
 
 @main
 struct MetatextApp: App {
-    private let environment: AppEnvironment
+    private let identityDatabase: IdentityDatabase
+    private let keychainServive = KeychainService(serviceName: "com.metabolist.metatext")
+    private let environment = AppEnvironment(
+        URLSessionConfiguration: .default,
+        webAuthSessionType: WebAuthSession.self)
 
     init() {
-        let identityDatabase: IdentityDatabase
-
         do {
             try identityDatabase = IdentityDatabase()
         } catch {
             fatalError("Failed to initialize identity database")
         }
-
-        environment = AppEnvironment(
-            URLSessionConfiguration: .default,
-            identityDatabase: identityDatabase,
-            defaults: Defaults(userDefaults: .standard),
-            keychainService: KeychainService(serviceName: Self.keychainServiceName),
-            webAuthSessionType: WebAuthSession.self)
     }
 
     var body: some Scene {
         WindowGroup {
-            RootView(viewModel: RootViewModel(identitiesService: IdentitiesService(environment: environment)))
+            RootView(
+                viewModel: RootViewModel(identitiesService: IdentitiesService(
+                                            identityDatabase: identityDatabase,
+                                            keychainService: keychainServive,
+                                            environment: environment)))
         }
     }
 }

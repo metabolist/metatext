@@ -21,12 +21,13 @@ struct AddIdentityView: View {
                 if viewModel.loading {
                     ProgressView()
                 } else {
-                    Button(
-                        action: viewModel.goTapped,
-                        label: { Text("go") })
+                    Button("add-identity.log-in",
+                        action: viewModel.logInTapped)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .center)
+            Button("add-identity.browse-anonymously", action: viewModel.browseAnonymouslyTapped)
+                .frame(maxWidth: .infinity, alignment: .center)
             #if os(macOS)
             Spacer()
             #endif

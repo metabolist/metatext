@@ -1,7 +1,8 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
-"go" = "Go";
 "add-identity.instance-url" = "Instance URL";
+"add-identity.log-in" = "Log in";
+"add-identity.browse-anonymously" = "Browse anonymously";
 "oauth.error.code-not-found" = "OAuth error: code not found";
 "secondary-navigation.manage-accounts" = "Manage Accounts";
 "secondary-navigation.preferences" = "Preferences";

@@ -7,15 +7,20 @@ class IdentityService {
     @Published private(set) var identity: Identity
     let observationErrors: AnyPublisher<Error, Never>
 
-    private let networkClient: MastodonClient
+    private let identityDatabase: IdentityDatabase
     private let environment: AppEnvironment
+    private let networkClient: MastodonClient
     private let observationErrorsInput = PassthroughSubject<Error, Never>()
 
-    init(identityID: UUID, environment: AppEnvironment) throws {
+    init(identityID: UUID,
+         identityDatabase: IdentityDatabase,
+         keychainService: KeychainServiceType,
+         environment: AppEnvironment) throws {
+        self.identityDatabase = identityDatabase
         self.environment = environment
         observationErrors = observationErrorsInput.eraseToAnyPublisher()
 
-        let observation = environment.identityDatabase.identityObservation(id: identityID).share()
+        let observation = identityDatabase.identityObservation(id: identityID).share()
         var initialIdentity: Identity?
 
         _ = observation.first().sink(
@@ -29,7 +34,7 @@ class IdentityService {
         networkClient.instanceURL = identity.url
         networkClient.accessToken = try SecretsService(
             identityID: identityID,
-            keychainService: environment.keychainService)
+            keychainService: keychainService)
             .item(.accessToken)
 
         observation.catch { [weak self] error -> Empty<Identity, Never> in
@@ -45,14 +50,14 @@ extension IdentityService {
     var isAuthorized: Bool { networkClient.accessToken != nil }
 
     func updateLastUse() -> AnyPublisher<Void, Error> {
-        environment.identityDatabase.updateLastUsedAt(identityID: identity.id)
+        identityDatabase.updateLastUsedAt(identityID: identity.id)
     }
 
     func verifyCredentials() -> AnyPublisher<Void, Error> {
         networkClient.request(AccountEndpoint.verifyCredentials)
             .continuingIfWeakReferenceIsStillAlive(to: self)
             .map { ($0, $1.identity.id) }
-            .flatMap(environment.identityDatabase.updateAccount)
+            .flatMap(identityDatabase.updateAccount)
             .eraseToAnyPublisher()
     }
 
@@ -60,7 +65,7 @@ extension IdentityService {
         networkClient.request(PreferencesEndpoint.preferences)
             .continuingIfWeakReferenceIsStillAlive(to: self)
             .map { ($1.identity.preferences.updated(from: $0), $1.identity.id) }
-            .flatMap(environment.identityDatabase.updatePreferences)
+            .flatMap(identityDatabase.updatePreferences)
             .eraseToAnyPublisher()
     }
 
@@ -68,19 +73,19 @@ extension IdentityService {
         networkClient.request(InstanceEndpoint.instance)
             .continuingIfWeakReferenceIsStillAlive(to: self)
             .map { ($0, $1.identity.id) }
-            .flatMap(environment.identityDatabase.updateInstance)
+            .flatMap(identityDatabase.updateInstance)
             .eraseToAnyPublisher()
     }
 
     func identitiesObservation() -> AnyPublisher<[Identity], Error> {
-        environment.identityDatabase.identitiesObservation()
+        identityDatabase.identitiesObservation()
     }
 
     func recentIdentitiesObservation() -> AnyPublisher<[Identity], Error> {
-        environment.identityDatabase.recentIdentitiesObservation(excluding: identity.id)
+        identityDatabase.recentIdentitiesObservation(excluding: identity.id)
     }
 
     func updatePreferences(_ preferences: Identity.Preferences) -> AnyPublisher<Void, Error> {
-        environment.identityDatabase.updatePreferences(preferences, forIdentityID: identity.id)
+        identityDatabase.updatePreferences(preferences, forIdentityID: identity.id)
     }
 }

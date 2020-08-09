@@ -52,6 +52,6 @@ extension RootViewModel {
     }
 
     func addIdentityViewModel() -> AddIdentityViewModel {
-        AddIdentityViewModel(authenticationService: identitiesService.authenticationService())
+        AddIdentityViewModel(identitiesService: identitiesService)
     }
 }

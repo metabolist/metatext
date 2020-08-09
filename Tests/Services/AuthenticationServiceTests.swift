@@ -6,26 +6,21 @@ import CombineExpectations
 @testable import Metatext
 
 class AuthenticationServiceTests: XCTestCase {
-    func testAddIdentity() throws {
-        let environment = AppEnvironment.fresh()
-        let sut = AuthenticationService(environment: environment)
+    func testAuthentication() throws {
+        let sut = AuthenticationService(environment: .development)
         let instanceURL = URL(string: "https://mastodon.social")!
-        let addedIDRecorder = sut.authenticate(instanceURL: instanceURL).record()
+        let appAuthorizationRecorder = sut.authorizeApp(instanceURL: instanceURL).record()
+        let appAuthorization = try wait(for: appAuthorizationRecorder.next(), timeout: 1)
 
-        let addedIdentityID = try wait(for: addedIDRecorder.next(), timeout: 1)
-        let identityRecorder = environment.identityDatabase.identityObservation(id: addedIdentityID).record()
-        let addedIdentity = try wait(for: identityRecorder.next(), timeout: 1)
+        XCTAssertEqual(appAuthorization.clientId, "AUTHORIZATION_CLIENT_ID_STUB_VALUE")
+        XCTAssertEqual(appAuthorization.clientSecret, "AUTHORIZATION_CLIENT_SECRET_STUB_VALUE")
 
-        XCTAssertEqual(addedIdentity.id, addedIdentityID)
-        XCTAssertEqual(addedIdentity.url, URL(string: "https://mastodon.social")!)
+        let accessTokenRecorder = sut.authenticate(
+            instanceURL: instanceURL,
+            appAuthorization: appAuthorization)
+            .record()
+        let accessToken = try wait(for: accessTokenRecorder.next(), timeout: 1)
 
-        let secretsService = SecretsService(identityID: addedIdentity.id, keychainService: environment.keychainService)
-
-        XCTAssertEqual(
-            try secretsService.item(.clientID) as String?, "AUTHORIZATION_CLIENT_ID_STUB_VALUE")
-        XCTAssertEqual(
-            try secretsService.item(.clientSecret) as String?, "AUTHORIZATION_CLIENT_SECRET_STUB_VALUE")
-        XCTAssertEqual(
-            try secretsService.item(.accessToken) as String?, "ACCESS_TOKEN_STUB_VALUE")
+        XCTAssertEqual(accessToken.accessToken, "ACCESS_TOKEN_STUB_VALUE")
     }
 }
