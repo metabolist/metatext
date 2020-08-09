@@ -18,17 +18,7 @@ class AddIdentityViewModelTests: XCTestCase {
         let identityRecorder = environment.identityDatabase.identityObservation(id: addedIdentityID).record()
         let addedIdentity = try wait(for: identityRecorder.next(), timeout: 1)
 
-        XCTAssertEqual(addedIdentity.id, addedIdentityID)
         XCTAssertEqual(addedIdentity.url, URL(string: "https://mastodon.social")!)
-
-        let secretsService = SecretsService(identityID: addedIdentity.id, keychainService: environment.keychainService)
-
-        XCTAssertEqual(
-            try secretsService.item(.clientID) as String?, "AUTHORIZATION_CLIENT_ID_STUB_VALUE")
-        XCTAssertEqual(
-            try secretsService.item(.clientSecret) as String?, "AUTHORIZATION_CLIENT_SECRET_STUB_VALUE")
-        XCTAssertEqual(
-            try secretsService.item(.accessToken) as String?, "ACCESS_TOKEN_STUB_VALUE")
     }
 
     func testAddIdentityWithoutScheme() throws {

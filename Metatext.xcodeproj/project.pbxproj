@@ -144,6 +144,7 @@
 		D0EC8DCC24DFA06700A08489 /* IdentitiesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DCA24DFA06700A08489 /* IdentitiesService.swift */; };
 		D0EC8DCE24DFB64200A08489 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DCD24DFB64200A08489 /* AuthenticationService.swift */; };
 		D0EC8DCF24DFB64200A08489 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DCD24DFB64200A08489 /* AuthenticationService.swift */; };
+		D0EC8DD424DFE38900A08489 /* AuthenticationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DD324DFE38900A08489 /* AuthenticationServiceTests.swift */; };
 		D0ED1B6E24CE100C00B4899C /* AddIdentityViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ED1B6D24CE100C00B4899C /* AddIdentityViewModelTests.swift */; };
 		D0ED1BB724CE47F400B4899C /* WebAuthSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ED1BB624CE47F400B4899C /* WebAuthSession.swift */; };
 		D0ED1BB824CE47F400B4899C /* WebAuthSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ED1BB624CE47F400B4899C /* WebAuthSession.swift */; };
@@ -251,6 +252,7 @@
 		D0EC8DC724DF8B3C00A08489 /* SecretsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecretsService.swift; sourceTree = "<group>"; };
 		D0EC8DCA24DFA06700A08489 /* IdentitiesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentitiesService.swift; sourceTree = "<group>"; };
 		D0EC8DCD24DFB64200A08489 /* AuthenticationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
+		D0EC8DD324DFE38900A08489 /* AuthenticationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationServiceTests.swift; sourceTree = "<group>"; };
 		D0ED1B6D24CE100C00B4899C /* AddIdentityViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIdentityViewModelTests.swift; sourceTree = "<group>"; };
 		D0ED1BB624CE47F400B4899C /* WebAuthSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebAuthSession.swift; sourceTree = "<group>"; };
 		D0ED1BC024CED48800B4899C /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
@@ -428,8 +430,9 @@
 		D0666A2224C677B400F3F04B /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				D0ED1B6C24CE0EED00B4899C /* View Models */,
 				D0666A2524C677B400F3F04B /* Info.plist */,
+				D0EC8DD024DFE34F00A08489 /* Services */,
+				D0ED1B6C24CE0EED00B4899C /* View Models */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -529,6 +532,14 @@
 				D0A652AC24DE3EB6002EA33F /* PreferencesEndpoint+Stubbing.swift */,
 			);
 			path = "Mastodon API Stubs";
+			sourceTree = "<group>";
+		};
+		D0EC8DD024DFE34F00A08489 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				D0EC8DD324DFE38900A08489 /* AuthenticationServiceTests.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		D0ED1B6C24CE0EED00B4899C /* View Models */ = {
@@ -914,6 +925,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0EC8DD424DFE38900A08489 /* AuthenticationServiceTests.swift in Sources */,
 				D0ED1B6E24CE100C00B4899C /* AddIdentityViewModelTests.swift in Sources */,
 				D052BBC724D749C800A80A7A /* RootViewModelTests.swift in Sources */,
 			);

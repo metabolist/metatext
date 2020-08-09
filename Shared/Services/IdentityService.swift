@@ -4,36 +4,33 @@ import Foundation
 import Combine
 
 class IdentityService {
-    @Published var identity: Identity
+    @Published private(set) var identity: Identity
     let observationErrors: AnyPublisher<Error, Never>
 
     private let networkClient: MastodonClient
     private let environment: AppEnvironment
     private let observationErrorsInput = PassthroughSubject<Error, Never>()
-    private var cancellables = Set<AnyCancellable>()
 
     init(identityID: UUID, environment: AppEnvironment) throws {
         self.environment = environment
         observationErrors = observationErrorsInput.eraseToAnyPublisher()
-        networkClient = MastodonClient(configuration: environment.URLSessionConfiguration)
-        networkClient.accessToken = try SecretsService(
-            identityID: identityID,
-            keychainService: environment.keychainService)
-            .item(.accessToken)
 
         let observation = environment.identityDatabase.identityObservation(id: identityID).share()
-
         var initialIdentity: Identity?
 
-        observation.first().sink(
+        _ = observation.first().sink(
             receiveCompletion: { _ in },
             receiveValue: { initialIdentity = $0 })
-            .store(in: &cancellables)
 
         guard let identity = initialIdentity else { throw IdentityDatabaseError.identityNotFound }
 
         self.identity = identity
+        networkClient = MastodonClient(configuration: environment.URLSessionConfiguration)
         networkClient.instanceURL = identity.url
+        networkClient.accessToken = try SecretsService(
+            identityID: identityID,
+            keychainService: environment.keychainService)
+            .item(.accessToken)
 
         observation.catch { [weak self] error -> Empty<Identity, Never> in
             self?.observationErrorsInput.send(error)
