@@ -7,8 +7,8 @@ class MastodonClient: HTTPClient {
     var instanceURL: URL?
     var accessToken: String?
 
-    init(configuration: URLSessionConfiguration = URLSessionConfiguration.af.default) {
-        super.init(configuration: configuration, decoder: MastodonDecoder())
+    init(session: Session) {
+        super.init(session: session, decoder: MastodonDecoder())
     }
 
     override func request<T: DecodableTarget>(_ target: T) -> AnyPublisher<T.ResultType, Error> {

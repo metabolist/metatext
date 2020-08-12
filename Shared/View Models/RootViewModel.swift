@@ -6,13 +6,27 @@ import Combine
 class RootViewModel: ObservableObject {
     @Published private(set) var mainNavigationViewModel: MainNavigationViewModel?
 
+    // swiftlint:disable weak_delegate
+    private let appDelegate: AppDelegate
+    // swiftlint:enable weak_delegate
     private let identitiesService: IdentitiesService
+    private let notificationService: NotificationService
     private var cancellables = Set<AnyCancellable>()
 
-    init(identitiesService: IdentitiesService) {
+    init(appDelegate: AppDelegate, identitiesService: IdentitiesService, notificationService: NotificationService) {
+        self.appDelegate = appDelegate
         self.identitiesService = identitiesService
+        self.notificationService = notificationService
 
         newIdentitySelected(id: identitiesService.mostRecentlyUsedIdentityID)
+
+        notificationService.isAuthorized()
+            .filter { $0 }
+            .zip(appDelegate.registerForRemoteNotifications())
+            .map { $1 }
+            .flatMap(identitiesService.updatePushSubscriptions(deviceToken:))
+            .sink { _ in } receiveValue: { _ in }
+            .store(in: &cancellables)
     }
 }
 
@@ -43,6 +57,18 @@ extension RootViewModel {
             .store(in: &cancellables)
 
         mainNavigationViewModel = MainNavigationViewModel(identityService: identityService)
+    }
+
+    func newIdentityCreated(id: UUID, instanceURL: URL) {
+        newIdentitySelected(id: id)
+
+        notificationService.isAuthorized()
+            .filter { $0 }
+            .zip(appDelegate.registerForRemoteNotifications())
+            .map { (id, instanceURL, $1, nil) }
+            .flatMap(identitiesService.updatePushSubscription(identityID:instanceURL:deviceToken:alerts:))
+            .sink { _ in } receiveValue: { _ in }
+            .store(in: &cancellables)
     }
 
     func deleteIdentity(id: UUID) {

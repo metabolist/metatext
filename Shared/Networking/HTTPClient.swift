@@ -4,12 +4,14 @@ import Foundation
 import Combine
 import Alamofire
 
+typealias Session = Alamofire.Session
+
 class HTTPClient {
     private let session: Session
     private let decoder: DataDecoder
 
-    init(configuration: URLSessionConfiguration, decoder: DataDecoder = JSONDecoder()) {
-        self.session = Session(configuration: configuration)
+    init(session: Session, decoder: DataDecoder = JSONDecoder()) {
+        self.session = session
         self.decoder = decoder
     }
 

@@ -2,20 +2,36 @@
 
 import Foundation
 
-class MockKeychainService {
-    private var items = [String: Data]()
+struct MockKeychainService {}
+
+extension MockKeychainService {
+    static func reset() {
+        items = [String: Data]()
+    }
 }
 
 extension MockKeychainService: KeychainServiceType {
-    func set(data: Data, forKey key: String) throws {
+    static func setGenericPassword(data: Data, forAccount key: String, service: String) throws {
         items[key] = data
     }
 
-    func deleteData(key: String) throws {
-        items[key] = nil
+    static func deleteGenericPassword(account: String, service: String) throws {
+        items[account] = nil
     }
 
-    func getData(key: String) throws -> Data? {
-        items[key]
+    static func getGenericPassword(account: String, service: String) throws -> Data? {
+        items[account]
     }
+
+    static func generateKeyAndReturnPublicKey(applicationTag: String) throws -> Data {
+        fatalError("not implemented")
+    }
+
+    static func getPrivateKey(applicationTag: String) throws -> Data? {
+        fatalError("not implemented")
+    }
+}
+
+private extension MockKeychainService {
+    static var items = [String: Data]()
 }

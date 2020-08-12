@@ -9,33 +9,29 @@ class AddIdentityViewModelTests: XCTestCase {
     func testAddIdentity() throws {
         let identityDatabase = IdentityDatabase.fresh()
         let sut = AddIdentityViewModel(identitiesService: .fresh(identityDatabase: identityDatabase))
-        let addedIDRecorder = sut.addedIdentityID.record()
+        let addedIDAndURLRecorder = sut.addedIdentityIDAndURL.record()
 
         sut.urlFieldText = "https://mastodon.social"
         sut.logInTapped()
 
-        let addedIdentityID = try wait(for: addedIDRecorder.next(), timeout: 1)
-        let identityRecorder = identityDatabase.identityObservation(id: addedIdentityID).record()
-        let addedIdentity = try wait(for: identityRecorder.next(), timeout: 1)
+        let addedIdentityIDAndURL = try wait(for: addedIDAndURLRecorder.next(), timeout: 1)
 
-        XCTAssertEqual(addedIdentity.id, addedIdentityID)
-        XCTAssertEqual(addedIdentity.url, URL(string: "https://mastodon.social")!)
+//        XCTAssertEqual(addedIdentityIDAndURL.0, addedIdentityID)
+        XCTAssertEqual(addedIdentityIDAndURL.1, URL(string: "https://mastodon.social")!)
     }
 
     func testAddIdentityWithoutScheme() throws {
         let identityDatabase = IdentityDatabase.fresh()
         let sut = AddIdentityViewModel(identitiesService: .fresh(identityDatabase: identityDatabase))
-        let addedIDRecorder = sut.addedIdentityID.record()
+        let addedIDAndURLRecorder = sut.addedIdentityIDAndURL.record()
 
         sut.urlFieldText = "mastodon.social"
         sut.logInTapped()
 
-        let addedIdentityID = try wait(for: addedIDRecorder.next(), timeout: 1)
-        let identityRecorder = identityDatabase.identityObservation(id: addedIdentityID).record()
-        let addedIdentity = try wait(for: identityRecorder.next(), timeout: 1)
+        let addedIdentityIDAndURL = try wait(for: addedIDAndURLRecorder.next(), timeout: 1)
 
-        XCTAssertEqual(addedIdentity.id, addedIdentityID)
-        XCTAssertEqual(addedIdentity.url, URL(string: "https://mastodon.social")!)
+//        XCTAssertEqual(addedIdentityIDAndURL.0, addedIdentityID)
+        XCTAssertEqual(addedIdentityIDAndURL.1, URL(string: "https://mastodon.social")!)
     }
 
     func testInvalidURL() throws {
@@ -54,11 +50,11 @@ class AddIdentityViewModelTests: XCTestCase {
 
     func testDoesNotAlertCanceledLogin() throws {
         let environment = AppEnvironment(
-            URLSessionConfiguration: .stubbing,
-            webAuthSessionType: CanceledLoginMockWebAuthSession.self)
+            session: Session(configuration: .stubbing),
+            webAuthSessionType: CanceledLoginMockWebAuthSession.self,
+            keychainServiceType: MockKeychainService.self)
         let identitiesService = IdentitiesService(
             identityDatabase: .fresh(),
-            keychainService: MockKeychainService(),
             environment: environment)
         let sut = AddIdentityViewModel(identitiesService: identitiesService)
         let recorder = sut.$alertItem.record()

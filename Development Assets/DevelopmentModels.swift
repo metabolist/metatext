@@ -10,19 +10,6 @@ private let devInstanceURL = URL(string: "https://mastodon.social")!
 private let devIdentityID = UUID(uuidString: "E621E1F8-C36C-495A-93FC-0C247A3E6E5F")!
 private let devAccessToken = "DEVELOPMENT_ACCESS_TOKEN"
 
-func freshKeychainService() -> KeychainServiceType { MockKeychainService() }
-
-let developmentKeychainService: KeychainServiceType = {
-    let keychainService = MockKeychainService()
-    let secretsService = SecretsService(identityID: devIdentityID, keychainService: keychainService)
-
-    try! secretsService.set("DEVELOPMENT_CLIENT_ID", forItem: .clientID)
-    try! secretsService.set("DEVELOPMENT_CLIENT_SECRET", forItem: .clientSecret)
-    try! secretsService.set(devAccessToken, forItem: .accessToken)
-
-    return keychainService
-}()
-
 extension Account {
     static let development = try! decoder.decode(Account.self, from: Data(officialAccountJSON.utf8))
 }
@@ -58,8 +45,9 @@ extension IdentityDatabase {
 
 extension AppEnvironment {
     static let development = AppEnvironment(
-        URLSessionConfiguration: .stubbing,
-        webAuthSessionType: SuccessfulMockWebAuthSession.self)
+        session: Session(configuration: .stubbing),
+        webAuthSessionType: SuccessfulMockWebAuthSession.self,
+        keychainServiceType: MockKeychainService.self)
 }
 
 extension IdentitiesService {
@@ -69,13 +57,11 @@ extension IdentitiesService {
         environment: AppEnvironment = .development) -> IdentitiesService {
         IdentitiesService(
             identityDatabase: identityDatabase,
-            keychainService: keychainService,
             environment: environment)
     }
 
     static let development = IdentitiesService(
         identityDatabase: .development,
-        keychainService: developmentKeychainService,
         environment: .development)
 }
 
@@ -83,8 +69,15 @@ extension IdentityService {
     static let development = try! IdentitiesService.development.identityService(id: devIdentityID)
 }
 
+extension NotificationService {
+    static let development = NotificationService(userNotificationCenter: .current())
+}
+
 extension RootViewModel {
-    static let development = RootViewModel(identitiesService: .development)
+    static let development = RootViewModel(
+        appDelegate: AppDelegate(),
+        identitiesService: .development,
+        notificationService: .development)
 }
 
 extension AddIdentityViewModel {

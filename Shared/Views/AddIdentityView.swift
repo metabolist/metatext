@@ -34,9 +34,9 @@ struct AddIdentityView: View {
         }
         .paddingIfMac()
         .alertItem($viewModel.alertItem)
-        .onReceive(viewModel.addedIdentityID) { id in
+        .onReceive(viewModel.addedIdentityIDAndURL) { id, url in
             withAnimation {
-                rootViewModel.newIdentitySelected(id: id)
+                rootViewModel.newIdentityCreated(id: id, instanceURL: url)
             }
         }
     }

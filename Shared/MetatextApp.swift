@@ -4,31 +4,32 @@ import SwiftUI
 
 @main
 struct MetatextApp: App {
-    private let identityDatabase: IdentityDatabase
-    private let keychainServive = KeychainService(serviceName: "com.metabolist.metatext")
-    private let environment = AppEnvironment(
-        URLSessionConfiguration: .default,
-        webAuthSessionType: WebAuthSession.self)
+    // swiftlint:disable weak_delegate
+    #if os(macOS)
+    @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
+    #else
+    @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
+    #endif
+    // swiftlint:enable weak_delegate
 
-    init() {
+    private let identitiesService: IdentitiesService = {
+        let identityDatabase: IdentityDatabase
+
         do {
             try identityDatabase = IdentityDatabase()
         } catch {
             fatalError("Failed to initialize identity database")
         }
-    }
+
+        return IdentitiesService(identityDatabase: identityDatabase, environment: .live)
+    }()
 
     var body: some Scene {
         WindowGroup {
             RootView(
-                viewModel: RootViewModel(identitiesService: IdentitiesService(
-                                            identityDatabase: identityDatabase,
-                                            keychainService: keychainServive,
-                                            environment: environment)))
+                viewModel: RootViewModel(appDelegate: appDelegate,
+                                         identitiesService: identitiesService,
+                                         notificationService: NotificationService()))
         }
     }
-}
-
-private extension MetatextApp {
-    static let keychainServiceName = "com.metabolist.metatext"
 }

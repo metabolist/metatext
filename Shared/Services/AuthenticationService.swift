@@ -9,7 +9,7 @@ struct AuthenticationService {
     private let webAuthSessionContextProvider = WebAuthSessionContextProvider()
 
     init(environment: AppEnvironment) {
-        networkClient = MastodonClient(configuration: environment.URLSessionConfiguration)
+        networkClient = MastodonClient(session: environment.session)
         webAuthSessionType = environment.webAuthSessionType
     }
 }

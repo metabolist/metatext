@@ -13,29 +13,36 @@ enum SecretsStorableError: Error {
 
 struct SecretsService {
     let identityID: UUID
-    private let keychainService: KeychainServiceType
+    private let keychainServiceType: KeychainServiceType.Type
 
-    init(identityID: UUID, keychainService: KeychainServiceType) {
+    init(identityID: UUID, keychainServiceType: KeychainServiceType.Type) {
         self.identityID = identityID
-        self.keychainService = keychainService
+        self.keychainServiceType = keychainServiceType
     }
 }
 
 extension SecretsService {
     enum Item: String, CaseIterable {
-        case clientID = "client-id"
-        case clientSecret = "client-secret"
-        case accessToken = "access-token"
+        case clientID
+        case clientSecret
+        case accessToken
+        case pushKey
+        case pushAuth
     }
 }
 
 extension SecretsService {
     func set(_ data: SecretsStorable, forItem item: Item) throws {
-        try keychainService.set(data: data.dataStoredInSecrets, forKey: key(item: item))
+        try keychainServiceType.setGenericPassword(
+            data: data.dataStoredInSecrets,
+            forAccount: key(item: item),
+            service: Self.keychainServiceName)
     }
 
     func item<T: SecretsStorable>(_ item: Item) throws -> T? {
-        guard let data = try keychainService.getData(key: key(item: item)) else {
+        guard let data = try keychainServiceType.getGenericPassword(
+                account: key(item: item),
+                service: Self.keychainServiceName) else {
             return nil
         }
 
@@ -44,12 +51,41 @@ extension SecretsService {
 
     func deleteAllItems() throws {
         for item in SecretsService.Item.allCases {
-            try keychainService.deleteData(key: key(item: item))
+            try keychainServiceType.deleteGenericPassword(
+                account: key(item: item),
+                service: Self.keychainServiceName)
         }
+    }
+
+    func generatePushKeyAndReturnPublicKey() throws -> Data {
+        try keychainServiceType.generateKeyAndReturnPublicKey(applicationTag: key(item: .pushKey))
+    }
+
+    func getPushKey() throws -> Data? {
+        try keychainServiceType.getPrivateKey(applicationTag: key(item: .pushKey))
+    }
+
+    func generatePushAuth() throws -> Data {
+        var bytes = [UInt8](repeating: 0, count: Self.authLength)
+
+        _ = SecRandomCopyBytes(kSecRandomDefault, Self.authLength, &bytes)
+
+        let pushAuth = Data(bytes)
+
+        try set(pushAuth, forItem: .pushAuth)
+
+        return pushAuth
+    }
+
+    func getPushAuth() throws -> Data? {
+        try item(.pushAuth)
     }
 }
 
 private extension SecretsService {
+    static let keychainServiceName = "com.metabolist.metatext"
+    private static let authLength = 16
+
     func key(item: Item) -> String {
         identityID.uuidString + "." + item.rawValue
     }

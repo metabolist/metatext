@@ -37,7 +37,9 @@ extension IdentityDatabase {
                 url: url,
                 lastUsedAt: Date(),
                 preferences: Identity.Preferences(),
-                instanceURI: nil).save)
+                instanceURI: nil,
+                pushSubscriptionAlerts: nil)
+                .save)
             .eraseToAnyPublisher()
     }
 
@@ -100,6 +102,23 @@ extension IdentityDatabase {
         .eraseToAnyPublisher()
     }
 
+    func updatePushSubscription(deviceToken: String,
+                                alerts: PushSubscription.Alerts,
+                                forIdentityID identityID: UUID) -> AnyPublisher<Void, Error> {
+        databaseQueue.writePublisher {
+            let data = try StoredIdentity.databaseJSONEncoder(for: "pushSubscriptionAlerts").encode(alerts)
+
+            try StoredIdentity
+                .filter(Column("id") == identityID)
+                .updateAll($0, Column("pushSubscriptionAlerts").set(to: data))
+
+            try StoredIdentity
+                .filter(Column("id") == identityID)
+                .updateAll($0, Column("lastRegisteredDeviceToken").set(to: deviceToken))
+        }
+        .eraseToAnyPublisher()
+    }
+
     func identityObservation(id: UUID) -> AnyPublisher<Identity, Error> {
         ValueObservation.tracking(
             StoredIdentity
@@ -144,6 +163,15 @@ extension IdentityDatabase {
             .publisher(in: databaseQueue, scheduling: .immediate)
             .eraseToAnyPublisher()
     }
+
+    func identitiesWithOutdatedDeviceTokens(deviceToken: String) -> AnyPublisher<[Identity], Error> {
+        databaseQueue.readPublisher(
+            value: Self.identitiesRequest()
+                .filter(Column("lastRegisteredDeviceToken") != deviceToken)
+                .fetchAll)
+            .map { $0.map(Identity.init(result:)) }
+            .eraseToAnyPublisher()
+    }
 }
 
 private extension IdentityDatabase {
@@ -174,6 +202,8 @@ private extension IdentityDatabase {
                     .indexed()
                     .references("instance", column: "uri")
                 t.column("preferences", .blob).notNull()
+                t.column("pushSubscriptionAlerts", .blob)
+                t.column("lastRegisteredDeviceToken", .text)
             }
 
             try db.create(table: "account", ifNotExists: true) { t in
@@ -203,6 +233,7 @@ private struct StoredIdentity: Codable, Hashable, TableRecord, FetchableRecord, 
     let lastUsedAt: Date
     let preferences: Identity.Preferences
     let instanceURI: String?
+    let pushSubscriptionAlerts: PushSubscription.Alerts?
 }
 
 extension StoredIdentity {
@@ -222,6 +253,7 @@ private struct IdentityResult: Codable, Hashable, FetchableRecord {
     let identity: StoredIdentity
     let instance: Identity.Instance?
     let account: Identity.Account?
+    let pushSubscriptionAlerts: PushSubscription.Alerts?
 }
 
 private extension Identity {
@@ -232,7 +264,8 @@ private extension Identity {
             lastUsedAt: result.identity.lastUsedAt,
             preferences: result.identity.preferences,
             instance: result.instance,
-            account: result.account)
+            account: result.account,
+            pushSubscriptionAlerts: result.pushSubscriptionAlerts)
     }
 }
 

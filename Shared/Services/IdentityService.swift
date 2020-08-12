@@ -14,7 +14,6 @@ class IdentityService {
 
     init(identityID: UUID,
          identityDatabase: IdentityDatabase,
-         keychainService: KeychainServiceType,
          environment: AppEnvironment) throws {
         self.identityDatabase = identityDatabase
         self.environment = environment
@@ -30,11 +29,11 @@ class IdentityService {
         guard let identity = initialIdentity else { throw IdentityDatabaseError.identityNotFound }
 
         self.identity = identity
-        networkClient = MastodonClient(configuration: environment.URLSessionConfiguration)
+        networkClient = MastodonClient(session: environment.session)
         networkClient.instanceURL = identity.url
         networkClient.accessToken = try SecretsService(
             identityID: identityID,
-            keychainService: keychainService)
+            keychainServiceType: environment.keychainServiceType)
             .item(.accessToken)
 
         observation.catch { [weak self] error -> Empty<Identity, Never> in
