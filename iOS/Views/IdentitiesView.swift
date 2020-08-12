@@ -66,9 +66,11 @@ struct IdentitiesView: View {
     }
 }
 
+#if DEBUG
 struct IdentitiesView_Previews: PreviewProvider {
     static var previews: some View {
         IdentitiesView(viewModel: .development)
             .environmentObject(RootViewModel.development)
     }
 }
+#endif

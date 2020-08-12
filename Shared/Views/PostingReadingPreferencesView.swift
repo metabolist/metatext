@@ -47,8 +47,10 @@ struct PostingReadingPreferencesView: View {
     }
 }
 
+#if DEBUG
 struct PostingReadingPreferencesViewView_Previews: PreviewProvider {
     static var previews: some View {
         PostingReadingPreferencesView(viewModel: .development)
     }
 }
+#endif
