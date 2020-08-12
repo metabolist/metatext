@@ -5,7 +5,7 @@ import Combine
 
 struct AuthenticationService {
     private let networkClient: MastodonClient
-    private let webAuthSessionType: WebAuthSessionType.Type
+    private let webAuthSessionType: WebAuthSession.Type
     private let webAuthSessionContextProvider = WebAuthSessionContextProvider()
 
     init(environment: AppEnvironment) {

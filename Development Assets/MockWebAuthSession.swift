@@ -2,7 +2,7 @@
 
 import Foundation
 
-class MockWebAuthSession: WebAuthSessionType {
+class MockWebAuthSession: WebAuthSession {
     let completionHandler: WebAuthSessionCompletionHandler
     let url: URL
     let callbackURLScheme: String?

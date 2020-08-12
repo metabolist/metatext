@@ -13,9 +13,9 @@ enum SecretsStorableError: Error {
 
 struct SecretsService {
     let identityID: UUID
-    private let keychainServiceType: KeychainServiceType.Type
+    private let keychainServiceType: KeychainService.Type
 
-    init(identityID: UUID, keychainServiceType: KeychainServiceType.Type) {
+    init(identityID: UUID, keychainServiceType: KeychainService.Type) {
         self.identityID = identityID
         self.keychainServiceType = keychainServiceType
     }

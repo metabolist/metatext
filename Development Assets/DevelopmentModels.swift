@@ -53,7 +53,7 @@ extension AppEnvironment {
 extension IdentitiesService {
     static func fresh(
         identityDatabase: IdentityDatabase = .fresh(),
-        keychainService: KeychainServiceType = MockKeychainService(),
+        keychainService: KeychainService = MockKeychainService(),
         environment: AppEnvironment = .development) -> IdentitiesService {
         IdentitiesService(
             identityDatabase: identityDatabase,

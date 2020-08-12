@@ -10,7 +10,7 @@ extension MockKeychainService {
     }
 }
 
-extension MockKeychainService: KeychainServiceType {
+extension MockKeychainService: KeychainService {
     static func setGenericPassword(data: Data, forAccount key: String, service: String) throws {
         items[key] = data
     }
