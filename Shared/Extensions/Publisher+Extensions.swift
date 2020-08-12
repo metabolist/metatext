@@ -16,24 +16,4 @@ extension Publisher {
         }
         .eraseToAnyPublisher()
     }
-
-    func continuingIfWeakReferenceIsStillAlive<T: AnyObject>(to object: T) -> AnyPublisher<(Output, T), Error> {
-        tryMap { [weak object] in
-            guard let object = object else { throw WeakReferenceError.deallocated }
-
-            return ($0, object)
-        }
-        .tryCatch { error -> Empty<(Output, T), Never> in
-            if case WeakReferenceError.deallocated = error {
-                return Empty()
-            }
-
-            throw error
-        }
-        .eraseToAnyPublisher()
-    }
-}
-
-private enum WeakReferenceError: Error {
-    case deallocated
 }

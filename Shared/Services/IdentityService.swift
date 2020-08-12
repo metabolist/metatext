@@ -54,15 +54,14 @@ extension IdentityService {
 
     func verifyCredentials() -> AnyPublisher<Void, Error> {
         networkClient.request(AccountEndpoint.verifyCredentials)
-            .continuingIfWeakReferenceIsStillAlive(to: self)
-            .map { ($0, $1.identity.id) }
+            .zip(Just(identity.id).first().setFailureType(to: Error.self))
             .flatMap(identityDatabase.updateAccount)
             .eraseToAnyPublisher()
     }
 
     func refreshServerPreferences() -> AnyPublisher<Void, Error> {
         networkClient.request(PreferencesEndpoint.preferences)
-            .continuingIfWeakReferenceIsStillAlive(to: self)
+            .zip(Just(self).first().setFailureType(to: Error.self))
             .map { ($1.identity.preferences.updated(from: $0), $1.identity.id) }
             .flatMap(identityDatabase.updatePreferences)
             .eraseToAnyPublisher()
@@ -70,8 +69,7 @@ extension IdentityService {
 
     func refreshInstance() -> AnyPublisher<Void, Error> {
         networkClient.request(InstanceEndpoint.instance)
-            .continuingIfWeakReferenceIsStillAlive(to: self)
-            .map { ($0, $1.identity.id) }
+            .zip(Just(identity.id).first().setFailureType(to: Error.self))
             .flatMap(identityDatabase.updateInstance)
             .eraseToAnyPublisher()
     }

@@ -4,7 +4,17 @@ import Foundation
 import Combine
 
 class PostingReadingPreferencesViewModel: ObservableObject {
-    @Published var preferences: Identity.Preferences
+    @Published var preferences: Identity.Preferences {
+        didSet {
+            if preferences.useServerPostingReadingPreferences {
+                identityService.refreshServerPreferences()
+                    .assignErrorsToAlertItem(to: \.alertItem, on: self)
+                    .sink(receiveValue: {})
+                    .store(in: &cancellables)
+            }
+        }
+    }
+
     @Published var alertItem: AlertItem?
     let handle: String
 
@@ -19,24 +29,10 @@ class PostingReadingPreferencesViewModel: ObservableObject {
         identityService.$identity.map(\.preferences)
             .dropFirst()
             .removeDuplicates()
-            .handleEvents(receiveOutput: { [weak self] in
-                if $0.useServerPostingReadingPreferences {
-                    self?.refreshServerPreferences()
-                }
-            })
             .assign(to: &$preferences)
 
         $preferences.dropFirst()
             .flatMap(identityService.updatePreferences)
-            .assignErrorsToAlertItem(to: \.alertItem, on: self)
-            .sink(receiveValue: {})
-            .store(in: &cancellables)
-    }
-}
-
-extension PostingReadingPreferencesViewModel {
-    private func refreshServerPreferences() {
-        identityService.refreshServerPreferences()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .sink(receiveValue: {})
             .store(in: &cancellables)
