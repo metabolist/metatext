@@ -23,11 +23,11 @@ extension MockKeychainService: KeychainService {
         items[account]
     }
 
-    static func generateKeyAndReturnPublicKey(applicationTag: String) throws -> Data {
+    static func generateKeyAndReturnPublicKey(applicationTag: String, attributes: [String: Any]) throws -> Data {
         fatalError("not implemented")
     }
 
-    static func getPrivateKey(applicationTag: String) throws -> Data? {
+    static func getPrivateKey(applicationTag: String, attributes: [String: Any]) throws -> Data? {
         fatalError("not implemented")
     }
 }

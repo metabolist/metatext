@@ -10,17 +10,19 @@ class RootViewModel: ObservableObject {
     private let appDelegate: AppDelegate
     // swiftlint:enable weak_delegate
     private let identitiesService: IdentitiesService
-    private let notificationService: NotificationService
+    private let userNotificationService: UserNotificationService
     private var cancellables = Set<AnyCancellable>()
 
-    init(appDelegate: AppDelegate, identitiesService: IdentitiesService, notificationService: NotificationService) {
+    init(appDelegate: AppDelegate,
+         identitiesService: IdentitiesService,
+         userNotificationService: UserNotificationService) {
         self.appDelegate = appDelegate
         self.identitiesService = identitiesService
-        self.notificationService = notificationService
+        self.userNotificationService = userNotificationService
 
         newIdentitySelected(id: identitiesService.mostRecentlyUsedIdentityID)
 
-        notificationService.isAuthorized()
+        userNotificationService.isAuthorized()
             .filter { $0 }
             .zip(appDelegate.registerForRemoteNotifications())
             .map { $1 }
@@ -62,7 +64,7 @@ extension RootViewModel {
     func newIdentityCreated(id: UUID, instanceURL: URL) {
         newIdentitySelected(id: id)
 
-        notificationService.isAuthorized()
+        userNotificationService.isAuthorized()
             .filter { $0 }
             .zip(appDelegate.registerForRemoteNotifications())
             .map { (id, instanceURL, $1, nil) }

@@ -29,7 +29,7 @@ struct MetatextApp: App {
             RootView(
                 viewModel: RootViewModel(appDelegate: appDelegate,
                                          identitiesService: identitiesService,
-                                         notificationService: NotificationService()))
+                                         userNotificationService: UserNotificationService()))
         }
     }
 }

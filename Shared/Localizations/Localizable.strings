@@ -1,5 +1,6 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
+"apns-default-message" = "New notification";
 "add-identity.instance-url" = "Instance URL";
 "add-identity.log-in" = "Log in";
 "add-identity.browse-anonymously" = "Browse anonymously";

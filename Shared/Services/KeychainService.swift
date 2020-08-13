@@ -6,8 +6,8 @@ protocol KeychainService {
     static func setGenericPassword(data: Data, forAccount key: String, service: String) throws
     static func deleteGenericPassword(account: String, service: String) throws
     static func getGenericPassword(account: String, service: String) throws -> Data?
-    static func generateKeyAndReturnPublicKey(applicationTag: String) throws -> Data
-    static func getPrivateKey(applicationTag: String) throws -> Data?
+    static func generateKeyAndReturnPublicKey(applicationTag: String, attributes: [String: Any]) throws -> Data
+    static func getPrivateKey(applicationTag: String, attributes: [String: Any]) throws -> Data?
 }
 
 struct LiveKeychainService {}
@@ -52,13 +52,21 @@ extension LiveKeychainService: KeychainService {
         }
     }
 
-    static func generateKeyAndReturnPublicKey(applicationTag: String) throws -> Data {
-        var attributes = keyAttributes
+    static func generateKeyAndReturnPublicKey(applicationTag: String, attributes: [String: Any]) throws -> Data {
+        var attributes = attributes
         var error: Unmanaged<CFError>?
+
+        guard let accessControl = SecAccessControlCreateWithFlags(
+                kCFAllocatorDefault,
+                kSecAttrAccessibleAfterFirstUnlock,
+                [],
+                &error)
+        else { throw error?.takeRetainedValue() ?? NSError() }
 
         attributes[kSecPrivateKeyAttrs as String] = [
             kSecAttrIsPermanent as String: true,
-            kSecAttrApplicationTag as String: Data(applicationTag.utf8)]
+            kSecAttrApplicationTag as String: Data(applicationTag.utf8),
+            kSecAttrAccessControl as String: accessControl]
 
         guard
             let key = SecKeyCreateRandomKey(attributes as CFDictionary, &error),
@@ -69,13 +77,27 @@ extension LiveKeychainService: KeychainService {
         return publicKeyData
     }
 
-    static func getPrivateKey(applicationTag: String) throws -> Data? {
+    static func getPrivateKey(applicationTag: String, attributes: [String: Any]) throws -> Data? {
         var result: AnyObject?
-        let status = SecItemCopyMatching(keyQueryDictionary(applicationTag: applicationTag) as CFDictionary, &result)
+        var error: Unmanaged<CFError>?
+        var query = keyQueryDictionary(applicationTag: applicationTag)
+
+        query.merge(attributes, uniquingKeysWith: { $1 })
+        query[kSecMatchLimit as String] = kSecMatchLimitOne
+        query[kSecReturnRef as String] = kCFBooleanTrue
+
+        let status = SecItemCopyMatching(query as CFDictionary, &result)
 
         switch status {
         case errSecSuccess:
-            return result as? Data
+            // swiftlint:disable force_cast
+            let secKey = result as! SecKey
+            // swiftlint:enable force_cast
+            guard let data = SecKeyCopyExternalRepresentation(secKey, &error) else {
+                throw error?.takeRetainedValue() ?? NSError()
+            }
+
+            return data as Data
         case errSecItemNotFound:
             return nil
         default:
@@ -85,8 +107,6 @@ extension LiveKeychainService: KeychainService {
 }
 
 private extension LiveKeychainService {
-    static let keySizeInBits = 256
-
     static func genericPasswordQueryDictionary(account: String, service: String) -> [String: Any] {
         [kSecAttrService as String: service,
          kSecAttrAccount as String: account,
@@ -96,13 +116,7 @@ private extension LiveKeychainService {
     static func keyQueryDictionary(applicationTag: String) -> [String: Any] {
         [kSecClass as String: kSecClassKey,
          kSecAttrKeyClass as String: kSecAttrKeyClassPrivate,
-         kSecAttrKeyType as String: kSecAttrKeyTypeECSECPrimeRandom,
-         kSecAttrKeySizeInBits as String: keySizeInBits,
          kSecAttrApplicationTag as String: applicationTag,
          kSecReturnRef as String: true]
     }
-
-    static let keyAttributes: [String: Any] = [
-        kSecAttrKeyType as String: kSecAttrKeyTypeECSECPrimeRandom,
-        kSecAttrKeySizeInBits as String: keySizeInBits]
 }

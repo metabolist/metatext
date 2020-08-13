@@ -58,17 +58,21 @@ extension SecretsService {
     }
 
     func generatePushKeyAndReturnPublicKey() throws -> Data {
-        try keychainServiceType.generateKeyAndReturnPublicKey(applicationTag: key(item: .pushKey))
+        try keychainServiceType.generateKeyAndReturnPublicKey(
+            applicationTag: key(item: .pushKey),
+            attributes: PushKey.attributes)
     }
 
     func getPushKey() throws -> Data? {
-        try keychainServiceType.getPrivateKey(applicationTag: key(item: .pushKey))
+        try keychainServiceType.getPrivateKey(
+            applicationTag: key(item: .pushKey),
+            attributes: PushKey.attributes)
     }
 
     func generatePushAuth() throws -> Data {
-        var bytes = [UInt8](repeating: 0, count: Self.authLength)
+        var bytes = [UInt8](repeating: 0, count: PushKey.authLength)
 
-        _ = SecRandomCopyBytes(kSecRandomDefault, Self.authLength, &bytes)
+        _ = SecRandomCopyBytes(kSecRandomDefault, PushKey.authLength, &bytes)
 
         let pushAuth = Data(bytes)
 
@@ -84,7 +88,6 @@ extension SecretsService {
 
 private extension SecretsService {
     static let keychainServiceName = "com.metabolist.metatext"
-    private static let authLength = 16
 
     func key(item: Item) -> String {
         identityID.uuidString + "." + item.rawValue
@@ -109,4 +112,12 @@ extension String: SecretsStorable {
 
         return string
     }
+}
+
+struct PushKey {
+    static let authLength = 16
+    static let sizeInBits = 256
+    static let attributes: [String: Any] = [
+        kSecAttrKeyType as String: kSecAttrKeyTypeECSECPrimeRandom,
+        kSecAttrKeySizeInBits as String: sizeInBits]
 }

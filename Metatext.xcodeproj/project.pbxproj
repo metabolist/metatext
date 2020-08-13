@@ -132,6 +132,17 @@
 		D0DC176124D0171800A75C65 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = D0DC176024D0171800A75C65 /* Alamofire */; };
 		D0DC177724D0CF2600A75C65 /* MockKeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DC177624D0CF2600A75C65 /* MockKeychainService.swift */; };
 		D0DC177824D0CF2600A75C65 /* MockKeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DC177624D0CF2600A75C65 /* MockKeychainService.swift */; };
+		D0E5361C24E3EB4D00FB1CE1 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E5361B24E3EB4D00FB1CE1 /* NotificationService.swift */; };
+		D0E5362024E3EB4D00FB1CE1 /* Notification Service Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D0E5361924E3EB4D00FB1CE1 /* Notification Service Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D0E5362524E3FE2300FB1CE1 /* SecretsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DC724DF8B3C00A08489 /* SecretsService.swift */; };
+		D0E5362624E3FE2C00FB1CE1 /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DC424DF842700A08489 /* KeychainService.swift */; };
+		D0E5362724E4047C00FB1CE1 /* NSError+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B23F0C24D210E90066F411 /* NSError+Extensions.swift */; };
+		D0E5362C24E534BD00FB1CE1 /* Unknowable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CD847B24DBEA9F00CF380C /* Unknowable.swift */; };
+		D0E5362D24E5430F00FB1CE1 /* MastodonDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D019E6D624DF728400697C7D /* MastodonDecoder.swift */; };
+		D0E5362E24E5432000FB1CE1 /* MastodonAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DC175A24D0154F00A75C65 /* MastodonAPI.swift */; };
+		D0E5363024E5436C00FB1CE1 /* PushNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E5362F24E5436C00FB1CE1 /* PushNotification.swift */; };
+		D0E5363124E5453E00FB1CE1 /* PushNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E5362F24E5436C00FB1CE1 /* PushNotification.swift */; };
+		D0E5363224E5453F00FB1CE1 /* PushNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E5362F24E5436C00FB1CE1 /* PushNotification.swift */; };
 		D0EC8DC224DF7D9C00A08489 /* IdentityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DC124DF7D9C00A08489 /* IdentityService.swift */; };
 		D0EC8DC324DF7D9C00A08489 /* IdentityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DC124DF7D9C00A08489 /* IdentityService.swift */; };
 		D0EC8DC524DF842700A08489 /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DC424DF842700A08489 /* KeychainService.swift */; };
@@ -145,8 +156,8 @@
 		D0EC8DD424DFE38900A08489 /* AuthenticationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DD324DFE38900A08489 /* AuthenticationServiceTests.swift */; };
 		D0EC8DDF24E09D7000A08489 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DDE24E09D7000A08489 /* AppDelegate.swift */; };
 		D0EC8DE024E09D7000A08489 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DDE24E09D7000A08489 /* AppDelegate.swift */; };
-		D0EC8DE424E0B44400A08489 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DD724E096C900A08489 /* NotificationService.swift */; };
-		D0EC8DE524E0B44500A08489 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DD724E096C900A08489 /* NotificationService.swift */; };
+		D0EC8DE424E0B44400A08489 /* UserNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DD724E096C900A08489 /* UserNotificationService.swift */; };
+		D0EC8DE524E0B44500A08489 /* UserNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DD724E096C900A08489 /* UserNotificationService.swift */; };
 		D0EC8DE824E21FEC00A08489 /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DE724E21FEC00A08489 /* Data+Extensions.swift */; };
 		D0EC8DE924E21FEC00A08489 /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DE724E21FEC00A08489 /* Data+Extensions.swift */; };
 		D0EC8DEB24E26F1100A08489 /* PushSubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DEA24E26F1100A08489 /* PushSubscription.swift */; };
@@ -180,7 +191,28 @@
 			remoteGlobalIDString = D047FA8B24C3E21200AF17C5;
 			remoteInfo = "Metatext (iOS)";
 		};
+		D0E5361E24E3EB4D00FB1CE1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D047FA8024C3E21000AF17C5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D0E5361824E3EB4D00FB1CE1;
+			remoteInfo = "Notification Service Extension";
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D0E5362424E3EB4D00FB1CE1 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				D0E5362024E3EB4D00FB1CE1 /* Notification Service Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		D0091B6724DC10B30040E8D2 /* PostingReadingPreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostingReadingPreferencesView.swift; sourceTree = "<group>"; };
@@ -254,13 +286,18 @@
 		D0DC175724D0130800A75C65 /* HTTPStubs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPStubs.swift; sourceTree = "<group>"; };
 		D0DC175A24D0154F00A75C65 /* MastodonAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MastodonAPI.swift; sourceTree = "<group>"; };
 		D0DC177624D0CF2600A75C65 /* MockKeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockKeychainService.swift; sourceTree = "<group>"; };
+		D0E5361924E3EB4D00FB1CE1 /* Notification Service Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Notification Service Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D0E5361B24E3EB4D00FB1CE1 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		D0E5361D24E3EB4D00FB1CE1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D0E5362824E4A06B00FB1CE1 /* Notification Service Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Notification Service Extension.entitlements"; sourceTree = "<group>"; };
+		D0E5362F24E5436C00FB1CE1 /* PushNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotification.swift; sourceTree = "<group>"; };
 		D0EC8DC124DF7D9C00A08489 /* IdentityService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityService.swift; sourceTree = "<group>"; };
 		D0EC8DC424DF842700A08489 /* KeychainService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
 		D0EC8DC724DF8B3C00A08489 /* SecretsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecretsService.swift; sourceTree = "<group>"; };
 		D0EC8DCA24DFA06700A08489 /* IdentitiesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentitiesService.swift; sourceTree = "<group>"; };
 		D0EC8DCD24DFB64200A08489 /* AuthenticationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
 		D0EC8DD324DFE38900A08489 /* AuthenticationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationServiceTests.swift; sourceTree = "<group>"; };
-		D0EC8DD724E096C900A08489 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		D0EC8DD724E096C900A08489 /* UserNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationService.swift; sourceTree = "<group>"; };
 		D0EC8DDE24E09D7000A08489 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D0EC8DE624E0BA6500A08489 /* Metatext.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Metatext.entitlements; sourceTree = "<group>"; };
 		D0EC8DE724E21FEC00A08489 /* Data+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extensions.swift"; sourceTree = "<group>"; };
@@ -303,6 +340,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				D065F53924D37E5100741304 /* CombineExpectations in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D0E5361624E3EB4D00FB1CE1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -375,7 +419,7 @@
 				D0EC8DCA24DFA06700A08489 /* IdentitiesService.swift */,
 				D0EC8DC124DF7D9C00A08489 /* IdentityService.swift */,
 				D0EC8DC424DF842700A08489 /* KeychainService.swift */,
-				D0EC8DD724E096C900A08489 /* NotificationService.swift */,
+				D0EC8DD724E096C900A08489 /* UserNotificationService.swift */,
 				D0EC8DC724DF8B3C00A08489 /* SecretsService.swift */,
 			);
 			path = Services;
@@ -384,11 +428,12 @@
 		D047FA7F24C3E21000AF17C5 = {
 			isa = PBXGroup;
 			children = (
-				D0EC8DE624E0BA6500A08489 /* Metatext.entitlements */,
 				D0ED1BB224CE3A1600B4899C /* Development Assets */,
 				D0666A7924C7745A00F3F04B /* Frameworks */,
 				D047FA8E24C3E21200AF17C5 /* iOS */,
 				D047FA9524C3E21200AF17C5 /* macOS */,
+				D0EC8DE624E0BA6500A08489 /* Metatext.entitlements */,
+				D0E5361A24E3EB4D00FB1CE1 /* Notification Service Extension */,
 				D047FA8D24C3E21200AF17C5 /* Products */,
 				D047FA8424C3E21000AF17C5 /* Shared */,
 				D0666A2224C677B400F3F04B /* Tests */,
@@ -419,6 +464,7 @@
 				D047FA8C24C3E21200AF17C5 /* Metatext.app */,
 				D047FA9424C3E21200AF17C5 /* Metatext.app */,
 				D0666A2124C677B400F3F04B /* Tests.xctest */,
+				D0E5361924E3EB4D00FB1CE1 /* Notification Service Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -468,6 +514,7 @@
 				D0666A4D24C6C39600F3F04B /* Instance.swift */,
 				D0ED1BE224CFA84400B4899C /* MastodonError.swift */,
 				D0CD847224DBDEC700CF380C /* MastodonPreferences.swift */,
+				D0E5362F24E5436C00FB1CE1 /* PushNotification.swift */,
 				D0EC8DEA24E26F1100A08489 /* PushSubscription.swift */,
 				D0CD847524DBDF3C00CF380C /* Status.swift */,
 				D0CD847B24DBEA9F00CF380C /* Unknowable.swift */,
@@ -552,6 +599,16 @@
 			path = "Mastodon API Stubs";
 			sourceTree = "<group>";
 		};
+		D0E5361A24E3EB4D00FB1CE1 /* Notification Service Extension */ = {
+			isa = PBXGroup;
+			children = (
+				D0E5362824E4A06B00FB1CE1 /* Notification Service Extension.entitlements */,
+				D0E5361B24E3EB4D00FB1CE1 /* NotificationService.swift */,
+				D0E5361D24E3EB4D00FB1CE1 /* Info.plist */,
+			);
+			path = "Notification Service Extension";
+			sourceTree = "<group>";
+		};
 		D0EC8DD024DFE34F00A08489 /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -610,10 +667,12 @@
 				D047FA8924C3E21200AF17C5 /* Frameworks */,
 				D047FA8A24C3E21200AF17C5 /* Resources */,
 				D0666A2E24C67E6700F3F04B /* ShellScript */,
+				D0E5362424E3EB4D00FB1CE1 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				D0E5361F24E3EB4D00FB1CE1 /* PBXTargetDependency */,
 			);
 			name = "Metatext (iOS)";
 			packageProductDependencies = (
@@ -669,6 +728,25 @@
 			productReference = D0666A2124C677B400F3F04B /* Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		D0E5361824E3EB4D00FB1CE1 /* Notification Service Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D0E5362124E3EB4D00FB1CE1 /* Build configuration list for PBXNativeTarget "Notification Service Extension" */;
+			buildPhases = (
+				D0E5361524E3EB4D00FB1CE1 /* Sources */,
+				D0E5361624E3EB4D00FB1CE1 /* Frameworks */,
+				D0E5361724E3EB4D00FB1CE1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Notification Service Extension";
+			packageProductDependencies = (
+			);
+			productName = "Notification Service Extension";
+			productReference = D0E5361924E3EB4D00FB1CE1 /* Notification Service Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -689,6 +767,9 @@
 						CreatedOnToolsVersion = 12.0;
 						LastSwiftMigration = 1200;
 						TestTargetID = D047FA8B24C3E21200AF17C5;
+					};
+					D0E5361824E3EB4D00FB1CE1 = {
+						CreatedOnToolsVersion = 12.0;
 					};
 				};
 			};
@@ -714,6 +795,7 @@
 				D047FA8B24C3E21200AF17C5 /* Metatext (iOS) */,
 				D047FA9324C3E21200AF17C5 /* Metatext (macOS) */,
 				D0666A2024C677B400F3F04B /* Tests */,
+				D0E5361824E3EB4D00FB1CE1 /* Notification Service Extension */,
 			);
 		};
 /* End PBXProject section */
@@ -738,6 +820,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		D0666A1F24C677B400F3F04B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D0E5361724E3EB4D00FB1CE1 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -830,11 +919,12 @@
 				D0DC175824D0130800A75C65 /* HTTPStubs.swift in Sources */,
 				D0DC177724D0CF2600A75C65 /* MockKeychainService.swift in Sources */,
 				D0EC8DC224DF7D9C00A08489 /* IdentityService.swift in Sources */,
+				D0E5363024E5436C00FB1CE1 /* PushNotification.swift in Sources */,
 				D0C963FB24CC359D003BD330 /* AlertItem.swift in Sources */,
 				D0DC174624CFEC2000A75C65 /* StubbingURLProtocol.swift in Sources */,
 				D019E6F024DF7C2F00697C7D /* DatabaseError.swift in Sources */,
 				D019E6D724DF728400697C7D /* MastodonEncoder.swift in Sources */,
-				D0EC8DE524E0B44500A08489 /* NotificationService.swift in Sources */,
+				D0EC8DE524E0B44500A08489 /* UserNotificationService.swift in Sources */,
 				D0EC8DCB24DFA06700A08489 /* IdentitiesService.swift in Sources */,
 				D0091B7124DD68220040E8D2 /* PreferencesViewModel.swift in Sources */,
 				D0DC174D24CFF1F100A75C65 /* Stubbing.swift in Sources */,
@@ -872,6 +962,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0E5363124E5453E00FB1CE1 /* PushNotification.swift in Sources */,
 				D04FD73A24D4A7B4007D572D /* AccountEndpoint+Stubbing.swift in Sources */,
 				D0DB6F0A24C65AC000D965FE /* AddIdentityViewModel.swift in Sources */,
 				D0CD847424DBDEC700CF380C /* MastodonPreferences.swift in Sources */,
@@ -891,7 +982,7 @@
 				D0BEC93924C9632800E864C4 /* RootViewModel.swift in Sources */,
 				D0ED1BC224CED48800B4899C /* HTTPClient.swift in Sources */,
 				D0666A4C24C6C37700F3F04B /* Identity.swift in Sources */,
-				D0EC8DE424E0B44400A08489 /* NotificationService.swift in Sources */,
+				D0EC8DE424E0B44400A08489 /* UserNotificationService.swift in Sources */,
 				D0EC8DCC24DFA06700A08489 /* IdentitiesService.swift in Sources */,
 				D0666A5524C6C3E500F3F04B /* Emoji.swift in Sources */,
 				D019E6EE24DF7BF300697C7D /* IdentityDatabase.swift in Sources */,
@@ -957,6 +1048,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D0E5361524E3EB4D00FB1CE1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D0E5363224E5453F00FB1CE1 /* PushNotification.swift in Sources */,
+				D0E5362C24E534BD00FB1CE1 /* Unknowable.swift in Sources */,
+				D0E5362D24E5430F00FB1CE1 /* MastodonDecoder.swift in Sources */,
+				D0E5362E24E5432000FB1CE1 /* MastodonAPI.swift in Sources */,
+				D0E5361C24E3EB4D00FB1CE1 /* NotificationService.swift in Sources */,
+				D0E5362724E4047C00FB1CE1 /* NSError+Extensions.swift in Sources */,
+				D0E5362524E3FE2300FB1CE1 /* SecretsService.swift in Sources */,
+				D0E5362624E3FE2C00FB1CE1 /* KeychainService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -964,6 +1070,11 @@
 			isa = PBXTargetDependency;
 			target = D047FA8B24C3E21200AF17C5 /* Metatext (iOS) */;
 			targetProxy = D0666A2624C677B400F3F04B /* PBXContainerItemProxy */;
+		};
+		D0E5361F24E3EB4D00FB1CE1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D0E5361824E3EB4D00FB1CE1 /* Notification Service Extension */;
+			targetProxy = D0E5361E24E3EB4D00FB1CE1 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1082,6 +1193,7 @@
 		D047FAB724C3E21200AF17C5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Metatext.entitlements;
@@ -1106,6 +1218,7 @@
 		D047FAB824C3E21200AF17C5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Metatext.entitlements;
@@ -1226,6 +1339,51 @@
 			};
 			name = Release;
 		};
+		D0E5362224E3EB4D00FB1CE1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "Notification Service Extension/Notification Service Extension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 82HL67AXQ2;
+				INFOPLIST_FILE = "Notification Service Extension/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.metabolist.metatext.notification-service-extension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D0E5362324E3EB4D00FB1CE1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "Notification Service Extension/Notification Service Extension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 82HL67AXQ2;
+				INFOPLIST_FILE = "Notification Service Extension/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.metabolist.metatext.notification-service-extension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1261,6 +1419,15 @@
 			buildConfigurations = (
 				D0666A2924C677B400F3F04B /* Debug */,
 				D0666A2A24C677B400F3F04B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D0E5362124E3EB4D00FB1CE1 /* Build configuration list for PBXNativeTarget "Notification Service Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D0E5362224E3EB4D00FB1CE1 /* Debug */,
+				D0E5362324E3EB4D00FB1CE1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

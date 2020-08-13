@@ -69,15 +69,15 @@ extension IdentityService {
     static let development = try! IdentitiesService.development.identityService(id: devIdentityID)
 }
 
-extension NotificationService {
-    static let development = NotificationService(userNotificationCenter: .current())
+extension UserNotificationService {
+    static let development = UserNotificationService(userNotificationCenter: .current())
 }
 
 extension RootViewModel {
     static let development = RootViewModel(
         appDelegate: AppDelegate(),
         identitiesService: .development,
-        notificationService: .development)
+        userNotificationService: .development)
 }
 
 extension AddIdentityViewModel {

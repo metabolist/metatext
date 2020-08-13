@@ -4,21 +4,27 @@ import Foundation
 import Combine
 import UserNotifications
 
-struct NotificationService {
+class UserNotificationService: NSObject {
     private let userNotificationCenter: UNUserNotificationCenter
 
     init(userNotificationCenter: UNUserNotificationCenter = .current()) {
         self.userNotificationCenter = userNotificationCenter
+
+        super.init()
+
+        userNotificationCenter.delegate = self
     }
 }
 
-extension NotificationService {
+extension UserNotificationService {
     func isAuthorized() -> AnyPublisher<Bool, Error> {
         getNotificationSettings()
             .map(\.authorizationStatus)
-            .flatMap { status -> AnyPublisher<Bool, Error> in
+            .flatMap { [weak self] status -> AnyPublisher<Bool, Error> in
                 if status == .notDetermined {
-                    return requestProvisionalAuthorization().eraseToAnyPublisher()
+                    return self?.requestProvisionalAuthorization()
+                        .eraseToAnyPublisher()
+                        ?? Empty().eraseToAnyPublisher()
                 }
 
                 return Just(status == .authorized || status == .provisional)
@@ -29,17 +35,17 @@ extension NotificationService {
     }
 }
 
-private extension NotificationService {
+private extension UserNotificationService {
     func getNotificationSettings() -> AnyPublisher<UNNotificationSettings, Never> {
-        Future<UNNotificationSettings, Never> { promise in
-            userNotificationCenter.getNotificationSettings { promise(.success($0)) }
+        Future<UNNotificationSettings, Never> { [weak self] promise in
+            self?.userNotificationCenter.getNotificationSettings { promise(.success($0)) }
         }
         .eraseToAnyPublisher()
     }
 
     func requestProvisionalAuthorization() -> AnyPublisher<Bool, Error> {
-        Future<Bool, Error> { promise in
-            userNotificationCenter.requestAuthorization(
+        Future<Bool, Error> { [weak self] promise in
+            self?.userNotificationCenter.requestAuthorization(
                 options: [.alert, .sound, .badge, .provisional]) { granted, error in
                 if let error = error {
                     return promise(.failure(error))
@@ -49,5 +55,15 @@ private extension NotificationService {
             }
         }
         .eraseToAnyPublisher()
+    }
+}
+
+extension UserNotificationService: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification,
+        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        print(notification.request.content.body)
+        completionHandler(.banner)
     }
 }
