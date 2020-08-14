@@ -10,6 +10,7 @@ class IdentityService {
     private let identityDatabase: IdentityDatabase
     private let environment: AppEnvironment
     private let networkClient: MastodonClient
+    private let secretsService: SecretsService
     private let observationErrorsInput = PassthroughSubject<Error, Never>()
 
     init(identityID: UUID,
@@ -29,12 +30,12 @@ class IdentityService {
         guard let identity = initialIdentity else { throw IdentityDatabaseError.identityNotFound }
 
         self.identity = identity
-        networkClient = MastodonClient(session: environment.session)
-        networkClient.instanceURL = identity.url
-        networkClient.accessToken = try SecretsService(
+        secretsService = SecretsService(
             identityID: identityID,
             keychainServiceType: environment.keychainServiceType)
-            .item(.accessToken)
+        networkClient = MastodonClient(session: environment.session)
+        networkClient.instanceURL = identity.url
+        networkClient.accessToken = try secretsService.item(.accessToken)
 
         observation.catch { [weak self] error -> Empty<Identity, Never> in
             self?.observationErrorsInput.send(error)
@@ -85,4 +86,39 @@ extension IdentityService {
     func updatePreferences(_ preferences: Identity.Preferences) -> AnyPublisher<Void, Error> {
         identityDatabase.updatePreferences(preferences, forIdentityID: identity.id)
     }
+
+    func createPushSubscription(deviceToken: String, alerts: PushSubscription.Alerts) -> AnyPublisher<Void, Error> {
+        let publicKey: String
+        let auth: String
+
+        do {
+            publicKey = try secretsService.generatePushKeyAndReturnPublicKey().base64EncodedString()
+            auth = try secretsService.generatePushAuth().base64EncodedString()
+        } catch {
+            return Fail(error: error).eraseToAnyPublisher()
+        }
+
+        let identityID = identity.id
+        let endpoint = Self.pushSubscriptionEndpointURL
+            .appendingPathComponent(deviceToken)
+            .appendingPathComponent(identityID.uuidString)
+
+        return networkClient.request(
+            PushSubscriptionEndpoint.create(
+                endpoint: endpoint,
+                publicKey: publicKey,
+                auth: auth,
+                alerts: alerts))
+            .map { (deviceToken, $0.alerts, identityID) }
+            .flatMap(identityDatabase.updatePushSubscription(deviceToken:alerts:forIdentityID:))
+            .eraseToAnyPublisher()
+    }
+}
+
+private extension IdentityService {
+    #if DEBUG
+    static let pushSubscriptionEndpointURL = URL(string: "https://metatext-apns.metabolist.com/push?sandbox=true")!
+    #else
+    static let pushSubscriptionEndpointURL = URL(string: "https://metatext-apns.metabolist.com/push")!
+    #endif
 }

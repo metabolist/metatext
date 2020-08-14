@@ -9,7 +9,8 @@ struct Identity: Codable, Hashable, Identifiable {
     let preferences: Identity.Preferences
     let instance: Identity.Instance?
     let account: Identity.Account?
-    let pushSubscriptionAlerts: PushSubscription.Alerts?
+    let lastRegisteredDeviceToken: String?
+    let pushSubscriptionAlerts: PushSubscription.Alerts
 }
 
 extension Identity {

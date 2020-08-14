@@ -55,22 +55,19 @@ extension RootViewModel {
             .store(in: &cancellables)
 
         identityService.updateLastUse()
-            .sink(receiveCompletion: { _ in }, receiveValue: {})
+            .sink { _ in } receiveValue: { _ in }
             .store(in: &cancellables)
-
-        mainNavigationViewModel = MainNavigationViewModel(identityService: identityService)
-    }
-
-    func newIdentityCreated(id: UUID, instanceURL: URL) {
-        newIdentitySelected(id: id)
 
         userNotificationService.isAuthorized()
             .filter { $0 }
             .zip(appDelegate.registerForRemoteNotifications())
-            .map { (id, instanceURL, $1, nil) }
-            .flatMap(identitiesService.updatePushSubscription(identityID:instanceURL:deviceToken:alerts:))
+            .filter { identityService.identity.lastRegisteredDeviceToken != $1 }
+            .map { ($1, identityService.identity.pushSubscriptionAlerts) }
+            .flatMap(identityService.createPushSubscription(deviceToken:alerts:))
             .sink { _ in } receiveValue: { _ in }
             .store(in: &cancellables)
+
+        mainNavigationViewModel = MainNavigationViewModel(identityService: identityService)
     }
 
     func deleteIdentity(id: UUID) {

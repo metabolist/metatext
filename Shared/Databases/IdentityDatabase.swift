@@ -38,7 +38,8 @@ extension IdentityDatabase {
                 lastUsedAt: Date(),
                 preferences: Identity.Preferences(),
                 instanceURI: nil,
-                pushSubscriptionAlerts: nil)
+                lastRegisteredDeviceToken: nil,
+                pushSubscriptionAlerts: .initial)
                 .save)
             .eraseToAnyPublisher()
     }
@@ -202,7 +203,7 @@ private extension IdentityDatabase {
                     .indexed()
                     .references("instance", column: "uri")
                 t.column("preferences", .blob).notNull()
-                t.column("pushSubscriptionAlerts", .blob)
+                t.column("pushSubscriptionAlerts", .blob).notNull()
                 t.column("lastRegisteredDeviceToken", .text)
             }
 
@@ -233,7 +234,8 @@ private struct StoredIdentity: Codable, Hashable, TableRecord, FetchableRecord, 
     let lastUsedAt: Date
     let preferences: Identity.Preferences
     let instanceURI: String?
-    let pushSubscriptionAlerts: PushSubscription.Alerts?
+    let lastRegisteredDeviceToken: String?
+    let pushSubscriptionAlerts: PushSubscription.Alerts
 }
 
 extension StoredIdentity {
@@ -253,7 +255,7 @@ private struct IdentityResult: Codable, Hashable, FetchableRecord {
     let identity: StoredIdentity
     let instance: Identity.Instance?
     let account: Identity.Account?
-    let pushSubscriptionAlerts: PushSubscription.Alerts?
+    let pushSubscriptionAlerts: PushSubscription.Alerts
 }
 
 private extension Identity {
@@ -265,6 +267,7 @@ private extension Identity {
             preferences: result.identity.preferences,
             instance: result.instance,
             account: result.account,
+            lastRegisteredDeviceToken: result.identity.lastRegisteredDeviceToken,
             pushSubscriptionAlerts: result.pushSubscriptionAlerts)
     }
 }

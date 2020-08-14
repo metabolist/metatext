@@ -65,82 +65,20 @@ extension IdentitiesService {
             .eraseToAnyPublisher()
     }
 
-    func updatePushSubscription(
-        identityID: UUID,
-        instanceURL: URL,
-        deviceToken: String,
-        alerts: PushSubscription.Alerts?) -> AnyPublisher<Void, Error> {
-        let secretsService = SecretsService(
-            identityID: identityID,
-            keychainServiceType: environment.keychainServiceType)
-        let accessTokenOptional: String?
-
-        do {
-            accessTokenOptional = try secretsService.item(.accessToken) as String?
-        } catch {
-            return Fail(error: error).eraseToAnyPublisher()
-        }
-
-        guard let accessToken: String = accessTokenOptional
-        else { return Empty().eraseToAnyPublisher() }
-
-        let publicKey: String
-        let auth: String
-
-        do {
-            publicKey = try secretsService.generatePushKeyAndReturnPublicKey().base64EncodedString()
-            auth = try secretsService.generatePushAuth().base64EncodedString()
-        } catch {
-            return Fail(error: error).eraseToAnyPublisher()
-        }
-
-        let networkClient = MastodonClient(session: environment.session)
-        networkClient.instanceURL = instanceURL
-        networkClient.accessToken = accessToken
-
-        let endpoint = Self.pushSubscriptionEndpointURL
-            .appendingPathComponent(deviceToken)
-            .appendingPathComponent(identityID.uuidString)
-
-        return networkClient.request(
-            PushSubscriptionEndpoint.create(
-                endpoint: endpoint,
-                publicKey: publicKey,
-                auth: auth,
-                follow: alerts?.follow ?? true,
-                favourite: alerts?.favourite ?? true,
-                reblog: alerts?.reblog ?? true,
-                mention: alerts?.mention ?? true,
-                poll: alerts?.poll ?? true))
-            .map { (deviceToken, $0.alerts, identityID) }
-            .flatMap(identityDatabase.updatePushSubscription(deviceToken:alerts:forIdentityID:))
-            .eraseToAnyPublisher()
-    }
-
     func updatePushSubscriptions(deviceToken: String) -> AnyPublisher<Void, Error> {
         identityDatabase.identitiesWithOutdatedDeviceTokens(deviceToken: deviceToken)
-            .flatMap { identities -> Publishers.MergeMany<AnyPublisher<Void, Never>> in
-                Publishers.MergeMany(
-                    identities.map { [weak self] in
-                        guard let self = self else { return Empty().eraseToAnyPublisher() }
+            .tryMap { [weak self] identities -> [AnyPublisher<Void, Never>] in
+                guard let self = self else { return [Empty().eraseToAnyPublisher()] }
 
-                        return self.updatePushSubscription(
-                            identityID: $0.id,
-                            instanceURL: $0.url,
-                            deviceToken: deviceToken,
-                            alerts: $0.pushSubscriptionAlerts)
-                            .catch { _ in Empty() } // can't let one failure stop the pipeline
-                            .eraseToAnyPublisher()
-                    })
+                return try identities.map {
+                    try self.identityService(id: $0.id)
+                        .createPushSubscription(deviceToken: deviceToken, alerts: $0.pushSubscriptionAlerts)
+                        .catch { _ in Empty() } // don't want to disrupt pipeline, consider future telemetry
+                        .eraseToAnyPublisher()
+                }
             }
+            .map(Publishers.MergeMany.init)
+            .map { _ in () }
             .eraseToAnyPublisher()
     }
-}
-
-private extension IdentitiesService {
-    #if DEBUG
-    static let pushSubscriptionEndpointURL = URL(string: "https://metatext-apns.metabolist.com/push?sandbox=true")!
-    #else
-    static let pushSubscriptionEndpointURL = URL(string: "https://metatext-apns.metabolist.com/push")!
-    #endif
 }

@@ -15,3 +15,7 @@ struct PushSubscription: Codable {
     let alerts: Alerts
     let serverKey: String
 }
+
+extension PushSubscription.Alerts {
+    static let initial: Self = Self(follow: true, favourite: true, reblog: true, mention: true, poll: true)
+}

@@ -7,13 +7,9 @@ enum PushSubscriptionEndpoint {
             endpoint: URL,
             publicKey: String,
             auth: String,
-            follow: Bool,
-            favourite: Bool,
-            reblog: Bool,
-            mention: Bool,
-            poll: Bool)
+            alerts: PushSubscription.Alerts)
     case read
-    case update(follow: Bool, favourite: Bool, reblog: Bool, mention: Bool, poll: Bool)
+    case update(alerts: PushSubscription.Alerts)
     case delete
 }
 
@@ -37,7 +33,7 @@ extension PushSubscriptionEndpoint: MastodonEndpoint {
 
     var parameters: [String: Any]? {
         switch self {
-        case let .create(endpoint, publicKey, auth, follow, favourite, reblog, mention, poll):
+        case let .create(endpoint, publicKey, auth, alerts):
             return ["subscription":
                         ["endpoint": endpoint.absoluteString,
                          "keys": [
@@ -45,20 +41,20 @@ extension PushSubscriptionEndpoint: MastodonEndpoint {
                             "auth": auth]],
                     "data": [
                         "alerts": [
-                            "follow": follow,
-                            "favourite": favourite,
-                            "reblog": reblog,
-                            "mention": mention,
-                            "poll": poll
+                            "follow": alerts.follow,
+                            "favourite": alerts.favourite,
+                            "reblog": alerts.reblog,
+                            "mention": alerts.mention,
+                            "poll": alerts.poll
                         ]]]
-        case let .update(follow, favourite, reblog, mention, poll):
+        case let .update(alerts):
             return ["data":
                         ["alerts":
-                            ["follow": follow,
-                             "favourite": favourite,
-                             "reblog": reblog,
-                             "mention": mention,
-                             "poll": poll]]]
+                            ["follow": alerts.follow,
+                             "favourite": alerts.favourite,
+                             "reblog": alerts.reblog,
+                             "mention": alerts.mention,
+                             "poll": alerts.poll]]]
         default: return nil
         }
     }

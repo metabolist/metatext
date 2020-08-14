@@ -7,15 +7,15 @@ class AddIdentityViewModel: ObservableObject {
     @Published var urlFieldText = ""
     @Published var alertItem: AlertItem?
     @Published private(set) var loading = false
-    let addedIdentityIDAndURL: AnyPublisher<(UUID, URL), Never>
+    let addedIdentityID: AnyPublisher<UUID, Never>
 
     private let identitiesService: IdentitiesService
-    private let addedIdentityIDAndURLInput = PassthroughSubject<(UUID, URL), Never>()
+    private let addedIdentityIDInput = PassthroughSubject<UUID, Never>()
     private var cancellables = Set<AnyCancellable>()
 
     init(identitiesService: IdentitiesService) {
         self.identitiesService = identitiesService
-        addedIdentityIDAndURL = addedIdentityIDAndURLInput.eraseToAnyPublisher()
+        addedIdentityID = addedIdentityIDInput.eraseToAnyPublisher()
     }
 
     func logInTapped() {
@@ -33,13 +33,13 @@ class AddIdentityViewModel: ObservableObject {
         identitiesService.authorizeIdentity(id: identityID, instanceURL: instanceURL)
             .map { (identityID, instanceURL) }
             .flatMap(identitiesService.createIdentity(id:instanceURL:))
-            .map { (identityID, instanceURL) }
+            .map { identityID }
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .receive(on: RunLoop.main)
             .handleEvents(
                 receiveSubscription: { [weak self] _ in self?.loading = true },
                 receiveCompletion: { [weak self] _ in self?.loading = false  })
-            .sink(receiveValue: addedIdentityIDAndURLInput.send)
+            .sink(receiveValue: addedIdentityIDInput.send)
             .store(in: &cancellables)
     }
 
@@ -57,9 +57,9 @@ class AddIdentityViewModel: ObservableObject {
 
         // TODO: Ensure instance has not disabled public preview
         identitiesService.createIdentity(id: identityID, instanceURL: instanceURL)
-            .map { (identityID, instanceURL) }
+            .map { identityID }
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
-            .sink(receiveValue: addedIdentityIDAndURLInput.send)
+            .sink(receiveValue: addedIdentityIDInput.send)
             .store(in: &cancellables)
     }
 }
