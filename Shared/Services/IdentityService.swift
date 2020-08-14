@@ -35,7 +35,7 @@ class IdentityService {
             keychainService: environment.keychainServiceType)
         networkClient = MastodonClient(session: environment.session)
         networkClient.instanceURL = identity.url
-        networkClient.accessToken = try secretsService.item(.accessToken)
+        networkClient.accessToken = try? secretsService.item(.accessToken)
 
         observation.catch { [weak self] error -> Empty<Identity, Never> in
             self?.observationErrorsInput.send(error)

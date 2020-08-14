@@ -53,7 +53,7 @@ struct IdentitiesView: View {
                     .onDelete {
                         guard let index = $0.first else { return }
 
-                        rootViewModel.deleteIdentity(id: viewModel.identities[index].id)
+                        rootViewModel.deleteIdentity(viewModel.identities[index])
                     }
                 }
             }

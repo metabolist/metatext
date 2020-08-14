@@ -31,6 +31,10 @@ extension SecretsService {
     }
 }
 
+enum SecretsServiceError: Error {
+    case itemAbsent
+}
+
 extension SecretsService.Item {
     enum Kind {
         case genericPassword
@@ -53,11 +57,11 @@ extension SecretsService {
             service: Self.keychainServiceName)
     }
 
-    func item<T: SecretsStorable>(_ item: Item) throws -> T? {
+    func item<T: SecretsStorable>(_ item: Item) throws -> T {
         guard let data = try keychainService.getGenericPassword(
                 account: key(item: item),
                 service: Self.keychainServiceName) else {
-            return nil
+            throw SecretsServiceError.itemAbsent
         }
 
         return try T.fromDataStoredInSecrets(data)

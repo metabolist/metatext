@@ -70,8 +70,8 @@ extension RootViewModel {
         mainNavigationViewModel = MainNavigationViewModel(identityService: identityService)
     }
 
-    func deleteIdentity(id: UUID) {
-        identitiesService.deleteIdentity(id: id)
+    func deleteIdentity(_ identity: Identity) {
+        identitiesService.deleteIdentity(identity)
             .sink { _ in } receiveValue: { _ in }
             .store(in: &cancellables)
     }

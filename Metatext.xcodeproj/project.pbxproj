@@ -44,6 +44,8 @@
 		D019E6EE24DF7BF300697C7D /* IdentityDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D019E6EC24DF7BF300697C7D /* IdentityDatabase.swift */; };
 		D019E6F024DF7C2F00697C7D /* DatabaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D019E6EF24DF7C2F00697C7D /* DatabaseError.swift */; };
 		D019E6F124DF7C2F00697C7D /* DatabaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D019E6EF24DF7C2F00697C7D /* DatabaseError.swift */; };
+		D03DF45B24E62A68007A8CD5 /* DeletionEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DF45A24E62A68007A8CD5 /* DeletionEndpoint.swift */; };
+		D03DF45C24E62A68007A8CD5 /* DeletionEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DF45A24E62A68007A8CD5 /* DeletionEndpoint.swift */; };
 		D047FAAE24C3E21200AF17C5 /* MetatextApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D047FA8524C3E21000AF17C5 /* MetatextApp.swift */; };
 		D047FAAF24C3E21200AF17C5 /* MetatextApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D047FA8524C3E21000AF17C5 /* MetatextApp.swift */; };
 		D047FAB224C3E21200AF17C5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D047FA8724C3E21200AF17C5 /* Assets.xcassets */; };
@@ -238,6 +240,7 @@
 		D019E6E024DF72E700697C7D /* InstanceEndpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstanceEndpoint.swift; sourceTree = "<group>"; };
 		D019E6EC24DF7BF300697C7D /* IdentityDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityDatabase.swift; sourceTree = "<group>"; };
 		D019E6EF24DF7C2F00697C7D /* DatabaseError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseError.swift; sourceTree = "<group>"; };
+		D03DF45A24E62A68007A8CD5 /* DeletionEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletionEndpoint.swift; sourceTree = "<group>"; };
 		D047FA8524C3E21000AF17C5 /* MetatextApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetatextApp.swift; sourceTree = "<group>"; };
 		D047FA8724C3E21200AF17C5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D047FA8C24C3E21200AF17C5 /* Metatext.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Metatext.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -396,6 +399,7 @@
 				D019E6DF24DF72E700697C7D /* AccessTokenEndpoint.swift */,
 				D019E6DE24DF72E700697C7D /* AccountEndpoint.swift */,
 				D019E6DC24DF72E700697C7D /* AppAuthorizationEndpoint.swift */,
+				D03DF45A24E62A68007A8CD5 /* DeletionEndpoint.swift */,
 				D019E6E024DF72E700697C7D /* InstanceEndpoint.swift */,
 				D019E6DD24DF72E700697C7D /* PreferencesEndpoint.swift */,
 				D0EC8DED24E2704D00A08489 /* PushSubscriptionEndpoint.swift */,
@@ -934,6 +938,7 @@
 				D0091B6E24DD68090040E8D2 /* PreferencesView.swift in Sources */,
 				D0159F8F24DE743700E78478 /* IdentitiesView.swift in Sources */,
 				D0EC8DEB24E26F1100A08489 /* PushSubscription.swift in Sources */,
+				D03DF45B24E62A68007A8CD5 /* DeletionEndpoint.swift in Sources */,
 				D0DB6EF424C5228A00D965FE /* AddIdentityView.swift in Sources */,
 				D074577724D29006004758DB /* MockWebAuthSession.swift in Sources */,
 				D0159FA524DE989700E78478 /* NSMutableAttributedString+Extensions.swift in Sources */,
@@ -1020,6 +1025,7 @@
 				D074577B24D29366004758DB /* URLSessionConfiguration+Extensions.swift in Sources */,
 				D0ED1BB824CE47F400B4899C /* WebAuthSession.swift in Sources */,
 				D0EC8DEC24E26F1100A08489 /* PushSubscription.swift in Sources */,
+				D03DF45C24E62A68007A8CD5 /* DeletionEndpoint.swift in Sources */,
 				D0A1CA7524DAC2F1003063E9 /* KingfisherOptionsInfo+Extensions.swift in Sources */,
 				D0ED1BC524CED54D00B4899C /* HTTPTarget.swift in Sources */,
 				D0C963FF24CC3812003BD330 /* Publisher+Extensions.swift in Sources */,

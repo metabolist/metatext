@@ -50,18 +50,22 @@ extension IdentitiesService {
             .eraseToAnyPublisher()
     }
 
-    func deleteIdentity(id: UUID) -> AnyPublisher<Void, Error> {
-        let environment = self.environment
+    func deleteIdentity(_ identity: Identity) -> AnyPublisher<Void, Error> {
+        let secretsService = SecretsService(identityID: identity.id, keychainService: environment.keychainServiceType)
+        let networkClient = MastodonClient(session: environment.session)
 
-        return identityDatabase.deleteIdentity(id: id)
-            .tryMap { _ -> Void in
-                try SecretsService(
-                    identityID: id,
-                    keychainService: environment.keychainServiceType)
-                    .deleteAllItems()
+        networkClient.instanceURL = identity.url
 
-                return ()
+        return identityDatabase.deleteIdentity(id: identity.id)
+            .tryMap {
+                DeletionEndpoint.oauthRevoke(
+                    token: try secretsService.item(.accessToken),
+                    clientID: try secretsService.item(.clientID),
+                    clientSecret: try secretsService.item(.clientSecret))
             }
+            .flatMap(networkClient.request)
+            .tryMap { _ in try secretsService.deleteAllItems() }
+            .print()
             .eraseToAnyPublisher()
     }
 
