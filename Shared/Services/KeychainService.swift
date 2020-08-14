@@ -8,6 +8,7 @@ protocol KeychainService {
     static func getGenericPassword(account: String, service: String) throws -> Data?
     static func generateKeyAndReturnPublicKey(applicationTag: String, attributes: [String: Any]) throws -> Data
     static func getPrivateKey(applicationTag: String, attributes: [String: Any]) throws -> Data?
+    static func deleteKey(applicationTag: String) throws
 }
 
 struct LiveKeychainService {}
@@ -101,6 +102,14 @@ extension LiveKeychainService: KeychainService {
         case errSecItemNotFound:
             return nil
         default:
+            throw NSError(status: status)
+        }
+    }
+
+    static func deleteKey(applicationTag: String) throws {
+        let status = SecItemDelete(keyQueryDictionary(applicationTag: applicationTag) as CFDictionary)
+
+        if status != errSecSuccess {
             throw NSError(status: status)
         }
     }

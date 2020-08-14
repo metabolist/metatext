@@ -13,11 +13,11 @@ enum SecretsStorableError: Error {
 
 struct SecretsService {
     let identityID: UUID
-    private let keychainServiceType: KeychainService.Type
+    private let keychainService: KeychainService.Type
 
-    init(identityID: UUID, keychainServiceType: KeychainService.Type) {
+    init(identityID: UUID, keychainService: KeychainService.Type) {
         self.identityID = identityID
-        self.keychainServiceType = keychainServiceType
+        self.keychainService = keychainService
     }
 }
 
@@ -31,16 +31,30 @@ extension SecretsService {
     }
 }
 
+extension SecretsService.Item {
+    enum Kind {
+        case genericPassword
+        case key
+    }
+
+    var kind: Kind {
+        switch self {
+        case .pushKey: return .key
+        default: return .genericPassword
+        }
+    }
+}
+
 extension SecretsService {
     func set(_ data: SecretsStorable, forItem item: Item) throws {
-        try keychainServiceType.setGenericPassword(
+        try keychainService.setGenericPassword(
             data: data.dataStoredInSecrets,
             forAccount: key(item: item),
             service: Self.keychainServiceName)
     }
 
     func item<T: SecretsStorable>(_ item: Item) throws -> T? {
-        guard let data = try keychainServiceType.getGenericPassword(
+        guard let data = try keychainService.getGenericPassword(
                 account: key(item: item),
                 service: Self.keychainServiceName) else {
             return nil
@@ -51,20 +65,25 @@ extension SecretsService {
 
     func deleteAllItems() throws {
         for item in SecretsService.Item.allCases {
-            try keychainServiceType.deleteGenericPassword(
-                account: key(item: item),
-                service: Self.keychainServiceName)
+            switch item.kind {
+            case .genericPassword:
+                try keychainService.deleteGenericPassword(
+                    account: key(item: item),
+                    service: Self.keychainServiceName)
+            case .key:
+                try keychainService.deleteKey(applicationTag: key(item: item))
+            }
         }
     }
 
     func generatePushKeyAndReturnPublicKey() throws -> Data {
-        try keychainServiceType.generateKeyAndReturnPublicKey(
+        try keychainService.generateKeyAndReturnPublicKey(
             applicationTag: key(item: .pushKey),
             attributes: PushKey.attributes)
     }
 
     func getPushKey() throws -> Data? {
-        try keychainServiceType.getPrivateKey(
+        try keychainService.getPrivateKey(
             applicationTag: key(item: .pushKey),
             attributes: PushKey.attributes)
     }

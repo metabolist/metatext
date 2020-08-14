@@ -72,7 +72,7 @@ extension RootViewModel {
 
     func deleteIdentity(id: UUID) {
         identitiesService.deleteIdentity(id: id)
-            .sink(receiveCompletion: { _ in }, receiveValue: {})
+            .sink { _ in } receiveValue: { _ in }
             .store(in: &cancellables)
     }
 

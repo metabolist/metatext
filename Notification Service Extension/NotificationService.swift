@@ -89,7 +89,7 @@ private extension NotificationService {
             let serverPublicKeyData = Data(base64Encoded: serverPublicKeyBase64)
         else { throw NotificationServiceError.userInfoDataAbsent }
 
-        let secretsService = SecretsService(identityID: identityID, keychainServiceType: LiveKeychainService.self)
+        let secretsService = SecretsService(identityID: identityID, keychainService: LiveKeychainService.self)
 
         guard
             let auth = try secretsService.getPushAuth(),

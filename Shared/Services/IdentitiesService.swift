@@ -31,7 +31,7 @@ extension IdentitiesService {
     }
 
     func authorizeIdentity(id: UUID, instanceURL: URL) -> AnyPublisher<Void, Error> {
-        let secretsService = SecretsService(identityID: id, keychainServiceType: environment.keychainServiceType)
+        let secretsService = SecretsService(identityID: id, keychainService: environment.keychainServiceType)
         let authenticationService = AuthenticationService(environment: environment)
 
         return authenticationService.authorizeApp(instanceURL: instanceURL)
@@ -57,7 +57,7 @@ extension IdentitiesService {
             .tryMap { _ -> Void in
                 try SecretsService(
                     identityID: id,
-                    keychainServiceType: environment.keychainServiceType)
+                    keychainService: environment.keychainServiceType)
                     .deleteAllItems()
 
                 return ()

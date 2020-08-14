@@ -32,7 +32,7 @@ class IdentityService {
         self.identity = identity
         secretsService = SecretsService(
             identityID: identityID,
-            keychainServiceType: environment.keychainServiceType)
+            keychainService: environment.keychainServiceType)
         networkClient = MastodonClient(session: environment.session)
         networkClient.instanceURL = identity.url
         networkClient.accessToken = try secretsService.item(.accessToken)

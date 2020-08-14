@@ -9,29 +9,23 @@ class AddIdentityViewModelTests: XCTestCase {
     func testAddIdentity() throws {
         let identityDatabase = IdentityDatabase.fresh()
         let sut = AddIdentityViewModel(identitiesService: .fresh(identityDatabase: identityDatabase))
-        let addedIDAndURLRecorder = sut.addedIdentityIDAndURL.record()
+        let addedIDRecorder = sut.addedIdentityID.record()
 
         sut.urlFieldText = "https://mastodon.social"
         sut.logInTapped()
 
-        let addedIdentityIDAndURL = try wait(for: addedIDAndURLRecorder.next(), timeout: 1)
-
-//        XCTAssertEqual(addedIdentityIDAndURL.0, addedIdentityID)
-        XCTAssertEqual(addedIdentityIDAndURL.1, URL(string: "https://mastodon.social")!)
+        _ = try wait(for: addedIDRecorder.next(), timeout: 1)
     }
 
     func testAddIdentityWithoutScheme() throws {
         let identityDatabase = IdentityDatabase.fresh()
         let sut = AddIdentityViewModel(identitiesService: .fresh(identityDatabase: identityDatabase))
-        let addedIDAndURLRecorder = sut.addedIdentityIDAndURL.record()
+        let addedIDRecorder = sut.addedIdentityID.record()
 
         sut.urlFieldText = "mastodon.social"
         sut.logInTapped()
 
-        let addedIdentityIDAndURL = try wait(for: addedIDAndURLRecorder.next(), timeout: 1)
-
-//        XCTAssertEqual(addedIdentityIDAndURL.0, addedIdentityID)
-        XCTAssertEqual(addedIdentityIDAndURL.1, URL(string: "https://mastodon.social")!)
+        _ = try wait(for: addedIDRecorder.next(), timeout: 1)
     }
 
     func testInvalidURL() throws {

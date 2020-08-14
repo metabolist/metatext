@@ -20,8 +20,8 @@ class RootViewModelTests: XCTestCase {
 
         let addIdentityViewModel = sut.addIdentityViewModel()
 
-        addIdentityViewModel.addedIdentityIDAndURL
-            .sink(receiveValue: sut.newIdentityCreated(id:instanceURL:))
+        addIdentityViewModel.addedIdentityID
+            .sink(receiveValue: sut.newIdentitySelected(id:))
             .store(in: &cancellables)
 
         addIdentityViewModel.urlFieldText = "https://mastodon.social"

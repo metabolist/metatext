@@ -30,6 +30,10 @@ extension MockKeychainService: KeychainService {
     static func getPrivateKey(applicationTag: String, attributes: [String: Any]) throws -> Data? {
         fatalError("not implemented")
     }
+
+    static func deleteKey(applicationTag: String) throws {
+        fatalError("not implemented")
+    }
 }
 
 private extension MockKeychainService {
