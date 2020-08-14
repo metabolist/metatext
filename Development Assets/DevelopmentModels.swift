@@ -106,4 +106,8 @@ extension PostingReadingPreferencesViewModel {
     static let development = PostingReadingPreferencesViewModel(identityService: .development)
 }
 
+extension NotificationTypesPreferencesViewModel {
+    static let development = NotificationTypesPreferencesViewModel(identityService: .development)
+}
+
 // swiftlint:enable force_try

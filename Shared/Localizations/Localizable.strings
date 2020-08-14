@@ -20,6 +20,12 @@
 "preferences.expand-media.show-all" = "Show all";
 "preferences.expand-media.hide-all" = "Hide all";
 "preferences.reading-expand-spoilers" = "Always expand content warnings";
+"preferences.notification-types" = "Notification Types";
+"preferences.notification-types.follow" = "Follow";
+"preferences.notification-types.favourite" = "Favorite";
+"preferences.notification-types.reblog" = "Reblog";
+"preferences.notification-types.mention" = "Mention";
+"preferences.notification-types.poll" = "Poll";
 "status.visibility.public" = "Public";
 "status.visibility.unlisted" = "Unlisted";
 "status.visibility.private" = "Private";

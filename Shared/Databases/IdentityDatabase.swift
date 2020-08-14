@@ -103,8 +103,8 @@ extension IdentityDatabase {
         .eraseToAnyPublisher()
     }
 
-    func updatePushSubscription(deviceToken: String,
-                                alerts: PushSubscription.Alerts,
+    func updatePushSubscription(alerts: PushSubscription.Alerts,
+                                deviceToken: String? = nil,
                                 forIdentityID identityID: UUID) -> AnyPublisher<Void, Error> {
         databaseQueue.writePublisher {
             let data = try StoredIdentity.databaseJSONEncoder(for: "pushSubscriptionAlerts").encode(alerts)
@@ -113,9 +113,11 @@ extension IdentityDatabase {
                 .filter(Column("id") == identityID)
                 .updateAll($0, Column("pushSubscriptionAlerts").set(to: data))
 
-            try StoredIdentity
-                .filter(Column("id") == identityID)
-                .updateAll($0, Column("lastRegisteredDeviceToken").set(to: deviceToken))
+            if let deviceToken = deviceToken {
+                try StoredIdentity
+                    .filter(Column("id") == identityID)
+                    .updateAll($0, Column("lastRegisteredDeviceToken").set(to: deviceToken))
+            }
         }
         .eraseToAnyPublisher()
     }

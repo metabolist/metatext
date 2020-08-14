@@ -4,11 +4,11 @@ import Foundation
 
 struct PushSubscription: Codable {
     struct Alerts: Codable, Hashable {
-        let follow: Bool
-        let favourite: Bool
-        let reblog: Bool
-        let mention: Bool
-        let poll: Bool
+        var follow: Bool
+        var favourite: Bool
+        var reblog: Bool
+        var mention: Bool
+        var poll: Bool
     }
 
     let endpoint: URL

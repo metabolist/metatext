@@ -86,6 +86,10 @@
 		D074577824D29006004758DB /* MockWebAuthSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D074577624D29006004758DB /* MockWebAuthSession.swift */; };
 		D074577A24D29366004758DB /* URLSessionConfiguration+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D074577924D29366004758DB /* URLSessionConfiguration+Extensions.swift */; };
 		D074577B24D29366004758DB /* URLSessionConfiguration+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D074577924D29366004758DB /* URLSessionConfiguration+Extensions.swift */; };
+		D075817924E6657B0081F6A3 /* NotificationTypesPreferencesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D075817824E6657B0081F6A3 /* NotificationTypesPreferencesViewModel.swift */; };
+		D075817A24E6657B0081F6A3 /* NotificationTypesPreferencesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D075817824E6657B0081F6A3 /* NotificationTypesPreferencesViewModel.swift */; };
+		D075817C24E6659A0081F6A3 /* NotificationTypesPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D075817B24E6659A0081F6A3 /* NotificationTypesPreferencesView.swift */; };
+		D075817D24E6659A0081F6A3 /* NotificationTypesPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D075817B24E6659A0081F6A3 /* NotificationTypesPreferencesView.swift */; };
 		D081A40524D0F1A8001B016E /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D081A40424D0F1A8001B016E /* String+Extensions.swift */; };
 		D081A40624D0F1A8001B016E /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D081A40424D0F1A8001B016E /* String+Extensions.swift */; };
 		D0A1CA7424DAC2F1003063E9 /* KingfisherOptionsInfo+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A1CA7324DAC2F1003063E9 /* KingfisherOptionsInfo+Extensions.swift */; };
@@ -266,6 +270,8 @@
 		D06B491E24D3F7FE00642749 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		D074577624D29006004758DB /* MockWebAuthSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockWebAuthSession.swift; sourceTree = "<group>"; };
 		D074577924D29366004758DB /* URLSessionConfiguration+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSessionConfiguration+Extensions.swift"; sourceTree = "<group>"; };
+		D075817824E6657B0081F6A3 /* NotificationTypesPreferencesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTypesPreferencesViewModel.swift; sourceTree = "<group>"; };
+		D075817B24E6659A0081F6A3 /* NotificationTypesPreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTypesPreferencesView.swift; sourceTree = "<group>"; };
 		D081A40424D0F1A8001B016E /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		D0A1CA7324DAC2F1003063E9 /* KingfisherOptionsInfo+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KingfisherOptionsInfo+Extensions.swift"; sourceTree = "<group>"; };
 		D0A652AC24DE3EB6002EA33F /* PreferencesEndpoint+Stubbing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PreferencesEndpoint+Stubbing.swift"; sourceTree = "<group>"; };
@@ -545,6 +551,7 @@
 			isa = PBXGroup;
 			children = (
 				D0DB6EF324C5228A00D965FE /* AddIdentityView.swift */,
+				D075817B24E6659A0081F6A3 /* NotificationTypesPreferencesView.swift */,
 				D0091B6724DC10B30040E8D2 /* PostingReadingPreferencesView.swift */,
 				D0091B6D24DD68090040E8D2 /* PreferencesView.swift */,
 				D0BEC93A24C96FD500E864C4 /* RootView.swift */,
@@ -568,6 +575,7 @@
 			isa = PBXGroup;
 			children = (
 				D0DB6F0824C65AC000D965FE /* AddIdentityViewModel.swift */,
+				D075817824E6657B0081F6A3 /* NotificationTypesPreferencesViewModel.swift */,
 				D0091B6A24DC10CE0040E8D2 /* PostingReadingPreferencesViewModel.swift */,
 				D0091B7024DD68220040E8D2 /* PreferencesViewModel.swift */,
 				D0BEC93724C9632800E864C4 /* RootViewModel.swift */,
@@ -884,6 +892,7 @@
 				D04FD73924D4A7B4007D572D /* AccountEndpoint+Stubbing.swift in Sources */,
 				D0DB6F0924C65AC000D965FE /* AddIdentityViewModel.swift in Sources */,
 				D0CD847324DBDEC700CF380C /* MastodonPreferences.swift in Sources */,
+				D075817924E6657B0081F6A3 /* NotificationTypesPreferencesViewModel.swift in Sources */,
 				D0ED1BD724CF94B200B4899C /* Application.swift in Sources */,
 				D047FAAE24C3E21200AF17C5 /* MetatextApp.swift in Sources */,
 				D0BEC94724CA22C400E864C4 /* TimelineViewModel.swift in Sources */,
@@ -893,6 +902,7 @@
 				D0EC8DE824E21FEC00A08489 /* Data+Extensions.swift in Sources */,
 				D0666A6324C6DC6C00F3F04B /* AppAuthorization.swift in Sources */,
 				D019E6E524DF72E700697C7D /* AccountEndpoint.swift in Sources */,
+				D075817C24E6659A0081F6A3 /* NotificationTypesPreferencesView.swift in Sources */,
 				D065F53B24D3B33A00741304 /* View+Extensions.swift in Sources */,
 				D0DC174A24CFF15F00A75C65 /* AppAuthorizationEndpoint+Stubbing.swift in Sources */,
 				D0159F8A24DE742F00E78478 /* IdentitiesViewModel.swift in Sources */,
@@ -1029,6 +1039,7 @@
 				D0A1CA7524DAC2F1003063E9 /* KingfisherOptionsInfo+Extensions.swift in Sources */,
 				D0ED1BC524CED54D00B4899C /* HTTPTarget.swift in Sources */,
 				D0C963FF24CC3812003BD330 /* Publisher+Extensions.swift in Sources */,
+				D075817D24E6659A0081F6A3 /* NotificationTypesPreferencesView.swift in Sources */,
 				D019E6E824DF72E700697C7D /* AccessTokenEndpoint.swift in Sources */,
 				D04FD73D24D4A83A007D572D /* InstanceEndpoint+Stubbing.swift in Sources */,
 				D0DC175C24D0154F00A75C65 /* MastodonAPI.swift in Sources */,
@@ -1038,6 +1049,7 @@
 				D0666A7024C6DFB300F3F04B /* AccessToken.swift in Sources */,
 				D0ED1BCC24CF744200B4899C /* MastodonClient.swift in Sources */,
 				D0091B6924DC10B30040E8D2 /* PostingReadingPreferencesView.swift in Sources */,
+				D075817A24E6657B0081F6A3 /* NotificationTypesPreferencesViewModel.swift in Sources */,
 				D019E6E624DF72E700697C7D /* AccountEndpoint.swift in Sources */,
 				D0CD847724DBDF3C00CF380C /* Status.swift in Sources */,
 				D0EC8DEF24E2704D00A08489 /* PushSubscriptionEndpoint.swift in Sources */,

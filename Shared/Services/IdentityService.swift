@@ -109,8 +109,17 @@ extension IdentityService {
                 publicKey: publicKey,
                 auth: auth,
                 alerts: alerts))
-            .map { (deviceToken, $0.alerts, identityID) }
-            .flatMap(identityDatabase.updatePushSubscription(deviceToken:alerts:forIdentityID:))
+            .map { ($0.alerts, deviceToken, identityID) }
+            .flatMap(identityDatabase.updatePushSubscription(alerts:deviceToken:forIdentityID:))
+            .eraseToAnyPublisher()
+    }
+
+    func updatePushSubscription(alerts: PushSubscription.Alerts) -> AnyPublisher<Void, Error> {
+        let identityID = identity.id
+
+        return networkClient.request(PushSubscriptionEndpoint.update(alerts: alerts))
+            .map { ($0.alerts, nil, identityID) }
+            .flatMap(identityDatabase.updatePushSubscription(alerts:deviceToken:forIdentityID:))
             .eraseToAnyPublisher()
     }
 }

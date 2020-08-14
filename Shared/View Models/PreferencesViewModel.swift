@@ -17,4 +17,8 @@ extension PreferencesViewModel {
     func postingReadingPreferencesViewModel() -> PostingReadingPreferencesViewModel {
         PostingReadingPreferencesViewModel(identityService: identityService)
     }
+
+    func notificationTypesPreferencesViewModel() -> NotificationTypesPreferencesViewModel {
+        NotificationTypesPreferencesViewModel(identityService: identityService)
+    }
 }

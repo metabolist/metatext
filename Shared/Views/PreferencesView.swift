@@ -11,6 +11,9 @@ struct PreferencesView: View {
                 NavigationLink("preferences.posting-reading",
                                destination: PostingReadingPreferencesView(
                                 viewModel: viewModel.postingReadingPreferencesViewModel()))
+                NavigationLink("preferences.notification-types",
+                               destination: NotificationTypesPreferencesView(
+                                viewModel: viewModel.notificationTypesPreferencesViewModel()))
             }
         }
         .navigationTitle("preferences")
