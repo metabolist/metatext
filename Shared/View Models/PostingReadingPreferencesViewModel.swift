@@ -4,19 +4,8 @@ import Foundation
 import Combine
 
 class PostingReadingPreferencesViewModel: ObservableObject {
-    @Published var preferences: Identity.Preferences {
-        didSet {
-            if preferences.useServerPostingReadingPreferences {
-                identityService.refreshServerPreferences()
-                    .assignErrorsToAlertItem(to: \.alertItem, on: self)
-                    .sink(receiveValue: {})
-                    .store(in: &cancellables)
-            }
-        }
-    }
-
+    @Published var preferences: Identity.Preferences
     @Published var alertItem: AlertItem?
-    let handle: String
 
     private let identityService: IdentityService
     private var cancellables = Set<AnyCancellable>()
@@ -24,17 +13,18 @@ class PostingReadingPreferencesViewModel: ObservableObject {
     init(identityService: IdentityService) {
         self.identityService = identityService
         preferences = identityService.identity.preferences
-        handle = identityService.identity.handle
 
-        identityService.$identity.map(\.preferences)
+        identityService.$identity
+            .map(\.preferences)
             .dropFirst()
             .removeDuplicates()
             .assign(to: &$preferences)
 
-        $preferences.dropFirst()
+        $preferences
+            .dropFirst()
             .flatMap(identityService.updatePreferences)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
-            .sink(receiveValue: {})
+            .sink {}
             .store(in: &cancellables)
     }
 }

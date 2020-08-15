@@ -85,6 +85,11 @@ extension IdentityService {
 
     func updatePreferences(_ preferences: Identity.Preferences) -> AnyPublisher<Void, Error> {
         identityDatabase.updatePreferences(preferences, forIdentityID: identity.id)
+            .zip(Just(self).first().setFailureType(to: Error.self))
+            .filter { $1.identity.preferences.useServerPostingReadingPreferences }
+            .map { _ in () }
+            .flatMap(refreshServerPreferences)
+            .eraseToAnyPublisher()
     }
 
     func createPushSubscription(deviceToken: String, alerts: PushSubscription.Alerts) -> AnyPublisher<Void, Error> {
