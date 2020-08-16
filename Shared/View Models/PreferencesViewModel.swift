@@ -4,12 +4,15 @@ import Foundation
 
 class PreferencesViewModel: ObservableObject {
     let handle: String
+    let shouldShowNotificationTypePreferences: Bool
 
     private let identityService: IdentityService
 
     init(identityService: IdentityService) {
         self.identityService = identityService
         handle = identityService.identity.handle
+
+        shouldShowNotificationTypePreferences = identityService.identity.lastRegisteredDeviceToken != nil
     }
 }
 
