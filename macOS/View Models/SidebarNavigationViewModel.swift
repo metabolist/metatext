@@ -5,6 +5,7 @@ import Combine
 
 class SidebarNavigationViewModel: ObservableObject {
     @Published private(set) var identity: Identity
+    @Published private(set) var timelineViewModel: StatusesViewModel
     @Published var alertItem: AlertItem?
     var selectedTab: Tab? = .timelines
 
@@ -14,6 +15,7 @@ class SidebarNavigationViewModel: ObservableObject {
     init(identityService: IdentityService) {
         self.identityService = identityService
         identity = identityService.identity
+        timelineViewModel = StatusesViewModel(statusListService: identityService.service(timeline: .home))
         identityService.$identity.dropFirst().assign(to: &$identity)
     }
 }

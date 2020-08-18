@@ -8,6 +8,7 @@ class IdentityService {
     let observationErrors: AnyPublisher<Error, Never>
 
     private let identityDatabase: IdentityDatabase
+    private let contentDatabase: ContentDatabase
     private let environment: AppEnvironment
     private let networkClient: MastodonClient
     private let secretsService: SecretsService
@@ -36,6 +37,8 @@ class IdentityService {
         networkClient = MastodonClient(session: environment.session)
         networkClient.instanceURL = identity.url
         networkClient.accessToken = try? secretsService.item(.accessToken)
+
+        contentDatabase = try ContentDatabase(identityID: identityID, inMemory: environment.inMemoryContent)
 
         observation.catch { [weak self] error -> Empty<Identity, Never> in
             self?.observationErrorsInput.send(error)
@@ -126,6 +129,10 @@ extension IdentityService {
             .map { ($0.alerts, nil, identityID) }
             .flatMap(identityDatabase.updatePushSubscription(alerts:deviceToken:forIdentityID:))
             .eraseToAnyPublisher()
+    }
+
+    func service(timeline: Timeline) -> StatusListService {
+        TimelineService(timeline: timeline, networkClient: networkClient, contentDatabase: contentDatabase)
     }
 }
 

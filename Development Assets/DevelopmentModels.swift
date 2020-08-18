@@ -47,7 +47,9 @@ extension AppEnvironment {
     static let development = AppEnvironment(
         session: Session(configuration: .stubbing),
         webAuthSessionType: SuccessfulMockWebAuthSession.self,
-        keychainServiceType: MockKeychainService.self)
+        keychainServiceType: MockKeychainService.self,
+        userDefaults: MockUserDefaults(),
+        inMemoryContent: true)
 }
 
 extension IdentitiesService {
@@ -108,6 +110,10 @@ extension PostingReadingPreferencesViewModel {
 
 extension NotificationTypesPreferencesViewModel {
     static let development = NotificationTypesPreferencesViewModel(identityService: .development)
+}
+
+extension StatusesViewModel {
+    static let development = StatusesViewModel(statusListService: IdentityService.development.service(timeline: .home))
 }
 
 // swiftlint:enable force_try

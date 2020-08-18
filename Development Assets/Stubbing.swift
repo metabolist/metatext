@@ -30,5 +30,7 @@ extension Stubbing {
         dataString(url: url)?.data(using: .utf8)
     }
 
+    func dataString(url: URL) -> String? { nil }
+
     func statusCode(url: URL) -> Int? { 200 }
 }

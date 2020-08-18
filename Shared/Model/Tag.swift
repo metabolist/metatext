@@ -2,7 +2,7 @@
 
 import Foundation
 
-struct Application: Codable, Hashable {
+struct Tag: Codable, Hashable {
     let name: String
-    let website: String?
+    let url: URL
 }

@@ -2,6 +2,6 @@
 
 import Foundation
 
-class TimelineViewModel: ObservableObject {
-
+struct TransientStatusCollection: Codable {
+    let id: String
 }

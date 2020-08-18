@@ -39,7 +39,7 @@ private extension SidebarNavigationView {
         Group {
             switch topLevelNavigation {
             case .timelines:
-                TimelineView()
+                StatusesView(viewModel: viewModel.timelineViewModel)
             default: Text(topLevelNavigation.title)
             }
         }
