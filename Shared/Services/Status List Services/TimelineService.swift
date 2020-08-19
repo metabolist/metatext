@@ -3,7 +3,7 @@
 import Foundation
 import Combine
 
-struct TimelineService: StatusListService {
+struct TimelineService {
     let statusSections: AnyPublisher<[[Status]], Error>
 
     private let timeline: Timeline
@@ -18,11 +18,17 @@ struct TimelineService: StatusListService {
             .map { [$0] }
             .eraseToAnyPublisher()
     }
+}
 
+extension TimelineService: StatusListService {
     func request(maxID: String?, minID: String?) -> AnyPublisher<Void, Error> {
         return networkClient.request(timeline.endpoint)
             .map { ($0, timeline) }
             .flatMap(contentDatabase.insert(statuses:collection:))
             .eraseToAnyPublisher()
+    }
+
+    func contextService(status: Status) -> ContextService {
+        ContextService(status: status, networkClient: networkClient, contentDatabase: contentDatabase)
     }
 }

@@ -44,6 +44,16 @@
 		D019E6EE24DF7BF300697C7D /* IdentityDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D019E6EC24DF7BF300697C7D /* IdentityDatabase.swift */; };
 		D019E6F024DF7C2F00697C7D /* DatabaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D019E6EF24DF7C2F00697C7D /* DatabaseError.swift */; };
 		D019E6F124DF7C2F00697C7D /* DatabaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D019E6EF24DF7C2F00697C7D /* DatabaseError.swift */; };
+		D020F50B24EC9F1D005AB084 /* ContextService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D020F50A24EC9F1D005AB084 /* ContextService.swift */; };
+		D020F50C24EC9F1D005AB084 /* ContextService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D020F50A24EC9F1D005AB084 /* ContextService.swift */; };
+		D020F50E24ECA25F005AB084 /* ContextEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = D020F50D24ECA25F005AB084 /* ContextEndpoint.swift */; };
+		D020F50F24ECA25F005AB084 /* ContextEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = D020F50D24ECA25F005AB084 /* ContextEndpoint.swift */; };
+		D020F51124ECA309005AB084 /* MastodonContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D020F51024ECA309005AB084 /* MastodonContext.swift */; };
+		D020F51224ECA309005AB084 /* MastodonContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D020F51024ECA309005AB084 /* MastodonContext.swift */; };
+		D020F51424ECBA60005AB084 /* LazyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D020F51324ECBA60005AB084 /* LazyView.swift */; };
+		D020F51524ECBA60005AB084 /* LazyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D020F51324ECBA60005AB084 /* LazyView.swift */; };
+		D03658D124EDD80900AC17EC /* ContextEndpoint+Stubbing.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03658D024EDD80900AC17EC /* ContextEndpoint+Stubbing.swift */; };
+		D03658D224EDD80900AC17EC /* ContextEndpoint+Stubbing.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03658D024EDD80900AC17EC /* ContextEndpoint+Stubbing.swift */; };
 		D03DF45B24E62A68007A8CD5 /* DeletionEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DF45A24E62A68007A8CD5 /* DeletionEndpoint.swift */; };
 		D03DF45C24E62A68007A8CD5 /* DeletionEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DF45A24E62A68007A8CD5 /* DeletionEndpoint.swift */; };
 		D047FAAE24C3E21200AF17C5 /* MetatextApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D047FA8524C3E21000AF17C5 /* MetatextApp.swift */; };
@@ -272,6 +282,11 @@
 		D019E6E024DF72E700697C7D /* InstanceEndpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstanceEndpoint.swift; sourceTree = "<group>"; };
 		D019E6EC24DF7BF300697C7D /* IdentityDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityDatabase.swift; sourceTree = "<group>"; };
 		D019E6EF24DF7C2F00697C7D /* DatabaseError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseError.swift; sourceTree = "<group>"; };
+		D020F50A24EC9F1D005AB084 /* ContextService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextService.swift; sourceTree = "<group>"; };
+		D020F50D24ECA25F005AB084 /* ContextEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextEndpoint.swift; sourceTree = "<group>"; };
+		D020F51024ECA309005AB084 /* MastodonContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MastodonContext.swift; sourceTree = "<group>"; };
+		D020F51324ECBA60005AB084 /* LazyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyView.swift; sourceTree = "<group>"; };
+		D03658D024EDD80900AC17EC /* ContextEndpoint+Stubbing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContextEndpoint+Stubbing.swift"; sourceTree = "<group>"; };
 		D03DF45A24E62A68007A8CD5 /* DeletionEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletionEndpoint.swift; sourceTree = "<group>"; };
 		D047FA8524C3E21000AF17C5 /* MetatextApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetatextApp.swift; sourceTree = "<group>"; };
 		D047FA8724C3E21200AF17C5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -447,6 +462,7 @@
 				D019E6DF24DF72E700697C7D /* AccessTokenEndpoint.swift */,
 				D019E6DE24DF72E700697C7D /* AccountEndpoint.swift */,
 				D019E6DC24DF72E700697C7D /* AppAuthorizationEndpoint.swift */,
+				D020F50D24ECA25F005AB084 /* ContextEndpoint.swift */,
 				D03DF45A24E62A68007A8CD5 /* DeletionEndpoint.swift */,
 				D019E6E024DF72E700697C7D /* InstanceEndpoint.swift */,
 				D019E6DD24DF72E700697C7D /* PreferencesEndpoint.swift */,
@@ -548,6 +564,7 @@
 		D054951024EB101F008B00A5 /* Status List Services */ = {
 			isa = PBXGroup;
 			children = (
+				D020F50A24EC9F1D005AB084 /* ContextService.swift */,
 				D054951124EB1041008B00A5 /* StatusListService.swift */,
 				D054951424EB1053008B00A5 /* TimelineService.swift */,
 			);
@@ -575,6 +592,7 @@
 				D0ED1BD624CF94B200B4899C /* Application.swift */,
 				D05494E924EA3F54008B00A5 /* Attachment.swift */,
 				D05494EF24EA3FE5008B00A5 /* Card.swift */,
+				D020F51024ECA309005AB084 /* MastodonContext.swift */,
 				D0666A5324C6C3E500F3F04B /* Emoji.swift */,
 				D0666A4A24C6C37700F3F04B /* Identity.swift */,
 				D0666A4D24C6C39600F3F04B /* Instance.swift */,
@@ -613,6 +631,7 @@
 			isa = PBXGroup;
 			children = (
 				D0DB6EF324C5228A00D965FE /* AddIdentityView.swift */,
+				D020F51324ECBA60005AB084 /* LazyView.swift */,
 				D075817B24E6659A0081F6A3 /* NotificationTypesPreferencesView.swift */,
 				D0091B6724DC10B30040E8D2 /* PostingReadingPreferencesView.swift */,
 				D0091B6D24DD68090040E8D2 /* PreferencesView.swift */,
@@ -666,6 +685,7 @@
 				D0DC175424D00F0A00A75C65 /* AccessTokenEndpoint+Stubbing.swift */,
 				D04FD73824D4A7B4007D572D /* AccountEndpoint+Stubbing.swift */,
 				D0DC174924CFF15F00A75C65 /* AppAuthorizationEndpoint+Stubbing.swift */,
+				D03658D024EDD80900AC17EC /* ContextEndpoint+Stubbing.swift */,
 				D04FD73B24D4A83A007D572D /* InstanceEndpoint+Stubbing.swift */,
 				D0DC175124D008E300A75C65 /* MastodonTarget+Stubbing.swift */,
 				D0A652AC24DE3EB6002EA33F /* PreferencesEndpoint+Stubbing.swift */,
@@ -963,17 +983,20 @@
 				D075817924E6657B0081F6A3 /* NotificationTypesPreferencesViewModel.swift in Sources */,
 				D0ED1BD724CF94B200B4899C /* Application.swift in Sources */,
 				D047FAAE24C3E21200AF17C5 /* MetatextApp.swift in Sources */,
+				D03658D124EDD80900AC17EC /* ContextEndpoint+Stubbing.swift in Sources */,
 				D0BEC94724CA22C400E864C4 /* StatusesViewModel.swift in Sources */,
 				D0666A4E24C6C39600F3F04B /* Instance.swift in Sources */,
 				D057426724E9FE1D00839EBA /* ContentDatabase.swift in Sources */,
 				D054951524EB1053008B00A5 /* TimelineService.swift in Sources */,
 				D019E6E924DF72E700697C7D /* InstanceEndpoint.swift in Sources */,
 				D0ED1BE324CFA84400B4899C /* MastodonError.swift in Sources */,
+				D020F50E24ECA25F005AB084 /* ContextEndpoint.swift in Sources */,
 				D0EC8DE824E21FEC00A08489 /* Data+Extensions.swift in Sources */,
 				D0666A6324C6DC6C00F3F04B /* AppAuthorization.swift in Sources */,
 				D05494F024EA3FE5008B00A5 /* Card.swift in Sources */,
 				D019E6E524DF72E700697C7D /* AccountEndpoint.swift in Sources */,
 				D075817C24E6659A0081F6A3 /* NotificationTypesPreferencesView.swift in Sources */,
+				D020F51424ECBA60005AB084 /* LazyView.swift in Sources */,
 				D065F53B24D3B33A00741304 /* View+Extensions.swift in Sources */,
 				D0DC174A24CFF15F00A75C65 /* AppAuthorizationEndpoint+Stubbing.swift in Sources */,
 				D05494E424EA3EF7008B00A5 /* Tag.swift in Sources */,
@@ -1004,6 +1027,7 @@
 				D0BEC93B24C96FD500E864C4 /* RootView.swift in Sources */,
 				D04FD74224D4AA34007D572D /* DevelopmentModels.swift in Sources */,
 				D0EC8DC524DF842700A08489 /* KeychainService.swift in Sources */,
+				D020F50B24EC9F1D005AB084 /* ContextService.swift in Sources */,
 				D0DC175824D0130800A75C65 /* HTTPStubs.swift in Sources */,
 				D0DC177724D0CF2600A75C65 /* MockKeychainService.swift in Sources */,
 				D0EC8DC224DF7D9C00A08489 /* IdentityService.swift in Sources */,
@@ -1042,6 +1066,7 @@
 				D0EC8DCE24DFB64200A08489 /* AuthenticationService.swift in Sources */,
 				D04FD73C24D4A83A007D572D /* InstanceEndpoint+Stubbing.swift in Sources */,
 				D0DC175B24D0154F00A75C65 /* MastodonAPI.swift in Sources */,
+				D020F51124ECA309005AB084 /* MastodonContext.swift in Sources */,
 				D0ED1BD124CF779B00B4899C /* MastodonTarget.swift in Sources */,
 				D0CD847C24DBEA9F00CF380C /* Unknowable.swift in Sources */,
 				D0666A6F24C6DFB300F3F04B /* AccessToken.swift in Sources */,
@@ -1108,6 +1133,7 @@
 				D054951624EB1053008B00A5 /* TimelineService.swift in Sources */,
 				D019E6D824DF728400697C7D /* MastodonEncoder.swift in Sources */,
 				D054951C24EB2825008B00A5 /* TransientStatusCollection.swift in Sources */,
+				D03658D224EDD80900AC17EC /* ContextEndpoint+Stubbing.swift in Sources */,
 				D0DC174E24CFF1F100A75C65 /* Stubbing.swift in Sources */,
 				D0091B6C24DC10CE0040E8D2 /* PostingReadingPreferencesViewModel.swift in Sources */,
 				D0091B6F24DD68090040E8D2 /* PreferencesView.swift in Sources */,
@@ -1121,6 +1147,7 @@
 				D019E6F124DF7C2F00697C7D /* DatabaseError.swift in Sources */,
 				D074577824D29006004758DB /* MockWebAuthSession.swift in Sources */,
 				D057426E24EA339300839EBA /* ListTimeline.swift in Sources */,
+				D020F51224ECA309005AB084 /* MastodonContext.swift in Sources */,
 				D0ED1BCF24CF768200B4899C /* MastodonEndpoint.swift in Sources */,
 				D074577B24D29366004758DB /* URLSessionConfiguration+Extensions.swift in Sources */,
 				D0ED1BB824CE47F400B4899C /* WebAuthSession.swift in Sources */,
@@ -1133,8 +1160,11 @@
 				D019E6E824DF72E700697C7D /* AccessTokenEndpoint.swift in Sources */,
 				D04FD73D24D4A83A007D572D /* InstanceEndpoint+Stubbing.swift in Sources */,
 				D0DC175C24D0154F00A75C65 /* MastodonAPI.swift in Sources */,
+				D020F51524ECBA60005AB084 /* LazyView.swift in Sources */,
 				D0ED1BD224CF779B00B4899C /* MastodonTarget.swift in Sources */,
 				D0EC8DC624DF842700A08489 /* KeychainService.swift in Sources */,
+				D020F50C24EC9F1D005AB084 /* ContextService.swift in Sources */,
+				D020F50F24ECA25F005AB084 /* ContextEndpoint.swift in Sources */,
 				D0CD847D24DBEA9F00CF380C /* Unknowable.swift in Sources */,
 				D0666A7024C6DFB300F3F04B /* AccessToken.swift in Sources */,
 				D0ED1BCC24CF744200B4899C /* MastodonClient.swift in Sources */,

@@ -56,6 +56,26 @@ extension ContentDatabase {
             .map { $0.map(Status.init(statusResult:)) }
             .eraseToAnyPublisher()
     }
+
+    func statusesObservation(collection: TransientStatusCollection) -> AnyPublisher<[Status], Error> {
+        ValueObservation.tracking {
+            try StatusResult.fetchAll(
+                $0,
+                StoredStatus.filter(
+                    try collection
+                        .elements
+                        .fetchAll($0)
+                        .map(\.statusId)
+                        .contains(Column("id")))
+                    .including(required: StoredStatus.account)
+                    .including(optional: StoredStatus.reblogAccount)
+                    .including(optional: StoredStatus.reblog))
+        }
+        .removeDuplicates()
+        .publisher(in: databaseQueue)
+        .map { $0.map(Status.init(statusResult:)) }
+        .eraseToAnyPublisher()
+    }
 }
 
 private extension ContentDatabase {

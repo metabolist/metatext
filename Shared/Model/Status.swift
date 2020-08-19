@@ -105,3 +105,69 @@ class Status: Codable, Identifiable {
         self.pinned = pinned
     }
 }
+
+extension Status: Hashable {
+    static func == (lhs: Status, rhs: Status) -> Bool {
+        lhs.id == rhs.id
+            && lhs.uri == rhs.uri
+            && lhs.createdAt == rhs.createdAt
+            && lhs.account == rhs.account
+            && lhs.content == rhs.content
+            && lhs.visibility == rhs.visibility
+            && lhs.sensitive == rhs.sensitive
+            && lhs.spoilerText == rhs.spoilerText
+            && lhs.mediaAttachments == rhs.mediaAttachments
+            && lhs.mentions == rhs.mentions
+            && lhs.tags == rhs.tags
+            && lhs.emojis == rhs.emojis
+            && lhs.reblogsCount == rhs.reblogsCount
+            && lhs.favouritesCount == rhs.favouritesCount
+            && lhs.repliesCount == rhs.repliesCount
+            && lhs.application == rhs.application
+            && lhs.url == rhs.url
+            && lhs.inReplyToId == rhs.inReplyToId
+            && lhs.inReplyToAccountId == rhs.inReplyToAccountId
+            && lhs.reblog == rhs.reblog
+            && lhs.poll == rhs.poll
+            && lhs.card == rhs.card
+            && lhs.language == rhs.language
+            && lhs.text == rhs.text
+            && lhs.favourited == rhs.favourited
+            && lhs.reblogged == rhs.reblogged
+            && lhs.muted == rhs.muted
+            && lhs.bookmarked == rhs.bookmarked
+            && lhs.pinned == rhs.pinned
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+        hasher.combine(uri)
+        hasher.combine(createdAt)
+        hasher.combine(account)
+        hasher.combine(content)
+        hasher.combine(visibility)
+        hasher.combine(sensitive)
+        hasher.combine(spoilerText)
+        hasher.combine(mediaAttachments)
+        hasher.combine(mentions)
+        hasher.combine(tags)
+        hasher.combine(emojis)
+        hasher.combine(reblogsCount)
+        hasher.combine(favouritesCount)
+        hasher.combine(repliesCount)
+        hasher.combine(application)
+        hasher.combine(url)
+        hasher.combine(inReplyToId)
+        hasher.combine(inReplyToAccountId)
+        hasher.combine(reblog)
+        hasher.combine(poll)
+        hasher.combine(card)
+        hasher.combine(language)
+        hasher.combine(text)
+        hasher.combine(favourited)
+        hasher.combine(reblogged)
+        hasher.combine(muted)
+        hasher.combine(bookmarked)
+        hasher.combine(pinned)
+    }
+}
