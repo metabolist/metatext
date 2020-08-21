@@ -34,11 +34,11 @@ class IdentityService {
         secretsService = SecretsService(
             identityID: identityID,
             keychainService: environment.keychainServiceType)
-        networkClient = MastodonClient(session: environment.session)
+        networkClient = MastodonClient(environment: environment)
         networkClient.instanceURL = identity.url
         networkClient.accessToken = try? secretsService.item(.accessToken)
 
-        contentDatabase = try ContentDatabase(identityID: identityID, inMemory: environment.inMemoryContent)
+        contentDatabase = try ContentDatabase(identityID: identityID, environment: environment)
 
         observation.catch { [weak self] error -> Empty<Identity, Never> in
             self?.observationErrorsInput.send(error)

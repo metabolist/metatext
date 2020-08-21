@@ -34,6 +34,32 @@ struct ContextService {
 extension ContextService: StatusListService {
     var contextParent: Status? { status }
 
+    func isReplyInContext(status: Status) -> Bool {
+        let flatContext = flattenedContext()
+
+        guard
+            let index = flatContext.firstIndex(where: { $0.id == status.id }),
+            index > 0
+        else { return false }
+
+        let previousStatus = flatContext[index - 1]
+
+        return previousStatus.id != contextParent?.id && status.inReplyToId == previousStatus.id
+    }
+
+    func hasReplyFollowing(status: Status) -> Bool {
+        let flatContext = flattenedContext()
+
+        guard
+            let index = flatContext.firstIndex(where: { $0.id == status.id }),
+            flatContext.count > index + 1
+        else { return false }
+
+        let nextStatus = flatContext[index + 1]
+
+        return status.id != contextParent?.id && nextStatus.inReplyToId == status.id
+    }
+
     func request(maxID: String?, minID: String?) -> AnyPublisher<Void, Error> {
         networkClient.request(ContextEndpoint.context(id: status.id))
             .handleEvents(receiveOutput: context.send)
@@ -42,7 +68,17 @@ extension ContextService: StatusListService {
             .eraseToAnyPublisher()
     }
 
+    func statusService(status: Status) -> StatusService {
+        StatusService(status: status, networkClient: networkClient, contentDatabase: contentDatabase)
+    }
+
     func contextService(status: Status) -> ContextService {
-        ContextService(status: status, networkClient: networkClient, contentDatabase: contentDatabase)
+        ContextService(status: status.displayStatus, networkClient: networkClient, contentDatabase: contentDatabase)
+    }
+}
+
+private extension ContextService {
+    func flattenedContext() -> [Status] {
+        context.value.ancestors + [status] + context.value.descendants
     }
 }

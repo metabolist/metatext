@@ -40,7 +40,7 @@ private extension TabNavigationView {
     func view(tab: TabNavigationViewModel.Tab) -> some View {
         switch tab {
         case .timelines:
-            StatusesView(viewModel: viewModel.timelineViewModel)
+            StatusListView(viewModel: viewModel.timelineViewModel)
                 .navigationBarTitle(viewModel.identity.handle, displayMode: .inline)
                 .navigationBarItems(
                     leading: Button {

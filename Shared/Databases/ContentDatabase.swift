@@ -8,7 +8,7 @@ import GRDB
 struct ContentDatabase {
     private let databaseQueue: DatabaseQueue
 
-    init(identityID: UUID, inMemory: Bool = false) throws {
+    init(identityID: UUID, environment: AppEnvironment) throws {
         guard
             let documentsDirectory = NSSearchPathForDirectoriesInDomains(
                 .documentDirectory,
@@ -16,7 +16,7 @@ struct ContentDatabase {
                 .first
         else { throw DatabaseError.documentsDirectoryNotFound }
 
-        if inMemory {
+        if environment.inMemoryContent {
             databaseQueue = DatabaseQueue()
         } else {
             databaseQueue = try DatabaseQueue(path: "\(documentsDirectory)/\(identityID.uuidString).sqlite3")
@@ -24,6 +24,7 @@ struct ContentDatabase {
 
         try Self.migrate(databaseQueue)
         try Self.createTemporaryTables(databaseQueue)
+        Self.attributedStringCache = environment.attributedStringCache
     }
 }
 
@@ -79,6 +80,8 @@ extension ContentDatabase {
 }
 
 private extension ContentDatabase {
+    static var attributedStringCache: AttributedStringCache?
+
     // swiftlint:disable function_body_length
     static func migrate(_ writer: DatabaseWriter) throws {
         var migrator = DatabaseMigrator()
@@ -181,6 +184,16 @@ private extension ContentDatabase {
 }
 
 extension Account: TableRecord, FetchableRecord, PersistableRecord {
+    static var databaseDecodingUserInfo: [CodingUserInfoKey: Any] {
+        var userInfo = [CodingUserInfoKey: Any]()
+
+        if let attributedStringCache = ContentDatabase.attributedStringCache {
+            userInfo[.attributedStringCache] = attributedStringCache
+        }
+
+        return userInfo
+    }
+
     static func databaseJSONDecoder(for column: String) -> JSONDecoder {
         MastodonDecoder()
     }
@@ -276,7 +289,7 @@ private struct StoredStatus: Codable, Hashable {
     let uri: String
     let createdAt: Date
     let accountId: String
-    let content: String
+    let content: HTML
     let visibility: Status.Visibility
     let sensitive: Bool
     let spoilerText: String
@@ -354,6 +367,16 @@ private extension StoredStatus {
 }
 
 extension StoredStatus: TableRecord, FetchableRecord, PersistableRecord {
+    static var databaseDecodingUserInfo: [CodingUserInfoKey: Any] {
+        var userInfo = [CodingUserInfoKey: Any]()
+
+        if let attributedStringCache = ContentDatabase.attributedStringCache {
+            userInfo[.attributedStringCache] = attributedStringCache
+        }
+
+        return userInfo
+    }
+
     static func databaseJSONDecoder(for column: String) -> JSONDecoder {
         MastodonDecoder()
     }

@@ -28,7 +28,11 @@ extension TimelineService: StatusListService {
             .eraseToAnyPublisher()
     }
 
+    func statusService(status: Status) -> StatusService {
+        StatusService(status: status, networkClient: networkClient, contentDatabase: contentDatabase)
+    }
+
     func contextService(status: Status) -> ContextService {
-        ContextService(status: status, networkClient: networkClient, contentDatabase: contentDatabase)
+        ContextService(status: status.displayStatus, networkClient: networkClient, contentDatabase: contentDatabase)
     }
 }

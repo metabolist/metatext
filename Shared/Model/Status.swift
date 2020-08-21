@@ -17,7 +17,7 @@ class Status: Codable, Identifiable {
     let uri: String
     let createdAt: Date
     let account: Account
-    let content: String
+    let content: HTML
     let visibility: Visibility
     let sensitive: Bool
     let spoilerText: String
@@ -49,7 +49,7 @@ class Status: Codable, Identifiable {
         uri: String,
         createdAt: Date,
         account: Account,
-        content: String,
+        content: HTML,
         visibility: Status.Visibility,
         sensitive: Bool,
         spoilerText: String,
@@ -103,6 +103,12 @@ class Status: Codable, Identifiable {
         self.muted = muted
         self.bookmarked = bookmarked
         self.pinned = pinned
+    }
+}
+
+extension Status {
+    var displayStatus: Status {
+        reblog ?? self
     }
 }
 

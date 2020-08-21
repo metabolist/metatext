@@ -8,6 +8,7 @@ struct AppEnvironment {
     let keychainServiceType: KeychainService.Type
     let userDefaults: UserDefaults
     let inMemoryContent: Bool
+    let attributedStringCache = AttributedStringCache()
 }
 
 extension AppEnvironment {

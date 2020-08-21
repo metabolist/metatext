@@ -26,6 +26,15 @@
 "preferences.notification-types.reblog" = "Reblog";
 "preferences.notification-types.mention" = "Mention";
 "preferences.notification-types.poll" = "Poll";
+"status.reblogged-by" = "%@ boosted";
+"status.pinned-post" = "Pinned post";
+"status.show-more" = "Show More";
+"status.show-less" = "Show Less";
+"status.poll.vote" = "Vote";
+"status.poll.participation-count" = "%ld people";
+"status.poll.time-left" = "%@ left";
+"status.poll.refresh" = "Refresh";
+"status.poll.closed" = "Closed";
 "status.visibility.public" = "Public";
 "status.visibility.unlisted" = "Unlisted";
 "status.visibility.private" = "Private";

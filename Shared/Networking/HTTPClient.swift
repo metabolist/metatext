@@ -10,7 +10,7 @@ class HTTPClient {
     private let session: Session
     private let decoder: DataDecoder
 
-    init(session: Session, decoder: DataDecoder = JSONDecoder()) {
+    init(session: Session, decoder: DataDecoder) {
         self.session = session
         self.decoder = decoder
     }

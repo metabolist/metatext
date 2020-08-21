@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>status.reblogs-count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@reblogs@</string>
+		<key>reblogs</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld Boost</string>
+			<key>other</key>
+			<string>%ld Boosts</string>
+		</dict>
+	</dict>
+	<key>status.favorites-count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@favorites@</string>
+		<key>favorites</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld Favorite</string>
+			<key>other</key>
+			<string>%ld Favorites</string>
+		</dict>
+	</dict>
+	<key>account.followers-count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@followers@</string>
+		<key>followers</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld Follower</string>
+			<key>other</key>
+			<string>%ld Followers</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

@@ -5,7 +5,7 @@ import Foundation
 struct Account: Codable, Hashable {
     struct Field: Codable, Hashable {
         let name: String
-        let value: String
+        let value: HTML
         let verifiedAt: Date?
     }
 
@@ -18,7 +18,7 @@ struct Account: Codable, Hashable {
     let followersCount: Int
     let followingCount: Int
     let statusesCount: Int
-    let note: String
+    let note: HTML
     let url: URL
     let avatar: URL
     let avatarStatic: URL

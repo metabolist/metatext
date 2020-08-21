@@ -7,8 +7,12 @@ class MastodonClient: HTTPClient {
     var instanceURL: URL?
     var accessToken: String?
 
-    init(session: Session) {
-        super.init(session: session, decoder: MastodonDecoder())
+    required init(environment: AppEnvironment) {
+        let decoder = MastodonDecoder()
+
+        decoder.userInfo[.attributedStringCache] = environment.attributedStringCache
+
+        super.init(session: environment.session, decoder: decoder)
     }
 
     override func request<T: DecodableTarget>(_ target: T) -> AnyPublisher<T.ResultType, Error> {

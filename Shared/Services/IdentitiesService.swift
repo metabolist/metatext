@@ -52,7 +52,7 @@ extension IdentitiesService {
 
     func deleteIdentity(_ identity: Identity) -> AnyPublisher<Void, Error> {
         let secretsService = SecretsService(identityID: identity.id, keychainService: environment.keychainServiceType)
-        let networkClient = MastodonClient(session: environment.session)
+        let networkClient = MastodonClient(environment: environment)
 
         networkClient.instanceURL = identity.url
 
