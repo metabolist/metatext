@@ -51,18 +51,28 @@ class StatusListViewController: UITableViewController {
         tableView.separatorInset = .zero
 
         viewModel.$statusSections.map { $0.snapshot() }
-            .sink { [weak self] in self?.dataSource.apply($0, animatingDifferences: false) }
-            .store(in: &cancellables)
-
-        viewModel.scrollToStatus
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] in
-                guard
-                    let self = self,
-                    let indexPath = self.dataSource.indexPath(for: $0)
-                else { return }
+                guard let self = self else { return }
 
-                self.tableView.scrollToRow(at: indexPath, at: .none, animated: true)
+                var offsetFromNavigationBar: CGFloat?
+
+                if
+                    let id = self.viewModel.maintainScrollPositionOfStatusID,
+                    let indexPath = self.indexPath(statusID: id),
+                    let navigationBar = self.navigationController?.navigationBar {
+                    let navigationBarMaxY = self.tableView.convert(navigationBar.bounds, from: navigationBar).maxY
+                    offsetFromNavigationBar = self.tableView.rectForRow(at: indexPath).origin.y - navigationBarMaxY
+                }
+
+                self.dataSource.apply($0, animatingDifferences: false) {
+                    if
+                        let id = self.viewModel.maintainScrollPositionOfStatusID,
+                        let indexPath = self.indexPath(statusID: id),
+                        let offsetFromNavigationBar = offsetFromNavigationBar {
+                        self.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
+                        self.tableView.contentOffset.y -= offsetFromNavigationBar
+                    }
+                }
             }
             .store(in: &cancellables)
     }
@@ -112,6 +122,14 @@ extension StatusListViewController: StatusTableViewCellDelegate {
 }
 
 private extension StatusListViewController {
+    func indexPath(statusID: String) -> IndexPath? {
+        guard let status = viewModel.statusSections.reduce([], +).first(where: { $0.id == statusID }) else {
+            return nil
+        }
+
+        return dataSource.indexPath(for: status)
+    }
+
     func share(url: URL) {
         let activityViewController = UIActivityViewController(activityItems: [url], applicationActivities: nil)
 
