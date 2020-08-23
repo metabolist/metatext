@@ -26,7 +26,7 @@ struct Account: Codable, Hashable {
     let headerStatic: URL
     let fields: [Field]
     let emojis: [Emoji]
-    let bot: Bool?
-    let moved: Bool?
-    let discoverable: Bool?
+    @DecodableDefault.False private(set) var bot: Bool
+    @DecodableDefault.False private(set) var moved: Bool
+    @DecodableDefault.False private(set) var discoverable: Bool
 }

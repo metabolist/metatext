@@ -19,10 +19,10 @@ struct Instance: Codable, Hashable {
     let shortDescription: String?
     let email: String
     let version: String
-    let languages: [String]
-    let registrations: Bool?
-    let approvalRequired: Bool?
-    let invitesEnabled: Bool?
+    @DecodableDefault.EmptyList private(set) var languages: [String]
+    @DecodableDefault.False private(set) var registrations: Bool
+    @DecodableDefault.False private(set) var approvalRequired: Bool
+    @DecodableDefault.False private(set) var invitesEnabled: Bool
     let urls: URLs
     let stats: Stats
     let thumbnail: URL?

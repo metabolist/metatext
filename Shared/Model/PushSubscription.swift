@@ -8,7 +8,7 @@ struct PushSubscription: Codable {
         var favourite: Bool
         var reblog: Bool
         var mention: Bool
-        var poll: Bool
+        @DecodableDefault.True var poll: Bool
     }
 
     let endpoint: URL
@@ -17,5 +17,10 @@ struct PushSubscription: Codable {
 }
 
 extension PushSubscription.Alerts {
-    static let initial: Self = Self(follow: true, favourite: true, reblog: true, mention: true, poll: true)
+    static let initial: Self = Self(
+        follow: true,
+        favourite: true,
+        reblog: true,
+        mention: true,
+        poll: DecodableDefault.True())
 }

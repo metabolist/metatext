@@ -135,10 +135,10 @@ private extension ContentDatabase {
                 t.column("card", .blob)
                 t.column("language", .text)
                 t.column("text", .text)
-                t.column("favourited", .boolean)
-                t.column("reblogged", .boolean)
-                t.column("muted", .boolean)
-                t.column("bookmarked", .boolean)
+                t.column("favourited", .boolean).notNull()
+                t.column("reblogged", .boolean).notNull()
+                t.column("muted", .boolean).notNull()
+                t.column("bookmarked", .boolean).notNull()
                 t.column("pinned", .boolean)
             }
 
@@ -309,10 +309,10 @@ private struct StoredStatus: Codable, Hashable {
     let card: Card?
     let language: String?
     let text: String?
-    let favourited: Bool?
-    let reblogged: Bool?
-    let muted: Bool?
-    let bookmarked: Bool?
+    let favourited: Bool
+    let reblogged: Bool
+    let muted: Bool
+    let bookmarked: Bool
     let pinned: Bool?
 }
 

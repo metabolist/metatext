@@ -35,12 +35,12 @@ extension Identity {
     }
 
     struct Preferences: Codable, Hashable {
-        var useServerPostingReadingPreferences = true
-        var postingDefaultVisibility = Status.Visibility.public
-        var postingDefaultSensitive = false
+        @DecodableDefault.True var useServerPostingReadingPreferences
+        @DecodableDefault.StatusVisibilityPublic var postingDefaultVisibility: Status.Visibility
+        @DecodableDefault.False var postingDefaultSensitive
         var postingDefaultLanguage: String?
-        var readingExpandMedia = MastodonPreferences.ExpandMedia.default
-        var readingExpandSpoilers = false
+        @DecodableDefault.ExpandMediaDefault var readingExpandMedia: MastodonPreferences.ExpandMedia
+        @DecodableDefault.False var readingExpandSpoilers
     }
 }
 

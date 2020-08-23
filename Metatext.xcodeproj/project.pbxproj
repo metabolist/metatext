@@ -15,6 +15,8 @@
 		D0091B6F24DD68090040E8D2 /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0091B6D24DD68090040E8D2 /* PreferencesView.swift */; };
 		D0091B7124DD68220040E8D2 /* PreferencesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0091B7024DD68220040E8D2 /* PreferencesViewModel.swift */; };
 		D0091B7224DD68220040E8D2 /* PreferencesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0091B7024DD68220040E8D2 /* PreferencesViewModel.swift */; };
+		D009CCF024F3260300F410E7 /* DecodableDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = D009CCEF24F3260300F410E7 /* DecodableDefault.swift */; };
+		D009CCF124F3260300F410E7 /* DecodableDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = D009CCEF24F3260300F410E7 /* DecodableDefault.swift */; };
 		D0159F8624DE742F00E78478 /* TabNavigationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0159F8324DE742F00E78478 /* TabNavigationViewModel.swift */; };
 		D0159F8824DE742F00E78478 /* SecondaryNavigationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0159F8424DE742F00E78478 /* SecondaryNavigationViewModel.swift */; };
 		D0159F8A24DE742F00E78478 /* IdentitiesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0159F8524DE742F00E78478 /* IdentitiesViewModel.swift */; };
@@ -279,6 +281,7 @@
 		D0091B6A24DC10CE0040E8D2 /* PostingReadingPreferencesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostingReadingPreferencesViewModel.swift; sourceTree = "<group>"; };
 		D0091B6D24DD68090040E8D2 /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
 		D0091B7024DD68220040E8D2 /* PreferencesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesViewModel.swift; sourceTree = "<group>"; };
+		D009CCEF24F3260300F410E7 /* DecodableDefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodableDefault.swift; sourceTree = "<group>"; };
 		D0159F8324DE742F00E78478 /* TabNavigationViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabNavigationViewModel.swift; sourceTree = "<group>"; };
 		D0159F8424DE742F00E78478 /* SecondaryNavigationViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecondaryNavigationViewModel.swift; sourceTree = "<group>"; };
 		D0159F8524DE742F00E78478 /* IdentitiesViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentitiesViewModel.swift; sourceTree = "<group>"; };
@@ -447,6 +450,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D009CCEE24F325AF00F410E7 /* Property Wrappers */ = {
+			isa = PBXGroup;
+			children = (
+				D009CCEF24F3260300F410E7 /* DecodableDefault.swift */,
+			);
+			path = "Property Wrappers";
+			sourceTree = "<group>";
+		};
 		D0159F7F24DE739000E78478 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -564,6 +575,7 @@
 				D047FA8524C3E21000AF17C5 /* MetatextApp.swift */,
 				D0666A3A24C6B56200F3F04B /* Model */,
 				D0DB6EFA24C5730600D965FE /* Networking */,
+				D009CCEE24F325AF00F410E7 /* Property Wrappers */,
 				D019E6F224DF7C9E00697C7D /* Services */,
 				D0DB6EFB24C658E400D965FE /* View Models */,
 				D0DB6EF024C5224F00D965FE /* Views */,
@@ -1125,6 +1137,7 @@
 				D074577A24D29366004758DB /* URLSessionConfiguration+Extensions.swift in Sources */,
 				D0ED1BB724CE47F400B4899C /* WebAuthSession.swift in Sources */,
 				D0A1CA7424DAC2F1003063E9 /* KingfisherOptionsInfo+Extensions.swift in Sources */,
+				D009CCF024F3260300F410E7 /* DecodableDefault.swift in Sources */,
 				D054951224EB1041008B00A5 /* StatusListService.swift in Sources */,
 				D0159F9124DE743700E78478 /* TabNavigationView.swift in Sources */,
 				D0ED1BC424CED54D00B4899C /* HTTPTarget.swift in Sources */,
@@ -1229,6 +1242,7 @@
 				D0ED1BC524CED54D00B4899C /* HTTPTarget.swift in Sources */,
 				D0C963FF24CC3812003BD330 /* Publisher+Extensions.swift in Sources */,
 				D075817D24E6659A0081F6A3 /* NotificationTypesPreferencesView.swift in Sources */,
+				D009CCF124F3260300F410E7 /* DecodableDefault.swift in Sources */,
 				D019E6E824DF72E700697C7D /* AccessTokenEndpoint.swift in Sources */,
 				D04FD73D24D4A83A007D572D /* InstanceEndpoint+Stubbing.swift in Sources */,
 				D0DC175C24D0154F00A75C65 /* MastodonAPI.swift in Sources */,

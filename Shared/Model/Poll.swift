@@ -14,8 +14,8 @@ struct Poll: Codable, Hashable {
     let multiple: Bool
     let votesCount: Int
     let votersCount: Int?
-    let voted: Bool?
-    let ownVotes: [Int]?
+    @DecodableDefault.False private(set) var voted: Bool
+    @DecodableDefault.EmptyList private(set) var ownVotes: [Int]
     let options: [Option]
     let emojis: [Emoji]
 }

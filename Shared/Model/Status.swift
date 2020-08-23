@@ -27,7 +27,7 @@ class Status: Codable, Identifiable {
     let emojis: [Emoji]
     let reblogsCount: Int
     let favouritesCount: Int
-    let repliesCount: Int
+    @DecodableDefault.Zero private(set) var repliesCount: Int
     let application: Application?
     let url: URL?
     let inReplyToId: String?
@@ -37,10 +37,10 @@ class Status: Codable, Identifiable {
     let card: Card?
     let language: String?
     let text: String?
-    let favourited: Bool?
-    let reblogged: Bool?
-    let muted: Bool?
-    let bookmarked: Bool?
+    @DecodableDefault.False private(set) var favourited: Bool
+    @DecodableDefault.False private(set) var reblogged: Bool
+    @DecodableDefault.False private(set) var muted: Bool
+    @DecodableDefault.False private(set) var bookmarked: Bool
     let pinned: Bool?
 
     // Xcode-generated memberwise initializer
@@ -69,10 +69,10 @@ class Status: Codable, Identifiable {
         card: Card?,
         language: String?,
         text: String?,
-        favourited: Bool?,
-        reblogged: Bool?,
-        muted: Bool?,
-        bookmarked: Bool?,
+        favourited: Bool,
+        reblogged: Bool,
+        muted: Bool,
+        bookmarked: Bool,
         pinned: Bool?) {
         self.id = id
         self.uri = uri
