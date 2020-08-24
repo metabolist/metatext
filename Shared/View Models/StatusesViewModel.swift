@@ -9,13 +9,17 @@ class StatusesViewModel: ObservableObject {
     @Published private(set) var loading = false
     private(set) var maintainScrollPositionOfStatusID: String?
     private let statusListService: StatusListService
+    private var statusViewModelCache = [Status: (StatusViewModel, AnyCancellable)]()
     private var cancellables = Set<AnyCancellable>()
 
     init(statusListService: StatusListService) {
         self.statusListService = statusListService
 
         statusListService.statusSections
-            .handleEvents(receiveOutput: determineIfScrollPositionShouldBeMaintained(newStatusSections:))
+            .handleEvents(receiveOutput: { [weak self] in
+                self?.determineIfScrollPositionShouldBeMaintained(newStatusSections: $0)
+                self?.cleanViewModelCache(newStatusSections: $0)
+            })
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$statusSections)
     }
@@ -35,15 +39,22 @@ extension StatusesViewModel {
     }
 
     func statusViewModel(status: Status) -> StatusViewModel {
-        var statusViewModel = Self.viewModelCache[status]
-            ?? StatusViewModel(statusService: statusListService.statusService(status: status))
+        var statusViewModel: StatusViewModel
+
+        if let cachedViewModel = statusViewModelCache[status]?.0 {
+            statusViewModel = cachedViewModel
+        } else {
+            statusViewModel = StatusViewModel(statusService: statusListService.statusService(status: status))
+            statusViewModelCache[status] = (statusViewModel, statusViewModel.events
+                .flatMap { $0 }
+                .assignErrorsToAlertItem(to: \.alertItem, on: self)
+                .sink {})
+        }
 
         statusViewModel.isContextParent = status == contextParent
         statusViewModel.isPinned = statusListService.isPinned(status: status)
         statusViewModel.isReplyInContext = statusListService.isReplyInContext(status: status)
         statusViewModel.hasReplyFollowing = statusListService.hasReplyFollowing(status: status)
-
-        Self.viewModelCache[status] = statusViewModel
 
         return statusViewModel
     }
@@ -54,8 +65,6 @@ extension StatusesViewModel {
 }
 
 private extension StatusesViewModel {
-    static var viewModelCache = [Status: StatusViewModel]()
-
     func determineIfScrollPositionShouldBeMaintained(newStatusSections: [[Status]]) {
         maintainScrollPositionOfStatusID = nil // clear old value
 
@@ -63,5 +72,11 @@ private extension StatusesViewModel {
         if let contextParent = contextParent, statusSections == [[], [contextParent], []] {
             maintainScrollPositionOfStatusID = contextParent.id
         }
+    }
+
+    func cleanViewModelCache(newStatusSections: [[Status]]) {
+        let newStatuses = Set(newStatusSections.reduce([], +))
+
+        statusViewModelCache = statusViewModelCache.filter { newStatuses.contains($0.key) }
     }
 }

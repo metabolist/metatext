@@ -274,7 +274,7 @@ extension StatusTableViewCell {
     }
 
     @IBAction func favoriteButtonTapped(_ sender: UIButton) {
-
+        viewModel.toggleFavorited()
     }
 
     @IBAction func actionsButtonTapped(_ sender: Any) {

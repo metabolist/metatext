@@ -19,8 +19,10 @@ struct StatusViewModel {
     var isReplyInContext = false
     var hasReplyFollowing = false
     var sensitiveContentToggled = false
+    let events: AnyPublisher<AnyPublisher<Void, Error>, Never>
 
     private let statusService: StatusService
+    private let eventsInput = PassthroughSubject<AnyPublisher<Void, Error>, Never>()
 
     init(statusService: StatusService) {
         self.statusService = statusService
@@ -38,6 +40,7 @@ struct StatusViewModel {
         rebloggedByDisplayNameEmoji = statusService.status.account.emojis
         pollOptionTitles = statusService.status.displayStatus.poll?.options.map { $0.title } ?? []
         pollEmoji = statusService.status.displayStatus.poll?.emojis ?? []
+        events = eventsInput.eraseToAnyPublisher()
     }
 }
 
@@ -74,9 +77,9 @@ extension StatusViewModel {
 
     var favoritesCount: Int { statusService.status.displayStatus.favouritesCount }
 
-    var reblogged: Bool { statusService.status.displayStatus.reblogged ?? false }
+    var reblogged: Bool { statusService.status.displayStatus.reblogged }
 
-    var favorited: Bool { statusService.status.displayStatus.favourited ?? false }
+    var favorited: Bool { statusService.status.displayStatus.favourited }
 
     var sensitive: Bool { statusService.status.displayStatus.sensitive }
 
@@ -97,6 +100,10 @@ extension StatusViewModel {
         default:
             return true
         }
+    }
+
+    func toggleFavorited() {
+        eventsInput.send(statusService.toggleFavorited())
     }
 }
 

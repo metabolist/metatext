@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D002A0FB24F3362100E8AEBB /* StatusEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = D002A0FA24F3362100E8AEBB /* StatusEndpoint.swift */; };
+		D002A0FC24F3362100E8AEBB /* StatusEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = D002A0FA24F3362100E8AEBB /* StatusEndpoint.swift */; };
 		D0091B6824DC10B30040E8D2 /* PostingReadingPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0091B6724DC10B30040E8D2 /* PostingReadingPreferencesView.swift */; };
 		D0091B6924DC10B30040E8D2 /* PostingReadingPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0091B6724DC10B30040E8D2 /* PostingReadingPreferencesView.swift */; };
 		D0091B6B24DC10CE0040E8D2 /* PostingReadingPreferencesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0091B6A24DC10CE0040E8D2 /* PostingReadingPreferencesViewModel.swift */; };
@@ -277,6 +279,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D002A0FA24F3362100E8AEBB /* StatusEndpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusEndpoint.swift; sourceTree = "<group>"; };
 		D0091B6724DC10B30040E8D2 /* PostingReadingPreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostingReadingPreferencesView.swift; sourceTree = "<group>"; };
 		D0091B6A24DC10CE0040E8D2 /* PostingReadingPreferencesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostingReadingPreferencesViewModel.swift; sourceTree = "<group>"; };
 		D0091B6D24DD68090040E8D2 /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
@@ -510,6 +513,7 @@
 				D019E6E024DF72E700697C7D /* InstanceEndpoint.swift */,
 				D019E6DD24DF72E700697C7D /* PreferencesEndpoint.swift */,
 				D0EC8DED24E2704D00A08489 /* PushSubscriptionEndpoint.swift */,
+				D002A0FA24F3362100E8AEBB /* StatusEndpoint.swift */,
 				D05494F624EA49F7008B00A5 /* TimelinesEndpoint.swift */,
 			);
 			path = Endpoints;
@@ -1082,6 +1086,7 @@
 				D019E6ED24DF7BF300697C7D /* IdentityDatabase.swift in Sources */,
 				D081A40524D0F1A8001B016E /* String+Extensions.swift in Sources */,
 				D019E6E724DF72E700697C7D /* AccessTokenEndpoint.swift in Sources */,
+				D002A0FB24F3362100E8AEBB /* StatusEndpoint.swift in Sources */,
 				D02D870524EFBB79004583CC /* String+UIKitExtensions.swift in Sources */,
 				D0BEC93824C9632800E864C4 /* RootViewModel.swift in Sources */,
 				D02D86EC24EF9CA3004583CC /* CodingUserInfoKey+Extensions.swift in Sources */,
@@ -1247,6 +1252,7 @@
 				D04FD73D24D4A83A007D572D /* InstanceEndpoint+Stubbing.swift in Sources */,
 				D0DC175C24D0154F00A75C65 /* MastodonAPI.swift in Sources */,
 				D020F51524ECBA60005AB084 /* LazyView.swift in Sources */,
+				D002A0FC24F3362100E8AEBB /* StatusEndpoint.swift in Sources */,
 				D0ED1BD224CF779B00B4899C /* MastodonTarget.swift in Sources */,
 				D0EC8DC624DF842700A08489 /* KeychainService.swift in Sources */,
 				D020F50C24EC9F1D005AB084 /* ContextService.swift in Sources */,

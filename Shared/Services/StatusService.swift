@@ -14,3 +14,14 @@ struct StatusService {
         self.contentDatabase = contentDatabase
     }
 }
+
+extension StatusService {
+    func toggleFavorited() -> AnyPublisher<Void, Error> {
+        networkClient.request(status.favourited
+                                ? StatusEndpoint.unfavourite(id: status.id)
+                                : StatusEndpoint.favourite(id: status.id))
+            .map { ([$0], nil) }
+            .flatMap(contentDatabase.insert(statuses:collection:))
+            .eraseToAnyPublisher()
+    }
+}
