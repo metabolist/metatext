@@ -41,6 +41,7 @@ private extension TabNavigationView {
         switch tab {
         case .timelines:
             StatusListView(viewModel: viewModel.timelineViewModel)
+                .edgesIgnoringSafeArea(.all)
                 .navigationBarTitle(viewModel.identity.handle, displayMode: .inline)
                 .navigationBarItems(
                     leading: Button {
