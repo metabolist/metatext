@@ -51,7 +51,7 @@ extension RootViewModel {
         identityService.observationErrors
             .receive(on: RunLoop.main)
             .map { [weak self] _ in self?.identitiesService.mostRecentlyUsedIdentityID }
-            .sink(receiveValue: newIdentitySelected(id:))
+            .sink { [weak self] in self?.newIdentitySelected(id: $0) }
             .store(in: &cancellables)
 
         identityService.updateLastUse()
