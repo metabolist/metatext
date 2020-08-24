@@ -6,7 +6,7 @@ import Combine
 struct ContextService {
     let statusSections: AnyPublisher<[[Status]], Error>
 
-    private var status: Status
+    private let status: Status
     private let context = CurrentValueSubject<MastodonContext, Never>(MastodonContext(ancestors: [], descendants: []))
     private let networkClient: MastodonClient
     private let contentDatabase: ContentDatabase
@@ -32,7 +32,7 @@ struct ContextService {
 }
 
 extension ContextService: StatusListService {
-    var contextParent: Status? { status }
+    var contextParentID: String? { status.id }
 
     func isReplyInContext(status: Status) -> Bool {
         let flatContext = flattenedContext()
@@ -44,7 +44,7 @@ extension ContextService: StatusListService {
 
         let previousStatus = flatContext[index - 1]
 
-        return previousStatus.id != contextParent?.id && status.inReplyToId == previousStatus.id
+        return previousStatus.id != contextParentID && status.inReplyToId == previousStatus.id
     }
 
     func hasReplyFollowing(status: Status) -> Bool {
@@ -57,14 +57,18 @@ extension ContextService: StatusListService {
 
         let nextStatus = flatContext[index + 1]
 
-        return status.id != contextParent?.id && nextStatus.inReplyToId == status.id
+        return status.id != contextParentID && nextStatus.inReplyToId == status.id
     }
 
     func request(maxID: String?, minID: String?) -> AnyPublisher<Void, Error> {
-        networkClient.request(ContextEndpoint.context(id: status.id))
-            .handleEvents(receiveOutput: context.send)
-            .map { ($0.ancestors + $0.descendants, collection) }
-            .flatMap(contentDatabase.insert(statuses:collection:))
+        Publishers.Merge(
+            networkClient.request(StatusEndpoint.status(id: status.id))
+                .map { ([$0], collection) }
+                .flatMap(contentDatabase.insert(statuses:collection:)),
+            networkClient.request(ContextEndpoint.context(id: status.id))
+                .handleEvents(receiveOutput: context.send)
+                .map { ($0.ancestors + $0.descendants, collection) }
+                .flatMap(contentDatabase.insert(statuses:collection:)))
             .eraseToAnyPublisher()
     }
 

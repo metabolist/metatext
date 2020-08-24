@@ -101,7 +101,7 @@ class StatusListViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        viewModel.statusSections[indexPath.section][indexPath.row] != viewModel.contextParent
+        viewModel.statusSections[indexPath.section][indexPath.row].id != viewModel.contextParentID
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -123,11 +123,17 @@ extension StatusListViewController: StatusTableViewCellDelegate {
 
 private extension StatusListViewController {
     func indexPath(statusID: String) -> IndexPath? {
-        guard let status = viewModel.statusSections.reduce([], +).first(where: { $0.id == statusID }) else {
-            return nil
+        for section in 0..<dataSource.numberOfSections(in: tableView) {
+            for row in 0..<dataSource.tableView(tableView, numberOfRowsInSection: section) {
+                let indexPath = IndexPath(row: row, section: section)
+
+                if dataSource.itemIdentifier(for: indexPath)?.id == statusID {
+                    return indexPath
+                }
+            }
         }
 
-        return dataSource.indexPath(for: status)
+        return nil
     }
 
     func share(url: URL) {

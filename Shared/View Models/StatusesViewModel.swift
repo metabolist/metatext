@@ -26,7 +26,7 @@ class StatusesViewModel: ObservableObject {
 }
 
 extension StatusesViewModel {
-    var contextParent: Status? { statusListService.contextParent }
+    var contextParentID: String? { statusListService.contextParentID }
 
     func request(maxID: String? = nil, minID: String? = nil) {
         statusListService.request(maxID: maxID, minID: minID)
@@ -51,7 +51,7 @@ extension StatusesViewModel {
                 .sink {})
         }
 
-        statusViewModel.isContextParent = status == contextParent
+        statusViewModel.isContextParent = status.id == contextParentID
         statusViewModel.isPinned = statusListService.isPinned(status: status)
         statusViewModel.isReplyInContext = statusListService.isReplyInContext(status: status)
         statusViewModel.hasReplyFollowing = statusListService.hasReplyFollowing(status: status)
@@ -69,8 +69,8 @@ private extension StatusesViewModel {
         maintainScrollPositionOfStatusID = nil // clear old value
 
         // Maintain scroll position of parent after initial load of context
-        if let contextParent = contextParent, statusSections == [[], [contextParent], []] {
-            maintainScrollPositionOfStatusID = contextParent.id
+        if let contextParentID = contextParentID, statusSections.reduce([], +).map(\.id) == [contextParentID] {
+            maintainScrollPositionOfStatusID = contextParentID
         }
     }
 
