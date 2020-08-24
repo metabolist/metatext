@@ -23,7 +23,7 @@ class NotificationTypesPreferencesViewModel: ObservableObject {
         $pushSubscriptionAlerts
             .dropFirst()
             .removeDuplicates()
-            .sink(receiveValue: update(alerts:))
+            .sink { [weak self] in self?.update(alerts: $0) }
             .store(in: &cancellables)
     }
 }
