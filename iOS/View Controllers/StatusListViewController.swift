@@ -6,10 +6,10 @@ import Combine
 class StatusListViewController: UITableViewController {
     private let viewModel: StatusesViewModel
     private var cancellables = Set<AnyCancellable>()
-    private var cellHeightCaches = [CGFloat: [Status: CGFloat]]()
+    private var cellHeightCaches = [CGFloat: [String: CGFloat]]()
 
-    private lazy var dataSource: UITableViewDiffableDataSource<Int, Status> = {
-        UITableViewDiffableDataSource(tableView: tableView) { [weak self] tableView, indexPath, status in
+    private lazy var dataSource: UITableViewDiffableDataSource<Int, String> = {
+        UITableViewDiffableDataSource(tableView: tableView) { [weak self] tableView, indexPath, statusID in
             guard
                 let self = self,
                 let cell = tableView.dequeueReusableCell(
@@ -17,9 +17,7 @@ class StatusListViewController: UITableViewController {
                     for: indexPath) as? StatusTableViewCell
             else { return nil }
 
-            let statusViewModel = self.viewModel.statusViewModel(status: status)
-
-            cell.viewModel = statusViewModel
+            cell.viewModel = self.viewModel.statusViewModel(id: statusID)
             cell.delegate = self
 
             return cell
@@ -50,7 +48,7 @@ class StatusListViewController: UITableViewController {
         tableView.cellLayoutMarginsFollowReadableWidth = true
         tableView.separatorInset = .zero
 
-        viewModel.$statusSections.map { $0.snapshot() }
+        viewModel.$statusIDs
             .sink { [weak self] in
                 guard let self = self else { return }
 
@@ -58,16 +56,16 @@ class StatusListViewController: UITableViewController {
 
                 if
                     let id = self.viewModel.maintainScrollPositionOfStatusID,
-                    let indexPath = self.indexPath(statusID: id),
+                    let indexPath = self.dataSource.indexPath(for: id),
                     let navigationBar = self.navigationController?.navigationBar {
                     let navigationBarMaxY = self.tableView.convert(navigationBar.bounds, from: navigationBar).maxY
                     offsetFromNavigationBar = self.tableView.rectForRow(at: indexPath).origin.y - navigationBarMaxY
                 }
 
-                self.dataSource.apply($0, animatingDifferences: false) {
+                self.dataSource.apply($0.snapshot(), animatingDifferences: false) {
                     if
                         let id = self.viewModel.maintainScrollPositionOfStatusID,
-                        let indexPath = self.indexPath(statusID: id),
+                        let indexPath = self.dataSource.indexPath(for: id),
                         let offsetFromNavigationBar = offsetFromNavigationBar {
                         self.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
                         self.tableView.contentOffset.y -= offsetFromNavigationBar
@@ -88,7 +86,7 @@ class StatusListViewController: UITableViewController {
                             forRowAt indexPath: IndexPath) {
         guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
 
-        var heightCache = cellHeightCaches[tableView.frame.width] ?? [Status: CGFloat]()
+        var heightCache = cellHeightCaches[tableView.frame.width] ?? [String: CGFloat]()
 
         heightCache[item] = cell.frame.height
         cellHeightCaches[tableView.frame.width] = heightCache
@@ -101,41 +99,32 @@ class StatusListViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        viewModel.statusSections[indexPath.section][indexPath.row].id != viewModel.contextParentID
+        guard let id = dataSource.itemIdentifier(for: indexPath) else { return true }
+
+        return id != viewModel.contextParentID
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let status = viewModel.statusSections[indexPath.section][indexPath.row]
+        guard
+            let id = dataSource.itemIdentifier(for: indexPath),
+            let contextViewModel = viewModel.contextViewModel(id: id)
+        else { return }
 
         navigationController?.pushViewController(
-            StatusListViewController(viewModel: viewModel.contextViewModel(status: status)),
+            StatusListViewController(viewModel: contextViewModel),
             animated: true)
     }
 }
 
 extension StatusListViewController: StatusTableViewCellDelegate {
     func statusTableViewCellDidHaveShareButtonTapped(_ cell: StatusTableViewCell) {
-        guard let url = cell.viewModel.sharingURL else { return }
+        guard let url = cell.viewModel?.sharingURL else { return }
 
         share(url: url)
     }
 }
 
 private extension StatusListViewController {
-    func indexPath(statusID: String) -> IndexPath? {
-        for section in 0..<dataSource.numberOfSections(in: tableView) {
-            for row in 0..<dataSource.tableView(tableView, numberOfRowsInSection: section) {
-                let indexPath = IndexPath(row: row, section: section)
-
-                if dataSource.itemIdentifier(for: indexPath)?.id == statusID {
-                    return indexPath
-                }
-            }
-        }
-
-        return nil
-    }
-
     func share(url: URL) {
         let activityViewController = UIActivityViewController(activityItems: [url], applicationActivities: nil)
 
@@ -143,16 +132,16 @@ private extension StatusListViewController {
     }
 }
 
-private extension Array where Element == [Status] {
-    func snapshot() -> NSDiffableDataSourceSnapshot<Int, Status> {
-        var snapshot = NSDiffableDataSourceSnapshot<Int, Status>()
+private extension Array where Element: Sequence, Element.Element: Hashable {
+    func snapshot() -> NSDiffableDataSourceSnapshot<Int, Element.Element> {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, Element.Element>()
 
         let sections = [Int](0..<count)
 
         snapshot.appendSections(sections)
 
         for section in sections {
-            snapshot.appendItems(self[section], toSection: section)
+            snapshot.appendItems(self[section].map { $0 }, toSection: section)
         }
 
         return snapshot

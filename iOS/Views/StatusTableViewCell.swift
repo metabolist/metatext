@@ -58,8 +58,10 @@ class StatusTableViewCell: UITableViewCell {
 
     @IBOutlet private var separatorConstraints: [NSLayoutConstraint]!
 
-    var viewModel: StatusViewModel! {
+    var viewModel: StatusViewModel? {
         didSet {
+            guard let viewModel = viewModel else { return }
+
             let mutableContent = NSMutableAttributedString(attributedString: viewModel.content)
             let mutableDisplayName = NSMutableAttributedString(string: viewModel.displayName)
             let mutableSpoilerText = NSMutableAttributedString(string: viewModel.spoilerText)
@@ -274,7 +276,7 @@ extension StatusTableViewCell {
     }
 
     @IBAction func favoriteButtonTapped(_ sender: UIButton) {
-        viewModel.toggleFavorited()
+        viewModel?.toggleFavorited()
     }
 
     @IBAction func actionsButtonTapped(_ sender: Any) {
@@ -325,7 +327,7 @@ private extension StatusTableViewCell {
         let reblogColor: UIColor = reblogged ? .systemGreen : .secondaryLabel
         let reblogButton: UIButton
 
-        if viewModel.isContextParent {
+        if viewModel?.isContextParent ?? false {
             reblogButton = contextParentReblogButton
         } else {
             reblogButton = self.reblogButton
@@ -340,7 +342,7 @@ private extension StatusTableViewCell {
         let favoriteButton: UIButton
         let scale: UIImage.SymbolScale
 
-        if viewModel.isContextParent {
+        if viewModel?.isContextParent ?? false {
             favoriteButton = contextParentFavoriteButton
             scale = .medium
         } else {

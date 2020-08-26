@@ -4,10 +4,11 @@ import Foundation
 import Combine
 
 class StatusesViewModel: ObservableObject {
-    @Published private(set) var statusSections = [[Status]]()
+    @Published private(set) var statusIDs = [[String]]()
     @Published var alertItem: AlertItem?
     @Published private(set) var loading = false
     private(set) var maintainScrollPositionOfStatusID: String?
+    private var statuses = [String: Status]()
     private let statusListService: StatusListService
     private var statusViewModelCache = [Status: (StatusViewModel, AnyCancellable)]()
     private var cancellables = Set<AnyCancellable>()
@@ -19,9 +20,11 @@ class StatusesViewModel: ObservableObject {
             .handleEvents(receiveOutput: { [weak self] in
                 self?.determineIfScrollPositionShouldBeMaintained(newStatusSections: $0)
                 self?.cleanViewModelCache(newStatusSections: $0)
+                self?.statuses = Dictionary(uniqueKeysWithValues: $0.reduce([], +).map { ($0.id, $0) })
             })
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
-            .assign(to: &$statusSections)
+            .map { $0.map { section in section.map(\.id) } }
+            .assign(to: &$statusIDs)
     }
 }
 
@@ -38,7 +41,9 @@ extension StatusesViewModel {
             .store(in: &cancellables)
     }
 
-    func statusViewModel(status: Status) -> StatusViewModel {
+    func statusViewModel(id: String) -> StatusViewModel? {
+        guard let status = statuses[id] else { return nil }
+
         var statusViewModel: StatusViewModel
 
         if let cachedViewModel = statusViewModelCache[status]?.0 {
@@ -59,8 +64,10 @@ extension StatusesViewModel {
         return statusViewModel
     }
 
-    func contextViewModel(status: Status) -> StatusesViewModel {
-        StatusesViewModel(statusListService: statusListService.contextService(status: status))
+    func contextViewModel(id: String) -> StatusesViewModel? {
+        guard let status = statuses[id] else { return nil }
+
+        return StatusesViewModel(statusListService: statusListService.contextService(status: status))
     }
 }
 
@@ -69,7 +76,7 @@ private extension StatusesViewModel {
         maintainScrollPositionOfStatusID = nil // clear old value
 
         // Maintain scroll position of parent after initial load of context
-        if let contextParentID = contextParentID, statusSections.reduce([], +).map(\.id) == [contextParentID] {
+        if let contextParentID = contextParentID, statusIDs.reduce([], +) == [contextParentID] {
             maintainScrollPositionOfStatusID = contextParentID
         }
     }
