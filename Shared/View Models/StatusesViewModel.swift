@@ -37,7 +37,7 @@ extension StatusesViewModel {
             .handleEvents(
                 receiveSubscription: { [weak self] _ in self?.loading = true },
                 receiveCompletion: { [weak self] _ in self?.loading = false })
-            .sink {}
+            .sink { _ in }
             .store(in: &cancellables)
     }
 
@@ -53,7 +53,7 @@ extension StatusesViewModel {
             statusViewModelCache[status] = (statusViewModel, statusViewModel.events
                 .flatMap { $0 }
                 .assignErrorsToAlertItem(to: \.alertItem, on: self)
-                .sink {})
+                .sink { _ in })
         }
 
         statusViewModel.isContextParent = status.id == contextParentID

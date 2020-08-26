@@ -24,7 +24,7 @@ class PostingReadingPreferencesViewModel: ObservableObject {
             .dropFirst()
             .flatMap(identityService.updatePreferences)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
-            .sink {}
+            .sink { _ in }
             .store(in: &cancellables)
     }
 }

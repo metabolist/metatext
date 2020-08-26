@@ -26,11 +26,11 @@ extension IdentitiesService {
                             environment: environment)
     }
 
-    func createIdentity(id: UUID, instanceURL: URL) -> AnyPublisher<Void, Error> {
+    func createIdentity(id: UUID, instanceURL: URL) -> AnyPublisher<Never, Error> {
         identityDatabase.createIdentity(id: id, url: instanceURL)
     }
 
-    func authorizeIdentity(id: UUID, instanceURL: URL) -> AnyPublisher<Void, Error> {
+    func authorizeIdentity(id: UUID, instanceURL: URL) -> AnyPublisher<Never, Error> {
         let secretsService = SecretsService(identityID: id, keychainService: environment.keychainServiceType)
         let authenticationService = AuthenticationService(environment: environment)
 
@@ -42,22 +42,19 @@ extension IdentitiesService {
                 return (instanceURL, appAuthorization)
             }
             .flatMap(authenticationService.authenticate(instanceURL:appAuthorization:))
-            .tryMap { accessToken -> Void in
-                try secretsService.set(accessToken.accessToken, forItem: .accessToken)
-
-                return ()
-            }
+            .tryMap { try secretsService.set($0.accessToken, forItem: .accessToken) }
+            .ignoreOutput()
             .eraseToAnyPublisher()
     }
 
-    func deleteIdentity(_ identity: Identity) -> AnyPublisher<Void, Error> {
+    func deleteIdentity(_ identity: Identity) -> AnyPublisher<Never, Error> {
         let secretsService = SecretsService(identityID: identity.id, keychainService: environment.keychainServiceType)
         let networkClient = MastodonClient(environment: environment)
 
         networkClient.instanceURL = identity.url
 
         return identityDatabase.deleteIdentity(id: identity.id)
-            .tryMap {
+            .tryMap { _ in
                 DeletionEndpoint.oauthRevoke(
                     token: try secretsService.item(.accessToken),
                     clientID: try secretsService.item(.clientID),
@@ -65,12 +62,13 @@ extension IdentitiesService {
             }
             .flatMap(networkClient.request)
             .tryMap { _ in try secretsService.deleteAllItems() }
+            .ignoreOutput()
             .eraseToAnyPublisher()
     }
 
-    func updatePushSubscriptions(deviceToken: String) -> AnyPublisher<Void, Error> {
+    func updatePushSubscriptions(deviceToken: String) -> AnyPublisher<Never, Error> {
         identityDatabase.identitiesWithOutdatedDeviceTokens(deviceToken: deviceToken)
-            .tryMap { identities -> [AnyPublisher<Void, Never>] in
+            .tryMap { identities -> [AnyPublisher<Never, Never>] in
                 try identities.map {
                     try identityService(id: $0.id)
                         .createPushSubscription(deviceToken: deviceToken, alerts: $0.pushSubscriptionAlerts)
@@ -79,7 +77,7 @@ extension IdentitiesService {
                 }
             }
             .map(Publishers.MergeMany.init)
-            .map { _ in () }
+            .ignoreOutput()
             .eraseToAnyPublisher()
     }
 }

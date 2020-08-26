@@ -31,20 +31,20 @@ extension TabNavigationViewModel {
         if identityService.isAuthorized {
             identityService.verifyCredentials()
                 .assignErrorsToAlertItem(to: \.alertItem, on: self)
-                .sink(receiveValue: {})
+                .sink { _ in }
                 .store(in: &cancellables)
 
             if identity.preferences.useServerPostingReadingPreferences {
                 identityService.refreshServerPreferences()
                     .assignErrorsToAlertItem(to: \.alertItem, on: self)
-                    .sink(receiveValue: {})
+                    .sink { _ in }
                     .store(in: &cancellables)
             }
         }
 
         identityService.refreshInstance()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
-            .sink(receiveValue: {})
+            .sink { _ in }
             .store(in: &cancellables)
     }
 

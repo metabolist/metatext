@@ -21,7 +21,7 @@ struct TimelineService {
 }
 
 extension TimelineService: StatusListService {
-    func request(maxID: String?, minID: String?) -> AnyPublisher<Void, Error> {
+    func request(maxID: String?, minID: String?) -> AnyPublisher<Never, Error> {
         return networkClient.request(timeline.endpoint)
             .map { ($0, timeline) }
             .flatMap(contentDatabase.insert(statuses:collection:))

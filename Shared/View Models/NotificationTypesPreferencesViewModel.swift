@@ -38,7 +38,7 @@ private extension NotificationTypesPreferencesViewModel {
 
                 self.alertItem = AlertItem(error: error)
                 self.pushSubscriptionAlerts = self.identityService.identity.pushSubscriptionAlerts
-            } receiveValue: {}
+            } receiveValue: { _ in }
             .store(in: &cancellables)
     }
 }

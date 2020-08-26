@@ -60,7 +60,7 @@ extension ContextService: StatusListService {
         return status.id != contextParentID && nextStatus.inReplyToId == status.id
     }
 
-    func request(maxID: String?, minID: String?) -> AnyPublisher<Void, Error> {
+    func request(maxID: String?, minID: String?) -> AnyPublisher<Never, Error> {
         Publishers.Merge(
             networkClient.request(StatusEndpoint.status(id: status.id))
                 .map { ([$0], collection) }

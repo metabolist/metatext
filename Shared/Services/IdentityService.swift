@@ -52,18 +52,18 @@ class IdentityService {
 extension IdentityService {
     var isAuthorized: Bool { networkClient.accessToken != nil }
 
-    func updateLastUse() -> AnyPublisher<Void, Error> {
+    func updateLastUse() -> AnyPublisher<Never, Error> {
         identityDatabase.updateLastUsedAt(identityID: identity.id)
     }
 
-    func verifyCredentials() -> AnyPublisher<Void, Error> {
+    func verifyCredentials() -> AnyPublisher<Never, Error> {
         networkClient.request(AccountEndpoint.verifyCredentials)
             .zip(Just(identity.id).first().setFailureType(to: Error.self))
             .flatMap(identityDatabase.updateAccount)
             .eraseToAnyPublisher()
     }
 
-    func refreshServerPreferences() -> AnyPublisher<Void, Error> {
+    func refreshServerPreferences() -> AnyPublisher<Never, Error> {
         networkClient.request(PreferencesEndpoint.preferences)
             .zip(Just(self).first().setFailureType(to: Error.self))
             .map { ($1.identity.preferences.updated(from: $0), $1.identity.id) }
@@ -71,7 +71,7 @@ extension IdentityService {
             .eraseToAnyPublisher()
     }
 
-    func refreshInstance() -> AnyPublisher<Void, Error> {
+    func refreshInstance() -> AnyPublisher<Never, Error> {
         networkClient.request(InstanceEndpoint.instance)
             .zip(Just(identity.id).first().setFailureType(to: Error.self))
             .flatMap(identityDatabase.updateInstance)
@@ -86,7 +86,7 @@ extension IdentityService {
         identityDatabase.recentIdentitiesObservation(excluding: identity.id)
     }
 
-    func updatePreferences(_ preferences: Identity.Preferences) -> AnyPublisher<Void, Error> {
+    func updatePreferences(_ preferences: Identity.Preferences) -> AnyPublisher<Never, Error> {
         identityDatabase.updatePreferences(preferences, forIdentityID: identity.id)
             .zip(Just(self).first().setFailureType(to: Error.self))
             .filter { $1.identity.preferences.useServerPostingReadingPreferences }
@@ -95,7 +95,7 @@ extension IdentityService {
             .eraseToAnyPublisher()
     }
 
-    func createPushSubscription(deviceToken: String, alerts: PushSubscription.Alerts) -> AnyPublisher<Void, Error> {
+    func createPushSubscription(deviceToken: String, alerts: PushSubscription.Alerts) -> AnyPublisher<Never, Error> {
         let publicKey: String
         let auth: String
 
@@ -122,7 +122,7 @@ extension IdentityService {
             .eraseToAnyPublisher()
     }
 
-    func updatePushSubscription(alerts: PushSubscription.Alerts) -> AnyPublisher<Void, Error> {
+    func updatePushSubscription(alerts: PushSubscription.Alerts) -> AnyPublisher<Never, Error> {
         let identityID = identity.id
 
         return networkClient.request(PushSubscriptionEndpoint.update(alerts: alerts))

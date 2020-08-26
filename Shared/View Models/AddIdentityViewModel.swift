@@ -31,15 +31,19 @@ class AddIdentityViewModel: ObservableObject {
         }
 
         identitiesService.authorizeIdentity(id: identityID, instanceURL: instanceURL)
-            .map { (identityID, instanceURL) }
+            .collect()
+            .map { _ in (identityID, instanceURL) }
             .flatMap(identitiesService.createIdentity(id:instanceURL:))
-            .map { identityID }
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .receive(on: RunLoop.main)
             .handleEvents(
                 receiveSubscription: { [weak self] _ in self?.loading = true },
                 receiveCompletion: { [weak self] _ in self?.loading = false  })
-            .sink(receiveValue: addedIdentityIDInput.send)
+            .sink { [weak self] in
+                guard let self = self, case .finished = $0 else { return }
+
+                self.addedIdentityIDInput.send(identityID)
+            } receiveValue: { _ in }
             .store(in: &cancellables)
     }
 
@@ -57,9 +61,12 @@ class AddIdentityViewModel: ObservableObject {
 
         // TODO: Ensure instance has not disabled public preview
         identitiesService.createIdentity(id: identityID, instanceURL: instanceURL)
-            .map { identityID }
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
-            .sink(receiveValue: addedIdentityIDInput.send)
+            .sink { [weak self] in
+                guard let self = self, case .finished = $0 else { return }
+
+                self.addedIdentityIDInput.send(identityID)
+            } receiveValue: { _ in }
             .store(in: &cancellables)
     }
 }

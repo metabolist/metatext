@@ -29,7 +29,7 @@ struct ContentDatabase {
 }
 
 extension ContentDatabase {
-    func insert(statuses: [Status], collection: StatusCollection? = nil) -> AnyPublisher<Void, Error> {
+    func insert(statuses: [Status], collection: StatusCollection? = nil) -> AnyPublisher<Never, Error> {
         databaseQueue.writePublisher {
             try collection?.save($0)
 
@@ -41,6 +41,7 @@ extension ContentDatabase {
                 try collection?.joinRecord(status: status).save($0)
             }
         }
+        .ignoreOutput()
         .eraseToAnyPublisher()
     }
 

@@ -16,7 +16,7 @@ struct StatusService {
 }
 
 extension StatusService {
-    func toggleFavorited() -> AnyPublisher<Void, Error> {
+    func toggleFavorited() -> AnyPublisher<Never, Error> {
         networkClient.request(status.favourited
                                 ? StatusEndpoint.unfavourite(id: status.id)
                                 : StatusEndpoint.favourite(id: status.id))

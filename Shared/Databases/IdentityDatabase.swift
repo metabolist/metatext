@@ -30,7 +30,7 @@ struct IdentityDatabase {
 }
 
 extension IdentityDatabase {
-    func createIdentity(id: UUID, url: URL) -> AnyPublisher<Void, Error> {
+    func createIdentity(id: UUID, url: URL) -> AnyPublisher<Never, Error> {
         databaseQueue.writePublisher(
             updates: StoredIdentity(
                 id: id,
@@ -41,25 +41,27 @@ extension IdentityDatabase {
                 lastRegisteredDeviceToken: nil,
                 pushSubscriptionAlerts: .initial)
                 .save)
+            .ignoreOutput()
             .eraseToAnyPublisher()
     }
 
-    func deleteIdentity(id: UUID) -> AnyPublisher<Void, Error> {
+    func deleteIdentity(id: UUID) -> AnyPublisher<Never, Error> {
         return databaseQueue.writePublisher(updates: StoredIdentity.filter(Column("id") == id).deleteAll)
-            .map { _ in () }
+            .ignoreOutput()
             .eraseToAnyPublisher()
     }
 
-    func updateLastUsedAt(identityID: UUID) -> AnyPublisher<Void, Error> {
+    func updateLastUsedAt(identityID: UUID) -> AnyPublisher<Never, Error> {
         databaseQueue.writePublisher {
             try StoredIdentity
                 .filter(Column("id") == identityID)
                 .updateAll($0, Column("lastUsedAt").set(to: Date()))
         }
+        .ignoreOutput()
         .eraseToAnyPublisher()
     }
 
-    func updateInstance(_ instance: Instance, forIdentityID identityID: UUID) -> AnyPublisher<Void, Error> {
+    func updateInstance(_ instance: Instance, forIdentityID identityID: UUID) -> AnyPublisher<Never, Error> {
         databaseQueue.writePublisher {
             try Identity.Instance(
                 uri: instance.uri,
@@ -71,10 +73,11 @@ extension IdentityDatabase {
                 .filter(Column("id") == identityID)
                 .updateAll($0, Column("instanceURI").set(to: instance.uri))
         }
+        .ignoreOutput()
         .eraseToAnyPublisher()
     }
 
-    func updateAccount(_ account: Account, forIdentityID identityID: UUID) -> AnyPublisher<Void, Error> {
+    func updateAccount(_ account: Account, forIdentityID identityID: UUID) -> AnyPublisher<Never, Error> {
         databaseQueue.writePublisher(
             updates: Identity.Account(
                 id: account.id,
@@ -88,11 +91,12 @@ extension IdentityDatabase {
                 headerStatic: account.headerStatic,
                 emojis: account.emojis)
                 .save)
+            .ignoreOutput()
             .eraseToAnyPublisher()
     }
 
     func updatePreferences(_ preferences: Identity.Preferences,
-                           forIdentityID identityID: UUID) -> AnyPublisher<Void, Error> {
+                           forIdentityID identityID: UUID) -> AnyPublisher<Never, Error> {
         databaseQueue.writePublisher {
             let data = try StoredIdentity.databaseJSONEncoder(for: "preferences").encode(preferences)
 
@@ -100,12 +104,13 @@ extension IdentityDatabase {
                 .filter(Column("id") == identityID)
                 .updateAll($0, Column("preferences").set(to: data))
         }
+        .ignoreOutput()
         .eraseToAnyPublisher()
     }
 
     func updatePushSubscription(alerts: PushSubscription.Alerts,
                                 deviceToken: String? = nil,
-                                forIdentityID identityID: UUID) -> AnyPublisher<Void, Error> {
+                                forIdentityID identityID: UUID) -> AnyPublisher<Never, Error> {
         databaseQueue.writePublisher {
             let data = try StoredIdentity.databaseJSONEncoder(for: "pushSubscriptionAlerts").encode(alerts)
 
@@ -119,6 +124,7 @@ extension IdentityDatabase {
                     .updateAll($0, Column("lastRegisteredDeviceToken").set(to: deviceToken))
             }
         }
+        .ignoreOutput()
         .eraseToAnyPublisher()
     }
 

@@ -19,10 +19,10 @@ struct StatusViewModel {
     var isReplyInContext = false
     var hasReplyFollowing = false
     var sensitiveContentToggled = false
-    let events: AnyPublisher<AnyPublisher<Void, Error>, Never>
+    let events: AnyPublisher<AnyPublisher<Never, Error>, Never>
 
     private let statusService: StatusService
-    private let eventsInput = PassthroughSubject<AnyPublisher<Void, Error>, Never>()
+    private let eventsInput = PassthroughSubject<AnyPublisher<Never, Error>, Never>()
 
     init(statusService: StatusService) {
         self.statusService = statusService

@@ -9,7 +9,7 @@ protocol StatusListService {
     func isPinned(status: Status) -> Bool
     func isReplyInContext(status: Status) -> Bool
     func hasReplyFollowing(status: Status) -> Bool
-    func request(maxID: String?, minID: String?) -> AnyPublisher<Void, Error>
+    func request(maxID: String?, minID: String?) -> AnyPublisher<Never, Error>
     func statusService(status: Status) -> StatusService
     func contextService(status: Status) -> ContextService
 }
