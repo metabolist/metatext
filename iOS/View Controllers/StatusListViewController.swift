@@ -4,7 +4,7 @@ import SwiftUI
 import Combine
 
 class StatusListViewController: UITableViewController {
-    private let viewModel: StatusesViewModel
+    private let viewModel: StatusListViewModel
     private var cancellables = Set<AnyCancellable>()
     private var cellHeightCaches = [CGFloat: [String: CGFloat]]()
 
@@ -24,7 +24,7 @@ class StatusListViewController: UITableViewController {
         }
     }()
 
-    init(viewModel: StatusesViewModel) {
+    init(viewModel: StatusListViewModel) {
         self.viewModel = viewModel
 
         super.init(style: .plain)

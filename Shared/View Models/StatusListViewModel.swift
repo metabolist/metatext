@@ -3,7 +3,7 @@
 import Foundation
 import Combine
 
-class StatusesViewModel: ObservableObject {
+class StatusListViewModel: ObservableObject {
     @Published private(set) var statusIDs = [[String]]()
     @Published var alertItem: AlertItem?
     @Published private(set) var loading = false
@@ -28,7 +28,7 @@ class StatusesViewModel: ObservableObject {
     }
 }
 
-extension StatusesViewModel {
+extension StatusListViewModel {
     var contextParentID: String? { statusListService.contextParentID }
 
     func request(maxID: String? = nil, minID: String? = nil) {
@@ -64,14 +64,14 @@ extension StatusesViewModel {
         return statusViewModel
     }
 
-    func contextViewModel(id: String) -> StatusesViewModel? {
+    func contextViewModel(id: String) -> StatusListViewModel? {
         guard let status = statuses[id] else { return nil }
 
-        return StatusesViewModel(statusListService: statusListService.contextService(status: status))
+        return StatusListViewModel(statusListService: statusListService.contextService(status: status))
     }
 }
 
-private extension StatusesViewModel {
+private extension StatusListViewModel {
     func determineIfScrollPositionShouldBeMaintained(newStatusSections: [[Status]]) {
         maintainScrollPositionOfStatusID = nil // clear old value
 

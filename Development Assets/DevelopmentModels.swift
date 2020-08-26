@@ -112,8 +112,8 @@ extension NotificationTypesPreferencesViewModel {
     static let development = NotificationTypesPreferencesViewModel(identityService: .development)
 }
 
-extension StatusesViewModel {
-    static let development = StatusesViewModel(statusListService: IdentityService.development.service(timeline: .home))
+extension StatusListViewModel {
+    static let development = StatusListViewModel(statusListService: IdentityService.development.service(timeline: .home))
 }
 
 // swiftlint:enable force_try

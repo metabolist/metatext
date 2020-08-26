@@ -6,7 +6,7 @@ import Combine
 class TabNavigationViewModel: ObservableObject {
     @Published private(set) var identity: Identity
     @Published private(set) var recentIdentities = [Identity]()
-    @Published private(set) var timelineViewModel: StatusesViewModel
+    @Published private(set) var timelineViewModel: StatusListViewModel
     @Published var presentingSecondaryNavigation = false
     @Published var alertItem: AlertItem?
     var selectedTab: Tab? = .timelines
@@ -17,7 +17,7 @@ class TabNavigationViewModel: ObservableObject {
     init(identityService: IdentityService) {
         self.identityService = identityService
         identity = identityService.identity
-        timelineViewModel = StatusesViewModel(statusListService: identityService.service(timeline: .home))
+        timelineViewModel = StatusListViewModel(statusListService: identityService.service(timeline: .home))
         identityService.$identity.dropFirst().assign(to: &$identity)
 
         identityService.recentIdentitiesObservation()

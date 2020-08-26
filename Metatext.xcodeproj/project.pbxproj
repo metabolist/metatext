@@ -161,8 +161,8 @@
 		D0BEC93924C9632800E864C4 /* RootViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEC93724C9632800E864C4 /* RootViewModel.swift */; };
 		D0BEC93B24C96FD500E864C4 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEC93A24C96FD500E864C4 /* RootView.swift */; };
 		D0BEC93C24C96FD500E864C4 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEC93A24C96FD500E864C4 /* RootView.swift */; };
-		D0BEC94724CA22C400E864C4 /* StatusesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEC94624CA22C400E864C4 /* StatusesViewModel.swift */; };
-		D0BEC94824CA22C400E864C4 /* StatusesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEC94624CA22C400E864C4 /* StatusesViewModel.swift */; };
+		D0BEC94724CA22C400E864C4 /* StatusListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEC94624CA22C400E864C4 /* StatusListViewModel.swift */; };
+		D0BEC94824CA22C400E864C4 /* StatusListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEC94624CA22C400E864C4 /* StatusListViewModel.swift */; };
 		D0C963FB24CC359D003BD330 /* AlertItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C963FA24CC359D003BD330 /* AlertItem.swift */; };
 		D0C963FC24CC359D003BD330 /* AlertItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C963FA24CC359D003BD330 /* AlertItem.swift */; };
 		D0C963FE24CC3812003BD330 /* Publisher+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C963FD24CC3812003BD330 /* Publisher+Extensions.swift */; };
@@ -369,7 +369,7 @@
 		D0B23F0C24D210E90066F411 /* NSError+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSError+Extensions.swift"; sourceTree = "<group>"; };
 		D0BEC93724C9632800E864C4 /* RootViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewModel.swift; sourceTree = "<group>"; };
 		D0BEC93A24C96FD500E864C4 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
-		D0BEC94624CA22C400E864C4 /* StatusesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusesViewModel.swift; sourceTree = "<group>"; };
+		D0BEC94624CA22C400E864C4 /* StatusListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusListViewModel.swift; sourceTree = "<group>"; };
 		D0C963FA24CC359D003BD330 /* AlertItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertItem.swift; sourceTree = "<group>"; };
 		D0C963FD24CC3812003BD330 /* Publisher+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+Extensions.swift"; sourceTree = "<group>"; };
 		D0CD847224DBDEC700CF380C /* MastodonPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MastodonPreferences.swift; sourceTree = "<group>"; };
@@ -729,7 +729,7 @@
 				D0091B6A24DC10CE0040E8D2 /* PostingReadingPreferencesViewModel.swift */,
 				D0091B7024DD68220040E8D2 /* PreferencesViewModel.swift */,
 				D0BEC93724C9632800E864C4 /* RootViewModel.swift */,
-				D0BEC94624CA22C400E864C4 /* StatusesViewModel.swift */,
+				D0BEC94624CA22C400E864C4 /* StatusListViewModel.swift */,
 				D0A2453E24EF55D000B07068 /* StatusViewModel.swift */,
 			);
 			path = "View Models";
@@ -1060,7 +1060,7 @@
 				D0ED1BD724CF94B200B4899C /* Application.swift in Sources */,
 				D047FAAE24C3E21200AF17C5 /* MetatextApp.swift in Sources */,
 				D03658D124EDD80900AC17EC /* ContextEndpoint+Stubbing.swift in Sources */,
-				D0BEC94724CA22C400E864C4 /* StatusesViewModel.swift in Sources */,
+				D0BEC94724CA22C400E864C4 /* StatusListViewModel.swift in Sources */,
 				D0666A4E24C6C39600F3F04B /* Instance.swift in Sources */,
 				D057426724E9FE1D00839EBA /* ContentDatabase.swift in Sources */,
 				D02D86E424EF9848004583CC /* TouchFallthroughTextView.swift in Sources */,
@@ -1174,7 +1174,7 @@
 				D0CD847424DBDEC700CF380C /* MastodonPreferences.swift in Sources */,
 				D0ED1BD824CF94B200B4899C /* Application.swift in Sources */,
 				D047FAAF24C3E21200AF17C5 /* MetatextApp.swift in Sources */,
-				D0BEC94824CA22C400E864C4 /* StatusesViewModel.swift in Sources */,
+				D0BEC94824CA22C400E864C4 /* StatusListViewModel.swift in Sources */,
 				D02D86ED24EF9CA3004583CC /* CodingUserInfoKey+Extensions.swift in Sources */,
 				D0159FA624DE98F600E78478 /* NSMutableAttributedString+Extensions.swift in Sources */,
 				D0EC8DC324DF7D9C00A08489 /* IdentityService.swift in Sources */,

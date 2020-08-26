@@ -3,7 +3,7 @@
 import SwiftUI
 
 struct StatusListView: UIViewControllerRepresentable {
-    let viewModel: StatusesViewModel
+    let viewModel: StatusListViewModel
 
     func makeUIViewController(context: Context) -> StatusListViewController {
         StatusListViewController(viewModel: viewModel)
