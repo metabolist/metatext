@@ -10,18 +10,18 @@ class RootViewModel: ObservableObject {
     // swiftlint:disable weak_delegate
     private let appDelegate: AppDelegate
     // swiftlint:enable weak_delegate
-    private let identitiesService: IdentitiesService
+    private let allIdentitiesService: AllIdentitiesService
     private let userNotificationService: UserNotificationService
     private var cancellables = Set<AnyCancellable>()
 
     init(appDelegate: AppDelegate,
-         identitiesService: IdentitiesService,
+         allIdentitiesService: AllIdentitiesService,
          userNotificationService: UserNotificationService) {
         self.appDelegate = appDelegate
-        self.identitiesService = identitiesService
+        self.allIdentitiesService = allIdentitiesService
         self.userNotificationService = userNotificationService
 
-        identitiesService.mostRecentlyUsedIdentityID.assign(to: &$mostRecentlyUsedIdentityID)
+        allIdentitiesService.mostRecentlyUsedIdentityID.assign(to: &$mostRecentlyUsedIdentityID)
 
         newIdentitySelected(id: mostRecentlyUsedIdentityID)
 
@@ -29,7 +29,7 @@ class RootViewModel: ObservableObject {
             .filter { $0 }
             .zip(appDelegate.registerForRemoteNotifications())
             .map { $1 }
-            .flatMap(identitiesService.updatePushSubscriptions(deviceToken:))
+            .flatMap(allIdentitiesService.updatePushSubscriptions(deviceToken:))
             .sink { _ in } receiveValue: { _ in }
             .store(in: &cancellables)
     }
@@ -46,7 +46,7 @@ extension RootViewModel {
         let identityService: IdentityService
 
         do {
-            identityService = try identitiesService.identityService(id: id)
+            identityService = try allIdentitiesService.identityService(id: id)
         } catch {
             return
         }
@@ -74,12 +74,12 @@ extension RootViewModel {
     }
 
     func deleteIdentity(_ identity: Identity) {
-        identitiesService.deleteIdentity(identity)
+        allIdentitiesService.deleteIdentity(identity)
             .sink { _ in } receiveValue: { _ in }
             .store(in: &cancellables)
     }
 
     func addIdentityViewModel() -> AddIdentityViewModel {
-        AddIdentityViewModel(identitiesService: identitiesService)
+        AddIdentityViewModel(allIdentitiesService: allIdentitiesService)
     }
 }

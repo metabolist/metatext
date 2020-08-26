@@ -52,23 +52,23 @@ extension AppEnvironment {
         inMemoryContent: true)
 }
 
-extension IdentitiesService {
+extension AllIdentitiesService {
     static func fresh(
         identityDatabase: IdentityDatabase = .fresh(),
         keychainService: KeychainService = MockKeychainService(),
-        environment: AppEnvironment = .development) -> IdentitiesService {
-        IdentitiesService(
+        environment: AppEnvironment = .development) -> AllIdentitiesService {
+        AllIdentitiesService(
             identityDatabase: identityDatabase,
             environment: environment)
     }
 
-    static let development = IdentitiesService(
+    static let development = AllIdentitiesService(
         identityDatabase: .development,
         environment: .development)
 }
 
 extension IdentityService {
-    static let development = try! IdentitiesService.development.identityService(id: devIdentityID)
+    static let development = try! AllIdentitiesService.development.identityService(id: devIdentityID)
 }
 
 extension UserNotificationService {
@@ -78,7 +78,7 @@ extension UserNotificationService {
 extension RootViewModel {
     static let development = RootViewModel(
         appDelegate: AppDelegate(),
-        identitiesService: .development,
+        allIdentitiesService: .development,
         userNotificationService: .development)
 }
 
@@ -113,7 +113,8 @@ extension NotificationTypesPreferencesViewModel {
 }
 
 extension StatusListViewModel {
-    static let development = StatusListViewModel(statusListService: IdentityService.development.service(timeline: .home))
+    static let development = StatusListViewModel(
+        statusListService: IdentityService.development.service(timeline: .home))
 }
 
 // swiftlint:enable force_try

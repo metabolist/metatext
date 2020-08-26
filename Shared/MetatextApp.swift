@@ -12,7 +12,7 @@ struct MetatextApp: App {
     #endif
     // swiftlint:enable weak_delegate
 
-    private let identitiesService: IdentitiesService = {
+    private let allIdentitiesService: AllIdentitiesService = {
         let identityDatabase: IdentityDatabase
 
         do {
@@ -21,14 +21,14 @@ struct MetatextApp: App {
             fatalError("Failed to initialize identity database")
         }
 
-        return IdentitiesService(identityDatabase: identityDatabase, environment: .live)
+        return AllIdentitiesService(identityDatabase: identityDatabase, environment: .live)
     }()
 
     var body: some Scene {
         WindowGroup {
             RootView(
                 viewModel: RootViewModel(appDelegate: appDelegate,
-                                         identitiesService: identitiesService,
+                                         allIdentitiesService: allIdentitiesService,
                                          userNotificationService: UserNotificationService()))
         }
     }

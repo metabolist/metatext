@@ -3,7 +3,7 @@
 import Foundation
 import Combine
 
-struct IdentitiesService {
+struct AllIdentitiesService {
     let mostRecentlyUsedIdentityID: AnyPublisher<UUID?, Never>
 
     private let identityDatabase: IdentityDatabase
@@ -19,7 +19,7 @@ struct IdentitiesService {
     }
 }
 
-extension IdentitiesService {
+extension AllIdentitiesService {
     func identityService(id: UUID) throws -> IdentityService {
         try IdentityService(identityID: id,
                             identityDatabase: identityDatabase,

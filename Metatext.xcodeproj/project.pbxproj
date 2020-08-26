@@ -213,8 +213,8 @@
 		D0EC8DC624DF842700A08489 /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DC424DF842700A08489 /* KeychainService.swift */; };
 		D0EC8DC824DF8B3C00A08489 /* SecretsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DC724DF8B3C00A08489 /* SecretsService.swift */; };
 		D0EC8DC924DF8B3C00A08489 /* SecretsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DC724DF8B3C00A08489 /* SecretsService.swift */; };
-		D0EC8DCB24DFA06700A08489 /* IdentitiesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DCA24DFA06700A08489 /* IdentitiesService.swift */; };
-		D0EC8DCC24DFA06700A08489 /* IdentitiesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DCA24DFA06700A08489 /* IdentitiesService.swift */; };
+		D0EC8DCB24DFA06700A08489 /* AllIdentitiesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DCA24DFA06700A08489 /* AllIdentitiesService.swift */; };
+		D0EC8DCC24DFA06700A08489 /* AllIdentitiesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DCA24DFA06700A08489 /* AllIdentitiesService.swift */; };
 		D0EC8DCE24DFB64200A08489 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DCD24DFB64200A08489 /* AuthenticationService.swift */; };
 		D0EC8DCF24DFB64200A08489 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DCD24DFB64200A08489 /* AuthenticationService.swift */; };
 		D0EC8DD424DFE38900A08489 /* AuthenticationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EC8DD324DFE38900A08489 /* AuthenticationServiceTests.swift */; };
@@ -394,7 +394,7 @@
 		D0EC8DC124DF7D9C00A08489 /* IdentityService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityService.swift; sourceTree = "<group>"; };
 		D0EC8DC424DF842700A08489 /* KeychainService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
 		D0EC8DC724DF8B3C00A08489 /* SecretsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecretsService.swift; sourceTree = "<group>"; };
-		D0EC8DCA24DFA06700A08489 /* IdentitiesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentitiesService.swift; sourceTree = "<group>"; };
+		D0EC8DCA24DFA06700A08489 /* AllIdentitiesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllIdentitiesService.swift; sourceTree = "<group>"; };
 		D0EC8DCD24DFB64200A08489 /* AuthenticationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
 		D0EC8DD324DFE38900A08489 /* AuthenticationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationServiceTests.swift; sourceTree = "<group>"; };
 		D0EC8DD724E096C900A08489 /* UserNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationService.swift; sourceTree = "<group>"; };
@@ -533,7 +533,7 @@
 			isa = PBXGroup;
 			children = (
 				D0EC8DCD24DFB64200A08489 /* AuthenticationService.swift */,
-				D0EC8DCA24DFA06700A08489 /* IdentitiesService.swift */,
+				D0EC8DCA24DFA06700A08489 /* AllIdentitiesService.swift */,
 				D0EC8DC124DF7D9C00A08489 /* IdentityService.swift */,
 				D0EC8DC424DF842700A08489 /* KeychainService.swift */,
 				D0EC8DC724DF8B3C00A08489 /* SecretsService.swift */,
@@ -1122,7 +1122,7 @@
 				D019E6F024DF7C2F00697C7D /* DatabaseError.swift in Sources */,
 				D019E6D724DF728400697C7D /* MastodonEncoder.swift in Sources */,
 				D0EC8DE524E0B44500A08489 /* UserNotificationService.swift in Sources */,
-				D0EC8DCB24DFA06700A08489 /* IdentitiesService.swift in Sources */,
+				D0EC8DCB24DFA06700A08489 /* AllIdentitiesService.swift in Sources */,
 				D0091B7124DD68220040E8D2 /* PreferencesViewModel.swift in Sources */,
 				D0A2453724EF346800B07068 /* StatusListViewController.swift in Sources */,
 				D057426A24EA32AC00839EBA /* Timeline.swift in Sources */,
@@ -1192,7 +1192,7 @@
 				D0ED1BC224CED48800B4899C /* HTTPClient.swift in Sources */,
 				D0666A4C24C6C37700F3F04B /* Identity.swift in Sources */,
 				D0EC8DE424E0B44400A08489 /* UserNotificationService.swift in Sources */,
-				D0EC8DCC24DFA06700A08489 /* IdentitiesService.swift in Sources */,
+				D0EC8DCC24DFA06700A08489 /* AllIdentitiesService.swift in Sources */,
 				D0666A5524C6C3E500F3F04B /* Emoji.swift in Sources */,
 				D019E6EE24DF7BF300697C7D /* IdentityDatabase.swift in Sources */,
 				D0A652AE24DE3EB6002EA33F /* PreferencesEndpoint+Stubbing.swift in Sources */,

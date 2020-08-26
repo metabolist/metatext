@@ -8,7 +8,7 @@ import CombineExpectations
 class AddIdentityViewModelTests: XCTestCase {
     func testAddIdentity() throws {
         let identityDatabase = IdentityDatabase.fresh()
-        let sut = AddIdentityViewModel(identitiesService: .fresh(identityDatabase: identityDatabase))
+        let sut = AddIdentityViewModel(allIdentitiesService: .fresh(identityDatabase: identityDatabase))
         let addedIDRecorder = sut.addedIdentityID.record()
 
         sut.urlFieldText = "https://mastodon.social"
@@ -19,7 +19,7 @@ class AddIdentityViewModelTests: XCTestCase {
 
     func testAddIdentityWithoutScheme() throws {
         let identityDatabase = IdentityDatabase.fresh()
-        let sut = AddIdentityViewModel(identitiesService: .fresh(identityDatabase: identityDatabase))
+        let sut = AddIdentityViewModel(allIdentitiesService: .fresh(identityDatabase: identityDatabase))
         let addedIDRecorder = sut.addedIdentityID.record()
 
         sut.urlFieldText = "mastodon.social"
@@ -29,7 +29,7 @@ class AddIdentityViewModelTests: XCTestCase {
     }
 
     func testInvalidURL() throws {
-        let sut = AddIdentityViewModel(identitiesService: .fresh())
+        let sut = AddIdentityViewModel(allIdentitiesService: .fresh())
         let recorder = sut.$alertItem.record()
 
         XCTAssertNil(try wait(for: recorder.next(), timeout: 1))
@@ -46,11 +46,13 @@ class AddIdentityViewModelTests: XCTestCase {
         let environment = AppEnvironment(
             session: Session(configuration: .stubbing),
             webAuthSessionType: CanceledLoginMockWebAuthSession.self,
-            keychainServiceType: MockKeychainService.self)
-        let identitiesService = IdentitiesService(
+            keychainServiceType: MockKeychainService.self,
+            userDefaults: MockUserDefaults(),
+            inMemoryContent: true)
+        let allIdentitiesService = AllIdentitiesService(
             identityDatabase: .fresh(),
             environment: environment)
-        let sut = AddIdentityViewModel(identitiesService: identitiesService)
+        let sut = AddIdentityViewModel(allIdentitiesService: allIdentitiesService)
         let recorder = sut.$alertItem.record()
 
         XCTAssertNil(try wait(for: recorder.next(), timeout: 1))

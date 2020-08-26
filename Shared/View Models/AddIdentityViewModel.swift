@@ -9,12 +9,12 @@ class AddIdentityViewModel: ObservableObject {
     @Published private(set) var loading = false
     let addedIdentityID: AnyPublisher<UUID, Never>
 
-    private let identitiesService: IdentitiesService
+    private let allIdentitiesService: AllIdentitiesService
     private let addedIdentityIDInput = PassthroughSubject<UUID, Never>()
     private var cancellables = Set<AnyCancellable>()
 
-    init(identitiesService: IdentitiesService) {
-        self.identitiesService = identitiesService
+    init(allIdentitiesService: AllIdentitiesService) {
+        self.allIdentitiesService = allIdentitiesService
         addedIdentityID = addedIdentityIDInput.eraseToAnyPublisher()
     }
 
@@ -30,10 +30,10 @@ class AddIdentityViewModel: ObservableObject {
             return
         }
 
-        identitiesService.authorizeIdentity(id: identityID, instanceURL: instanceURL)
+        allIdentitiesService.authorizeIdentity(id: identityID, instanceURL: instanceURL)
             .collect()
             .map { _ in (identityID, instanceURL) }
-            .flatMap(identitiesService.createIdentity(id:instanceURL:))
+            .flatMap(allIdentitiesService.createIdentity(id:instanceURL:))
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .receive(on: RunLoop.main)
             .handleEvents(
@@ -60,7 +60,7 @@ class AddIdentityViewModel: ObservableObject {
         }
 
         // TODO: Ensure instance has not disabled public preview
-        identitiesService.createIdentity(id: identityID, instanceURL: instanceURL)
+        allIdentitiesService.createIdentity(id: identityID, instanceURL: instanceURL)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .sink { [weak self] in
                 guard let self = self, case .finished = $0 else { return }

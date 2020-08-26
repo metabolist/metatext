@@ -10,7 +10,7 @@ class RootViewModelTests: XCTestCase {
 
     func testAddIdentity() throws {
         let sut = RootViewModel(appDelegate: AppDelegate(),
-                                identitiesService: IdentitiesService(
+                                allIdentitiesService: AllIdentitiesService(
                                     identityDatabase: .fresh(),
                                     environment: .development),
                                 userNotificationService: UserNotificationService())
