@@ -5,6 +5,7 @@ import Combine
 
 class RootViewModel: ObservableObject {
     @Published private(set) var mainNavigationViewModel: MainNavigationViewModel?
+    @Published private var mostRecentlyUsedIdentityID: UUID?
 
     // swiftlint:disable weak_delegate
     private let appDelegate: AppDelegate
@@ -20,7 +21,9 @@ class RootViewModel: ObservableObject {
         self.identitiesService = identitiesService
         self.userNotificationService = userNotificationService
 
-        newIdentitySelected(id: identitiesService.mostRecentlyUsedIdentityID)
+        identitiesService.mostRecentlyUsedIdentityID.assign(to: &$mostRecentlyUsedIdentityID)
+
+        newIdentitySelected(id: mostRecentlyUsedIdentityID)
 
         userNotificationService.isAuthorized()
             .filter { $0 }
@@ -50,7 +53,7 @@ extension RootViewModel {
 
         identityService.observationErrors
             .receive(on: RunLoop.main)
-            .map { [weak self] _ in self?.identitiesService.mostRecentlyUsedIdentityID }
+            .map { [weak self] _ in self?.mostRecentlyUsedIdentityID }
             .sink { [weak self] in self?.newIdentitySelected(id: $0) }
             .store(in: &cancellables)
 

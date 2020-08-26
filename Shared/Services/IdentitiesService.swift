@@ -3,8 +3,8 @@
 import Foundation
 import Combine
 
-class IdentitiesService {
-    @Published var mostRecentlyUsedIdentityID: UUID?
+struct IdentitiesService {
+    let mostRecentlyUsedIdentityID: AnyPublisher<UUID?, Never>
 
     private let identityDatabase: IdentityDatabase
     private let environment: AppEnvironment
@@ -13,9 +13,9 @@ class IdentitiesService {
         self.identityDatabase = identityDatabase
         self.environment = environment
 
-        identityDatabase.mostRecentlyUsedIdentityIDObservation()
+        mostRecentlyUsedIdentityID = identityDatabase.mostRecentlyUsedIdentityIDObservation()
             .replaceError(with: nil)
-            .assign(to: &$mostRecentlyUsedIdentityID)
+            .eraseToAnyPublisher()
     }
 }
 
@@ -65,19 +65,16 @@ extension IdentitiesService {
             }
             .flatMap(networkClient.request)
             .tryMap { _ in try secretsService.deleteAllItems() }
-            .print()
             .eraseToAnyPublisher()
     }
 
     func updatePushSubscriptions(deviceToken: String) -> AnyPublisher<Void, Error> {
         identityDatabase.identitiesWithOutdatedDeviceTokens(deviceToken: deviceToken)
-            .tryMap { [weak self] identities -> [AnyPublisher<Void, Never>] in
-                guard let self = self else { return [Empty().eraseToAnyPublisher()] }
-
-                return try identities.map {
-                    try self.identityService(id: $0.id)
+            .tryMap { identities -> [AnyPublisher<Void, Never>] in
+                try identities.map {
+                    try identityService(id: $0.id)
                         .createPushSubscription(deviceToken: deviceToken, alerts: $0.pushSubscriptionAlerts)
-                        .catch { _ in Empty() } // don't want to disrupt pipeline, consider future telemetry
+                        .catch { _ in Empty() } // don't want to disrupt pipeline
                         .eraseToAnyPublisher()
                 }
             }
