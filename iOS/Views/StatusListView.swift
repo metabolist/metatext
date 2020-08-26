@@ -13,3 +13,11 @@ struct StatusListView: UIViewControllerRepresentable {
 
     }
 }
+
+#if DEBUG
+struct StatusListView_Previews: PreviewProvider {
+    static var previews: some View {
+        StatusListView(viewModel: .development)
+    }
+}
+#endif

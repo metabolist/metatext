@@ -9,6 +9,6 @@ import AppKit
 
 extension TimelinesEndpoint: Stubbing {
     func data(url: URL) -> Data? {
-        NSDataAsset(name: "TimelineJSON")!.data
+        NSDataAsset(name: "timelineJSON")!.data
     }
 }
