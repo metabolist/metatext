@@ -4,22 +4,15 @@ import UIKit
 import Kingfisher
 
 extension NSMutableAttributedString {
-    func insert(emojis: [Emoji], onImageLoad: @escaping (() -> Void)) {
-        for emoji in emojis {
+    func insert(emoji: [Emoji], view: UIView) {
+        for emoji in emoji {
             let token = ":\(emoji.shortcode):"
 
             while let tokenRange = string.range(of: token) {
                 let attachment = NSTextAttachment()
-                let attachmentAttributedString = NSAttributedString(attachment: attachment)
 
-                replaceCharacters(in: NSRange(tokenRange, in: string), with: attachmentAttributedString)
-
-                KingfisherManager.shared.retrieveImage(with: emoji.url) {
-                    guard case let .success(value) = $0 else { return }
-
-                    attachment.image = value.image
-                    onImageLoad()
-                }
+                attachment.kf.setImage(with: emoji.url, attributedView: view)
+                replaceCharacters(in: NSRange(tokenRange, in: string), with: NSAttributedString(attachment: attachment))
             }
         }
     }

@@ -94,18 +94,14 @@ class StatusTableViewCell: UITableViewCell {
                 [.font: contentFont as Any,
                  .foregroundColor: UIColor.label],
                 range: contentRange)
-            mutableContent.insert(emojis: viewModel.contentEmoji) { [weak self] in
-                self?.contentTextView.setNeedsDisplay()
-            }
+            mutableContent.insert(emoji: viewModel.contentEmoji, view: contentTextView)
             mutableContent.resizeAttachments(toLineHeight: contentFont.lineHeight)
             contentTextView.attributedText = mutableContent
             contentTextView.isHidden = contentTextView.text == ""
-            mutableDisplayName.insert(emojis: viewModel.displayNameEmoji) { displayNameLabel.setNeedsDisplay() }
+            mutableDisplayName.insert(emoji: viewModel.displayNameEmoji, view: displayNameLabel)
             mutableDisplayName.resizeAttachments(toLineHeight: displayNameLabel.font.lineHeight)
             displayNameLabel.attributedText = mutableDisplayName
-            mutableSpoilerText.insert(emojis: viewModel.contentEmoji) { [weak self] in
-                self?.spoilerTextLabel.setNeedsDisplay()
-            }
+            mutableSpoilerText.insert(emoji: viewModel.contentEmoji, view: spoilerTextLabel)
             mutableSpoilerText.resizeAttachments(toLineHeight: spoilerTextLabel.font.lineHeight)
             spoilerTextLabel.attributedText = mutableSpoilerText
             spoilerTextLabel.isHidden = !viewModel.sensitive || spoilerTextLabel.text == ""
@@ -156,9 +152,7 @@ class StatusTableViewCell: UITableViewCell {
                     NSLocalizedString("status.reblogged-by", comment: ""),
                     viewModel.rebloggedByDisplayName)
                 let mutableMetaText = NSMutableAttributedString(string: metaText)
-                mutableMetaText.insert(emojis: viewModel.rebloggedByDisplayNameEmoji) { [weak self] in
-                    self?.metaLabel.setNeedsDisplay()
-                }
+                mutableMetaText.insert(emoji: viewModel.rebloggedByDisplayNameEmoji, view: metaLabel)
                 mutableMetaText.resizeAttachments(toLineHeight: metaLabel.font.lineHeight)
                 metaLabel.attributedText = mutableMetaText
                 metaIcon.image = UIImage(

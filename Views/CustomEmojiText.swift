@@ -17,7 +17,7 @@ struct CustomEmojiText: UIViewRepresentable {
         let label = UILabel()
 
         label.font = UIFont.preferredFont(forTextStyle: textStyle)
-        attributedText.insert(emojis: emoji, onImageLoad: { label.setNeedsDisplay() })
+        attributedText.insert(emoji: emoji, view: label)
         attributedText.resizeAttachments(toLineHeight: label.font.lineHeight)
         label.attributedText = attributedText
 

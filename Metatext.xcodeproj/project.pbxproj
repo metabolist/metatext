@@ -1290,7 +1290,7 @@
 			repositoryURL = "https://github.com/onevcat/Kingfisher";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 5.14.1;
+				minimumVersion = 5.15.0;
 			};
 		};
 		D0DC175D24D016EA00A75C65 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
