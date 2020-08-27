@@ -5,11 +5,7 @@ import SwiftUI
 @main
 struct MetatextApp: App {
     // swiftlint:disable weak_delegate
-    #if os(macOS)
-    @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
-    #else
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
-    #endif
     // swiftlint:enable weak_delegate
 
     private let allIdentitiesService: AllIdentitiesService = {

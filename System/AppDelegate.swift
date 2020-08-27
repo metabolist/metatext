@@ -1,19 +1,10 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
-#if os(macOS)
-import AppKit
-typealias AppDelegateType = NSApplicationDelegate
-typealias ApplicationType = NSApplication
-#else
 import UIKit
-typealias AppDelegateType = UIApplicationDelegate
-typealias ApplicationType = UIApplication
-#endif
-
 import Combine
 
 class AppDelegate: NSObject {
-    @Published private var application: ApplicationType?
+    @Published private var application: UIApplication?
     private let remoteNotificationDeviceTokens = PassthroughSubject<Data, Error>()
 }
 
@@ -30,12 +21,7 @@ extension AppDelegate {
     }
 }
 
-extension AppDelegate: AppDelegateType {
-    #if os(macOS)
-    func applicationDidFinishLaunching(_ notification: Notification) {
-        application = notification.object as? ApplicationType
-    }
-    #else
+extension AppDelegate: UIApplicationDelegate {
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
@@ -43,15 +29,13 @@ extension AppDelegate: AppDelegateType {
 
         return true
     }
-    #endif
 
-    func application(_ application: ApplicationType,
+    func application(_ application: UIApplication,
                      didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        // this doesn't get called on macOS, need to figure out why
         remoteNotificationDeviceTokens.send(deviceToken)
     }
 
-    func application(_ application: ApplicationType,
+    func application(_ application: UIApplication,
                      didFailToRegisterForRemoteNotificationsWithError error: Error) {
         remoteNotificationDeviceTokens.send(completion: .failure(error))
     }

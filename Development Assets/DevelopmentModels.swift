@@ -86,19 +86,17 @@ extension AddIdentityViewModel {
     static let development = RootViewModel.development.addIdentityViewModel()
 }
 
-extension MainNavigationViewModel {
-    static let development = RootViewModel.development.mainNavigationViewModel!
+extension TabNavigationViewModel {
+    static let development = RootViewModel.development.tabNavigationViewModel!
 }
 
-#if os(iOS)
 extension SecondaryNavigationViewModel {
-    static let development = MainNavigationViewModel.development.secondaryNavigationViewModel()
+    static let development = TabNavigationViewModel.development.secondaryNavigationViewModel()
 }
 
 extension IdentitiesViewModel {
     static let development = IdentitiesViewModel(identityService: .development)
 }
-#endif
 
 extension PreferencesViewModel {
     static let development = PreferencesViewModel(identityService: .development)

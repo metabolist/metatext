@@ -2,18 +2,12 @@
 
 import SwiftUI
 
-#if os(macOS)
-typealias MainNavigationViewModel = SidebarNavigationViewModel
-#else
-typealias MainNavigationViewModel = TabNavigationViewModel
-#endif
-
 struct RootView: View {
     @StateObject var viewModel: RootViewModel
 
     var body: some View {
-        if let mainNavigationViewModel = viewModel.mainNavigationViewModel {
-            Self.mainNavigation(mainNavigationViewModel: mainNavigationViewModel)
+        if let tabNavigationViewModel = viewModel.tabNavigationViewModel {
+            TabNavigationView(viewModel: tabNavigationViewModel)
                 .id(UUID())
                 .environmentObject(viewModel)
                 .transition(.opacity)
@@ -22,18 +16,6 @@ struct RootView: View {
                 .environmentObject(viewModel)
                 .transition(.opacity)
         }
-    }
-}
-
-private extension RootView {
-    @ViewBuilder
-    private static func mainNavigation(mainNavigationViewModel: MainNavigationViewModel) -> some View {
-        #if os(macOS)
-        SidebarNavigationView(viewModel: mainNavigationViewModel)
-            .frame(minWidth: 900, maxWidth: .infinity, minHeight: 500, maxHeight: .infinity)
-        #else
-        TabNavigationView(viewModel: mainNavigationViewModel)
-        #endif
     }
 }
 

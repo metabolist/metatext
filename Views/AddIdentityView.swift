@@ -8,15 +8,10 @@ struct AddIdentityView: View {
 
     var body: some View {
         Form {
-            #if os(macOS)
-            Spacer()
-            urlTextField
-            #else
             urlTextField
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
                 .keyboardType(.URL)
-            #endif
             Group {
                 if viewModel.loading {
                     ProgressView()
@@ -28,11 +23,7 @@ struct AddIdentityView: View {
             .frame(maxWidth: .infinity, alignment: .center)
             Button("add-identity.browse-anonymously", action: viewModel.browseAnonymouslyTapped)
                 .frame(maxWidth: .infinity, alignment: .center)
-            #if os(macOS)
-            Spacer()
-            #endif
         }
-        .paddingIfMac()
         .alertItem($viewModel.alertItem)
         .onReceive(viewModel.addedIdentityID) { id in
             withAnimation {
@@ -45,16 +36,6 @@ struct AddIdentityView: View {
 extension AddIdentityView {
     private var urlTextField: some View {
         TextField("add-identity.instance-url", text: $viewModel.urlFieldText)
-    }
-}
-
-private extension View {
-    func paddingIfMac() -> some View {
-        #if os(macOS)
-        return padding()
-        #else
-        return self
-        #endif
     }
 }
 

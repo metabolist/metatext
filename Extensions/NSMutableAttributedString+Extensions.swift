@@ -1,10 +1,6 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
-#if canImport(UIKit)
 import UIKit
-#elseif canImport(AppKit)
-import AppKit
-#endif
 import Kingfisher
 
 extension NSMutableAttributedString {

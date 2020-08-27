@@ -4,7 +4,7 @@ import Foundation
 import Combine
 
 class RootViewModel: ObservableObject {
-    @Published private(set) var mainNavigationViewModel: MainNavigationViewModel?
+    @Published private(set) var tabNavigationViewModel: TabNavigationViewModel?
     @Published private var mostRecentlyUsedIdentityID: UUID?
 
     // swiftlint:disable weak_delegate
@@ -38,7 +38,7 @@ class RootViewModel: ObservableObject {
 extension RootViewModel {
     func newIdentitySelected(id: UUID?) {
         guard let id = id else {
-            mainNavigationViewModel = nil
+            tabNavigationViewModel = nil
 
             return
         }
@@ -70,7 +70,7 @@ extension RootViewModel {
             .sink { _ in } receiveValue: { _ in }
             .store(in: &cancellables)
 
-        mainNavigationViewModel = MainNavigationViewModel(identityService: identityService)
+        tabNavigationViewModel = TabNavigationViewModel(identityService: identityService)
     }
 
     func deleteIdentity(_ identity: Identity) {

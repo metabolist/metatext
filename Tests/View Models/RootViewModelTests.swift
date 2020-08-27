@@ -14,7 +14,7 @@ class RootViewModelTests: XCTestCase {
                                     identityDatabase: .fresh(),
                                     environment: .development),
                                 userNotificationService: UserNotificationService())
-        let recorder = sut.$mainNavigationViewModel.record()
+        let recorder = sut.$tabNavigationViewModel.record()
 
         XCTAssertNil(try wait(for: recorder.next(), timeout: 1))
 
