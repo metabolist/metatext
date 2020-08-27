@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "D047FA8B24C3E21200AF17C5"
                BuildableName = "Metatext.app"
-               BlueprintName = "Metatext (iOS)"
+               BlueprintName = "Metatext"
                ReferencedContainer = "container:Metatext.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -29,26 +29,6 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       codeCoverageEnabled = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D047FA9B24C3E21200AF17C5"
-               BuildableName = "Tests iOS.xctest"
-               BlueprintName = "Tests iOS"
-               ReferencedContainer = "container:Metatext.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D0666A0D24C6737800F3F04B"
-               BuildableName = "MetatextTests.xctest"
-               BlueprintName = "MetatextTests"
-               ReferencedContainer = "container:Metatext.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
          <TestableReference
             skipped = "NO">
             <BuildableReference
@@ -77,7 +57,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D047FA8B24C3E21200AF17C5"
             BuildableName = "Metatext.app"
-            BlueprintName = "Metatext (iOS)"
+            BlueprintName = "Metatext"
             ReferencedContainer = "container:Metatext.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -94,7 +74,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D047FA8B24C3E21200AF17C5"
             BuildableName = "Metatext.app"
-            BlueprintName = "Metatext (iOS)"
+            BlueprintName = "Metatext"
             ReferencedContainer = "container:Metatext.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
