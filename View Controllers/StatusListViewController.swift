@@ -5,6 +5,7 @@ import Combine
 
 class StatusListViewController: UITableViewController {
     private let viewModel: StatusListViewModel
+    private let loadingTableFooterView = LoadingTableFooterView()
     private var cancellables = Set<AnyCancellable>()
     private var cellHeightCaches = [CGFloat: [String: CGFloat]]()
 
@@ -30,6 +31,7 @@ class StatusListViewController: UITableViewController {
         super.init(style: .plain)
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -45,8 +47,10 @@ class StatusListViewController: UITableViewController {
         }
 
         tableView.dataSource = dataSource
+        tableView.prefetchDataSource = self
         tableView.cellLayoutMarginsFollowReadableWidth = true
         tableView.separatorInset = .zero
+        tableView.tableFooterView = UIView()
 
         viewModel.$statusIDs
             .sink { [weak self] in
@@ -71,6 +75,16 @@ class StatusListViewController: UITableViewController {
                         self.tableView.contentOffset.y -= offsetFromNavigationBar
                     }
                 }
+            }
+            .store(in: &cancellables)
+
+        viewModel.$loading
+            .receive(on: RunLoop.main)
+            .sink { [weak self] in
+                guard let self = self else { return }
+
+                self.tableView.tableFooterView = $0 ? self.loadingTableFooterView : UIView()
+                self.sizeTableHeaderFooterViews()
             }
             .store(in: &cancellables)
     }
@@ -114,6 +128,26 @@ class StatusListViewController: UITableViewController {
             StatusListViewController(viewModel: contextViewModel),
             animated: true)
     }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        sizeTableHeaderFooterViews()
+    }
+}
+
+extension StatusListViewController: UITableViewDataSourcePrefetching {
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        guard
+            viewModel.paginates,
+            let indexPath = indexPaths.last,
+            indexPath.section == dataSource.numberOfSections(in: tableView) - 1,
+            indexPath.row == dataSource.tableView(tableView, numberOfRowsInSection: indexPath.section) - 1,
+            let maxID = dataSource.itemIdentifier(for: indexPath)
+        else { return }
+
+        viewModel.request(maxID: maxID)
+    }
 }
 
 extension StatusListViewController: StatusTableViewCellDelegate {
@@ -129,6 +163,35 @@ private extension StatusListViewController {
         let activityViewController = UIActivityViewController(activityItems: [url], applicationActivities: nil)
 
         present(activityViewController, animated: true, completion: nil)
+    }
+
+    func sizeTableHeaderFooterViews() {
+        // https://useyourloaf.com/blog/variable-height-table-view-header/
+        if let headerView = tableView.tableHeaderView {
+            let size = headerView.systemLayoutSizeFitting(
+                CGSize(width: tableView.frame.width, height: .greatestFiniteMagnitude),
+                withHorizontalFittingPriority: .required,
+                verticalFittingPriority: .fittingSizeLevel)
+
+            if headerView.frame.size.height != size.height {
+                headerView.frame.size.height = size.height
+                tableView.tableHeaderView = headerView
+                tableView.layoutIfNeeded()
+            }
+        }
+
+        if let footerView = tableView.tableFooterView {
+            let size = footerView.systemLayoutSizeFitting(
+                CGSize(width: tableView.frame.width, height: .greatestFiniteMagnitude),
+                withHorizontalFittingPriority: .required,
+                verticalFittingPriority: .fittingSizeLevel)
+
+            if footerView.frame.size.height != size.height {
+                footerView.frame.size.height = size.height
+                tableView.tableFooterView = footerView
+                tableView.layoutIfNeeded()
+            }
+        }
     }
 }
 

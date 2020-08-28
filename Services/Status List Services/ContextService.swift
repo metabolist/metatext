@@ -5,6 +5,7 @@ import Combine
 
 struct ContextService {
     let statusSections: AnyPublisher<[[Status]], Error>
+    let paginates = false
 
     private let status: Status
     private let context = CurrentValueSubject<MastodonContext, Never>(MastodonContext(ancestors: [], descendants: []))

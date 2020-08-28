@@ -27,6 +27,8 @@
 		D074577A24D29366004758DB /* URLSessionConfiguration+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D074577924D29366004758DB /* URLSessionConfiguration+Extensions.swift */; };
 		D0A652AD24DE3EB6002EA33F /* PreferencesEndpoint+Stubbing.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A652AC24DE3EB6002EA33F /* PreferencesEndpoint+Stubbing.swift */; };
 		D0BEB1F324F8EE8C001B0F04 /* AttachmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB1F224F8EE8C001B0F04 /* AttachmentView.swift */; };
+		D0BEB1F524F9A216001B0F04 /* Paged.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB1F424F9A216001B0F04 /* Paged.swift */; };
+		D0BEB1F724F9A84B001B0F04 /* LoadingTableFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB1F624F9A84B001B0F04 /* LoadingTableFooterView.swift */; };
 		D0C7D49724F7616A001EBDBB /* IdentitiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42224F76169001EBDBB /* IdentitiesView.swift */; };
 		D0C7D49824F7616A001EBDBB /* CustomEmojiText.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42324F76169001EBDBB /* CustomEmojiText.swift */; };
 		D0C7D49924F7616A001EBDBB /* AddIdentityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42424F76169001EBDBB /* AddIdentityView.swift */; };
@@ -194,6 +196,8 @@
 		D074577924D29366004758DB /* URLSessionConfiguration+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSessionConfiguration+Extensions.swift"; sourceTree = "<group>"; };
 		D0A652AC24DE3EB6002EA33F /* PreferencesEndpoint+Stubbing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PreferencesEndpoint+Stubbing.swift"; sourceTree = "<group>"; };
 		D0BEB1F224F8EE8C001B0F04 /* AttachmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentView.swift; sourceTree = "<group>"; };
+		D0BEB1F424F9A216001B0F04 /* Paged.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paged.swift; sourceTree = "<group>"; };
+		D0BEB1F624F9A84B001B0F04 /* LoadingTableFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingTableFooterView.swift; sourceTree = "<group>"; };
 		D0C7D41E24F76169001EBDBB /* Metatext.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Metatext.entitlements; sourceTree = "<group>"; };
 		D0C7D41F24F76169001EBDBB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D0C7D42224F76169001EBDBB /* IdentitiesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentitiesView.swift; sourceTree = "<group>"; };
@@ -416,10 +420,11 @@
 		D0C7D42024F76169001EBDBB /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				D01F41E024F8885900D55A2D /* Attachments */,
 				D0C7D42424F76169001EBDBB /* AddIdentityView.swift */,
+				D01F41E024F8885900D55A2D /* Attachments */,
 				D0C7D42324F76169001EBDBB /* CustomEmojiText.swift */,
 				D0C7D42224F76169001EBDBB /* IdentitiesView.swift */,
+				D0BEB1F624F9A84B001B0F04 /* LoadingTableFooterView.swift */,
 				D0C7D42D24F76169001EBDBB /* NotificationTypesPreferencesView.swift */,
 				D0C7D42824F76169001EBDBB /* PostingReadingPreferencesView.swift */,
 				D0C7D42624F76169001EBDBB /* PreferencesView.swift */,
@@ -577,6 +582,7 @@
 				D0C7D48324F76169001EBDBB /* ContextEndpoint.swift */,
 				D0C7D48224F76169001EBDBB /* DeletionEndpoint.swift */,
 				D0C7D47D24F76169001EBDBB /* InstanceEndpoint.swift */,
+				D0BEB1F424F9A216001B0F04 /* Paged.swift */,
 				D0C7D47C24F76169001EBDBB /* PreferencesEndpoint.swift */,
 				D0C7D47B24F76169001EBDBB /* PushSubscriptionEndpoint.swift */,
 				D0C7D48424F76169001EBDBB /* StatusEndpoint.swift */,
@@ -860,6 +866,7 @@
 				D0C7D4CD24F7616A001EBDBB /* AddIdentityViewModel.swift in Sources */,
 				D03658D124EDD80900AC17EC /* ContextEndpoint+Stubbing.swift in Sources */,
 				D0BEB1F324F8EE8C001B0F04 /* AttachmentView.swift in Sources */,
+				D0BEB1F524F9A216001B0F04 /* Paged.swift in Sources */,
 				D0DC174A24CFF15F00A75C65 /* AppAuthorizationEndpoint+Stubbing.swift in Sources */,
 				D0C7D49A24F7616A001EBDBB /* StatusListView.swift in Sources */,
 				D01F41D924F880C400D55A2D /* TouchFallthroughTextView.swift in Sources */,
@@ -908,6 +915,7 @@
 				D0C7D4A224F7616A001EBDBB /* NotificationTypesPreferencesView.swift in Sources */,
 				D0C7D4CF24F7616A001EBDBB /* StatusViewModel.swift in Sources */,
 				D0C7D4C724F7616A001EBDBB /* PostingReadingPreferencesViewModel.swift in Sources */,
+				D0BEB1F724F9A84B001B0F04 /* LoadingTableFooterView.swift in Sources */,
 				D0DC175224D008E300A75C65 /* MastodonTarget+Stubbing.swift in Sources */,
 				D0C7D4F124F7616A001EBDBB /* IdentityService.swift in Sources */,
 				D04FD74224D4AA34007D572D /* DevelopmentModels.swift in Sources */,

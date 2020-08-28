@@ -29,6 +29,8 @@ class StatusListViewModel: ObservableObject {
 }
 
 extension StatusListViewModel {
+    var paginates: Bool { statusListService.paginates }
+
     var contextParentID: String? { statusListService.contextParentID }
 
     func request(maxID: String? = nil, minID: String? = nil) {

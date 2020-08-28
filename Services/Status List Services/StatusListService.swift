@@ -5,6 +5,7 @@ import Combine
 
 protocol StatusListService {
     var statusSections: AnyPublisher<[[Status]], Error> { get }
+    var paginates: Bool { get }
     var contextParentID: String? { get }
     func isPinned(status: Status) -> Bool
     func isReplyInContext(status: Status) -> Bool
@@ -15,6 +16,8 @@ protocol StatusListService {
 }
 
 extension StatusListService {
+    var paginates: Bool { true }
+
     var contextParentID: String? { nil }
 
     func isPinned(status: Status) -> Bool { false }
