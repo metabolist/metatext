@@ -12,6 +12,7 @@ struct StatusViewModel {
     let isReblog: Bool
     let rebloggedByDisplayName: String
     let rebloggedByDisplayNameEmoji: [Emoji]
+    let attachmentViewModels: [AttachmentViewModel]
     let pollOptionTitles: [String]
     let pollEmoji: [Emoji]
     var isPinned = false
@@ -38,6 +39,8 @@ struct StatusViewModel {
             ? statusService.status.account.username
             : statusService.status.account.displayName
         rebloggedByDisplayNameEmoji = statusService.status.account.emojis
+        attachmentViewModels = statusService.status.displayStatus.mediaAttachments
+            .map(AttachmentViewModel.init(attachment:))
         pollOptionTitles = statusService.status.displayStatus.poll?.options.map { $0.title } ?? []
         pollEmoji = statusService.status.displayStatus.poll?.emojis ?? []
         events = eventsInput.eraseToAnyPublisher()

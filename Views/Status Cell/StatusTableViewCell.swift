@@ -23,6 +23,7 @@ class StatusTableViewCell: UITableViewCell {
     @IBOutlet weak var reblogButton: UIButton!
     @IBOutlet weak var favoriteButton: UIButton!
     @IBOutlet weak var shareButton: UIButton!
+    @IBOutlet weak var attachmentsView: AttachmentsView!
     @IBOutlet weak var cardView: UIView!
     @IBOutlet weak var cardImageView: UIImageView!
     @IBOutlet weak var cardTitleLabel: UILabel!
@@ -171,6 +172,10 @@ class StatusTableViewCell: UITableViewCell {
                 metaLabel.isHidden = true
                 metaIcon.isHidden = true
             }
+
+            attachmentsView.isHidden = viewModel.attachmentViewModels.count == 0
+            attachmentsView.attachmentViewModels = viewModel.attachmentViewModels
+            setNeedsLayout()
 
             if let cardURL = viewModel.cardURL {
                 cardTitleLabel.text = viewModel.cardTitle

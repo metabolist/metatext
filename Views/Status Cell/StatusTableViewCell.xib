@@ -200,10 +200,16 @@
                                         <rect key="frame" x="0.0" y="175" width="287" height="654.5"/>
                                         <subviews>
                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="751" scrollEnabled="NO" editable="NO" text="Content" textAlignment="natural" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GvW-gH-ofw" customClass="TouchFallthroughTextView" customModule="Metatext" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="0.0" width="287" height="345"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="287" height="175.5"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                             </textView>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KvJ-fF-o4f" customClass="AttachmentsView" customModule="Metatext" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="183.5" width="287" height="161.5"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="KvJ-fF-o4f" secondAttribute="height" multiplier="16:9" priority="999" id="Con-eO-cOX"/>
+                                                </constraints>
+                                            </view>
                                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gCY-Qy-hbS">
                                                 <rect key="frame" x="0.0" y="353" width="287" height="301.5"/>
                                                 <subviews>
@@ -481,6 +487,7 @@
                 <outlet property="accountLabel" destination="hrV-68-5hn" id="Kn4-pt-nQa"/>
                 <outlet property="actionButtonsView" destination="wFL-zS-Rev" id="h7S-r0-vMa"/>
                 <outlet property="applicationButton" destination="hkk-pX-8oP" id="tHC-cy-B25"/>
+                <outlet property="attachmentsView" destination="KvJ-fF-o4f" id="KHT-xe-SeO"/>
                 <outlet property="avatarButton" destination="dRj-hF-Ov8" id="1aD-hK-1iz"/>
                 <outlet property="avatarImageView" destination="Rag-3x-Vbq" id="BaZ-ad-Qgs"/>
                 <outlet property="avatarReplyContextView" destination="NHl-tq-tPi" id="CCJ-SE-Egv"/>
