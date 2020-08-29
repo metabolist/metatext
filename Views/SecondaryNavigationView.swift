@@ -5,7 +5,6 @@ import KingfisherSwiftUI
 
 struct SecondaryNavigationView: View {
     @StateObject var viewModel: SecondaryNavigationViewModel
-    @EnvironmentObject var rootViewModel: RootViewModel
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.displayScale) var displayScale: CGFloat
 
@@ -14,8 +13,7 @@ struct SecondaryNavigationView: View {
             Form {
                 Section {
                     NavigationLink(
-                        destination: IdentitiesView(viewModel: viewModel.identitiesViewModel())
-                            .environmentObject(rootViewModel),
+                        destination: IdentitiesView(viewModel: viewModel.identitiesViewModel()),
                         label: {
                             HStack {
                                 KFImage(viewModel.identity.image,
@@ -39,6 +37,11 @@ struct SecondaryNavigationView: View {
                                 .padding()
                             }
                         })
+                }
+                Section {
+                    NavigationLink(destination: ListsView(viewModel: viewModel.listsViewModel())) {
+                        Label("secondary-navigation.lists", systemImage: "scroll")
+                    }
                 }
                 Section {
                     NavigationLink(
@@ -67,6 +70,7 @@ struct SecondaryNavigationView_Previews: PreviewProvider {
     static var previews: some View {
         SecondaryNavigationView(viewModel: .development)
             .environmentObject(RootViewModel.development)
+            .environmentObject(TabNavigationViewModel.development)
     }
 }
 #endif

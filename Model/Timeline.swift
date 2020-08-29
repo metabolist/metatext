@@ -2,7 +2,7 @@
 
 import Foundation
 
-enum Timeline: Identifiable {
+enum Timeline: Hashable {
     case home
     case local
     case federated
@@ -10,18 +10,7 @@ enum Timeline: Identifiable {
 }
 
 extension Timeline {
-    var id: String {
-        switch self {
-        case .home:
-            return "home"
-        case .local:
-            return "local"
-        case .federated:
-            return "federated"
-        case let .list(list):
-            return list.id
-        }
-    }
+    static let nonLists: [Timeline] = [.home, .local, .federated]
 
     var endpoint: TimelinesEndpoint {
         switch self {
@@ -33,6 +22,21 @@ extension Timeline {
             return .public(local: false)
         case let .list(list):
             return .list(id: list.id)
+        }
+    }
+}
+
+extension Timeline: Identifiable {
+    var id: String {
+        switch self {
+        case .home:
+            return "home"
+        case .local:
+            return "local"
+        case .federated:
+            return "federated"
+        case let .list(list):
+            return list.id
         }
     }
 }

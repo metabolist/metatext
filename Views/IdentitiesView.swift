@@ -14,7 +14,7 @@ struct IdentitiesView: View {
                 NavigationLink(
                     destination: AddIdentityView(viewModel: rootViewModel.addIdentityViewModel()),
                     label: {
-                        Label("identities.add", systemImage: "plus.circle")
+                        Label("add", systemImage: "plus.circle")
                     })
             }
             Section {

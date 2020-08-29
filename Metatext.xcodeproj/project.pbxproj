@@ -29,6 +29,10 @@
 		D0BEB1F324F8EE8C001B0F04 /* AttachmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB1F224F8EE8C001B0F04 /* AttachmentView.swift */; };
 		D0BEB1F524F9A216001B0F04 /* Paged.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB1F424F9A216001B0F04 /* Paged.swift */; };
 		D0BEB1F724F9A84B001B0F04 /* LoadingTableFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB1F624F9A84B001B0F04 /* LoadingTableFooterView.swift */; };
+		D0BEB1F924F9D627001B0F04 /* ListsEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB1F824F9D627001B0F04 /* ListsEndpoint.swift */; };
+		D0BEB1FD24F9E4E5001B0F04 /* ListsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB1FC24F9E4E5001B0F04 /* ListsViewModel.swift */; };
+		D0BEB1FF24F9E5BB001B0F04 /* ListsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB1FE24F9E5BB001B0F04 /* ListsView.swift */; };
+		D0BEB20124FA0220001B0F04 /* ListEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB20024FA0220001B0F04 /* ListEndpoint.swift */; };
 		D0C7D49724F7616A001EBDBB /* IdentitiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42224F76169001EBDBB /* IdentitiesView.swift */; };
 		D0C7D49824F7616A001EBDBB /* CustomEmojiText.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42324F76169001EBDBB /* CustomEmojiText.swift */; };
 		D0C7D49924F7616A001EBDBB /* AddIdentityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42424F76169001EBDBB /* AddIdentityView.swift */; };
@@ -198,6 +202,10 @@
 		D0BEB1F224F8EE8C001B0F04 /* AttachmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentView.swift; sourceTree = "<group>"; };
 		D0BEB1F424F9A216001B0F04 /* Paged.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paged.swift; sourceTree = "<group>"; };
 		D0BEB1F624F9A84B001B0F04 /* LoadingTableFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingTableFooterView.swift; sourceTree = "<group>"; };
+		D0BEB1F824F9D627001B0F04 /* ListsEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsEndpoint.swift; sourceTree = "<group>"; };
+		D0BEB1FC24F9E4E5001B0F04 /* ListsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsViewModel.swift; sourceTree = "<group>"; };
+		D0BEB1FE24F9E5BB001B0F04 /* ListsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsView.swift; sourceTree = "<group>"; };
+		D0BEB20024FA0220001B0F04 /* ListEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListEndpoint.swift; sourceTree = "<group>"; };
 		D0C7D41E24F76169001EBDBB /* Metatext.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Metatext.entitlements; sourceTree = "<group>"; };
 		D0C7D41F24F76169001EBDBB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D0C7D42224F76169001EBDBB /* IdentitiesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentitiesView.swift; sourceTree = "<group>"; };
@@ -424,6 +432,7 @@
 				D01F41E024F8885900D55A2D /* Attachments */,
 				D0C7D42324F76169001EBDBB /* CustomEmojiText.swift */,
 				D0C7D42224F76169001EBDBB /* IdentitiesView.swift */,
+				D0BEB1FE24F9E5BB001B0F04 /* ListsView.swift */,
 				D0BEB1F624F9A84B001B0F04 /* LoadingTableFooterView.swift */,
 				D0C7D42D24F76169001EBDBB /* NotificationTypesPreferencesView.swift */,
 				D0C7D42824F76169001EBDBB /* PostingReadingPreferencesView.swift */,
@@ -509,6 +518,7 @@
 				D0C7D46024F76169001EBDBB /* AddIdentityViewModel.swift */,
 				D01F41DE24F8868800D55A2D /* AttachmentViewModel.swift */,
 				D0C7D45F24F76169001EBDBB /* IdentitiesViewModel.swift */,
+				D0BEB1FC24F9E4E5001B0F04 /* ListsViewModel.swift */,
 				D0C7D45D24F76169001EBDBB /* NotificationTypesPreferencesViewModel.swift */,
 				D0C7D45A24F76169001EBDBB /* PostingReadingPreferencesViewModel.swift */,
 				D0C7D46124F76169001EBDBB /* PreferencesViewModel.swift */,
@@ -582,6 +592,8 @@
 				D0C7D48324F76169001EBDBB /* ContextEndpoint.swift */,
 				D0C7D48224F76169001EBDBB /* DeletionEndpoint.swift */,
 				D0C7D47D24F76169001EBDBB /* InstanceEndpoint.swift */,
+				D0BEB20024FA0220001B0F04 /* ListEndpoint.swift */,
+				D0BEB1F824F9D627001B0F04 /* ListsEndpoint.swift */,
 				D0BEB1F424F9A216001B0F04 /* Paged.swift */,
 				D0C7D47C24F76169001EBDBB /* PreferencesEndpoint.swift */,
 				D0C7D47B24F76169001EBDBB /* PushSubscriptionEndpoint.swift */,
@@ -908,6 +920,7 @@
 				D0C7D4B324F7616A001EBDBB /* MastodonError.swift in Sources */,
 				D0C7D4E924F7616A001EBDBB /* AccessTokenEndpoint.swift in Sources */,
 				D0C7D4D524F7616A001EBDBB /* String+Extensions.swift in Sources */,
+				D0BEB20124FA0220001B0F04 /* ListEndpoint.swift in Sources */,
 				D0C7D4BA24F7616A001EBDBB /* AppAuthorization.swift in Sources */,
 				D0C7D4AB24F7616A001EBDBB /* Identity.swift in Sources */,
 				D0C7D4C024F7616A001EBDBB /* AlertItem.swift in Sources */,
@@ -925,6 +938,7 @@
 				D0C7D4DC24F7616A001EBDBB /* Data+Extensions.swift in Sources */,
 				D0DC177724D0CF2600A75C65 /* MockKeychainService.swift in Sources */,
 				D0DC174624CFEC2000A75C65 /* StubbingURLProtocol.swift in Sources */,
+				D0BEB1FF24F9E5BB001B0F04 /* ListsView.swift in Sources */,
 				D0C7D4F824F7616A001EBDBB /* SecretsService.swift in Sources */,
 				D0C7D4DE24F7616A001EBDBB /* HTTPTarget.swift in Sources */,
 				D0C7D4F624F7616A001EBDBB /* KeychainService.swift in Sources */,
@@ -946,6 +960,7 @@
 				D074577A24D29366004758DB /* URLSessionConfiguration+Extensions.swift in Sources */,
 				D0C7D4E424F7616A001EBDBB /* PreferencesEndpoint.swift in Sources */,
 				D0C7D49924F7616A001EBDBB /* AddIdentityView.swift in Sources */,
+				D0BEB1FD24F9E4E5001B0F04 /* ListsViewModel.swift in Sources */,
 				D0C7D4C324F7616A001EBDBB /* MetatextApp.swift in Sources */,
 				D0C7D4B124F7616A001EBDBB /* Card.swift in Sources */,
 				D0C7D4F324F7616A001EBDBB /* ContextService.swift in Sources */,
@@ -959,6 +974,7 @@
 				D0C7D4EC24F7616A001EBDBB /* StatusEndpoint.swift in Sources */,
 				D0C7D4D724F7616A001EBDBB /* UIColor+Extensions.swift in Sources */,
 				D0C7D4BB24F7616A001EBDBB /* Emoji.swift in Sources */,
+				D0BEB1F924F9D627001B0F04 /* ListsEndpoint.swift in Sources */,
 				D0C7D4AD24F7616A001EBDBB /* AccessToken.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -6,8 +6,8 @@ import Combine
 class TabNavigationViewModel: ObservableObject {
     @Published private(set) var identity: Identity
     @Published private(set) var recentIdentities = [Identity]()
-    @Published private(set) var timeline = Timeline.home
-    @Published private(set) var timelinesAndLists = TabNavigationViewModel.timelines
+    @Published var timeline = Timeline.home
+    @Published private(set) var timelinesAndLists = Timeline.nonLists
     @Published var presentingSecondaryNavigation = false
     @Published var alertItem: AlertItem?
     var selectedTab: Tab? = .timelines
@@ -23,6 +23,11 @@ class TabNavigationViewModel: ObservableObject {
         identityService.recentIdentitiesObservation()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$recentIdentities)
+
+        identityService.listsObservation()
+            .map { Timeline.nonLists + $0 }
+            .assignErrorsToAlertItem(to: \.alertItem, on: self)
+            .assign(to: &$timelinesAndLists)
     }
 }
 
@@ -65,6 +70,11 @@ extension TabNavigationViewModel {
                 .sink { _ in }
                 .store(in: &cancellables)
 
+            identityService.refreshLists()
+                .assignErrorsToAlertItem(to: \.alertItem, on: self)
+                .sink { _ in }
+                .store(in: &cancellables)
+
             if identity.preferences.useServerPostingReadingPreferences {
                 identityService.refreshServerPreferences()
                     .assignErrorsToAlertItem(to: \.alertItem, on: self)
@@ -86,14 +96,6 @@ extension TabNavigationViewModel {
     func viewModel(timeline: Timeline) -> StatusListViewModel {
         StatusListViewModel(statusListService: identityService.service(timeline: timeline))
     }
-
-    func select(timeline: Timeline) {
-        self.timeline = timeline
-    }
-}
-
-private extension TabNavigationViewModel {
-    static let timelines: [Timeline] = [.home, .local, .federated]
 }
 
 extension TabNavigationViewModel {

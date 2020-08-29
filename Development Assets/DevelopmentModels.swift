@@ -98,6 +98,10 @@ extension IdentitiesViewModel {
     static let development = IdentitiesViewModel(identityService: .development)
 }
 
+extension ListsViewModel {
+    static let development = ListsViewModel(identityService: .development)
+}
+
 extension PreferencesViewModel {
     static let development = PreferencesViewModel(identityService: .development)
 }

@@ -86,6 +86,29 @@ extension IdentityService {
         identityDatabase.recentIdentitiesObservation(excluding: identity.id)
     }
 
+    func refreshLists() -> AnyPublisher<Never, Error> {
+        networkClient.request(ListsEndpoint.lists)
+            .flatMap(contentDatabase.updateLists(_:))
+            .eraseToAnyPublisher()
+    }
+
+    func listsObservation() -> AnyPublisher<[Timeline], Error> {
+        contentDatabase.listsObservation()
+    }
+
+    func createList(title: String) -> AnyPublisher<Never, Error> {
+        networkClient.request(ListEndpoint.create(title: title))
+            .flatMap(contentDatabase.createList(_:))
+            .eraseToAnyPublisher()
+    }
+
+    func deleteList(id: String) -> AnyPublisher<Never, Error> {
+        networkClient.request(DeletionEndpoint.list(id: id))
+            .map { _ in id }
+            .flatMap(contentDatabase.deleteList(id:))
+            .eraseToAnyPublisher()
+    }
+
     func updatePreferences(_ preferences: Identity.Preferences) -> AnyPublisher<Never, Error> {
         identityDatabase.updatePreferences(preferences, forIdentityID: identity.id)
             .zip(Just(self).first().setFailureType(to: Error.self))

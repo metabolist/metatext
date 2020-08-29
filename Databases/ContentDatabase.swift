@@ -45,6 +45,30 @@ extension ContentDatabase {
         .eraseToAnyPublisher()
     }
 
+    func updateLists(_ lists: [MastodonList]) -> AnyPublisher<Never, Error> {
+        databaseQueue.writePublisher {
+            for list in lists {
+                try Timeline.list(list).save($0)
+            }
+
+            try Timeline.filter(!(Timeline.nonLists.map(\.id) + lists.map(\.id)).contains(Column("id"))).deleteAll($0)
+        }
+        .ignoreOutput()
+        .eraseToAnyPublisher()
+    }
+
+    func createList(_ list: MastodonList) -> AnyPublisher<Never, Error> {
+        databaseQueue.writePublisher(updates: Timeline.list(list).save)
+            .ignoreOutput()
+            .eraseToAnyPublisher()
+    }
+
+    func deleteList(id: String) -> AnyPublisher<Never, Error> {
+        databaseQueue.writePublisher(updates: Timeline.filter(Column("id") == id).deleteAll)
+        .ignoreOutput()
+        .eraseToAnyPublisher()
+    }
+
     func statusesObservation(timeline: Timeline) -> AnyPublisher<[Status], Error> {
         ValueObservation
             .tracking(timeline.statuses
@@ -76,6 +100,15 @@ extension ContentDatabase {
         .removeDuplicates()
         .publisher(in: databaseQueue)
         .map { $0.map(Status.init(statusResult:)) }
+        .eraseToAnyPublisher()
+    }
+
+    func listsObservation() -> AnyPublisher<[Timeline], Error> {
+        ValueObservation.tracking(Timeline.filter(!Timeline.nonLists.map(\.id).contains(Column("id")))
+                                    .order(Column("listTitle").collating(.localizedCaseInsensitiveCompare).asc)
+                                    .fetchAll)
+        .removeDuplicates()
+        .publisher(in: databaseQueue)
         .eraseToAnyPublisher()
     }
 }

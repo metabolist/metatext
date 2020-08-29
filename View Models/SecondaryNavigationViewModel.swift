@@ -18,6 +18,10 @@ extension SecondaryNavigationViewModel {
         IdentitiesViewModel(identityService: identityService)
     }
 
+    func listsViewModel() -> ListsViewModel {
+        ListsViewModel(identityService: identityService)
+    }
+
     func preferencesViewModel() -> PreferencesViewModel {
         PreferencesViewModel(identityService: identityService)
     }

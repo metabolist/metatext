@@ -24,7 +24,7 @@ struct TabNavigationView: View {
         }
         .sheet(isPresented: $viewModel.presentingSecondaryNavigation) {
             SecondaryNavigationView(viewModel: viewModel.secondaryNavigationViewModel())
-                .environmentObject(rootViewModel)
+                .environmentObject(viewModel)
         }
         .alertItem($viewModel.alertItem)
         .onAppear(perform: viewModel.refreshIdentity)
@@ -60,7 +60,7 @@ private extension TabNavigationView {
                     trailing: Menu {
                         ForEach(viewModel.timelinesAndLists) { timeline in
                             Button {
-                                viewModel.select(timeline: timeline)
+                                viewModel.timeline = timeline
                             } label: {
                                 Label(viewModel.title(timeline: timeline),
                                       systemImage: viewModel.systemImageName(timeline: timeline))
