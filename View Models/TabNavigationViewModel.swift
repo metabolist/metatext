@@ -6,7 +6,8 @@ import Combine
 class TabNavigationViewModel: ObservableObject {
     @Published private(set) var identity: Identity
     @Published private(set) var recentIdentities = [Identity]()
-    @Published private(set) var timelineViewModel: StatusListViewModel
+    @Published private(set) var timeline = Timeline.home
+    @Published private(set) var timelinesAndLists = TabNavigationViewModel.timelines
     @Published var presentingSecondaryNavigation = false
     @Published var alertItem: AlertItem?
     var selectedTab: Tab? = .timelines
@@ -17,7 +18,6 @@ class TabNavigationViewModel: ObservableObject {
     init(identityService: IdentityService) {
         self.identityService = identityService
         identity = identityService.identity
-        timelineViewModel = StatusListViewModel(statusListService: identityService.service(timeline: .home))
         identityService.$identity.dropFirst().assign(to: &$identity)
 
         identityService.recentIdentitiesObservation()
@@ -27,6 +27,37 @@ class TabNavigationViewModel: ObservableObject {
 }
 
 extension TabNavigationViewModel {
+    var timelineSubtitle: String {
+        switch timeline {
+        case .home, .list:
+            return identity.handle
+        case .local, .federated:
+            return identity.instance?.uri ?? ""
+        }
+    }
+
+    func title(timeline: Timeline) -> String {
+        switch timeline {
+        case .home:
+            return NSLocalizedString("timelines.home", comment: "")
+        case .local:
+            return NSLocalizedString("timelines.local", comment: "")
+        case .federated:
+            return NSLocalizedString("timelines.federated", comment: "")
+        case let .list(list):
+            return list.title
+        }
+    }
+
+    func systemImageName(timeline: Timeline) -> String {
+        switch timeline {
+        case .home: return "house"
+        case .local: return "person.3"
+        case .federated: return "globe"
+        case .list: return "scroll"
+        }
+    }
+
     func refreshIdentity() {
         if identityService.isAuthorized {
             identityService.verifyCredentials()
@@ -51,6 +82,18 @@ extension TabNavigationViewModel {
     func secondaryNavigationViewModel() -> SecondaryNavigationViewModel {
         SecondaryNavigationViewModel(identityService: identityService)
     }
+
+    func viewModel(timeline: Timeline) -> StatusListViewModel {
+        StatusListViewModel(statusListService: identityService.service(timeline: timeline))
+    }
+
+    func select(timeline: Timeline) {
+        self.timeline = timeline
+    }
+}
+
+private extension TabNavigationViewModel {
+    static let timelines: [Timeline] = [.home, .local, .federated]
 }
 
 extension TabNavigationViewModel {

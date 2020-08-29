@@ -40,34 +40,63 @@ private extension TabNavigationView {
     func view(tab: TabNavigationViewModel.Tab) -> some View {
         switch tab {
         case .timelines:
-            StatusListView(viewModel: viewModel.timelineViewModel)
+            StatusListView(viewModel: viewModel.viewModel(timeline: viewModel.timeline))
+                .id(viewModel.timeline.id)
                 .edgesIgnoringSafeArea(.all)
-                .navigationBarTitle(viewModel.identity.handle, displayMode: .inline)
+                .navigationBarTitle(viewModel.title(timeline: viewModel.timeline), displayMode: .inline)
+                .toolbar {
+                    ToolbarItem(placement: .principal) {
+                        VStack {
+                            Text(viewModel.title(timeline: viewModel.timeline))
+                                .font(.headline)
+                            Text(viewModel.timelineSubtitle)
+                                .font(.footnote)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                }
                 .navigationBarItems(
-                    leading: Button {
-                        viewModel.presentingSecondaryNavigation.toggle()
+                    leading: secondaryNavigationButton,
+                    trailing: Menu {
+                        ForEach(viewModel.timelinesAndLists) { timeline in
+                            Button {
+                                viewModel.select(timeline: timeline)
+                            } label: {
+                                Label(viewModel.title(timeline: timeline),
+                                      systemImage: viewModel.systemImageName(timeline: timeline))
+                            }
+                        }
                     } label: {
-                        KFImage(viewModel.identity.image,
-                                options: .downsampled(dimension: 28, scaleFactor: displayScale))
-                            .placeholder { Image(systemName: "gear") }
-                            .renderingMode(.original)
-                            .contextMenu(ContextMenu {
-                                ForEach(viewModel.recentIdentities) { recentIdentity in
-                                    Button {
-                                        rootViewModel.newIdentitySelected(id: recentIdentity.id)
-                                    } label: {
-                                        Label(
-                                            title: { Text(recentIdentity.handle) },
-                                            icon: {
-                                                KFImage(recentIdentity.image,
-                                                        options: .downsampled(dimension: 28, scaleFactor: displayScale))
-                                                    .renderingMode(.original)
-                                            })
-                                    }
-                                }
-                            })
+                        Image(systemName: viewModel.systemImageName(timeline: viewModel.timeline))
                     })
         default: Text(tab.title)
+        }
+    }
+
+    @ViewBuilder
+    var secondaryNavigationButton: some View {
+        Button {
+            viewModel.presentingSecondaryNavigation.toggle()
+        } label: {
+            KFImage(viewModel.identity.image,
+                    options: .downsampled(dimension: 28, scaleFactor: displayScale))
+                .placeholder { Image(systemName: "gear") }
+                .renderingMode(.original)
+                .contextMenu(ContextMenu {
+                    ForEach(viewModel.recentIdentities) { recentIdentity in
+                        Button {
+                            rootViewModel.newIdentitySelected(id: recentIdentity.id)
+                        } label: {
+                            Label(
+                                title: { Text(recentIdentity.handle) },
+                                icon: {
+                                    KFImage(recentIdentity.image,
+                                            options: .downsampled(dimension: 28, scaleFactor: displayScale))
+                                        .renderingMode(.original)
+                                })
+                        }
+                    }
+                })
         }
     }
 }

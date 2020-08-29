@@ -38,3 +38,6 @@
 "status.visibility.public" = "Public";
 "status.visibility.unlisted" = "Unlisted";
 "status.visibility.private" = "Private";
+"timelines.home" = "Home";
+"timelines.local" = "Local";
+"timelines.federated" = "Federated";

@@ -2,7 +2,7 @@
 
 import Foundation
 
-enum Timeline {
+enum Timeline: Identifiable {
     case home
     case local
     case federated
