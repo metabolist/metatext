@@ -45,7 +45,7 @@ extension ContentDatabase {
         .eraseToAnyPublisher()
     }
 
-    func updateLists(_ lists: [MastodonList]) -> AnyPublisher<Never, Error> {
+    func setLists(_ lists: [MastodonList]) -> AnyPublisher<Never, Error> {
         databaseQueue.writePublisher {
             for list in lists {
                 try Timeline.list(list).save($0)
@@ -65,8 +65,32 @@ extension ContentDatabase {
 
     func deleteList(id: String) -> AnyPublisher<Never, Error> {
         databaseQueue.writePublisher(updates: Timeline.filter(Column("id") == id).deleteAll)
+            .ignoreOutput()
+            .eraseToAnyPublisher()
+    }
+
+    func setFilters(_ filters: [Filter]) -> AnyPublisher<Never, Error> {
+        databaseQueue.writePublisher {
+            for filter in filters {
+                try filter.save($0)
+            }
+
+            try Filter.filter(!filters.map(\.id).contains(Column("id"))).deleteAll($0)
+        }
         .ignoreOutput()
         .eraseToAnyPublisher()
+    }
+
+    func createFilter(_ filter: Filter) -> AnyPublisher<Never, Error> {
+        databaseQueue.writePublisher(updates: filter.save)
+            .ignoreOutput()
+            .eraseToAnyPublisher()
+    }
+
+    func deleteFilter(id: String) -> AnyPublisher<Never, Error> {
+        databaseQueue.writePublisher(updates: Filter.filter(Column("id") == id).deleteAll)
+            .ignoreOutput()
+            .eraseToAnyPublisher()
     }
 
     func statusesObservation(timeline: Timeline) -> AnyPublisher<[Status], Error> {
@@ -107,9 +131,16 @@ extension ContentDatabase {
         ValueObservation.tracking(Timeline.filter(!Timeline.nonLists.map(\.id).contains(Column("id")))
                                     .order(Column("listTitle").collating(.localizedCaseInsensitiveCompare).asc)
                                     .fetchAll)
-        .removeDuplicates()
-        .publisher(in: databaseQueue)
-        .eraseToAnyPublisher()
+            .removeDuplicates()
+            .publisher(in: databaseQueue)
+            .eraseToAnyPublisher()
+    }
+
+    func filtersObservation() -> AnyPublisher<[Filter], Error> {
+        ValueObservation.tracking(Filter.fetchAll)
+            .removeDuplicates()
+            .publisher(in: databaseQueue)
+            .eraseToAnyPublisher()
     }
 }
 
@@ -192,6 +223,15 @@ private extension ContentDatabase {
                     .references("storedStatus", column: "id", onDelete: .cascade, onUpdate: .cascade)
 
                 t.primaryKey(["timelineId", "statusId"], onConflict: .replace)
+            }
+
+            try db.create(table: "filter", ifNotExists: true) { t in
+                t.column("id", .text).notNull().primaryKey(onConflict: .replace)
+                t.column("phrase", .text).notNull()
+                t.column("context", .blob).notNull()
+                t.column("expiresAt", .date)
+                t.column("irreversible", .boolean).notNull()
+                t.column("wholeWord", .boolean).notNull()
             }
         }
 
@@ -294,6 +334,16 @@ private extension Timeline {
 
     var statuses: QueryInterfaceRequest<StoredStatus> {
         request(for: Self.statuses)
+    }
+}
+
+extension Filter: TableRecord, FetchableRecord, PersistableRecord {
+    static func databaseJSONDecoder(for column: String) -> JSONDecoder {
+        MastodonDecoder()
+    }
+
+    static func databaseJSONEncoder(for column: String) -> JSONEncoder {
+        MastodonEncoder()
     }
 }
 

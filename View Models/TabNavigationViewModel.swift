@@ -75,6 +75,11 @@ extension TabNavigationViewModel {
                 .sink { _ in }
                 .store(in: &cancellables)
 
+            identityService.refreshFilters()
+                .assignErrorsToAlertItem(to: \.alertItem, on: self)
+                .sink { _ in }
+                .store(in: &cancellables)
+
             if identity.preferences.useServerPostingReadingPreferences {
                 identityService.refreshServerPreferences()
                     .assignErrorsToAlertItem(to: \.alertItem, on: self)

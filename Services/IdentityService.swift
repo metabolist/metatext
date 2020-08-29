@@ -88,12 +88,8 @@ extension IdentityService {
 
     func refreshLists() -> AnyPublisher<Never, Error> {
         networkClient.request(ListsEndpoint.lists)
-            .flatMap(contentDatabase.updateLists(_:))
+            .flatMap(contentDatabase.setLists(_:))
             .eraseToAnyPublisher()
-    }
-
-    func listsObservation() -> AnyPublisher<[Timeline], Error> {
-        contentDatabase.listsObservation()
     }
 
     func createList(title: String) -> AnyPublisher<Never, Error> {
@@ -107,6 +103,48 @@ extension IdentityService {
             .map { _ in id }
             .flatMap(contentDatabase.deleteList(id:))
             .eraseToAnyPublisher()
+    }
+
+    func listsObservation() -> AnyPublisher<[Timeline], Error> {
+        contentDatabase.listsObservation()
+    }
+
+    func refreshFilters() -> AnyPublisher<Never, Error> {
+        networkClient.request(FiltersEndpoint.filters)
+            .flatMap(contentDatabase.setFilters(_:))
+            .eraseToAnyPublisher()
+    }
+
+    func createFilter(_ filter: Filter) -> AnyPublisher<Never, Error> {
+        networkClient.request(FilterEndpoint.create(phrase: filter.phrase,
+                                                    context: filter.context,
+                                                    irreversible: filter.irreversible,
+                                                    wholeWord: filter.wholeWord,
+                                                    expiresIn: filter.expiresAt))
+            .flatMap(contentDatabase.createFilter(_:))
+            .eraseToAnyPublisher()
+    }
+
+    func updateFilter(_ filter: Filter) -> AnyPublisher<Never, Error> {
+        networkClient.request(FilterEndpoint.update(id: filter.id,
+                                                    phrase: filter.phrase,
+                                                    context: filter.context,
+                                                    irreversible: filter.irreversible,
+                                                    wholeWord: filter.wholeWord,
+                                                    expiresIn: filter.expiresAt))
+            .flatMap(contentDatabase.createFilter(_:))
+            .eraseToAnyPublisher()
+    }
+
+    func deleteFilter(id: String) -> AnyPublisher<Never, Error> {
+        networkClient.request(DeletionEndpoint.filter(id: id))
+            .map { _ in id }
+            .flatMap(contentDatabase.deleteFilter(id:))
+            .eraseToAnyPublisher()
+    }
+
+    func filtersObservation() -> AnyPublisher<[Filter], Error> {
+        contentDatabase.filtersObservation()
     }
 
     func updatePreferences(_ preferences: Identity.Preferences) -> AnyPublisher<Never, Error> {

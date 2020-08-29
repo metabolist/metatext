@@ -24,4 +24,8 @@ extension PreferencesViewModel {
     func notificationTypesPreferencesViewModel() -> NotificationTypesPreferencesViewModel {
         NotificationTypesPreferencesViewModel(identityService: identityService)
     }
+
+    func filtersViewModel() -> FiltersViewModel {
+        FiltersViewModel(identityService: identityService)
+    }
 }

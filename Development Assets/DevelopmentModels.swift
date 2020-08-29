@@ -114,6 +114,14 @@ extension NotificationTypesPreferencesViewModel {
     static let development = NotificationTypesPreferencesViewModel(identityService: .development)
 }
 
+extension FiltersViewModel {
+    static let development = FiltersViewModel(identityService: .development)
+}
+
+extension EditFilterViewModel {
+    static let development = EditFilterViewModel(filter: .new, identityService: .development)
+}
+
 extension StatusListViewModel {
     static let development = StatusListViewModel(
         statusListService: IdentityService.development.service(timeline: .home))

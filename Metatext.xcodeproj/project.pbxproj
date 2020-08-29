@@ -33,6 +33,13 @@
 		D0BEB1FD24F9E4E5001B0F04 /* ListsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB1FC24F9E4E5001B0F04 /* ListsViewModel.swift */; };
 		D0BEB1FF24F9E5BB001B0F04 /* ListsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB1FE24F9E5BB001B0F04 /* ListsView.swift */; };
 		D0BEB20124FA0220001B0F04 /* ListEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB20024FA0220001B0F04 /* ListEndpoint.swift */; };
+		D0BEB20524FA1107001B0F04 /* FiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB20424FA1107001B0F04 /* FiltersView.swift */; };
+		D0BEB20724FA1121001B0F04 /* FiltersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB20624FA1121001B0F04 /* FiltersViewModel.swift */; };
+		D0BEB20924FA1136001B0F04 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB20824FA1136001B0F04 /* Filter.swift */; };
+		D0BEB20B24FA12D8001B0F04 /* FiltersEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB20A24FA12D8001B0F04 /* FiltersEndpoint.swift */; };
+		D0BEB20D24FA193A001B0F04 /* FilterEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB20C24FA193A001B0F04 /* FilterEndpoint.swift */; };
+		D0BEB21124FA2A91001B0F04 /* EditFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB21024FA2A90001B0F04 /* EditFilterView.swift */; };
+		D0BEB21324FA2C0A001B0F04 /* EditFilterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB21224FA2C0A001B0F04 /* EditFilterViewModel.swift */; };
 		D0C7D49724F7616A001EBDBB /* IdentitiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42224F76169001EBDBB /* IdentitiesView.swift */; };
 		D0C7D49824F7616A001EBDBB /* CustomEmojiText.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42324F76169001EBDBB /* CustomEmojiText.swift */; };
 		D0C7D49924F7616A001EBDBB /* AddIdentityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42424F76169001EBDBB /* AddIdentityView.swift */; };
@@ -206,6 +213,13 @@
 		D0BEB1FC24F9E4E5001B0F04 /* ListsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsViewModel.swift; sourceTree = "<group>"; };
 		D0BEB1FE24F9E5BB001B0F04 /* ListsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsView.swift; sourceTree = "<group>"; };
 		D0BEB20024FA0220001B0F04 /* ListEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListEndpoint.swift; sourceTree = "<group>"; };
+		D0BEB20424FA1107001B0F04 /* FiltersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersView.swift; sourceTree = "<group>"; };
+		D0BEB20624FA1121001B0F04 /* FiltersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersViewModel.swift; sourceTree = "<group>"; };
+		D0BEB20824FA1136001B0F04 /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
+		D0BEB20A24FA12D8001B0F04 /* FiltersEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersEndpoint.swift; sourceTree = "<group>"; };
+		D0BEB20C24FA193A001B0F04 /* FilterEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterEndpoint.swift; sourceTree = "<group>"; };
+		D0BEB21024FA2A90001B0F04 /* EditFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFilterView.swift; sourceTree = "<group>"; };
+		D0BEB21224FA2C0A001B0F04 /* EditFilterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFilterViewModel.swift; sourceTree = "<group>"; };
 		D0C7D41E24F76169001EBDBB /* Metatext.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Metatext.entitlements; sourceTree = "<group>"; };
 		D0C7D41F24F76169001EBDBB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D0C7D42224F76169001EBDBB /* IdentitiesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentitiesView.swift; sourceTree = "<group>"; };
@@ -431,6 +445,8 @@
 				D0C7D42424F76169001EBDBB /* AddIdentityView.swift */,
 				D01F41E024F8885900D55A2D /* Attachments */,
 				D0C7D42324F76169001EBDBB /* CustomEmojiText.swift */,
+				D0BEB21024FA2A90001B0F04 /* EditFilterView.swift */,
+				D0BEB20424FA1107001B0F04 /* FiltersView.swift */,
 				D0C7D42224F76169001EBDBB /* IdentitiesView.swift */,
 				D0BEB1FE24F9E5BB001B0F04 /* ListsView.swift */,
 				D0BEB1F624F9A84B001B0F04 /* LoadingTableFooterView.swift */,
@@ -474,6 +490,7 @@
 				D0C7D43A24F76169001EBDBB /* Attachment.swift */,
 				D0C7D44124F76169001EBDBB /* Card.swift */,
 				D0C7D44B24F76169001EBDBB /* Emoji.swift */,
+				D0BEB20824FA1136001B0F04 /* Filter.swift */,
 				D0C7D44224F76169001EBDBB /* HTML.swift */,
 				D0C7D43B24F76169001EBDBB /* Identity.swift */,
 				D0C7D44524F76169001EBDBB /* Instance.swift */,
@@ -517,6 +534,8 @@
 			children = (
 				D0C7D46024F76169001EBDBB /* AddIdentityViewModel.swift */,
 				D01F41DE24F8868800D55A2D /* AttachmentViewModel.swift */,
+				D0BEB21224FA2C0A001B0F04 /* EditFilterViewModel.swift */,
+				D0BEB20624FA1121001B0F04 /* FiltersViewModel.swift */,
 				D0C7D45F24F76169001EBDBB /* IdentitiesViewModel.swift */,
 				D0BEB1FC24F9E4E5001B0F04 /* ListsViewModel.swift */,
 				D0C7D45D24F76169001EBDBB /* NotificationTypesPreferencesViewModel.swift */,
@@ -591,6 +610,8 @@
 				D0C7D47F24F76169001EBDBB /* AppAuthorizationEndpoint.swift */,
 				D0C7D48324F76169001EBDBB /* ContextEndpoint.swift */,
 				D0C7D48224F76169001EBDBB /* DeletionEndpoint.swift */,
+				D0BEB20C24FA193A001B0F04 /* FilterEndpoint.swift */,
+				D0BEB20A24FA12D8001B0F04 /* FiltersEndpoint.swift */,
 				D0C7D47D24F76169001EBDBB /* InstanceEndpoint.swift */,
 				D0BEB20024FA0220001B0F04 /* ListEndpoint.swift */,
 				D0BEB1F824F9D627001B0F04 /* ListsEndpoint.swift */,
@@ -874,14 +895,17 @@
 				D0C7D4D224F7616A001EBDBB /* ContentDatabase.swift in Sources */,
 				D0C7D4F724F7616A001EBDBB /* StatusService.swift in Sources */,
 				D04FD73924D4A7B4007D572D /* AccountEndpoint+Stubbing.swift in Sources */,
+				D0BEB21324FA2C0A001B0F04 /* EditFilterViewModel.swift in Sources */,
 				D0C7D4FA24F7616A001EBDBB /* AllIdentitiesService.swift in Sources */,
 				D0C7D4CD24F7616A001EBDBB /* AddIdentityViewModel.swift in Sources */,
 				D03658D124EDD80900AC17EC /* ContextEndpoint+Stubbing.swift in Sources */,
 				D0BEB1F324F8EE8C001B0F04 /* AttachmentView.swift in Sources */,
 				D0BEB1F524F9A216001B0F04 /* Paged.swift in Sources */,
 				D0DC174A24CFF15F00A75C65 /* AppAuthorizationEndpoint+Stubbing.swift in Sources */,
+				D0BEB20D24FA193A001B0F04 /* FilterEndpoint.swift in Sources */,
 				D0C7D49A24F7616A001EBDBB /* StatusListView.swift in Sources */,
 				D01F41D924F880C400D55A2D /* TouchFallthroughTextView.swift in Sources */,
+				D0BEB20924FA1136001B0F04 /* Filter.swift in Sources */,
 				D0C7D4A524F7616A001EBDBB /* StatusListViewController.swift in Sources */,
 				D0C7D4CC24F7616A001EBDBB /* IdentitiesViewModel.swift in Sources */,
 				D0C7D4E024F7616A001EBDBB /* WebAuthSession.swift in Sources */,
@@ -952,10 +976,13 @@
 				D01F41E424F8889700D55A2D /* AttachmentsView.swift in Sources */,
 				D0C7D4AA24F7616A001EBDBB /* Attachment.swift in Sources */,
 				D0C7D4AF24F7616A001EBDBB /* PushNotification.swift in Sources */,
+				D0BEB20724FA1121001B0F04 /* FiltersViewModel.swift in Sources */,
 				D0C7D4C924F7616A001EBDBB /* TabNavigationViewModel.swift in Sources */,
+				D0BEB21124FA2A91001B0F04 /* EditFilterView.swift in Sources */,
 				D0C7D4B624F7616A001EBDBB /* ListTimeline.swift in Sources */,
 				D0C7D4E124F7616A001EBDBB /* MastodonDecoder.swift in Sources */,
 				D0C7D4B024F7616A001EBDBB /* PushSubscription.swift in Sources */,
+				D0BEB20B24FA12D8001B0F04 /* FiltersEndpoint.swift in Sources */,
 				D0C7D4C424F7616A001EBDBB /* AppDelegate.swift in Sources */,
 				D074577A24D29366004758DB /* URLSessionConfiguration+Extensions.swift in Sources */,
 				D0C7D4E424F7616A001EBDBB /* PreferencesEndpoint.swift in Sources */,
@@ -966,6 +993,7 @@
 				D0C7D4F324F7616A001EBDBB /* ContextService.swift in Sources */,
 				D0C7D4DD24F7616A001EBDBB /* CodingUserInfoKey+Extensions.swift in Sources */,
 				D0C7D4D824F7616A001EBDBB /* Publisher+Extensions.swift in Sources */,
+				D0BEB20524FA1107001B0F04 /* FiltersView.swift in Sources */,
 				D01F41D824F880C400D55A2D /* StatusTableViewCell.swift in Sources */,
 				D04FD73C24D4A83A007D572D /* InstanceEndpoint+Stubbing.swift in Sources */,
 				D0C7D4BE24F7616A001EBDBB /* Unknowable.swift in Sources */,

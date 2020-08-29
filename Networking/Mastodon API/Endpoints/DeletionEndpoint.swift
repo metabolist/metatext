@@ -5,6 +5,7 @@ import Foundation
 enum DeletionEndpoint {
     case oauthRevoke(token: String, clientID: String, clientSecret: String)
     case list(id: String)
+    case filter(id: String)
 }
 
 extension DeletionEndpoint: MastodonEndpoint {
@@ -16,6 +17,8 @@ extension DeletionEndpoint: MastodonEndpoint {
             return ["oauth"]
         case .list:
             return defaultContext + ["lists"]
+        case .filter:
+            return defaultContext + ["filters"]
         }
     }
 
@@ -23,7 +26,7 @@ extension DeletionEndpoint: MastodonEndpoint {
         switch self {
         case .oauthRevoke:
             return ["revoke"]
-        case let .list(id):
+        case let .list(id), let .filter(id):
             return [id]
         }
     }
@@ -32,7 +35,7 @@ extension DeletionEndpoint: MastodonEndpoint {
         switch self {
         case .oauthRevoke:
             return .post
-        case .list:
+        case .list, .filter:
             return .delete
         }
     }
@@ -41,7 +44,7 @@ extension DeletionEndpoint: MastodonEndpoint {
         switch self {
         case let .oauthRevoke(token, clientID, clientSecret):
             return ["token": token, "client_id": clientID, "client_secret": clientSecret]
-        case .list:
+        case .list, .filter:
             return nil
         }
     }
