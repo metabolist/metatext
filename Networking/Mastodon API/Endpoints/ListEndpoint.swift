@@ -20,7 +20,7 @@ extension ListEndpoint: MastodonEndpoint {
         }
     }
 
-    var parameters: [String : Any]? {
+    var parameters: [String: Any]? {
         switch self {
         case let .create(title):
             return ["title": title]
