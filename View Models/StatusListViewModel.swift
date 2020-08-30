@@ -8,6 +8,8 @@ class StatusListViewModel: ObservableObject {
     @Published var alertItem: AlertItem?
     @Published private(set) var loading = false
     private(set) var maintainScrollPositionOfStatusID: String?
+
+    @Published private var filterRegularExpression: String?
     private var statuses = [String: Status]()
     private let statusListService: StatusListService
     private var statusViewModelCache = [Status: (StatusViewModel, AnyCancellable)]()
@@ -16,7 +18,22 @@ class StatusListViewModel: ObservableObject {
     init(statusListService: StatusListService) {
         self.statusListService = statusListService
 
+        statusListService.filters
+            .assignErrorsToAlertItem(to: \.alertItem, on: self)
+            .map { $0.regularExpression() }
+            .assign(to: &$filterRegularExpression)
+
         statusListService.statusSections
+            .map {
+                $0.map {
+                    $0.filter { [weak self] in
+                        guard let filterRegularExpression = self?.filterRegularExpression else { return true }
+
+                        return $0.filterableContent.range(of: filterRegularExpression,
+                                                          options: [.regularExpression, .caseInsensitive]) == nil
+                    }
+                }
+            }
             .handleEvents(receiveOutput: { [weak self] in
                 self?.determineIfScrollPositionShouldBeMaintained(newStatusSections: $0)
                 self?.cleanViewModelCache(newStatusSections: $0)

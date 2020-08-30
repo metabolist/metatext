@@ -5,6 +5,7 @@ import Combine
 
 protocol StatusListService {
     var statusSections: AnyPublisher<[[Status]], Error> { get }
+    var filters: AnyPublisher<[Filter], Error> { get }
     var paginates: Bool { get }
     var contextParentID: String? { get }
     func isPinned(status: Status) -> Bool

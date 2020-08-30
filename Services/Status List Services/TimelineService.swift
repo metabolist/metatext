@@ -21,6 +21,10 @@ struct TimelineService {
 }
 
 extension TimelineService: StatusListService {
+    var filters: AnyPublisher<[Filter], Error> {
+        contentDatabase.activeFiltersObservation(date: Date(), context: filterContext)
+    }
+
     func request(maxID: String?, minID: String?) -> AnyPublisher<Never, Error> {
         networkClient.request(Paged(timeline.endpoint, maxID: maxID, minID: minID))
             .map { ($0, timeline) }
@@ -34,5 +38,16 @@ extension TimelineService: StatusListService {
 
     func contextService(status: Status) -> ContextService {
         ContextService(status: status.displayStatus, networkClient: networkClient, contentDatabase: contentDatabase)
+    }
+}
+
+private extension TimelineService {
+    var filterContext: Filter.Context {
+        switch timeline {
+        case .home, .list:
+            return .home
+        case .local, .federated:
+            return .public
+        }
     }
 }

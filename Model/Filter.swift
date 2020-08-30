@@ -32,6 +32,30 @@ extension Filter {
                           wholeWord: true)
 }
 
+extension Array where Element == Filter {
+    // Adapted from https://github.com/tootsuite/mastodon/blob/bf477cee9f31036ebf3d164ddec1cebef5375513/app/javascript/mastodon/selectors/index.js#L43
+    func regularExpression() -> String? {
+        guard !isEmpty else { return nil }
+
+        return map {
+            var expression = NSRegularExpression.escapedPattern(for: $0.phrase)
+
+            if $0.wholeWord {
+                if expression.range(of: #"^[\w]"#, options: .regularExpression) != nil {
+                    expression = #"\b"# + expression
+                }
+
+                if expression.range(of: #"[\w]$"#, options: .regularExpression) != nil {
+                    expression += #"\b"#
+                }
+            }
+
+            return expression
+        }
+        .joined(separator: "|")
+    }
+}
+
 extension Filter.Context: Identifiable {
     var id: Self { self }
 }

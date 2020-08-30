@@ -33,6 +33,10 @@ struct ContextService {
 }
 
 extension ContextService: StatusListService {
+    var filters: AnyPublisher<[Filter], Error> {
+        contentDatabase.activeFiltersObservation(date: Date(), context: .thread)
+    }
+
     var contextParentID: String? { status.id }
 
     func isReplyInContext(status: Status) -> Bool {

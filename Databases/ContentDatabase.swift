@@ -143,10 +143,15 @@ extension ContentDatabase {
             .eraseToAnyPublisher()
     }
 
-    func activeFiltersObservation(date: Date) -> AnyPublisher<[Filter], Error> {
+    func activeFiltersObservation(date: Date, context: Filter.Context? = nil) -> AnyPublisher<[Filter], Error> {
         ValueObservation.tracking(Filter.filter(Column("expiresAt") == nil || Column("expiresAt") > date).fetchAll)
             .removeDuplicates()
             .publisher(in: databaseQueue)
+            .map {
+                guard let context = context else { return $0 }
+
+                return $0.filter { $0.context.contains(context) }
+            }
             .eraseToAnyPublisher()
     }
 

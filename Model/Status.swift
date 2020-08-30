@@ -110,6 +110,14 @@ extension Status {
     var displayStatus: Status {
         reblog ?? self
     }
+
+    var filterableContent: String {
+        [content.attributed.string,
+         spoilerText,
+         (poll?.options.map(\.title) ?? []).joined(separator: " "),
+         reblog?.filterableContent ?? ""]
+            .joined(separator: " ")
+    }
 }
 
 extension Status: Hashable {
