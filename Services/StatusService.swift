@@ -2,6 +2,7 @@
 
 import Foundation
 import Combine
+import Mastodon
 
 struct StatusService {
     let status: Status

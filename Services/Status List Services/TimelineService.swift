@@ -2,6 +2,7 @@
 
 import Foundation
 import Combine
+import Mastodon
 
 struct TimelineService {
     let statusSections: AnyPublisher<[[Status]], Error>

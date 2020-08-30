@@ -1,6 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import Foundation
+import Mastodon
 
 struct HTTPStubs {
     static func stub(

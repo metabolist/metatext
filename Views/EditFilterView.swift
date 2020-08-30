@@ -1,6 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import SwiftUI
+import struct Mastodon.Filter
 
 struct EditFilterView: View {
     @StateObject var viewModel: EditFilterViewModel

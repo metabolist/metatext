@@ -2,6 +2,7 @@
 
 import Foundation
 import Combine
+import Mastodon
 
 class FiltersViewModel: ObservableObject {
     @Published var activeFilters = [Filter]()

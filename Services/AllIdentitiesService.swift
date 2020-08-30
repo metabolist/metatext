@@ -2,6 +2,7 @@
 
 import Foundation
 import Combine
+import Mastodon
 
 struct AllIdentitiesService {
     let mostRecentlyUsedIdentityID: AnyPublisher<UUID?, Never>
@@ -49,7 +50,7 @@ extension AllIdentitiesService {
 
     func deleteIdentity(_ identity: Identity) -> AnyPublisher<Never, Error> {
         let secretsService = SecretsService(identityID: identity.id, keychainService: environment.keychainServiceType)
-        let networkClient = MastodonClient(environment: environment)
+        let networkClient = MastodonClient(session: environment.session)
 
         networkClient.instanceURL = identity.url
 

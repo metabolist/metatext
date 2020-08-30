@@ -1,6 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import Foundation
+import Mastodon
 
 class StubbingURLProtocol: URLProtocol {
     private static var targetsForURLs = [URL: HTTPTarget]()

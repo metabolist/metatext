@@ -1,6 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import Foundation
+import Mastodon
 
 extension PreferencesEndpoint: Stubbing {
     func dataString(url: URL) -> String? {

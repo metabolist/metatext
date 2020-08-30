@@ -2,6 +2,7 @@
 
 import Foundation
 import Combine
+import Mastodon
 
 class IdentityService {
     @Published private(set) var identity: Identity
@@ -34,11 +35,11 @@ class IdentityService {
         secretsService = SecretsService(
             identityID: identityID,
             keychainService: environment.keychainServiceType)
-        networkClient = MastodonClient(environment: environment)
+        networkClient = MastodonClient(session: environment.session)
         networkClient.instanceURL = identity.url
         networkClient.accessToken = try? secretsService.item(.accessToken)
 
-        contentDatabase = try ContentDatabase(identityID: identityID, environment: environment)
+        contentDatabase = try ContentDatabase(identityID: identityID, inMemory: environment.inMemoryContent)
 
         observation.catch { [weak self] error -> Empty<Identity, Never> in
             self?.observationErrorsInput.send(error)

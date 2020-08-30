@@ -3,6 +3,7 @@
 import Foundation
 import Combine
 import GRDB
+import Mastodon
 
 enum IdentityDatabaseError: Error {
     case identityNotFound

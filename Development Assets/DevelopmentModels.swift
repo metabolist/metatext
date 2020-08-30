@@ -2,6 +2,7 @@
 
 import Foundation
 import Combine
+import Mastodon
 
 // swiftlint:disable force_try
 private let decoder = MastodonDecoder()
@@ -119,7 +120,7 @@ extension FiltersViewModel {
 }
 
 extension EditFilterViewModel {
-    static let development = EditFilterViewModel(filter: .new, identityService: .development)
+    static let development = EditFilterViewModel(filter: Filter.new, identityService: .development)
 }
 
 extension StatusListViewModel {

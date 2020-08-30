@@ -2,6 +2,7 @@
 
 import Foundation
 import Combine
+import Mastodon
 
 protocol StatusListService {
     var statusSections: AnyPublisher<[[Status]], Error> { get }

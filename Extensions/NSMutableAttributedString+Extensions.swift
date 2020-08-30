@@ -2,6 +2,7 @@
 
 import UIKit
 import Kingfisher
+import Mastodon
 
 extension NSMutableAttributedString {
     func insert(emoji: [Emoji], view: UIView) {

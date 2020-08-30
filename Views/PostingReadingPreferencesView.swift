@@ -1,6 +1,8 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import SwiftUI
+import class Mastodon.Status
+import struct Mastodon.MastodonPreferences
 
 struct PostingReadingPreferencesView: View {
     @StateObject var viewModel: PostingReadingPreferencesViewModel

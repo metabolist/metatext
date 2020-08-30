@@ -1,6 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import Foundation
+import Mastodon
 
 struct AppEnvironment {
     let session: Session
@@ -8,7 +9,6 @@ struct AppEnvironment {
     let keychainServiceType: KeychainService.Type
     let userDefaults: UserDefaults
     let inMemoryContent: Bool
-    let attributedStringCache = AttributedStringCache()
 }
 
 extension AppEnvironment {

@@ -2,6 +2,7 @@
 
 import Foundation
 import UIKit
+import Mastodon
 
 extension TimelinesEndpoint: Stubbing {
     func data(url: URL) -> Data? {

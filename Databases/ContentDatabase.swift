@@ -3,12 +3,13 @@
 import Foundation
 import Combine
 import GRDB
+import Mastodon
 
 // swiftlint:disable file_length
 struct ContentDatabase {
     private let databaseQueue: DatabaseQueue
 
-    init(identityID: UUID, environment: AppEnvironment) throws {
+    init(identityID: UUID, inMemory: Bool) throws {
         guard
             let documentsDirectory = NSSearchPathForDirectoriesInDomains(
                 .documentDirectory,
@@ -16,7 +17,7 @@ struct ContentDatabase {
                 .first
         else { throw DatabaseError.documentsDirectoryNotFound }
 
-        if environment.inMemoryContent {
+        if inMemory {
             databaseQueue = DatabaseQueue()
         } else {
             databaseQueue = try DatabaseQueue(path: "\(documentsDirectory)/\(identityID.uuidString).sqlite3")
@@ -24,7 +25,6 @@ struct ContentDatabase {
 
         try Self.migrate(databaseQueue)
         try Self.createTemporaryTables(databaseQueue)
-        Self.attributedStringCache = environment.attributedStringCache
     }
 }
 
@@ -131,8 +131,6 @@ extension ContentDatabase {
 }
 
 private extension ContentDatabase {
-    static var attributedStringCache: AttributedStringCache?
-
     // swiftlint:disable function_body_length
     static func migrate(_ writer: DatabaseWriter) throws {
         var migrator = DatabaseMigrator()
@@ -244,21 +242,11 @@ private extension ContentDatabase {
 }
 
 extension Account: TableRecord, FetchableRecord, PersistableRecord {
-    static var databaseDecodingUserInfo: [CodingUserInfoKey: Any] {
-        var userInfo = [CodingUserInfoKey: Any]()
-
-        if let attributedStringCache = ContentDatabase.attributedStringCache {
-            userInfo[.attributedStringCache] = attributedStringCache
-        }
-
-        return userInfo
-    }
-
-    static func databaseJSONDecoder(for column: String) -> JSONDecoder {
+    public static func databaseJSONDecoder(for column: String) -> JSONDecoder {
         MastodonDecoder()
     }
 
-    static func databaseJSONEncoder(for column: String) -> JSONEncoder {
+    public static func databaseJSONEncoder(for column: String) -> JSONEncoder {
         MastodonEncoder()
     }
 }
@@ -282,7 +270,7 @@ extension Timeline: StatusCollection {
         case id, listTitle
     }
 
-    init(row: Row) {
+    public init(row: Row) {
         switch (row[Columns.id] as String, row[Columns.listTitle] as String?) {
         case (Timeline.home.id, _):
             self = .home
@@ -297,7 +285,7 @@ extension Timeline: StatusCollection {
         }
     }
 
-    func encode(to container: inout PersistenceContainer) {
+    public func encode(to container: inout PersistenceContainer) {
         container[Columns.id] = id
 
         if case let .list(list) = self {
@@ -336,11 +324,11 @@ private extension Timeline {
 }
 
 extension Filter: TableRecord, FetchableRecord, PersistableRecord {
-    static func databaseJSONDecoder(for column: String) -> JSONDecoder {
+    public static func databaseJSONDecoder(for column: String) -> JSONDecoder {
         MastodonDecoder()
     }
 
-    static func databaseJSONEncoder(for column: String) -> JSONEncoder {
+    public static func databaseJSONEncoder(for column: String) -> JSONEncoder {
         MastodonEncoder()
     }
 }
@@ -464,16 +452,6 @@ private extension StoredStatus {
 }
 
 extension StoredStatus: TableRecord, FetchableRecord, PersistableRecord {
-    static var databaseDecodingUserInfo: [CodingUserInfoKey: Any] {
-        var userInfo = [CodingUserInfoKey: Any]()
-
-        if let attributedStringCache = ContentDatabase.attributedStringCache {
-            userInfo[.attributedStringCache] = attributedStringCache
-        }
-
-        return userInfo
-    }
-
     static func databaseJSONDecoder(for column: String) -> JSONDecoder {
         MastodonDecoder()
     }

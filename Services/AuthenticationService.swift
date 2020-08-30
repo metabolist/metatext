@@ -2,6 +2,7 @@
 
 import Foundation
 import Combine
+import Mastodon
 
 struct AuthenticationService {
     private let networkClient: MastodonClient
@@ -9,7 +10,7 @@ struct AuthenticationService {
     private let webAuthSessionContextProvider = WebAuthSessionContextProvider()
 
     init(environment: AppEnvironment) {
-        networkClient = MastodonClient(environment: environment)
+        networkClient = MastodonClient(session: environment.session)
         webAuthSessionType = environment.webAuthSessionType
     }
 }

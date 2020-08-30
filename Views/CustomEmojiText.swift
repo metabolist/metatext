@@ -1,6 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import SwiftUI
+import struct Mastodon.Emoji
 
 struct CustomEmojiText: UIViewRepresentable {
     private let attributedText: NSMutableAttributedString
