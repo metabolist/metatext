@@ -26,7 +26,7 @@ class StatusListViewModel: ObservableObject {
                 self?.statuses = Dictionary(uniqueKeysWithValues: $0.reduce([], +).map { ($0.id, $0) })
             })
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
-            .map { $0.map { section in section.map(\.id) } }
+            .map { $0.map { $0.map(\.id) } }
             .assign(to: &$statusIDs)
     }
 }
