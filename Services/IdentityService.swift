@@ -153,6 +153,7 @@ extension IdentityService {
 
     func updatePreferences(_ preferences: Identity.Preferences) -> AnyPublisher<Never, Error> {
         identityDatabase.updatePreferences(preferences, forIdentityID: identity.id)
+            .collect()
             .zip(Just(self).first().setFailureType(to: Error.self))
             .filter { $1.identity.preferences.useServerPostingReadingPreferences }
             .map { _ in () }
