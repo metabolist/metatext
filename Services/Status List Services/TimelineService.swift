@@ -14,7 +14,7 @@ struct TimelineService {
         self.timeline = timeline
         self.networkClient = networkClient
         self.contentDatabase = contentDatabase
-        statusSections = contentDatabase.statusesObservation(timeline: timeline)
+        statusSections = contentDatabase.statusesObservation(collection: timeline)
             .map { [$0] }
             .eraseToAnyPublisher()
     }
@@ -46,7 +46,7 @@ private extension TimelineService {
         switch timeline {
         case .home, .list:
             return .home
-        case .local, .federated:
+        case .local, .federated, .tag:
             return .public
         }
     }

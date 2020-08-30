@@ -36,7 +36,7 @@ extension TabNavigationViewModel {
         switch timeline {
         case .home, .list:
             return identity.handle
-        case .local, .federated:
+        case .local, .federated, .tag:
             return identity.instance?.uri ?? ""
         }
     }
@@ -51,6 +51,8 @@ extension TabNavigationViewModel {
             return NSLocalizedString("timelines.federated", comment: "")
         case let .list(list):
             return list.title
+        case let .tag(tag):
+            return "#" + tag
         }
     }
 
@@ -60,6 +62,7 @@ extension TabNavigationViewModel {
         case .local: return "person.3"
         case .federated: return "globe"
         case .list: return "scroll"
+        case .tag: return "number"
         }
     }
 

@@ -93,34 +93,8 @@ extension ContentDatabase {
             .eraseToAnyPublisher()
     }
 
-    func statusesObservation(timeline: Timeline) -> AnyPublisher<[Status], Error> {
-        ValueObservation
-            .tracking(timeline.statuses
-                        .including(required: StoredStatus.account)
-                        .including(optional: StoredStatus.reblogAccount)
-                        .including(optional: StoredStatus.reblog)
-                        .asRequest(of: StatusResult.self)
-                        .fetchAll)
-            .removeDuplicates()
-            .publisher(in: databaseQueue)
-            .map { $0.map(Status.init(statusResult:)) }
-            .eraseToAnyPublisher()
-    }
-
-    func statusesObservation(collection: TransientStatusCollection) -> AnyPublisher<[Status], Error> {
-        ValueObservation.tracking {
-            try StatusResult.fetchAll(
-                $0,
-                StoredStatus.filter(
-                    try collection
-                        .elements
-                        .fetchAll($0)
-                        .map(\.statusId)
-                        .contains(Column("id")))
-                    .including(required: StoredStatus.account)
-                    .including(optional: StoredStatus.reblogAccount)
-                    .including(optional: StoredStatus.reblog))
-        }
+    func statusesObservation(collection: StatusCollection) -> AnyPublisher<[Status], Error> {
+        ValueObservation.tracking(collection.fetch)
         .removeDuplicates()
         .publisher(in: databaseQueue)
         .map { $0.map(Status.init(statusResult:)) }
@@ -131,13 +105,6 @@ extension ContentDatabase {
         ValueObservation.tracking(Timeline.filter(!Timeline.nonLists.map(\.id).contains(Column("id")))
                                     .order(Column("listTitle").collating(.localizedCaseInsensitiveCompare).asc)
                                     .fetchAll)
-            .removeDuplicates()
-            .publisher(in: databaseQueue)
-            .eraseToAnyPublisher()
-    }
-
-    func filtersObservation() -> AnyPublisher<[Filter], Error> {
-        ValueObservation.tracking(Filter.fetchAll)
             .removeDuplicates()
             .publisher(in: databaseQueue)
             .eraseToAnyPublisher()
@@ -298,6 +265,7 @@ extension Account: TableRecord, FetchableRecord, PersistableRecord {
 
 protocol StatusCollection: FetchableRecord, PersistableRecord {
     var id: String { get }
+    var fetch: (Database) throws -> [StatusResult] { get }
 
     func joinRecord(status: Status) -> PersistableRecord
 }
@@ -315,15 +283,17 @@ extension Timeline: StatusCollection {
     }
 
     init(row: Row) {
-        switch row[Columns.id] as String {
-        case Timeline.home.id:
+        switch (row[Columns.id] as String, row[Columns.listTitle] as String?) {
+        case (Timeline.home.id, _):
             self = .home
-        case Timeline.local.id:
+        case (Timeline.local.id, _):
             self = .local
-        case Timeline.federated.id:
+        case (Timeline.federated.id, _):
             self = .federated
+        case (let id, .some(let title)):
+            self = .list(MastodonList(id: id, title: title))
         default:
-            self = .list(MastodonList(id: row[Columns.id], title: row[Columns.listTitle]))
+            self = .tag(row[Columns.id])
         }
     }
 
@@ -333,6 +303,15 @@ extension Timeline: StatusCollection {
         if case let .list(list) = self {
             container[Columns.listTitle] = list.title
         }
+    }
+
+    var fetch: (Database) throws -> [StatusResult] {
+        statuses
+            .including(required: StoredStatus.account)
+            .including(optional: StoredStatus.reblogAccount)
+            .including(optional: StoredStatus.reblog)
+            .asRequest(of: StatusResult.self)
+            .fetchAll
     }
 
     func joinRecord(status: Status) -> PersistableRecord {
@@ -374,6 +353,21 @@ private struct TransientStatusCollectionElement: Codable, TableRecord, Fetchable
 }
 
 extension TransientStatusCollection: StatusCollection {
+    var fetch: (Database) throws -> [StatusResult] {
+        {
+            try StatusResult.fetchAll(
+                $0,
+                StoredStatus.filter(
+                    try elements
+                        .fetchAll($0)
+                        .map(\.statusId)
+                        .contains(Column("id")))
+                    .including(required: StoredStatus.account)
+                    .including(optional: StoredStatus.reblogAccount)
+                    .including(optional: StoredStatus.reblog))
+        }
+    }
+
     func joinRecord(status: Status) -> PersistableRecord {
         TransientStatusCollectionElement(transientStatusCollectionId: id, statusId: status.id)
     }
@@ -489,11 +483,11 @@ extension StoredStatus: TableRecord, FetchableRecord, PersistableRecord {
     }
 }
 
-private struct StatusResult: Codable, Hashable, FetchableRecord {
+struct StatusResult: Codable, Hashable, FetchableRecord {
     let account: Account
-    let status: StoredStatus
+    fileprivate let status: StoredStatus
     let reblogAccount: Account?
-    let reblog: StoredStatus?
+    fileprivate let reblog: StoredStatus?
 }
 
 private extension Status {

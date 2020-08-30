@@ -7,6 +7,7 @@ enum Timeline: Hashable {
     case local
     case federated
     case list(MastodonList)
+    case tag(String)
 }
 
 extension Timeline {
@@ -22,6 +23,8 @@ extension Timeline {
             return .public(local: false)
         case let .list(list):
             return .list(id: list.id)
+        case let .tag(tag):
+            return .tag(tag)
         }
     }
 }
@@ -37,6 +40,8 @@ extension Timeline: Identifiable {
             return "federated"
         case let .list(list):
             return list.id
+        case let .tag(tag):
+            return "#" + tag
         }
     }
 }
