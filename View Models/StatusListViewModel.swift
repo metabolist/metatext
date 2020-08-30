@@ -9,7 +9,6 @@ class StatusListViewModel: ObservableObject {
     @Published private(set) var loading = false
     private(set) var maintainScrollPositionOfStatusID: String?
 
-    @Published private var filterRegularExpression: String?
     private var statuses = [String: Status]()
     private let statusListService: StatusListService
     private var statusViewModelCache = [Status: (StatusViewModel, AnyCancellable)]()
@@ -18,22 +17,9 @@ class StatusListViewModel: ObservableObject {
     init(statusListService: StatusListService) {
         self.statusListService = statusListService
 
-        statusListService.filters
-            .assignErrorsToAlertItem(to: \.alertItem, on: self)
-            .map { $0.regularExpression() }
-            .assign(to: &$filterRegularExpression)
-
         statusListService.statusSections
-            .map {
-                $0.map {
-                    $0.filter { [weak self] in
-                        guard let filterRegularExpression = self?.filterRegularExpression else { return true }
-
-                        return $0.filterableContent.range(of: filterRegularExpression,
-                                                          options: [.regularExpression, .caseInsensitive]) == nil
-                    }
-                }
-            }
+            .combineLatest(statusListService.filters.map { $0.regularExpression() })
+            .map(Self.filter(statusSections:regularExpression:))
             .handleEvents(receiveOutput: { [weak self] in
                 self?.determineIfScrollPositionShouldBeMaintained(newStatusSections: $0)
                 self?.cleanViewModelCache(newStatusSections: $0)
@@ -91,6 +77,14 @@ extension StatusListViewModel {
 }
 
 private extension StatusListViewModel {
+    static func filter(statusSections: [[Status]], regularExpression: String?) -> [[Status]] {
+        guard let regEx = regularExpression else { return statusSections }
+
+        return statusSections.map {
+            $0.filter { $0.filterableContent.range(of: regEx, options: [.regularExpression, .caseInsensitive]) == nil }
+        }
+    }
+
     func determineIfScrollPositionShouldBeMaintained(newStatusSections: [[Status]]) {
         maintainScrollPositionOfStatusID = nil // clear old value
 
