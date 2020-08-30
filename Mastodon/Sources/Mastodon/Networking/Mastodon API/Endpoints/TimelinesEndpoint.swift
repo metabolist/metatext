@@ -9,7 +9,7 @@ public enum TimelinesEndpoint {
     case list(id: String)
 }
 
-extension TimelinesEndpoint: MastodonEndpoint {
+extension TimelinesEndpoint: Endpoint {
     public typealias ResultType = [Status]
 
     public var context: [String] {

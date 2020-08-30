@@ -8,7 +8,7 @@ public enum DeletionEndpoint {
     case filter(id: String)
 }
 
-extension DeletionEndpoint: MastodonEndpoint {
+extension DeletionEndpoint: Endpoint {
     public typealias ResultType = [String: String]
 
     public var context: [String] {

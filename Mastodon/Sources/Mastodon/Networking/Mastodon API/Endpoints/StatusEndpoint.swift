@@ -8,7 +8,7 @@ public enum StatusEndpoint {
     case unfavourite(id: String)
 }
 
-extension StatusEndpoint: MastodonEndpoint {
+extension StatusEndpoint: Endpoint {
     public typealias ResultType = Status
 
     public var context: [String] {

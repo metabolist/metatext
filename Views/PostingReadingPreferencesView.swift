@@ -2,7 +2,7 @@
 
 import SwiftUI
 import class Mastodon.Status
-import struct Mastodon.MastodonPreferences
+import struct Mastodon.Preferences
 
 struct PostingReadingPreferencesView: View {
     @StateObject var viewModel: PostingReadingPreferencesViewModel
@@ -33,9 +33,9 @@ struct PostingReadingPreferencesView: View {
                     Text("preferences.reading-expand-media")
                     Picker("", selection: $viewModel.preferences.readingExpandMedia,
                            content: {
-                            Text("preferences.expand-media.default").tag(MastodonPreferences.ExpandMedia.default)
-                            Text("preferences.expand-media.show-all").tag(MastodonPreferences.ExpandMedia.showAll)
-                            Text("preferences.expand-media.hide-all").tag(MastodonPreferences.ExpandMedia.hideAll)
+                            Text("preferences.expand-media.default").tag(Preferences.ExpandMedia.default)
+                            Text("preferences.expand-media.show-all").tag(Preferences.ExpandMedia.showAll)
+                            Text("preferences.expand-media.hide-all").tag(Preferences.ExpandMedia.hideAll)
                            })
                         .pickerStyle(SegmentedPickerStyle())
                 }

@@ -2,10 +2,10 @@
 
 import Foundation
 
-public struct MastodonError: Error, Codable {
+public struct APIError: Error, Codable {
     public let error: String
 }
 
-extension MastodonError: LocalizedError {
+extension APIError: LocalizedError {
     public var errorDescription: String? { error }
 }

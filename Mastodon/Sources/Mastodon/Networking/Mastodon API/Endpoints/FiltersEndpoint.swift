@@ -6,7 +6,7 @@ public enum FiltersEndpoint {
     case filters
 }
 
-extension FiltersEndpoint: MastodonEndpoint {
+extension FiltersEndpoint: Endpoint {
     public typealias ResultType = [Filter]
 
     public var context: [String] {

@@ -6,7 +6,7 @@ public enum ListsEndpoint {
     case lists
 }
 
-extension ListsEndpoint: MastodonEndpoint {
+extension ListsEndpoint: Endpoint {
     public typealias ResultType = [MastodonList]
 
     public var pathComponentsInContext: [String] {

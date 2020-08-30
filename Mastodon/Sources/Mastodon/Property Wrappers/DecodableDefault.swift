@@ -57,7 +57,7 @@ public extension DecodableDefault {
         }
 
         public enum ExpandMediaDefault: Source {
-            public static var defaultValue: MastodonPreferences.ExpandMedia { .default }
+            public static var defaultValue: Preferences.ExpandMedia { .default }
         }
     }
 }

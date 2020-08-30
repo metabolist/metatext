@@ -40,7 +40,7 @@ extension Identity {
         @DecodableDefault.StatusVisibilityPublic var postingDefaultVisibility: Status.Visibility
         @DecodableDefault.False var postingDefaultSensitive
         var postingDefaultLanguage: String?
-        @DecodableDefault.ExpandMediaDefault var readingExpandMedia: MastodonPreferences.ExpandMedia
+        @DecodableDefault.ExpandMediaDefault var readingExpandMedia: Mastodon.Preferences.ExpandMedia
         @DecodableDefault.False var readingExpandSpoilers
     }
 }
@@ -58,7 +58,7 @@ extension Identity {
 }
 
 extension Identity.Preferences {
-    func updated(from serverPreferences: MastodonPreferences) -> Self {
+    func updated(from serverPreferences: Preferences) -> Self {
         var mutable = self
 
         if useServerPostingReadingPreferences {

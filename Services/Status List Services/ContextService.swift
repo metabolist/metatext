@@ -9,12 +9,12 @@ struct ContextService {
     let paginates = false
 
     private let status: Status
-    private let context = CurrentValueSubject<MastodonContext, Never>(MastodonContext(ancestors: [], descendants: []))
-    private let networkClient: MastodonClient
+    private let context = CurrentValueSubject<Context, Never>(Context(ancestors: [], descendants: []))
+    private let networkClient: APIClient
     private let contentDatabase: ContentDatabase
     private let collection: TransientStatusCollection
 
-    init(status: Status, networkClient: MastodonClient, contentDatabase: ContentDatabase) {
+    init(status: Status, networkClient: APIClient, contentDatabase: ContentDatabase) {
         self.status = status
         self.networkClient = networkClient
         self.contentDatabase = contentDatabase

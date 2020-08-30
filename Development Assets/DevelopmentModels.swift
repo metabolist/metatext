@@ -5,7 +5,7 @@ import Combine
 import Mastodon
 
 // swiftlint:disable force_try
-private let decoder = MastodonDecoder()
+private let decoder = APIDecoder()
 private var cancellables = Set<AnyCancellable>()
 private let devInstanceURL = URL(string: "https://mastodon.social")!
 private let devIdentityID = UUID(uuidString: "E621E1F8-C36C-495A-93FC-0C247A3E6E5F")!

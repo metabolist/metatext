@@ -6,7 +6,7 @@ public enum ListEndpoint {
     case create(title: String)
 }
 
-extension ListEndpoint: MastodonEndpoint {
+extension ListEndpoint: Endpoint {
     public typealias ResultType = MastodonList
 
     public var context: [String] {

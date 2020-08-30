@@ -18,7 +18,7 @@ public enum FilterEndpoint {
             expiresIn: Date?)
 }
 
-extension FilterEndpoint: MastodonEndpoint {
+extension FilterEndpoint: Endpoint {
     public typealias ResultType = Filter
 
     public var context: [String] {

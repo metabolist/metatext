@@ -243,11 +243,11 @@ private extension ContentDatabase {
 
 extension Account: TableRecord, FetchableRecord, PersistableRecord {
     public static func databaseJSONDecoder(for column: String) -> JSONDecoder {
-        MastodonDecoder()
+        APIDecoder()
     }
 
     public static func databaseJSONEncoder(for column: String) -> JSONEncoder {
-        MastodonEncoder()
+        APIEncoder()
     }
 }
 
@@ -325,11 +325,11 @@ private extension Timeline {
 
 extension Filter: TableRecord, FetchableRecord, PersistableRecord {
     public static func databaseJSONDecoder(for column: String) -> JSONDecoder {
-        MastodonDecoder()
+        APIDecoder()
     }
 
     public static func databaseJSONEncoder(for column: String) -> JSONEncoder {
-        MastodonEncoder()
+        APIEncoder()
     }
 }
 
@@ -453,11 +453,11 @@ private extension StoredStatus {
 
 extension StoredStatus: TableRecord, FetchableRecord, PersistableRecord {
     static func databaseJSONDecoder(for column: String) -> JSONDecoder {
-        MastodonDecoder()
+        APIDecoder()
     }
 
     static func databaseJSONEncoder(for column: String) -> JSONEncoder {
-        MastodonEncoder()
+        APIEncoder()
     }
 }
 

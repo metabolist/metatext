@@ -5,12 +5,12 @@ import Combine
 import Mastodon
 
 struct AuthenticationService {
-    private let networkClient: MastodonClient
+    private let networkClient: APIClient
     private let webAuthSessionType: WebAuthSession.Type
     private let webAuthSessionContextProvider = WebAuthSessionContextProvider()
 
     init(environment: AppEnvironment) {
-        networkClient = MastodonClient(session: environment.session)
+        networkClient = APIClient(session: environment.session)
         webAuthSessionType = environment.webAuthSessionType
     }
 }
@@ -22,7 +22,7 @@ extension AuthenticationService {
             redirectURI: OAuth.callbackURL.absoluteString,
             scopes: OAuth.scopes,
             website: OAuth.website)
-        let target = MastodonTarget(baseURL: instanceURL, endpoint: endpoint, accessToken: nil)
+        let target = Target(baseURL: instanceURL, endpoint: endpoint, accessToken: nil)
 
         return networkClient.request(target)
     }
@@ -63,7 +63,7 @@ extension AuthenticationService {
                     grantType: OAuth.grantType,
                     scopes: OAuth.scopes,
                     redirectURI: OAuth.callbackURL.absoluteString)
-                let target = MastodonTarget(baseURL: instanceURL, endpoint: endpoint, accessToken: nil)
+                let target = Target(baseURL: instanceURL, endpoint: endpoint, accessToken: nil)
 
                 return networkClient.request(target)
             }

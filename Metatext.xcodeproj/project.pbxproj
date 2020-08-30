@@ -289,13 +289,13 @@
 		D047FA7F24C3E21000AF17C5 = {
 			isa = PBXGroup;
 			children = (
-				D0E0F1E424FC49FC002C04BF /* Mastodon */,
 				D0C7D45224F76169001EBDBB /* Assets.xcassets */,
 				D0C7D46424F76169001EBDBB /* Databases */,
 				D0ED1BB224CE3A1600B4899C /* Development Assets */,
 				D0C7D46824F76169001EBDBB /* Extensions */,
 				D0666A7924C7745A00F3F04B /* Frameworks */,
 				D0C7D45624F76169001EBDBB /* Localizations */,
+				D0E0F1E424FC49FC002C04BF /* Mastodon */,
 				D0C7D43824F76169001EBDBB /* Model */,
 				D0C7D47324F76169001EBDBB /* Networking */,
 				D0E5361A24E3EB4D00FB1CE1 /* Notification Service Extension */,

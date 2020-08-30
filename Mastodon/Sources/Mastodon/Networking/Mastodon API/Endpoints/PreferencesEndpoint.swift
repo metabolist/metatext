@@ -6,8 +6,8 @@ public enum PreferencesEndpoint {
     case preferences
 }
 
-extension PreferencesEndpoint: MastodonEndpoint {
-    public typealias ResultType = MastodonPreferences
+extension PreferencesEndpoint: Endpoint {
+    public typealias ResultType = Preferences
 
     public var pathComponentsInContext: [String] {
         switch self {

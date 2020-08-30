@@ -2,7 +2,7 @@
 
 import Foundation
 
-public struct MastodonPreferences: Codable {
+public struct Preferences: Codable {
     enum CodingKeys: String, CodingKey {
         case postingDefaultVisibility = "posting:default:visibility"
         case postingDefaultSensitive = "posting:default:sensitive"
@@ -18,7 +18,7 @@ public struct MastodonPreferences: Codable {
     public let readingExpandSpoilers: Bool
 }
 
-public extension MastodonPreferences {
+public extension Preferences {
     enum ExpandMedia: String, Codable, Unknowable {
         case `default`
         case showAll

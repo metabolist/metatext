@@ -2,7 +2,7 @@
 
 import Foundation
 
-public protocol MastodonEndpoint {
+public protocol Endpoint {
     associatedtype ResultType: Decodable
     var APIVersion: String { get }
     var context: [String] { get }
@@ -13,7 +13,7 @@ public protocol MastodonEndpoint {
     var headers: HTTPHeaders? { get }
 }
 
-public extension MastodonEndpoint {
+public extension Endpoint {
     var defaultContext: [String] {
         ["api", APIVersion]
     }

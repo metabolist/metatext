@@ -6,8 +6,8 @@ public enum ContextEndpoint {
     case context(id: String)
 }
 
-extension ContextEndpoint: MastodonEndpoint {
-    public typealias ResultType = MastodonContext
+extension ContextEndpoint: Endpoint {
+    public typealias ResultType = Context
 
     public var context: [String] {
         defaultContext + ["statuses"]

@@ -6,7 +6,7 @@ public enum AccountEndpoint {
     case verifyCredentials
 }
 
-extension AccountEndpoint: MastodonEndpoint {
+extension AccountEndpoint: Endpoint {
     public typealias ResultType = Account
 
     public var context: [String] {

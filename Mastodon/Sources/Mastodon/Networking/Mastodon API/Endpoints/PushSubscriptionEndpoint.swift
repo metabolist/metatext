@@ -13,7 +13,7 @@ public enum PushSubscriptionEndpoint {
     case delete
 }
 
-extension PushSubscriptionEndpoint: MastodonEndpoint {
+extension PushSubscriptionEndpoint: Endpoint {
     public typealias ResultType = PushSubscription
 
     public var context: [String] {

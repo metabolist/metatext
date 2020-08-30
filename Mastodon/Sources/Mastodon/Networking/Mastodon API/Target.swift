@@ -2,7 +2,7 @@
 
 import Foundation
 
-public struct MastodonTarget<E: MastodonEndpoint> {
+public struct Target<E: Endpoint> {
     public let baseURL: URL
     public let endpoint: E
     public let accessToken: String?
@@ -14,7 +14,7 @@ public struct MastodonTarget<E: MastodonEndpoint> {
     }
 }
 
-extension MastodonTarget: DecodableTarget {
+extension Target: DecodableTarget {
     public typealias ResultType = E.ResultType
 
     public var pathComponents: [String] { endpoint.pathComponents }

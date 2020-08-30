@@ -6,7 +6,7 @@ public enum AppAuthorizationEndpoint {
     case apps(clientName: String, redirectURI: String, scopes: String, website: URL?)
 }
 
-extension AppAuthorizationEndpoint: MastodonEndpoint {
+extension AppAuthorizationEndpoint: Endpoint {
     public typealias ResultType = AppAuthorization
 
     public var pathComponentsInContext: [String] {

@@ -2,7 +2,7 @@
 
 import Foundation
 
-public struct Paged<T: MastodonEndpoint> {
+public struct Paged<T: Endpoint> {
     public let endpoint: T
     public let maxID: String?
     public let minID: String?
@@ -18,7 +18,7 @@ public struct Paged<T: MastodonEndpoint> {
     }
 }
 
-extension Paged: MastodonEndpoint {
+extension Paged: Endpoint {
     public typealias ResultType = T.ResultType
 
     public var APIVersion: String { endpoint.APIVersion }

@@ -6,7 +6,7 @@ public enum InstanceEndpoint {
     case instance
 }
 
-extension InstanceEndpoint: MastodonEndpoint {
+extension InstanceEndpoint: Endpoint {
     public typealias ResultType = Instance
 
     public var pathComponentsInContext: [String] {

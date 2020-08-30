@@ -13,7 +13,7 @@ public enum AccessTokenEndpoint {
     )
 }
 
-extension AccessTokenEndpoint: MastodonEndpoint {
+extension AccessTokenEndpoint: Endpoint {
     public typealias ResultType = AccessToken
 
     public var context: [String] { [] }

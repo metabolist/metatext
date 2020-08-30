@@ -8,10 +8,10 @@ struct TimelineService {
     let statusSections: AnyPublisher<[[Status]], Error>
 
     private let timeline: Timeline
-    private let networkClient: MastodonClient
+    private let networkClient: APIClient
     private let contentDatabase: ContentDatabase
 
-    init(timeline: Timeline, networkClient: MastodonClient, contentDatabase: ContentDatabase) {
+    init(timeline: Timeline, networkClient: APIClient, contentDatabase: ContentDatabase) {
         self.timeline = timeline
         self.networkClient = networkClient
         self.contentDatabase = contentDatabase

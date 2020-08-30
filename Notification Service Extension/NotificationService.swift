@@ -22,7 +22,7 @@ class NotificationService: UNNotificationServiceExtension {
         do {
             let decryptedJSON = try Self.extractAndDecrypt(userInfo: request.content.userInfo)
 
-            pushNotification = try MastodonDecoder().decode(PushNotification.self, from: decryptedJSON)
+            pushNotification = try APIDecoder().decode(PushNotification.self, from: decryptedJSON)
         } catch {
             contentHandler(bestAttemptContent)
 

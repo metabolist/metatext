@@ -2,7 +2,7 @@
 
 import Foundation
 
-public class MastodonDecoder: JSONDecoder {
+public class APIDecoder: JSONDecoder {
     public override init() {
         super.init()
 

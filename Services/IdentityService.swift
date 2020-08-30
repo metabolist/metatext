@@ -11,7 +11,7 @@ class IdentityService {
     private let identityDatabase: IdentityDatabase
     private let contentDatabase: ContentDatabase
     private let environment: AppEnvironment
-    private let networkClient: MastodonClient
+    private let networkClient: APIClient
     private let secretsService: SecretsService
     private let observationErrorsInput = PassthroughSubject<Error, Never>()
 
@@ -35,7 +35,7 @@ class IdentityService {
         secretsService = SecretsService(
             identityID: identityID,
             keychainService: environment.keychainServiceType)
-        networkClient = MastodonClient(session: environment.session)
+        networkClient = APIClient(session: environment.session)
         networkClient.instanceURL = identity.url
         networkClient.accessToken = try? secretsService.item(.accessToken)
 

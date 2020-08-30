@@ -2,7 +2,7 @@
 
 import Foundation
 
-public struct MastodonContext: Codable, Hashable {
+public struct Context: Codable, Hashable {
     public let ancestors: [Status]
     public let descendants: [Status]
 
