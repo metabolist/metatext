@@ -16,17 +16,11 @@ struct EditFilterView: View {
                 if viewModel.isNew || viewModel.filter.expiresAt == nil {
                     Toggle("filter.never-expires", isOn: .init(
                             get: { viewModel.filter.expiresAt == nil },
-                            set: {
-                                if $0 {
-                                    viewModel.filter.expiresAt = nil
-                                } else {
-                                    viewModel.filter.expiresAt = viewModel.date
-                                }
-                            }))
+                            set: { viewModel.filter.expiresAt = $0 ? nil : viewModel.date }))
                 }
 
                 if viewModel.filter.expiresAt != nil {
-                    DatePicker(selection: $viewModel.date, in: viewModel.dateRange) {
+                    DatePicker(selection: $viewModel.date, in: Date()...) {
                         Text("filter.expire-after")
                     }
                 }

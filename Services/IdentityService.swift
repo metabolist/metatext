@@ -143,8 +143,12 @@ extension IdentityService {
             .eraseToAnyPublisher()
     }
 
-    func filtersObservation() -> AnyPublisher<[Filter], Error> {
-        contentDatabase.filtersObservation()
+    func activeFiltersObservation(date: Date) -> AnyPublisher<[Filter], Error> {
+        contentDatabase.activeFiltersObservation(date: date)
+    }
+
+    func expiredFiltersObservation(date: Date) -> AnyPublisher<[Filter], Error> {
+        contentDatabase.expiredFiltersObservation(date: date)
     }
 
     func updatePreferences(_ preferences: Identity.Preferences) -> AnyPublisher<Never, Error> {

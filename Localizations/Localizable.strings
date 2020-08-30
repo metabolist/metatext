@@ -29,6 +29,8 @@
 "preferences.notification-types.reblog" = "Reblog";
 "preferences.notification-types.mention" = "Mention";
 "preferences.notification-types.poll" = "Poll";
+"filters.active" = "Active";
+"filters.expired" = "Expired";
 "filter.add-new" = "Add New Filter";
 "filter.edit" = "Edit Filter";
 "filter.keyword-or-phrase" = "Keyword or phrase";

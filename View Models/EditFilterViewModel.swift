@@ -7,9 +7,11 @@ class EditFilterViewModel: ObservableObject {
     @Published var filter: Filter
     @Published var saving = false
     @Published var alertItem: AlertItem?
-    var date: Date
-    let dateRange: ClosedRange<Date>
     let saveCompleted: AnyPublisher<Void, Never>
+
+    var date: Date {
+        didSet { filter.expiresAt = date }
+    }
 
     private let identityService: IdentityService
     private let saveCompletedInput = PassthroughSubject<Void, Never>()
@@ -18,8 +20,7 @@ class EditFilterViewModel: ObservableObject {
     init(filter: Filter, identityService: IdentityService) {
         self.filter = filter
         self.identityService = identityService
-        date = Calendar.autoupdatingCurrent.date(byAdding: .minute, value: 30, to: Date()) ?? Date()
-        dateRange = date...(Calendar.autoupdatingCurrent.date(byAdding: .day, value: 7, to: date) ?? Date())
+        date = filter.expiresAt ?? Date()
         saveCompleted = saveCompletedInput.eraseToAnyPublisher()
     }
 }

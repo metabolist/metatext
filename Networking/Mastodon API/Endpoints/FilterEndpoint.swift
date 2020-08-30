@@ -78,17 +78,9 @@ private extension FilterEndpoint {
             "whole_word": wholeWord]
 
         if let expiresIn = expiresIn {
-            params["expires_in"] = Self.dateFormatter.string(from: expiresIn)
+            params["expires_in"] = Int(expiresIn.timeIntervalSinceNow)
         }
 
         return params
     }
-
-    static let dateFormatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-
-        dateFormatter.dateFormat = MastodonAPI.dateFormat
-
-        return dateFormatter
-    }()
 }
