@@ -82,7 +82,7 @@ private extension AuthenticationService {
         static let website = URL(string: "https://metabolist.com/metatext")!
     }
 
-    enum OAuthError {
+    enum OAuthError: Error {
         case codeNotFound
     }
 
@@ -100,14 +100,5 @@ private extension AuthenticationService {
         ].map { URLQueryItem(name: $0, value: $1) }
 
         return authorizationURLComponents.url
-    }
-}
-
-extension AuthenticationService.OAuthError: LocalizedError {
-    var errorDescription: String? {
-        switch self {
-        case .codeNotFound:
-            return NSLocalizedString("oauth.error.code-not-found", comment: "")
-        }
     }
 }
