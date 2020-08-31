@@ -3,7 +3,7 @@
 import Foundation
 import Combine
 
-public class APIClient: HTTPClient {
+public final class APIClient: HTTPClient {
     public var instanceURL: URL?
     public var accessToken: String?
 

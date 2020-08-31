@@ -2,7 +2,7 @@
 
 import Foundation
 
-public class Status: Codable, Identifiable {
+public final class Status: Codable, Identifiable {
     public enum Visibility: String, Codable, Unknowable {
         case `public`
         case unlisted

@@ -2,7 +2,7 @@
 
 import Foundation
 
-public class APIEncoder: JSONEncoder {
+public final class APIEncoder: JSONEncoder {
     public override init() {
         super.init()
 

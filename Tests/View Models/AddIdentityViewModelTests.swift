@@ -3,6 +3,7 @@
 import XCTest
 import Combine
 import CombineExpectations
+import Mastodon
 @testable import Metatext
 
 class AddIdentityViewModelTests: XCTestCase {
