@@ -14,12 +14,12 @@ let package = Package(
             targets: ["Mastodon"])
     ],
     dependencies: [
-        .package(url: "https://github.com/Alamofire/Alamofire.git", .upToNextMajor(from: "5.2.2"))
+        .package(path: "HTTP")
     ],
     targets: [
         .target(
             name: "Mastodon",
-            dependencies: ["Alamofire"]),
+            dependencies: ["HTTP"]),
         .testTarget(
             name: "MastodonTests",
             dependencies: ["Mastodon"])

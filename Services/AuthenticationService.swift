@@ -22,7 +22,7 @@ extension AuthenticationService {
             redirectURI: OAuth.callbackURL.absoluteString,
             scopes: OAuth.scopes,
             website: OAuth.website)
-        let target = Target(baseURL: instanceURL, endpoint: endpoint, accessToken: nil)
+        let target = APITarget(baseURL: instanceURL, endpoint: endpoint, accessToken: nil)
 
         return networkClient.request(target)
     }
@@ -63,7 +63,7 @@ extension AuthenticationService {
                     grantType: OAuth.grantType,
                     scopes: OAuth.scopes,
                     redirectURI: OAuth.callbackURL.absoluteString)
-                let target = Target(baseURL: instanceURL, endpoint: endpoint, accessToken: nil)
+                let target = APITarget(baseURL: instanceURL, endpoint: endpoint, accessToken: nil)
 
                 return networkClient.request(target)
             }

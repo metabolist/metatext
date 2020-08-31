@@ -3,7 +3,7 @@
 import Foundation
 import Mastodon
 
-extension Target: Stubbing {
+extension APITarget: Stubbing {
     func stub(url: URL) -> HTTPStub? {
         (endpoint as? Stubbing)?.stub(url: url)
     }

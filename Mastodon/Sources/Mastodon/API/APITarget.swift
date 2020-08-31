@@ -1,8 +1,9 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import Foundation
+import HTTP
 
-public struct Target<E: Endpoint> {
+public struct APITarget<E: Endpoint> {
     public let baseURL: URL
     public let endpoint: E
     public let accessToken: String?
@@ -14,7 +15,7 @@ public struct Target<E: Endpoint> {
     }
 }
 
-extension Target: DecodableTarget {
+extension APITarget: DecodableTarget {
     public typealias ResultType = E.ResultType
 
     public var pathComponents: [String] { endpoint.pathComponents }

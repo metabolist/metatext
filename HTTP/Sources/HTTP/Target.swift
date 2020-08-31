@@ -9,7 +9,7 @@ public typealias ParameterEncoding = Alamofire.ParameterEncoding
 public typealias URLEncoding = Alamofire.URLEncoding
 public typealias JSONEncoding = Alamofire.JSONEncoding
 
-public protocol HTTPTarget: URLRequestConvertible {
+public protocol Target: URLRequestConvertible {
     var baseURL: URL { get }
     var pathComponents: [String] { get }
     var method: HTTPMethod { get }
@@ -18,7 +18,7 @@ public protocol HTTPTarget: URLRequestConvertible {
     var headers: HTTPHeaders? { get }
 }
 
-public extension HTTPTarget {
+public extension Target {
     func asURLRequest() throws -> URLRequest {
         var url = baseURL
 
@@ -30,6 +30,10 @@ public extension HTTPTarget {
     }
 }
 
-public protocol DecodableTarget: HTTPTarget {
+public protocol DecodableTarget: Target {
     associatedtype ResultType: Decodable
+}
+
+public protocol TargetProcessing {
+    static func process(target: Target)
 }

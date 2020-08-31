@@ -1,6 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import Foundation
+import HTTP
 
 public enum DeletionEndpoint {
     case oauthRevoke(token: String, clientID: String, clientSecret: String)

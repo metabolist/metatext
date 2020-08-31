@@ -1,6 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import Foundation
+import HTTP
 
 public enum AppAuthorizationEndpoint {
     case apps(clientName: String, redirectURI: String, scopes: String, website: URL?)

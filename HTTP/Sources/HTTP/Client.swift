@@ -6,7 +6,7 @@ import Alamofire
 
 public typealias Session = Alamofire.Session
 
-public class HTTPClient {
+open class Client {
     private let session: Session
     private let decoder: DataDecoder
 
@@ -15,7 +15,7 @@ public class HTTPClient {
         self.decoder = decoder
     }
 
-    public func request<T: DecodableTarget>(_ target: T) -> AnyPublisher<T.ResultType, Error> {
+    open func request<T: DecodableTarget>(_ target: T) -> AnyPublisher<T.ResultType, Error> {
         requestPublisher(target).value().mapError { $0 as Error }.eraseToAnyPublisher()
     }
 
@@ -42,13 +42,13 @@ public class HTTPClient {
     }
 }
 
-private extension HTTPClient {
+private extension Client {
     func requestPublisher<T: DecodableTarget>(_ target: T) -> DataResponsePublisher<T.ResultType> {
-//        #if DEBUG
-//        if let url = try? target.asURLRequest().url {
-//            StubbingURLProtocol.setTarget(target, forURL: url)
-//        }
-//        #endif
+        if let protocolClasses = session.sessionConfiguration.protocolClasses {
+            for protocolClass in protocolClasses {
+                (protocolClass as? TargetProcessing.Type)?.process(target: target)
+            }
+        }
 
         return session.request(target)
             .validate()

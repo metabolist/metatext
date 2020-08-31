@@ -2,8 +2,9 @@
 
 import Foundation
 import Combine
+import HTTP
 
-public final class APIClient: HTTPClient {
+public final class APIClient: Client {
     public var instanceURL: URL?
     public var accessToken: String?
 
@@ -23,7 +24,7 @@ extension APIClient {
         }
 
         return super.request(
-            Target(baseURL: instanceURL, endpoint: endpoint, accessToken: accessToken),
+            APITarget(baseURL: instanceURL, endpoint: endpoint, accessToken: accessToken),
             decodeErrorsAs: APIError.self)
     }
 }

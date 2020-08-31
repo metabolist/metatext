@@ -1,14 +1,10 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import Foundation
-import Mastodon
+import HTTP
 
 class StubbingURLProtocol: URLProtocol {
-    private static var targetsForURLs = [URL: HTTPTarget]()
-
-    class func setTarget(_ target: HTTPTarget, forURL url: URL) {
-        targetsForURLs[url] = target
-    }
+    private static var targetsForURLs = [URL: Target]()
 
     override class func canInit(with task: URLSessionTask) -> Bool {
         true
@@ -40,4 +36,12 @@ class StubbingURLProtocol: URLProtocol {
     }
 
     override func stopLoading() {}
+}
+
+extension StubbingURLProtocol: TargetProcessing {
+    static func process(target: Target) {
+        if let url = try? target.asURLRequest().url {
+            targetsForURLs[url] = target
+        }
+    }
 }

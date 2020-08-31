@@ -1,23 +1,24 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import Foundation
+import HTTP
 
-public enum PreferencesEndpoint {
-    case preferences
+public enum InstanceEndpoint {
+    case instance
 }
 
-extension PreferencesEndpoint: Endpoint {
-    public typealias ResultType = Preferences
+extension InstanceEndpoint: Endpoint {
+    public typealias ResultType = Instance
 
     public var pathComponentsInContext: [String] {
         switch self {
-        case .preferences: return ["preferences"]
+        case .instance: return ["instance"]
         }
     }
 
     public var method: HTTPMethod {
         switch self {
-        case .preferences: return .get
+        case .instance: return .get
         }
     }
 }

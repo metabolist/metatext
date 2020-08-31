@@ -2,6 +2,7 @@
 
 import Foundation
 import Combine
+import HTTP
 import Mastodon
 
 // swiftlint:disable force_try

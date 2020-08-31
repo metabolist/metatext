@@ -1,6 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import Foundation
+import HTTP
 
 public struct Paged<T: Endpoint> {
     public let endpoint: T

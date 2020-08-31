@@ -3,6 +3,7 @@
 import XCTest
 import Combine
 import CombineExpectations
+import HTTP
 import Mastodon
 @testable import Metatext
 
