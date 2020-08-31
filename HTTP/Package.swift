@@ -11,7 +11,10 @@ let package = Package(
     products: [
         .library(
             name: "HTTP",
-            targets: ["HTTP"])
+            targets: ["HTTP"]),
+        .library(
+            name: "Stubbing",
+            targets: ["Stubbing"])
     ],
     dependencies: [
         .package(url: "https://github.com/Alamofire/Alamofire.git", .upToNextMajor(from: "5.2.2"))
@@ -20,6 +23,9 @@ let package = Package(
         .target(
             name: "HTTP",
             dependencies: ["Alamofire"]),
+        .target(
+            name: "Stubbing",
+            dependencies: ["HTTP"]),
         .testTarget(
             name: "HTTPTests",
             dependencies: ["HTTP"])

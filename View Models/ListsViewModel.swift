@@ -3,6 +3,7 @@
 import Foundation
 import Combine
 import Mastodon
+import Services
 
 class ListsViewModel: ObservableObject {
     @Published private(set) var lists = [MastodonList]()

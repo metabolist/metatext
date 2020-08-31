@@ -3,6 +3,7 @@
 import Foundation
 import Combine
 import Mastodon
+import Services
 
 class StatusListViewModel: ObservableObject {
     @Published private(set) var statusIDs = [[String]]()

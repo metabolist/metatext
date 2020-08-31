@@ -2,6 +2,7 @@
 
 import Combine
 import Foundation
+import Services
 
 class IdentitiesViewModel: ObservableObject {
     @Published private(set) var identity: Identity

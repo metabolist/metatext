@@ -3,6 +3,7 @@
 import UserNotifications
 import CryptoKit
 import Mastodon
+import Services
 
 class NotificationService: UNNotificationServiceExtension {
 

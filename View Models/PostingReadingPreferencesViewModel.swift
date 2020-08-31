@@ -2,6 +2,7 @@
 
 import Foundation
 import Combine
+import Services
 
 class PostingReadingPreferencesViewModel: ObservableObject {
     @Published var preferences: Identity.Preferences

@@ -4,6 +4,8 @@ import Foundation
 import Combine
 import HTTP
 import Mastodon
+import Services
+import ServiceMocks
 
 // swiftlint:disable force_try
 private let decoder = APIDecoder()
@@ -20,31 +22,6 @@ extension Instance {
     static let development = try! decoder.decode(Instance.self, from: Data(officialInstanceJSON.utf8))
 }
 
-extension IdentityDatabase {
-    static func fresh() -> IdentityDatabase { try! IdentityDatabase(inMemory: true) }
-
-    static var development: IdentityDatabase = {
-        let db = IdentityDatabase.fresh()
-
-        db.createIdentity(id: devIdentityID, url: devInstanceURL)
-            .receive(on: ImmediateScheduler.shared)
-            .sink(receiveCompletion: { _ in }, receiveValue: { _ in })
-            .store(in: &cancellables)
-
-        db.updateAccount(.development, forIdentityID: devIdentityID)
-            .receive(on: ImmediateScheduler.shared)
-            .sink(receiveCompletion: { _ in }, receiveValue: { _ in })
-            .store(in: &cancellables)
-
-        db.updateInstance(.development, forIdentityID: devIdentityID)
-            .receive(on: ImmediateScheduler.shared)
-            .sink(receiveCompletion: { _ in }, receiveValue: { _ in })
-            .store(in: &cancellables)
-
-        return db
-    }()
-}
-
 extension AppEnvironment {
     static let development = AppEnvironment(
         session: Session(configuration: .stubbing),
@@ -55,18 +32,30 @@ extension AppEnvironment {
 }
 
 extension AllIdentitiesService {
-    static func fresh(
-        identityDatabase: IdentityDatabase = .fresh(),
-        keychainService: KeychainService = MockKeychainService(),
-        environment: AppEnvironment = .development) -> AllIdentitiesService {
-        AllIdentitiesService(
-            identityDatabase: identityDatabase,
-            environment: environment)
-    }
+    static let fresh = try! AllIdentitiesService(environment: .development)
 
-    static let development = AllIdentitiesService(
-        identityDatabase: .development,
-        environment: .development)
+    static var development: Self = {
+        let allIdentitiesService = try! AllIdentitiesService(environment: .development)
+
+        allIdentitiesService.authorizeIdentity(id: devIdentityID, instanceURL: devInstanceURL)
+            .receive(on: ImmediateScheduler.shared)
+            .sink { _ in } receiveValue: { _ in }
+            .store(in: &cancellables)
+
+//        let identityService = try! allIdentitiesService.identityService(id: devIdentityID)
+//
+//        identityService.verifyCredentials()
+//            .receive(on: ImmediateScheduler.shared)
+//            .sink { _ in } receiveValue: { _ in }
+//            .store(in: &cancellables)
+//
+//        identityService.refreshInstance()
+//            .receive(on: ImmediateScheduler.shared)
+//            .sink { _ in } receiveValue: { _ in }
+//            .store(in: &cancellables)
+
+        return allIdentitiesService
+    } ()
 }
 
 extension IdentityService {

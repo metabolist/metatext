@@ -3,6 +3,7 @@
 import XCTest
 import Combine
 import CombineExpectations
+import Services
 @testable import Metatext
 
 class RootViewModelTests: XCTestCase {
@@ -10,9 +11,7 @@ class RootViewModelTests: XCTestCase {
 
     func testAddIdentity() throws {
         let sut = RootViewModel(appDelegate: AppDelegate(),
-                                allIdentitiesService: AllIdentitiesService(
-                                    identityDatabase: .fresh(),
-                                    environment: .development),
+                                allIdentitiesService: .fresh,
                                 userNotificationService: UserNotificationService())
         let recorder = sut.$tabNavigationViewModel.record()
 

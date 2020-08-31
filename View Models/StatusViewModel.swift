@@ -3,6 +3,7 @@
 import Foundation
 import Combine
 import Mastodon
+import Services
 
 struct StatusViewModel {
     let content: NSAttributedString

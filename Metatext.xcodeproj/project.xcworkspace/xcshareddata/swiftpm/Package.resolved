@@ -21,7 +21,7 @@
       },
       {
         "package": "GRDB",
-        "repositoryURL": "https://github.com/groue/GRDB.swift",
+        "repositoryURL": "https://github.com/groue/GRDB.swift.git",
         "state": {
           "branch": null,
           "revision": "ededd8668abd5a3c4c43cc9ebcfd611082b47f65",

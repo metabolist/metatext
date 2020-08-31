@@ -2,6 +2,7 @@
 
 import SwiftUI
 import KingfisherSwiftUI
+import struct Services.Identity
 
 struct IdentitiesView: View {
     @StateObject var viewModel: IdentitiesViewModel

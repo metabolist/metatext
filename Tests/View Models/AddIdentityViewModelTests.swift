@@ -7,10 +7,11 @@ import HTTP
 import Mastodon
 @testable import Metatext
 
+import Services
+
 class AddIdentityViewModelTests: XCTestCase {
     func testAddIdentity() throws {
-        let identityDatabase = IdentityDatabase.fresh()
-        let sut = AddIdentityViewModel(allIdentitiesService: .fresh(identityDatabase: identityDatabase))
+        let sut = AddIdentityViewModel(allIdentitiesService: .fresh)
         let addedIDRecorder = sut.addedIdentityID.record()
 
         sut.urlFieldText = "https://mastodon.social"
@@ -20,8 +21,7 @@ class AddIdentityViewModelTests: XCTestCase {
     }
 
     func testAddIdentityWithoutScheme() throws {
-        let identityDatabase = IdentityDatabase.fresh()
-        let sut = AddIdentityViewModel(allIdentitiesService: .fresh(identityDatabase: identityDatabase))
+        let sut = AddIdentityViewModel(allIdentitiesService: .fresh)
         let addedIDRecorder = sut.addedIdentityID.record()
 
         sut.urlFieldText = "mastodon.social"
@@ -31,7 +31,7 @@ class AddIdentityViewModelTests: XCTestCase {
     }
 
     func testInvalidURL() throws {
-        let sut = AddIdentityViewModel(allIdentitiesService: .fresh())
+        let sut = AddIdentityViewModel(allIdentitiesService: .fresh)
         let recorder = sut.$alertItem.record()
 
         XCTAssertNil(try wait(for: recorder.next(), timeout: 1))
@@ -51,9 +51,7 @@ class AddIdentityViewModelTests: XCTestCase {
             keychainServiceType: MockKeychainService.self,
             userDefaults: MockUserDefaults(),
             inMemoryContent: true)
-        let allIdentitiesService = AllIdentitiesService(
-            identityDatabase: .fresh(),
-            environment: environment)
+        let allIdentitiesService = try AllIdentitiesService(environment: environment)
         let sut = AddIdentityViewModel(allIdentitiesService: allIdentitiesService)
         let recorder = sut.$alertItem.record()
 
@@ -63,5 +61,9 @@ class AddIdentityViewModelTests: XCTestCase {
         sut.logInTapped()
 
         try wait(for: recorder.next().inverted, timeout: 1)
+    }
+
+    func testFuck() {
+
     }
 }

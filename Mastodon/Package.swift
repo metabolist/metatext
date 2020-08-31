@@ -11,7 +11,10 @@ let package = Package(
     products: [
         .library(
             name: "Mastodon",
-            targets: ["Mastodon"])
+            targets: ["Mastodon"]),
+        .library(
+            name: "MastodonStubs",
+            targets: ["MastodonStubs"])
     ],
     dependencies: [
         .package(path: "HTTP")
@@ -20,8 +23,12 @@ let package = Package(
         .target(
             name: "Mastodon",
             dependencies: ["HTTP"]),
+        .target(
+            name: "MastodonStubs",
+            dependencies: ["Mastodon", .product(name: "Stubbing", package: "HTTP")],
+            resources: [.process("Resources")]),
         .testTarget(
             name: "MastodonTests",
-            dependencies: ["Mastodon"])
+            dependencies: ["MastodonStubs"])
     ]
 )

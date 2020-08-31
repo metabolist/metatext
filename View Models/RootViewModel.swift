@@ -2,6 +2,7 @@
 
 import Foundation
 import Combine
+import Services
 
 class RootViewModel: ObservableObject {
     @Published private(set) var tabNavigationViewModel: TabNavigationViewModel?

@@ -3,6 +3,7 @@
 import Foundation
 import Combine
 import Mastodon
+import Services
 
 class TabNavigationViewModel: ObservableObject {
     @Published private(set) var identity: Identity

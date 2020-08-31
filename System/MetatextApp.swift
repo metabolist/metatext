@@ -1,6 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import SwiftUI
+import Services
 
 @main
 struct MetatextApp: App {
@@ -8,23 +9,13 @@ struct MetatextApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     // swiftlint:enable weak_delegate
 
-    private let allIdentitiesService: AllIdentitiesService = {
-        let identityDatabase: IdentityDatabase
-
-        do {
-            try identityDatabase = IdentityDatabase()
-        } catch {
-            fatalError("Failed to initialize identity database")
-        }
-
-        return AllIdentitiesService(identityDatabase: identityDatabase, environment: .live)
-    }()
-
     var body: some Scene {
         WindowGroup {
             RootView(
                 viewModel: RootViewModel(appDelegate: appDelegate,
-                                         allIdentitiesService: allIdentitiesService,
+                                         // swiftlint:disable force_try
+                                         allIdentitiesService: try! AllIdentitiesService(environment: .live),
+                                         // swiftlint:enable force_try
                                          userNotificationService: UserNotificationService()))
         }
     }

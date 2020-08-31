@@ -2,6 +2,7 @@
 
 import Foundation
 import Combine
+import Services
 
 class AddIdentityViewModel: ObservableObject {
     @Published var urlFieldText = ""
