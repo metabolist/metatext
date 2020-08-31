@@ -96,7 +96,6 @@
 		D0DC175224D008E300A75C65 /* MastodonTarget+Stubbing.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DC175124D008E300A75C65 /* MastodonTarget+Stubbing.swift */; };
 		D0DC175524D00F0A00A75C65 /* AccessTokenEndpoint+Stubbing.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DC175424D00F0A00A75C65 /* AccessTokenEndpoint+Stubbing.swift */; };
 		D0DC175824D0130800A75C65 /* HTTPStubs.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DC175724D0130800A75C65 /* HTTPStubs.swift */; };
-		D0DC175F24D016EA00A75C65 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = D0DC175E24D016EA00A75C65 /* Alamofire */; };
 		D0DC177724D0CF2600A75C65 /* MockKeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DC177624D0CF2600A75C65 /* MockKeychainService.swift */; };
 		D0E0F1E624FC4B76002C04BF /* Mastodon in Frameworks */ = {isa = PBXBuildFile; productRef = D0E0F1E524FC4B76002C04BF /* Mastodon */; };
 		D0E0F1E824FC5A61002C04BF /* Mastodon in Frameworks */ = {isa = PBXBuildFile; productRef = D0E0F1E724FC5A61002C04BF /* Mastodon */; };
@@ -244,7 +243,6 @@
 				D06B492324D4611300642749 /* KingfisherSwiftUI in Frameworks */,
 				D0E0F1E624FC4B76002C04BF /* Mastodon in Frameworks */,
 				D0666A4924C6C1A300F3F04B /* GRDB in Frameworks */,
-				D0DC175F24D016EA00A75C65 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -566,7 +564,6 @@
 			name = Metatext;
 			packageProductDependencies = (
 				D0666A4824C6C1A300F3F04B /* GRDB */,
-				D0DC175E24D016EA00A75C65 /* Alamofire */,
 				D06B492224D4611300642749 /* KingfisherSwiftUI */,
 				D0E0F1E524FC4B76002C04BF /* Mastodon */,
 			);
@@ -649,7 +646,6 @@
 			mainGroup = D047FA7F24C3E21000AF17C5;
 			packageReferences = (
 				D0666A4724C6C1A300F3F04B /* XCRemoteSwiftPackageReference "GRDB" */,
-				D0DC175D24D016EA00A75C65 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				D065F53724D37E5100741304 /* XCRemoteSwiftPackageReference "CombineExpectations" */,
 				D06B492124D4611300642749 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
@@ -1161,14 +1157,6 @@
 				minimumVersion = 5.15.0;
 			};
 		};
-		D0DC175D24D016EA00A75C65 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Alamofire/Alamofire";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.2.2;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1186,11 +1174,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D06B492124D4611300642749 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = KingfisherSwiftUI;
-		};
-		D0DC175E24D016EA00A75C65 /* Alamofire */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D0DC175D24D016EA00A75C65 /* XCRemoteSwiftPackageReference "Alamofire" */;
-			productName = Alamofire;
 		};
 		D0E0F1E524FC4B76002C04BF /* Mastodon */ = {
 			isa = XCSwiftPackageProductDependency;
