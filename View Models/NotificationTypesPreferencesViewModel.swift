@@ -3,7 +3,7 @@
 import Foundation
 import Combine
 import Mastodon
-import Services
+import ServiceLayer
 
 class NotificationTypesPreferencesViewModel: ObservableObject {
     @Published var pushSubscriptionAlerts: PushSubscription.Alerts

@@ -1,7 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import Foundation
-import Services
+import ServiceLayer
 
 class PreferencesViewModel: ObservableObject {
     let handle: String

@@ -12,13 +12,12 @@
 		D01F41D924F880C400D55A2D /* TouchFallthroughTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01F41D624F880C400D55A2D /* TouchFallthroughTextView.swift */; };
 		D01F41DF24F8868800D55A2D /* AttachmentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01F41DE24F8868800D55A2D /* AttachmentViewModel.swift */; };
 		D01F41E424F8889700D55A2D /* AttachmentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01F41E224F8889700D55A2D /* AttachmentsView.swift */; };
-		D04FD74224D4AA34007D572D /* DevelopmentModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04FD74124D4AA34007D572D /* DevelopmentModels.swift */; };
+		D04FD74224D4AA34007D572D /* PreviewMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04FD74124D4AA34007D572D /* PreviewMocks.swift */; };
 		D052BBC724D749C800A80A7A /* RootViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D052BBC624D749C800A80A7A /* RootViewModelTests.swift */; };
 		D065F53924D37E5100741304 /* CombineExpectations in Frameworks */ = {isa = PBXBuildFile; productRef = D065F53824D37E5100741304 /* CombineExpectations */; };
 		D06B492324D4611300642749 /* KingfisherSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = D06B492224D4611300642749 /* KingfisherSwiftUI */; };
-		D075C28524FCD41D00D35112 /* Services in Frameworks */ = {isa = PBXBuildFile; productRef = D075C28424FCD41D00D35112 /* Services */; };
-		D075C28724FCD92400D35112 /* Services in Frameworks */ = {isa = PBXBuildFile; productRef = D075C28624FCD92400D35112 /* Services */; };
-		D0ADCBF124FD05510062ACCE /* ServiceMocks in Frameworks */ = {isa = PBXBuildFile; productRef = D0ADCBF024FD05510062ACCE /* ServiceMocks */; };
+		D0BDF66724FD7CDA00C7FA1C /* ServiceLayer in Frameworks */ = {isa = PBXBuildFile; productRef = D0BDF66624FD7CDA00C7FA1C /* ServiceLayer */; };
+		D0BDF66B24FD7CEC00C7FA1C /* ServiceLayer in Frameworks */ = {isa = PBXBuildFile; productRef = D0BDF66A24FD7CEC00C7FA1C /* ServiceLayer */; };
 		D0BEB1F324F8EE8C001B0F04 /* AttachmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB1F224F8EE8C001B0F04 /* AttachmentView.swift */; };
 		D0BEB1F724F9A84B001B0F04 /* LoadingTableFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB1F624F9A84B001B0F04 /* LoadingTableFooterView.swift */; };
 		D0BEB1FD24F9E4E5001B0F04 /* ListsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB1FC24F9E4E5001B0F04 /* ListsViewModel.swift */; };
@@ -62,6 +61,7 @@
 		D0C7D4DA24F7616A001EBDBB /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D46F24F76169001EBDBB /* View+Extensions.swift */; };
 		D0C7D4DB24F7616A001EBDBB /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D47024F76169001EBDBB /* Date+Extensions.swift */; };
 		D0C7D4DC24F7616A001EBDBB /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D47124F76169001EBDBB /* Data+Extensions.swift */; };
+		D0E2C1CE24FD7EE900854680 /* ServiceLayerMocks in Frameworks */ = {isa = PBXBuildFile; productRef = D0E2C1CD24FD7EE900854680 /* ServiceLayerMocks */; };
 		D0E5361C24E3EB4D00FB1CE1 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E5361B24E3EB4D00FB1CE1 /* NotificationService.swift */; };
 		D0E5362024E3EB4D00FB1CE1 /* Notification Service Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D0E5361924E3EB4D00FB1CE1 /* Notification Service Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D0ED1B6E24CE100C00B4899C /* AddIdentityViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ED1B6D24CE100C00B4899C /* AddIdentityViewModelTests.swift */; };
@@ -105,11 +105,11 @@
 		D01F41DE24F8868800D55A2D /* AttachmentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentViewModel.swift; sourceTree = "<group>"; };
 		D01F41E224F8889700D55A2D /* AttachmentsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttachmentsView.swift; sourceTree = "<group>"; };
 		D047FA8C24C3E21200AF17C5 /* Metatext.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Metatext.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		D04FD74124D4AA34007D572D /* DevelopmentModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevelopmentModels.swift; sourceTree = "<group>"; };
+		D04FD74124D4AA34007D572D /* PreviewMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewMocks.swift; sourceTree = "<group>"; };
 		D052BBC624D749C800A80A7A /* RootViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewModelTests.swift; sourceTree = "<group>"; };
 		D0666A2124C677B400F3F04B /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0666A2524C677B400F3F04B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D075C28324FCD27300D35112 /* Services */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Services; sourceTree = "<group>"; };
+		D0BDF66524FD7A6400C7FA1C /* ServiceLayer */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ServiceLayer; sourceTree = "<group>"; };
 		D0BEB1F224F8EE8C001B0F04 /* AttachmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentView.swift; sourceTree = "<group>"; };
 		D0BEB1F624F9A84B001B0F04 /* LoadingTableFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingTableFooterView.swift; sourceTree = "<group>"; };
 		D0BEB1FC24F9E4E5001B0F04 /* ListsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsViewModel.swift; sourceTree = "<group>"; };
@@ -169,9 +169,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D075C28524FCD41D00D35112 /* Services in Frameworks */,
-				D0ADCBF124FD05510062ACCE /* ServiceMocks in Frameworks */,
+				D0BDF66724FD7CDA00C7FA1C /* ServiceLayer in Frameworks */,
 				D06B492324D4611300642749 /* KingfisherSwiftUI in Frameworks */,
+				D0E2C1CE24FD7EE900854680 /* ServiceLayerMocks in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -187,7 +187,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D075C28724FCD92400D35112 /* Services in Frameworks */,
+				D0BDF66B24FD7CEC00C7FA1C /* ServiceLayer in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -217,7 +217,6 @@
 			isa = PBXGroup;
 			children = (
 				D0C7D45224F76169001EBDBB /* Assets.xcassets */,
-				D0ED1BB224CE3A1600B4899C /* Development Assets */,
 				D0C7D46824F76169001EBDBB /* Extensions */,
 				D0666A7924C7745A00F3F04B /* Frameworks */,
 				D0BFDAF524FC7C5300C86618 /* HTTP */,
@@ -225,8 +224,9 @@
 				D0E0F1E424FC49FC002C04BF /* Mastodon */,
 				D0C7D43824F76169001EBDBB /* Model */,
 				D0E5361A24E3EB4D00FB1CE1 /* Notification Service Extension */,
+				D0ED1BB224CE3A1600B4899C /* Preview */,
 				D047FA8D24C3E21200AF17C5 /* Products */,
-				D075C28324FCD27300D35112 /* Services */,
+				D0BDF66524FD7A6400C7FA1C /* ServiceLayer */,
 				D0C7D41D24F76169001EBDBB /* Supporting Files */,
 				D0C7D45324F76169001EBDBB /* System */,
 				D0666A2224C677B400F3F04B /* Tests */,
@@ -383,12 +383,12 @@
 			path = "View Models";
 			sourceTree = "<group>";
 		};
-		D0ED1BB224CE3A1600B4899C /* Development Assets */ = {
+		D0ED1BB224CE3A1600B4899C /* Preview */ = {
 			isa = PBXGroup;
 			children = (
-				D04FD74124D4AA34007D572D /* DevelopmentModels.swift */,
+				D04FD74124D4AA34007D572D /* PreviewMocks.swift */,
 			);
-			path = "Development Assets";
+			path = Preview;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -412,8 +412,8 @@
 			name = Metatext;
 			packageProductDependencies = (
 				D06B492224D4611300642749 /* KingfisherSwiftUI */,
-				D075C28424FCD41D00D35112 /* Services */,
-				D0ADCBF024FD05510062ACCE /* ServiceMocks */,
+				D0BDF66624FD7CDA00C7FA1C /* ServiceLayer */,
+				D0E2C1CD24FD7EE900854680 /* ServiceLayerMocks */,
 			);
 			productName = "Metatext (iOS)";
 			productReference = D047FA8C24C3E21200AF17C5 /* Metatext.app */;
@@ -454,7 +454,7 @@
 			);
 			name = "Notification Service Extension";
 			packageProductDependencies = (
-				D075C28624FCD92400D35112 /* Services */,
+				D0BDF66A24FD7CEC00C7FA1C /* ServiceLayer */,
 			);
 			productName = "Notification Service Extension";
 			productReference = D0E5361924E3EB4D00FB1CE1 /* Notification Service Extension.appex */;
@@ -586,7 +586,7 @@
 				D0C7D4CF24F7616A001EBDBB /* StatusViewModel.swift in Sources */,
 				D0C7D4C724F7616A001EBDBB /* PostingReadingPreferencesViewModel.swift in Sources */,
 				D0BEB1F724F9A84B001B0F04 /* LoadingTableFooterView.swift in Sources */,
-				D04FD74224D4AA34007D572D /* DevelopmentModels.swift in Sources */,
+				D04FD74224D4AA34007D572D /* PreviewMocks.swift in Sources */,
 				D0C7D4D924F7616A001EBDBB /* KingfisherOptionsInfo+Extensions.swift in Sources */,
 				D0C7D4DC24F7616A001EBDBB /* Data+Extensions.swift in Sources */,
 				D0BEB1FF24F9E5BB001B0F04 /* ListsView.swift in Sources */,
@@ -760,7 +760,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Supporting Files/Metatext.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "Development\\ Assets";
+				DEVELOPMENT_ASSET_PATHS = Preview;
 				DEVELOPMENT_TEAM = 82HL67AXQ2;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "Supporting Files/Info.plist";
@@ -786,7 +786,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Supporting Files/Metatext.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "Development\\ Assets";
+				DEVELOPMENT_ASSET_PATHS = Preview;
 				DEVELOPMENT_TEAM = 82HL67AXQ2;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "Supporting Files/Info.plist";
@@ -971,17 +971,17 @@
 			package = D06B492124D4611300642749 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = KingfisherSwiftUI;
 		};
-		D075C28424FCD41D00D35112 /* Services */ = {
+		D0BDF66624FD7CDA00C7FA1C /* ServiceLayer */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = Services;
+			productName = ServiceLayer;
 		};
-		D075C28624FCD92400D35112 /* Services */ = {
+		D0BDF66A24FD7CEC00C7FA1C /* ServiceLayer */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = Services;
+			productName = ServiceLayer;
 		};
-		D0ADCBF024FD05510062ACCE /* ServiceMocks */ = {
+		D0E2C1CD24FD7EE900854680 /* ServiceLayerMocks */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = ServiceMocks;
+			productName = ServiceLayerMocks;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

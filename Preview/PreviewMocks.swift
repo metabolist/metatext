@@ -4,8 +4,9 @@ import Foundation
 import Combine
 import HTTP
 import Mastodon
-import Services
-import ServiceMocks
+import MastodonStubs
+import ServiceLayer
+import ServiceLayerMocks
 
 // swiftlint:disable force_try
 private let decoder = APIDecoder()
@@ -15,11 +16,13 @@ private let devIdentityID = UUID(uuidString: "E621E1F8-C36C-495A-93FC-0C247A3E6E
 private let devAccessToken = "DEVELOPMENT_ACCESS_TOKEN"
 
 extension Account {
-    static let development = try! decoder.decode(Account.self, from: Data(officialAccountJSON.utf8))
+    static let development = try! decoder.decode(Account.self,
+                                                 from: AccountEndpoint.verifyCredentials.data(url: devInstanceURL)!)
 }
 
 extension Instance {
-    static let development = try! decoder.decode(Instance.self, from: Data(officialInstanceJSON.utf8))
+    static let development = try! decoder.decode(Instance.self,
+                                                 from: InstanceEndpoint.instance.data(url: devInstanceURL)!)
 }
 
 extension AppEnvironment {

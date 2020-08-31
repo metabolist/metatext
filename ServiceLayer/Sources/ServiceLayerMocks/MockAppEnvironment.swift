@@ -1,9 +1,9 @@
 import Foundation
 import HTTP
-import Services
+import ServiceLayer
 import Stubbing
 
-extension AppEnvironment {
+public extension AppEnvironment {
     static let mock = AppEnvironment(
         session: Session(configuration: .stubbing),
         webAuthSessionType: SuccessfulMockWebAuthSession.self,

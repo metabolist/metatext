@@ -3,8 +3,8 @@
 import XCTest
 import Combine
 import CombineExpectations
-@testable import Services
-@testable import ServiceMocks
+@testable import ServiceLayer
+@testable import ServiceLayerMocks
 
 class AuthenticationServiceTests: XCTestCase {
     func testAuthentication() throws {

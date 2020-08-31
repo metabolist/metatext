@@ -3,7 +3,7 @@
 import Foundation
 import Combine
 import Mastodon
-import Services
+import ServiceLayer
 
 struct StatusViewModel {
     let content: NSAttributedString

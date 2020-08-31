@@ -2,12 +2,12 @@
 
 import Foundation
 
-class MockUserDefaults: UserDefaults {
-    convenience init() {
+public class MockUserDefaults: UserDefaults {
+    public convenience init() {
         self.init(suiteName: Self.suiteName)!
     }
 
-    override init?(suiteName suitename: String?) {
+    public override init?(suiteName suitename: String?) {
         guard let suitename = suitename else { return nil }
 
         UserDefaults().removePersistentDomain(forName: suitename)
@@ -17,5 +17,5 @@ class MockUserDefaults: UserDefaults {
 }
 
 private extension MockUserDefaults {
-    private static let suiteName = "com.metatext.metabolist.mock-user-defaults"
+    private static let suiteName = "com.metabolist.metatext.mock-user-defaults"
 }

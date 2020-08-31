@@ -3,18 +3,18 @@
 import PackageDescription
 
 let package = Package(
-    name: "Services",
+    name: "ServiceLayer",
     platforms: [
         .iOS(.v14),
         .macOS(.v11)
     ],
     products: [
         .library(
-            name: "Services",
-            targets: ["Services"]),
+            name: "ServiceLayer",
+            targets: ["ServiceLayer"]),
         .library(
-            name: "ServiceMocks",
-            targets: ["ServiceMocks"])
+            name: "ServiceLayerMocks",
+            targets: ["ServiceLayerMocks"])
     ],
     dependencies: [
         .package(url: "https://github.com/groue/CombineExpectations.git", .upToNextMajor(from: "0.5.0")),
@@ -23,13 +23,13 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "Services",
+            name: "ServiceLayer",
             dependencies: ["GRDB", "Mastodon"]),
         .target(
-            name: "ServiceMocks",
-            dependencies: ["Services", .product(name: "MastodonStubs", package: "Mastodon")]),
+            name: "ServiceLayerMocks",
+            dependencies: ["ServiceLayer", .product(name: "MastodonStubs", package: "Mastodon")]),
         .testTarget(
-            name: "ServicesTests",
-            dependencies: ["ServiceMocks", "CombineExpectations"])
+            name: "ServiceLayerTests",
+            dependencies: ["CombineExpectations", "ServiceLayerMocks"])
     ]
 )

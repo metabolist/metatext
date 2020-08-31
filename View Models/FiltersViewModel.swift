@@ -3,7 +3,7 @@
 import Foundation
 import Combine
 import Mastodon
-import Services
+import ServiceLayer
 
 class FiltersViewModel: ObservableObject {
     @Published var activeFilters = [Filter]()

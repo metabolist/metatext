@@ -3,7 +3,7 @@
 import Foundation
 import Combine
 import Mastodon
-import Services
+import ServiceLayer
 
 class StatusListViewModel: ObservableObject {
     @Published private(set) var statusIDs = [[String]]()

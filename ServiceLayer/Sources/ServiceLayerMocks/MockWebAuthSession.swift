@@ -1,15 +1,15 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import Foundation
-import Services
+import ServiceLayer
 
-class MockWebAuthSession: WebAuthSession {
+public class MockWebAuthSession: WebAuthSession {
     let completionHandler: WebAuthSessionCompletionHandler
     let url: URL
     let callbackURLScheme: String?
-    var presentationContextProvider: WebAuthPresentationContextProviding?
+    public var presentationContextProvider: WebAuthPresentationContextProviding?
 
-    required init(
+    public required init(
         url URL: URL,
         callbackURLScheme: String?,
         completionHandler: @escaping WebAuthSessionCompletionHandler) {
@@ -18,7 +18,7 @@ class MockWebAuthSession: WebAuthSession {
         self.completionHandler = completionHandler
     }
 
-    func start() -> Bool {
+    public func start() -> Bool {
         completionHandler(completionHandlerURL, completionHandlerError)
 
         return true
@@ -33,7 +33,7 @@ class MockWebAuthSession: WebAuthSession {
     }
 }
 
-class SuccessfulMockWebAuthSession: MockWebAuthSession {
+public class SuccessfulMockWebAuthSession: MockWebAuthSession {
     private let redirectURL: URL
 
     required init(
@@ -60,7 +60,7 @@ class SuccessfulMockWebAuthSession: MockWebAuthSession {
     }
 }
 
-class CanceledLoginMockWebAuthSession: MockWebAuthSession {
+public class CanceledLoginMockWebAuthSession: MockWebAuthSession {
     override var completionHandlerError: Error? {
         WebAuthSessionError(.canceledLogin)
     }

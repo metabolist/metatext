@@ -3,7 +3,7 @@
 import Foundation
 import Combine
 import Mastodon
-import Services
+import ServiceLayer
 
 class EditFilterViewModel: ObservableObject {
     @Published var filter: Filter

@@ -3,7 +3,7 @@
 import XCTest
 import Combine
 import CombineExpectations
-import Services
+import ServiceLayer
 @testable import Metatext
 
 class RootViewModelTests: XCTestCase {

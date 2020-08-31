@@ -7,7 +7,7 @@ import HTTP
 import Mastodon
 @testable import Metatext
 
-import Services
+import ServiceLayer
 
 class AddIdentityViewModelTests: XCTestCase {
     func testAddIdentity() throws {
