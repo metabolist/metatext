@@ -43,21 +43,6 @@ extension TabNavigationViewModel {
         }
     }
 
-    func title(timeline: Timeline) -> String {
-        switch timeline {
-        case .home:
-            return NSLocalizedString("timelines.home", comment: "")
-        case .local:
-            return NSLocalizedString("timelines.local", comment: "")
-        case .federated:
-            return NSLocalizedString("timelines.federated", comment: "")
-        case let .list(list):
-            return list.title
-        case let .tag(tag):
-            return "#" + tag
-        }
-    }
-
     func systemImageName(timeline: Timeline) -> String {
         switch timeline {
         case .home: return "house"

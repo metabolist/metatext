@@ -43,11 +43,11 @@ private extension TabNavigationView {
             StatusListView(viewModel: viewModel.viewModel(timeline: viewModel.timeline))
                 .id(viewModel.timeline.id)
                 .edgesIgnoringSafeArea(.all)
-                .navigationBarTitle(viewModel.title(timeline: viewModel.timeline), displayMode: .inline)
+                .navigationBarTitle(timelineTitle, displayMode: .inline)
                 .toolbar {
                     ToolbarItem(placement: .principal) {
                         VStack {
-                            Text(viewModel.title(timeline: viewModel.timeline))
+                            Text(timelineTitle)
                                 .font(.headline)
                             Text(viewModel.timelineSubtitle)
                                 .font(.footnote)
@@ -62,7 +62,7 @@ private extension TabNavigationView {
                             Button {
                                 viewModel.timeline = timeline
                             } label: {
-                                Label(viewModel.title(timeline: timeline),
+                                Label(timelineTitle,
                                       systemImage: viewModel.systemImageName(timeline: timeline))
                             }
                         }
@@ -97,6 +97,23 @@ private extension TabNavigationView {
                         }
                     }
                 })
+        }
+    }
+}
+
+private extension TabNavigationView {
+    var timelineTitle: String {
+        switch viewModel.timeline {
+        case .home:
+            return NSLocalizedString("timelines.home", comment: "")
+        case .local:
+            return NSLocalizedString("timelines.local", comment: "")
+        case .federated:
+            return NSLocalizedString("timelines.federated", comment: "")
+        case let .list(list):
+            return list.title
+        case let .tag(tag):
+            return "#" + tag
         }
     }
 }

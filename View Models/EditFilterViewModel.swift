@@ -58,22 +58,3 @@ extension EditFilterViewModel {
             .store(in: &cancellables)
     }
 }
-
-extension Filter.Context {
-    var localized: String {
-        switch self {
-        case .home:
-            return NSLocalizedString("filter.context.home", comment: "")
-        case .notifications:
-            return NSLocalizedString("filter.context.notifications", comment: "")
-        case .public:
-            return NSLocalizedString("filter.context.public", comment: "")
-        case .thread:
-            return NSLocalizedString("filter.context.thread", comment: "")
-        case .account:
-            return NSLocalizedString("filter.context.account", comment: "")
-        case .unknown:
-            return NSLocalizedString("filter.context.unknown", comment: "")
-        }
-    }
-}
