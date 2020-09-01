@@ -2,6 +2,7 @@
 
 import SwiftUI
 import KingfisherSwiftUI
+import enum Mastodon.Timeline
 import ViewModels
 
 struct TabNavigationView: View {
@@ -44,11 +45,11 @@ private extension TabNavigationView {
             StatusListView(viewModel: viewModel.viewModel(timeline: viewModel.timeline))
                 .id(viewModel.timeline.id)
                 .edgesIgnoringSafeArea(.all)
-                .navigationBarTitle(timelineTitle, displayMode: .inline)
+                .navigationBarTitle(viewModel.timeline.title, displayMode: .inline)
                 .toolbar {
                     ToolbarItem(placement: .principal) {
                         VStack {
-                            Text(timelineTitle)
+                            Text(viewModel.timeline.title)
                                 .font(.headline)
                             Text(viewModel.timelineSubtitle)
                                 .font(.footnote)
@@ -63,7 +64,7 @@ private extension TabNavigationView {
                             Button {
                                 viewModel.timeline = timeline
                             } label: {
-                                Label(timelineTitle,
+                                Label(timeline.title,
                                       systemImage: viewModel.systemImageName(timeline: timeline))
                             }
                         }
@@ -102,9 +103,9 @@ private extension TabNavigationView {
     }
 }
 
-private extension TabNavigationView {
-    var timelineTitle: String {
-        switch viewModel.timeline {
+private extension Timeline {
+    var title: String {
+        switch self {
         case .home:
             return NSLocalizedString("timelines.home", comment: "")
         case .local:
