@@ -1,6 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import SwiftUI
+import ViewModels
 
 struct ListsView: View {
     @StateObject var viewModel: ListsViewModel
@@ -55,10 +56,12 @@ struct ListsView: View {
 }
 
 #if DEBUG
+import PreviewViewModels
+
 struct ListsView_Previews: PreviewProvider {
     static var previews: some View {
-        ListsView(viewModel: .development)
-            .environmentObject(TabNavigationViewModel.development)
+        ListsView(viewModel: .mock())
+            .environmentObject(TabNavigationViewModel.mock())
     }
 }
 #endif

@@ -3,15 +3,15 @@
 import Foundation
 import Mastodon
 
-struct AttachmentViewModel {
-    let attachment: Attachment
+public struct AttachmentViewModel {
+    public let attachment: Attachment
 
     init(attachment: Attachment) {
         self.attachment = attachment
     }
 }
 
-extension AttachmentViewModel {
+public extension AttachmentViewModel {
     var aspectRatio: Double? {
         if
             let info = attachment.meta?.original,

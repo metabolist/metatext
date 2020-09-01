@@ -4,15 +4,16 @@ import XCTest
 import Combine
 import CombineExpectations
 import ServiceLayer
-@testable import Metatext
+import ServiceLayerMocks
+@testable import ViewModels
 
 class RootViewModelTests: XCTestCase {
     var cancellables = Set<AnyCancellable>()
 
     func testAddIdentity() throws {
-        let sut = RootViewModel(appDelegate: AppDelegate(),
-                                allIdentitiesService: .fresh,
-                                userNotificationService: UserNotificationService())
+        let sut = try RootViewModel(
+            environment: .mock(),
+            registerForRemoteNotifications: { Empty().setFailureType(to: Error.self).eraseToAnyPublisher() })
         let recorder = sut.$tabNavigationViewModel.record()
 
         XCTAssertNil(try wait(for: recorder.next(), timeout: 1))

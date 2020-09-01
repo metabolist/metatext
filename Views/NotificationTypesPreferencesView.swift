@@ -1,6 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import SwiftUI
+import ViewModels
 
 struct NotificationTypesPreferencesView: View {
     @StateObject var viewModel: NotificationTypesPreferencesViewModel
@@ -24,9 +25,11 @@ struct NotificationTypesPreferencesView: View {
 }
 
 #if DEBUG
+import PreviewViewModels
+
 struct NotificationTypesPreferencesView_Previews: PreviewProvider {
     static var previews: some View {
-        NotificationTypesPreferencesView(viewModel: .development)
+        NotificationTypesPreferencesView(viewModel: .mock())
     }
 }
 #endif

@@ -5,14 +5,14 @@ import Combine
 import Mastodon
 import ServiceLayer
 
-class TabNavigationViewModel: ObservableObject {
-    @Published private(set) var identity: Identity
-    @Published private(set) var recentIdentities = [Identity]()
-    @Published var timeline = Timeline.home
-    @Published private(set) var timelinesAndLists = Timeline.nonLists
-    @Published var presentingSecondaryNavigation = false
-    @Published var alertItem: AlertItem?
-    var selectedTab: Tab? = .timelines
+public class TabNavigationViewModel: ObservableObject {
+    @Published public private(set) var identity: Identity
+    @Published public private(set) var recentIdentities = [Identity]()
+    @Published public var timeline = Timeline.home
+    @Published public private(set) var timelinesAndLists = Timeline.nonLists
+    @Published public var presentingSecondaryNavigation = false
+    @Published public var alertItem: AlertItem?
+    public var selectedTab: Tab? = .timelines
 
     private let identityService: IdentityService
     private var cancellables = Set<AnyCancellable>()
@@ -33,7 +33,7 @@ class TabNavigationViewModel: ObservableObject {
     }
 }
 
-extension TabNavigationViewModel {
+public extension TabNavigationViewModel {
     var timelineSubtitle: String {
         switch timeline {
         case .home, .list:
@@ -93,7 +93,7 @@ extension TabNavigationViewModel {
     }
 }
 
-extension TabNavigationViewModel {
+public extension TabNavigationViewModel {
     enum Tab: CaseIterable {
         case timelines
         case search
@@ -102,26 +102,6 @@ extension TabNavigationViewModel {
     }
 }
 
-extension TabNavigationViewModel.Tab {
-    var title: String {
-        switch self {
-        case .timelines: return "Timelines"
-        case .search: return "Search"
-        case .notifications: return "Notifications"
-        case .messages: return "Messages"
-        }
-    }
-
-    var systemImageName: String {
-        switch self {
-        case .timelines: return "newspaper"
-        case .search: return "magnifyingglass"
-        case .notifications: return "bell"
-        case .messages: return "envelope"
-        }
-    }
-}
-
 extension TabNavigationViewModel.Tab: Identifiable {
-    var id: Self { self }
+    public var id: Self { self }
 }

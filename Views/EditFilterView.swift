@@ -2,6 +2,7 @@
 
 import SwiftUI
 import struct Mastodon.Filter
+import ViewModels
 
 struct EditFilterView: View {
     @StateObject var viewModel: EditFilterViewModel
@@ -96,9 +97,11 @@ extension Filter.Context {
 }
 
 #if DEBUG
+import PreviewViewModels
+
 struct EditFilterView_Previews: PreviewProvider {
     static var previews: some View {
-        EditFilterView(viewModel: .development)
+        EditFilterView(viewModel: .mock())
     }
 }
 #endif

@@ -5,9 +5,9 @@ import Combine
 import Mastodon
 import ServiceLayer
 
-class NotificationTypesPreferencesViewModel: ObservableObject {
-    @Published var pushSubscriptionAlerts: PushSubscription.Alerts
-    @Published var alertItem: AlertItem?
+public class NotificationTypesPreferencesViewModel: ObservableObject {
+    @Published public var pushSubscriptionAlerts: PushSubscription.Alerts
+    @Published public var alertItem: AlertItem?
 
     private let identityService: IdentityService
     private var cancellables = Set<AnyCancellable>()

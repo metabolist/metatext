@@ -8,7 +8,7 @@ import CombineExpectations
 
 class AuthenticationServiceTests: XCTestCase {
     func testAuthentication() throws {
-        let sut = AuthenticationService(environment: .mock)
+        let sut = AuthenticationService(environment: .mock())
         let instanceURL = URL(string: "https://mastodon.social")!
         let appAuthorizationRecorder = sut.authorizeApp(instanceURL: instanceURL).record()
         let appAuthorization = try wait(for: appAuthorizationRecorder.next(), timeout: 1)

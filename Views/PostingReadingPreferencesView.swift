@@ -3,6 +3,7 @@
 import SwiftUI
 import class Mastodon.Status
 import struct Mastodon.Preferences
+import ViewModels
 
 struct PostingReadingPreferencesView: View {
     @StateObject var viewModel: PostingReadingPreferencesViewModel
@@ -50,9 +51,11 @@ struct PostingReadingPreferencesView: View {
 }
 
 #if DEBUG
+import PreviewViewModels
+
 struct PostingReadingPreferencesViewView_Previews: PreviewProvider {
     static var previews: some View {
-        PostingReadingPreferencesView(viewModel: .development)
+        PostingReadingPreferencesView(viewModel: .mock())
     }
 }
 #endif

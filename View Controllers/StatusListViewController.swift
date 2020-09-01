@@ -2,6 +2,7 @@
 
 import SwiftUI
 import Combine
+import ViewModels
 
 class StatusListViewController: UITableViewController {
     private let viewModel: StatusListViewModel

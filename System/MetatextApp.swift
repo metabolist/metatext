@@ -1,7 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import SwiftUI
-import ServiceLayer
+import ViewModels
 
 @main
 struct MetatextApp: App {
@@ -12,11 +12,11 @@ struct MetatextApp: App {
     var body: some Scene {
         WindowGroup {
             RootView(
-                viewModel: RootViewModel(appDelegate: appDelegate,
-                                         // swiftlint:disable force_try
-                                         allIdentitiesService: try! AllIdentitiesService(environment: .live),
-                                         // swiftlint:enable force_try
-                                         userNotificationService: UserNotificationService()))
+                // swiftlint:disable force_try
+                viewModel: try! RootViewModel(
+                    environment: .live(userNotificationCenter: .current()),
+                    registerForRemoteNotifications: appDelegate.registerForRemoteNotifications))
+                // swiftlint:enable force_try
         }
     }
 }

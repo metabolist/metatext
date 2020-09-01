@@ -5,11 +5,11 @@ import Combine
 import Mastodon
 import ServiceLayer
 
-class StatusListViewModel: ObservableObject {
-    @Published private(set) var statusIDs = [[String]]()
-    @Published var alertItem: AlertItem?
-    @Published private(set) var loading = false
-    private(set) var maintainScrollPositionOfStatusID: String?
+public class StatusListViewModel: ObservableObject {
+    @Published public private(set) var statusIDs = [[String]]()
+    @Published public var alertItem: AlertItem?
+    @Published public private(set) var loading = false
+    public private(set) var maintainScrollPositionOfStatusID: String?
 
     private var statuses = [String: Status]()
     private let statusListService: StatusListService
@@ -27,19 +27,21 @@ class StatusListViewModel: ObservableObject {
                 self?.cleanViewModelCache(newStatusSections: $0)
                 self?.statuses = Dictionary(uniqueKeysWithValues: $0.reduce([], +).map { ($0.id, $0) })
             })
+            .receive(on: DispatchQueue.main)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .map { $0.map { $0.map(\.id) } }
             .assign(to: &$statusIDs)
     }
 }
 
-extension StatusListViewModel {
+public extension StatusListViewModel {
     var paginates: Bool { statusListService.paginates }
 
     var contextParentID: String? { statusListService.contextParentID }
 
     func request(maxID: String? = nil, minID: String? = nil) {
         statusListService.request(maxID: maxID, minID: minID)
+            .receive(on: DispatchQueue.main)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .handleEvents(
                 receiveSubscription: { [weak self] _ in self?.loading = true },

@@ -52,6 +52,6 @@ private extension Client {
 
         return session.request(target)
             .validate()
-            .publishDecodable(type: T.ResultType.self, decoder: decoder)
+            .publishDecodable(type: T.ResultType.self, queue: session.rootQueue, decoder: decoder)
     }
 }

@@ -12,7 +12,7 @@ enum IdentityDatabaseError: Error {
 struct IdentityDatabase {
     private let databaseQueue: DatabaseQueue
 
-    init(inMemory: Bool = false) throws {
+    init(environment: AppEnvironment) throws {
         guard
             let documentsDirectory = NSSearchPathForDirectoriesInDomains(
                 .documentDirectory,
@@ -20,13 +20,17 @@ struct IdentityDatabase {
                 .first
         else { throw DatabaseError.documentsDirectoryNotFound }
 
-        if inMemory {
+        if environment.inMemoryContent {
             databaseQueue = DatabaseQueue()
         } else {
             databaseQueue = try DatabaseQueue(path: "\(documentsDirectory)/IdentityDatabase.sqlite3")
         }
 
         try Self.migrate(databaseQueue)
+
+        if let fixture = environment.identityFixture {
+            try populate(fixture: fixture)
+        }
     }
 }
 
@@ -234,6 +238,24 @@ private extension IdentityDatabase {
         }
 
         try migrator.migrate(writer)
+    }
+
+    func populate(fixture: AppEnvironment.IdentityFixture) throws {
+        _ = createIdentity(id: fixture.id, url: fixture.instanceURL)
+            .receive(on: ImmediateScheduler.shared)
+            .sink { _ in } receiveValue: { _ in }
+
+        if let instance = fixture.instance {
+            _ = updateInstance(instance, forIdentityID: fixture.id)
+                .receive(on: ImmediateScheduler.shared)
+                .sink { _ in } receiveValue: { _ in }
+        }
+
+        if let account = fixture.account {
+            _ = updateAccount(account, forIdentityID: fixture.id)
+                .receive(on: ImmediateScheduler.shared)
+                .sink { _ in } receiveValue: { _ in }
+        }
     }
 }
 

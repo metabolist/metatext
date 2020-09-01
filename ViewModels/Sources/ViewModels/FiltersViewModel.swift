@@ -5,10 +5,10 @@ import Combine
 import Mastodon
 import ServiceLayer
 
-class FiltersViewModel: ObservableObject {
-    @Published var activeFilters = [Filter]()
-    @Published var expiredFilters = [Filter]()
-    @Published var alertItem: AlertItem?
+public class FiltersViewModel: ObservableObject {
+    @Published public var activeFilters = [Filter]()
+    @Published public var expiredFilters = [Filter]()
+    @Published public var alertItem: AlertItem?
 
     private let identityService: IdentityService
     private var cancellables = Set<AnyCancellable>()
@@ -28,7 +28,7 @@ class FiltersViewModel: ObservableObject {
     }
 }
 
-extension FiltersViewModel {
+public extension FiltersViewModel {
     func refreshFilters() {
         identityService.refreshFilters()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)

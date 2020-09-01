@@ -9,7 +9,7 @@ import Mastodon
 struct ContentDatabase {
     private let databaseQueue: DatabaseQueue
 
-    init(identityID: UUID, inMemory: Bool) throws {
+    init(identityID: UUID, environment: AppEnvironment) throws {
         guard
             let documentsDirectory = NSSearchPathForDirectoriesInDomains(
                 .documentDirectory,
@@ -17,7 +17,7 @@ struct ContentDatabase {
                 .first
         else { throw DatabaseError.documentsDirectoryNotFound }
 
-        if inMemory {
+        if environment.inMemoryContent {
             databaseQueue = DatabaseQueue()
         } else {
             databaseQueue = try DatabaseQueue(path: "\(documentsDirectory)/\(identityID.uuidString).sqlite3")

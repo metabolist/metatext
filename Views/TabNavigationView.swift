@@ -2,6 +2,7 @@
 
 import SwiftUI
 import KingfisherSwiftUI
+import ViewModels
 
 struct TabNavigationView: View {
     @ObservedObject var viewModel: TabNavigationViewModel
@@ -118,11 +119,33 @@ private extension TabNavigationView {
     }
 }
 
+extension TabNavigationViewModel.Tab {
+    var title: String {
+        switch self {
+        case .timelines: return "Timelines"
+        case .search: return "Search"
+        case .notifications: return "Notifications"
+        case .messages: return "Messages"
+        }
+    }
+
+    var systemImageName: String {
+        switch self {
+        case .timelines: return "newspaper"
+        case .search: return "magnifyingglass"
+        case .notifications: return "bell"
+        case .messages: return "envelope"
+        }
+    }
+}
+
 #if DEBUG
+import PreviewViewModels
+
 struct TabNavigation_Previews: PreviewProvider {
     static var previews: some View {
-        TabNavigationView(viewModel: .development)
-            .environmentObject(RootViewModel.development)
+        TabNavigationView(viewModel: .mock())
+            .environmentObject(RootViewModel.mock())
     }
 }
 #endif

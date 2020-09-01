@@ -1,6 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import SwiftUI
+import ViewModels
 
 struct StatusListView: UIViewControllerRepresentable {
     let viewModel: StatusListViewModel
@@ -15,9 +16,11 @@ struct StatusListView: UIViewControllerRepresentable {
 }
 
 #if DEBUG
+import PreviewViewModels
+
 struct StatusListView_Previews: PreviewProvider {
     static var previews: some View {
-        StatusListView(viewModel: .development)
+        StatusListView(viewModel: .mock())
     }
 }
 #endif

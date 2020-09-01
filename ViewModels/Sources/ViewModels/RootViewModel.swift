@@ -4,23 +4,20 @@ import Foundation
 import Combine
 import ServiceLayer
 
-class RootViewModel: ObservableObject {
-    @Published private(set) var tabNavigationViewModel: TabNavigationViewModel?
-    @Published private var mostRecentlyUsedIdentityID: UUID?
+public final class RootViewModel: ObservableObject {
+    @Published public private(set) var tabNavigationViewModel: TabNavigationViewModel?
 
-    // swiftlint:disable weak_delegate
-    private let appDelegate: AppDelegate
-    // swiftlint:enable weak_delegate
+    @Published private var mostRecentlyUsedIdentityID: UUID?
     private let allIdentitiesService: AllIdentitiesService
     private let userNotificationService: UserNotificationService
+    private let registerForRemoteNotifications: () -> AnyPublisher<String, Error>
     private var cancellables = Set<AnyCancellable>()
 
-    init(appDelegate: AppDelegate,
-         allIdentitiesService: AllIdentitiesService,
-         userNotificationService: UserNotificationService) {
-        self.appDelegate = appDelegate
-        self.allIdentitiesService = allIdentitiesService
-        self.userNotificationService = userNotificationService
+    public init(environment: AppEnvironment,
+                registerForRemoteNotifications: @escaping () -> AnyPublisher<String, Error>) throws {
+        allIdentitiesService = try AllIdentitiesService(environment: environment)
+        userNotificationService = UserNotificationService(environment: environment)
+        self.registerForRemoteNotifications = registerForRemoteNotifications
 
         allIdentitiesService.mostRecentlyUsedIdentityID.assign(to: &$mostRecentlyUsedIdentityID)
 
@@ -28,7 +25,7 @@ class RootViewModel: ObservableObject {
 
         userNotificationService.isAuthorized()
             .filter { $0 }
-            .zip(appDelegate.registerForRemoteNotifications())
+            .zip(registerForRemoteNotifications())
             .map { $1 }
             .flatMap(allIdentitiesService.updatePushSubscriptions(deviceToken:))
             .sink { _ in } receiveValue: { _ in }
@@ -36,7 +33,7 @@ class RootViewModel: ObservableObject {
     }
 }
 
-extension RootViewModel {
+public extension RootViewModel {
     func newIdentitySelected(id: UUID?) {
         guard let id = id else {
             tabNavigationViewModel = nil
@@ -64,7 +61,7 @@ extension RootViewModel {
 
         userNotificationService.isAuthorized()
             .filter { $0 }
-            .zip(appDelegate.registerForRemoteNotifications())
+            .zip(registerForRemoteNotifications())
             .filter { identityService.identity.lastRegisteredDeviceToken != $1 }
             .map { ($1, identityService.identity.pushSubscriptionAlerts) }
             .flatMap(identityService.createPushSubscription(deviceToken:alerts:))

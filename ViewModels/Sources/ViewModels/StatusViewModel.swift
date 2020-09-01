@@ -5,24 +5,24 @@ import Combine
 import Mastodon
 import ServiceLayer
 
-struct StatusViewModel {
-    let content: NSAttributedString
-    let contentEmoji: [Emoji]
-    let displayName: String
-    let displayNameEmoji: [Emoji]
-    let spoilerText: String
-    let isReblog: Bool
-    let rebloggedByDisplayName: String
-    let rebloggedByDisplayNameEmoji: [Emoji]
-    let attachmentViewModels: [AttachmentViewModel]
-    let pollOptionTitles: [String]
-    let pollEmoji: [Emoji]
-    var isPinned = false
-    var isContextParent = false
-    var isReplyInContext = false
-    var hasReplyFollowing = false
-    var sensitiveContentToggled = false
-    let events: AnyPublisher<AnyPublisher<Never, Error>, Never>
+public struct StatusViewModel {
+    public let content: NSAttributedString
+    public let contentEmoji: [Emoji]
+    public let displayName: String
+    public let displayNameEmoji: [Emoji]
+    public let spoilerText: String
+    public let isReblog: Bool
+    public let rebloggedByDisplayName: String
+    public let rebloggedByDisplayNameEmoji: [Emoji]
+    public let attachmentViewModels: [AttachmentViewModel]
+    public let pollOptionTitles: [String]
+    public let pollEmoji: [Emoji]
+    public var isPinned = false
+    public var isContextParent = false
+    public var isReplyInContext = false
+    public var hasReplyFollowing = false
+    public var sensitiveContentToggled = false
+    public let events: AnyPublisher<AnyPublisher<Never, Error>, Never>
 
     private let statusService: StatusService
     private let eventsInput = PassthroughSubject<AnyPublisher<Never, Error>, Never>()
@@ -49,7 +49,7 @@ struct StatusViewModel {
     }
 }
 
-extension StatusViewModel {
+public extension StatusViewModel {
     var shouldDisplaySensitiveContent: Bool {
         if statusService.status.displayStatus.sensitive {
             return sensitiveContentToggled

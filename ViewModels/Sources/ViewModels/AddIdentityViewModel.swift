@@ -4,11 +4,11 @@ import Foundation
 import Combine
 import ServiceLayer
 
-class AddIdentityViewModel: ObservableObject {
-    @Published var urlFieldText = ""
-    @Published var alertItem: AlertItem?
-    @Published private(set) var loading = false
-    let addedIdentityID: AnyPublisher<UUID, Never>
+public class AddIdentityViewModel: ObservableObject {
+    @Published public var urlFieldText = ""
+    @Published public var alertItem: AlertItem?
+    @Published public private(set) var loading = false
+    public let addedIdentityID: AnyPublisher<UUID, Never>
 
     private let allIdentitiesService: AllIdentitiesService
     private let addedIdentityIDInput = PassthroughSubject<UUID, Never>()
@@ -18,7 +18,9 @@ class AddIdentityViewModel: ObservableObject {
         self.allIdentitiesService = allIdentitiesService
         addedIdentityID = addedIdentityIDInput.eraseToAnyPublisher()
     }
+}
 
+public extension AddIdentityViewModel {
     func logInTapped() {
         let identityID = UUID()
         let instanceURL: URL
@@ -35,8 +37,8 @@ class AddIdentityViewModel: ObservableObject {
             .collect()
             .map { _ in (identityID, instanceURL) }
             .flatMap(allIdentitiesService.createIdentity(id:instanceURL:))
+            .receive(on: DispatchQueue.main)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
-            .receive(on: RunLoop.main)
             .handleEvents(
                 receiveSubscription: { [weak self] _ in self?.loading = true },
                 receiveCompletion: { [weak self] _ in self?.loading = false  })

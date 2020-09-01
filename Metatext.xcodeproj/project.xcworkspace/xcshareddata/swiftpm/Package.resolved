@@ -12,7 +12,7 @@
       },
       {
         "package": "CombineExpectations",
-        "repositoryURL": "https://github.com/groue/CombineExpectations",
+        "repositoryURL": "https://github.com/groue/CombineExpectations.git",
         "state": {
           "branch": null,
           "revision": "96d5604151c94b21fbca6877b237e80af9e821dd",

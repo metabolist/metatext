@@ -3,6 +3,7 @@
 import AVKit
 import Kingfisher
 import UIKit
+import ViewModels
 
 protocol StatusTableViewCellDelegate: class {
     func statusTableViewCellDidHaveShareButtonTapped(_ cell: StatusTableViewCell)

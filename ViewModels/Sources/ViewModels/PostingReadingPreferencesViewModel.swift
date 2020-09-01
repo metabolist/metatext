@@ -4,9 +4,9 @@ import Foundation
 import Combine
 import ServiceLayer
 
-class PostingReadingPreferencesViewModel: ObservableObject {
-    @Published var preferences: Identity.Preferences
-    @Published var alertItem: AlertItem?
+public class PostingReadingPreferencesViewModel: ObservableObject {
+    @Published public var preferences: Identity.Preferences
+    @Published public var alertItem: AlertItem?
 
     private let identityService: IdentityService
     private var cancellables = Set<AnyCancellable>()

@@ -1,6 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import SwiftUI
+import ViewModels
 
 struct RootView: View {
     @StateObject var viewModel: RootViewModel
@@ -20,9 +21,11 @@ struct RootView: View {
 }
 
 #if DEBUG
+import PreviewViewModels
+
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        RootView(viewModel: .development)
+        RootView(viewModel: .mock())
     }
 }
 #endif

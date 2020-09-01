@@ -2,6 +2,7 @@
 
 import SwiftUI
 import KingfisherSwiftUI
+import ViewModels
 
 struct SecondaryNavigationView: View {
     @StateObject var viewModel: SecondaryNavigationViewModel
@@ -66,11 +67,13 @@ struct SecondaryNavigationView: View {
 }
 
 #if DEBUG
+import PreviewViewModels
+
 struct SecondaryNavigationView_Previews: PreviewProvider {
     static var previews: some View {
-        SecondaryNavigationView(viewModel: .development)
-            .environmentObject(RootViewModel.development)
-            .environmentObject(TabNavigationViewModel.development)
+        SecondaryNavigationView(viewModel: .mock())
+            .environmentObject(RootViewModel.mock())
+            .environmentObject(TabNavigationViewModel.mock())
     }
 }
 #endif

@@ -3,9 +3,9 @@
 import Foundation
 import ServiceLayer
 
-class PreferencesViewModel: ObservableObject {
-    let handle: String
-    let shouldShowNotificationTypePreferences: Bool
+public class PreferencesViewModel: ObservableObject {
+    public let handle: String
+    public let shouldShowNotificationTypePreferences: Bool
 
     private let identityService: IdentityService
 
@@ -17,7 +17,7 @@ class PreferencesViewModel: ObservableObject {
     }
 }
 
-extension PreferencesViewModel {
+public extension PreferencesViewModel {
     func postingReadingPreferencesViewModel() -> PostingReadingPreferencesViewModel {
         PostingReadingPreferencesViewModel(identityService: identityService)
     }

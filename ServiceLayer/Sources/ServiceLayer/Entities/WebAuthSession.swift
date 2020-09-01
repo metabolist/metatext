@@ -29,7 +29,10 @@ extension WebAuthSession {
             }
 
             webAuthSession.presentationContextProvider = presentationContextProvider
-            webAuthSession.start()
+
+            DispatchQueue.main.async {
+                webAuthSession.start()
+            }
         }
         .eraseToAnyPublisher()
     }

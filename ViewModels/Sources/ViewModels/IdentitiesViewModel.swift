@@ -4,10 +4,10 @@ import Combine
 import Foundation
 import ServiceLayer
 
-class IdentitiesViewModel: ObservableObject {
-    @Published private(set) var identity: Identity
-    @Published var identities = [Identity]()
-    @Published var alertItem: AlertItem?
+public class IdentitiesViewModel: ObservableObject {
+    @Published public private(set) var identity: Identity
+    @Published public var identities = [Identity]()
+    @Published public var alertItem: AlertItem?
 
     private let identityService: IdentityService
     private var cancellables = Set<AnyCancellable>()

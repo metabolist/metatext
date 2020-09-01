@@ -22,7 +22,8 @@ public class StubbingURLProtocol: URLProtocol {
         guard
             let url = request.url,
             let stub = Self.stub(request: request, target: Self.targetsForURLs[url]) else {
-            preconditionFailure("Stub for request not found")
+//            preconditionFailure("Stub for request not found")
+            return
         }
 
         switch stub {

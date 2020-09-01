@@ -1,6 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import SwiftUI
+import ViewModels
 
 struct AddIdentityView: View {
     @StateObject var viewModel: AddIdentityViewModel
@@ -40,9 +41,11 @@ extension AddIdentityView {
 }
 
 #if DEBUG
+import PreviewViewModels
+
 struct AddAccountView_Previews: PreviewProvider {
     static var previews: some View {
-        AddIdentityView(viewModel: .development)
+        AddIdentityView(viewModel: .mock())
     }
 }
 #endif

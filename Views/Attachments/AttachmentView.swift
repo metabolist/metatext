@@ -2,6 +2,7 @@
 
 import UIKit
 import Kingfisher
+import ViewModels
 
 class AttachmentView: UIView {
     let imageView = AnimatedImageView()

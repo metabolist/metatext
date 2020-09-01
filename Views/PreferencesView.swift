@@ -1,6 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import SwiftUI
+import ViewModels
 
 struct PreferencesView: View {
     @StateObject var viewModel: PreferencesViewModel
@@ -26,9 +27,11 @@ struct PreferencesView: View {
 }
 
 #if DEBUG
+import PreviewViewModels
+
 struct PreferencesView_Previews: PreviewProvider {
     static var previews: some View {
-        PreferencesView(viewModel: .development)
+        PreferencesView(viewModel: .mock())
     }
 }
 #endif

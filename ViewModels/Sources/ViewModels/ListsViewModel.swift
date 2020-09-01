@@ -5,10 +5,10 @@ import Combine
 import Mastodon
 import ServiceLayer
 
-class ListsViewModel: ObservableObject {
-    @Published private(set) var lists = [MastodonList]()
-    @Published private(set) var creatingList = false
-    @Published var alertItem: AlertItem?
+public class ListsViewModel: ObservableObject {
+    @Published public private(set) var lists = [MastodonList]()
+    @Published public private(set) var creatingList = false
+    @Published public var alertItem: AlertItem?
 
     private let identityService: IdentityService
     private var cancellables = Set<AnyCancellable>()
@@ -29,7 +29,7 @@ class ListsViewModel: ObservableObject {
     }
 }
 
-extension ListsViewModel {
+public extension ListsViewModel {
     func refreshLists() {
         identityService.refreshLists()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)

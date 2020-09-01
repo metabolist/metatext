@@ -4,15 +4,14 @@ import Foundation
 import Combine
 import UserNotifications
 
-public class UserNotificationService: NSObject {
-    private let userNotificationCenter: UNUserNotificationCenter
+public struct UserNotificationService {
+    let events: AnyPublisher<UserNotificationClient.DelegateEvent, Never>
 
-    public init(userNotificationCenter: UNUserNotificationCenter = .current()) {
-        self.userNotificationCenter = userNotificationCenter
+    private let userNotificationClient: UserNotificationClient
 
-        super.init()
-
-        userNotificationCenter.delegate = self
+    public init(environment: AppEnvironment) {
+        self.userNotificationClient = environment.userNotificationClient
+        events = userNotificationClient.delegateEvents
     }
 }
 
@@ -20,11 +19,9 @@ public extension UserNotificationService {
     func isAuthorized() -> AnyPublisher<Bool, Error> {
         getNotificationSettings()
             .map(\.authorizationStatus)
-            .flatMap { [weak self] status -> AnyPublisher<Bool, Error> in
+            .flatMap { status -> AnyPublisher<Bool, Error> in
                 if status == .notDetermined {
-                    return self?.requestProvisionalAuthorization()
-                        .eraseToAnyPublisher()
-                        ?? Empty().eraseToAnyPublisher()
+                    return requestProvisionalAuthorization().eraseToAnyPublisher()
                 }
 
                 return Just(status == .authorized || status == .provisional)
@@ -37,16 +34,15 @@ public extension UserNotificationService {
 
 private extension UserNotificationService {
     func getNotificationSettings() -> AnyPublisher<UNNotificationSettings, Never> {
-        Future<UNNotificationSettings, Never> { [weak self] promise in
-            self?.userNotificationCenter.getNotificationSettings { promise(.success($0)) }
+        Future<UNNotificationSettings, Never> { promise in
+            userNotificationClient.getNotificationSettings { promise(.success($0)) }
         }
         .eraseToAnyPublisher()
     }
 
     func requestProvisionalAuthorization() -> AnyPublisher<Bool, Error> {
-        Future<Bool, Error> { [weak self] promise in
-            self?.userNotificationCenter.requestAuthorization(
-                options: [.alert, .sound, .badge, .provisional]) { granted, error in
+        Future<Bool, Error> { promise in
+            userNotificationClient.requestAuthorization([.alert, .sound, .badge, .provisional]) { granted, error in
                 if let error = error {
                     return promise(.failure(error))
                 }
@@ -55,15 +51,5 @@ private extension UserNotificationService {
             }
         }
         .eraseToAnyPublisher()
-    }
-}
-
-extension UserNotificationService: UNUserNotificationCenterDelegate {
-    public func userNotificationCenter(
-        _ center: UNUserNotificationCenter,
-        willPresent notification: UNNotification,
-        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        print(notification.request.content.body)
-        completionHandler(.banner)
     }
 }

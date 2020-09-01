@@ -2,6 +2,7 @@
 
 import Foundation
 import SwiftUI
+import ViewModels
 
 extension View {
     func alertItem(_ alertItem: Binding<AlertItem?>) -> some View {

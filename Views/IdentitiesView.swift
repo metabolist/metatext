@@ -2,7 +2,7 @@
 
 import SwiftUI
 import KingfisherSwiftUI
-import struct ServiceLayer.Identity
+import ViewModels
 
 struct IdentitiesView: View {
     @StateObject var viewModel: IdentitiesViewModel
@@ -68,10 +68,12 @@ struct IdentitiesView: View {
 }
 
 #if DEBUG
+import PreviewViewModels
+
 struct IdentitiesView_Previews: PreviewProvider {
     static var previews: some View {
-        IdentitiesView(viewModel: .development)
-            .environmentObject(RootViewModel.development)
+        IdentitiesView(viewModel: .mock())
+            .environmentObject(RootViewModel.mock())
     }
 }
 #endif

@@ -3,8 +3,9 @@
 import Foundation
 import ServiceLayer
 
-class SecondaryNavigationViewModel: ObservableObject {
-    @Published private(set) var identity: Identity
+public class SecondaryNavigationViewModel: ObservableObject {
+    @Published public private(set) var identity: Identity
+
     private let identityService: IdentityService
 
     init(identityService: IdentityService) {
@@ -14,7 +15,7 @@ class SecondaryNavigationViewModel: ObservableObject {
     }
 }
 
-extension SecondaryNavigationViewModel {
+public extension SecondaryNavigationViewModel {
     func identitiesViewModel() -> IdentitiesViewModel {
         IdentitiesViewModel(identityService: identityService)
     }
