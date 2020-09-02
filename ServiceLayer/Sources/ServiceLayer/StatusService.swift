@@ -18,9 +18,9 @@ public struct StatusService {
 
 public extension StatusService {
     func toggleFavorited() -> AnyPublisher<Never, Error> {
-        networkClient.request(status.favourited
-                                ? StatusEndpoint.unfavourite(id: status.id)
-                                : StatusEndpoint.favourite(id: status.id))
+        networkClient.request(status.displayStatus.favourited
+                                ? StatusEndpoint.unfavourite(id: status.displayStatus.id)
+                                : StatusEndpoint.favourite(id: status.displayStatus.id))
             .map { ([$0], nil) }
             .flatMap(contentDatabase.insert(statuses:timeline:))
             .eraseToAnyPublisher()
