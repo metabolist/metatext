@@ -33,8 +33,7 @@ extension StatusListService {
                   networkClient: networkClient,
                   contentDatabase: contentDatabase) { maxID, minID in
             networkClient.request(Paged(timeline.endpoint, maxID: maxID, minID: minID))
-                .map { ($0, timeline) }
-                .flatMap(contentDatabase.insert(statuses:timeline:))
+                .flatMap { contentDatabase.insert(statuses: $0, timeline: timeline) }
                 .eraseToAnyPublisher()
         }
     }
@@ -62,12 +61,10 @@ public extension StatusListService {
              contentDatabase: contentDatabase) { _, _ in
             Publishers.Merge(
                 networkClient.request(StatusEndpoint.status(id: statusID))
-                    .map { ([$0], nil) }
-                    .flatMap(contentDatabase.insert(statuses:timeline:))
+                    .flatMap(contentDatabase.insert(status:))
                     .eraseToAnyPublisher(),
                 networkClient.request(ContextEndpoint.context(id: statusID))
-                    .map { ($0, statusID) }
-                    .flatMap(contentDatabase.insert(context:parentID:))
+                    .flatMap { contentDatabase.insert(context: $0, parentID: statusID) }
                     .eraseToAnyPublisher())
                 .eraseToAnyPublisher()
         }

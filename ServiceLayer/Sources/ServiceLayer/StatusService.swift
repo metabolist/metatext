@@ -21,8 +21,7 @@ public extension StatusService {
         networkClient.request(status.displayStatus.favourited
                                 ? StatusEndpoint.unfavourite(id: status.displayStatus.id)
                                 : StatusEndpoint.favourite(id: status.displayStatus.id))
-            .map { ([$0], nil) }
-            .flatMap(contentDatabase.insert(statuses:timeline:))
+            .flatMap(contentDatabase.insert(status:))
             .eraseToAnyPublisher()
     }
 }

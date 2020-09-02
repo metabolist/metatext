@@ -28,18 +28,20 @@ struct ContentDatabase {
 }
 
 extension ContentDatabase {
-    func insert(statuses: [Status], timeline: Timeline? = nil) -> AnyPublisher<Never, Error> {
+    func insert(status: Status) -> AnyPublisher<Never, Error> {
+        databaseQueue.writePublisher(updates: status.save)
+        .ignoreOutput()
+        .eraseToAnyPublisher()
+    }
+
+    func insert(statuses: [Status], timeline: Timeline) -> AnyPublisher<Never, Error> {
         databaseQueue.writePublisher {
-            try timeline?.save($0)
+            try timeline.save($0)
 
             for status in statuses {
-                for component in status.storedComponents() {
-                    try component.save($0)
-                }
+                try status.save($0)
 
-                if let timeline = timeline {
-                    try TimelineStatusJoin(timelineId: timeline.id, statusId: status.id).save($0)
-                }
+                try TimelineStatusJoin(timelineId: timeline.id, statusId: status.id).save($0)
             }
         }
         .ignoreOutput()
@@ -49,9 +51,7 @@ extension ContentDatabase {
     func insert(context: Context, parentID: String) -> AnyPublisher<Never, Error> {
         databaseQueue.writePublisher {
             for status in context.ancestors + context.descendants {
-                for component in status.storedComponents() {
-                    try component.save($0)
-                }
+                try status.save($0)
             }
 
             for (section, statuses) in [(StatusContextJoin.Section.ancestors, context.ancestors),
@@ -502,17 +502,15 @@ struct StatusResult: Codable, Hashable, FetchableRecord {
 }
 
 private extension Status {
-    func storedComponents() -> [PersistableRecord] {
-        var components: [PersistableRecord] = [account]
+    func save(_ db: Database) throws {
+        try account.save(db)
 
         if let reblog = reblog {
-            components.append(reblog.account)
-            components.append(StoredStatus(status: reblog))
+            try reblog.account.save(db)
+            try StoredStatus(status: reblog).save(db)
         }
 
-        components.append(StoredStatus(status: self))
-
-        return components
+        try StoredStatus(status: self).save(db)
     }
 
     convenience init(statusResult: StatusResult) {
