@@ -70,10 +70,12 @@ class StatusListViewController: UITableViewController {
                 self.dataSource.apply($0.snapshot(), animatingDifferences: false) {
                     if
                         let id = self.viewModel.maintainScrollPositionOfStatusID,
-                        let indexPath = self.dataSource.indexPath(for: id),
-                        let offsetFromNavigationBar = offsetFromNavigationBar {
+                        let indexPath = self.dataSource.indexPath(for: id) {
                         self.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
-                        self.tableView.contentOffset.y -= offsetFromNavigationBar
+
+                        if let offsetFromNavigationBar = offsetFromNavigationBar {
+                            self.tableView.contentOffset.y -= offsetFromNavigationBar
+                        }
                     }
                 }
             }

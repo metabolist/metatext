@@ -92,8 +92,10 @@ private extension StatusListViewModel {
     func determineIfScrollPositionShouldBeMaintained(newStatusSections: [[Status]]) {
         maintainScrollPositionOfStatusID = nil // clear old value
 
+        let flatStatusIDs = statusIDs.reduce([], +)
+
         // Maintain scroll position of parent after initial load of context
-        if let contextParentID = contextParentID, statusIDs.reduce([], +) == [contextParentID] {
+        if let contextParentID = contextParentID, flatStatusIDs == [contextParentID] || flatStatusIDs == [] {
             maintainScrollPositionOfStatusID = contextParentID
         }
     }
