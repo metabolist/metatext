@@ -12,24 +12,12 @@ public struct ContextService {
     private let context = CurrentValueSubject<Context, Never>(Context(ancestors: [], descendants: []))
     private let networkClient: APIClient
     private let contentDatabase: ContentDatabase
-    private let collection: TransientStatusCollection
 
     init(status: Status, networkClient: APIClient, contentDatabase: ContentDatabase) {
         self.status = status
         self.networkClient = networkClient
         self.contentDatabase = contentDatabase
-        collection = TransientStatusCollection(id: "context-\(status.id)")
-        statusSections = contentDatabase.statusesObservation(collection: collection)
-            .combineLatest(context.setFailureType(to: Error.self))
-            .map { statuses, context in
-                [
-                    context.ancestors.map { a in statuses.first { $0.id == a.id } ?? a },
-                    [statuses.first { $0.id == status.id } ?? status],
-                    context.descendants.map { d in statuses.first { $0.id == d.id } ?? d }
-                ]
-            }
-            .removeDuplicates()
-            .eraseToAnyPublisher()
+        statusSections = contentDatabase.contextObservation(parentID: status.id)
     }
 }
 
@@ -69,12 +57,14 @@ extension ContextService: StatusListService {
     public func request(maxID: String?, minID: String?) -> AnyPublisher<Never, Error> {
         Publishers.Merge(
             networkClient.request(StatusEndpoint.status(id: status.id))
-                .map { ([$0], collection) }
-                .flatMap(contentDatabase.insert(statuses:collection:)),
+                .map { ([$0], nil) }
+                .flatMap(contentDatabase.insert(statuses:timeline:))
+                .eraseToAnyPublisher(),
             networkClient.request(ContextEndpoint.context(id: status.id))
                 .handleEvents(receiveOutput: context.send)
-                .map { ($0.ancestors + $0.descendants, collection) }
-                .flatMap(contentDatabase.insert(statuses:collection:)))
+                .map { ($0, status.id) }
+                .flatMap(contentDatabase.insert(context:parentID:))
+                .eraseToAnyPublisher())
             .eraseToAnyPublisher()
     }
 

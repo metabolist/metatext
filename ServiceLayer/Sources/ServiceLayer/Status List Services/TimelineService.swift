@@ -15,8 +15,7 @@ struct TimelineService {
         self.timeline = timeline
         self.networkClient = networkClient
         self.contentDatabase = contentDatabase
-        statusSections = contentDatabase.statusesObservation(collection: timeline)
-            .map { [$0] }
+        statusSections = contentDatabase.statusesObservation(timeline: timeline)
             .eraseToAnyPublisher()
     }
 }
@@ -29,7 +28,7 @@ extension TimelineService: StatusListService {
     func request(maxID: String?, minID: String?) -> AnyPublisher<Never, Error> {
         networkClient.request(Paged(timeline.endpoint, maxID: maxID, minID: minID))
             .map { ($0, timeline) }
-            .flatMap(contentDatabase.insert(statuses:collection:))
+            .flatMap(contentDatabase.insert(statuses:timeline:))
             .eraseToAnyPublisher()
     }
 

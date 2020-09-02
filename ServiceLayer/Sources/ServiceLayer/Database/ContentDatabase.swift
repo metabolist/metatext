@@ -24,21 +24,52 @@ struct ContentDatabase {
         }
 
         try Self.migrate(databaseQueue)
-        try Self.createTemporaryTables(databaseQueue)
     }
 }
 
 extension ContentDatabase {
-    func insert(statuses: [Status], collection: StatusCollection? = nil) -> AnyPublisher<Never, Error> {
+    func insert(statuses: [Status], timeline: Timeline? = nil) -> AnyPublisher<Never, Error> {
         databaseQueue.writePublisher {
-            try collection?.save($0)
+            try timeline?.save($0)
 
             for status in statuses {
                 for component in status.storedComponents() {
                     try component.save($0)
                 }
 
-                try collection?.joinRecord(status: status).save($0)
+                if let timeline = timeline {
+                    try TimelineStatusJoin(timelineId: timeline.id, statusId: status.id).save($0)
+                }
+            }
+        }
+        .ignoreOutput()
+        .eraseToAnyPublisher()
+    }
+
+    func insert(context: Context, parentID: String) -> AnyPublisher<Never, Error> {
+        databaseQueue.writePublisher {
+            for status in context.ancestors + context.descendants {
+                for component in status.storedComponents() {
+                    try component.save($0)
+                }
+            }
+
+            for (section, statuses) in [(StatusContextJoin.Section.ancestors, context.ancestors),
+                                        (StatusContextJoin.Section.descendants, context.descendants)] {
+                for (index, status) in statuses.enumerated() {
+                    try StatusContextJoin(
+                        parentId: parentID,
+                        statusId: status.id,
+                        section: section,
+                        index: index)
+                        .save($0)
+                }
+
+               try StatusContextJoin.filter(
+                    Column("parentId") == parentID
+                        && Column("section") == section.rawValue
+                        && Column("index") >= statuses.count)
+                    .deleteAll($0)
             }
         }
         .ignoreOutput()
@@ -93,11 +124,28 @@ extension ContentDatabase {
             .eraseToAnyPublisher()
     }
 
-    func statusesObservation(collection: StatusCollection) -> AnyPublisher<[Status], Error> {
-        ValueObservation.tracking(collection.fetch)
+    func statusesObservation(timeline: Timeline) -> AnyPublisher<[[Status]], Error> {
+        ValueObservation.tracking(timeline.statuses.fetchAll)
+            .removeDuplicates()
+            .publisher(in: databaseQueue)
+            .map { [$0.map(Status.init(statusResult:))] }
+            .eraseToAnyPublisher()
+    }
+
+    func contextObservation(parentID: String) -> AnyPublisher<[[Status]], Error> {
+        ValueObservation.tracking { db -> [[StatusResult]] in
+            guard let parent = try StoredStatus.filter(Column("id") == parentID).statusResultRequest.fetchOne(db) else {
+                return [[]]
+            }
+
+            let ancestors = try parent.status.ancestors.fetchAll(db)
+            let descendants = try parent.status.descendants.fetchAll(db)
+
+            return [ancestors, [parent], descendants]
+        }
         .removeDuplicates()
         .publisher(in: databaseQueue)
-        .map { $0.map(Status.init(statusResult:)) }
+        .map { $0.map { $0.map(Status.init(statusResult:)) } }
         .eraseToAnyPublisher()
     }
 
@@ -209,6 +257,21 @@ private extension ContentDatabase {
                 t.primaryKey(["timelineId", "statusId"], onConflict: .replace)
             }
 
+            try db.create(table: "statusContextJoin", ifNotExists: true) { t in
+                t.column("parentId", .text)
+                    .indexed()
+                    .notNull()
+                    .references("storedStatus", column: "id", onDelete: .cascade, onUpdate: .cascade)
+                t.column("statusId", .text)
+                    .indexed()
+                    .notNull()
+                    .references("storedStatus", column: "id", onDelete: .cascade, onUpdate: .cascade)
+                t.column("section", .text).notNull()
+                t.column("index", .integer).notNull()
+
+                t.primaryKey(["parentId", "statusId"], onConflict: .replace)
+            }
+
             try db.create(table: "filter", ifNotExists: true) { t in
                 t.column("id", .text).notNull().primaryKey(onConflict: .replace)
                 t.column("phrase", .text).notNull()
@@ -222,23 +285,6 @@ private extension ContentDatabase {
         try migrator.migrate(writer)
     }
     // swiftlint:enable function_body_length
-
-    static func createTemporaryTables(_ writer: DatabaseWriter) throws {
-        try writer.write { database in
-            try database.create(table: "transientStatusCollection", temporary: true, ifNotExists: true) { t in
-                t.column("id", .text).notNull().primaryKey(onConflict: .replace)
-            }
-
-            try database.create(table: "transientStatusCollectionElement", temporary: true, ifNotExists: true) { t in
-                t.column("transientStatusCollectionId", .text)
-                    .notNull()
-                    .references("transientStatusCollection", column: "id", onDelete: .cascade, onUpdate: .cascade)
-                t.column("statusId", .text).notNull()
-
-                t.primaryKey(["transientStatusCollectionId", "statusId"], onConflict: .replace)
-            }
-        }
-    }
 }
 
 extension Account: FetchableRecord, PersistableRecord {
@@ -251,13 +297,6 @@ extension Account: FetchableRecord, PersistableRecord {
     }
 }
 
-public protocol StatusCollection: FetchableRecord, PersistableRecord {
-    var id: String { get }
-    var fetch: (Database) throws -> [StatusResult] { get }
-
-    func joinRecord(status: Status) -> PersistableRecord
-}
-
 private struct TimelineStatusJoin: Codable, FetchableRecord, PersistableRecord {
     let timelineId: String
     let statusId: String
@@ -265,7 +304,7 @@ private struct TimelineStatusJoin: Codable, FetchableRecord, PersistableRecord {
     static let status = belongsTo(StoredStatus.self)
 }
 
-extension Timeline: StatusCollection {
+extension Timeline: FetchableRecord, PersistableRecord {
     enum Columns: String, ColumnExpression {
         case id, listTitle
     }
@@ -292,34 +331,64 @@ extension Timeline: StatusCollection {
             container[Columns.listTitle] = list.title
         }
     }
-
-    public var fetch: (Database) throws -> [StatusResult] {
-        statuses
-            .including(required: StoredStatus.account)
-            .including(optional: StoredStatus.reblogAccount)
-            .including(optional: StoredStatus.reblog)
-            .asRequest(of: StatusResult.self)
-            .fetchAll
-    }
-
-    public func joinRecord(status: Status) -> PersistableRecord {
-        TimelineStatusJoin(timelineId: id, statusId: status.id)
-    }
 }
 
 private extension Timeline {
     static let statusJoins = hasMany(TimelineStatusJoin.self)
+    static let statuses = hasMany(
+        StoredStatus.self,
+        through: statusJoins,
+        using: TimelineStatusJoin.status)
+        .order(Column("createdAt").desc)
 
-    static let statuses = hasMany(StoredStatus.self,
-                                  through: statusJoins,
-                                  using: TimelineStatusJoin.status).order(Column("createdAt").desc)
+    var statuses: QueryInterfaceRequest<StatusResult> {
+        request(for: Self.statuses).statusResultRequest
+    }
+}
 
-    var statusJoins: QueryInterfaceRequest<TimelineStatusJoin> {
-        request(for: Self.statusJoins)
+private struct StatusContextJoin: Codable, FetchableRecord, PersistableRecord {
+    enum Section: String, Codable {
+        case ancestors
+        case descendants
     }
 
-    var statuses: QueryInterfaceRequest<StoredStatus> {
-        request(for: Self.statuses)
+    let parentId: String
+    let statusId: String
+    let section: Section
+    let index: Int
+
+    static let status = belongsTo(StoredStatus.self, using: ForeignKey([Column("statusId")]))
+}
+
+private extension StoredStatus {
+    static let ancestorJoins = hasMany(StatusContextJoin.self, using: ForeignKey([Column("parentID")]))
+        .filter(Column("section") == StatusContextJoin.Section.ancestors.rawValue)
+        .order(Column("index"))
+    static let descendantJoins = hasMany(StatusContextJoin.self, using: ForeignKey([Column("parentID")]))
+        .filter(Column("section") == StatusContextJoin.Section.descendants.rawValue)
+        .order(Column("index"))
+    static let ancestors = hasMany(StoredStatus.self,
+                                   through: ancestorJoins,
+                                   using: StatusContextJoin.status)
+    static let descendants = hasMany(StoredStatus.self,
+                                   through: descendantJoins,
+                                   using: StatusContextJoin.status)
+
+    var ancestors: QueryInterfaceRequest<StatusResult> {
+        request(for: Self.ancestors).statusResultRequest
+    }
+
+    var descendants: QueryInterfaceRequest<StatusResult> {
+        request(for: Self.descendants).statusResultRequest
+    }
+}
+
+private extension QueryInterfaceRequest where RowDecoder == StoredStatus {
+    var statusResultRequest: QueryInterfaceRequest<StatusResult> {
+        including(required: StoredStatus.account)
+        .including(optional: StoredStatus.reblogAccount)
+        .including(optional: StoredStatus.reblog)
+        .asRequest(of: StatusResult.self)
     }
 }
 
@@ -333,43 +402,7 @@ extension Filter: FetchableRecord, PersistableRecord {
     }
 }
 
-private struct TransientStatusCollectionElement: Codable, FetchableRecord, PersistableRecord {
-    let transientStatusCollectionId: String
-    let statusId: String
-
-    static let status = belongsTo(StoredStatus.self, key: "statusId")
-}
-
-extension TransientStatusCollection: StatusCollection {
-    public var fetch: (Database) throws -> [StatusResult] {
-        {
-            try StatusResult.fetchAll(
-                $0,
-                StoredStatus.filter(
-                    try elements
-                        .fetchAll($0)
-                        .map(\.statusId)
-                        .contains(Column("id")))
-                    .including(required: StoredStatus.account)
-                    .including(optional: StoredStatus.reblogAccount)
-                    .including(optional: StoredStatus.reblog))
-        }
-    }
-
-    public func joinRecord(status: Status) -> PersistableRecord {
-        TransientStatusCollectionElement(transientStatusCollectionId: id, statusId: status.id)
-    }
-}
-
-private extension TransientStatusCollection {
-    static let elements = hasMany(TransientStatusCollectionElement.self)
-
-    var elements: QueryInterfaceRequest<TransientStatusCollectionElement> {
-        request(for: Self.elements)
-    }
-}
-
-private struct StoredStatus: Codable, Hashable {
+struct StoredStatus: Codable, Hashable {
     let id: String
     let uri: String
     let createdAt: Date
@@ -461,11 +494,11 @@ extension StoredStatus: FetchableRecord, PersistableRecord {
     }
 }
 
-public struct StatusResult: Codable, Hashable, FetchableRecord {
+struct StatusResult: Codable, Hashable, FetchableRecord {
     let account: Account
-    fileprivate let status: StoredStatus
+    let status: StoredStatus
     let reblogAccount: Account?
-    fileprivate let reblog: StoredStatus?
+    let reblog: StoredStatus?
 }
 
 private extension Status {

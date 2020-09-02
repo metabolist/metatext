@@ -22,7 +22,7 @@ public extension StatusService {
                                 ? StatusEndpoint.unfavourite(id: status.id)
                                 : StatusEndpoint.favourite(id: status.id))
             .map { ([$0], nil) }
-            .flatMap(contentDatabase.insert(statuses:collection:))
+            .flatMap(contentDatabase.insert(statuses:timeline:))
             .eraseToAnyPublisher()
     }
 }
