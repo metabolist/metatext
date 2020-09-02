@@ -65,18 +65,16 @@ public extension StatusListViewModel {
                 .sink { _ in })
         }
 
-        statusViewModel.isContextParent = status.id == contextParentID
-        statusViewModel.isPinned = statusListService.isPinned(status: status)
-        statusViewModel.isReplyInContext = statusListService.isReplyInContext(status: status)
-        statusViewModel.hasReplyFollowing = statusListService.hasReplyFollowing(status: status)
+        statusViewModel.isContextParent = status.id == statusListService.contextParentID
+        statusViewModel.isPinned = status.displayStatus.pinned ?? false
+        statusViewModel.isReplyInContext = isReplyInContext(status: status)
+        statusViewModel.hasReplyFollowing = hasReplyFollowing(status: status)
 
         return statusViewModel
     }
 
-    func contextViewModel(id: String) -> StatusListViewModel? {
-        guard let status = statuses[id] else { return nil }
-
-        return StatusListViewModel(statusListService: statusListService.contextService(status: status))
+    func contextViewModel(id: String) -> StatusListViewModel {
+        StatusListViewModel(statusListService: statusListService.contextService(statusID: id))
     }
 }
 
@@ -104,5 +102,30 @@ private extension StatusListViewModel {
         let newStatuses = Set(newStatusSections.reduce([], +))
 
         statusViewModelCache = statusViewModelCache.filter { newStatuses.contains($0.key) }
+    }
+
+    func isReplyInContext(status: Status) -> Bool {
+        let flatStatusIDs = statusIDs.reduce([], +)
+
+        guard
+            let index = flatStatusIDs.firstIndex(where: { $0 == status.id }),
+            index > 0
+        else { return false }
+
+        let previousStatusID = flatStatusIDs[index - 1]
+
+        return previousStatusID != contextParentID && status.inReplyToId == previousStatusID
+    }
+
+    func hasReplyFollowing(status: Status) -> Bool {
+        let flatStatusIDs = statusIDs.reduce([], +)
+
+        guard
+            let index = flatStatusIDs.firstIndex(where: { $0 == status.id }),
+            flatStatusIDs.count > index + 1,
+            let nextStatus = statuses[flatStatusIDs[index + 1]]
+        else { return false }
+
+        return status.id != contextParentID && nextStatus.inReplyToId == status.id
     }
 }

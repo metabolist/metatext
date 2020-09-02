@@ -199,7 +199,7 @@ public extension IdentityService {
     }
 
     func service(timeline: Timeline) -> StatusListService {
-        TimelineService(timeline: timeline, networkClient: networkClient, contentDatabase: contentDatabase)
+        StatusListService(timeline: timeline, networkClient: networkClient, contentDatabase: contentDatabase)
     }
 }
 

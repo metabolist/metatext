@@ -9,6 +9,8 @@ class StatusListViewController: UITableViewController {
     private let loadingTableFooterView = LoadingTableFooterView()
     private var cancellables = Set<AnyCancellable>()
     private var cellHeightCaches = [CGFloat: [String: CGFloat]]()
+    private let dataSourceQueue =
+        DispatchQueue(label: "com.metabolist.metatext.status-list.data-source-queue")
 
     private lazy var dataSource: UITableViewDiffableDataSource<Int, String> = {
         UITableViewDiffableDataSource(tableView: tableView) { [weak self] tableView, indexPath, statusID in
@@ -54,7 +56,7 @@ class StatusListViewController: UITableViewController {
         tableView.tableFooterView = UIView()
 
         viewModel.$statusIDs
-            .sink { [weak self] in
+            .sink { [weak self] statusIDs in
                 guard let self = self else { return }
 
                 var offsetFromNavigationBar: CGFloat?
@@ -67,14 +69,16 @@ class StatusListViewController: UITableViewController {
                     offsetFromNavigationBar = self.tableView.rectForRow(at: indexPath).origin.y - navigationBarMaxY
                 }
 
-                self.dataSource.apply($0.snapshot(), animatingDifferences: false) {
-                    if
-                        let id = self.viewModel.maintainScrollPositionOfStatusID,
-                        let indexPath = self.dataSource.indexPath(for: id) {
-                        self.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
+                self.dataSourceQueue.async {
+                    self.dataSource.apply(statusIDs.snapshot(), animatingDifferences: false) {
+                        if
+                            let id = self.viewModel.maintainScrollPositionOfStatusID,
+                            let indexPath = self.dataSource.indexPath(for: id) {
+                            self.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
 
-                        if let offsetFromNavigationBar = offsetFromNavigationBar {
-                            self.tableView.contentOffset.y -= offsetFromNavigationBar
+                            if let offsetFromNavigationBar = offsetFromNavigationBar {
+                                self.tableView.contentOffset.y -= offsetFromNavigationBar
+                            }
                         }
                     }
                 }
@@ -122,13 +126,10 @@ class StatusListViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard
-            let id = dataSource.itemIdentifier(for: indexPath),
-            let contextViewModel = viewModel.contextViewModel(id: id)
-        else { return }
+        guard let id = dataSource.itemIdentifier(for: indexPath) else { return }
 
         navigationController?.pushViewController(
-            StatusListViewController(viewModel: contextViewModel),
+            StatusListViewController(viewModel: viewModel.contextViewModel(id: id)),
             animated: true)
     }
 
