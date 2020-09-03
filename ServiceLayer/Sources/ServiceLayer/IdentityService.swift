@@ -1,5 +1,6 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
+import DB
 import Foundation
 import Combine
 import Mastodon
@@ -39,7 +40,7 @@ public class IdentityService {
         networkClient.instanceURL = identity.url
         networkClient.accessToken = try? secretsService.item(.accessToken)
 
-        contentDatabase = try ContentDatabase(identityID: identityID, environment: environment)
+        contentDatabase = try ContentDatabase(identityID: identityID, inMemory: environment.inMemoryContent)
 
         observation.catch { [weak self] error -> Empty<Identity, Never> in
             self?.observationErrorsInput.send(error)

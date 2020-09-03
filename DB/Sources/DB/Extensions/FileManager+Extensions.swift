@@ -1,9 +1,4 @@
-//
-//  File.swift
-//  
-//
-//  Created by Justin Mazzocchi on 9/2/20.
-//
+// Copyright © 2020 Metabolist. All rights reserved.
 
 import Foundation
 

@@ -1,5 +1,6 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
+import DB
 import Foundation
 import HTTP
 import Mastodon
@@ -32,20 +33,6 @@ public struct AppEnvironment {
 }
 
 public extension AppEnvironment {
-    struct IdentityFixture {
-        public let id: UUID
-        public let instanceURL: URL
-        public let instance: Instance?
-        public let account: Account?
-
-        public init(id: UUID, instanceURL: URL, instance: Instance?, account: Account?) {
-            self.id = id
-            self.instanceURL = instanceURL
-            self.instance = instance
-            self.account = account
-        }
-    }
-
     static func live(userNotificationCenter: UNUserNotificationCenter) -> Self {
         Self(
             session: Session(configuration: .default),

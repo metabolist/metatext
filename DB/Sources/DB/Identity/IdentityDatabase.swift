@@ -5,15 +5,15 @@ import Combine
 import GRDB
 import Mastodon
 
-enum IdentityDatabaseError: Error {
+public enum IdentityDatabaseError: Error {
     case identityNotFound
 }
 
-struct IdentityDatabase {
+public struct IdentityDatabase {
     private let databaseQueue: DatabaseQueue
 
-    init(environment: AppEnvironment) throws {
-        if environment.inMemoryContent {
+    public init(inMemory: Bool, fixture: IdentityFixture?) throws {
+        if inMemory {
             databaseQueue = DatabaseQueue()
         } else {
             let databaseURL = try FileManager.default.databaseDirectoryURL().appendingPathComponent("Identities.sqlite")
@@ -23,13 +23,13 @@ struct IdentityDatabase {
 
         try Self.migrate(databaseQueue)
 
-        if let fixture = environment.identityFixture {
+        if let fixture = fixture {
             try populate(fixture: fixture)
         }
     }
 }
 
-extension IdentityDatabase {
+public extension IdentityDatabase {
     func createIdentity(id: UUID, url: URL) -> AnyPublisher<Never, Error> {
         databaseQueue.writePublisher(
             updates: StoredIdentity(
@@ -235,7 +235,7 @@ private extension IdentityDatabase {
         try migrator.migrate(writer)
     }
 
-    func populate(fixture: AppEnvironment.IdentityFixture) throws {
+    func populate(fixture: IdentityFixture) throws {
         _ = createIdentity(id: fixture.id, url: fixture.instanceURL)
             .receive(on: ImmediateScheduler.shared)
             .sink { _ in } receiveValue: { _ in }
@@ -253,51 +253,3 @@ private extension IdentityDatabase {
         }
     }
 }
-
-private struct StoredIdentity: Codable, Hashable, FetchableRecord, PersistableRecord {
-    let id: UUID
-    let url: URL
-    let lastUsedAt: Date
-    let preferences: Identity.Preferences
-    let instanceURI: String?
-    let lastRegisteredDeviceToken: String?
-    let pushSubscriptionAlerts: PushSubscription.Alerts
-}
-
-extension StoredIdentity {
-    static let instance = belongsTo(Identity.Instance.self, key: "instance")
-    static let account = hasOne(Identity.Account.self, key: "account")
-
-    var instance: QueryInterfaceRequest<Identity.Instance> {
-        request(for: Self.instance)
-    }
-
-    var account: QueryInterfaceRequest<Identity.Account> {
-        request(for: Self.account)
-    }
-}
-
-private struct IdentityResult: Codable, Hashable, FetchableRecord {
-    let identity: StoredIdentity
-    let instance: Identity.Instance?
-    let account: Identity.Account?
-    let pushSubscriptionAlerts: PushSubscription.Alerts
-}
-
-private extension Identity {
-    init(result: IdentityResult) {
-        self.init(
-            id: result.identity.id,
-            url: result.identity.url,
-            lastUsedAt: result.identity.lastUsedAt,
-            preferences: result.identity.preferences,
-            instance: result.instance,
-            account: result.account,
-            lastRegisteredDeviceToken: result.identity.lastRegisteredDeviceToken,
-            pushSubscriptionAlerts: result.pushSubscriptionAlerts)
-    }
-}
-
-extension Identity.Instance: FetchableRecord, PersistableRecord {}
-
-extension Identity.Account: FetchableRecord, PersistableRecord {}

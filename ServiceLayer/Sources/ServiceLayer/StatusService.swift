@@ -2,6 +2,7 @@
 
 import Foundation
 import Combine
+import DB
 import Mastodon
 
 public struct StatusService {

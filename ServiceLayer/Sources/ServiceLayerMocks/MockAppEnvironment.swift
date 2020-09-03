@@ -1,5 +1,6 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
+import DB
 import Foundation
 import HTTP
 import ServiceLayer

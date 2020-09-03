@@ -1,5 +1,6 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
+import DB
 import Foundation
 import Combine
 import Mastodon
@@ -11,7 +12,8 @@ public struct AllIdentitiesService {
     private let environment: AppEnvironment
 
     public init(environment: AppEnvironment) throws {
-        self.identityDatabase = try IdentityDatabase(environment: environment)
+        self.identityDatabase = try IdentityDatabase(inMemory: environment.inMemoryContent,
+                                                     fixture: environment.identityFixture)
         self.environment = environment
 
         mostRecentlyUsedIdentityID = identityDatabase.mostRecentlyUsedIdentityIDObservation()

@@ -18,13 +18,13 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/groue/CombineExpectations.git", .upToNextMajor(from: "0.5.0")),
-        .package(name: "GRDB", url: "https://github.com/groue/GRDB.swift.git", .upToNextMajor(from: "5.0.0-beta.10")),
+        .package(path: "DB"),
         .package(path: "Mastodon")
     ],
     targets: [
         .target(
             name: "ServiceLayer",
-            dependencies: ["GRDB", "Mastodon"]),
+            dependencies: ["DB"]),
         .target(
             name: "ServiceLayerMocks",
             dependencies: ["ServiceLayer", .product(name: "MastodonStubs", package: "Mastodon")]),
