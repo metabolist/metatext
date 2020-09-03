@@ -10,17 +10,10 @@ struct ContentDatabase {
     private let databaseQueue: DatabaseQueue
 
     init(identityID: UUID, environment: AppEnvironment) throws {
-        guard
-            let documentsDirectory = NSSearchPathForDirectoriesInDomains(
-                .documentDirectory,
-                .userDomainMask, true)
-                .first
-        else { throw DatabaseError.documentsDirectoryNotFound }
-
         if environment.inMemoryContent {
             databaseQueue = DatabaseQueue()
         } else {
-            databaseQueue = try DatabaseQueue(path: "\(documentsDirectory)/\(identityID.uuidString).sqlite3")
+            databaseQueue = try DatabaseQueue(path: try Self.fileURL(identityID: identityID).path)
         }
 
         try Self.migrate(databaseQueue)
@@ -28,6 +21,10 @@ struct ContentDatabase {
 }
 
 extension ContentDatabase {
+    static func delete(forIdentityID identityID: UUID) throws {
+        try FileManager.default.removeItem(at: try fileURL(identityID: identityID))
+    }
+
     func insert(status: Status) -> AnyPublisher<Never, Error> {
         databaseQueue.writePublisher(updates: status.save)
         .ignoreOutput()
@@ -179,6 +176,10 @@ extension ContentDatabase {
 }
 
 private extension ContentDatabase {
+    static func fileURL(identityID: UUID) throws -> URL {
+        try FileManager.default.databaseDirectoryURL().appendingPathComponent(identityID.uuidString + ".sqlite")
+    }
+
     // swiftlint:disable function_body_length
     static func migrate(_ writer: DatabaseWriter) throws {
         var migrator = DatabaseMigrator()

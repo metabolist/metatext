@@ -55,6 +55,7 @@ public extension AllIdentitiesService {
         networkClient.instanceURL = identity.url
 
         return identityDatabase.deleteIdentity(id: identity.id)
+            .collect()
             .tryMap { _ in
                 DeletionEndpoint.oauthRevoke(
                     token: try secretsService.item(.accessToken),
@@ -62,7 +63,11 @@ public extension AllIdentitiesService {
                     clientSecret: try secretsService.item(.clientSecret))
             }
             .flatMap(networkClient.request)
-            .tryMap { _ in try secretsService.deleteAllItems() }
+            .collect()
+            .tryMap { _ in
+                try secretsService.deleteAllItems()
+                try ContentDatabase.delete(forIdentityID: identity.id)
+            }
             .ignoreOutput()
             .eraseToAnyPublisher()
     }

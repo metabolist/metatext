@@ -13,17 +13,12 @@ struct IdentityDatabase {
     private let databaseQueue: DatabaseQueue
 
     init(environment: AppEnvironment) throws {
-        guard
-            let documentsDirectory = NSSearchPathForDirectoriesInDomains(
-                .documentDirectory,
-                .userDomainMask, true)
-                .first
-        else { throw DatabaseError.documentsDirectoryNotFound }
-
         if environment.inMemoryContent {
             databaseQueue = DatabaseQueue()
         } else {
-            databaseQueue = try DatabaseQueue(path: "\(documentsDirectory)/IdentityDatabase.sqlite3")
+            let databaseURL = try FileManager.default.databaseDirectoryURL().appendingPathComponent("Identities.sqlite")
+
+            databaseQueue = try DatabaseQueue(path: databaseURL.path)
         }
 
         try Self.migrate(databaseQueue)
@@ -51,7 +46,7 @@ extension IdentityDatabase {
     }
 
     func deleteIdentity(id: UUID) -> AnyPublisher<Never, Error> {
-        return databaseQueue.writePublisher(updates: StoredIdentity.filter(Column("id") == id).deleteAll)
+        databaseQueue.writePublisher(updates: StoredIdentity.filter(Column("id") == id).deleteAll)
             .ignoreOutput()
             .eraseToAnyPublisher()
     }
