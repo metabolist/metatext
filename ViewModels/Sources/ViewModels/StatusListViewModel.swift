@@ -74,7 +74,9 @@ public extension StatusListViewModel {
     }
 
     func contextViewModel(id: String) -> StatusListViewModel {
-        StatusListViewModel(statusListService: statusListService.contextService(statusID: id))
+        let displayStatusID = statuses[id]?.displayStatus.id ?? id
+
+        return StatusListViewModel(statusListService: statusListService.contextService(statusID: displayStatusID))
     }
 }
 
