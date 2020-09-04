@@ -128,9 +128,7 @@ class StatusListViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let id = dataSource.itemIdentifier(for: indexPath) else { return }
 
-        navigationController?.pushViewController(
-            StatusListViewController(viewModel: viewModel.contextViewModel(id: id)),
-            animated: true)
+        show(StatusListViewController(viewModel: viewModel.contextViewModel(id: id)), sender: self)
     }
 
     override func viewDidLayoutSubviews() {
