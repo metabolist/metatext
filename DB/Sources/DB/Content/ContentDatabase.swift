@@ -17,9 +17,8 @@ public struct ContentDatabase {
             let path = try Self.fileURL(identityID: identityID).path
             var configuration = Configuration()
 
-            configuration.prepareDatabase = { db in
-                let passphrase = try Secrets.databasePassphrase(identityID: identityID, keychain: keychain)
-                try db.usePassphrase(passphrase)
+            configuration.prepareDatabase = {
+                try $0.usePassphrase(try Secrets.databaseKey(identityID: identityID, keychain: keychain))
             }
 
             databaseQueue = try DatabaseQueue(path: path, configuration: configuration)

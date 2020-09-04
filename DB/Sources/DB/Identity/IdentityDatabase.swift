@@ -21,9 +21,8 @@ public struct IdentityDatabase {
             let path = try FileManager.default.databaseDirectoryURL(name: Self.name).path
             var configuration = Configuration()
 
-            configuration.prepareDatabase = { db in
-                let passphrase = try Secrets.databasePassphrase(identityID: nil, keychain: keychain)
-                try db.usePassphrase(passphrase)
+            configuration.prepareDatabase = {
+                try $0.usePassphrase(try Secrets.databaseKey(identityID: nil, keychain: keychain))
             }
 
             databaseQueue = try DatabaseQueue(path: path, configuration: configuration)

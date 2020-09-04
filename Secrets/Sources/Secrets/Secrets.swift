@@ -29,11 +29,11 @@ public extension Secrets {
         case accessToken
         case pushKey
         case pushAuth
-        case databasePassphrase
+        case databaseKey
     }
 }
 
-public enum SecretsError: Error {
+enum SecretsError: Error {
     case itemAbsent
 }
 
@@ -43,6 +43,7 @@ extension Secrets.Item {
         case key
     }
 
+    // Note `databaseKey` is a generic password and not a key
     var kind: Kind {
         switch self {
         case .pushKey: return .key
@@ -52,7 +53,9 @@ extension Secrets.Item {
 }
 
 public extension Secrets {
-    static func databasePassphrase(identityID: UUID?, keychain: Keychain.Type) throws -> String {
+    // https://www.zetetic.net/sqlcipher/sqlcipher-api/#key
+    static func databaseKey(identityID: UUID?, keychain: Keychain.Type) throws -> String {
+        let passphraseData: Data
         let scopedSecrets: Secrets?
 
         if let identityID = identityID {
@@ -62,25 +65,26 @@ public extension Secrets {
         }
 
         do {
-            return try scopedSecrets?.item(.databasePassphrase) ?? unscopedItem(.databasePassphrase, keychain: keychain)
+            passphraseData = try scopedSecrets?.item(.databaseKey)
+                ?? unscopedItem(.databaseKey, keychain: keychain)
         } catch SecretsError.itemAbsent {
-            var bytes = [Int8](repeating: 0, count: databasePassphraseByteCount)
-            let status = SecRandomCopyBytes(kSecRandomDefault, databasePassphraseByteCount, &bytes)
+            var bytes = [UInt8](repeating: 0, count: databaseKeyLength)
+            let status = SecRandomCopyBytes(kSecRandomDefault, databaseKeyLength, &bytes)
 
             if status == errSecSuccess {
-                let passphrase = Data(bytes: bytes, count: databasePassphraseByteCount).base64EncodedString()
+                passphraseData = Data(bytes)
 
                 if let scopedSecrets = scopedSecrets {
-                    try scopedSecrets.set(passphrase, forItem: .databasePassphrase)
+                    try scopedSecrets.set(passphraseData, forItem: .databaseKey)
                 } else {
-                    try setUnscoped(passphrase, forItem: .databasePassphrase, keychain: keychain)
+                    try setUnscoped(passphraseData, forItem: .databaseKey, keychain: keychain)
                 }
-
-                return passphrase
             } else {
                 throw NSError(status: status)
             }
         }
+
+        return "x'\(passphraseData.uppercaseHexEncodedString())'"
     }
 
     func deleteAllItems() throws {
@@ -134,14 +138,17 @@ public extension Secrets {
 
     func generatePushAuth() throws -> Data {
         var bytes = [UInt8](repeating: 0, count: PushKey.authLength)
+        let status = SecRandomCopyBytes(kSecRandomDefault, PushKey.authLength, &bytes)
 
-        _ = SecRandomCopyBytes(kSecRandomDefault, PushKey.authLength, &bytes)
+        if status == errSecSuccess {
+            let pushAuth = Data(bytes)
 
-        let pushAuth = Data(bytes)
+            try set(pushAuth, forItem: .pushAuth)
 
-        try set(pushAuth, forItem: .pushAuth)
-
-        return pushAuth
+            return pushAuth
+        } else {
+            throw NSError(status: status)
+        }
     }
 
     func getPushAuth() throws -> Data? {
@@ -151,7 +158,7 @@ public extension Secrets {
 
 private extension Secrets {
     static let keychainServiceName = "com.metabolist.metatext"
-    static let databasePassphraseByteCount = 64
+    static let databaseKeyLength = 32
 
     private static func set(_ data: SecretsStorable, forAccount account: String, keychain: Keychain.Type) throws {
         try keychain.setGenericPassword(
@@ -217,4 +224,10 @@ private struct PushKey {
     static let attributes: [String: Any] = [
         kSecAttrKeyType as String: kSecAttrKeyTypeECSECPrimeRandom,
         kSecAttrKeySizeInBits as String: sizeInBits]
+}
+
+private extension Data {
+    func uppercaseHexEncodedString() -> String {
+        map { String(format: "%02hhX", $0) }.joined()
+    }
 }
