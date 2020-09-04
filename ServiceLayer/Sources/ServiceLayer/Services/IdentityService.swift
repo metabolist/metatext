@@ -40,7 +40,7 @@ public class IdentityService {
             keychain: environment.keychain)
         mastodonAPIClient = MastodonAPIClient(session: environment.session)
         mastodonAPIClient.instanceURL = identity.url
-        mastodonAPIClient.accessToken = try? secrets.item(.accessToken)
+        mastodonAPIClient.accessToken = try? secrets.getAccessToken()
 
         contentDatabase = try ContentDatabase(identityID: identityID,
                                               inMemory: environment.inMemoryContent,

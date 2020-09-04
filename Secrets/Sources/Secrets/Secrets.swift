@@ -52,38 +52,35 @@ extension Secrets.Item {
 }
 
 public extension Secrets {
-    static func setUnscoped(_ data: SecretsStorable, forItem item: Item, keychain: Keychain.Type) throws {
-        try keychain.setGenericPassword(
-            data: data.dataStoredInSecrets,
-            forAccount: item.rawValue,
-            service: keychainServiceName)
-    }
+    static func databasePassphrase(identityID: UUID?, keychain: Keychain.Type) throws -> String {
+        let scopedSecrets: Secrets?
 
-    static func unscopedItem<T: SecretsStorable>(_ item: Item, keychain: Keychain.Type) throws -> T {
-        guard let data = try keychain.getGenericPassword(
-                account: item.rawValue,
-                service: Self.keychainServiceName) else {
-            throw SecretsError.itemAbsent
+        if let identityID = identityID {
+            scopedSecrets = Secrets(identityID: identityID, keychain: keychain)
+        } else {
+            scopedSecrets = nil
         }
 
-        return try T.fromDataStoredInSecrets(data)
-    }
+        do {
+            return try scopedSecrets?.item(.databasePassphrase) ?? unscopedItem(.databasePassphrase, keychain: keychain)
+        } catch SecretsError.itemAbsent {
+            var bytes = [Int8](repeating: 0, count: databasePassphraseByteCount)
+            let status = SecRandomCopyBytes(kSecRandomDefault, databasePassphraseByteCount, &bytes)
 
-    func set(_ data: SecretsStorable, forItem item: Item) throws {
-        try keychain.setGenericPassword(
-            data: data.dataStoredInSecrets,
-            forAccount: scopedKey(item: item),
-            service: Self.keychainServiceName)
-    }
+            if status == errSecSuccess {
+                let passphrase = Data(bytes: bytes, count: databasePassphraseByteCount).base64EncodedString()
 
-    func item<T: SecretsStorable>(_ item: Item) throws -> T {
-        guard let data = try keychain.getGenericPassword(
-                account: scopedKey(item: item),
-                service: Self.keychainServiceName) else {
-            throw SecretsError.itemAbsent
+                if let scopedSecrets = scopedSecrets {
+                    try scopedSecrets.set(passphrase, forItem: .databasePassphrase)
+                } else {
+                    try setUnscoped(passphrase, forItem: .databasePassphrase, keychain: keychain)
+                }
+
+                return passphrase
+            } else {
+                throw NSError(status: status)
+            }
         }
-
-        return try T.fromDataStoredInSecrets(data)
     }
 
     func deleteAllItems() throws {
@@ -97,6 +94,30 @@ public extension Secrets {
                 try keychain.deleteKey(applicationTag: scopedKey(item: item))
             }
         }
+    }
+
+    func getClientID() throws -> String {
+        try item(.clientID)
+    }
+
+    func setClientID(_ clientID: String) throws {
+        try set(clientID, forItem: .clientID)
+    }
+
+    func getClientSecret() throws -> String {
+        try item(.clientSecret)
+    }
+
+    func setClientSecret(_ clientSecret: String) throws {
+        try set(clientSecret, forItem: .clientSecret)
+    }
+
+    func getAccessToken() throws -> String {
+        try item(.accessToken)
+    }
+
+    func setAccessToken(_ accessToken: String) throws {
+        try set(accessToken, forItem: .accessToken)
     }
 
     func generatePushKeyAndReturnPublicKey() throws -> Data {
@@ -130,9 +151,43 @@ public extension Secrets {
 
 private extension Secrets {
     static let keychainServiceName = "com.metabolist.metatext"
+    static let databasePassphraseByteCount = 64
+
+    private static func set(_ data: SecretsStorable, forAccount account: String, keychain: Keychain.Type) throws {
+        try keychain.setGenericPassword(
+            data: data.dataStoredInSecrets,
+            forAccount: account,
+            service: keychainServiceName)
+    }
+
+    private static func get<T: SecretsStorable>(account: String, keychain: Keychain.Type) throws -> T {
+        guard let data = try keychain.getGenericPassword(
+                account: account,
+                service: keychainServiceName) else {
+            throw SecretsError.itemAbsent
+        }
+
+        return try T.fromDataStoredInSecrets(data)
+    }
+
+    static func setUnscoped(_ data: SecretsStorable, forItem item: Item, keychain: Keychain.Type) throws {
+        try set(data, forAccount: item.rawValue, keychain: keychain)
+    }
+
+    static func unscopedItem<T: SecretsStorable>(_ item: Item, keychain: Keychain.Type) throws -> T {
+        try get(account: item.rawValue, keychain: keychain)
+    }
 
     func scopedKey(item: Item) -> String {
         identityID.uuidString + "." + item.rawValue
+    }
+
+    func set(_ data: SecretsStorable, forItem item: Item) throws {
+        try Self.set(data, forAccount: scopedKey(item: item), keychain: keychain)
+    }
+
+    func item<T: SecretsStorable>(_ item: Item) throws -> T {
+        try Self.get(account: scopedKey(item: item), keychain: keychain)
     }
 }
 

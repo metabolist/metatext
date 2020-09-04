@@ -42,13 +42,13 @@ public extension AllIdentitiesService {
 
         return authenticationService.authorizeApp(instanceURL: instanceURL)
             .tryMap { appAuthorization -> (URL, AppAuthorization) in
-                try secrets.set(appAuthorization.clientId, forItem: .clientID)
-                try secrets.set(appAuthorization.clientSecret, forItem: .clientSecret)
+                try secrets.setClientID(appAuthorization.clientId)
+                try secrets.setClientSecret(appAuthorization.clientSecret)
 
                 return (instanceURL, appAuthorization)
             }
             .flatMap(authenticationService.authenticate(instanceURL:appAuthorization:))
-            .tryMap { try secrets.set($0.accessToken, forItem: .accessToken) }
+            .tryMap { try secrets.setAccessToken($0.accessToken) }
             .ignoreOutput()
             .eraseToAnyPublisher()
     }
@@ -63,9 +63,9 @@ public extension AllIdentitiesService {
             .collect()
             .tryMap { _ in
                 DeletionEndpoint.oauthRevoke(
-                    token: try secrets.item(.accessToken),
-                    clientID: try secrets.item(.clientID),
-                    clientSecret: try secrets.item(.clientSecret))
+                    token: try secrets.getAccessToken(),
+                    clientID: try secrets.getClientID(),
+                    clientSecret: try secrets.getClientSecret())
             }
             .flatMap(mastodonAPIClient.request)
             .collect()
