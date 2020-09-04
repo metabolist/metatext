@@ -4,6 +4,7 @@ import DB
 import Foundation
 import Combine
 import Mastodon
+import Secrets
 
 public class IdentityService {
     @Published public private(set) var identity: Identity
@@ -13,7 +14,7 @@ public class IdentityService {
     private let contentDatabase: ContentDatabase
     private let environment: AppEnvironment
     private let networkClient: APIClient
-    private let secretsService: SecretsService
+    private let secrets: Secrets
     private let observationErrorsInput = PassthroughSubject<Error, Never>()
 
     init(identityID: UUID,
@@ -33,12 +34,12 @@ public class IdentityService {
         guard let identity = initialIdentity else { throw IdentityDatabaseError.identityNotFound }
 
         self.identity = identity
-        secretsService = SecretsService(
+        secrets = Secrets(
             identityID: identityID,
-            keychainService: environment.keychainServiceType)
+            keychain: environment.keychain)
         networkClient = APIClient(session: environment.session)
         networkClient.instanceURL = identity.url
-        networkClient.accessToken = try? secretsService.item(.accessToken)
+        networkClient.accessToken = try? secrets.item(.accessToken)
 
         contentDatabase = try ContentDatabase(identityID: identityID, inMemory: environment.inMemoryContent)
 
@@ -168,8 +169,8 @@ public extension IdentityService {
         let auth: String
 
         do {
-            publicKey = try secretsService.generatePushKeyAndReturnPublicKey().base64EncodedString()
-            auth = try secretsService.generatePushAuth().base64EncodedString()
+            publicKey = try secrets.generatePushKeyAndReturnPublicKey().base64EncodedString()
+            auth = try secrets.generatePushAuth().base64EncodedString()
         } catch {
             return Fail(error: error).eraseToAnyPublisher()
         }

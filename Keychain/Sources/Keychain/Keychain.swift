@@ -2,7 +2,7 @@
 
 import Foundation
 
-public protocol KeychainService {
+public protocol Keychain {
     static func setGenericPassword(data: Data, forAccount key: String, service: String) throws
     static func deleteGenericPassword(account: String, service: String) throws
     static func getGenericPassword(account: String, service: String) throws -> Data?
@@ -11,9 +11,9 @@ public protocol KeychainService {
     static func deleteKey(applicationTag: String) throws
 }
 
-public struct LiveKeychainService {}
+public struct LiveKeychain {}
 
-extension LiveKeychainService: KeychainService {
+extension LiveKeychain: Keychain {
     public static func setGenericPassword(data: Data, forAccount account: String, service: String) throws {
         var query = genericPasswordQueryDictionary(account: account, service: service)
 
@@ -115,7 +115,7 @@ extension LiveKeychainService: KeychainService {
     }
 }
 
-private extension LiveKeychainService {
+private extension LiveKeychain {
     static func genericPasswordQueryDictionary(account: String, service: String) -> [String: Any] {
         [kSecAttrService as String: service,
          kSecAttrAccount as String: account,

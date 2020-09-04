@@ -1,17 +1,17 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import Foundation
-import ServiceLayer
+import Keychain
 
-public struct MockKeychainService {}
+public struct MockKeychain {}
 
-public extension MockKeychainService {
+public extension MockKeychain {
     static func reset() {
         items = [String: Data]()
     }
 }
 
-extension MockKeychainService: KeychainService {
+extension MockKeychain: Keychain {
     public static func setGenericPassword(data: Data, forAccount key: String, service: String) throws {
         items[key] = data
     }
@@ -37,6 +37,6 @@ extension MockKeychainService: KeychainService {
     }
 }
 
-private extension MockKeychainService {
+private extension MockKeychain {
     static var items = [String: Data]()
 }

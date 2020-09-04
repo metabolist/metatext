@@ -7,18 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D0175CAC24FE2D6300B085F6 /* PreviewViewModels in Frameworks */ = {isa = PBXBuildFile; productRef = D0175CAB24FE2D6300B085F6 /* PreviewViewModels */; };
 		D01F41D724F880C400D55A2D /* StatusTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D01F41D424F880C400D55A2D /* StatusTableViewCell.xib */; };
 		D01F41D824F880C400D55A2D /* StatusTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01F41D524F880C400D55A2D /* StatusTableViewCell.swift */; };
 		D01F41D924F880C400D55A2D /* TouchFallthroughTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01F41D624F880C400D55A2D /* TouchFallthroughTextView.swift */; };
 		D01F41E424F8889700D55A2D /* AttachmentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01F41E224F8889700D55A2D /* AttachmentsView.swift */; };
 		D06B492324D4611300642749 /* KingfisherSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = D06B492224D4611300642749 /* KingfisherSwiftUI */; };
-		D0BDF66B24FD7CEC00C7FA1C /* ServiceLayer in Frameworks */ = {isa = PBXBuildFile; productRef = D0BDF66A24FD7CEC00C7FA1C /* ServiceLayer */; };
 		D0BEB1F324F8EE8C001B0F04 /* AttachmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB1F224F8EE8C001B0F04 /* AttachmentView.swift */; };
 		D0BEB1F724F9A84B001B0F04 /* LoadingTableFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB1F624F9A84B001B0F04 /* LoadingTableFooterView.swift */; };
 		D0BEB1FF24F9E5BB001B0F04 /* ListsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB1FE24F9E5BB001B0F04 /* ListsView.swift */; };
 		D0BEB20524FA1107001B0F04 /* FiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB20424FA1107001B0F04 /* FiltersView.swift */; };
 		D0BEB21124FA2A91001B0F04 /* EditFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB21024FA2A90001B0F04 /* EditFilterView.swift */; };
+		D0BECB982501C0FC002C1B13 /* Secrets in Frameworks */ = {isa = PBXBuildFile; productRef = D0BECB972501C0FC002C1B13 /* Secrets */; };
+		D0BECB9A2501C15F002C1B13 /* Mastodon in Frameworks */ = {isa = PBXBuildFile; productRef = D0BECB992501C15F002C1B13 /* Mastodon */; };
+		D0BECB9C2501C731002C1B13 /* PreviewViewModels in Frameworks */ = {isa = PBXBuildFile; productRef = D0BECB9B2501C731002C1B13 /* PreviewViewModels */; };
 		D0C7D49724F7616A001EBDBB /* IdentitiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42224F76169001EBDBB /* IdentitiesView.swift */; };
 		D0C7D49824F7616A001EBDBB /* CustomEmojiText.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42324F76169001EBDBB /* CustomEmojiText.swift */; };
 		D0C7D49924F7616A001EBDBB /* AddIdentityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42424F76169001EBDBB /* AddIdentityView.swift */; };
@@ -92,6 +93,8 @@
 		D0BEB1FE24F9E5BB001B0F04 /* ListsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsView.swift; sourceTree = "<group>"; };
 		D0BEB20424FA1107001B0F04 /* FiltersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersView.swift; sourceTree = "<group>"; };
 		D0BEB21024FA2A90001B0F04 /* EditFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFilterView.swift; sourceTree = "<group>"; };
+		D0BECB952501B3DD002C1B13 /* Keychain */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Keychain; sourceTree = "<group>"; };
+		D0BECB962501BCE0002C1B13 /* Secrets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Secrets; sourceTree = "<group>"; };
 		D0BFDAF524FC7C5300C86618 /* HTTP */ = {isa = PBXFileReference; lastKnownFileType = folder; path = HTTP; sourceTree = "<group>"; };
 		D0C7D41E24F76169001EBDBB /* Metatext.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Metatext.entitlements; sourceTree = "<group>"; };
 		D0C7D41F24F76169001EBDBB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -132,7 +135,7 @@
 			files = (
 				D06B492324D4611300642749 /* KingfisherSwiftUI in Frameworks */,
 				D0E2C1D124FD97F000854680 /* ViewModels in Frameworks */,
-				D0175CAC24FE2D6300B085F6 /* PreviewViewModels in Frameworks */,
+				D0BECB9C2501C731002C1B13 /* PreviewViewModels in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -147,7 +150,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D0BDF66B24FD7CEC00C7FA1C /* ServiceLayer in Frameworks */,
+				D0BECB982501C0FC002C1B13 /* Secrets in Frameworks */,
+				D0BECB9A2501C15F002C1B13 /* Mastodon in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -181,10 +185,12 @@
 				D0C7D46824F76169001EBDBB /* Extensions */,
 				D0666A7924C7745A00F3F04B /* Frameworks */,
 				D0BFDAF524FC7C5300C86618 /* HTTP */,
+				D0BECB952501B3DD002C1B13 /* Keychain */,
 				D0C7D45624F76169001EBDBB /* Localizations */,
 				D0E0F1E424FC49FC002C04BF /* Mastodon */,
 				D0E5361A24E3EB4D00FB1CE1 /* Notification Service Extension */,
 				D047FA8D24C3E21200AF17C5 /* Products */,
+				D0BECB962501BCE0002C1B13 /* Secrets */,
 				D0BDF66524FD7A6400C7FA1C /* ServiceLayer */,
 				D0C7D41D24F76169001EBDBB /* Supporting Files */,
 				D0C7D45324F76169001EBDBB /* System */,
@@ -323,7 +329,7 @@
 			packageProductDependencies = (
 				D06B492224D4611300642749 /* KingfisherSwiftUI */,
 				D0E2C1D024FD97F000854680 /* ViewModels */,
-				D0175CAB24FE2D6300B085F6 /* PreviewViewModels */,
+				D0BECB9B2501C731002C1B13 /* PreviewViewModels */,
 			);
 			productName = "Metatext (iOS)";
 			productReference = D047FA8C24C3E21200AF17C5 /* Metatext.app */;
@@ -363,7 +369,8 @@
 			);
 			name = "Notification Service Extension";
 			packageProductDependencies = (
-				D0BDF66A24FD7CEC00C7FA1C /* ServiceLayer */,
+				D0BECB972501C0FC002C1B13 /* Secrets */,
+				D0BECB992501C15F002C1B13 /* Mastodon */,
 			);
 			productName = "Notification Service Extension";
 			productReference = D0E5361924E3EB4D00FB1CE1 /* Notification Service Extension.appex */;
@@ -841,18 +848,22 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		D0175CAB24FE2D6300B085F6 /* PreviewViewModels */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = PreviewViewModels;
-		};
 		D06B492224D4611300642749 /* KingfisherSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D06B492124D4611300642749 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = KingfisherSwiftUI;
 		};
-		D0BDF66A24FD7CEC00C7FA1C /* ServiceLayer */ = {
+		D0BECB972501C0FC002C1B13 /* Secrets */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = ServiceLayer;
+			productName = Secrets;
+		};
+		D0BECB992501C15F002C1B13 /* Mastodon */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Mastodon;
+		};
+		D0BECB9B2501C731002C1B13 /* PreviewViewModels */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PreviewViewModels;
 		};
 		D0E2C1D024FD97F000854680 /* ViewModels */ = {
 			isa = XCSwiftPackageProductDependency;

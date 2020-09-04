@@ -5,6 +5,7 @@ import Combine
 import CombineExpectations
 import HTTP
 import Mastodon
+import MockKeychain
 import ServiceLayer
 import ServiceLayerMocks
 @testable import ViewModels
@@ -48,7 +49,7 @@ class AddIdentityViewModelTests: XCTestCase {
         let environment = AppEnvironment(
             session: Session(configuration: .stubbing),
             webAuthSessionType: CanceledLoginMockWebAuthSession.self,
-            keychainServiceType: MockKeychainService.self,
+            keychain: MockKeychain.self,
             userDefaults: MockUserDefaults(),
             userNotificationClient: .mock,
             inMemoryContent: true,

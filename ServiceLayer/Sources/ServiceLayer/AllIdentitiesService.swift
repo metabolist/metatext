@@ -4,6 +4,7 @@ import DB
 import Foundation
 import Combine
 import Mastodon
+import Secrets
 
 public struct AllIdentitiesService {
     public let mostRecentlyUsedIdentityID: AnyPublisher<UUID?, Never>
@@ -34,24 +35,24 @@ public extension AllIdentitiesService {
     }
 
     func authorizeIdentity(id: UUID, instanceURL: URL) -> AnyPublisher<Never, Error> {
-        let secretsService = SecretsService(identityID: id, keychainService: environment.keychainServiceType)
+        let secrets = Secrets(identityID: id, keychain: environment.keychain)
         let authenticationService = AuthenticationService(environment: environment)
 
         return authenticationService.authorizeApp(instanceURL: instanceURL)
             .tryMap { appAuthorization -> (URL, AppAuthorization) in
-                try secretsService.set(appAuthorization.clientId, forItem: .clientID)
-                try secretsService.set(appAuthorization.clientSecret, forItem: .clientSecret)
+                try secrets.set(appAuthorization.clientId, forItem: .clientID)
+                try secrets.set(appAuthorization.clientSecret, forItem: .clientSecret)
 
                 return (instanceURL, appAuthorization)
             }
             .flatMap(authenticationService.authenticate(instanceURL:appAuthorization:))
-            .tryMap { try secretsService.set($0.accessToken, forItem: .accessToken) }
+            .tryMap { try secrets.set($0.accessToken, forItem: .accessToken) }
             .ignoreOutput()
             .eraseToAnyPublisher()
     }
 
     func deleteIdentity(_ identity: Identity) -> AnyPublisher<Never, Error> {
-        let secretsService = SecretsService(identityID: identity.id, keychainService: environment.keychainServiceType)
+        let secrets = Secrets(identityID: identity.id, keychain: environment.keychain)
         let networkClient = APIClient(session: environment.session)
 
         networkClient.instanceURL = identity.url
@@ -60,14 +61,14 @@ public extension AllIdentitiesService {
             .collect()
             .tryMap { _ in
                 DeletionEndpoint.oauthRevoke(
-                    token: try secretsService.item(.accessToken),
-                    clientID: try secretsService.item(.clientID),
-                    clientSecret: try secretsService.item(.clientSecret))
+                    token: try secrets.item(.accessToken),
+                    clientID: try secrets.item(.clientID),
+                    clientSecret: try secrets.item(.clientSecret))
             }
             .flatMap(networkClient.request)
             .collect()
             .tryMap { _ in
-                try secretsService.deleteAllItems()
+                try secrets.deleteAllItems()
                 try ContentDatabase.delete(forIdentityID: identity.id)
             }
             .ignoreOutput()

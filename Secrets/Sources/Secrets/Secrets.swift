@@ -1,6 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import Foundation
+import Keychain
 
 public protocol SecretsStorable {
     var dataStoredInSecrets: Data { get }
@@ -11,17 +12,17 @@ enum SecretsStorableError: Error {
     case conversionFromDataStoredInSecrets(Data)
 }
 
-public struct SecretsService {
+public struct Secrets {
     public let identityID: UUID
-    private let keychainService: KeychainService.Type
+    private let keychain: Keychain.Type
 
-    public init(identityID: UUID, keychainService: KeychainService.Type) {
+    public init(identityID: UUID, keychain: Keychain.Type) {
         self.identityID = identityID
-        self.keychainService = keychainService
+        self.keychain = keychain
     }
 }
 
-public extension SecretsService {
+public extension Secrets {
     enum Item: String, CaseIterable {
         case clientID
         case clientSecret
@@ -35,7 +36,7 @@ enum SecretsServiceError: Error {
     case itemAbsent
 }
 
-extension SecretsService.Item {
+extension Secrets.Item {
     enum Kind {
         case genericPassword
         case key
@@ -49,16 +50,16 @@ extension SecretsService.Item {
     }
 }
 
-public extension SecretsService {
+public extension Secrets {
     func set(_ data: SecretsStorable, forItem item: Item) throws {
-        try keychainService.setGenericPassword(
+        try keychain.setGenericPassword(
             data: data.dataStoredInSecrets,
             forAccount: key(item: item),
             service: Self.keychainServiceName)
     }
 
     func item<T: SecretsStorable>(_ item: Item) throws -> T {
-        guard let data = try keychainService.getGenericPassword(
+        guard let data = try keychain.getGenericPassword(
                 account: key(item: item),
                 service: Self.keychainServiceName) else {
             throw SecretsServiceError.itemAbsent
@@ -68,26 +69,26 @@ public extension SecretsService {
     }
 
     func deleteAllItems() throws {
-        for item in SecretsService.Item.allCases {
+        for item in Secrets.Item.allCases {
             switch item.kind {
             case .genericPassword:
-                try keychainService.deleteGenericPassword(
+                try keychain.deleteGenericPassword(
                     account: key(item: item),
                     service: Self.keychainServiceName)
             case .key:
-                try keychainService.deleteKey(applicationTag: key(item: item))
+                try keychain.deleteKey(applicationTag: key(item: item))
             }
         }
     }
 
     func generatePushKeyAndReturnPublicKey() throws -> Data {
-        try keychainService.generateKeyAndReturnPublicKey(
+        try keychain.generateKeyAndReturnPublicKey(
             applicationTag: key(item: .pushKey),
             attributes: PushKey.attributes)
     }
 
     func getPushKey() throws -> Data? {
-        try keychainService.getPrivateKey(
+        try keychain.getPrivateKey(
             applicationTag: key(item: .pushKey),
             attributes: PushKey.attributes)
     }
@@ -109,7 +110,7 @@ public extension SecretsService {
     }
 }
 
-private extension SecretsService {
+private extension Secrets {
     static let keychainServiceName = "com.metabolist.metatext"
 
     func key(item: Item) -> String {

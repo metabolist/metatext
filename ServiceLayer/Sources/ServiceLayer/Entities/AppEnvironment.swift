@@ -3,13 +3,14 @@
 import DB
 import Foundation
 import HTTP
+import Keychain
 import Mastodon
 import UserNotifications
 
 public struct AppEnvironment {
     let session: Session
     let webAuthSessionType: WebAuthSession.Type
-    let keychainServiceType: KeychainService.Type
+    let keychain: Keychain.Type
     let userDefaults: UserDefaults
     let userNotificationClient: UserNotificationClient
     let inMemoryContent: Bool
@@ -17,14 +18,14 @@ public struct AppEnvironment {
 
     public init(session: Session,
                 webAuthSessionType: WebAuthSession.Type,
-                keychainServiceType: KeychainService.Type,
+                keychain: Keychain.Type,
                 userDefaults: UserDefaults,
                 userNotificationClient: UserNotificationClient,
                 inMemoryContent: Bool,
                 identityFixture: IdentityFixture?) {
         self.session = session
         self.webAuthSessionType = webAuthSessionType
-        self.keychainServiceType = keychainServiceType
+        self.keychain = keychain
         self.userDefaults = userDefaults
         self.userNotificationClient = userNotificationClient
         self.inMemoryContent = inMemoryContent
@@ -37,7 +38,7 @@ public extension AppEnvironment {
         Self(
             session: Session(configuration: .default),
             webAuthSessionType: LiveWebAuthSession.self,
-            keychainServiceType: LiveKeychainService.self,
+            keychain: LiveKeychain.self,
             userDefaults: .standard,
             userNotificationClient: .live(userNotificationCenter),
             inMemoryContent: false,
