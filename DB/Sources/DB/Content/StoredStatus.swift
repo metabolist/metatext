@@ -38,11 +38,11 @@ struct StoredStatus: Codable, Hashable {
 
 extension StoredStatus: FetchableRecord, PersistableRecord {
     static func databaseJSONDecoder(for column: String) -> JSONDecoder {
-        APIDecoder()
+        MastodonDecoder()
     }
 
     static func databaseJSONEncoder(for column: String) -> JSONEncoder {
-        APIEncoder()
+        MastodonEncoder()
     }
 }
 

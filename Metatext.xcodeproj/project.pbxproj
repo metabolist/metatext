@@ -95,6 +95,7 @@
 		D0BEB21024FA2A90001B0F04 /* EditFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFilterView.swift; sourceTree = "<group>"; };
 		D0BECB952501B3DD002C1B13 /* Keychain */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Keychain; sourceTree = "<group>"; };
 		D0BECB962501BCE0002C1B13 /* Secrets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Secrets; sourceTree = "<group>"; };
+		D0BECB9D2501CBC3002C1B13 /* MastodonAPI */ = {isa = PBXFileReference; lastKnownFileType = folder; path = MastodonAPI; sourceTree = "<group>"; };
 		D0BFDAF524FC7C5300C86618 /* HTTP */ = {isa = PBXFileReference; lastKnownFileType = folder; path = HTTP; sourceTree = "<group>"; };
 		D0C7D41E24F76169001EBDBB /* Metatext.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Metatext.entitlements; sourceTree = "<group>"; };
 		D0C7D41F24F76169001EBDBB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -188,6 +189,7 @@
 				D0BECB952501B3DD002C1B13 /* Keychain */,
 				D0C7D45624F76169001EBDBB /* Localizations */,
 				D0E0F1E424FC49FC002C04BF /* Mastodon */,
+				D0BECB9D2501CBC3002C1B13 /* MastodonAPI */,
 				D0E5361A24E3EB4D00FB1CE1 /* Notification Service Extension */,
 				D047FA8D24C3E21200AF17C5 /* Products */,
 				D0BECB962501BCE0002C1B13 /* Secrets */,

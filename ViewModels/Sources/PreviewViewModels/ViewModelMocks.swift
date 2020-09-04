@@ -4,12 +4,13 @@ import Foundation
 import Combine
 import HTTP
 import Mastodon
-import MastodonStubs
+import MastodonAPI
+import MastodonAPIStubs
 import ServiceLayer
 import ServiceLayerMocks
 import ViewModels
 
-private let decoder = APIDecoder()
+private let decoder = MastodonDecoder()
 private let devInstanceURL = URL(string: "https://mastodon.social")!
 
 // swiftlint:disable force_try

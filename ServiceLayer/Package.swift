@@ -20,18 +20,18 @@ let package = Package(
         .package(url: "https://github.com/groue/CombineExpectations.git", .upToNextMajor(from: "0.5.0")),
         .package(path: "DB"),
         .package(path: "Keychain"),
-        .package(path: "Mastodon"),
+        .package(path: "MastodonAPI"),
         .package(path: "Secrets")
     ],
     targets: [
         .target(
             name: "ServiceLayer",
-            dependencies: ["DB", "Secrets"]),
+            dependencies: ["DB", "MastodonAPI", "Secrets"]),
         .target(
             name: "ServiceLayerMocks",
             dependencies: [
                 "ServiceLayer",
-                .product(name: "MastodonStubs", package: "Mastodon"),
+                .product(name: "MastodonAPIStubs", package: "MastodonAPI"),
                 .product(name: "MockKeychain", package: "Keychain")]),
         .testTarget(
             name: "ServiceLayerTests",

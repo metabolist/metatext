@@ -11,24 +11,13 @@ let package = Package(
     products: [
         .library(
             name: "Mastodon",
-            targets: ["Mastodon"]),
-        .library(
-            name: "MastodonStubs",
-            targets: ["MastodonStubs"])
+            targets: ["Mastodon"])
     ],
-    dependencies: [
-        .package(path: "HTTP")
-    ],
+    dependencies: [],
     targets: [
-        .target(
-            name: "Mastodon",
-            dependencies: ["HTTP"]),
-        .target(
-            name: "MastodonStubs",
-            dependencies: ["Mastodon", .product(name: "Stubbing", package: "HTTP")],
-            resources: [.process("Resources")]),
+        .target(name: "Mastodon"),
         .testTarget(
             name: "MastodonTests",
-            dependencies: ["MastodonStubs"])
+            dependencies: ["Mastodon"])
     ]
 )

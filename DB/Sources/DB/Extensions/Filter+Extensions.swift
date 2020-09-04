@@ -6,10 +6,10 @@ import Mastodon
 
 extension Filter: FetchableRecord, PersistableRecord {
     public static func databaseJSONDecoder(for column: String) -> JSONDecoder {
-        APIDecoder()
+        MastodonDecoder()
     }
 
     public static func databaseJSONEncoder(for column: String) -> JSONEncoder {
-        APIEncoder()
+        MastodonEncoder()
     }
 }
