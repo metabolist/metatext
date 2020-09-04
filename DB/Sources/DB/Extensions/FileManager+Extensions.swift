@@ -3,12 +3,12 @@
 import Foundation
 
 extension FileManager {
-    func databaseDirectoryURL() throws -> URL {
+    func databaseDirectoryURL(name: String) throws -> URL {
         let databaseDirectoryURL = try url(for: .applicationSupportDirectory,
                                            in: .userDomainMask,
                                            appropriateFor: nil,
                                            create: true)
-            .appendingPathComponent("Database")
+            .appendingPathComponent("DB")
         var isDirectory: ObjCBool = false
 
         if !fileExists(atPath: databaseDirectoryURL.path, isDirectory: &isDirectory) {
@@ -19,6 +19,6 @@ extension FileManager {
             throw NSError(domain: NSCocoaErrorDomain, code: NSFileWriteFileExistsError, userInfo: nil)
         }
 
-        return databaseDirectoryURL
+        return databaseDirectoryURL.appendingPathComponent(name)
     }
 }

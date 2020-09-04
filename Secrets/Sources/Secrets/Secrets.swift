@@ -29,10 +29,11 @@ public extension Secrets {
         case accessToken
         case pushKey
         case pushAuth
+        case databasePassphrase
     }
 }
 
-enum SecretsServiceError: Error {
+public enum SecretsError: Error {
     case itemAbsent
 }
 
@@ -51,18 +52,35 @@ extension Secrets.Item {
 }
 
 public extension Secrets {
+    static func setUnscoped(_ data: SecretsStorable, forItem item: Item, keychain: Keychain.Type) throws {
+        try keychain.setGenericPassword(
+            data: data.dataStoredInSecrets,
+            forAccount: item.rawValue,
+            service: keychainServiceName)
+    }
+
+    static func unscopedItem<T: SecretsStorable>(_ item: Item, keychain: Keychain.Type) throws -> T {
+        guard let data = try keychain.getGenericPassword(
+                account: item.rawValue,
+                service: Self.keychainServiceName) else {
+            throw SecretsError.itemAbsent
+        }
+
+        return try T.fromDataStoredInSecrets(data)
+    }
+
     func set(_ data: SecretsStorable, forItem item: Item) throws {
         try keychain.setGenericPassword(
             data: data.dataStoredInSecrets,
-            forAccount: key(item: item),
+            forAccount: scopedKey(item: item),
             service: Self.keychainServiceName)
     }
 
     func item<T: SecretsStorable>(_ item: Item) throws -> T {
         guard let data = try keychain.getGenericPassword(
-                account: key(item: item),
+                account: scopedKey(item: item),
                 service: Self.keychainServiceName) else {
-            throw SecretsServiceError.itemAbsent
+            throw SecretsError.itemAbsent
         }
 
         return try T.fromDataStoredInSecrets(data)
@@ -73,23 +91,23 @@ public extension Secrets {
             switch item.kind {
             case .genericPassword:
                 try keychain.deleteGenericPassword(
-                    account: key(item: item),
+                    account: scopedKey(item: item),
                     service: Self.keychainServiceName)
             case .key:
-                try keychain.deleteKey(applicationTag: key(item: item))
+                try keychain.deleteKey(applicationTag: scopedKey(item: item))
             }
         }
     }
 
     func generatePushKeyAndReturnPublicKey() throws -> Data {
         try keychain.generateKeyAndReturnPublicKey(
-            applicationTag: key(item: .pushKey),
+            applicationTag: scopedKey(item: .pushKey),
             attributes: PushKey.attributes)
     }
 
     func getPushKey() throws -> Data? {
         try keychain.getPrivateKey(
-            applicationTag: key(item: .pushKey),
+            applicationTag: scopedKey(item: .pushKey),
             attributes: PushKey.attributes)
     }
 
@@ -113,7 +131,7 @@ public extension Secrets {
 private extension Secrets {
     static let keychainServiceName = "com.metabolist.metatext"
 
-    func key(item: Item) -> String {
+    func scopedKey(item: Item) -> String {
         identityID.uuidString + "." + item.rawValue
     }
 }

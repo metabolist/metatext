@@ -21,11 +21,11 @@
       },
       {
         "package": "GRDB",
-        "repositoryURL": "https://github.com/groue/GRDB.swift.git",
+        "repositoryURL": "https://github.com/metabolist/GRDB.swift.git",
         "state": {
-          "branch": null,
-          "revision": "ededd8668abd5a3c4c43cc9ebcfd611082b47f65",
-          "version": "5.0.0-beta.10"
+          "branch": "ea3ed26",
+          "revision": "ea3ed26ddc82f72c2d9c50111977df7671ca1e64",
+          "version": null
         }
       },
       {

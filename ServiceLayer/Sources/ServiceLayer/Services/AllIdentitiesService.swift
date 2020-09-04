@@ -15,7 +15,8 @@ public struct AllIdentitiesService {
 
     public init(environment: AppEnvironment) throws {
         self.identityDatabase = try IdentityDatabase(inMemory: environment.inMemoryContent,
-                                                     fixture: environment.identityFixture)
+                                                     fixture: environment.identityFixture,
+                                                     keychain: environment.keychain)
         self.environment = environment
 
         mostRecentlyUsedIdentityID = identityDatabase.mostRecentlyUsedIdentityIDObservation()

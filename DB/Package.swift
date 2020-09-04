@@ -14,13 +14,14 @@ let package = Package(
             targets: ["DB"])
     ],
     dependencies: [
-        .package(name: "GRDB", url: "https://github.com/groue/GRDB.swift.git", .upToNextMajor(from: "5.0.0-beta.10")),
-        .package(path: "Mastodon")
+        .package(name: "GRDB", url: "https://github.com/metabolist/GRDB.swift.git", .revision("ea3ed26")),
+        .package(path: "Mastodon"),
+        .package(path: "Secrets")
     ],
     targets: [
         .target(
             name: "DB",
-            dependencies: ["GRDB", "Mastodon"]),
+            dependencies: ["GRDB", "Mastodon", "Secrets"]),
         .testTarget(
             name: "DBTests",
             dependencies: ["DB"])

@@ -19,7 +19,7 @@
 		D0BEB21124FA2A91001B0F04 /* EditFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB21024FA2A90001B0F04 /* EditFilterView.swift */; };
 		D0BECB982501C0FC002C1B13 /* Secrets in Frameworks */ = {isa = PBXBuildFile; productRef = D0BECB972501C0FC002C1B13 /* Secrets */; };
 		D0BECB9A2501C15F002C1B13 /* Mastodon in Frameworks */ = {isa = PBXBuildFile; productRef = D0BECB992501C15F002C1B13 /* Mastodon */; };
-		D0BECB9C2501C731002C1B13 /* PreviewViewModels in Frameworks */ = {isa = PBXBuildFile; productRef = D0BECB9B2501C731002C1B13 /* PreviewViewModels */; };
+		D0BECB9F2501D9AD002C1B13 /* PreviewViewModels in Frameworks */ = {isa = PBXBuildFile; productRef = D0BECB9E2501D9AD002C1B13 /* PreviewViewModels */; };
 		D0C7D49724F7616A001EBDBB /* IdentitiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42224F76169001EBDBB /* IdentitiesView.swift */; };
 		D0C7D49824F7616A001EBDBB /* CustomEmojiText.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42324F76169001EBDBB /* CustomEmojiText.swift */; };
 		D0C7D49924F7616A001EBDBB /* AddIdentityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42424F76169001EBDBB /* AddIdentityView.swift */; };
@@ -136,7 +136,7 @@
 			files = (
 				D06B492324D4611300642749 /* KingfisherSwiftUI in Frameworks */,
 				D0E2C1D124FD97F000854680 /* ViewModels in Frameworks */,
-				D0BECB9C2501C731002C1B13 /* PreviewViewModels in Frameworks */,
+				D0BECB9F2501D9AD002C1B13 /* PreviewViewModels in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -331,7 +331,7 @@
 			packageProductDependencies = (
 				D06B492224D4611300642749 /* KingfisherSwiftUI */,
 				D0E2C1D024FD97F000854680 /* ViewModels */,
-				D0BECB9B2501C731002C1B13 /* PreviewViewModels */,
+				D0BECB9E2501D9AD002C1B13 /* PreviewViewModels */,
 			);
 			productName = "Metatext (iOS)";
 			productReference = D047FA8C24C3E21200AF17C5 /* Metatext.app */;
@@ -863,7 +863,7 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = Mastodon;
 		};
-		D0BECB9B2501C731002C1B13 /* PreviewViewModels */ = {
+		D0BECB9E2501D9AD002C1B13 /* PreviewViewModels */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PreviewViewModels;
 		};

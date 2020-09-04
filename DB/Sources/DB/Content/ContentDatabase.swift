@@ -3,16 +3,26 @@
 import Foundation
 import Combine
 import GRDB
+import Keychain
 import Mastodon
+import Secrets
 
 public struct ContentDatabase {
     private let databaseQueue: DatabaseQueue
 
-    public init(identityID: UUID, inMemory: Bool) throws {
+    public init(identityID: UUID, inMemory: Bool, keychain: Keychain.Type) throws {
         if inMemory {
             databaseQueue = DatabaseQueue()
         } else {
-            databaseQueue = try DatabaseQueue(path: try Self.fileURL(identityID: identityID).path)
+            let path = try Self.fileURL(identityID: identityID).path
+            var configuration = Configuration()
+
+            configuration.prepareDatabase = { db in
+                let passphrase = try Secrets.databasePassphrase(identityID: identityID, keychain: keychain)
+                try db.usePassphrase(passphrase)
+            }
+
+            databaseQueue = try DatabaseQueue(path: path, configuration: configuration)
         }
 
         try Self.migrate(databaseQueue)
@@ -176,7 +186,7 @@ public extension ContentDatabase {
 
 private extension ContentDatabase {
     static func fileURL(identityID: UUID) throws -> URL {
-        try FileManager.default.databaseDirectoryURL().appendingPathComponent(identityID.uuidString + ".sqlite")
+        try FileManager.default.databaseDirectoryURL(name: identityID.uuidString)
     }
 
     // swiftlint:disable function_body_length

@@ -3,7 +3,9 @@
 import Foundation
 import Combine
 import GRDB
+import Keychain
 import Mastodon
+import Secrets
 
 public enum IdentityDatabaseError: Error {
     case identityNotFound
@@ -12,13 +14,19 @@ public enum IdentityDatabaseError: Error {
 public struct IdentityDatabase {
     private let databaseQueue: DatabaseQueue
 
-    public init(inMemory: Bool, fixture: IdentityFixture?) throws {
+    public init(inMemory: Bool, fixture: IdentityFixture?, keychain: Keychain.Type) throws {
         if inMemory {
             databaseQueue = DatabaseQueue()
         } else {
-            let databaseURL = try FileManager.default.databaseDirectoryURL().appendingPathComponent("Identities.sqlite")
+            let path = try FileManager.default.databaseDirectoryURL(name: Self.name).path
+            var configuration = Configuration()
 
-            databaseQueue = try DatabaseQueue(path: databaseURL.path)
+            configuration.prepareDatabase = { db in
+                let passphrase = try Secrets.databasePassphrase(identityID: nil, keychain: keychain)
+                try db.usePassphrase(passphrase)
+            }
+
+            databaseQueue = try DatabaseQueue(path: path, configuration: configuration)
         }
 
         try Self.migrate(databaseQueue)
@@ -184,6 +192,8 @@ public extension IdentityDatabase {
 }
 
 private extension IdentityDatabase {
+    private static let name = "Identity"
+
     private static func identitiesRequest() -> QueryInterfaceRequest<IdentityResult> {
         StoredIdentity
             .order(Column("lastUsedAt").desc)

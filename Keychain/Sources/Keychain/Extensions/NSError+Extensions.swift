@@ -3,7 +3,7 @@
 import Foundation
 
 extension NSError {
-    convenience init(status: OSStatus) {
+    public convenience init(status: OSStatus) {
         var userInfo: [String: Any]?
 
         if let errorMessage = SecCopyErrorMessageString(status, nil) {

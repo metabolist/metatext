@@ -42,7 +42,9 @@ public class IdentityService {
         mastodonAPIClient.instanceURL = identity.url
         mastodonAPIClient.accessToken = try? secrets.item(.accessToken)
 
-        contentDatabase = try ContentDatabase(identityID: identityID, inMemory: environment.inMemoryContent)
+        contentDatabase = try ContentDatabase(identityID: identityID,
+                                              inMemory: environment.inMemoryContent,
+                                              keychain: environment.keychain)
 
         observation.catch { [weak self] error -> Empty<Identity, Never> in
             self?.observationErrorsInput.send(error)
