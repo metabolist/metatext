@@ -27,6 +27,5 @@ public struct Account: Codable, Hashable {
     public let fields: [Field]
     public let emojis: [Emoji]
     @DecodableDefault.False public private(set) var bot: Bool
-    @DecodableDefault.False public private(set) var moved: Bool
     @DecodableDefault.False public private(set) var discoverable: Bool
 }

@@ -212,7 +212,6 @@ private extension ContentDatabase {
                 t.column("fields", .blob).notNull()
                 t.column("emojis", .blob).notNull()
                 t.column("bot", .boolean).notNull()
-                t.column("moved", .boolean)
                 t.column("discoverable", .boolean)
             }
 
