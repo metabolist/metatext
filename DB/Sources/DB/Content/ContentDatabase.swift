@@ -193,7 +193,7 @@ private extension ContentDatabase {
         var migrator = DatabaseMigrator()
 
         migrator.registerMigration("createStatuses") { db in
-            try db.create(table: "account", ifNotExists: true) { t in
+            try db.create(table: "storedAccount", ifNotExists: true) { t in
                 t.column("id", .text).notNull().primaryKey(onConflict: .replace)
                 t.column("username", .text).notNull()
                 t.column("acct", .text).notNull()
@@ -213,13 +213,14 @@ private extension ContentDatabase {
                 t.column("emojis", .blob).notNull()
                 t.column("bot", .boolean).notNull()
                 t.column("discoverable", .boolean)
+                t.column("movedId", .text).indexed().references("storedAccount", column: "id")
             }
 
             try db.create(table: "storedStatus", ifNotExists: true) { t in
                 t.column("id", .text).notNull().primaryKey(onConflict: .replace)
                 t.column("uri", .text).notNull()
                 t.column("createdAt", .datetime).notNull()
-                t.column("accountId", .text).indexed().notNull().references("account", column: "id")
+                t.column("accountId", .text).indexed().notNull().references("storedAccount", column: "id")
                 t.column("content", .text).notNull()
                 t.column("visibility", .text).notNull()
                 t.column("sensitive", .boolean).notNull()

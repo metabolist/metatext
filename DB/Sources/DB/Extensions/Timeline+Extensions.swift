@@ -41,7 +41,7 @@ extension Timeline {
         using: TimelineStatusJoin.status)
         .order(Column("createdAt").desc)
 
-    var statuses: QueryInterfaceRequest<StatusResult> {
+    var statuses: AnyFetchRequest<StatusResult> {
         request(for: Self.statuses).statusResultRequest
     }
 }

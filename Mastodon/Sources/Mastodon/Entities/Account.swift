@@ -2,7 +2,7 @@
 
 import Foundation
 
-public struct Account: Codable, Hashable {
+public final class Account: Codable, Identifiable {
     public struct Field: Codable, Hashable {
         public let name: String
         public let value: HTML
@@ -28,4 +28,95 @@ public struct Account: Codable, Hashable {
     public let emojis: [Emoji]
     @DecodableDefault.False public private(set) var bot: Bool
     @DecodableDefault.False public private(set) var discoverable: Bool
+    public var moved: Account?
+
+    public init(id: String,
+                username: String,
+                acct: String,
+                displayName: String,
+                locked: Bool,
+                createdAt: Date,
+                followersCount: Int,
+                followingCount: Int,
+                statusesCount: Int,
+                note: HTML,
+                url: URL,
+                avatar: URL,
+                avatarStatic: URL,
+                header: URL,
+                headerStatic: URL,
+                fields: [Account.Field],
+                emojis: [Emoji],
+                bot: Bool,
+                discoverable: Bool,
+                moved: Account?) {
+        self.id = id
+        self.username = username
+        self.acct = acct
+        self.displayName = displayName
+        self.locked = locked
+        self.createdAt = createdAt
+        self.followersCount = followersCount
+        self.followingCount = followingCount
+        self.statusesCount = statusesCount
+        self.note = note
+        self.url = url
+        self.avatar = avatar
+        self.avatarStatic = avatarStatic
+        self.header = header
+        self.headerStatic = headerStatic
+        self.fields = fields
+        self.emojis = emojis
+        self.bot = bot
+        self.discoverable = discoverable
+        self.moved = moved
+    }
+}
+
+extension Account: Hashable {
+    public static func == (lhs: Account, rhs: Account) -> Bool {
+        return lhs.id == rhs.id &&
+            lhs.username == rhs.username &&
+            lhs.acct == rhs.acct &&
+            lhs.displayName == rhs.displayName &&
+            lhs.locked == rhs.locked &&
+            lhs.createdAt == rhs.createdAt &&
+            lhs.followersCount == rhs.followersCount &&
+            lhs.followingCount == rhs.followingCount &&
+            lhs.statusesCount == rhs.statusesCount &&
+            lhs.note == rhs.note &&
+            lhs.url == rhs.url &&
+            lhs.avatar == rhs.avatar &&
+            lhs.avatarStatic == rhs.avatarStatic &&
+            lhs.header == rhs.header &&
+            lhs.headerStatic == rhs.headerStatic &&
+            lhs.fields == rhs.fields &&
+            lhs.emojis == rhs.emojis &&
+            lhs._bot == rhs._bot &&
+            lhs._discoverable == rhs._discoverable &&
+            lhs.moved == rhs.moved
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+        hasher.combine(username)
+        hasher.combine(acct)
+        hasher.combine(displayName)
+        hasher.combine(locked)
+        hasher.combine(createdAt)
+        hasher.combine(followersCount)
+        hasher.combine(followingCount)
+        hasher.combine(statusesCount)
+        hasher.combine(note)
+        hasher.combine(url)
+        hasher.combine(avatar)
+        hasher.combine(avatarStatic)
+        hasher.combine(header)
+        hasher.combine(headerStatic)
+        hasher.combine(fields)
+        hasher.combine(emojis)
+        hasher.combine(bot)
+        hasher.combine(discoverable)
+        hasher.combine(moved)
+    }
 }

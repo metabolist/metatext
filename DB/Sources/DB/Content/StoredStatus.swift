@@ -47,8 +47,19 @@ extension StoredStatus: FetchableRecord, PersistableRecord {
 }
 
 extension StoredStatus {
-    static let account = belongsTo(Account.self, key: "account")
-    static let reblogAccount = hasOne(Account.self, through: Self.reblog, using: Self.account, key: "reblogAccount")
+    static let account = belongsTo(StoredAccount.self, key: "account", using: ForeignKey([Column("accountId")]))
+    static let accountMoved = hasOne(StoredAccount.self,
+                                     through: Self.account,
+                                     using: StoredAccount.moved,
+                                     key: "accountMoved")
+    static let reblogAccount = hasOne(StoredAccount.self,
+                                      through: Self.reblog,
+                                      using: Self.account,
+                                      key: "reblogAccount")
+    static let reblogAccountMoved = hasOne(StoredAccount.self,
+                                           through: Self.reblogAccount,
+                                           using: StoredAccount.moved,
+                                           key: "reblogAccountMoved")
     static let reblog = belongsTo(StoredStatus.self, key: "reblog")
     static let ancestorJoins = hasMany(StatusContextJoin.self, using: ForeignKey([Column("parentID")]))
         .filter(Column("section") == StatusContextJoin.Section.ancestors.rawValue)
@@ -63,23 +74,11 @@ extension StoredStatus {
                                    through: descendantJoins,
                                    using: StatusContextJoin.status)
 
-    var account: QueryInterfaceRequest<Account> {
-        request(for: Self.account)
-    }
-
-    var reblogAccount: QueryInterfaceRequest<Account> {
-        request(for: Self.reblogAccount)
-    }
-
-    var reblog: QueryInterfaceRequest<StoredStatus> {
-        request(for: Self.reblog)
-    }
-
-    var ancestors: QueryInterfaceRequest<StatusResult> {
+    var ancestors: AnyFetchRequest<StatusResult> {
         request(for: Self.ancestors).statusResultRequest
     }
 
-    var descendants: QueryInterfaceRequest<StatusResult> {
+    var descendants: AnyFetchRequest<StatusResult> {
         request(for: Self.descendants).statusResultRequest
     }
 

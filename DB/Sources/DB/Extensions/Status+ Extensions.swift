@@ -19,11 +19,11 @@ extension Status {
     convenience init(statusResult: StatusResult) {
         var reblog: Status?
 
-        if let reblogResult = statusResult.reblog, let reblogAccount = statusResult.reblogAccount {
-            reblog = Status(storedStatus: reblogResult, account: reblogAccount, reblog: nil)
+        if let reblogResult = statusResult.reblog, let reblogAccount = statusResult.reblogAccountResult {
+            reblog = Status(storedStatus: reblogResult, account: Account(accountResult: reblogAccount), reblog: nil)
         }
 
-        self.init(storedStatus: statusResult.status, account: statusResult.account, reblog: reblog)
+        self.init(storedStatus: statusResult.status, account: Account(accountResult: statusResult.accountResult), reblog: reblog)
     }
 
     convenience init(storedStatus: StoredStatus, account: Account, reblog: Status?) {

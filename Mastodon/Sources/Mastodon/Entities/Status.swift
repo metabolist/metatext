@@ -43,7 +43,6 @@ public final class Status: Codable, Identifiable {
     @DecodableDefault.False public private(set) var bookmarked: Bool
     public let pinned: Bool?
 
-    // Xcode-generated memberwise initializer
     public init(
         id: String,
         uri: String,
