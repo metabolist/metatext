@@ -1,11 +1,11 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
-import XCTest
 import Combine
 import CombineExpectations
 import ServiceLayer
 import ServiceLayerMocks
 @testable import ViewModels
+import XCTest
 
 class RootViewModelTests: XCTestCase {
     var cancellables = Set<AnyCancellable>()

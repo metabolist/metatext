@@ -1,5 +1,5 @@
-import XCTest
 @testable import Secrets
+import XCTest
 
 final class SecretsTests: XCTestCase {
     func testExample() {

@@ -1,6 +1,5 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
-import XCTest
 import Combine
 import CombineExpectations
 import HTTP
@@ -9,6 +8,7 @@ import MockKeychain
 import ServiceLayer
 import ServiceLayerMocks
 @testable import ViewModels
+import XCTest
 
 class AddIdentityViewModelTests: XCTestCase {
     func testAddIdentity() throws {

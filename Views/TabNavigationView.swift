@@ -1,8 +1,8 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
-import SwiftUI
 import KingfisherSwiftUI
 import enum Mastodon.Timeline
+import SwiftUI
 import ViewModels
 
 struct TabNavigationView: View {

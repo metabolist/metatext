@@ -1,7 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
-import UIKit
 import Kingfisher
+import UIKit
 import ViewModels
 
 class AttachmentView: UIView {

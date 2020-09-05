@@ -1,10 +1,10 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
-import XCTest
 import Combine
 import CombineExpectations
 @testable import ServiceLayer
 @testable import ServiceLayerMocks
+import XCTest
 
 class AuthenticationServiceTests: XCTestCase {
     func testAuthentication() throws {

@@ -1,7 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
-import Foundation
 import Alamofire
+import Foundation
 
 public typealias HTTPMethod = Alamofire.HTTPMethod
 public typealias HTTPHeaders = Alamofire.HTTPHeaders

@@ -1,8 +1,8 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
-import UIKit
 import Kingfisher
 import Mastodon
+import UIKit
 
 extension NSMutableAttributedString {
     func insert(emoji: [Emoji], view: UIView) {

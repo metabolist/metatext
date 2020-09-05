@@ -1,8 +1,8 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
-import Foundation
 import AuthenticationServices
 import Combine
+import Foundation
 
 public protocol WebAuthSession: AnyObject {
     init(url URL: URL,

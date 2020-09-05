@@ -1,12 +1,12 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
-import SwiftUI
-import KingfisherSwiftUI
-import struct Kingfisher.KingfisherOptionsInfo
-import protocol Kingfisher.ImageProcessor
 import struct Kingfisher.DownsamplingImageProcessor
-import struct Kingfisher.RoundCornerImageProcessor
 import struct Kingfisher.FormatIndicatedCacheSerializer
+import protocol Kingfisher.ImageProcessor
+import struct Kingfisher.KingfisherOptionsInfo
+import struct Kingfisher.RoundCornerImageProcessor
+import KingfisherSwiftUI
+import SwiftUI
 
 extension KingfisherOptionsInfo {
     static func downsampled(size: CGSize, scaleFactor: CGFloat, rounded: Bool = true) -> Self {

@@ -1,8 +1,8 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
-import Foundation
-import Combine
 import Alamofire
+import Combine
+import Foundation
 
 public typealias Session = Alamofire.Session
 

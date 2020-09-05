@@ -1,7 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
-import Foundation
 import Combine
+import Foundation
 import HTTP
 import Mastodon
 

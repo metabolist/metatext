@@ -1,10 +1,10 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
-import UserNotifications
 import CryptoKit
 import Keychain
 import Mastodon
 import Secrets
+import UserNotifications
 
 class NotificationService: UNNotificationServiceExtension {
 

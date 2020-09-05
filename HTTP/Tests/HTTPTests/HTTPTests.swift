@@ -1,5 +1,5 @@
-import XCTest
 @testable import HTTP
+import XCTest
 
 final class HTTPTests: XCTestCase {
     func testExample() {

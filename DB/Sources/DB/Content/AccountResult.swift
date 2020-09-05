@@ -2,7 +2,6 @@
 
 import Foundation
 import GRDB
-import Mastodon
 
 struct AccountResult: Codable, Hashable, FetchableRecord {
     let account: AccountRecord

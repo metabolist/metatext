@@ -1,5 +1,5 @@
-import XCTest
 @testable import MastodonAPI
+import XCTest
 
 final class MastodonAPITests: XCTestCase {
     func testExample() {
