@@ -6,44 +6,44 @@ import Foundation
 // https://khanlou.com/2018/09/bloom-filters/
 // This implementation uses deterministic hashing functions so it can be serialized / deserialized
 
-struct BloomFilter {
-    let hashes: [Hash]
-    let bits: Int
+public struct BloomFilter<T: DeterministicallyHashable> {
+    public let hashes: [Hash]
+    public let bits: Int
 
     private var data: BitArray
 
-    init(hashes: [Hash], bits: Int) {
+    public init(hashes: [Hash], bits: Int) {
         self.hashes = hashes
         self.bits = bits
         data = BitArray(count: bits)
     }
 }
 
-extension BloomFilter {
+public extension BloomFilter {
     enum Hash: String, Codable {
         case djb2
         case sdbm
     }
 
-    mutating func insert(_ newMember: String) {
+    mutating func insert(_ newMember: T) {
         for index in indices(newMember) {
             data[index] = true
         }
     }
 
-    func contains(_ member: String) -> Bool {
+    func contains(_ member: T) -> Bool {
         indices(member).map { data[$0] }.allSatisfy { $0 }
     }
 }
 
 extension BloomFilter: Codable {
-    enum CodingKeys: String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case hashes
         case bits
         case data
     }
 
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
         hashes = try container.decode([Hash].self, forKey: .hashes)
@@ -51,7 +51,7 @@ extension BloomFilter: Codable {
         data = BitArray(data: try container.decode(Data.self, forKey: .data), count: bits)
     }
 
-    func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
 
         try container.encode(hashes, forKey: .hashes)
@@ -61,16 +61,18 @@ extension BloomFilter: Codable {
 }
 
 private extension BloomFilter {
-    func indices(_ string: String) -> [Int] {
-        hashes.map { abs($0.apply(string)) % bits }
+    func indices(_ member: T) -> [Int] {
+        hashes.map { abs($0.apply(member)) % bits }
     }
 }
 
 // https://gist.github.com/kharrison/2355182ac03b481921073c5cf6d77a73
 
 private extension BloomFilter.Hash {
-    func apply(_ string: String) -> Int {
-        string.unicodeScalars.map(\.value).reduce(initial, then)
+    func apply(_ member: T) -> Int {
+        Array(member.deterministicallyHashableData)
+            .map(Int.init)
+            .reduce(initial, then)
     }
 
     var initial: Int {
@@ -80,12 +82,12 @@ private extension BloomFilter.Hash {
         }
     }
 
-    func then(result: Int, next: UInt32) -> Int {
+    func then(result: Int, next: Int) -> Int {
         switch self {
         case .djb2:
-            return (result << 5) &+ result &+ Int(next)
+            return (result << 5) &+ result &+ next
         case .sdbm:
-            return Int(next) &+ (result << 6) &+ (result << 16) - result
+            return next &+ (result << 6) &+ (result << 16) - result
         }
     }
 }
