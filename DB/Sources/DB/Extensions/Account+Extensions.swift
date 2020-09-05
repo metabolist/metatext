@@ -7,42 +7,44 @@ import Mastodon
 extension Account {
     func save(_ db: Database) throws {
         if let moved = moved {
-            try StoredAccount(account: moved).save(db)
+            try AccountRecord(account: moved).save(db)
         }
 
-        try StoredAccount(account: self).save(db)
+        try AccountRecord(account: self).save(db)
     }
 
-    convenience init(accountResult: AccountResult) {
+    convenience init(result: AccountResult) {
         var moved: Account?
 
-        if let movedResult = accountResult.moved {
-            moved = Self(storedAccount: movedResult, moved: nil)
+        if let movedRecord = result.moved {
+            moved = Self(record: movedRecord, moved: nil)
         }
 
-        self.init(storedAccount: accountResult.account, moved: moved)
+        self.init(record: result.account, moved: moved)
     }
+}
 
-    convenience init(storedAccount: StoredAccount, moved: Account?) {
-        self.init(id: storedAccount.id,
-                  username: storedAccount.username,
-                  acct: storedAccount.acct,
-                  displayName: storedAccount.displayName,
-                  locked: storedAccount.locked,
-                  createdAt: storedAccount.createdAt,
-                  followersCount: storedAccount.followersCount,
-                  followingCount: storedAccount.followingCount,
-                  statusesCount: storedAccount.statusesCount,
-                  note: storedAccount.note,
-                  url: storedAccount.url,
-                  avatar: storedAccount.avatar,
-                  avatarStatic: storedAccount.avatarStatic,
-                  header: storedAccount.header,
-                  headerStatic: storedAccount.headerStatic,
-                  fields: storedAccount.fields,
-                  emojis: storedAccount.emojis,
-                  bot: storedAccount.bot,
-                  discoverable: storedAccount.discoverable,
+private extension Account {
+    convenience init(record: AccountRecord, moved: Account?) {
+        self.init(id: record.id,
+                  username: record.username,
+                  acct: record.acct,
+                  displayName: record.displayName,
+                  locked: record.locked,
+                  createdAt: record.createdAt,
+                  followersCount: record.followersCount,
+                  followingCount: record.followingCount,
+                  statusesCount: record.statusesCount,
+                  note: record.note,
+                  url: record.url,
+                  avatar: record.avatar,
+                  avatarStatic: record.avatarStatic,
+                  header: record.header,
+                  headerStatic: record.headerStatic,
+                  fields: record.fields,
+                  emojis: record.emojis,
+                  bot: record.bot,
+                  discoverable: record.discoverable,
                   moved: moved)
     }
 }

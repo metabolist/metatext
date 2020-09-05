@@ -133,13 +133,13 @@ public extension ContentDatabase {
         ValueObservation.tracking(timeline.statuses.fetchAll)
             .removeDuplicates()
             .publisher(in: databaseQueue)
-            .map { [$0.map(Status.init(statusResult:))] }
+            .map { [$0.map(Status.init(result:))] }
             .eraseToAnyPublisher()
     }
 
     func contextObservation(parentID: String) -> AnyPublisher<[[Status]], Error> {
         ValueObservation.tracking { db -> [[StatusResult]] in
-            guard let parent = try StoredStatus.filter(Column("id") == parentID).statusResultRequest.fetchOne(db) else {
+            guard let parent = try StatusRecord.filter(Column("id") == parentID).statusResultRequest.fetchOne(db) else {
                 return [[]]
             }
 
@@ -150,7 +150,7 @@ public extension ContentDatabase {
         }
         .removeDuplicates()
         .publisher(in: databaseQueue)
-        .map { $0.map { $0.map(Status.init(statusResult:)) } }
+        .map { $0.map { $0.map(Status.init(result:)) } }
         .eraseToAnyPublisher()
     }
 
@@ -193,7 +193,7 @@ private extension ContentDatabase {
         var migrator = DatabaseMigrator()
 
         migrator.registerMigration("createStatuses") { db in
-            try db.create(table: "storedAccount", ifNotExists: true) { t in
+            try db.create(table: "accountRecord", ifNotExists: true) { t in
                 t.column("id", .text).notNull().primaryKey(onConflict: .replace)
                 t.column("username", .text).notNull()
                 t.column("acct", .text).notNull()
@@ -213,14 +213,14 @@ private extension ContentDatabase {
                 t.column("emojis", .blob).notNull()
                 t.column("bot", .boolean).notNull()
                 t.column("discoverable", .boolean)
-                t.column("movedId", .text).indexed().references("storedAccount", column: "id")
+                t.column("movedId", .text).indexed().references("accountRecord", column: "id")
             }
 
-            try db.create(table: "storedStatus", ifNotExists: true) { t in
+            try db.create(table: "statusRecord", ifNotExists: true) { t in
                 t.column("id", .text).notNull().primaryKey(onConflict: .replace)
                 t.column("uri", .text).notNull()
                 t.column("createdAt", .datetime).notNull()
-                t.column("accountId", .text).indexed().notNull().references("storedAccount", column: "id")
+                t.column("accountId", .text).indexed().notNull().references("accountRecord", column: "id")
                 t.column("content", .text).notNull()
                 t.column("visibility", .text).notNull()
                 t.column("sensitive", .boolean).notNull()
@@ -236,7 +236,7 @@ private extension ContentDatabase {
                 t.column("url", .text)
                 t.column("inReplyToId", .text)
                 t.column("inReplyToAccountId", .text)
-                t.column("reblogId", .text).indexed().references("storedStatus", column: "id")
+                t.column("reblogId", .text).indexed().references("statusRecord", column: "id")
                 t.column("poll", .blob)
                 t.column("card", .blob)
                 t.column("language", .text)
@@ -261,7 +261,7 @@ private extension ContentDatabase {
                 t.column("statusId", .text)
                     .indexed()
                     .notNull()
-                    .references("storedStatus", column: "id", onDelete: .cascade, onUpdate: .cascade)
+                    .references("statusRecord", column: "id", onDelete: .cascade, onUpdate: .cascade)
 
                 t.primaryKey(["timelineId", "statusId"], onConflict: .replace)
             }
@@ -270,11 +270,11 @@ private extension ContentDatabase {
                 t.column("parentId", .text)
                     .indexed()
                     .notNull()
-                    .references("storedStatus", column: "id", onDelete: .cascade, onUpdate: .cascade)
+                    .references("statusRecord", column: "id", onDelete: .cascade, onUpdate: .cascade)
                 t.column("statusId", .text)
                     .indexed()
                     .notNull()
-                    .references("storedStatus", column: "id", onDelete: .cascade, onUpdate: .cascade)
+                    .references("statusRecord", column: "id", onDelete: .cascade, onUpdate: .cascade)
                 t.column("section", .text).notNull()
                 t.column("index", .integer).notNull()
 

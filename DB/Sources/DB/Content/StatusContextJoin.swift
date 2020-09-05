@@ -14,5 +14,5 @@ struct StatusContextJoin: Codable, FetchableRecord, PersistableRecord {
     let section: Section
     let index: Int
 
-    static let status = belongsTo(StoredStatus.self, using: ForeignKey([Column("statusId")]))
+    static let status = belongsTo(StatusRecord.self, using: ForeignKey([Column("statusId")]))
 }

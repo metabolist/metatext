@@ -4,7 +4,7 @@ import Foundation
 import GRDB
 import Mastodon
 
-struct StoredStatus: Codable, Hashable {
+struct StatusRecord: Codable, Hashable {
     let id: String
     let uri: String
     let createdAt: Date
@@ -36,7 +36,7 @@ struct StoredStatus: Codable, Hashable {
     let pinned: Bool?
 }
 
-extension StoredStatus: FetchableRecord, PersistableRecord {
+extension StatusRecord: FetchableRecord, PersistableRecord {
     static func databaseJSONDecoder(for column: String) -> JSONDecoder {
         MastodonDecoder()
     }
@@ -46,31 +46,31 @@ extension StoredStatus: FetchableRecord, PersistableRecord {
     }
 }
 
-extension StoredStatus {
-    static let account = belongsTo(StoredAccount.self, key: "account", using: ForeignKey([Column("accountId")]))
-    static let accountMoved = hasOne(StoredAccount.self,
+extension StatusRecord {
+    static let account = belongsTo(AccountRecord.self, key: "account", using: ForeignKey([Column("accountId")]))
+    static let accountMoved = hasOne(AccountRecord.self,
                                      through: Self.account,
-                                     using: StoredAccount.moved,
+                                     using: AccountRecord.moved,
                                      key: "accountMoved")
-    static let reblogAccount = hasOne(StoredAccount.self,
+    static let reblogAccount = hasOne(AccountRecord.self,
                                       through: Self.reblog,
                                       using: Self.account,
                                       key: "reblogAccount")
-    static let reblogAccountMoved = hasOne(StoredAccount.self,
+    static let reblogAccountMoved = hasOne(AccountRecord.self,
                                            through: Self.reblogAccount,
-                                           using: StoredAccount.moved,
+                                           using: AccountRecord.moved,
                                            key: "reblogAccountMoved")
-    static let reblog = belongsTo(StoredStatus.self, key: "reblog")
+    static let reblog = belongsTo(StatusRecord.self, key: "reblog")
     static let ancestorJoins = hasMany(StatusContextJoin.self, using: ForeignKey([Column("parentID")]))
         .filter(Column("section") == StatusContextJoin.Section.ancestors.rawValue)
         .order(Column("index"))
     static let descendantJoins = hasMany(StatusContextJoin.self, using: ForeignKey([Column("parentID")]))
         .filter(Column("section") == StatusContextJoin.Section.descendants.rawValue)
         .order(Column("index"))
-    static let ancestors = hasMany(StoredStatus.self,
+    static let ancestors = hasMany(StatusRecord.self,
                                    through: ancestorJoins,
                                    using: StatusContextJoin.status)
-    static let descendants = hasMany(StoredStatus.self,
+    static let descendants = hasMany(StatusRecord.self,
                                    through: descendantJoins,
                                    using: StatusContextJoin.status)
 

@@ -39,7 +39,7 @@ public struct IdentityDatabase {
 public extension IdentityDatabase {
     func createIdentity(id: UUID, url: URL) -> AnyPublisher<Never, Error> {
         databaseQueue.writePublisher(
-            updates: StoredIdentity(
+            updates: IdentityRecord(
                 id: id,
                 url: url,
                 lastUsedAt: Date(),
@@ -53,14 +53,14 @@ public extension IdentityDatabase {
     }
 
     func deleteIdentity(id: UUID) -> AnyPublisher<Never, Error> {
-        databaseQueue.writePublisher(updates: StoredIdentity.filter(Column("id") == id).deleteAll)
+        databaseQueue.writePublisher(updates: IdentityRecord.filter(Column("id") == id).deleteAll)
             .ignoreOutput()
             .eraseToAnyPublisher()
     }
 
     func updateLastUsedAt(identityID: UUID) -> AnyPublisher<Never, Error> {
         databaseQueue.writePublisher {
-            try StoredIdentity
+            try IdentityRecord
                 .filter(Column("id") == identityID)
                 .updateAll($0, Column("lastUsedAt").set(to: Date()))
         }
@@ -76,7 +76,7 @@ public extension IdentityDatabase {
                 title: instance.title,
                 thumbnail: instance.thumbnail)
                 .save($0)
-            try StoredIdentity
+            try IdentityRecord
                 .filter(Column("id") == identityID)
                 .updateAll($0, Column("instanceURI").set(to: instance.uri))
         }
@@ -105,9 +105,9 @@ public extension IdentityDatabase {
     func updatePreferences(_ preferences: Identity.Preferences,
                            forIdentityID identityID: UUID) -> AnyPublisher<Never, Error> {
         databaseQueue.writePublisher {
-            let data = try StoredIdentity.databaseJSONEncoder(for: "preferences").encode(preferences)
+            let data = try IdentityRecord.databaseJSONEncoder(for: "preferences").encode(preferences)
 
-            try StoredIdentity
+            try IdentityRecord
                 .filter(Column("id") == identityID)
                 .updateAll($0, Column("preferences").set(to: data))
         }
@@ -119,14 +119,14 @@ public extension IdentityDatabase {
                                 deviceToken: String? = nil,
                                 forIdentityID identityID: UUID) -> AnyPublisher<Never, Error> {
         databaseQueue.writePublisher {
-            let data = try StoredIdentity.databaseJSONEncoder(for: "pushSubscriptionAlerts").encode(alerts)
+            let data = try IdentityRecord.databaseJSONEncoder(for: "pushSubscriptionAlerts").encode(alerts)
 
-            try StoredIdentity
+            try IdentityRecord
                 .filter(Column("id") == identityID)
                 .updateAll($0, Column("pushSubscriptionAlerts").set(to: data))
 
             if let deviceToken = deviceToken {
-                try StoredIdentity
+                try IdentityRecord
                     .filter(Column("id") == identityID)
                     .updateAll($0, Column("lastRegisteredDeviceToken").set(to: deviceToken))
             }
@@ -137,10 +137,10 @@ public extension IdentityDatabase {
 
     func identityObservation(id: UUID) -> AnyPublisher<Identity, Error> {
         ValueObservation.tracking(
-            StoredIdentity
+            IdentityRecord
                 .filter(Column("id") == id)
-                .including(optional: StoredIdentity.instance)
-                .including(optional: StoredIdentity.account)
+                .including(optional: IdentityRecord.instance)
+                .including(optional: IdentityRecord.account)
                 .asRequest(of: IdentityResult.self)
                 .fetchOne)
             .removeDuplicates()
@@ -174,7 +174,7 @@ public extension IdentityDatabase {
     }
 
     func mostRecentlyUsedIdentityIDObservation() -> AnyPublisher<UUID?, Error> {
-        ValueObservation.tracking(StoredIdentity.select(Column("id")).order(Column("lastUsedAt").desc).fetchOne)
+        ValueObservation.tracking(IdentityRecord.select(Column("id")).order(Column("lastUsedAt").desc).fetchOne)
             .removeDuplicates()
             .publisher(in: databaseQueue, scheduling: .immediate)
             .eraseToAnyPublisher()
@@ -194,10 +194,10 @@ private extension IdentityDatabase {
     private static let name = "Identity"
 
     private static func identitiesRequest() -> QueryInterfaceRequest<IdentityResult> {
-        StoredIdentity
+        IdentityRecord
             .order(Column("lastUsedAt").desc)
-            .including(optional: StoredIdentity.instance)
-            .including(optional: StoredIdentity.account)
+            .including(optional: IdentityRecord.instance)
+            .including(optional: IdentityRecord.account)
             .asRequest(of: IdentityResult.self)
     }
 
@@ -212,7 +212,7 @@ private extension IdentityDatabase {
                 t.column("thumbnail", .text)
             }
 
-            try db.create(table: "storedIdentity", ifNotExists: true) { t in
+            try db.create(table: "identityRecord", ifNotExists: true) { t in
                 t.column("id", .text).notNull().primaryKey(onConflict: .replace)
                 t.column("url", .text).notNull()
                 t.column("lastUsedAt", .datetime).notNull()
@@ -229,7 +229,7 @@ private extension IdentityDatabase {
                 t.column("identityID", .text)
                     .notNull()
                     .indexed()
-                    .references("storedIdentity", column: "id", onDelete: .cascade)
+                    .references("identityRecord", column: "id", onDelete: .cascade)
                 t.column("username", .text).notNull()
                 t.column("displayName", .text).notNull()
                 t.column("url", .text).notNull()

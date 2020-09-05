@@ -4,7 +4,7 @@ import Foundation
 import GRDB
 import Mastodon
 
-struct StoredIdentity: Codable, Hashable, FetchableRecord, PersistableRecord {
+struct IdentityRecord: Codable, Hashable, FetchableRecord, PersistableRecord {
     let id: UUID
     let url: URL
     let lastUsedAt: Date
@@ -14,7 +14,7 @@ struct StoredIdentity: Codable, Hashable, FetchableRecord, PersistableRecord {
     let pushSubscriptionAlerts: PushSubscription.Alerts
 }
 
-extension StoredIdentity {
+extension IdentityRecord {
     static let instance = belongsTo(Identity.Instance.self, key: "instance")
     static let account = hasOne(Identity.Account.self, key: "account")
 

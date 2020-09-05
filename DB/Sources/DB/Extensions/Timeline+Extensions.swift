@@ -36,7 +36,7 @@ extension Timeline: FetchableRecord, PersistableRecord {
 extension Timeline {
     static let statusJoins = hasMany(TimelineStatusJoin.self)
     static let statuses = hasMany(
-        StoredStatus.self,
+        StatusRecord.self,
         through: statusJoins,
         using: TimelineStatusJoin.status)
         .order(Column("createdAt").desc)

@@ -5,7 +5,7 @@ import GRDB
 import Mastodon
 
 struct IdentityResult: Codable, Hashable, FetchableRecord {
-    let identity: StoredIdentity
+    let identity: IdentityRecord
     let instance: Identity.Instance?
     let account: Identity.Account?
     let pushSubscriptionAlerts: PushSubscription.Alerts

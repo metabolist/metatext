@@ -10,54 +10,56 @@ extension Status {
 
         if let reblog = reblog {
             try reblog.account.save(db)
-            try StoredStatus(status: reblog).save(db)
+            try StatusRecord(status: reblog).save(db)
         }
 
-        try StoredStatus(status: self).save(db)
+        try StatusRecord(status: self).save(db)
     }
 
-    convenience init(statusResult: StatusResult) {
+    convenience init(result: StatusResult) {
         var reblog: Status?
 
-        if let reblogResult = statusResult.reblog, let reblogAccount = statusResult.reblogAccountResult {
-            reblog = Status(storedStatus: reblogResult, account: Account(accountResult: reblogAccount), reblog: nil)
+        if let reblogResult = result.reblog, let reblogAccountResult = result.reblogAccountResult {
+            reblog = Status(record: reblogResult, account: Account(result: reblogAccountResult), reblog: nil)
         }
 
-        self.init(storedStatus: statusResult.status,
-                  account: Account(accountResult: statusResult.accountResult),
+        self.init(record: result.status,
+                  account: Account(result: result.accountResult),
                   reblog: reblog)
     }
+}
 
-    convenience init(storedStatus: StoredStatus, account: Account, reblog: Status?) {
+private extension Status {
+    convenience init(record: StatusRecord, account: Account, reblog: Status?) {
         self.init(
-            id: storedStatus.id,
-            uri: storedStatus.uri,
-            createdAt: storedStatus.createdAt,
+            id: record.id,
+            uri: record.uri,
+            createdAt: record.createdAt,
             account: account,
-            content: storedStatus.content,
-            visibility: storedStatus.visibility,
-            sensitive: storedStatus.sensitive,
-            spoilerText: storedStatus.spoilerText,
-            mediaAttachments: storedStatus.mediaAttachments,
-            mentions: storedStatus.mentions,
-            tags: storedStatus.tags,
-            emojis: storedStatus.emojis,
-            reblogsCount: storedStatus.reblogsCount,
-            favouritesCount: storedStatus.favouritesCount,
-            repliesCount: storedStatus.repliesCount,
-            application: storedStatus.application,
-            url: storedStatus.url,
-            inReplyToId: storedStatus.inReplyToId,
-            inReplyToAccountId: storedStatus.inReplyToAccountId,
+            content: record.content,
+            visibility: record.visibility,
+            sensitive: record.sensitive,
+            spoilerText: record.spoilerText,
+            mediaAttachments: record.mediaAttachments,
+            mentions: record.mentions,
+            tags: record.tags,
+            emojis: record.emojis,
+            reblogsCount: record.reblogsCount,
+            favouritesCount: record.favouritesCount,
+            repliesCount: record.repliesCount,
+            application: record.application,
+            url: record.url,
+            inReplyToId: record.inReplyToId,
+            inReplyToAccountId: record.inReplyToAccountId,
             reblog: reblog,
-            poll: storedStatus.poll,
-            card: storedStatus.card,
-            language: storedStatus.language,
-            text: storedStatus.text,
-            favourited: storedStatus.favourited,
-            reblogged: storedStatus.reblogged,
-            muted: storedStatus.muted,
-            bookmarked: storedStatus.bookmarked,
-            pinned: storedStatus.pinned)
+            poll: record.poll,
+            card: record.card,
+            language: record.language,
+            text: record.text,
+            favourited: record.favourited,
+            reblogged: record.reblogged,
+            muted: record.muted,
+            bookmarked: record.bookmarked,
+            pinned: record.pinned)
     }
 }

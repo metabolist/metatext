@@ -7,5 +7,5 @@ struct TimelineStatusJoin: Codable, FetchableRecord, PersistableRecord {
     let timelineId: String
     let statusId: String
 
-    static let status = belongsTo(StoredStatus.self)
+    static let status = belongsTo(StatusRecord.self)
 }

@@ -5,13 +5,13 @@ import GRDB
 import Mastodon
 
 struct AccountResult: Codable, Hashable, FetchableRecord {
-    let account: StoredAccount
-    let moved: StoredAccount?
+    let account: AccountRecord
+    let moved: AccountRecord?
 }
 
-extension QueryInterfaceRequest where RowDecoder == StoredAccount {
+extension QueryInterfaceRequest where RowDecoder == AccountRecord {
     var accountResultRequest: AnyFetchRequest<AccountResult> {
-        AnyFetchRequest(including(optional: StoredAccount.moved))
+        AnyFetchRequest(including(optional: AccountRecord.moved))
             .asRequest(of: AccountResult.self)
     }
 }

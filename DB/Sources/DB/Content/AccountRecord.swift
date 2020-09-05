@@ -4,7 +4,7 @@ import Foundation
 import GRDB
 import Mastodon
 
-struct StoredAccount: Codable, Hashable {
+struct AccountRecord: Codable, Hashable {
     let id: String
     let username: String
     let acct: String
@@ -27,7 +27,7 @@ struct StoredAccount: Codable, Hashable {
     let movedId: String?
 }
 
-extension StoredAccount: FetchableRecord, PersistableRecord {
+extension AccountRecord: FetchableRecord, PersistableRecord {
     static func databaseJSONDecoder(for column: String) -> JSONDecoder {
         MastodonDecoder()
     }
@@ -37,8 +37,8 @@ extension StoredAccount: FetchableRecord, PersistableRecord {
     }
 }
 
-extension StoredAccount {
-    static let moved = belongsTo(StoredAccount.self, key: "moved")
+extension AccountRecord {
+    static let moved = belongsTo(AccountRecord.self, key: "moved")
 
     init(account: Account) {
         id = account.id

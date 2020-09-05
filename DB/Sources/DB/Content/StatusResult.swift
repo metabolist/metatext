@@ -5,12 +5,12 @@ import GRDB
 import Mastodon
 
 struct StatusResult: Codable, Hashable, FetchableRecord {
-    let account: StoredAccount
-    let accountMoved: StoredAccount?
-    let status: StoredStatus
-    let reblogAccount: StoredAccount?
-    let reblogAccountMoved: StoredAccount?
-    let reblog: StoredStatus?
+    let account: AccountRecord
+    let accountMoved: AccountRecord?
+    let status: StatusRecord
+    let reblogAccount: AccountRecord?
+    let reblogAccountMoved: AccountRecord?
+    let reblog: StatusRecord?
 }
 
 extension StatusResult {
@@ -25,13 +25,13 @@ extension StatusResult {
     }
 }
 
-extension QueryInterfaceRequest where RowDecoder == StoredStatus {
+extension QueryInterfaceRequest where RowDecoder == StatusRecord {
     var statusResultRequest: AnyFetchRequest<StatusResult> {
-        AnyFetchRequest(including(required: StoredStatus.account)
-                            .including(optional: StoredStatus.accountMoved)
-                            .including(optional: StoredStatus.reblogAccount)
-                            .including(optional: StoredStatus.reblogAccountMoved)
-                            .including(optional: StoredStatus.reblog))
+        AnyFetchRequest(including(required: StatusRecord.account)
+                            .including(optional: StatusRecord.accountMoved)
+                            .including(optional: StatusRecord.reblogAccount)
+                            .including(optional: StatusRecord.reblogAccountMoved)
+                            .including(optional: StatusRecord.reblog))
             .asRequest(of: StatusResult.self)
     }
 }
