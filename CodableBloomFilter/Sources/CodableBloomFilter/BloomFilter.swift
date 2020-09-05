@@ -8,14 +8,14 @@ import Foundation
 
 struct BloomFilter {
     let hashes: [Hash]
-    let bitCount: Int
+    let bits: Int
 
-    private var bits: Bits
+    private var data: BitArray
 
-    init(hashes: [Hash], bitCount: Int) {
+    init(hashes: [Hash], bits: Int) {
         self.hashes = hashes
-        self.bitCount = bitCount
-        bits = Bits(count: bitCount)
+        self.bits = bits
+        data = BitArray(count: bits)
     }
 }
 
@@ -27,43 +27,42 @@ extension BloomFilter {
 
     mutating func insert(_ newMember: String) {
         for index in indices(newMember) {
-            bits[index] = true
+            data[index] = true
         }
     }
 
     func contains(_ member: String) -> Bool {
-        indices(member).map { bits[$0] }.allSatisfy { $0 }
+        indices(member).map { data[$0] }.allSatisfy { $0 }
     }
 }
 
 extension BloomFilter: Codable {
     enum CodingKeys: String, CodingKey {
         case hashes
-        case bitCount
+        case bits
         case data
     }
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let data = try container.decode(Data.self, forKey: .data)
 
         hashes = try container.decode([Hash].self, forKey: .hashes)
-        bitCount = try container.decode(Int.self, forKey: .bitCount)
-        bits = Bits(bytes: Array(data), count: bitCount)
+        bits = try container.decode(Int.self, forKey: .bits)
+        data = BitArray(data: try container.decode(Data.self, forKey: .data), count: bits)
     }
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
 
         try container.encode(hashes, forKey: .hashes)
-        try container.encode(bitCount, forKey: .bitCount)
-        try container.encode(bits.data, forKey: .data)
+        try container.encode(bits, forKey: .bits)
+        try container.encode(data.data, forKey: .data)
     }
 }
 
 private extension BloomFilter {
     func indices(_ string: String) -> [Int] {
-        hashes.map { abs($0.apply(string)) % bitCount }
+        hashes.map { abs($0.apply(string)) % bits }
     }
 }
 

@@ -4,10 +4,10 @@
 
 import Foundation
 
-struct Bits {
+struct BitArray {
     let count: Int
 
-    private var bytes: [UInt8]
+    private var items: [UInt8]
 
     init(count: Int) {
         self.count = count
@@ -16,38 +16,38 @@ struct Bits {
 
         byteCount += bitRemainder > 0 ? 1 : 0
 
-        bytes = [UInt8](repeating: 0, count: byteCount)
+        items = [UInt8](repeating: 0, count: byteCount)
     }
 
-    init(bytes: [UInt8], count: Int) {
-        self.bytes = bytes
+    init(data: Data, count: Int) {
+        self.items = Array(data)
         self.count = count
     }
 }
 
-extension Bits {
-    var data: Data { Data(bytes) }
+extension BitArray {
+    var data: Data { Data(items) }
 
     subscript(index: Int) -> Bool {
         get {
             let (byteCount, bitPosition) = index.quotientAndRemainder(dividingBy: Self.bitsInByte)
 
-            return bytes[byteCount] & mask(index: bitPosition) > 0
+            return items[byteCount] & mask(index: bitPosition) > 0
         }
 
         set {
             let (byteCount, bitPosition) = index.quotientAndRemainder(dividingBy: Self.bitsInByte)
 
             if newValue {
-                bytes[byteCount] |= mask(index: bitPosition)
+                items[byteCount] |= mask(index: bitPosition)
             } else {
-                bytes[byteCount] &= ~mask(index: bitPosition)
+                items[byteCount] &= ~mask(index: bitPosition)
             }
         }
     }
 }
 
-private extension Bits {
+private extension BitArray {
     static let bitsInByte = 8
 
     func mask(index: Int) -> UInt8 {
