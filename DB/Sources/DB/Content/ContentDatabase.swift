@@ -192,8 +192,8 @@ private extension ContentDatabase {
     static func migrate(_ writer: DatabaseWriter) throws {
         var migrator = DatabaseMigrator()
 
-        migrator.registerMigration("createStatuses") { db in
-            try db.create(table: "accountRecord", ifNotExists: true) { t in
+        migrator.registerMigration("0.1.0") { db in
+            try db.create(table: "accountRecord") { t in
                 t.column("id", .text).notNull().primaryKey(onConflict: .replace)
                 t.column("username", .text).notNull()
                 t.column("acct", .text).notNull()
@@ -216,7 +216,7 @@ private extension ContentDatabase {
                 t.column("movedId", .text).indexed().references("accountRecord", column: "id")
             }
 
-            try db.create(table: "statusRecord", ifNotExists: true) { t in
+            try db.create(table: "statusRecord") { t in
                 t.column("id", .text).notNull().primaryKey(onConflict: .replace)
                 t.column("uri", .text).notNull()
                 t.column("createdAt", .datetime).notNull()
@@ -248,12 +248,12 @@ private extension ContentDatabase {
                 t.column("pinned", .boolean)
             }
 
-            try db.create(table: "timeline", ifNotExists: true) { t in
+            try db.create(table: "timeline") { t in
                 t.column("id", .text).notNull().primaryKey(onConflict: .replace)
                 t.column("listTitle", .text)
             }
 
-            try db.create(table: "timelineStatusJoin", ifNotExists: true) { t in
+            try db.create(table: "timelineStatusJoin") { t in
                 t.column("timelineId", .text)
                     .indexed()
                     .notNull()
@@ -266,7 +266,7 @@ private extension ContentDatabase {
                 t.primaryKey(["timelineId", "statusId"], onConflict: .replace)
             }
 
-            try db.create(table: "statusContextJoin", ifNotExists: true) { t in
+            try db.create(table: "statusContextJoin") { t in
                 t.column("parentId", .text)
                     .indexed()
                     .notNull()
@@ -281,7 +281,7 @@ private extension ContentDatabase {
                 t.primaryKey(["parentId", "statusId"], onConflict: .replace)
             }
 
-            try db.create(table: "filter", ifNotExists: true) { t in
+            try db.create(table: "filter") { t in
                 t.column("id", .text).notNull().primaryKey(onConflict: .replace)
                 t.column("phrase", .text).notNull()
                 t.column("context", .blob).notNull()

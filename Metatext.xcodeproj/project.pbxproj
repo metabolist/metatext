@@ -666,6 +666,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.metabolist.metatext;
 				PRODUCT_NAME = Metatext;
 				SDKROOT = iphoneos;
@@ -692,6 +693,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.metabolist.metatext;
 				PRODUCT_NAME = Metatext;
 				SDKROOT = iphoneos;
