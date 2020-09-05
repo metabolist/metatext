@@ -23,7 +23,9 @@ extension Status {
             reblog = Status(storedStatus: reblogResult, account: Account(accountResult: reblogAccount), reblog: nil)
         }
 
-        self.init(storedStatus: statusResult.status, account: Account(accountResult: statusResult.accountResult), reblog: reblog)
+        self.init(storedStatus: statusResult.status,
+                  account: Account(accountResult: statusResult.accountResult),
+                  reblog: reblog)
     }
 
     convenience init(storedStatus: StoredStatus, account: Account, reblog: Status?) {
