@@ -15,7 +15,7 @@ extension DeterministicHasher {
     }
 }
 
-// https://gist.github.com/kharrison/2355182ac03b481921073c5cf6d77a73
+// http://www.cse.yorku.ca/~oz/hash.html
 
 private extension DeterministicHasher {
     var initial: Int {

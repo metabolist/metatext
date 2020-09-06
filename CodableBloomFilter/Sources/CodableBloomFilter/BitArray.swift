@@ -5,53 +5,62 @@
 import Foundation
 
 struct BitArray {
-    let count: Int
+    private var bytes: [UInt8]
 
-    private var items: [UInt8]
-
-    init(count: Int) {
-        self.count = count
-
-        var (byteCount, bitRemainder) = count.quotientAndRemainder(dividingBy: Self.bitsInByte)
-
-        byteCount += bitRemainder > 0 ? 1 : 0
-
-        items = [UInt8](repeating: 0, count: byteCount)
+    init(byteCount: Int) {
+        self.bytes = [UInt8](repeating: 0, count: byteCount)
     }
 
-    init(data: Data, count: Int) {
-        self.items = Array(data)
-        self.count = count
+    init(data: Data) {
+        bytes = Array(data)
     }
 }
 
 extension BitArray {
-    var data: Data { Data(items) }
+    var bitCount: Int { bytes.count * Self.bitsInByte }
 
     subscript(index: Int) -> Bool {
         get {
-            let (byteCount, bitPosition) = index.quotientAndRemainder(dividingBy: Self.bitsInByte)
+            let (byteIndex, bitIndex) = Self.byteAndBitIndices(index: index)
 
-            return items[byteCount] & mask(index: bitPosition) > 0
+            return bytes[byteIndex] & Self.mask(bitIndex: bitIndex) > 0
         }
 
         set {
-            let (byteCount, bitPosition) = index.quotientAndRemainder(dividingBy: Self.bitsInByte)
+            let (byteIndex, bitIndex) = Self.byteAndBitIndices(index: index)
 
             if newValue {
-                items[byteCount] |= mask(index: bitPosition)
+                bytes[byteIndex] |= Self.mask(bitIndex: bitIndex)
             } else {
-                items[byteCount] &= ~mask(index: bitPosition)
+                bytes[byteIndex] &= ~Self.mask(bitIndex: bitIndex)
             }
         }
+    }
+}
+
+extension BitArray: Codable {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+
+        bytes = Array(try container.decode(Data.self))
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+
+        try container.encode(Data(bytes))
     }
 }
 
 private extension BitArray {
     static let bitsInByte = 8
 
-    func mask(index: Int) -> UInt8 {
-        switch index {
+    static func byteAndBitIndices(index: Int) -> (Int, Int) {
+        index.quotientAndRemainder(dividingBy: bitsInByte)
+    }
+
+    static func mask(bitIndex: Int) -> UInt8 {
+        switch bitIndex {
         case 0: return 0b00000001
         case 1: return 0b00000010
         case 2: return 0b00000100
@@ -61,7 +70,7 @@ private extension BitArray {
         case 6: return 0b01000000
         case 7: return 0b10000000
         default:
-            fatalError("Invalid index: \(index)")
+            fatalError("Invalid bit index: \(bitIndex)")
         }
     }
 }
