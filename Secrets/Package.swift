@@ -14,12 +14,13 @@ let package = Package(
             targets: ["Secrets"])
     ],
     dependencies: [
+        .package(path: "Base16"),
         .package(path: "Keychain")
     ],
     targets: [
         .target(
             name: "Secrets",
-            dependencies: ["Keychain"]),
+            dependencies: ["Base16", "Keychain"]),
         .testTarget(
             name: "SecretsTests",
             dependencies: ["Secrets"])

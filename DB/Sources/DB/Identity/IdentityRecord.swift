@@ -10,7 +10,7 @@ struct IdentityRecord: Codable, Hashable, FetchableRecord, PersistableRecord {
     let lastUsedAt: Date
     let preferences: Identity.Preferences
     let instanceURI: String?
-    let lastRegisteredDeviceToken: String?
+    let lastRegisteredDeviceToken: Data?
     let pushSubscriptionAlerts: PushSubscription.Alerts
 }
 

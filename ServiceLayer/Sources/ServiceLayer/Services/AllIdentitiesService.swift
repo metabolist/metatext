@@ -77,7 +77,7 @@ public extension AllIdentitiesService {
             .eraseToAnyPublisher()
     }
 
-    func updatePushSubscriptions(deviceToken: String) -> AnyPublisher<Never, Error> {
+    func updatePushSubscriptions(deviceToken: Data) -> AnyPublisher<Never, Error> {
         identityDatabase.identitiesWithOutdatedDeviceTokens(deviceToken: deviceToken)
             .tryMap { identities -> [AnyPublisher<Never, Never>] in
                 try identities.map {

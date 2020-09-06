@@ -1,5 +1,6 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
+import Base16
 import Combine
 import DB
 import Foundation
@@ -167,7 +168,7 @@ public extension IdentityService {
             .eraseToAnyPublisher()
     }
 
-    func createPushSubscription(deviceToken: String, alerts: PushSubscription.Alerts) -> AnyPublisher<Never, Error> {
+    func createPushSubscription(deviceToken: Data, alerts: PushSubscription.Alerts) -> AnyPublisher<Never, Error> {
         let publicKey: String
         let auth: String
 
@@ -180,7 +181,7 @@ public extension IdentityService {
 
         let identityID = identity.id
         let endpoint = Self.pushSubscriptionEndpointURL
-            .appendingPathComponent(deviceToken)
+            .appendingPathComponent(deviceToken.base16EncodedString())
             .appendingPathComponent(identityID.uuidString)
 
         return mastodonAPIClient.request(

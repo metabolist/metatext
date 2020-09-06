@@ -9,14 +9,14 @@ class AppDelegate: NSObject {
 }
 
 extension AppDelegate {
-    func registerForRemoteNotifications() -> AnyPublisher<String, Error> {
+    func registerForRemoteNotifications() -> AnyPublisher<Data, Error> {
         $application
             .compactMap { $0 }
             .handleEvents(receiveOutput: { $0.registerForRemoteNotifications() })
             .setFailureType(to: Error.self)
             .zip(remoteNotificationDeviceTokens)
             .first()
-            .map { $1.hexEncodedString() }
+            .map { $1 }
             .eraseToAnyPublisher()
     }
 }

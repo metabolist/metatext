@@ -41,7 +41,6 @@
 		D0C7D4D724F7616A001EBDBB /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D46C24F76169001EBDBB /* UIColor+Extensions.swift */; };
 		D0C7D4D924F7616A001EBDBB /* KingfisherOptionsInfo+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D46E24F76169001EBDBB /* KingfisherOptionsInfo+Extensions.swift */; };
 		D0C7D4DA24F7616A001EBDBB /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D46F24F76169001EBDBB /* View+Extensions.swift */; };
-		D0C7D4DC24F7616A001EBDBB /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D47124F76169001EBDBB /* Data+Extensions.swift */; };
 		D0E2C1D124FD97F000854680 /* ViewModels in Frameworks */ = {isa = PBXBuildFile; productRef = D0E2C1D024FD97F000854680 /* ViewModels */; };
 		D0E5361C24E3EB4D00FB1CE1 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E5361B24E3EB4D00FB1CE1 /* NotificationService.swift */; };
 		D0E5362024E3EB4D00FB1CE1 /* Notification Service Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D0E5361924E3EB4D00FB1CE1 /* Notification Service Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -87,6 +86,7 @@
 		D0666A2124C677B400F3F04B /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0666A2524C677B400F3F04B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D085C3BB25008DEC008A6C5E /* DB */ = {isa = PBXFileReference; lastKnownFileType = folder; path = DB; sourceTree = "<group>"; };
+		D0AD03552505814D0085A466 /* Base16 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Base16; sourceTree = "<group>"; };
 		D0BDF66524FD7A6400C7FA1C /* ServiceLayer */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ServiceLayer; sourceTree = "<group>"; };
 		D0BEB1F224F8EE8C001B0F04 /* AttachmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentView.swift; sourceTree = "<group>"; };
 		D0BEB1F624F9A84B001B0F04 /* LoadingTableFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingTableFooterView.swift; sourceTree = "<group>"; };
@@ -120,7 +120,6 @@
 		D0C7D46C24F76169001EBDBB /* UIColor+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
 		D0C7D46E24F76169001EBDBB /* KingfisherOptionsInfo+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "KingfisherOptionsInfo+Extensions.swift"; sourceTree = "<group>"; };
 		D0C7D46F24F76169001EBDBB /* View+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
-		D0C7D47124F76169001EBDBB /* Data+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+Extensions.swift"; sourceTree = "<group>"; };
 		D0D7C013250440610039AD6F /* CodableBloomFilter */ = {isa = PBXFileReference; lastKnownFileType = folder; path = CodableBloomFilter; sourceTree = "<group>"; };
 		D0E0F1E424FC49FC002C04BF /* Mastodon */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Mastodon; sourceTree = "<group>"; };
 		D0E2C1CF24FD8BA400854680 /* ViewModels */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ViewModels; sourceTree = "<group>"; };
@@ -183,6 +182,7 @@
 			isa = PBXGroup;
 			children = (
 				D0C7D45224F76169001EBDBB /* Assets.xcassets */,
+				D0AD03552505814D0085A466 /* Base16 */,
 				D0D7C013250440610039AD6F /* CodableBloomFilter */,
 				D085C3BB25008DEC008A6C5E /* DB */,
 				D0C7D46824F76169001EBDBB /* Extensions */,
@@ -291,7 +291,6 @@
 		D0C7D46824F76169001EBDBB /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				D0C7D47124F76169001EBDBB /* Data+Extensions.swift */,
 				D0C7D46E24F76169001EBDBB /* KingfisherOptionsInfo+Extensions.swift */,
 				D0C7D46B24F76169001EBDBB /* NSMutableAttributedString+Extensions.swift */,
 				D0C7D46A24F76169001EBDBB /* String+Extensions.swift */,
@@ -493,7 +492,6 @@
 				D0C7D4A224F7616A001EBDBB /* NotificationTypesPreferencesView.swift in Sources */,
 				D0BEB1F724F9A84B001B0F04 /* LoadingTableFooterView.swift in Sources */,
 				D0C7D4D924F7616A001EBDBB /* KingfisherOptionsInfo+Extensions.swift in Sources */,
-				D0C7D4DC24F7616A001EBDBB /* Data+Extensions.swift in Sources */,
 				D0BEB1FF24F9E5BB001B0F04 /* ListsView.swift in Sources */,
 				D0C7D49724F7616A001EBDBB /* IdentitiesView.swift in Sources */,
 				D0C7D49824F7616A001EBDBB /* CustomEmojiText.swift in Sources */,

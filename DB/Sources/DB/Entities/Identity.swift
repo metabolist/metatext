@@ -10,7 +10,7 @@ public struct Identity: Codable, Hashable, Identifiable {
     public let preferences: Identity.Preferences
     public let instance: Identity.Instance?
     public let account: Identity.Account?
-    public let lastRegisteredDeviceToken: String?
+    public let lastRegisteredDeviceToken: Data?
     public let pushSubscriptionAlerts: PushSubscription.Alerts
 }
 

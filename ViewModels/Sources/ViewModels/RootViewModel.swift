@@ -10,11 +10,11 @@ public final class RootViewModel: ObservableObject {
     @Published private var mostRecentlyUsedIdentityID: UUID?
     private let allIdentitiesService: AllIdentitiesService
     private let userNotificationService: UserNotificationService
-    private let registerForRemoteNotifications: () -> AnyPublisher<String, Error>
+    private let registerForRemoteNotifications: () -> AnyPublisher<Data, Error>
     private var cancellables = Set<AnyCancellable>()
 
     public init(environment: AppEnvironment,
-                registerForRemoteNotifications: @escaping () -> AnyPublisher<String, Error>) throws {
+                registerForRemoteNotifications: @escaping () -> AnyPublisher<Data, Error>) throws {
         allIdentitiesService = try AllIdentitiesService(environment: environment)
         userNotificationService = UserNotificationService(environment: environment)
         self.registerForRemoteNotifications = registerForRemoteNotifications

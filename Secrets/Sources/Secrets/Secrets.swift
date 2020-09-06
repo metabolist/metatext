@@ -1,5 +1,6 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
+import Base16
 import Foundation
 import Keychain
 
@@ -84,7 +85,7 @@ public extension Secrets {
             }
         }
 
-        return "x'\(passphraseData.uppercaseHexEncodedString())'"
+        return "x'\(passphraseData.base16EncodedString(options: [.uppercase]))'"
     }
 
     func deleteAllItems() throws {
@@ -224,10 +225,4 @@ private struct PushKey {
     static let attributes: [String: Any] = [
         kSecAttrKeyType as String: kSecAttrKeyTypeECSECPrimeRandom,
         kSecAttrKeySizeInBits as String: sizeInBits]
-}
-
-private extension Data {
-    func uppercaseHexEncodedString() -> String {
-        map { String(format: "%02hhX", $0) }.joined()
-    }
 }

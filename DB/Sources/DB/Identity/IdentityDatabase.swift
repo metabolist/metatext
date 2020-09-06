@@ -116,7 +116,7 @@ public extension IdentityDatabase {
     }
 
     func updatePushSubscription(alerts: PushSubscription.Alerts,
-                                deviceToken: String? = nil,
+                                deviceToken: Data? = nil,
                                 forIdentityID identityID: UUID) -> AnyPublisher<Never, Error> {
         databaseQueue.writePublisher {
             let data = try IdentityRecord.databaseJSONEncoder(for: "pushSubscriptionAlerts").encode(alerts)
@@ -180,7 +180,7 @@ public extension IdentityDatabase {
             .eraseToAnyPublisher()
     }
 
-    func identitiesWithOutdatedDeviceTokens(deviceToken: String) -> AnyPublisher<[Identity], Error> {
+    func identitiesWithOutdatedDeviceTokens(deviceToken: Data) -> AnyPublisher<[Identity], Error> {
         databaseQueue.readPublisher(
             value: Self.identitiesRequest()
                 .filter(Column("lastRegisteredDeviceToken") != deviceToken)
@@ -221,7 +221,7 @@ private extension IdentityDatabase {
                     .references("instance", column: "uri")
                 t.column("preferences", .blob).notNull()
                 t.column("pushSubscriptionAlerts", .blob).notNull()
-                t.column("lastRegisteredDeviceToken", .text)
+                t.column("lastRegisteredDeviceToken", .blob)
             }
 
             try db.create(table: "account", ifNotExists: true) { t in
