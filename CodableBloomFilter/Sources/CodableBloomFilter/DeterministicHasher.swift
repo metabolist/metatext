@@ -40,7 +40,7 @@ private extension DeterministicHasher {
         case .djb2a:
             return ((result << 5) &+ result ^ next) % Self.u32mod
         case .sdbm:
-            return next &+ (result << 6) &+ (result << 16) - result
+            return next &+ (result << 6) &+ (result << 16) &- result
         case .fnv1:
             return (result * Self.fnvPrime % Self.u32mod) ^ next
         case .fnv1a:
