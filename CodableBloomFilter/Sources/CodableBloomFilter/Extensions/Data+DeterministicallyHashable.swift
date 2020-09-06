@@ -3,5 +3,5 @@
 import Foundation
 
 extension Data: DeterministicallyHashable {
-    public var deterministicallyHashableData: Data { self }
+    public var hashableData: Data { self }
 }

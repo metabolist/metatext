@@ -3,5 +3,5 @@
 import Foundation
 
 extension String: DeterministicallyHashable {
-    public var deterministicallyHashableData: Data { Data(utf8) }
+    public var hashableData: Data { Data(utf8) }
 }
