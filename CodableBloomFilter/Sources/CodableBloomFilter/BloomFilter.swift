@@ -8,26 +8,26 @@ import Foundation
 
 public struct BloomFilter<T: DeterministicallyHashable> {
     public let hashers: [DeterministicHasher]
-    public let bits: Int
+    public let bitCount: Int
 
-    private var data: BitArray
+    private var bitArray: BitArray
 
-    public init(hashes: [DeterministicHasher], bits: Int) {
-        self.hashers = hashes
-        self.bits = bits
-        data = BitArray(count: bits)
+    public init(hashers: [DeterministicHasher], bits: Int) {
+        self.hashers = hashers
+        bitCount = bits
+        bitArray = BitArray(count: bits)
     }
 }
 
 public extension BloomFilter {
     mutating func insert(_ newMember: T) {
         for index in indices(newMember) {
-            data[index] = true
+            bitArray[index] = true
         }
     }
 
     func contains(_ member: T) -> Bool {
-        indices(member).map { data[$0] }.allSatisfy { $0 }
+        indices(member).map { bitArray[$0] }.allSatisfy { $0 }
     }
 }
 
@@ -42,21 +42,21 @@ extension BloomFilter: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
         hashers = try container.decode([DeterministicHasher].self, forKey: .hashers)
-        bits = try container.decode(Int.self, forKey: .bits)
-        data = BitArray(data: try container.decode(Data.self, forKey: .data), count: bits)
+        bitCount = try container.decode(Int.self, forKey: .bits)
+        bitArray = BitArray(data: try container.decode(Data.self, forKey: .data), count: bitCount)
     }
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
 
         try container.encode(hashers, forKey: .hashers)
-        try container.encode(bits, forKey: .bits)
-        try container.encode(data.data, forKey: .data)
+        try container.encode(bitCount, forKey: .bits)
+        try container.encode(bitArray.data, forKey: .data)
     }
 }
 
 private extension BloomFilter {
     func indices(_ member: T) -> [Int] {
-        hashers.map { abs($0.apply(member)) % bits }
+        hashers.map { abs($0.apply(member)) % bitCount }
     }
 }

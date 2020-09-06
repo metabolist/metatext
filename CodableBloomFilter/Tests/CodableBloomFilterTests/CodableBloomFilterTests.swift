@@ -3,7 +3,7 @@ import XCTest
 
 final class CodableBloomFilterTests: XCTestCase {
     func testContains() {
-        var sut = BloomFilter<String>(hashes: [.djb2, .sdbm], bits: 1024)
+        var sut = BloomFilter<String>(hashers: [.djb2, .sdbm], bits: 1024)
 
         sut.insert("lol")
         sut.insert("ok")
@@ -15,7 +15,7 @@ final class CodableBloomFilterTests: XCTestCase {
     }
 
     func testCoding() throws {
-        var sut = BloomFilter<String>(hashes: [.djb2, .sdbm], bits: 64)
+        var sut = BloomFilter<String>(hashers: [.djb2, .sdbm], bits: 64)
         let expectedSerialization = Data(#"{"bits":64,"data":"ABAAAAACAJA=","hashers":["djb2","sdbm"]}"#.utf8)
 
         sut.insert("lol")
