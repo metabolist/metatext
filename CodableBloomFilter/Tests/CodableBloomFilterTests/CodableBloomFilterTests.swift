@@ -4,12 +4,13 @@
 import XCTest
 
 final class CodableBloomFilterTests: XCTestCase {
+
     func testHashers() {
-        XCTAssertEqual(DeterministicHasher.djb2.apply("hash"), 6385287881)
+        XCTAssertEqual(DeterministicHasher.djb2.apply("hash"), 2090320585)
         XCTAssertEqual(DeterministicHasher.djb2a.apply("hash"), 2087809207)
-        XCTAssertEqual(DeterministicHasher.sdbm.apply("hash"), 29358318056884782)
-        XCTAssertEqual(DeterministicHasher.fnv1.apply("hash"), 0xd7918815)
-        XCTAssertEqual(DeterministicHasher.fnv1a.apply("hash"), 0xcec577d1)
+        XCTAssertEqual(DeterministicHasher.sdbm.apply("hash"), 385600046)
+        XCTAssertEqual(DeterministicHasher.fnv1.apply("hash"), 3616638997)
+        XCTAssertEqual(DeterministicHasher.fnv1a.apply("hash"), 3469047761)
     }
 
     func testContains() {

@@ -12,9 +12,9 @@ public enum DeterministicHasher: String, Codable {
 
 extension DeterministicHasher {
     func apply(_ hashable: DeterministicallyHashable) -> Int {
-        Array(hashable.hashableData)
-            .map(Int.init)
-            .reduce(offsetBasis, hash)
+        Int(Array(hashable.hashableData)
+            .map(UInt32.init)
+            .reduce(offsetBasis, hash))
     }
 }
 
@@ -22,10 +22,9 @@ extension DeterministicHasher {
 // http://www.isthe.com/chongo/tech/comp/fnv/
 
 private extension DeterministicHasher {
-    static let fnvPrime = 16777619
-    static let u32mod = 2 << 31
+    static let fnvPrime: UInt32 = 16777619
 
-    var offsetBasis: Int {
+    var offsetBasis: UInt32 {
         switch self {
         case .djb2, .djb2a: return 5381
         case .sdbm: return 0
@@ -33,18 +32,18 @@ private extension DeterministicHasher {
         }
     }
 
-    func hash(result: Int, next: Int) -> Int {
+    func hash(result: UInt32, next: UInt32) -> UInt32 {
         switch self {
         case .djb2:
             return (result << 5) &+ result &+ next
         case .djb2a:
-            return ((result << 5) &+ result ^ next) % Self.u32mod
+            return (result << 5) &+ result ^ next
         case .sdbm:
             return next &+ (result << 6) &+ (result << 16) &- result
         case .fnv1:
-            return (result * Self.fnvPrime % Self.u32mod) ^ next
+            return (result &* Self.fnvPrime) ^ next
         case .fnv1a:
-            return (result ^ next) * Self.fnvPrime % Self.u32mod
+            return (result ^ next) &* Self.fnvPrime
         }
     }
 }
