@@ -42,6 +42,7 @@
 		D0C7D4D924F7616A001EBDBB /* KingfisherOptionsInfo+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D46E24F76169001EBDBB /* KingfisherOptionsInfo+Extensions.swift */; };
 		D0C7D4DA24F7616A001EBDBB /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D46F24F76169001EBDBB /* View+Extensions.swift */; };
 		D0C7D4DC24F7616A001EBDBB /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D47124F76169001EBDBB /* Data+Extensions.swift */; };
+		D0C93E0B25047DC100442506 /* CodableBloomFilter in Frameworks */ = {isa = PBXBuildFile; productRef = D0C93E0A25047DC100442506 /* CodableBloomFilter */; };
 		D0E2C1D124FD97F000854680 /* ViewModels in Frameworks */ = {isa = PBXBuildFile; productRef = D0E2C1D024FD97F000854680 /* ViewModels */; };
 		D0E5361C24E3EB4D00FB1CE1 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E5361B24E3EB4D00FB1CE1 /* NotificationService.swift */; };
 		D0E5362024E3EB4D00FB1CE1 /* Notification Service Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D0E5361924E3EB4D00FB1CE1 /* Notification Service Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -138,6 +139,7 @@
 				D06B492324D4611300642749 /* KingfisherSwiftUI in Frameworks */,
 				D0E2C1D124FD97F000854680 /* ViewModels in Frameworks */,
 				D0BECB9F2501D9AD002C1B13 /* PreviewViewModels in Frameworks */,
+				D0C93E0B25047DC100442506 /* CodableBloomFilter in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -334,6 +336,7 @@
 				D06B492224D4611300642749 /* KingfisherSwiftUI */,
 				D0E2C1D024FD97F000854680 /* ViewModels */,
 				D0BECB9E2501D9AD002C1B13 /* PreviewViewModels */,
+				D0C93E0A25047DC100442506 /* CodableBloomFilter */,
 			);
 			productName = "Metatext (iOS)";
 			productReference = D047FA8C24C3E21200AF17C5 /* Metatext.app */;
@@ -872,6 +875,10 @@
 		D0BECB9E2501D9AD002C1B13 /* PreviewViewModels */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PreviewViewModels;
+		};
+		D0C93E0A25047DC100442506 /* CodableBloomFilter */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CodableBloomFilter;
 		};
 		D0E2C1D024FD97F000854680 /* ViewModels */ = {
 			isa = XCSwiftPackageProductDependency;

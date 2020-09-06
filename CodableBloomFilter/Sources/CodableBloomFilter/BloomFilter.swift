@@ -11,8 +11,9 @@ public struct BloomFilter<T: DeterministicallyHashable>: Codable {
 
     private var data: BitArray
 
-    public init(hashers: [DeterministicHasher], byteCount: Int) {
-        self.hashers = hashers
+    public init(hashers: Set<DeterministicHasher>, byteCount: Int) {
+        // Sort the hashers for consistent decoding output
+        self.hashers = Array(hashers.sorted { $0.rawValue < $1.rawValue })
         data = BitArray(byteCount: byteCount)
     }
 }

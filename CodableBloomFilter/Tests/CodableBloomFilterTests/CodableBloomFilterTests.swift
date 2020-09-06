@@ -15,7 +15,7 @@ final class CodableBloomFilterTests: XCTestCase {
     }
 
     func testCoding() throws {
-        var sut = BloomFilter<String>(hashers: [.djb2, .sdbm], byteCount: 8)
+        var sut = BloomFilter<String>(hashers: [.sdbm, .djb2], byteCount: 8)
         let expectedSerialization = Data(#"{"data":"ABAAAAACAJA=","hashers":["djb2","sdbm"]}"#.utf8)
 
         sut.insert("lol")
