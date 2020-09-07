@@ -26,7 +26,7 @@ public extension AddIdentityViewModel {
         let instanceURL: URL
 
         do {
-            try instanceURL = urlFieldText.url()
+            instanceURL = try checkedURL()
         } catch {
             alertItem = AlertItem(error: error)
 
@@ -37,6 +37,9 @@ public extension AddIdentityViewModel {
             .collect()
             .map { _ in (identityID, instanceURL) }
             .flatMap(allIdentitiesService.createIdentity(id:instanceURL:))
+            .mapError {
+                return $0
+            }
             .receive(on: DispatchQueue.main)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .handleEvents(
@@ -55,7 +58,7 @@ public extension AddIdentityViewModel {
         let instanceURL: URL
 
         do {
-            try instanceURL = urlFieldText.url()
+            instanceURL = try checkedURL()
         } catch {
             alertItem = AlertItem(error: error)
 
@@ -71,5 +74,34 @@ public extension AddIdentityViewModel {
                 self.addedIdentityIDInput.send(identityID)
             } receiveValue: { _ in }
             .store(in: &cancellables)
+    }
+
+    func refreshFilter() {
+        allIdentitiesService.instanceFilterService.updateFilter()
+            .sink { _ in }
+            .store(in: &cancellables)
+    }
+}
+
+private extension AddIdentityViewModel {
+    private static let filteredURL = URL(string: "https://filtered")!
+    private static let HTTPSPrefix = "https://"
+
+    func checkedURL() throws -> URL {
+        let url: URL
+
+        if urlFieldText.hasPrefix(Self.HTTPSPrefix), let prefixedURL = URL(string: urlFieldText) {
+            url = prefixedURL
+        } else if let unprefixedURL = URL(string: Self.HTTPSPrefix + urlFieldText) {
+            url = unprefixedURL
+        } else {
+            throw URLError(.badURL)
+        }
+
+        if allIdentitiesService.instanceFilterService.isFiltered(url: url) {
+            return Self.filteredURL
+        }
+
+        return url
     }
 }

@@ -5,7 +5,7 @@ import Foundation
 import HTTP
 import Mastodon
 
-public final class MastodonAPIClient: Client {
+public final class MastodonAPIClient: HTTPClient {
     public var instanceURL: URL?
     public var accessToken: String?
 

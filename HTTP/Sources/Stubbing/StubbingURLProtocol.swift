@@ -5,6 +5,7 @@ import HTTP
 
 public class StubbingURLProtocol: URLProtocol {
     private static var targetsForURLs = [URL: Target]()
+    private static var stubsForURLs = [URL: HTTPStub]()
 
     override public class func canInit(with task: URLSessionTask) -> Bool {
         true
@@ -21,22 +22,29 @@ public class StubbingURLProtocol: URLProtocol {
     override public func startLoading() {
         guard
             let url = request.url,
-            let stub = Self.stub(request: request, target: Self.targetsForURLs[url]) else {
-//            preconditionFailure("Stub for request not found")
+            let stub = Self.stubsForURLs[url]
+                ?? Self.stub(request: request, target: Self.targetsForURLs[url]) else {
             return
         }
 
         switch stub {
         case let .success((response, data)):
-            client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .allowed)
+            client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
             client?.urlProtocol(self, didLoad: data)
-            client?.urlProtocolDidFinishLoading(self)
         case let .failure(error):
             client?.urlProtocol(self, didFailWithError: error)
         }
+
+        client?.urlProtocolDidFinishLoading(self)
     }
 
     override public func stopLoading() {}
+}
+
+public extension StubbingURLProtocol {
+    static func setStub(_ stub: HTTPStub, forURL url: URL) {
+        stubsForURLs[url] = stub
+    }
 }
 
 private extension StubbingURLProtocol {

@@ -9,6 +9,7 @@ import Secrets
 
 public struct AllIdentitiesService {
     public let mostRecentlyUsedIdentityID: AnyPublisher<UUID?, Never>
+    public let instanceFilterService: InstanceFilterService
 
     private let identityDatabase: IdentityDatabase
     private let environment: AppEnvironment
@@ -22,6 +23,7 @@ public struct AllIdentitiesService {
         mostRecentlyUsedIdentityID = identityDatabase.mostRecentlyUsedIdentityIDObservation()
             .replaceError(with: nil)
             .eraseToAnyPublisher()
+        instanceFilterService = InstanceFilterService(environment: environment)
     }
 }
 

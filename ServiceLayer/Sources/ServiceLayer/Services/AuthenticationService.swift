@@ -87,7 +87,7 @@ private extension AuthenticationService {
         case codeNotFound
     }
 
-    private func authorizationURL(instanceURL: URL, clientID: String) -> URL? {
+    func authorizationURL(instanceURL: URL, clientID: String) -> URL? {
         guard var authorizationURLComponents = URLComponents(url: instanceURL, resolvingAgainstBaseURL: true) else {
             return nil
         }

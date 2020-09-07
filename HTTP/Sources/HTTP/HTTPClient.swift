@@ -6,7 +6,7 @@ import Foundation
 
 public typealias Session = Alamofire.Session
 
-open class Client {
+open class HTTPClient {
     private let session: Session
     private let decoder: DataDecoder
 
@@ -16,7 +16,7 @@ open class Client {
     }
 
     open func request<T: DecodableTarget>(_ target: T) -> AnyPublisher<T.ResultType, Error> {
-        requestPublisher(target).value().mapError { $0 as Error }.eraseToAnyPublisher()
+        requestPublisher(target).value().mapError { $0.underlyingOrTypeErased }.eraseToAnyPublisher()
     }
 
     public func request<T: DecodableTarget, E: Error & Decodable>(
@@ -35,14 +35,14 @@ open class Client {
                         throw decodedError
                     }
 
-                    throw error
+                    throw error.underlyingOrTypeErased
                 }
             }
             .eraseToAnyPublisher()
     }
 }
 
-private extension Client {
+private extension HTTPClient {
     func requestPublisher<T: DecodableTarget>(_ target: T) -> DataResponsePublisher<T.ResultType> {
         if let protocolClasses = session.sessionConfiguration.protocolClasses {
             for protocolClass in protocolClasses {
@@ -53,5 +53,11 @@ private extension Client {
         return session.request(target)
             .validate()
             .publishDecodable(type: T.ResultType.self, queue: session.rootQueue, decoder: decoder)
+    }
+}
+
+private extension AFError {
+    var underlyingOrTypeErased: Error {
+        underlyingError ?? self
     }
 }

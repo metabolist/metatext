@@ -31,6 +31,7 @@ struct AddIdentityView: View {
                 rootViewModel.newIdentitySelected(id: id)
             }
         }
+        .onAppear(perform: viewModel.refreshFilter)
     }
 }
 

@@ -18,6 +18,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/groue/CombineExpectations.git", .upToNextMajor(from: "0.5.0")),
+        .package(path: "CodableBloomFilter"),
         .package(path: "DB"),
         .package(path: "Keychain"),
         .package(path: "MastodonAPI"),
@@ -26,7 +27,7 @@ let package = Package(
     targets: [
         .target(
             name: "ServiceLayer",
-            dependencies: ["DB", "MastodonAPI", "Secrets"]),
+            dependencies: ["CodableBloomFilter", "DB", "MastodonAPI", "Secrets"]),
         .target(
             name: "ServiceLayerMocks",
             dependencies: [
