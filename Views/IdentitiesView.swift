@@ -43,12 +43,12 @@ struct IdentitiesView: View {
                                     Spacer()
                                 }
                                 Spacer()
-                                if identity.id == viewModel.identity.id {
+                                if identity.id == viewModel.currentIdentityID {
                                     Image(systemName: "checkmark.circle")
                                 }
                             }
                         }
-                        .disabled(identity.id == viewModel.identity.id)
+                        .disabled(identity.id == viewModel.currentIdentityID)
                         .buttonStyle(PlainButtonStyle())
                     }
                     .onDelete {

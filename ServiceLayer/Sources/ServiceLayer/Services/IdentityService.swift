@@ -8,10 +8,8 @@ import Mastodon
 import MastodonAPI
 import Secrets
 
-public class IdentityService {
-    @Published public private(set) var identity: Identity
-    public let observationErrors: AnyPublisher<Error, Never>
-
+public struct IdentityService {
+    private let identityID: UUID
     private let identityDatabase: IdentityDatabase
     private let contentDatabase: ContentDatabase
     private let environment: AppEnvironment
@@ -19,40 +17,20 @@ public class IdentityService {
     private let secrets: Secrets
     private let observationErrorsInput = PassthroughSubject<Error, Never>()
 
-    init(identityID: UUID,
-         identityDatabase: IdentityDatabase,
-         environment: AppEnvironment) throws {
-        self.identityDatabase = identityDatabase
+    init(id: UUID, instanceURL: URL, database: IdentityDatabase, environment: AppEnvironment) throws {
+        identityID = id
+        identityDatabase = database
         self.environment = environment
-        observationErrors = observationErrorsInput.eraseToAnyPublisher()
-
-        let observation = identityDatabase.identityObservation(id: identityID).share()
-        var initialIdentity: Identity?
-
-        _ = observation.first().sink(
-            receiveCompletion: { _ in },
-            receiveValue: { initialIdentity = $0 })
-
-        guard let identity = initialIdentity else { throw IdentityDatabaseError.identityNotFound }
-
-        self.identity = identity
         secrets = Secrets(
-            identityID: identityID,
+            identityID: id,
             keychain: environment.keychain)
         mastodonAPIClient = MastodonAPIClient(session: environment.session)
-        mastodonAPIClient.instanceURL = identity.url
+        mastodonAPIClient.instanceURL = instanceURL
         mastodonAPIClient.accessToken = try? secrets.getAccessToken()
 
-        contentDatabase = try ContentDatabase(identityID: identityID,
+        contentDatabase = try ContentDatabase(identityID: id,
                                               inMemory: environment.inMemoryContent,
                                               keychain: environment.keychain)
-
-        observation.catch { [weak self] error -> Empty<Identity, Never> in
-            self?.observationErrorsInput.send(error)
-
-            return Empty()
-        }
-        .assign(to: &$identity)
     }
 }
 
@@ -60,28 +38,24 @@ public extension IdentityService {
     var isAuthorized: Bool { mastodonAPIClient.accessToken != nil }
 
     func updateLastUse() -> AnyPublisher<Never, Error> {
-        identityDatabase.updateLastUsedAt(identityID: identity.id)
+        identityDatabase.updateLastUsedAt(identityID: identityID)
     }
 
     func verifyCredentials() -> AnyPublisher<Never, Error> {
         mastodonAPIClient.request(AccountEndpoint.verifyCredentials)
-            .zip(Just(identity.id).first().setFailureType(to: Error.self))
-            .flatMap(identityDatabase.updateAccount)
+            .flatMap { identityDatabase.updateAccount($0, forIdentityID: identityID) }
             .eraseToAnyPublisher()
     }
 
     func refreshServerPreferences() -> AnyPublisher<Never, Error> {
         mastodonAPIClient.request(PreferencesEndpoint.preferences)
-            .zip(Just(self).first().setFailureType(to: Error.self))
-            .map { ($1.identity.preferences.updated(from: $0), $1.identity.id) }
-            .flatMap(identityDatabase.updatePreferences)
+            .flatMap { identityDatabase.updatePreferences($0, forIdentityID: identityID) }
             .eraseToAnyPublisher()
     }
 
     func refreshInstance() -> AnyPublisher<Never, Error> {
         mastodonAPIClient.request(InstanceEndpoint.instance)
-            .zip(Just(identity.id).first().setFailureType(to: Error.self))
-            .flatMap(identityDatabase.updateInstance)
+            .flatMap { identityDatabase.updateInstance($0, forIdentityID: identityID) }
             .eraseToAnyPublisher()
     }
 
@@ -90,7 +64,7 @@ public extension IdentityService {
     }
 
     func recentIdentitiesObservation() -> AnyPublisher<[Identity], Error> {
-        identityDatabase.recentIdentitiesObservation(excluding: identity.id)
+        identityDatabase.recentIdentitiesObservation(excluding: identityID)
     }
 
     func refreshLists() -> AnyPublisher<Never, Error> {
@@ -145,8 +119,7 @@ public extension IdentityService {
 
     func deleteFilter(id: String) -> AnyPublisher<Never, Error> {
         mastodonAPIClient.request(DeletionEndpoint.filter(id: id))
-            .map { _ in id }
-            .flatMap(contentDatabase.deleteFilter(id:))
+            .flatMap { _ in contentDatabase.deleteFilter(id: id) }
             .eraseToAnyPublisher()
     }
 
@@ -159,12 +132,10 @@ public extension IdentityService {
     }
 
     func updatePreferences(_ preferences: Identity.Preferences) -> AnyPublisher<Never, Error> {
-        identityDatabase.updatePreferences(preferences, forIdentityID: identity.id)
+        identityDatabase.updatePreferences(preferences, forIdentityID: identityID)
             .collect()
-            .zip(Just(self).first().setFailureType(to: Error.self))
-            .filter { $1.identity.preferences.useServerPostingReadingPreferences }
-            .map { _ in () }
-            .flatMap(refreshServerPreferences)
+            .filter { _ in preferences.useServerPostingReadingPreferences }
+            .flatMap { _ in refreshServerPreferences() }
             .eraseToAnyPublisher()
     }
 
@@ -179,7 +150,6 @@ public extension IdentityService {
             return Fail(error: error).eraseToAnyPublisher()
         }
 
-        let identityID = identity.id
         let endpoint = Self.pushSubscriptionEndpointURL
             .appendingPathComponent(deviceToken.base16EncodedString())
             .appendingPathComponent(identityID.uuidString)
@@ -196,9 +166,7 @@ public extension IdentityService {
     }
 
     func updatePushSubscription(alerts: PushSubscription.Alerts) -> AnyPublisher<Never, Error> {
-        let identityID = identity.id
-
-        return mastodonAPIClient.request(PushSubscriptionEndpoint.update(alerts: alerts))
+        mastodonAPIClient.request(PushSubscriptionEndpoint.update(alerts: alerts))
             .map { ($0.alerts, nil, identityID) }
             .flatMap(identityDatabase.updatePushSubscription(alerts:deviceToken:forIdentityID:))
             .eraseToAnyPublisher()

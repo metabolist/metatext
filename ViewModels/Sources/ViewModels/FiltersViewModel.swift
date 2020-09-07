@@ -10,19 +10,19 @@ public class FiltersViewModel: ObservableObject {
     @Published public var expiredFilters = [Filter]()
     @Published public var alertItem: AlertItem?
 
-    private let identityService: IdentityService
+    private let environment: IdentifiedEnvironment
     private var cancellables = Set<AnyCancellable>()
 
-    init(identityService: IdentityService) {
-        self.identityService = identityService
+    init(environment: IdentifiedEnvironment) {
+        self.environment = environment
 
         let now = Date()
 
-        identityService.activeFiltersObservation(date: now)
+        environment.identityService.activeFiltersObservation(date: now)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$activeFilters)
 
-        identityService.expiredFiltersObservation(date: now)
+        environment.identityService.expiredFiltersObservation(date: now)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$expiredFilters)
     }
@@ -30,20 +30,20 @@ public class FiltersViewModel: ObservableObject {
 
 public extension FiltersViewModel {
     func refreshFilters() {
-        identityService.refreshFilters()
+        environment.identityService.refreshFilters()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .sink { _ in }
             .store(in: &cancellables)
     }
 
     func delete(filter: Filter) {
-        identityService.deleteFilter(id: filter.id)
+        environment.identityService.deleteFilter(id: filter.id)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .sink { _ in }
             .store(in: &cancellables)
     }
 
     func editFilterViewModel(filter: Filter) -> EditFilterViewModel {
-        EditFilterViewModel(filter: filter, identityService: identityService)
+        EditFilterViewModel(filter: filter, environment: environment)
     }
 }

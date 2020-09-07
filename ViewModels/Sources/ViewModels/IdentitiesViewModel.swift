@@ -5,18 +5,18 @@ import Foundation
 import ServiceLayer
 
 public class IdentitiesViewModel: ObservableObject {
-    @Published public private(set) var identity: Identity
+    public let currentIdentityID: UUID
     @Published public var identities = [Identity]()
     @Published public var alertItem: AlertItem?
 
-    private let identityService: IdentityService
+    private let environment: IdentifiedEnvironment
     private var cancellables = Set<AnyCancellable>()
 
-    init(identityService: IdentityService) {
-        self.identityService = identityService
-        identity = identityService.identity
+    init(environment: IdentifiedEnvironment) {
+        self.environment = environment
+        currentIdentityID = environment.identity.id
 
-        identityService.identitiesObservation()
+        environment.identityService.identitiesObservation()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$identities)
     }

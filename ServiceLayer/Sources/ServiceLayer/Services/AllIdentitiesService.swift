@@ -11,16 +11,16 @@ public struct AllIdentitiesService {
     public let mostRecentlyUsedIdentityID: AnyPublisher<UUID?, Never>
     public let instanceFilterService: InstanceFilterService
 
-    private let identityDatabase: IdentityDatabase
+    private let database: IdentityDatabase
     private let environment: AppEnvironment
 
     public init(environment: AppEnvironment) throws {
-        self.identityDatabase = try IdentityDatabase(inMemory: environment.inMemoryContent,
+        self.database = try IdentityDatabase(inMemory: environment.inMemoryContent,
                                                      fixture: environment.identityFixture,
                                                      keychain: environment.keychain)
         self.environment = environment
 
-        mostRecentlyUsedIdentityID = identityDatabase.mostRecentlyUsedIdentityIDObservation()
+        mostRecentlyUsedIdentityID = database.mostRecentlyUsedIdentityIDObservation()
             .replaceError(with: nil)
             .eraseToAnyPublisher()
         instanceFilterService = InstanceFilterService(environment: environment)
@@ -28,14 +28,12 @@ public struct AllIdentitiesService {
 }
 
 public extension AllIdentitiesService {
-    func identityService(id: UUID) throws -> IdentityService {
-        try IdentityService(identityID: id,
-                            identityDatabase: identityDatabase,
-                            environment: environment)
+    func identifiedEnvironment(id: UUID) throws -> IdentifiedEnvironment {
+        try IdentifiedEnvironment(id: id, database: database, environment: environment)
     }
 
     func createIdentity(id: UUID, instanceURL: URL) -> AnyPublisher<Never, Error> {
-        identityDatabase.createIdentity(id: id, url: instanceURL)
+        database.createIdentity(id: id, url: instanceURL)
     }
 
     func authorizeIdentity(id: UUID, instanceURL: URL) -> AnyPublisher<Never, Error> {
@@ -61,7 +59,7 @@ public extension AllIdentitiesService {
 
         mastodonAPIClient.instanceURL = identity.url
 
-        return identityDatabase.deleteIdentity(id: identity.id)
+        return database.deleteIdentity(id: identity.id)
             .collect()
             .tryMap { _ in
                 DeletionEndpoint.oauthRevoke(
@@ -80,10 +78,10 @@ public extension AllIdentitiesService {
     }
 
     func updatePushSubscriptions(deviceToken: Data) -> AnyPublisher<Never, Error> {
-        identityDatabase.identitiesWithOutdatedDeviceTokens(deviceToken: deviceToken)
+        database.identitiesWithOutdatedDeviceTokens(deviceToken: deviceToken)
             .tryMap { identities -> [AnyPublisher<Never, Never>] in
                 try identities.map {
-                    try identityService(id: $0.id)
+                    try IdentityService(id: $0.id, instanceURL: $0.url, database: database, environment: environment)
                         .createPushSubscription(deviceToken: deviceToken, alerts: $0.pushSubscriptionAlerts)
                         .catch { _ in Empty() } // don't want to disrupt pipeline
                         .eraseToAnyPublisher()

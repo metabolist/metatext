@@ -8,6 +8,7 @@ public final class RootViewModel: ObservableObject {
     @Published public private(set) var tabNavigationViewModel: TabNavigationViewModel?
 
     @Published private var mostRecentlyUsedIdentityID: UUID?
+    private let environment: AppEnvironment
     private let allIdentitiesService: AllIdentitiesService
     private let userNotificationService: UserNotificationService
     private let registerForRemoteNotifications: () -> AnyPublisher<Data, Error>
@@ -15,6 +16,7 @@ public final class RootViewModel: ObservableObject {
 
     public init(environment: AppEnvironment,
                 registerForRemoteNotifications: @escaping () -> AnyPublisher<Data, Error>) throws {
+        self.environment = environment
         allIdentitiesService = try AllIdentitiesService(environment: environment)
         userNotificationService = UserNotificationService(environment: environment)
         self.registerForRemoteNotifications = registerForRemoteNotifications
@@ -41,34 +43,34 @@ public extension RootViewModel {
             return
         }
 
-        let identityService: IdentityService
+        let identifiedEnvironment: IdentifiedEnvironment
 
         do {
-            identityService = try allIdentitiesService.identityService(id: id)
+            identifiedEnvironment = try allIdentitiesService.identifiedEnvironment(id: id)
         } catch {
             return
         }
 
-        identityService.observationErrors
+        identifiedEnvironment.observationErrors
             .receive(on: RunLoop.main)
             .map { [weak self] _ in self?.mostRecentlyUsedIdentityID }
             .sink { [weak self] in self?.newIdentitySelected(id: $0) }
             .store(in: &cancellables)
 
-        identityService.updateLastUse()
+        identifiedEnvironment.identityService.updateLastUse()
             .sink { _ in } receiveValue: { _ in }
             .store(in: &cancellables)
 
         userNotificationService.isAuthorized()
             .filter { $0 }
             .zip(registerForRemoteNotifications())
-            .filter { identityService.identity.lastRegisteredDeviceToken != $1 }
-            .map { ($1, identityService.identity.pushSubscriptionAlerts) }
-            .flatMap(identityService.createPushSubscription(deviceToken:alerts:))
+            .filter { identifiedEnvironment.identity.lastRegisteredDeviceToken != $1 }
+            .map { ($1, identifiedEnvironment.identity.pushSubscriptionAlerts) }
+            .flatMap(identifiedEnvironment.identityService.createPushSubscription(deviceToken:alerts:))
             .sink { _ in } receiveValue: { _ in }
             .store(in: &cancellables)
 
-        tabNavigationViewModel = TabNavigationViewModel(identityService: identityService)
+        tabNavigationViewModel = TabNavigationViewModel(environment: identifiedEnvironment)
     }
 
     func deleteIdentity(_ identity: Identity) {

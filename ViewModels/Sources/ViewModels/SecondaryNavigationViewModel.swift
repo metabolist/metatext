@@ -6,25 +6,25 @@ import ServiceLayer
 public class SecondaryNavigationViewModel: ObservableObject {
     @Published public private(set) var identity: Identity
 
-    private let identityService: IdentityService
+    private let environment: IdentifiedEnvironment
 
-    init(identityService: IdentityService) {
-        self.identityService = identityService
-        identity = identityService.identity
-        identityService.$identity.dropFirst().assign(to: &$identity)
+    init(environment: IdentifiedEnvironment) {
+        self.environment = environment
+        identity = environment.identity
+        environment.$identity.dropFirst().assign(to: &$identity)
     }
 }
 
 public extension SecondaryNavigationViewModel {
     func identitiesViewModel() -> IdentitiesViewModel {
-        IdentitiesViewModel(identityService: identityService)
+        IdentitiesViewModel(environment: environment)
     }
 
     func listsViewModel() -> ListsViewModel {
-        ListsViewModel(identityService: identityService)
+        ListsViewModel(environment: environment)
     }
 
     func preferencesViewModel() -> PreferencesViewModel {
-        PreferencesViewModel(identityService: identityService)
+        PreferencesViewModel(environment: environment)
     }
 }

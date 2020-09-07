@@ -102,15 +102,24 @@ public extension IdentityDatabase {
             .eraseToAnyPublisher()
     }
 
-    func updatePreferences(_ preferences: Identity.Preferences,
+    func updatePreferences(_ preferences: Mastodon.Preferences,
                            forIdentityID identityID: UUID) -> AnyPublisher<Never, Error> {
         databaseQueue.writePublisher {
-            let data = try IdentityRecord.databaseJSONEncoder(for: "preferences").encode(preferences)
+            guard let storedPreferences = try IdentityRecord.filter(Column("id") == identityID)
+                    .fetchOne($0)?
+                    .preferences else {
+                throw IdentityDatabaseError.identityNotFound
+            }
 
-            try IdentityRecord
-                .filter(Column("id") == identityID)
-                .updateAll($0, Column("preferences").set(to: data))
+            try Self.writePreferences(storedPreferences.updated(from: preferences), id: identityID)($0)
         }
+        .ignoreOutput()
+        .eraseToAnyPublisher()
+    }
+
+    func updatePreferences(_ preferences: Identity.Preferences,
+                           forIdentityID identityID: UUID) -> AnyPublisher<Never, Error> {
+        databaseQueue.writePublisher(updates: Self.writePreferences(preferences, id: identityID))
         .ignoreOutput()
         .eraseToAnyPublisher()
     }
@@ -199,6 +208,16 @@ private extension IdentityDatabase {
             .including(optional: IdentityRecord.instance)
             .including(optional: IdentityRecord.account)
             .asRequest(of: IdentityResult.self)
+    }
+
+    private static func writePreferences(_ preferences: Identity.Preferences, id: UUID) -> (Database) throws -> Void {
+        {
+            let data = try IdentityRecord.databaseJSONEncoder(for: "preferences").encode(preferences)
+
+            try IdentityRecord
+                .filter(Column("id") == id)
+                .updateAll($0, Column("preferences").set(to: data))
+        }
     }
 
     private static func migrate(_ writer: DatabaseWriter) throws {

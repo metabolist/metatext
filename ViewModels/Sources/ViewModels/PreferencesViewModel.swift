@@ -7,26 +7,26 @@ public class PreferencesViewModel: ObservableObject {
     public let handle: String
     public let shouldShowNotificationTypePreferences: Bool
 
-    private let identityService: IdentityService
+    private let environment: IdentifiedEnvironment
 
-    init(identityService: IdentityService) {
-        self.identityService = identityService
-        handle = identityService.identity.handle
+    init(environment: IdentifiedEnvironment) {
+        self.environment = environment
+        handle = environment.identity.handle
 
-        shouldShowNotificationTypePreferences = identityService.identity.lastRegisteredDeviceToken != nil
+        shouldShowNotificationTypePreferences = environment.identity.lastRegisteredDeviceToken != nil
     }
 }
 
 public extension PreferencesViewModel {
     func postingReadingPreferencesViewModel() -> PostingReadingPreferencesViewModel {
-        PostingReadingPreferencesViewModel(identityService: identityService)
+        PostingReadingPreferencesViewModel(environment: environment)
     }
 
     func notificationTypesPreferencesViewModel() -> NotificationTypesPreferencesViewModel {
-        NotificationTypesPreferencesViewModel(identityService: identityService)
+        NotificationTypesPreferencesViewModel(environment: environment)
     }
 
     func filtersViewModel() -> FiltersViewModel {
-        FiltersViewModel(identityService: identityService)
+        FiltersViewModel(environment: environment)
     }
 }
