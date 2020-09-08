@@ -72,8 +72,8 @@ import PreviewViewModels
 
 struct IdentitiesView_Previews: PreviewProvider {
     static var previews: some View {
-        IdentitiesView(viewModel: .mock())
-            .environmentObject(RootViewModel.mock())
+        IdentitiesView(viewModel: .init(identification: .preview))
+            .environmentObject(RootViewModel.preview)
     }
 }
 #endif

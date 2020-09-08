@@ -14,7 +14,7 @@ class RootViewModelTests: XCTestCase {
         let sut = try RootViewModel(
             environment: .mock(),
             registerForRemoteNotifications: { Empty().setFailureType(to: Error.self).eraseToAnyPublisher() })
-        let recorder = sut.$tabNavigationViewModel.record()
+        let recorder = sut.$identification.record()
 
         XCTAssertNil(try wait(for: recorder.next(), timeout: 1))
 

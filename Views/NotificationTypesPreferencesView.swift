@@ -29,7 +29,7 @@ import PreviewViewModels
 
 struct NotificationTypesPreferencesView_Previews: PreviewProvider {
     static var previews: some View {
-        NotificationTypesPreferencesView(viewModel: .mock())
+        NotificationTypesPreferencesView(viewModel: .init(identification: .preview))
     }
 }
 #endif

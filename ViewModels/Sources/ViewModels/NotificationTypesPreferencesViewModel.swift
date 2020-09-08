@@ -9,14 +9,14 @@ public class NotificationTypesPreferencesViewModel: ObservableObject {
     @Published public var pushSubscriptionAlerts: PushSubscription.Alerts
     @Published public var alertItem: AlertItem?
 
-    private let environment: IdentifiedEnvironment
+    private let identification: Identification
     private var cancellables = Set<AnyCancellable>()
 
-    init(environment: IdentifiedEnvironment) {
-        self.environment = environment
-        pushSubscriptionAlerts = environment.identity.pushSubscriptionAlerts
+    public init(identification: Identification) {
+        self.identification = identification
+        pushSubscriptionAlerts = identification.identity.pushSubscriptionAlerts
 
-        environment.$identity
+        identification.$identity
             .map(\.pushSubscriptionAlerts)
             .dropFirst()
             .removeDuplicates()
@@ -32,14 +32,14 @@ public class NotificationTypesPreferencesViewModel: ObservableObject {
 
 private extension NotificationTypesPreferencesViewModel {
     func update(alerts: PushSubscription.Alerts) {
-        guard alerts != environment.identity.pushSubscriptionAlerts else { return }
+        guard alerts != identification.identity.pushSubscriptionAlerts else { return }
 
-        environment.identityService.updatePushSubscription(alerts: alerts)
+        identification.service.updatePushSubscription(alerts: alerts)
             .sink { [weak self] in
                 guard let self = self, case let .failure(error) = $0 else { return }
 
                 self.alertItem = AlertItem(error: error)
-                self.pushSubscriptionAlerts = self.environment.identity.pushSubscriptionAlerts
+                self.pushSubscriptionAlerts = self.identification.identity.pushSubscriptionAlerts
             } receiveValue: { _ in }
             .store(in: &cancellables)
     }

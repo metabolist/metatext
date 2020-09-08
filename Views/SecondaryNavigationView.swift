@@ -5,7 +5,8 @@ import SwiftUI
 import ViewModels
 
 struct SecondaryNavigationView: View {
-    @StateObject var viewModel: SecondaryNavigationViewModel
+    @EnvironmentObject var identification: Identification
+    @EnvironmentObject var tabNavigationViewModel: TabNavigationViewModel
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.displayScale) var displayScale: CGFloat
 
@@ -14,19 +15,19 @@ struct SecondaryNavigationView: View {
             Form {
                 Section {
                     NavigationLink(
-                        destination: IdentitiesView(viewModel: viewModel.identitiesViewModel()),
+                        destination: IdentitiesView(viewModel: .init(identification: identification)),
                         label: {
                             HStack {
-                                KFImage(viewModel.identity.image,
+                                KFImage(tabNavigationViewModel.identity.image,
                                         options: .downsampled(dimension: 50, scaleFactor: displayScale))
                                 VStack(alignment: .leading) {
-                                    if let account = viewModel.identity.account {
+                                    if let account = tabNavigationViewModel.identity.account {
                                         CustomEmojiText(
                                             text: account.displayName,
                                             emoji: account.emojis,
                                             textStyle: .headline)
                                     }
-                                    Text(viewModel.identity.handle)
+                                    Text(tabNavigationViewModel.identity.handle)
                                         .font(.subheadline)
                                         .foregroundColor(.secondary)
                                         .lineLimit(1)
@@ -40,7 +41,7 @@ struct SecondaryNavigationView: View {
                         })
                 }
                 Section {
-                    NavigationLink(destination: ListsView(viewModel: viewModel.listsViewModel())) {
+                    NavigationLink(destination: ListsView(viewModel: .init(identification: identification))) {
                         Label("secondary-navigation.lists", systemImage: "scroll")
                     }
                 }
@@ -48,7 +49,7 @@ struct SecondaryNavigationView: View {
                     NavigationLink(
                         "secondary-navigation.preferences",
                         destination: PreferencesView(
-                            viewModel: viewModel.preferencesViewModel()))
+                            viewModel: .init(identification: identification)))
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
@@ -71,9 +72,9 @@ import PreviewViewModels
 
 struct SecondaryNavigationView_Previews: PreviewProvider {
     static var previews: some View {
-        SecondaryNavigationView(viewModel: .mock())
-            .environmentObject(RootViewModel.mock())
-            .environmentObject(TabNavigationViewModel.mock())
+        SecondaryNavigationView()
+            .environmentObject(Identification.preview)
+            .environmentObject(TabNavigationViewModel(identification: .preview))
     }
 }
 #endif

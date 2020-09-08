@@ -46,15 +46,8 @@ class AddIdentityViewModelTests: XCTestCase {
     }
 
     func testDoesNotAlertCanceledLogin() throws {
-        let environment = AppEnvironment(
-            session: Session(configuration: .stubbing),
-            webAuthSessionType: CanceledLoginMockWebAuthSession.self,
-            keychain: MockKeychain.self,
-            userDefaults: MockUserDefaults(),
-            userNotificationClient: .mock,
-            inMemoryContent: true,
-            identityFixture: nil)
-        let allIdentitiesService = try AllIdentitiesService(environment: environment)
+        let allIdentitiesService = try AllIdentitiesService(
+            environment: .mock(webAuthSessionType: CanceledLoginMockWebAuthSession.self))
         let sut = AddIdentityViewModel(allIdentitiesService: allIdentitiesService)
         let recorder = sut.$alertItem.record()
 

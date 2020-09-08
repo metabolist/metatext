@@ -14,19 +14,19 @@ public class TabNavigationViewModel: ObservableObject {
     @Published public var alertItem: AlertItem?
     public var selectedTab: Tab? = .timelines
 
-    private let environment: IdentifiedEnvironment
+    private let identification: Identification
     private var cancellables = Set<AnyCancellable>()
 
-    init(environment: IdentifiedEnvironment) {
-        self.environment = environment
-        identity = environment.identity
-        environment.$identity.dropFirst().assign(to: &$identity)
+    public init(identification: Identification) {
+        self.identification = identification
+        identity = identification.identity
+        identification.$identity.dropFirst().assign(to: &$identity)
 
-        environment.identityService.recentIdentitiesObservation()
+        identification.service.recentIdentitiesObservation()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$recentIdentities)
 
-        environment.identityService.listsObservation()
+        identification.service.listsObservation()
             .map { Timeline.nonLists + $0 }
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$timelinesAndLists)
@@ -54,42 +54,38 @@ public extension TabNavigationViewModel {
     }
 
     func refreshIdentity() {
-        if environment.identityService.isAuthorized {
-            environment.identityService.verifyCredentials()
+        if identification.service.isAuthorized {
+            identification.service.verifyCredentials()
                 .assignErrorsToAlertItem(to: \.alertItem, on: self)
                 .sink { _ in }
                 .store(in: &cancellables)
 
-            environment.identityService.refreshLists()
+            identification.service.refreshLists()
                 .assignErrorsToAlertItem(to: \.alertItem, on: self)
                 .sink { _ in }
                 .store(in: &cancellables)
 
-            environment.identityService.refreshFilters()
+            identification.service.refreshFilters()
                 .assignErrorsToAlertItem(to: \.alertItem, on: self)
                 .sink { _ in }
                 .store(in: &cancellables)
 
             if identity.preferences.useServerPostingReadingPreferences {
-                environment.identityService.refreshServerPreferences()
+                identification.service.refreshServerPreferences()
                     .assignErrorsToAlertItem(to: \.alertItem, on: self)
                     .sink { _ in }
                     .store(in: &cancellables)
             }
         }
 
-        environment.identityService.refreshInstance()
+        identification.service.refreshInstance()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .sink { _ in }
             .store(in: &cancellables)
     }
 
-    func secondaryNavigationViewModel() -> SecondaryNavigationViewModel {
-        SecondaryNavigationViewModel(environment: environment)
-    }
-
     func viewModel(timeline: Timeline) -> StatusListViewModel {
-        StatusListViewModel(statusListService: environment.identityService.service(timeline: timeline))
+        StatusListViewModel(statusListService: identification.service.service(timeline: timeline))
     }
 }
 

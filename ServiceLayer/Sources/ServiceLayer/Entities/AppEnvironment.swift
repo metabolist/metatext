@@ -14,7 +14,7 @@ public struct AppEnvironment {
     let userDefaults: UserDefaults
     let userNotificationClient: UserNotificationClient
     let inMemoryContent: Bool
-    let identityFixture: IdentityFixture?
+    let fixtureDatabase: IdentityDatabase?
 
     public init(session: Session,
                 webAuthSessionType: WebAuthSession.Type,
@@ -22,14 +22,14 @@ public struct AppEnvironment {
                 userDefaults: UserDefaults,
                 userNotificationClient: UserNotificationClient,
                 inMemoryContent: Bool,
-                identityFixture: IdentityFixture?) {
+                fixtureDatabase: IdentityDatabase?) {
         self.session = session
         self.webAuthSessionType = webAuthSessionType
         self.keychain = keychain
         self.userDefaults = userDefaults
         self.userNotificationClient = userNotificationClient
         self.inMemoryContent = inMemoryContent
-        self.identityFixture = identityFixture
+        self.fixtureDatabase = fixtureDatabase
     }
 }
 
@@ -42,6 +42,6 @@ public extension AppEnvironment {
             userDefaults: .standard,
             userNotificationClient: .live(userNotificationCenter),
             inMemoryContent: false,
-            identityFixture: nil)
+            fixtureDatabase: nil)
     }
 }

@@ -25,6 +25,7 @@ public struct Secrets {
 
 public extension Secrets {
     enum Item: String, CaseIterable {
+        case instanceURL
         case clientID
         case clientSecret
         case accessToken
@@ -99,6 +100,14 @@ public extension Secrets {
                 try keychain.deleteKey(applicationTag: scopedKey(item: item))
             }
         }
+    }
+
+    func getInstanceURL() throws -> URL {
+        try item(.instanceURL)
+    }
+
+    func setInstanceURL(_ instanceURL: URL) throws {
+        try set(instanceURL, forItem: .instanceURL)
     }
 
     func getClientID() throws -> String {
@@ -216,6 +225,18 @@ extension String: SecretsStorable {
         }
 
         return string
+    }
+}
+
+extension URL: SecretsStorable {
+    public var dataStoredInSecrets: Data { absoluteString.dataStoredInSecrets }
+
+    public static func fromDataStoredInSecrets(_ data: Data) throws -> URL {
+        guard let url = URL(string: try String.fromDataStoredInSecrets(data)) else {
+            throw SecretsStorableError.conversionFromDataStoredInSecrets(data)
+        }
+
+        return url
     }
 }
 

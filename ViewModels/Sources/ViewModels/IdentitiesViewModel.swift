@@ -9,14 +9,14 @@ public class IdentitiesViewModel: ObservableObject {
     @Published public var identities = [Identity]()
     @Published public var alertItem: AlertItem?
 
-    private let environment: IdentifiedEnvironment
+    private let identification: Identification
     private var cancellables = Set<AnyCancellable>()
 
-    init(environment: IdentifiedEnvironment) {
-        self.environment = environment
-        currentIdentityID = environment.identity.id
+    public init(identification: Identification) {
+        self.identification = identification
+        currentIdentityID = identification.identity.id
 
-        environment.identityService.identitiesObservation()
+        identification.service.identitiesObservation()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$identities)
     }

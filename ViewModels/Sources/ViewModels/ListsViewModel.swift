@@ -10,13 +10,13 @@ public class ListsViewModel: ObservableObject {
     @Published public private(set) var creatingList = false
     @Published public var alertItem: AlertItem?
 
-    private let environment: IdentifiedEnvironment
+    private let identification: Identification
     private var cancellables = Set<AnyCancellable>()
 
-    init(environment: IdentifiedEnvironment) {
-        self.environment = environment
+    public init(identification: Identification) {
+        self.identification = identification
 
-        environment.identityService.listsObservation()
+        identification.service.listsObservation()
             .map {
                 $0.compactMap {
                     guard case let .list(list) = $0 else { return nil }
@@ -31,14 +31,14 @@ public class ListsViewModel: ObservableObject {
 
 public extension ListsViewModel {
     func refreshLists() {
-        environment.identityService.refreshLists()
+        identification.service.refreshLists()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .sink { _ in }
             .store(in: &cancellables)
     }
 
     func createList(title: String) {
-        environment.identityService.createList(title: title)
+        identification.service.createList(title: title)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .handleEvents(
                 receiveSubscription: { [weak self] _ in self?.creatingList = true },
@@ -48,7 +48,7 @@ public extension ListsViewModel {
     }
 
     func delete(list: MastodonList) {
-        environment.identityService.deleteList(id: list.id)
+        identification.service.deleteList(id: list.id)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .sink { _ in }
             .store(in: &cancellables)

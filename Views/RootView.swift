@@ -7,9 +7,11 @@ struct RootView: View {
     @StateObject var viewModel: RootViewModel
 
     var body: some View {
-        if let tabNavigationViewModel = viewModel.tabNavigationViewModel {
-            TabNavigationView(viewModel: tabNavigationViewModel)
+        if let identification = viewModel.identification {
+            TabNavigationView()
                 .id(UUID())
+                .environmentObject(identification)
+                .environmentObject(TabNavigationViewModel(identification: identification))
                 .environmentObject(viewModel)
                 .transition(.opacity)
         } else {
@@ -21,11 +23,12 @@ struct RootView: View {
 }
 
 #if DEBUG
+import Combine
 import PreviewViewModels
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        RootView(viewModel: .mock())
+        RootView(viewModel: .preview)
     }
 }
 #endif

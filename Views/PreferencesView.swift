@@ -5,20 +5,21 @@ import ViewModels
 
 struct PreferencesView: View {
     @StateObject var viewModel: PreferencesViewModel
+    @EnvironmentObject var identification: Identification
 
     var body: some View {
         Form {
             Section(header: Text(viewModel.handle)) {
                 NavigationLink("preferences.posting-reading",
                                destination: PostingReadingPreferencesView(
-                                viewModel: viewModel.postingReadingPreferencesViewModel()))
+                                viewModel: .init(identification: identification)))
                 NavigationLink("preferences.filters",
                                destination: FiltersView(
-                                viewModel: viewModel.filtersViewModel()))
+                                viewModel: .init(identification: identification)))
                 if viewModel.shouldShowNotificationTypePreferences {
                     NavigationLink("preferences.notification-types",
                                    destination: NotificationTypesPreferencesView(
-                                    viewModel: viewModel.notificationTypesPreferencesViewModel()))
+                                    viewModel: .init(identification: identification)))
                 }
             }
         }
@@ -31,7 +32,7 @@ import PreviewViewModels
 
 struct PreferencesView_Previews: PreviewProvider {
     static var previews: some View {
-        PreferencesView(viewModel: .mock())
+        PreferencesView(viewModel: .init(identification: .preview))
     }
 }
 #endif

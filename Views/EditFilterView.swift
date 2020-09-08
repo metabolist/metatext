@@ -101,7 +101,7 @@ import PreviewViewModels
 
 struct EditFilterView_Previews: PreviewProvider {
     static var previews: some View {
-        EditFilterView(viewModel: .mock())
+        EditFilterView(viewModel: .init(filter: .new, identification: .preview))
     }
 }
 #endif

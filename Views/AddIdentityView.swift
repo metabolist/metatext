@@ -46,7 +46,7 @@ import PreviewViewModels
 
 struct AddAccountView_Previews: PreviewProvider {
     static var previews: some View {
-        AddIdentityView(viewModel: .mock())
+        AddIdentityView(viewModel: RootViewModel.preview.addIdentityViewModel())
     }
 }
 #endif

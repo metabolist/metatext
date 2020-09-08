@@ -14,7 +14,7 @@ public enum IdentityDatabaseError: Error {
 public struct IdentityDatabase {
     private let databaseQueue: DatabaseQueue
 
-    public init(inMemory: Bool, fixture: IdentityFixture?, keychain: Keychain.Type) throws {
+    public init(inMemory: Bool, keychain: Keychain.Type) throws {
         if inMemory {
             databaseQueue = DatabaseQueue()
         } else {
@@ -29,10 +29,6 @@ public struct IdentityDatabase {
         }
 
         try Self.migrate(databaseQueue)
-
-        if let fixture = fixture {
-            try populate(fixture: fixture)
-        }
     }
 }
 
@@ -261,23 +257,5 @@ private extension IdentityDatabase {
         }
 
         try migrator.migrate(writer)
-    }
-
-    func populate(fixture: IdentityFixture) throws {
-        _ = createIdentity(id: fixture.id, url: fixture.instanceURL)
-            .receive(on: ImmediateScheduler.shared)
-            .sink { _ in } receiveValue: { _ in }
-
-        if let instance = fixture.instance {
-            _ = updateInstance(instance, forIdentityID: fixture.id)
-                .receive(on: ImmediateScheduler.shared)
-                .sink { _ in } receiveValue: { _ in }
-        }
-
-        if let account = fixture.account {
-            _ = updateAccount(account, forIdentityID: fixture.id)
-                .receive(on: ImmediateScheduler.shared)
-                .sink { _ in } receiveValue: { _ in }
-        }
     }
 }

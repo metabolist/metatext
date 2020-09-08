@@ -6,7 +6,7 @@ import SwiftUI
 import ViewModels
 
 struct TabNavigationView: View {
-    @ObservedObject var viewModel: TabNavigationViewModel
+    @EnvironmentObject var viewModel: TabNavigationViewModel
     @EnvironmentObject var rootViewModel: RootViewModel
     @Environment(\.displayScale) var displayScale: CGFloat
 
@@ -25,7 +25,7 @@ struct TabNavigationView: View {
             }
         }
         .sheet(isPresented: $viewModel.presentingSecondaryNavigation) {
-            SecondaryNavigationView(viewModel: viewModel.secondaryNavigationViewModel())
+            SecondaryNavigationView()
                 .environmentObject(viewModel)
         }
         .alertItem($viewModel.alertItem)
@@ -145,8 +145,10 @@ import PreviewViewModels
 
 struct TabNavigation_Previews: PreviewProvider {
     static var previews: some View {
-        TabNavigationView(viewModel: .mock())
-            .environmentObject(RootViewModel.mock())
+        TabNavigationView()
+            .environmentObject(Identification.preview)
+            .environmentObject(TabNavigationViewModel(identification: .preview))
+            .environmentObject(RootViewModel.preview)
     }
 }
 #endif

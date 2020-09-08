@@ -60,8 +60,8 @@ import PreviewViewModels
 
 struct ListsView_Previews: PreviewProvider {
     static var previews: some View {
-        ListsView(viewModel: .mock())
-            .environmentObject(TabNavigationViewModel.mock())
+        ListsView(viewModel: .init(identification: .preview))
+            .environmentObject(TabNavigationViewModel(identification: .preview))
     }
 }
 #endif

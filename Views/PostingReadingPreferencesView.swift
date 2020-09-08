@@ -55,7 +55,7 @@ import PreviewViewModels
 
 struct PostingReadingPreferencesViewView_Previews: PreviewProvider {
     static var previews: some View {
-        PostingReadingPreferencesView(viewModel: .mock())
+        PostingReadingPreferencesView(viewModel: .init(identification: .preview))
     }
 }
 #endif

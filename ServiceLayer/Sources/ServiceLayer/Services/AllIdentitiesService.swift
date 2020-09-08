@@ -15,9 +15,9 @@ public struct AllIdentitiesService {
     private let environment: AppEnvironment
 
     public init(environment: AppEnvironment) throws {
-        self.database = try IdentityDatabase(inMemory: environment.inMemoryContent,
-                                                     fixture: environment.identityFixture,
-                                                     keychain: environment.keychain)
+        self.database =  try environment.fixtureDatabase ?? IdentityDatabase(
+            inMemory: environment.inMemoryContent,
+            keychain: environment.keychain)
         self.environment = environment
 
         mostRecentlyUsedIdentityID = database.mostRecentlyUsedIdentityIDObservation()
@@ -28,8 +28,8 @@ public struct AllIdentitiesService {
 }
 
 public extension AllIdentitiesService {
-    func identifiedEnvironment(id: UUID) throws -> IdentifiedEnvironment {
-        try IdentifiedEnvironment(id: id, database: database, environment: environment)
+    func identityService(id: UUID) throws -> IdentityService {
+        try IdentityService(id: id, database: database, environment: environment)
     }
 
     func createIdentity(id: UUID, instanceURL: URL) -> AnyPublisher<Never, Error> {
@@ -42,6 +42,7 @@ public extension AllIdentitiesService {
 
         return authenticationService.authorizeApp(instanceURL: instanceURL)
             .tryMap { appAuthorization -> (URL, AppAuthorization) in
+                try secrets.setInstanceURL(instanceURL)
                 try secrets.setClientID(appAuthorization.clientId)
                 try secrets.setClientSecret(appAuthorization.clientSecret)
 
@@ -81,7 +82,7 @@ public extension AllIdentitiesService {
         database.identitiesWithOutdatedDeviceTokens(deviceToken: deviceToken)
             .tryMap { identities -> [AnyPublisher<Never, Never>] in
                 try identities.map {
-                    try IdentityService(id: $0.id, instanceURL: $0.url, database: database, environment: environment)
+                    try IdentityService(id: $0.id, database: database, environment: environment)
                         .createPushSubscription(deviceToken: deviceToken, alerts: $0.pushSubscriptionAlerts)
                         .catch { _ in Empty() } // don't want to disrupt pipeline
                         .eraseToAnyPublisher()
