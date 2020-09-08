@@ -29,7 +29,7 @@ class InstanceFilterServiceTests: XCTestCase {
         XCTAssertTrue(sut.isFiltered(url: previouslyFilteredInstanceURL))
         XCTAssertFalse(sut.isFiltered(url: newlyFilteredInstanceURL))
 
-        var updatedFilter = BloomFilter<String>(hashers: [.djb2, .sdbm], byteCount: 16)
+        var updatedFilter = try BloomFilter<String>(hashes: [.djb232, .sdbm32], byteCount: 16)
 
         updatedFilter.insert("instance.filtered")
 

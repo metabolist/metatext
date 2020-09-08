@@ -8,11 +8,7 @@ struct BitArray {
     private var bytes: [UInt8]
 
     init(byteCount: Int) {
-        self.bytes = [UInt8](repeating: 0, count: byteCount)
-    }
-
-    init(data: Data) {
-        bytes = Array(data)
+        bytes = [UInt8](repeating: 0, count: byteCount)
     }
 }
 
@@ -40,9 +36,7 @@ extension BitArray {
 
 extension BitArray: Codable {
     init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-
-        bytes = Array(try container.decode(Data.self))
+        bytes = Array(try decoder.singleValueContainer().decode(Data.self))
     }
 
     func encode(to encoder: Encoder) throws {

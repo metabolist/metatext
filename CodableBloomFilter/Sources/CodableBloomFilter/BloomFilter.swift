@@ -6,14 +6,19 @@ import Foundation
 // https://khanlou.com/2018/09/bloom-filters/
 // This implementation uses deterministic hashing functions so it can conform to Codable
 
+enum BloomFilterError: Error {
+    case noHashesProvided
+}
+
 public struct BloomFilter<T: DeterministicallyHashable>: Codable {
-    public let hashers: [DeterministicHasher]
+    public let hashes: [Hash]
 
     private var data: BitArray
 
-    public init(hashers: Set<DeterministicHasher>, byteCount: Int) {
-        // Sort the hashers for consistent decoding output
-        self.hashers = Array(hashers.sorted { $0.rawValue < $1.rawValue })
+    public init(hashes: Set<Hash>, byteCount: Int) throws {
+        guard !hashes.isEmpty else { throw BloomFilterError.noHashesProvided }
+        // Sort the hashes for consistent decoding output
+        self.hashes = Array(hashes.sorted { $0.rawValue < $1.rawValue })
         data = BitArray(byteCount: byteCount)
     }
 }
@@ -32,6 +37,6 @@ public extension BloomFilter {
 
 private extension BloomFilter {
     func indices(_ member: T) -> [Int] {
-        hashers.map { abs($0.apply(member)) % data.bitCount }
+        hashes.map { abs($0.apply(member)) % data.bitCount }
     }
 }

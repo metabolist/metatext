@@ -2,17 +2,17 @@
 
 import Foundation
 
-public enum DeterministicHasher: String, Codable {
-    case djb2
-    case djb2a
-    case sdbm
-    case fnv1
-    case fnv1a
+public enum Hash: String, Codable {
+    case djb232
+    case djb2a32
+    case sdbm32
+    case fnv132
+    case fnv1a32
 }
 
-extension DeterministicHasher {
+extension Hash {
     func apply(_ hashable: DeterministicallyHashable) -> Int {
-        Int(Array(hashable.hashableData)
+        Int(Array(hashable.dataForHashingDeterministically)
             .map(UInt32.init)
             .reduce(offsetBasis, hash))
     }
@@ -21,28 +21,28 @@ extension DeterministicHasher {
 // http://www.cse.yorku.ca/~oz/hash.html
 // http://www.isthe.com/chongo/tech/comp/fnv/
 
-private extension DeterministicHasher {
+private extension Hash {
     static let fnvPrime: UInt32 = 16777619
 
     var offsetBasis: UInt32 {
         switch self {
-        case .djb2, .djb2a: return 5381
-        case .sdbm: return 0
-        case .fnv1, .fnv1a: return 2166136261
+        case .djb232, .djb2a32: return 5381
+        case .sdbm32: return 0
+        case .fnv132, .fnv1a32: return 2166136261
         }
     }
 
     func hash(result: UInt32, next: UInt32) -> UInt32 {
         switch self {
-        case .djb2:
+        case .djb232:
             return (result << 5) &+ result &+ next
-        case .djb2a:
+        case .djb2a32:
             return (result << 5) &+ result ^ next
-        case .sdbm:
+        case .sdbm32:
             return next &+ (result << 6) &+ (result << 16) &- result
-        case .fnv1:
+        case .fnv132:
             return (result &* Self.fnvPrime) ^ next
-        case .fnv1a:
+        case .fnv1a32:
             return (result ^ next) &* Self.fnvPrime
         }
     }

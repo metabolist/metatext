@@ -3,5 +3,5 @@
 import Foundation
 
 public protocol DeterministicallyHashable {
-    var hashableData: Data { get }
+    var dataForHashingDeterministically: Data { get }
 }
