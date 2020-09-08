@@ -34,6 +34,24 @@ final class CodableBloomFilterTests: XCTestCase {
         XCTAssertFalse(sut.contains("no"))
     }
 
+    func testData() throws {
+        var sut = try BloomFilter<String>(hashes: [.sdbm32, .djb232], byteCount: 8)
+
+        sut.insert("lol")
+        sut.insert("ok")
+
+        XCTAssertEqual(sut.data, Data([0, 16, 0, 0, 0, 2, 0, 144]))
+    }
+
+    func testFromData() throws {
+        let sut = try BloomFilter<String>(hashes: [.sdbm32, .djb232], data: Data([0, 16, 0, 0, 0, 2, 0, 144]))
+
+        XCTAssert(sut.contains("lol"))
+        XCTAssert(sut.contains("ok"))
+        XCTAssertFalse(sut.contains("wtf"))
+        XCTAssertFalse(sut.contains("no"))
+    }
+
     func testCoding() throws {
         var sut = try BloomFilter<String>(hashes: [.sdbm32, .djb232], byteCount: 8)
         let expectedData = Data(#"{"data":"ABAAAAACAJA=","hashes":["djb232","sdbm32"]}"#.utf8)

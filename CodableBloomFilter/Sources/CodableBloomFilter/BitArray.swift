@@ -7,13 +7,15 @@ import Foundation
 struct BitArray {
     private var bytes: [UInt8]
 
-    init(byteCount: Int) {
-        bytes = [UInt8](repeating: 0, count: byteCount)
+    init(data: Data) {
+        bytes = Array(data)
     }
 }
 
 extension BitArray {
     var bitCount: Int { bytes.count * Self.bitsInByte }
+
+    var data: Data { Data(bytes) }
 
     subscript(index: Int) -> Bool {
         get {
