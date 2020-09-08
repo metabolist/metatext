@@ -5,7 +5,7 @@ import Foundation
 import Mastodon
 import ServiceLayer
 
-public class TabNavigationViewModel: ObservableObject {
+public final class TabNavigationViewModel: ObservableObject {
     @Published public private(set) var identity: Identity
     @Published public private(set) var recentIdentities = [Identity]()
     @Published public var timeline = Timeline.home

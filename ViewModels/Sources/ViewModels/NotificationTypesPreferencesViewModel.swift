@@ -5,7 +5,7 @@ import Foundation
 import Mastodon
 import ServiceLayer
 
-public class NotificationTypesPreferencesViewModel: ObservableObject {
+public final class NotificationTypesPreferencesViewModel: ObservableObject {
     @Published public var pushSubscriptionAlerts: PushSubscription.Alerts
     @Published public var alertItem: AlertItem?
 

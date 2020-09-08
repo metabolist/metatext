@@ -9,7 +9,7 @@ protocol StatusTableViewCellDelegate: class {
     func statusTableViewCellDidHaveShareButtonTapped(_ cell: StatusTableViewCell)
 }
 
-class StatusTableViewCell: UITableViewCell {
+final class StatusTableViewCell: UITableViewCell {
     @IBOutlet weak var metaIcon: UIImageView!
     @IBOutlet weak var metaLabel: UILabel!
     @IBOutlet weak var contentTextView: TouchFallthroughTextView!

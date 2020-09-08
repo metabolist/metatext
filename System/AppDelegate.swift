@@ -3,7 +3,7 @@
 import Combine
 import UIKit
 
-class AppDelegate: NSObject {
+final class AppDelegate: NSObject {
     @Published private var application: UIApplication?
     private let remoteNotificationDeviceTokens = PassthroughSubject<Data, Error>()
 }

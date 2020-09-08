@@ -4,7 +4,7 @@ import Combine
 import Foundation
 import ServiceLayer
 
-public class AddIdentityViewModel: ObservableObject {
+public final class AddIdentityViewModel: ObservableObject {
     @Published public var urlFieldText = ""
     @Published public var alertItem: AlertItem?
     @Published public private(set) var loading = false

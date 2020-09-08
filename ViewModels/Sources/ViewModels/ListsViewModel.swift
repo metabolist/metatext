@@ -5,7 +5,7 @@ import Foundation
 import Mastodon
 import ServiceLayer
 
-public class ListsViewModel: ObservableObject {
+public final class ListsViewModel: ObservableObject {
     @Published public private(set) var lists = [MastodonList]()
     @Published public private(set) var creatingList = false
     @Published public var alertItem: AlertItem?

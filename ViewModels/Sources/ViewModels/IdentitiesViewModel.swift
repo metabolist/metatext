@@ -4,7 +4,7 @@ import Combine
 import Foundation
 import ServiceLayer
 
-public class IdentitiesViewModel: ObservableObject {
+public final class IdentitiesViewModel: ObservableObject {
     public let currentIdentityID: UUID
     @Published public var identities = [Identity]()
     @Published public var alertItem: AlertItem?

@@ -4,7 +4,7 @@ import Combine
 import SwiftUI
 import ViewModels
 
-class StatusListViewController: UITableViewController {
+final class StatusListViewController: UITableViewController {
     private let viewModel: StatusListViewModel
     private let loadingTableFooterView = LoadingTableFooterView()
     private var cancellables = Set<AnyCancellable>()

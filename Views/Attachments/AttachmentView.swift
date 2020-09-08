@@ -4,7 +4,7 @@ import Kingfisher
 import UIKit
 import ViewModels
 
-class AttachmentView: UIView {
+final class AttachmentView: UIView {
     let imageView = AnimatedImageView()
     let button = UIButton()
     let viewModel: AttachmentViewModel

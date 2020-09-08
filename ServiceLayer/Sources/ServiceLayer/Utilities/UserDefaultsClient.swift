@@ -3,7 +3,7 @@
 import CodableBloomFilter
 import Foundation
 
-class UserDefaultsClient {
+final class UserDefaultsClient {
     private let userDefaults: UserDefaults
 
     init(userDefaults: UserDefaults) {

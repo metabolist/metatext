@@ -3,7 +3,7 @@
 import UIKit
 import ViewModels
 
-class AttachmentsView: UIView {
+final class AttachmentsView: UIView {
     private let containerStackView = UIStackView()
     private let leftStackView = UIStackView()
     private let rightStackView = UIStackView()

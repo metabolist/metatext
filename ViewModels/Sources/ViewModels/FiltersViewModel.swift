@@ -5,7 +5,7 @@ import Foundation
 import Mastodon
 import ServiceLayer
 
-public class FiltersViewModel: ObservableObject {
+public final class FiltersViewModel: ObservableObject {
     @Published public var activeFilters = [Filter]()
     @Published public var expiredFilters = [Filter]()
     @Published public var alertItem: AlertItem?

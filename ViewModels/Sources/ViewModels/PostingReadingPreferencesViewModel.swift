@@ -4,7 +4,7 @@ import Combine
 import Foundation
 import ServiceLayer
 
-public class PostingReadingPreferencesViewModel: ObservableObject {
+public final class PostingReadingPreferencesViewModel: ObservableObject {
     @Published public var preferences: Identity.Preferences
     @Published public var alertItem: AlertItem?
 

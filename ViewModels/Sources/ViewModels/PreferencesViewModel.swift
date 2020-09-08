@@ -3,7 +3,7 @@
 import Foundation
 import ServiceLayer
 
-public class PreferencesViewModel: ObservableObject {
+public final class PreferencesViewModel: ObservableObject {
     public let handle: String
     public let shouldShowNotificationTypePreferences: Bool
 

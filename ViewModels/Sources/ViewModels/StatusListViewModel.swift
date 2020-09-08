@@ -5,7 +5,7 @@ import Foundation
 import Mastodon
 import ServiceLayer
 
-public class StatusListViewModel: ObservableObject {
+public final class StatusListViewModel: ObservableObject {
     @Published public private(set) var statusIDs = [[String]]()
     @Published public var alertItem: AlertItem?
     @Published public private(set) var loading = false

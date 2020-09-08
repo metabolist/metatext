@@ -2,7 +2,7 @@
 
 import UIKit
 
-class LoadingTableFooterView: UIView {
+final class LoadingTableFooterView: UIView {
     let activityIndicatorView = UIActivityIndicatorView()
 
     override init(frame: CGRect) {

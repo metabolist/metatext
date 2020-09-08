@@ -2,7 +2,7 @@
 
 import UIKit
 
-class TouchFallthroughTextView: UITextView {
+final class TouchFallthroughTextView: UITextView {
     var shouldFallthrough: Bool = true
 
     override init(frame: CGRect, textContainer: NSTextContainer?) {

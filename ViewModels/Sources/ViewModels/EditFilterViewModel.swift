@@ -5,7 +5,7 @@ import Foundation
 import Mastodon
 import ServiceLayer
 
-public class EditFilterViewModel: ObservableObject {
+public final class EditFilterViewModel: ObservableObject {
     @Published public var filter: Filter
     @Published public var saving = false
     @Published public var alertItem: AlertItem?
