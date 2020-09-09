@@ -5,7 +5,7 @@ import ViewModels
 
 struct ListsView: View {
     @StateObject var viewModel: ListsViewModel
-    @EnvironmentObject var tabNavigationViewModel: TabNavigationViewModel
+    @EnvironmentObject var rootViewModel: RootViewModel
     @State private var newListTitle = ""
 
     var body: some View {
@@ -28,8 +28,8 @@ struct ListsView: View {
             Section {
                 ForEach(viewModel.lists) { list in
                     Button(list.title) {
-                        tabNavigationViewModel.timeline = .list(list)
-                        tabNavigationViewModel.presentingSecondaryNavigation = false
+                        rootViewModel.navigationViewModel?.timeline = .list(list)
+                        rootViewModel.navigationViewModel?.presentingSecondaryNavigation = false
                     }
                 }
                 .onDelete {

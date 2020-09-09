@@ -5,8 +5,9 @@ import SwiftUI
 import ViewModels
 
 struct SecondaryNavigationView: View {
+    @ObservedObject var viewModel: TabNavigationViewModel
     @EnvironmentObject var identification: Identification
-    @EnvironmentObject var tabNavigationViewModel: TabNavigationViewModel
+    @EnvironmentObject var rootViewModel: RootViewModel
     @Environment(\.displayScale) var displayScale: CGFloat
 
     var body: some View {
@@ -17,25 +18,25 @@ struct SecondaryNavigationView: View {
                         destination: IdentitiesView(viewModel: .init(identification: identification)),
                         label: {
                             HStack {
-                                KFImage(tabNavigationViewModel.identity.image,
+                                KFImage(identification.identity.image,
                                         options: .downsampled(dimension: 50, scaleFactor: displayScale))
                                 VStack(alignment: .leading) {
-                                    if tabNavigationViewModel.identity.authenticated {
-                                        if let account = tabNavigationViewModel.identity.account {
+                                    if identification.identity.authenticated {
+                                        if let account = identification.identity.account {
                                             CustomEmojiText(
                                                 text: account.displayName,
                                                 emoji: account.emojis,
                                                 textStyle: .headline)
                                         }
-                                        Text(tabNavigationViewModel.identity.handle)
+                                        Text(identification.identity.handle)
                                             .font(.subheadline)
                                             .foregroundColor(.secondary)
                                             .lineLimit(1)
                                             .minimumScaleFactor(0.5)
                                     } else {
-                                        Text(tabNavigationViewModel.identity.handle)
+                                        Text(identification.identity.handle)
                                             .font(.headline)
-                                        if let instance = tabNavigationViewModel.identity.instance {
+                                        if let instance = identification.identity.instance {
                                             Text(instance.uri)
                                                 .font(.subheadline)
                                                 .foregroundColor(.secondary)
@@ -68,7 +69,7 @@ struct SecondaryNavigationView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button {
-                        tabNavigationViewModel.presentingSecondaryNavigation = false
+                        viewModel.presentingSecondaryNavigation = false
                     } label: {
                         Image(systemName: "xmark.circle.fill")
                     }
@@ -84,9 +85,9 @@ import PreviewViewModels
 
 struct SecondaryNavigationView_Previews: PreviewProvider {
     static var previews: some View {
-        SecondaryNavigationView()
+        SecondaryNavigationView(viewModel: TabNavigationViewModel(identification: .preview))
             .environmentObject(Identification.preview)
-            .environmentObject(TabNavigationViewModel(identification: .preview))
+            .environmentObject(RootViewModel.preview)
     }
 }
 #endif

@@ -7,11 +7,9 @@ struct RootView: View {
     @StateObject var viewModel: RootViewModel
 
     var body: some View {
-        if let identification = viewModel.identification {
-            TabNavigationView()
-                .id(UUID())
-                .environmentObject(identification)
-                .environmentObject(TabNavigationViewModel(identification: identification))
+        if let navigationViewModel = viewModel.navigationViewModel {
+            TabNavigationView(viewModel: navigationViewModel)
+                .id(navigationViewModel.identification.identity.id)
                 .environmentObject(viewModel)
                 .transition(.opacity)
         } else {

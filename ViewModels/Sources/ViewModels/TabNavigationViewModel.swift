@@ -6,7 +6,7 @@ import Mastodon
 import ServiceLayer
 
 public final class TabNavigationViewModel: ObservableObject {
-    @Published public private(set) var identity: Identity
+    public let identification: Identification
     @Published public private(set) var recentIdentities = [Identity]()
     @Published public var timeline: Timeline
     @Published public private(set) var timelinesAndLists: [Timeline]
@@ -14,18 +14,19 @@ public final class TabNavigationViewModel: ObservableObject {
     @Published public var alertItem: AlertItem?
     public var selectedTab: Tab? = .timelines
 
-    private let identification: Identification
     private var cancellables = Set<AnyCancellable>()
 
     public init(identification: Identification) {
         self.identification = identification
-        identity = identification.identity
         timeline = identification.service.isAuthorized ? .home : .local
         timelinesAndLists = identification.service.isAuthorized
             ? Timeline.authenticatedDefaults
             : Timeline.unauthenticatedDefaults
 
-        identification.$identity.dropFirst().assign(to: &$identity)
+        identification.$identity
+            .sink { [weak self] _ in self?.objectWillChange.send() }
+            .store(in: &cancellables)
+
         identification.service.recentIdentitiesObservation()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$recentIdentities)
@@ -51,9 +52,9 @@ public extension TabNavigationViewModel {
     var timelineSubtitle: String {
         switch timeline {
         case .home, .list:
-            return identity.handle
+            return identification.identity.handle
         case .local, .federated, .tag:
-            return identity.instance?.uri ?? ""
+            return identification.identity.instance?.uri ?? ""
         }
     }
 
@@ -72,7 +73,7 @@ public extension TabNavigationViewModel {
                 .sink { _ in }
                 .store(in: &cancellables)
 
-            if identity.preferences.useServerPostingReadingPreferences {
+            if identification.identity.preferences.useServerPostingReadingPreferences {
                 identification.service.refreshServerPreferences()
                     .assignErrorsToAlertItem(to: \.alertItem, on: self)
                     .sink { _ in }

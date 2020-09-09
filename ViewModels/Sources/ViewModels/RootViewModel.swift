@@ -5,24 +5,7 @@ import Foundation
 import ServiceLayer
 
 public final class RootViewModel: ObservableObject {
-    @Published public private(set) var identification: Identification? {
-        didSet {
-            guard let identification = identification else { return }
-
-            identification.service.updateLastUse()
-                .sink { _ in } receiveValue: { _ in }
-                .store(in: &cancellables)
-
-            userNotificationService.isAuthorized()
-                .filter { $0 }
-                .zip(registerForRemoteNotifications())
-                .filter { identification.identity.lastRegisteredDeviceToken != $1 }
-                .map { ($1, identification.identity.pushSubscriptionAlerts) }
-                .flatMap(identification.service.createPushSubscription(deviceToken:alerts:))
-                .sink { _ in } receiveValue: { _ in }
-                .store(in: &cancellables)
-        }
-    }
+    @Published public private(set) var navigationViewModel: TabNavigationViewModel?
 
     @Published private var mostRecentlyUsedIdentityID: UUID?
     private let environment: AppEnvironment
@@ -74,10 +57,12 @@ public extension RootViewModel {
 
 private extension RootViewModel {
     func identitySelected(id: UUID?, immediate: Bool) {
+        navigationViewModel?.presentingSecondaryNavigation = false
+
         guard
             let id = id,
             let identityService = try? allIdentitiesService.identityService(id: id) else {
-            identification = nil
+            navigationViewModel = nil
 
             return
         }
@@ -93,13 +78,30 @@ private extension RootViewModel {
             .share()
 
         observation
-            .filter { [weak self] in $0.id != self?.identification?.identity.id }
-            .map {
-                Identification(
+            .filter { [weak self] in $0.id != self?.navigationViewModel?.identification.identity.id }
+            .map { [weak self] in
+                let identification = Identification(
                     identity: $0,
                     observation: observation.eraseToAnyPublisher(),
                     service: identityService)
+
+                if let self = self {
+                    identification.service.updateLastUse()
+                        .sink { _ in } receiveValue: { _ in }
+                        .store(in: &self.cancellables)
+
+                    self.userNotificationService.isAuthorized()
+                        .filter { $0 }
+                        .zip(self.registerForRemoteNotifications())
+                        .filter { identification.identity.lastRegisteredDeviceToken != $1 }
+                        .map { ($1, identification.identity.pushSubscriptionAlerts) }
+                        .flatMap(identification.service.createPushSubscription(deviceToken:alerts:))
+                        .sink { _ in } receiveValue: { _ in }
+                        .store(in: &self.cancellables)
+                }
+
+                return TabNavigationViewModel(identification: identification)
             }
-            .assign(to: &$identification)
+            .assign(to: &$navigationViewModel)
     }
 }

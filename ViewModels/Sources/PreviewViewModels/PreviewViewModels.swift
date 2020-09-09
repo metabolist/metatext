@@ -47,7 +47,7 @@ public extension RootViewModel {
 }
 
 public extension Identification {
-    static let preview = RootViewModel.preview.identification!
+    static let preview = RootViewModel.preview.navigationViewModel!.identification
 }
 
 // swiftlint:enable force_try

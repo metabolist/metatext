@@ -6,7 +6,7 @@ import SwiftUI
 import ViewModels
 
 struct TabNavigationView: View {
-    @EnvironmentObject var viewModel: TabNavigationViewModel
+    @ObservedObject var viewModel: TabNavigationViewModel
     @EnvironmentObject var rootViewModel: RootViewModel
     @Environment(\.displayScale) var displayScale: CGFloat
 
@@ -24,8 +24,10 @@ struct TabNavigationView: View {
                 .tag(tab)
             }
         }
+        .environmentObject(viewModel.identification)
         .sheet(isPresented: $viewModel.presentingSecondaryNavigation) {
-            SecondaryNavigationView()
+            SecondaryNavigationView(viewModel: viewModel)
+                .environmentObject(viewModel.identification)
                 .environmentObject(viewModel)
                 .environmentObject(rootViewModel)
         }
@@ -81,7 +83,7 @@ private extension TabNavigationView {
         Button {
             viewModel.presentingSecondaryNavigation.toggle()
         } label: {
-            KFImage(viewModel.identity.image,
+            KFImage(viewModel.identification.identity.image,
                     options: .downsampled(dimension: 28, scaleFactor: displayScale))
                 .placeholder { Image(systemName: "gear") }
                 .renderingMode(.original)
@@ -156,9 +158,8 @@ import PreviewViewModels
 
 struct TabNavigation_Previews: PreviewProvider {
     static var previews: some View {
-        TabNavigationView()
+        TabNavigationView(viewModel: TabNavigationViewModel(identification: .preview))
             .environmentObject(Identification.preview)
-            .environmentObject(TabNavigationViewModel(identification: .preview))
             .environmentObject(RootViewModel.preview)
     }
 }

@@ -5,7 +5,7 @@ import Foundation
 import ServiceLayer
 
 public final class Identification: ObservableObject {
-    @Published private(set) var identity: Identity
+    @Published private(set) public var identity: Identity
     let service: IdentityService
 
     init(identity: Identity, observation: AnyPublisher<Identity, Never>, service: IdentityService) {
