@@ -27,6 +27,7 @@ struct TabNavigationView: View {
         .sheet(isPresented: $viewModel.presentingSecondaryNavigation) {
             SecondaryNavigationView()
                 .environmentObject(viewModel)
+                .environmentObject(rootViewModel)
         }
         .alertItem($viewModel.alertItem)
         .onAppear(perform: viewModel.refreshIdentity)

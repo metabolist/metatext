@@ -7,7 +7,6 @@ import ViewModels
 struct SecondaryNavigationView: View {
     @EnvironmentObject var identification: Identification
     @EnvironmentObject var tabNavigationViewModel: TabNavigationViewModel
-    @Environment(\.presentationMode) var presentationMode
     @Environment(\.displayScale) var displayScale: CGFloat
 
     var body: some View {
@@ -69,7 +68,7 @@ struct SecondaryNavigationView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button {
-                        presentationMode.wrappedValue.dismiss()
+                        tabNavigationViewModel.presentingSecondaryNavigation = false
                     } label: {
                         Image(systemName: "xmark.circle.fill")
                     }
