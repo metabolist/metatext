@@ -8,6 +8,7 @@ public final class RootViewModel: ObservableObject {
     @Published public private(set) var identification: Identification?
 
     @Published private var mostRecentlyUsedIdentityID: UUID?
+    private let environment: AppEnvironment
     private let allIdentitiesService: AllIdentitiesService
     private let userNotificationService: UserNotificationService
     private let registerForRemoteNotifications: () -> AnyPublisher<Data, Error>
@@ -15,6 +16,7 @@ public final class RootViewModel: ObservableObject {
 
     public init(environment: AppEnvironment,
                 registerForRemoteNotifications: @escaping () -> AnyPublisher<Data, Error>) throws {
+        self.environment = environment
         allIdentitiesService = try AllIdentitiesService(environment: environment)
         userNotificationService = UserNotificationService(environment: environment)
         self.registerForRemoteNotifications = registerForRemoteNotifications
@@ -77,6 +79,8 @@ public extension RootViewModel {
     }
 
     func addIdentityViewModel() -> AddIdentityViewModel {
-        AddIdentityViewModel(allIdentitiesService: allIdentitiesService)
+        AddIdentityViewModel(
+            allIdentitiesService: allIdentitiesService,
+            instanceFilterService: InstanceFilterService(environment: environment))
     }
 }

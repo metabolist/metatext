@@ -9,21 +9,19 @@ import Secrets
 
 public struct AllIdentitiesService {
     public let mostRecentlyUsedIdentityID: AnyPublisher<UUID?, Never>
-    public let instanceFilterService: InstanceFilterService
 
-    private let database: IdentityDatabase
     private let environment: AppEnvironment
+    private let database: IdentityDatabase
 
     public init(environment: AppEnvironment) throws {
+        self.environment = environment
         self.database =  try environment.fixtureDatabase ?? IdentityDatabase(
             inMemory: environment.inMemoryContent,
             keychain: environment.keychain)
-        self.environment = environment
 
         mostRecentlyUsedIdentityID = database.mostRecentlyUsedIdentityIDObservation()
             .replaceError(with: nil)
             .eraseToAnyPublisher()
-        instanceFilterService = InstanceFilterService(environment: environment)
     }
 }
 

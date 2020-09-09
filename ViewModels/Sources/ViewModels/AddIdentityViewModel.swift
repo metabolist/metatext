@@ -11,11 +11,13 @@ public final class AddIdentityViewModel: ObservableObject {
     public let addedIdentityID: AnyPublisher<UUID, Never>
 
     private let allIdentitiesService: AllIdentitiesService
+    private let instanceFilterService: InstanceFilterService
     private let addedIdentityIDSubject = PassthroughSubject<UUID, Never>()
     private var cancellables = Set<AnyCancellable>()
 
-    init(allIdentitiesService: AllIdentitiesService) {
+    init(allIdentitiesService: AllIdentitiesService, instanceFilterService: InstanceFilterService) {
         self.allIdentitiesService = allIdentitiesService
+        self.instanceFilterService = instanceFilterService
         addedIdentityID = addedIdentityIDSubject.eraseToAnyPublisher()
     }
 }
@@ -81,7 +83,7 @@ public extension AddIdentityViewModel {
     }
 
     func refreshFilter() {
-        allIdentitiesService.instanceFilterService.updateFilter()
+        instanceFilterService.updateFilter()
             .sink { _ in }
             .store(in: &cancellables)
     }
@@ -102,7 +104,7 @@ private extension AddIdentityViewModel {
             throw URLError(.badURL)
         }
 
-        if allIdentitiesService.instanceFilterService.isFiltered(url: url) {
+        if instanceFilterService.isFiltered(url: url) {
             return Self.filteredURL
         }
 

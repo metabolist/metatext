@@ -9,7 +9,7 @@ public struct InstanceFilterService {
     private let httpClient: HTTPClient
     private var userDefaultsClient: UserDefaultsClient
 
-    init(environment: AppEnvironment) {
+    public init(environment: AppEnvironment) {
         httpClient = HTTPClient(session: environment.session, decoder: JSONDecoder())
         userDefaultsClient = UserDefaultsClient(userDefaults: environment.userDefaults)
     }

@@ -44,38 +44,7 @@ private extension IdentitiesView {
                                 rootViewModel.newIdentitySelected(id: identity.id)
                             }
                         } label: {
-                            HStack {
-                                KFImage(identity.image,
-                                        options: .downsampled(dimension: 40, scaleFactor: displayScale))
-                                VStack(alignment: .leading, spacing: 0) {
-                                    Spacer()
-                                    if identity.authenticated {
-                                        if let account = identity.account {
-                                            CustomEmojiText(
-                                                text: account.displayName,
-                                                emoji: account.emojis,
-                                                textStyle: .headline)
-                                        }
-                                        Text(identity.handle)
-                                            .font(.subheadline)
-                                            .foregroundColor(.secondary)
-                                    } else {
-                                        Text(identity.handle)
-                                            .font(.headline)
-                                            .foregroundColor(.secondary)
-                                        if let instance = identity.instance {
-                                            Text(instance.uri)
-                                                .font(.subheadline)
-                                                .foregroundColor(.secondary)
-                                        }
-                                    }
-                                    Spacer()
-                                }
-                                Spacer()
-                                if identity.id == viewModel.currentIdentityID {
-                                    Image(systemName: "checkmark.circle")
-                                }
-                            }
+                            row(identity: identity)
                         }
                         .disabled(identity.id == viewModel.currentIdentityID)
                         .buttonStyle(PlainButtonStyle())
@@ -86,6 +55,42 @@ private extension IdentitiesView {
                         rootViewModel.deleteIdentity(id: identities[index].id)
                     }
                 }
+            }
+        }
+    }
+
+    @ViewBuilder
+    func row(identity: Identity) -> some View {
+        HStack {
+            KFImage(identity.image,
+                    options: .downsampled(dimension: 40, scaleFactor: displayScale))
+            VStack(alignment: .leading, spacing: 0) {
+                Spacer()
+                if identity.authenticated {
+                    if let account = identity.account {
+                        CustomEmojiText(
+                            text: account.displayName,
+                            emoji: account.emojis,
+                            textStyle: .headline)
+                    }
+                    Text(identity.handle)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                } else {
+                    Text(identity.handle)
+                        .font(.headline)
+                        .foregroundColor(.secondary)
+                    if let instance = identity.instance {
+                        Text(instance.uri)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
+                }
+                Spacer()
+            }
+            Spacer()
+            if identity.id == viewModel.currentIdentityID {
+                Image(systemName: "checkmark.circle")
             }
         }
     }
