@@ -16,13 +16,17 @@ extension WebAuthSession {
     static func publisher(
         url: URL,
         callbackURLScheme: String?,
-        presentationContextProvider: WebAuthPresentationContextProviding) -> AnyPublisher<URL?, Error> {
-        Future<URL?, Error> { promise in
+        presentationContextProvider: WebAuthPresentationContextProviding) -> AnyPublisher<URL, Error> {
+        Future<URL, Error> { promise in
             let webAuthSession = Self(
                 url: url,
                 callbackURLScheme: callbackURLScheme) { oauthCallbackURL, error in
                 if let error = error {
                     return promise(.failure(error))
+                }
+
+                guard let oauthCallbackURL = oauthCallbackURL else {
+                    return promise(.failure(URLError(.unknown)))
                 }
 
                 return promise(.success(oauthCallbackURL))

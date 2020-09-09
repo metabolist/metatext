@@ -6,10 +6,11 @@ import HTTP
 import Mastodon
 
 public final class MastodonAPIClient: HTTPClient {
-    public var instanceURL: URL?
+    public var instanceURL: URL
     public var accessToken: String?
 
-    public required init(session: Session) {
+    public required init(session: Session, instanceURL: URL) {
+        self.instanceURL = instanceURL
         super.init(session: session, decoder: MastodonDecoder())
     }
 
@@ -20,11 +21,7 @@ public final class MastodonAPIClient: HTTPClient {
 
 extension MastodonAPIClient {
     public func request<E: Endpoint>(_ endpoint: E) -> AnyPublisher<E.ResultType, Error> {
-        guard let instanceURL = instanceURL else {
-            return Fail(error: URLError(.badURL)).eraseToAnyPublisher()
-        }
-
-        return super.request(
+        super.request(
             MastodonAPITarget(baseURL: instanceURL, endpoint: endpoint, accessToken: accessToken),
             decodeErrorsAs: APIError.self)
     }

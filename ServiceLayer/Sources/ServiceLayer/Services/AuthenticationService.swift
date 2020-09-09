@@ -5,69 +5,33 @@ import Foundation
 import Mastodon
 import MastodonAPI
 
-public struct AuthenticationService {
+public enum AuthenticationError: Error {
+    case canceled
+}
+
+struct AuthenticationService {
     private let mastodonAPIClient: MastodonAPIClient
     private let webAuthSessionType: WebAuthSession.Type
     private let webAuthSessionContextProvider = WebAuthSessionContextProvider()
 
-    public init(environment: AppEnvironment) {
-        mastodonAPIClient = MastodonAPIClient(session: environment.session)
+    init(url: URL, environment: AppEnvironment) {
+        mastodonAPIClient = MastodonAPIClient(session: environment.session, instanceURL: url)
         webAuthSessionType = environment.webAuthSessionType
     }
 }
 
-public extension AuthenticationService {
-    func authorizeApp(instanceURL: URL) -> AnyPublisher<AppAuthorization, Error> {
-        let endpoint = AppAuthorizationEndpoint.apps(
-            clientName: OAuth.clientName,
-            redirectURI: OAuth.callbackURL.absoluteString,
-            scopes: OAuth.scopes,
-            website: OAuth.website)
-        let target = MastodonAPITarget(baseURL: instanceURL, endpoint: endpoint, accessToken: nil)
+extension AuthenticationService {
+    func authenticate() -> AnyPublisher<(AppAuthorization, AccessToken), Error> {
+        let appAuthorization = mastodonAPIClient.request(
+            AppAuthorizationEndpoint.apps(
+                clientName: OAuth.clientName,
+                redirectURI: OAuth.callbackURL.absoluteString,
+                scopes: OAuth.scopes,
+                website: OAuth.website))
+            .share()
 
-        return mastodonAPIClient.request(target)
-    }
-
-    func authenticate(instanceURL: URL, appAuthorization: AppAuthorization) -> AnyPublisher<AccessToken, Error> {
-        guard let authorizationURL = authorizationURL(
-                instanceURL: instanceURL,
-                clientID: appAuthorization.clientId) else {
-            return Fail(error: URLError(.badURL)).eraseToAnyPublisher()
-        }
-
-        return webAuthSessionType.publisher(
-            url: authorizationURL,
-            callbackURLScheme: OAuth.callbackURLScheme,
-            presentationContextProvider: webAuthSessionContextProvider)
-            .tryCatch { error -> AnyPublisher<URL?, Error> in
-                if (error as? WebAuthSessionError)?.code == .canceledLogin {
-                    return Just(nil).setFailureType(to: Error.self).eraseToAnyPublisher()
-                }
-
-                throw error
-            }
-            .compactMap { $0 }
-            .tryMap { url -> String in
-                guard let queryItems = URLComponents(url: url, resolvingAgainstBaseURL: true)?.queryItems,
-                      let code = queryItems.first(where: {
-                        $0.name == OAuth.codeCallbackQueryItemName
-                      })?.value
-                else { throw OAuthError.codeNotFound }
-
-                return code
-            }
-            .flatMap { code -> AnyPublisher<AccessToken, Error> in
-                let endpoint = AccessTokenEndpoint.oauthToken(
-                    clientID: appAuthorization.clientId,
-                    clientSecret: appAuthorization.clientSecret,
-                    code: code,
-                    grantType: OAuth.grantType,
-                    scopes: OAuth.scopes,
-                    redirectURI: OAuth.callbackURL.absoluteString)
-                let target = MastodonAPITarget(baseURL: instanceURL, endpoint: endpoint, accessToken: nil)
-
-                return mastodonAPIClient.request(target)
-            }
+        return appAuthorization
+            .zip(appAuthorization.flatMap(authenticate(appAuthorization:)))
             .eraseToAnyPublisher()
     }
 }
@@ -87,19 +51,66 @@ private extension AuthenticationService {
         case codeNotFound
     }
 
-    func authorizationURL(instanceURL: URL, clientID: String) -> URL? {
-        guard var authorizationURLComponents = URLComponents(url: instanceURL, resolvingAgainstBaseURL: true) else {
-            return nil
-        }
+    static func extractCode(oauthCallbackURL: URL) throws -> String {
+        guard let queryItems = URLComponents(
+                url: oauthCallbackURL,
+                resolvingAgainstBaseURL: true)?.queryItems,
+              let code = queryItems.first(where: {
+                $0.name == OAuth.codeCallbackQueryItemName
+              })?.value
+        else { throw OAuthError.codeNotFound }
+
+        return code
+    }
+
+    func authorizationURL(appAuthorization: AppAuthorization) throws -> URL {
+        guard var authorizationURLComponents = URLComponents(
+                url: mastodonAPIClient.instanceURL,
+                resolvingAgainstBaseURL: true)
+        else { throw URLError(.badURL) }
 
         authorizationURLComponents.path = "/oauth/authorize"
         authorizationURLComponents.queryItems = [
-            "client_id": clientID,
-            "scope": OAuth.scopes,
-            "response_type": "code",
-            "redirect_uri": OAuth.callbackURL.absoluteString
-        ].map { URLQueryItem(name: $0, value: $1) }
+            .init(name: "client_id", value: appAuthorization.clientId),
+            .init(name: "scope", value: OAuth.scopes),
+            .init(name: "response_type", value: "code"),
+            .init(name: "redirect_uri", value: OAuth.callbackURL.absoluteString)
+        ]
 
-        return authorizationURLComponents.url
+        guard let authorizationURL = authorizationURLComponents.url else {
+            throw URLError(.badURL)
+        }
+
+        return authorizationURL
+    }
+
+    func authenticate(appAuthorization: AppAuthorization) -> AnyPublisher<AccessToken, Error> {
+        Just(appAuthorization)
+            .tryMap(authorizationURL(appAuthorization:))
+            .flatMap {
+                webAuthSessionType.publisher(
+                    url: $0,
+                    callbackURLScheme: OAuth.callbackURLScheme,
+                    presentationContextProvider: webAuthSessionContextProvider)
+            }
+            .mapError { error -> Error in
+                if (error as? WebAuthSessionError)?.code == .canceledLogin {
+                    return AuthenticationError.canceled as Error
+                }
+
+                return error
+            }
+            .tryMap(Self.extractCode(oauthCallbackURL:))
+            .flatMap {
+                mastodonAPIClient.request(
+                    AccessTokenEndpoint.oauthToken(
+                        clientID: appAuthorization.clientId,
+                        clientSecret: appAuthorization.clientSecret,
+                        code: $0,
+                        grantType: OAuth.grantType,
+                        scopes: OAuth.scopes,
+                        redirectURI: OAuth.callbackURL.absoluteString))
+            }
+            .eraseToAnyPublisher()
     }
 }

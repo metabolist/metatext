@@ -18,11 +18,11 @@ public extension AppEnvironment {
                      fixtureDatabase: IdentityDatabase? = nil) -> Self {
         AppEnvironment(
             session: Session(configuration: .stubbing),
-            webAuthSessionType: SuccessfulMockWebAuthSession.self,
-            keychain: MockKeychain.self,
-            userDefaults: MockUserDefaults(),
-            userNotificationClient: .mock,
-            inMemoryContent: true,
+            webAuthSessionType: webAuthSessionType,
+            keychain: keychain,
+            userDefaults: userDefaults,
+            userNotificationClient: userNotificationClient,
+            inMemoryContent: inMemoryContent,
             fixtureDatabase: fixtureDatabase)
     }
 }

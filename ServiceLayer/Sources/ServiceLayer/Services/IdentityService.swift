@@ -24,8 +24,8 @@ public struct IdentityService {
         secrets = Secrets(
             identityID: id,
             keychain: environment.keychain)
-        mastodonAPIClient = MastodonAPIClient(session: environment.session)
-        mastodonAPIClient.instanceURL = try secrets.getInstanceURL()
+        mastodonAPIClient = MastodonAPIClient(session: environment.session,
+                                              instanceURL: try secrets.getInstanceURL())
         mastodonAPIClient.accessToken = try? secrets.getAccessToken()
 
         contentDatabase = try ContentDatabase(identityID: id,

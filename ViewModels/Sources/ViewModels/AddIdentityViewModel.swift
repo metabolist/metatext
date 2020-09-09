@@ -11,12 +11,12 @@ public final class AddIdentityViewModel: ObservableObject {
     public let addedIdentityID: AnyPublisher<UUID, Never>
 
     private let allIdentitiesService: AllIdentitiesService
-    private let addedIdentityIDInput = PassthroughSubject<UUID, Never>()
+    private let addedIdentityIDSubject = PassthroughSubject<UUID, Never>()
     private var cancellables = Set<AnyCancellable>()
 
     init(allIdentitiesService: AllIdentitiesService) {
         self.allIdentitiesService = allIdentitiesService
-        addedIdentityID = addedIdentityIDInput.eraseToAnyPublisher()
+        addedIdentityID = addedIdentityIDSubject.eraseToAnyPublisher()
     }
 }
 
@@ -33,22 +33,26 @@ public extension AddIdentityViewModel {
             return
         }
 
-        allIdentitiesService.authorizeIdentity(id: identityID, instanceURL: instanceURL)
-            .collect()
-            .map { _ in (identityID, instanceURL) }
-            .flatMap(allIdentitiesService.createIdentity(id:instanceURL:))
-            .mapError {
-                return $0
-            }
+        allIdentitiesService.authorizeAndCreateIdentity(id: identityID, url: instanceURL)
             .receive(on: DispatchQueue.main)
-            .assignErrorsToAlertItem(to: \.alertItem, on: self)
-            .handleEvents(
-                receiveSubscription: { [weak self] _ in self?.loading = true },
-                receiveCompletion: { [weak self] _ in self?.loading = false  })
-            .sink { [weak self] in
-                guard let self = self, case .finished = $0 else { return }
+            .catch { [weak self] error -> Empty<Never, Never> in
+                if case AuthenticationError.canceled = error {
+                    // no-op
+                } else {
+                    self?.alertItem = AlertItem(error: error)
+                }
 
-                self.addedIdentityIDInput.send(identityID)
+                return Empty()
+            }
+            .handleEvents(receiveSubscription: { [weak self] _ in self?.loading = true })
+            .sink { [weak self] in
+                guard let self = self else { return }
+
+                self.loading = false
+
+                if case .finished = $0 {
+                    self.addedIdentityIDSubject.send(identityID)
+                }
             } receiveValue: { _ in }
             .store(in: &cancellables)
     }
@@ -71,7 +75,7 @@ public extension AddIdentityViewModel {
             .sink { [weak self] in
                 guard let self = self, case .finished = $0 else { return }
 
-                self.addedIdentityIDInput.send(identityID)
+                self.addedIdentityIDSubject.send(identityID)
             } receiveValue: { _ in }
             .store(in: &cancellables)
     }

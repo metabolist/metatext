@@ -8,8 +8,10 @@ extension Publisher {
         to keyPath: ReferenceWritableKeyPath<Root, AlertItem?>,
         on object: Root) -> AnyPublisher<Output, Never> {
         self.catch { [weak object] error -> Empty<Output, Never> in
-            DispatchQueue.main.async {
-                object?[keyPath: keyPath] = AlertItem(error: error)
+            if let object = object {
+                DispatchQueue.main.async {
+                    object[keyPath: keyPath] = AlertItem(error: error)
+                }
             }
 
             return Empty()

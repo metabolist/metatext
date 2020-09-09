@@ -36,29 +36,25 @@ public extension AllIdentitiesService {
         database.createIdentity(id: id, url: instanceURL)
     }
 
-    func authorizeIdentity(id: UUID, instanceURL: URL) -> AnyPublisher<Never, Error> {
-        let secrets = Secrets(identityID: id, keychain: environment.keychain)
-        let authenticationService = AuthenticationService(environment: environment)
+    func authorizeAndCreateIdentity(id: UUID, url: URL) -> AnyPublisher<Never, Error> {
+        AuthenticationService(url: url, environment: environment)
+            .authenticate()
+            .tryMap {
+                let secrets = Secrets(identityID: id, keychain: environment.keychain)
 
-        return authenticationService.authorizeApp(instanceURL: instanceURL)
-            .tryMap { appAuthorization -> (URL, AppAuthorization) in
-                try secrets.setInstanceURL(instanceURL)
-                try secrets.setClientID(appAuthorization.clientId)
-                try secrets.setClientSecret(appAuthorization.clientSecret)
-
-                return (instanceURL, appAuthorization)
+                try secrets.setInstanceURL(url)
+                try secrets.setClientID($0.clientId)
+                try secrets.setClientSecret($0.clientSecret)
+                try secrets.setAccessToken($1.accessToken)
             }
-            .flatMap(authenticationService.authenticate(instanceURL:appAuthorization:))
-            .tryMap { try secrets.setAccessToken($0.accessToken) }
+            .flatMap { database.createIdentity(id: id, url: url) }
             .ignoreOutput()
             .eraseToAnyPublisher()
     }
 
     func deleteIdentity(_ identity: Identity) -> AnyPublisher<Never, Error> {
         let secrets = Secrets(identityID: identity.id, keychain: environment.keychain)
-        let mastodonAPIClient = MastodonAPIClient(session: environment.session)
-
-        mastodonAPIClient.instanceURL = identity.url
+        let mastodonAPIClient = MastodonAPIClient(session: environment.session, instanceURL: identity.url)
 
         return database.deleteIdentity(id: identity.id)
             .collect()
