@@ -27,7 +27,6 @@ struct TabNavigationView: View {
         .environmentObject(viewModel.identification)
         .sheet(isPresented: $viewModel.presentingSecondaryNavigation) {
             SecondaryNavigationView(viewModel: viewModel)
-                .environmentObject(viewModel.identification)
                 .environmentObject(viewModel)
                 .environmentObject(rootViewModel)
         }

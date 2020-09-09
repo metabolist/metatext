@@ -6,7 +6,6 @@ import ViewModels
 
 struct SecondaryNavigationView: View {
     @ObservedObject var viewModel: NavigationViewModel
-    @EnvironmentObject var identification: Identification
     @EnvironmentObject var rootViewModel: RootViewModel
     @Environment(\.displayScale) var displayScale: CGFloat
 
@@ -15,28 +14,28 @@ struct SecondaryNavigationView: View {
             Form {
                 Section {
                     NavigationLink(
-                        destination: IdentitiesView(viewModel: .init(identification: identification)),
+                        destination: IdentitiesView(viewModel: .init(identification: viewModel.identification)),
                         label: {
                             HStack {
-                                KFImage(identification.identity.image,
+                                KFImage(viewModel.identification.identity.image,
                                         options: .downsampled(dimension: 50, scaleFactor: displayScale))
                                 VStack(alignment: .leading) {
-                                    if identification.identity.authenticated {
-                                        if let account = identification.identity.account {
+                                    if viewModel.identification.identity.authenticated {
+                                        if let account = viewModel.identification.identity.account {
                                             CustomEmojiText(
                                                 text: account.displayName,
                                                 emoji: account.emojis,
                                                 textStyle: .headline)
                                         }
-                                        Text(identification.identity.handle)
+                                        Text(viewModel.identification.identity.handle)
                                             .font(.subheadline)
                                             .foregroundColor(.secondary)
                                             .lineLimit(1)
                                             .minimumScaleFactor(0.5)
                                     } else {
-                                        Text(identification.identity.handle)
+                                        Text(viewModel.identification.identity.handle)
                                             .font(.headline)
-                                        if let instance = identification.identity.instance {
+                                        if let instance = viewModel.identification.identity.instance {
                                             Text(instance.uri)
                                                 .font(.subheadline)
                                                 .foregroundColor(.secondary)
@@ -54,7 +53,7 @@ struct SecondaryNavigationView: View {
                         })
                 }
                 Section {
-                    NavigationLink(destination: ListsView(viewModel: .init(identification: identification))) {
+                    NavigationLink(destination: ListsView(viewModel: .init(identification: viewModel.identification))) {
                         Label("secondary-navigation.lists", systemImage: "scroll")
                     }
                 }
@@ -62,7 +61,7 @@ struct SecondaryNavigationView: View {
                     NavigationLink(
                         "secondary-navigation.preferences",
                         destination: PreferencesView(
-                            viewModel: .init(identification: identification)))
+                            viewModel: .init(identification: viewModel.identification)))
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
@@ -77,6 +76,7 @@ struct SecondaryNavigationView: View {
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
+        .environmentObject(viewModel.identification)
     }
 }
 
@@ -86,7 +86,6 @@ import PreviewViewModels
 struct SecondaryNavigationView_Previews: PreviewProvider {
     static var previews: some View {
         SecondaryNavigationView(viewModel: NavigationViewModel(identification: .preview))
-            .environmentObject(Identification.preview)
             .environmentObject(RootViewModel.preview)
     }
 }
