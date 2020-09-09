@@ -6,7 +6,7 @@ import SwiftUI
 import ViewModels
 
 struct TabNavigationView: View {
-    @ObservedObject var viewModel: TabNavigationViewModel
+    @ObservedObject var viewModel: NavigationViewModel
     @EnvironmentObject var rootViewModel: RootViewModel
     @Environment(\.displayScale) var displayScale: CGFloat
 
@@ -42,7 +42,7 @@ struct TabNavigationView: View {
 
 private extension TabNavigationView {
     @ViewBuilder
-    func view(tab: TabNavigationViewModel.Tab) -> some View {
+    func view(tab: NavigationViewModel.Tab) -> some View {
         switch tab {
         case .timelines:
             StatusListView(viewModel: viewModel.viewModel(timeline: viewModel.timeline))
@@ -133,7 +133,7 @@ private extension Timeline {
     }
 }
 
-extension TabNavigationViewModel.Tab {
+extension NavigationViewModel.Tab {
     var title: String {
         switch self {
         case .timelines: return "Timelines"
@@ -158,7 +158,7 @@ import PreviewViewModels
 
 struct TabNavigation_Previews: PreviewProvider {
     static var previews: some View {
-        TabNavigationView(viewModel: TabNavigationViewModel(identification: .preview))
+        TabNavigationView(viewModel: NavigationViewModel(identification: .preview))
             .environmentObject(Identification.preview)
             .environmentObject(RootViewModel.preview)
     }

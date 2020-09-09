@@ -5,7 +5,7 @@ import SwiftUI
 import ViewModels
 
 struct SecondaryNavigationView: View {
-    @ObservedObject var viewModel: TabNavigationViewModel
+    @ObservedObject var viewModel: NavigationViewModel
     @EnvironmentObject var identification: Identification
     @EnvironmentObject var rootViewModel: RootViewModel
     @Environment(\.displayScale) var displayScale: CGFloat
@@ -85,7 +85,7 @@ import PreviewViewModels
 
 struct SecondaryNavigationView_Previews: PreviewProvider {
     static var previews: some View {
-        SecondaryNavigationView(viewModel: TabNavigationViewModel(identification: .preview))
+        SecondaryNavigationView(viewModel: NavigationViewModel(identification: .preview))
             .environmentObject(Identification.preview)
             .environmentObject(RootViewModel.preview)
     }

@@ -20,7 +20,7 @@ import PreviewViewModels
 
 struct StatusListView_Previews: PreviewProvider {
     static var previews: some View {
-        StatusListView(viewModel: TabNavigationViewModel(identification: .preview).viewModel(timeline: .home))
+        StatusListView(viewModel: NavigationViewModel(identification: .preview).viewModel(timeline: .home))
     }
 }
 #endif

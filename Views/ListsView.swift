@@ -61,7 +61,7 @@ import PreviewViewModels
 struct ListsView_Previews: PreviewProvider {
     static var previews: some View {
         ListsView(viewModel: .init(identification: .preview))
-            .environmentObject(TabNavigationViewModel(identification: .preview))
+            .environmentObject(NavigationViewModel(identification: .preview))
     }
 }
 #endif

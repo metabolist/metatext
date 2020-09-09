@@ -5,7 +5,7 @@ import Foundation
 import Mastodon
 import ServiceLayer
 
-public final class TabNavigationViewModel: ObservableObject {
+public final class NavigationViewModel: ObservableObject {
     public let identification: Identification
     @Published public private(set) var recentIdentities = [Identity]()
     @Published public var timeline: Timeline
@@ -40,7 +40,7 @@ public final class TabNavigationViewModel: ObservableObject {
     }
 }
 
-public extension TabNavigationViewModel {
+public extension NavigationViewModel {
     var tabs: [Tab] {
         if identification.service.isAuthorized {
             return Tab.allCases
@@ -92,7 +92,7 @@ public extension TabNavigationViewModel {
     }
 }
 
-public extension TabNavigationViewModel {
+public extension NavigationViewModel {
     enum Tab: CaseIterable {
         case timelines
         case explore
@@ -101,6 +101,6 @@ public extension TabNavigationViewModel {
     }
 }
 
-extension TabNavigationViewModel.Tab: Identifiable {
+extension NavigationViewModel.Tab: Identifiable {
     public var id: Self { self }
 }

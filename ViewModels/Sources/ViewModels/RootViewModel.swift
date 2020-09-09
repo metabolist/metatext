@@ -5,7 +5,7 @@ import Foundation
 import ServiceLayer
 
 public final class RootViewModel: ObservableObject {
-    @Published public private(set) var navigationViewModel: TabNavigationViewModel?
+    @Published public private(set) var navigationViewModel: NavigationViewModel?
 
     @Published private var mostRecentlyUsedIdentityID: UUID?
     private let environment: AppEnvironment
@@ -100,7 +100,7 @@ private extension RootViewModel {
                         .store(in: &self.cancellables)
                 }
 
-                return TabNavigationViewModel(identification: identification)
+                return NavigationViewModel(identification: identification)
             }
             .assign(to: &$navigationViewModel)
     }
