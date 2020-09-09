@@ -21,17 +21,30 @@ struct SecondaryNavigationView: View {
                                 KFImage(tabNavigationViewModel.identity.image,
                                         options: .downsampled(dimension: 50, scaleFactor: displayScale))
                                 VStack(alignment: .leading) {
-                                    if let account = tabNavigationViewModel.identity.account {
-                                        CustomEmojiText(
-                                            text: account.displayName,
-                                            emoji: account.emojis,
-                                            textStyle: .headline)
+                                    if tabNavigationViewModel.identity.authenticated {
+                                        if let account = tabNavigationViewModel.identity.account {
+                                            CustomEmojiText(
+                                                text: account.displayName,
+                                                emoji: account.emojis,
+                                                textStyle: .headline)
+                                        }
+                                        Text(tabNavigationViewModel.identity.handle)
+                                            .font(.subheadline)
+                                            .foregroundColor(.secondary)
+                                            .lineLimit(1)
+                                            .minimumScaleFactor(0.5)
+                                    } else {
+                                        Text(tabNavigationViewModel.identity.handle)
+                                            .font(.headline)
+                                        if let instance = tabNavigationViewModel.identity.instance {
+                                            Text(instance.uri)
+                                                .font(.subheadline)
+                                                .foregroundColor(.secondary)
+                                                .lineLimit(1)
+                                                .minimumScaleFactor(0.5)
+                                        }
                                     }
-                                    Text(tabNavigationViewModel.identity.handle)
-                                        .font(.subheadline)
-                                        .foregroundColor(.secondary)
-                                        .lineLimit(1)
-                                        .minimumScaleFactor(0.5)
+
                                     Spacer()
                                     Text("secondary-navigation.manage-accounts")
                                         .font(.subheadline)

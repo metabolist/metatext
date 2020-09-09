@@ -11,7 +11,8 @@ public enum Timeline: Hashable {
 }
 
 public extension Timeline {
-    static let nonLists: [Timeline] = [.home, .local, .federated]
+    static let unauthenticatedDefaults: [Timeline] = [.local, .federated]
+    static let authenticatedDefaults: [Timeline] = [.home, .local, .federated]
 }
 
 extension Timeline: Identifiable {

@@ -35,7 +35,7 @@ public extension Secrets {
     }
 }
 
-enum SecretsError: Error {
+public enum SecretsError: Error {
     case itemAbsent
 }
 
@@ -89,15 +89,19 @@ public extension Secrets {
         return "x'\(passphraseData.base16EncodedString(options: [.uppercase]))'"
     }
 
-    func deleteAllItems() throws {
+    func deleteAllItems() {
         for item in Secrets.Item.allCases {
-            switch item.kind {
-            case .genericPassword:
-                try keychain.deleteGenericPassword(
-                    account: scopedKey(item: item),
-                    service: Self.keychainServiceName)
-            case .key:
-                try keychain.deleteKey(applicationTag: scopedKey(item: item))
+            do {
+                switch item.kind {
+                case .genericPassword:
+                    try keychain.deleteGenericPassword(
+                        account: scopedKey(item: item),
+                        service: Self.keychainServiceName)
+                case .key:
+                    try keychain.deleteKey(applicationTag: scopedKey(item: item))
+                }
+            } catch {
+                // no-op
             }
         }
     }

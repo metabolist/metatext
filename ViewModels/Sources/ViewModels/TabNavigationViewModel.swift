@@ -8,8 +8,8 @@ import ServiceLayer
 public final class TabNavigationViewModel: ObservableObject {
     @Published public private(set) var identity: Identity
     @Published public private(set) var recentIdentities = [Identity]()
-    @Published public var timeline = Timeline.home
-    @Published public private(set) var timelinesAndLists = Timeline.nonLists
+    @Published public var timeline: Timeline
+    @Published public private(set) var timelinesAndLists: [Timeline]
     @Published public var presentingSecondaryNavigation = false
     @Published public var alertItem: AlertItem?
     public var selectedTab: Tab? = .timelines
@@ -20,20 +20,34 @@ public final class TabNavigationViewModel: ObservableObject {
     public init(identification: Identification) {
         self.identification = identification
         identity = identification.identity
-        identification.$identity.dropFirst().assign(to: &$identity)
+        timeline = identification.service.isAuthorized ? .home : .local
+        timelinesAndLists = identification.service.isAuthorized
+            ? Timeline.authenticatedDefaults
+            : Timeline.unauthenticatedDefaults
 
+        identification.$identity.dropFirst().assign(to: &$identity)
         identification.service.recentIdentitiesObservation()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$recentIdentities)
 
-        identification.service.listsObservation()
-            .map { Timeline.nonLists + $0 }
-            .assignErrorsToAlertItem(to: \.alertItem, on: self)
-            .assign(to: &$timelinesAndLists)
+        if identification.service.isAuthorized {
+            identification.service.listsObservation()
+                .map { Timeline.authenticatedDefaults + $0 }
+                .assignErrorsToAlertItem(to: \.alertItem, on: self)
+                .assign(to: &$timelinesAndLists)
+        }
     }
 }
 
 public extension TabNavigationViewModel {
+    var tabs: [Tab] {
+        if identification.service.isAuthorized {
+            return Tab.allCases
+        } else {
+            return [.timelines, .explore]
+        }
+    }
+
     var timelineSubtitle: String {
         switch timeline {
         case .home, .list:
@@ -43,28 +57,16 @@ public extension TabNavigationViewModel {
         }
     }
 
-    func systemImageName(timeline: Timeline) -> String {
-        switch timeline {
-        case .home: return "house"
-        case .local: return "person.3"
-        case .federated: return "globe"
-        case .list: return "scroll"
-        case .tag: return "number"
-        }
-    }
-
     func refreshIdentity() {
         if identification.service.isAuthorized {
             identification.service.verifyCredentials()
                 .assignErrorsToAlertItem(to: \.alertItem, on: self)
                 .sink { _ in }
                 .store(in: &cancellables)
-
             identification.service.refreshLists()
                 .assignErrorsToAlertItem(to: \.alertItem, on: self)
                 .sink { _ in }
                 .store(in: &cancellables)
-
             identification.service.refreshFilters()
                 .assignErrorsToAlertItem(to: \.alertItem, on: self)
                 .sink { _ in }
@@ -92,7 +94,7 @@ public extension TabNavigationViewModel {
 public extension TabNavigationViewModel {
     enum Tab: CaseIterable {
         case timelines
-        case search
+        case explore
         case notifications
         case messages
     }

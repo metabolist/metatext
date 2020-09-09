@@ -1,6 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import KingfisherSwiftUI
+import struct ServiceLayer.Identity
 import SwiftUI
 import ViewModels
 
@@ -18,9 +19,26 @@ struct IdentitiesView: View {
                         Label("add", systemImage: "plus.circle")
                     })
             }
-            Section {
+            section(title: "identities.accounts", identities: viewModel.authenticated)
+            section(title: "identities.browsing-anonymously", identities: viewModel.unauthenticated)
+        }
+        .toolbar {
+            ToolbarItem(placement: ToolbarItemPlacement.navigationBarTrailing) {
+                EditButton()
+            }
+        }
+    }
+}
+
+private extension IdentitiesView {
+    @ViewBuilder
+    func section(title: LocalizedStringKey, identities: [Identity]) -> some View {
+        if identities.isEmpty {
+            EmptyView()
+        } else {
+            Section(header: Text(title)) {
                 List {
-                    ForEach(viewModel.identities) { identity in
+                    ForEach(identities) { identity in
                         Button {
                             withAnimation {
                                 rootViewModel.newIdentitySelected(id: identity.id)
@@ -31,15 +49,26 @@ struct IdentitiesView: View {
                                         options: .downsampled(dimension: 40, scaleFactor: displayScale))
                                 VStack(alignment: .leading, spacing: 0) {
                                     Spacer()
-                                    if let account = identity.account {
-                                        CustomEmojiText(
-                                            text: account.displayName,
-                                            emoji: account.emojis,
-                                            textStyle: .headline)
+                                    if identity.authenticated {
+                                        if let account = identity.account {
+                                            CustomEmojiText(
+                                                text: account.displayName,
+                                                emoji: account.emojis,
+                                                textStyle: .headline)
+                                        }
+                                        Text(identity.handle)
+                                            .font(.subheadline)
+                                            .foregroundColor(.secondary)
+                                    } else {
+                                        Text(identity.handle)
+                                            .font(.headline)
+                                            .foregroundColor(.secondary)
+                                        if let instance = identity.instance {
+                                            Text(instance.uri)
+                                                .font(.subheadline)
+                                                .foregroundColor(.secondary)
+                                        }
                                     }
-                                    Text(identity.handle)
-                                        .font(.subheadline)
-                                        .foregroundColor(.secondary)
                                     Spacer()
                                 }
                                 Spacer()
@@ -54,14 +83,9 @@ struct IdentitiesView: View {
                     .onDelete {
                         guard let index = $0.first else { return }
 
-                        rootViewModel.deleteIdentity(viewModel.identities[index])
+                        rootViewModel.deleteIdentity(id: identities[index].id)
                     }
                 }
-            }
-        }
-        .toolbar {
-            ToolbarItem(placement: ToolbarItemPlacement.navigationBarTrailing) {
-                EditButton()
             }
         }
     }

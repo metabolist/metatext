@@ -12,7 +12,7 @@ struct TabNavigationView: View {
 
     var body: some View {
         TabView(selection: $viewModel.selectedTab) {
-            ForEach(TabNavigationViewModel.Tab.allCases) { tab in
+            ForEach(viewModel.tabs) { tab in
                 NavigationView {
                     view(tab: tab)
                 }
@@ -65,11 +65,11 @@ private extension TabNavigationView {
                                 viewModel.timeline = timeline
                             } label: {
                                 Label(timeline.title,
-                                      systemImage: viewModel.systemImageName(timeline: timeline))
+                                      systemImage: timeline.systemImageName)
                             }
                         }
                     } label: {
-                        Image(systemName: viewModel.systemImageName(timeline: viewModel.timeline))
+                        Image(systemName: viewModel.timeline.systemImageName)
                     })
         default: Text(tab.title)
         }
@@ -118,13 +118,23 @@ private extension Timeline {
             return "#" + tag
         }
     }
+
+    var systemImageName: String {
+        switch self {
+        case .home: return "house"
+        case .local: return "person.3"
+        case .federated: return "globe"
+        case .list: return "scroll"
+        case .tag: return "number"
+        }
+    }
 }
 
 extension TabNavigationViewModel.Tab {
     var title: String {
         switch self {
         case .timelines: return "Timelines"
-        case .search: return "Search"
+        case .explore: return "Explore"
         case .notifications: return "Notifications"
         case .messages: return "Messages"
         }
@@ -133,7 +143,7 @@ extension TabNavigationViewModel.Tab {
     var systemImageName: String {
         switch self {
         case .timelines: return "newspaper"
-        case .search: return "magnifyingglass"
+        case .explore: return "magnifyingglass"
         case .notifications: return "bell"
         case .messages: return "envelope"
         }

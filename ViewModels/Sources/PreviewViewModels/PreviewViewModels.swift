@@ -25,7 +25,7 @@ let db: IdentityDatabase = {
     try! secrets.setInstanceURL(url)
     try! secrets.setAccessToken(UUID().uuidString)
 
-    _ = db.createIdentity(id: id, url: url)
+    _ = db.createIdentity(id: id, url: url, authenticated: true)
             .receive(on: ImmediateScheduler.shared)
             .sink { _ in } receiveValue: { _ in }
 

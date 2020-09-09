@@ -8,6 +8,7 @@ extension Identity {
         self.init(
             id: result.identity.id,
             url: result.identity.url,
+            authenticated: result.identity.authenticated,
             lastUsedAt: result.identity.lastUsedAt,
             preferences: result.identity.preferences,
             instance: result.instance,

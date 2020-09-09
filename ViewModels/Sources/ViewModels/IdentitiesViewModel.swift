@@ -6,7 +6,8 @@ import ServiceLayer
 
 public final class IdentitiesViewModel: ObservableObject {
     public let currentIdentityID: UUID
-    @Published public var identities = [Identity]()
+    @Published public var authenticated = [Identity]()
+    @Published public var unauthenticated = [Identity]()
     @Published public var alertItem: AlertItem?
 
     private let identification: Identification
@@ -16,8 +17,13 @@ public final class IdentitiesViewModel: ObservableObject {
         self.identification = identification
         currentIdentityID = identification.identity.id
 
-        identification.service.identitiesObservation()
+        let observation = identification.service.identitiesObservation()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
-            .assign(to: &$identities)
+            .share()
+
+        observation.map { $0.filter { $0.authenticated } }
+            .assign(to: &$authenticated)
+        observation.map { $0.filter { !$0.authenticated } }
+            .assign(to: &$unauthenticated)
     }
 }

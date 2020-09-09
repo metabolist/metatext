@@ -33,7 +33,7 @@ public extension AddIdentityViewModel {
             return
         }
 
-        allIdentitiesService.authorizeAndCreateIdentity(id: identityID, url: instanceURL)
+        allIdentitiesService.createIdentity(id: identityID, url: instanceURL, authenticated: true)
             .receive(on: DispatchQueue.main)
             .catch { [weak self] error -> Empty<Never, Never> in
                 if case AuthenticationError.canceled = error {
@@ -70,7 +70,7 @@ public extension AddIdentityViewModel {
         }
 
         // TODO: Ensure instance has not disabled public preview
-        allIdentitiesService.createIdentity(id: identityID, instanceURL: instanceURL)
+        allIdentitiesService.createIdentity(id: identityID, url: instanceURL, authenticated: false)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .sink { [weak self] in
                 guard let self = self, case .finished = $0 else { return }

@@ -7,6 +7,7 @@ import Mastodon
 struct IdentityRecord: Codable, Hashable, FetchableRecord, PersistableRecord {
     let id: UUID
     let url: URL
+    let authenticated: Bool
     let lastUsedAt: Date
     let preferences: Identity.Preferences
     let instanceURI: String?

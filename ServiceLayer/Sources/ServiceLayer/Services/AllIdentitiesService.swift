@@ -32,45 +32,61 @@ public extension AllIdentitiesService {
         try IdentityService(id: id, database: database, environment: environment)
     }
 
-    func createIdentity(id: UUID, instanceURL: URL) -> AnyPublisher<Never, Error> {
-        database.createIdentity(id: id, url: instanceURL)
-    }
+    func createIdentity(id: UUID, url: URL, authenticated: Bool) -> AnyPublisher<Never, Error> {
+        let secrets = Secrets(identityID: id, keychain: environment.keychain)
 
-    func authorizeAndCreateIdentity(id: UUID, url: URL) -> AnyPublisher<Never, Error> {
-        AuthenticationService(url: url, environment: environment)
-            .authenticate()
-            .tryMap {
-                let secrets = Secrets(identityID: id, keychain: environment.keychain)
+        do {
+            try secrets.setInstanceURL(url)
+        } catch {
+            return Fail(error: error).eraseToAnyPublisher()
+        }
 
-                try secrets.setInstanceURL(url)
-                try secrets.setClientID($0.clientId)
-                try secrets.setClientSecret($0.clientSecret)
-                try secrets.setAccessToken($1.accessToken)
-            }
-            .flatMap { database.createIdentity(id: id, url: url) }
+        let createIdentityPublisher = database.createIdentity(
+            id: id,
+            url: url,
+            authenticated: authenticated)
             .ignoreOutput()
             .eraseToAnyPublisher()
+
+        if authenticated {
+            return AuthenticationService(url: url, environment: environment).authenticate()
+                .tryMap {
+                    try secrets.setClientID($0.clientId)
+                    try secrets.setClientSecret($0.clientSecret)
+                    try secrets.setAccessToken($1.accessToken)
+                }
+                .flatMap { createIdentityPublisher }
+                .eraseToAnyPublisher()
+        } else {
+            return createIdentityPublisher
+        }
     }
 
-    func deleteIdentity(_ identity: Identity) -> AnyPublisher<Never, Error> {
-        let secrets = Secrets(identityID: identity.id, keychain: environment.keychain)
-        let mastodonAPIClient = MastodonAPIClient(session: environment.session, instanceURL: identity.url)
+    func deleteIdentity(id: UUID) -> AnyPublisher<Never, Error> {
+        database.deleteIdentity(id: id)
+            .collect()
+            .tryMap { _ -> AnyPublisher<Never, Error> in
+                try ContentDatabase.delete(forIdentityID: id)
 
-        return database.deleteIdentity(id: identity.id)
-            .collect()
-            .tryMap { _ in
-                DeletionEndpoint.oauthRevoke(
-                    token: try secrets.getAccessToken(),
-                    clientID: try secrets.getClientID(),
-                    clientSecret: try secrets.getClientSecret())
+                let secrets = Secrets(identityID: id, keychain: environment.keychain)
+
+                defer { secrets.deleteAllItems() }
+
+                do {
+                    return MastodonAPIClient(
+                        session: environment.session,
+                        instanceURL: try secrets.getInstanceURL())
+                        .request(DeletionEndpoint.oauthRevoke(
+                                    token: try secrets.getAccessToken(),
+                                    clientID: try secrets.getClientID(),
+                                    clientSecret: try secrets.getClientSecret()))
+                        .ignoreOutput()
+                        .eraseToAnyPublisher()
+                } catch {
+                    return Empty().eraseToAnyPublisher()
+                }
             }
-            .flatMap(mastodonAPIClient.request)
-            .collect()
-            .tryMap { _ in
-                try secrets.deleteAllItems()
-                try ContentDatabase.delete(forIdentityID: identity.id)
-            }
-            .ignoreOutput()
+            .flatMap { $0 }
             .eraseToAnyPublisher()
     }
 

@@ -70,8 +70,8 @@ public extension RootViewModel {
             .store(in: &cancellables)
     }
 
-    func deleteIdentity(_ identity: Identity) {
-        allIdentitiesService.deleteIdentity(identity)
+    func deleteIdentity(id: UUID) {
+        allIdentitiesService.deleteIdentity(id: id)
             .sink { _ in } receiveValue: { _ in }
             .store(in: &cancellables)
     }

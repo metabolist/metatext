@@ -8,6 +8,8 @@
 "secondary-navigation.manage-accounts" = "Manage Accounts";
 "secondary-navigation.lists" = "Lists";
 "secondary-navigation.preferences" = "Preferences";
+"identities.accounts" = "Accounts";
+"identities.browsing-anonymously" = "Browsing Anonymously";
 "lists.new-list-title" = "New List Title";
 "preferences" = "Preferences";
 "preferences.posting-reading" = "Posting and Reading";

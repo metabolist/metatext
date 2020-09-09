@@ -87,7 +87,9 @@ public extension ContentDatabase {
                 try Timeline.list(list).save($0)
             }
 
-            try Timeline.filter(!(Timeline.nonLists.map(\.id) + lists.map(\.id)).contains(Column("id"))).deleteAll($0)
+            try Timeline
+                .filter(!(Timeline.authenticatedDefaults.map(\.id) + lists.map(\.id)).contains(Column("id")))
+                .deleteAll($0)
         }
         .ignoreOutput()
         .eraseToAnyPublisher()
@@ -155,7 +157,7 @@ public extension ContentDatabase {
     }
 
     func listsObservation() -> AnyPublisher<[Timeline], Error> {
-        ValueObservation.tracking(Timeline.filter(!Timeline.nonLists.map(\.id).contains(Column("id")))
+        ValueObservation.tracking(Timeline.filter(!Timeline.authenticatedDefaults.map(\.id).contains(Column("id")))
                                     .order(Column("listTitle").collating(.localizedCaseInsensitiveCompare).asc)
                                     .fetchAll)
             .removeDuplicates()

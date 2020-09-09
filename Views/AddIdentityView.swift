@@ -19,11 +19,11 @@ struct AddIdentityView: View {
                 } else {
                     Button("add-identity.log-in",
                         action: viewModel.logInTapped)
+                    Button("add-identity.browse-anonymously", action: viewModel.browseAnonymouslyTapped)
+                        .frame(maxWidth: .infinity, alignment: .center)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .center)
-            Button("add-identity.browse-anonymously", action: viewModel.browseAnonymouslyTapped)
-                .frame(maxWidth: .infinity, alignment: .center)
         }
         .alertItem($viewModel.alertItem)
         .onReceive(viewModel.addedIdentityID) { id in

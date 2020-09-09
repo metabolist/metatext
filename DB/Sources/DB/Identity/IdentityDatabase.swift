@@ -33,11 +33,12 @@ public struct IdentityDatabase {
 }
 
 public extension IdentityDatabase {
-    func createIdentity(id: UUID, url: URL) -> AnyPublisher<Never, Error> {
+    func createIdentity(id: UUID, url: URL, authenticated: Bool) -> AnyPublisher<Never, Error> {
         databaseQueue.writePublisher(
             updates: IdentityRecord(
                 id: id,
                 url: url,
+                authenticated: authenticated,
                 lastUsedAt: Date(),
                 preferences: Identity.Preferences(),
                 instanceURI: nil,
@@ -161,7 +162,7 @@ public extension IdentityDatabase {
     func identitiesObservation() -> AnyPublisher<[Identity], Error> {
         ValueObservation.tracking(Self.identitiesRequest().fetchAll)
             .removeDuplicates()
-            .publisher(in: databaseQueue, scheduling: .immediate)
+            .publisher(in: databaseQueue)
             .map { $0.map(Identity.init(result:)) }
             .eraseToAnyPublisher()
     }
@@ -173,7 +174,7 @@ public extension IdentityDatabase {
                 .limit(9)
                 .fetchAll)
             .removeDuplicates()
-            .publisher(in: databaseQueue, scheduling: .immediate)
+            .publisher(in: databaseQueue)
             .map { $0.map(Identity.init(result:)) }
             .eraseToAnyPublisher()
     }
@@ -230,6 +231,7 @@ private extension IdentityDatabase {
             try db.create(table: "identityRecord", ifNotExists: true) { t in
                 t.column("id", .text).notNull().primaryKey(onConflict: .replace)
                 t.column("url", .text).notNull()
+                t.column("authenticated", .boolean).notNull()
                 t.column("lastUsedAt", .datetime).notNull()
                 t.column("instanceURI", .text)
                     .indexed()

@@ -6,6 +6,7 @@ import Mastodon
 public struct Identity: Codable, Hashable, Identifiable {
     public let id: UUID
     public let url: URL
+    public let authenticated: Bool
     public let lastUsedAt: Date
     public let preferences: Identity.Preferences
     public let instance: Identity.Instance?
