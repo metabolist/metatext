@@ -25,12 +25,12 @@ extension StatusResult {
 }
 
 extension QueryInterfaceRequest where RowDecoder == StatusRecord {
-    var statusResultRequest: AnyFetchRequest<StatusResult> {
-        AnyFetchRequest(including(required: StatusRecord.account)
-                            .including(optional: StatusRecord.accountMoved)
-                            .including(optional: StatusRecord.reblogAccount)
-                            .including(optional: StatusRecord.reblogAccountMoved)
-                            .including(optional: StatusRecord.reblog))
+    var statusResultRequest: QueryInterfaceRequest<StatusResult> {
+        including(required: StatusRecord.account)
+            .including(optional: StatusRecord.accountMoved)
+            .including(optional: StatusRecord.reblogAccount)
+            .including(optional: StatusRecord.reblogAccountMoved)
+            .including(optional: StatusRecord.reblog)
             .asRequest(of: StatusResult.self)
     }
 }

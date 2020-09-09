@@ -74,11 +74,11 @@ extension StatusRecord {
                                    through: descendantJoins,
                                    using: StatusContextJoin.status)
 
-    var ancestors: AnyFetchRequest<StatusResult> {
+    var ancestors: QueryInterfaceRequest<StatusResult> {
         request(for: Self.ancestors).statusResultRequest
     }
 
-    var descendants: AnyFetchRequest<StatusResult> {
+    var descendants: QueryInterfaceRequest<StatusResult> {
         request(for: Self.descendants).statusResultRequest
     }
 

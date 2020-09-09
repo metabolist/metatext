@@ -28,7 +28,7 @@ struct AddIdentityView: View {
         .alertItem($viewModel.alertItem)
         .onReceive(viewModel.addedIdentityID) { id in
             withAnimation {
-                rootViewModel.newIdentitySelected(id: id)
+                rootViewModel.identitySelected(id: id)
             }
         }
         .onAppear(perform: viewModel.refreshFilter)

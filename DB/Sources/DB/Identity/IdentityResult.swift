@@ -8,5 +8,12 @@ struct IdentityResult: Codable, Hashable, FetchableRecord {
     let identity: IdentityRecord
     let instance: Identity.Instance?
     let account: Identity.Account?
-    let pushSubscriptionAlerts: PushSubscription.Alerts
+}
+
+extension QueryInterfaceRequest where RowDecoder == IdentityRecord {
+    var identityResultRequest: QueryInterfaceRequest<IdentityResult> {
+        including(optional: IdentityRecord.instance)
+            .including(optional: IdentityRecord.account)
+            .asRequest(of: IdentityResult.self)
+    }
 }

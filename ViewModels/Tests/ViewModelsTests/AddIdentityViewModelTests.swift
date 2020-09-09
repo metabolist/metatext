@@ -12,7 +12,10 @@ import XCTest
 
 class AddIdentityViewModelTests: XCTestCase {
     func testAddIdentity() throws {
-        let sut = AddIdentityViewModel(allIdentitiesService: try AllIdentitiesService(environment: .mock()))
+        let environment = AppEnvironment.mock()
+        let sut = AddIdentityViewModel(
+            allIdentitiesService: try AllIdentitiesService(environment: environment),
+            instanceFilterService: InstanceFilterService(environment: environment))
         let addedIDRecorder = sut.addedIdentityID.record()
 
         sut.urlFieldText = "https://mastodon.social"
@@ -22,7 +25,10 @@ class AddIdentityViewModelTests: XCTestCase {
     }
 
     func testAddIdentityWithoutScheme() throws {
-        let sut = AddIdentityViewModel(allIdentitiesService: try AllIdentitiesService(environment: .mock()))
+        let environment = AppEnvironment.mock()
+        let sut = AddIdentityViewModel(
+            allIdentitiesService: try AllIdentitiesService(environment: environment),
+            instanceFilterService: InstanceFilterService(environment: environment))
         let addedIDRecorder = sut.addedIdentityID.record()
 
         sut.urlFieldText = "mastodon.social"
@@ -32,7 +38,10 @@ class AddIdentityViewModelTests: XCTestCase {
     }
 
     func testInvalidURL() throws {
-        let sut = AddIdentityViewModel(allIdentitiesService: try AllIdentitiesService(environment: .mock()))
+        let environment = AppEnvironment.mock()
+        let sut = AddIdentityViewModel(
+            allIdentitiesService: try AllIdentitiesService(environment: environment),
+            instanceFilterService: InstanceFilterService(environment: environment))
         let recorder = sut.$alertItem.record()
 
         XCTAssertNil(try wait(for: recorder.next(), timeout: 1))
@@ -46,9 +55,10 @@ class AddIdentityViewModelTests: XCTestCase {
     }
 
     func testDoesNotAlertCanceledLogin() throws {
-        let allIdentitiesService = try AllIdentitiesService(
-            environment: .mock(webAuthSessionType: CanceledLoginMockWebAuthSession.self))
-        let sut = AddIdentityViewModel(allIdentitiesService: allIdentitiesService)
+        let environment = AppEnvironment.mock(webAuthSessionType: CanceledLoginMockWebAuthSession.self)
+        let sut = AddIdentityViewModel(
+            allIdentitiesService: try AllIdentitiesService(environment: environment),
+            instanceFilterService: InstanceFilterService(environment: environment))
         let recorder = sut.$alertItem.record()
 
         XCTAssertNil(try wait(for: recorder.next(), timeout: 1))

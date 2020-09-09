@@ -15,7 +15,6 @@ public struct IdentityService {
     private let environment: AppEnvironment
     private let mastodonAPIClient: MastodonAPIClient
     private let secrets: Secrets
-    private let observationErrorsInput = PassthroughSubject<Error, Never>()
 
     init(id: UUID, database: IdentityDatabase, environment: AppEnvironment) throws {
         identityID = id
@@ -86,8 +85,8 @@ public extension IdentityService {
             .eraseToAnyPublisher()
     }
 
-    func observation() -> AnyPublisher<Identity, Error> {
-        identityDatabase.identityObservation(id: identityID)
+    func observation(immediate: Bool) -> AnyPublisher<Identity, Error> {
+        identityDatabase.identityObservation(id: identityID, immediate: immediate)
     }
 
     func listsObservation() -> AnyPublisher<[Timeline], Error> {

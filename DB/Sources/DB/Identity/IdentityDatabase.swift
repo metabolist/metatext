@@ -117,8 +117,8 @@ public extension IdentityDatabase {
     func updatePreferences(_ preferences: Identity.Preferences,
                            forIdentityID identityID: UUID) -> AnyPublisher<Never, Error> {
         databaseQueue.writePublisher(updates: Self.writePreferences(preferences, id: identityID))
-        .ignoreOutput()
-        .eraseToAnyPublisher()
+            .ignoreOutput()
+            .eraseToAnyPublisher()
     }
 
     func updatePushSubscription(alerts: PushSubscription.Alerts,
@@ -141,16 +141,14 @@ public extension IdentityDatabase {
         .eraseToAnyPublisher()
     }
 
-    func identityObservation(id: UUID) -> AnyPublisher<Identity, Error> {
+    func identityObservation(id: UUID, immediate: Bool) -> AnyPublisher<Identity, Error> {
         ValueObservation.tracking(
             IdentityRecord
                 .filter(Column("id") == id)
-                .including(optional: IdentityRecord.instance)
-                .including(optional: IdentityRecord.account)
-                .asRequest(of: IdentityResult.self)
+                .identityResultRequest
                 .fetchOne)
             .removeDuplicates()
-            .publisher(in: databaseQueue, scheduling: .immediate)
+            .publisher(in: databaseQueue, scheduling: immediate ? .immediate : .async(onQueue: .main))
             .tryMap {
                 guard let result = $0 else { throw IdentityDatabaseError.identityNotFound }
 
@@ -160,7 +158,11 @@ public extension IdentityDatabase {
     }
 
     func identitiesObservation() -> AnyPublisher<[Identity], Error> {
-        ValueObservation.tracking(Self.identitiesRequest().fetchAll)
+        ValueObservation.tracking(
+            IdentityRecord
+                .order(Column("lastUsedAt").desc)
+                .identityResultRequest
+                .fetchAll)
             .removeDuplicates()
             .publisher(in: databaseQueue)
             .map { $0.map(Identity.init(result:)) }
@@ -169,7 +171,9 @@ public extension IdentityDatabase {
 
     func recentIdentitiesObservation(excluding: UUID) -> AnyPublisher<[Identity], Error> {
         ValueObservation.tracking(
-            Self.identitiesRequest()
+            IdentityRecord
+                .order(Column("lastUsedAt").desc)
+                .identityResultRequest
                 .filter(Column("id") != excluding)
                 .limit(9)
                 .fetchAll)
@@ -179,7 +183,7 @@ public extension IdentityDatabase {
             .eraseToAnyPublisher()
     }
 
-    func mostRecentlyUsedIdentityIDObservation() -> AnyPublisher<UUID?, Error> {
+    func immediateMostRecentlyUsedIdentityIDObservation() -> AnyPublisher<UUID?, Error> {
         ValueObservation.tracking(IdentityRecord.select(Column("id")).order(Column("lastUsedAt").desc).fetchOne)
             .removeDuplicates()
             .publisher(in: databaseQueue, scheduling: .immediate)
@@ -188,7 +192,9 @@ public extension IdentityDatabase {
 
     func identitiesWithOutdatedDeviceTokens(deviceToken: Data) -> AnyPublisher<[Identity], Error> {
         databaseQueue.readPublisher(
-            value: Self.identitiesRequest()
+            value: IdentityRecord
+                .order(Column("lastUsedAt").desc)
+                .identityResultRequest
                 .filter(Column("lastRegisteredDeviceToken") != deviceToken)
                 .fetchAll)
             .map { $0.map(Identity.init(result:)) }
@@ -198,14 +204,6 @@ public extension IdentityDatabase {
 
 private extension IdentityDatabase {
     private static let name = "Identity"
-
-    private static func identitiesRequest() -> QueryInterfaceRequest<IdentityResult> {
-        IdentityRecord
-            .order(Column("lastUsedAt").desc)
-            .including(optional: IdentityRecord.instance)
-            .including(optional: IdentityRecord.account)
-            .asRequest(of: IdentityResult.self)
-    }
 
     private static func writePreferences(_ preferences: Identity.Preferences, id: UUID) -> (Database) throws -> Void {
         {

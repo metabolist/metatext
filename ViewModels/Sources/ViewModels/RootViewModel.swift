@@ -5,7 +5,24 @@ import Foundation
 import ServiceLayer
 
 public final class RootViewModel: ObservableObject {
-    @Published public private(set) var identification: Identification?
+    @Published public private(set) var identification: Identification? {
+        didSet {
+            guard let identification = identification else { return }
+
+            identification.service.updateLastUse()
+                .sink { _ in } receiveValue: { _ in }
+                .store(in: &cancellables)
+
+            userNotificationService.isAuthorized()
+                .filter { $0 }
+                .zip(registerForRemoteNotifications())
+                .filter { identification.identity.lastRegisteredDeviceToken != $1 }
+                .map { ($1, identification.identity.pushSubscriptionAlerts) }
+                .flatMap(identification.service.createPushSubscription(deviceToken:alerts:))
+                .sink { _ in } receiveValue: { _ in }
+                .store(in: &cancellables)
+        }
+    }
 
     @Published private var mostRecentlyUsedIdentityID: UUID?
     private let environment: AppEnvironment
@@ -21,9 +38,11 @@ public final class RootViewModel: ObservableObject {
         userNotificationService = UserNotificationService(environment: environment)
         self.registerForRemoteNotifications = registerForRemoteNotifications
 
-        allIdentitiesService.mostRecentlyUsedIdentityID.assign(to: &$mostRecentlyUsedIdentityID)
+        allIdentitiesService.immediateMostRecentlyUsedIdentityIDObservation()
+            .replaceError(with: nil)
+            .assign(to: &$mostRecentlyUsedIdentityID)
 
-        newIdentitySelected(id: mostRecentlyUsedIdentityID)
+        identitySelected(id: mostRecentlyUsedIdentityID, immediate: true)
 
         userNotificationService.isAuthorized()
             .filter { $0 }
@@ -36,39 +55,8 @@ public final class RootViewModel: ObservableObject {
 }
 
 public extension RootViewModel {
-    func newIdentitySelected(id: UUID?) {
-        guard let id = id else {
-            identification = nil
-
-            return
-        }
-
-        let identification: Identification
-
-        do {
-            identification = try Identification(service: allIdentitiesService.identityService(id: id))
-            self.identification = identification
-        } catch {
-            return
-        }
-
-        identification.observationErrors
-            .receive(on: RunLoop.main)
-            .sink { [weak self] _ in self?.newIdentitySelected(id: self?.mostRecentlyUsedIdentityID ) }
-            .store(in: &cancellables)
-
-        identification.service.updateLastUse()
-            .sink { _ in } receiveValue: { _ in }
-            .store(in: &cancellables)
-
-        userNotificationService.isAuthorized()
-            .filter { $0 }
-            .zip(registerForRemoteNotifications())
-            .filter { identification.identity.lastRegisteredDeviceToken != $1 }
-            .map { ($1, identification.identity.pushSubscriptionAlerts) }
-            .flatMap(identification.service.createPushSubscription(deviceToken:alerts:))
-            .sink { _ in } receiveValue: { _ in }
-            .store(in: &cancellables)
+    func identitySelected(id: UUID?) {
+        identitySelected(id: id, immediate: false)
     }
 
     func deleteIdentity(id: UUID) {
@@ -81,5 +69,35 @@ public extension RootViewModel {
         AddIdentityViewModel(
             allIdentitiesService: allIdentitiesService,
             instanceFilterService: InstanceFilterService(environment: environment))
+    }
+}
+
+private extension RootViewModel {
+    func identitySelected(id: UUID?, immediate: Bool) {
+        guard
+            let id = id,
+            let identityService = try? allIdentitiesService.identityService(id: id) else {
+            identification = nil
+
+            return
+        }
+
+        let observation = identityService.observation(immediate: immediate)
+            .catch { [weak self] _ -> Empty<Identity, Never> in
+                DispatchQueue.main.async {
+                    self?.identitySelected(id: self?.mostRecentlyUsedIdentityID, immediate: false)
+                }
+
+                return Empty()
+            }
+            .share()
+
+        observation.map {
+            Identification(
+                identity: $0,
+                observation: observation.eraseToAnyPublisher(),
+                service: identityService)
+        }
+        .assign(to: &$identification)
     }
 }

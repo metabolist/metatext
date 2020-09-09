@@ -9,8 +9,8 @@ struct AccountResult: Codable, Hashable, FetchableRecord {
 }
 
 extension QueryInterfaceRequest where RowDecoder == AccountRecord {
-    var accountResultRequest: AnyFetchRequest<AccountResult> {
-        AnyFetchRequest(including(optional: AccountRecord.moved))
+    var accountResultRequest: QueryInterfaceRequest<AccountResult> {
+        including(optional: AccountRecord.moved)
             .asRequest(of: AccountResult.self)
     }
 }

@@ -88,7 +88,7 @@ private extension TabNavigationView {
                 .contextMenu(ContextMenu {
                     ForEach(viewModel.recentIdentities) { recentIdentity in
                         Button {
-                            rootViewModel.newIdentitySelected(id: recentIdentity.id)
+                            rootViewModel.identitySelected(id: recentIdentity.id)
                         } label: {
                             Label(
                                 title: { Text(recentIdentity.handle) },

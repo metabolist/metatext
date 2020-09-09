@@ -14,7 +14,7 @@ extension Identity {
             instance: result.instance,
             account: result.account,
             lastRegisteredDeviceToken: result.identity.lastRegisteredDeviceToken,
-            pushSubscriptionAlerts: result.pushSubscriptionAlerts)
+            pushSubscriptionAlerts: result.identity.pushSubscriptionAlerts)
     }
 }
 

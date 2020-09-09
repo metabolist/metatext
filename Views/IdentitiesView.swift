@@ -41,7 +41,7 @@ private extension IdentitiesView {
                     ForEach(identities) { identity in
                         Button {
                             withAnimation {
-                                rootViewModel.newIdentitySelected(id: identity.id)
+                                rootViewModel.identitySelected(id: identity.id)
                             }
                         } label: {
                             row(identity: identity)

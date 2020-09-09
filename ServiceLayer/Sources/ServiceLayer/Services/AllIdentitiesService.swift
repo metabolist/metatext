@@ -8,8 +8,6 @@ import MastodonAPI
 import Secrets
 
 public struct AllIdentitiesService {
-    public let mostRecentlyUsedIdentityID: AnyPublisher<UUID?, Never>
-
     private let environment: AppEnvironment
     private let database: IdentityDatabase
 
@@ -18,16 +16,16 @@ public struct AllIdentitiesService {
         self.database =  try environment.fixtureDatabase ?? IdentityDatabase(
             inMemory: environment.inMemoryContent,
             keychain: environment.keychain)
-
-        mostRecentlyUsedIdentityID = database.mostRecentlyUsedIdentityIDObservation()
-            .replaceError(with: nil)
-            .eraseToAnyPublisher()
     }
 }
 
 public extension AllIdentitiesService {
     func identityService(id: UUID) throws -> IdentityService {
         try IdentityService(id: id, database: database, environment: environment)
+    }
+
+    func immediateMostRecentlyUsedIdentityIDObservation() -> AnyPublisher<UUID?, Error> {
+        database.immediateMostRecentlyUsedIdentityIDObservation()
     }
 
     func createIdentity(id: UUID, url: URL, authenticated: Bool) -> AnyPublisher<Never, Error> {
