@@ -77,13 +77,17 @@ private extension IdentitiesView {
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 } else {
-                    Text(identity.handle)
-                        .font(.headline)
-                        .foregroundColor(.secondary)
                     if let instance = identity.instance {
+                        CustomEmojiText(
+                            text: instance.title,
+                            emoji: [],
+                            textStyle: .headline)
                         Text(instance.uri)
                             .font(.subheadline)
                             .foregroundColor(.secondary)
+                    } else {
+                        Text(identity.handle)
+                            .font(.headline)
                     }
                 }
                 Spacer()

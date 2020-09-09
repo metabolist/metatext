@@ -54,8 +54,7 @@ public extension RootViewModel {
 
         identification.observationErrors
             .receive(on: RunLoop.main)
-            .map { [weak self] _ in self?.mostRecentlyUsedIdentityID }
-            .sink { [weak self] in self?.newIdentitySelected(id: $0) }
+            .sink { [weak self] _ in self?.newIdentitySelected(id: self?.mostRecentlyUsedIdentityID ) }
             .store(in: &cancellables)
 
         identification.service.updateLastUse()
