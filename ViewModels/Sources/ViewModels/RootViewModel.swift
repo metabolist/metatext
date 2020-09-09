@@ -92,12 +92,14 @@ private extension RootViewModel {
             }
             .share()
 
-        observation.map {
-            Identification(
-                identity: $0,
-                observation: observation.eraseToAnyPublisher(),
-                service: identityService)
-        }
-        .assign(to: &$identification)
+        observation
+            .filter { [weak self] in $0.id != self?.identification?.identity.id }
+            .map {
+                Identification(
+                    identity: $0,
+                    observation: observation.eraseToAnyPublisher(),
+                    service: identityService)
+            }
+            .assign(to: &$identification)
     }
 }
