@@ -16,14 +16,14 @@ public final class EditFilterViewModel: ObservableObject {
     }
 
     private let identification: Identification
-    private let saveCompletedInput = PassthroughSubject<Void, Never>()
+    private let saveCompletedSubject = PassthroughSubject<Void, Never>()
     private var cancellables = Set<AnyCancellable>()
 
     public init(filter: Filter, identification: Identification) {
         self.filter = filter
         self.identification = identification
         date = filter.expiresAt ?? Date()
-        saveCompleted = saveCompletedInput.eraseToAnyPublisher()
+        saveCompleted = saveCompletedSubject.eraseToAnyPublisher()
     }
 }
 
@@ -51,7 +51,7 @@ public extension EditFilterViewModel {
                     self.saving = false
 
                     if case .finished = $0 {
-                        self.saveCompletedInput.send(())
+                        self.saveCompletedSubject.send()
                     }
                 })
             .sink { _ in }
