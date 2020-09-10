@@ -1,5 +1,6 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
+import KingfisherSwiftUI
 import SwiftUI
 import ViewModels
 
@@ -9,22 +10,46 @@ struct AddIdentityView: View {
 
     var body: some View {
         Form {
-            urlTextField
-                .autocapitalization(.none)
-                .disableAutocorrection(true)
-                .keyboardType(.URL)
-            Group {
-                if viewModel.loading {
-                    ProgressView()
-                } else {
-                    Button("add-identity.log-in",
-                        action: viewModel.logInTapped)
-                    Button("add-identity.browse-anonymously", action: viewModel.browseAnonymouslyTapped)
-                        .frame(maxWidth: .infinity, alignment: .center)
+            Section {
+                TextField("add-identity.instance-url", text: $viewModel.urlFieldText)
+                    .autocapitalization(.none)
+                    .disableAutocorrection(true)
+                    .keyboardType(.URL)
+                Group {
+                    if viewModel.loading {
+                        ProgressView()
+                    } else {
+                        Button("add-identity.log-in",
+                               action: viewModel.logInTapped)
+                        if viewModel.isPublicTimelineAvailable {
+                            Button("add-identity.browse-anonymously", action: viewModel.browseAnonymouslyTapped)
+                        }
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .center)
+            }
+            Section {
+                if let instance = viewModel.instance {
+                    KFImage(instance.thumbnail)
+                        .placeholder {
+                            ProgressView()
+                        }
+                        .resizable()
+                        .scaledToFit()
+                        .listRowInsets(EdgeInsets())
+                    VStack(alignment: .center) {
+                        Text(instance.title)
+                            .font(.headline)
+                        Text(instance.uri)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .listRowInsets(EdgeInsets())
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .center)
         }
+        .animation(.default)
         .alertItem($viewModel.alertItem)
         .onReceive(viewModel.addedIdentityID) { id in
             withAnimation {
@@ -32,12 +57,6 @@ struct AddIdentityView: View {
             }
         }
         .onAppear(perform: viewModel.refreshFilter)
-    }
-}
-
-extension AddIdentityView {
-    private var urlTextField: some View {
-        TextField("add-identity.instance-url", text: $viewModel.urlFieldText)
     }
 }
 

@@ -2,6 +2,7 @@
 
 import Combine
 import Foundation
+import Mastodon
 import ServiceLayer
 
 public enum AddIdentityError: Error {
@@ -12,6 +13,8 @@ public final class AddIdentityViewModel: ObservableObject {
     @Published public var urlFieldText = ""
     @Published public var alertItem: AlertItem?
     @Published public private(set) var loading = false
+    @Published public private(set) var instance: Instance?
+    @Published public private(set) var isPublicTimelineAvailable = false
     public let addedIdentityID: AnyPublisher<UUID, Never>
 
     private let allIdentitiesService: AllIdentitiesService
@@ -23,6 +26,21 @@ public final class AddIdentityViewModel: ObservableObject {
         self.allIdentitiesService = allIdentitiesService
         self.instanceURLService = instanceURLService
         addedIdentityID = addedIdentityIDSubject.eraseToAnyPublisher()
+
+        let url = $urlFieldText
+            .debounce(for: 0.5, scheduler: DispatchQueue.main)
+            .removeDuplicates()
+            .compactMap(InstanceURLService.url(text:))
+            .filter { !instanceURLService.isFiltered(url: $0) }
+            .share()
+
+        url.flatMap(instanceURLService.instance(url:))
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$instance)
+
+        url.flatMap(instanceURLService.isPublicTimelineAvailable(url:))
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$isPublicTimelineAvailable)
     }
 }
 
@@ -43,23 +61,10 @@ public extension AddIdentityViewModel {
 }
 
 private extension AddIdentityViewModel {
-    private static let filteredURL = URL(string: "https://filtered")!
-    private static let HTTPSPrefix = "https://"
-
-    static func url(fieldText: String) -> URL? {
-        if fieldText.hasPrefix(HTTPSPrefix), let prefixedURL = URL(string: fieldText) {
-            return prefixedURL
-        } else if let unprefixedURL = URL(string: HTTPSPrefix + fieldText) {
-            return unprefixedURL
-        }
-
-        return nil
-    }
-
     func addIdentity(authenticated: Bool) {
         let identityID = UUID()
 
-        guard let url = Self.url(fieldText: urlFieldText) else {
+        guard let url = InstanceURLService.url(text: urlFieldText) else {
             alertItem = AlertItem(error: AddIdentityError.unableToConnectToInstance)
 
             return
@@ -81,27 +86,29 @@ private extension AddIdentityViewModel {
             url: url,
             authenticated: authenticated)
             .receive(on: DispatchQueue.main)
-            .catch { [weak self] error -> Empty<Never, Never> in
-                if case AuthenticationError.canceled = error {
-                    // no-op
-                } else {
-                    let displayedError = error is URLError ? AddIdentityError.unableToConnectToInstance : error
-
-                    self?.alertItem = AlertItem(error: displayedError)
-                }
-
-                return Empty()
-            }
             .handleEvents(receiveSubscription: { [weak self] _ in self?.loading = true })
             .sink { [weak self] in
                 guard let self = self else { return }
 
                 self.loading = false
 
-                if case .finished = $0 {
+                switch $0 {
+                case .finished:
                     self.addedIdentityIDSubject.send(identityID)
+                case let .failure(error):
+                    if case AuthenticationError.canceled = error {
+                        return
+                    }
+
+                    let displayedError = error is URLError ? AddIdentityError.unableToConnectToInstance : error
+
+                    self.alertItem = AlertItem(error: displayedError)
                 }
             } receiveValue: { _ in }
             .store(in: &cancellables)
+    }
+
+    func checkIfPublicTimelineAvailable(url: URL) -> AnyPublisher<Bool, Never> {
+        Just(false).eraseToAnyPublisher()
     }
 }
