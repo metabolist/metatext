@@ -28,8 +28,8 @@ struct AddIdentityView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
             }
-            Section {
-                if let instance = viewModel.instance {
+            if let instance = viewModel.instance {
+                Section {
                     KFImage(instance.thumbnail)
                         .placeholder {
                             ProgressView()
