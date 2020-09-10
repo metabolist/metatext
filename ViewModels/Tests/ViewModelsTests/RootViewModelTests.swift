@@ -14,7 +14,7 @@ class RootViewModelTests: XCTestCase {
         let sut = try RootViewModel(
             environment: .mock(),
             registerForRemoteNotifications: { Empty().setFailureType(to: Error.self).eraseToAnyPublisher() })
-        let recorder = sut.$identification.record()
+        let recorder = sut.$navigationViewModel.record()
 
         XCTAssertNil(try wait(for: recorder.next(), timeout: 1))
 
@@ -27,8 +27,8 @@ class RootViewModelTests: XCTestCase {
         addIdentityViewModel.urlFieldText = "https://mastodon.social"
         addIdentityViewModel.logInTapped()
 
-        let mainNavigationViewModel = try wait(for: recorder.next(), timeout: 1)!
+        let navigationViewModel = try wait(for: recorder.next(), timeout: 1)!
 
-        XCTAssertNotNil(mainNavigationViewModel)
+        XCTAssertNotNil(navigationViewModel)
     }
 }

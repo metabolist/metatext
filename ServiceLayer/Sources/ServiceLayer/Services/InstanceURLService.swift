@@ -5,7 +5,7 @@ import Combine
 import Foundation
 import HTTP
 
-public struct InstanceFilterService {
+public struct InstanceURLService {
     private let httpClient: HTTPClient
     private var userDefaultsClient: UserDefaultsClient
 
@@ -15,7 +15,7 @@ public struct InstanceFilterService {
     }
 }
 
-public extension InstanceFilterService {
+public extension InstanceURLService {
     func isFiltered(url: URL) -> Bool {
         guard let host = url.host else { return true }
 
@@ -54,7 +54,7 @@ private struct UpdatedFilterTarget: DecodableTarget {
     let headers: HTTPHeaders? = nil
 }
 
-private extension InstanceFilterService {
+private extension InstanceURLService {
     var filter: BloomFilter<String> {
         userDefaultsClient.updatedInstanceFilter ?? Self.defaultFilter
     }

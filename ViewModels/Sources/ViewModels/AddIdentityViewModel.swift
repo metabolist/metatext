@@ -15,13 +15,13 @@ public final class AddIdentityViewModel: ObservableObject {
     public let addedIdentityID: AnyPublisher<UUID, Never>
 
     private let allIdentitiesService: AllIdentitiesService
-    private let instanceFilterService: InstanceFilterService
+    private let instanceURLService: InstanceURLService
     private let addedIdentityIDSubject = PassthroughSubject<UUID, Never>()
     private var cancellables = Set<AnyCancellable>()
 
-    init(allIdentitiesService: AllIdentitiesService, instanceFilterService: InstanceFilterService) {
+    init(allIdentitiesService: AllIdentitiesService, instanceURLService: InstanceURLService) {
         self.allIdentitiesService = allIdentitiesService
-        self.instanceFilterService = instanceFilterService
+        self.instanceURLService = instanceURLService
         addedIdentityID = addedIdentityIDSubject.eraseToAnyPublisher()
     }
 }
@@ -36,7 +36,7 @@ public extension AddIdentityViewModel {
     }
 
     func refreshFilter() {
-        instanceFilterService.updateFilter()
+        instanceURLService.updateFilter()
             .sink { _ in }
             .store(in: &cancellables)
     }
@@ -46,21 +46,26 @@ private extension AddIdentityViewModel {
     private static let filteredURL = URL(string: "https://filtered")!
     private static let HTTPSPrefix = "https://"
 
+    static func url(fieldText: String) -> URL? {
+        if fieldText.hasPrefix(HTTPSPrefix), let prefixedURL = URL(string: fieldText) {
+            return prefixedURL
+        } else if let unprefixedURL = URL(string: HTTPSPrefix + fieldText) {
+            return unprefixedURL
+        }
+
+        return nil
+    }
+
     func addIdentity(authenticated: Bool) {
         let identityID = UUID()
-        let url: URL
 
-        if urlFieldText.hasPrefix(Self.HTTPSPrefix), let prefixedURL = URL(string: urlFieldText) {
-            url = prefixedURL
-        } else if let unprefixedURL = URL(string: Self.HTTPSPrefix + urlFieldText) {
-            url = unprefixedURL
-        } else {
+        guard let url = Self.url(fieldText: urlFieldText) else {
             alertItem = AlertItem(error: AddIdentityError.unableToConnectToInstance)
 
             return
         }
 
-        if instanceFilterService.isFiltered(url: url) {
+        if instanceURLService.isFiltered(url: url) {
             loading = true
 
             DispatchQueue.main.asyncAfter(deadline: .now() + .random(in: 0.01...0.1)) {

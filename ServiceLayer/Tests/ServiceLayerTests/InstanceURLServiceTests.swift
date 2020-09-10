@@ -8,9 +8,9 @@ import CombineExpectations
 import Stubbing
 import XCTest
 
-class InstanceFilterServiceTests: XCTestCase {
+class InstanceURLServiceTests: XCTestCase {
     func testFiltering() throws {
-        let sut = InstanceFilterService(environment: .mock())
+        let sut = InstanceURLService(environment: .mock())
         let unfilteredInstanceURL = URL(string: "https://unfiltered.instance")!
         let filteredInstanceURL = URL(string: "https://filtered.instance")!
         let subdomainFilteredInstanceURL = URL(string: "https://subdomain.filtered.instance")!
@@ -22,7 +22,7 @@ class InstanceFilterServiceTests: XCTestCase {
 
     func testUpdating() throws {
         let environment = AppEnvironment.mock()
-        var sut = InstanceFilterService(environment: environment)
+        var sut = InstanceURLService(environment: environment)
         let previouslyFilteredInstanceURL = URL(string: "https://filtered.instance")!
         let newlyFilteredInstanceURL = URL(string: "https://instance.filtered")!
 
@@ -45,7 +45,7 @@ class InstanceFilterServiceTests: XCTestCase {
         XCTAssertFalse(sut.isFiltered(url: previouslyFilteredInstanceURL))
         XCTAssertTrue(sut.isFiltered(url: newlyFilteredInstanceURL))
 
-        sut = InstanceFilterService(environment: environment)
+        sut = InstanceURLService(environment: environment)
 
         XCTAssertFalse(sut.isFiltered(url: previouslyFilteredInstanceURL))
         XCTAssertTrue(sut.isFiltered(url: newlyFilteredInstanceURL))

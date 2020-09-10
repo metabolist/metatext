@@ -15,7 +15,7 @@ class AddIdentityViewModelTests: XCTestCase {
         let environment = AppEnvironment.mock()
         let sut = AddIdentityViewModel(
             allIdentitiesService: try AllIdentitiesService(environment: environment),
-            instanceFilterService: InstanceFilterService(environment: environment))
+            instanceURLService: InstanceURLService(environment: environment))
         let addedIDRecorder = sut.addedIdentityID.record()
 
         sut.urlFieldText = "https://mastodon.social"
@@ -28,7 +28,7 @@ class AddIdentityViewModelTests: XCTestCase {
         let environment = AppEnvironment.mock()
         let sut = AddIdentityViewModel(
             allIdentitiesService: try AllIdentitiesService(environment: environment),
-            instanceFilterService: InstanceFilterService(environment: environment))
+            instanceURLService: InstanceURLService(environment: environment))
         let addedIDRecorder = sut.addedIdentityID.record()
 
         sut.urlFieldText = "mastodon.social"
@@ -41,7 +41,7 @@ class AddIdentityViewModelTests: XCTestCase {
         let environment = AppEnvironment.mock()
         let sut = AddIdentityViewModel(
             allIdentitiesService: try AllIdentitiesService(environment: environment),
-            instanceFilterService: InstanceFilterService(environment: environment))
+            instanceURLService: InstanceURLService(environment: environment))
         let recorder = sut.$alertItem.record()
 
         XCTAssertNil(try wait(for: recorder.next(), timeout: 1))
@@ -51,14 +51,14 @@ class AddIdentityViewModelTests: XCTestCase {
 
         let alertItem = try wait(for: recorder.next(), timeout: 1)
 
-        XCTAssertEqual((alertItem?.error as? URLError)?.code, URLError.badURL)
+        XCTAssertEqual((alertItem?.error as? AddIdentityError), AddIdentityError.unableToConnectToInstance)
     }
 
     func testDoesNotAlertCanceledLogin() throws {
         let environment = AppEnvironment.mock(webAuthSessionType: CanceledLoginMockWebAuthSession.self)
         let sut = AddIdentityViewModel(
             allIdentitiesService: try AllIdentitiesService(environment: environment),
-            instanceFilterService: InstanceFilterService(environment: environment))
+            instanceURLService: InstanceURLService(environment: environment))
         let recorder = sut.$alertItem.record()
 
         XCTAssertNil(try wait(for: recorder.next(), timeout: 1))

@@ -51,7 +51,7 @@ public extension RootViewModel {
     func addIdentityViewModel() -> AddIdentityViewModel {
         AddIdentityViewModel(
             allIdentitiesService: allIdentitiesService,
-            instanceFilterService: InstanceFilterService(environment: environment))
+            instanceURLService: InstanceURLService(environment: environment))
     }
 }
 
