@@ -18,8 +18,8 @@ public final class NavigationViewModel: ObservableObject {
 
     public init(identification: Identification) {
         self.identification = identification
-        timeline = identification.service.isAuthorized ? .home : .local
-        timelinesAndLists = identification.service.isAuthorized
+        timeline = identification.identity.authenticated ? .home : .local
+        timelinesAndLists = identification.identity.authenticated
             ? Timeline.authenticatedDefaults
             : Timeline.unauthenticatedDefaults
 
@@ -31,7 +31,7 @@ public final class NavigationViewModel: ObservableObject {
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$recentIdentities)
 
-        if identification.service.isAuthorized {
+        if identification.identity.authenticated {
             identification.service.listsObservation()
                 .map { Timeline.authenticatedDefaults + $0 }
                 .assignErrorsToAlertItem(to: \.alertItem, on: self)
@@ -42,7 +42,7 @@ public final class NavigationViewModel: ObservableObject {
 
 public extension NavigationViewModel {
     var tabs: [Tab] {
-        if identification.service.isAuthorized {
+        if identification.identity.authenticated {
             return Tab.allCases
         } else {
             return [.timelines, .explore]
@@ -59,7 +59,7 @@ public extension NavigationViewModel {
     }
 
     func refreshIdentity() {
-        if identification.service.isAuthorized {
+        if identification.identity.authenticated {
             identification.service.verifyCredentials()
                 .assignErrorsToAlertItem(to: \.alertItem, on: self)
                 .sink { _ in }

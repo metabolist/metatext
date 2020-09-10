@@ -34,8 +34,6 @@ public struct IdentityService {
 }
 
 public extension IdentityService {
-    var isAuthorized: Bool { mastodonAPIClient.accessToken != nil }
-
     func updateLastUse() -> AnyPublisher<Never, Error> {
         identityDatabase.updateLastUsedAt(identityID: identityID)
     }
