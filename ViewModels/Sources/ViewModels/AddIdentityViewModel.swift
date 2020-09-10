@@ -4,6 +4,10 @@ import Combine
 import Foundation
 import ServiceLayer
 
+public enum AddIdentityError: Error {
+    case unableToConnectToInstance
+}
+
 public final class AddIdentityViewModel: ObservableObject {
     @Published public var urlFieldText = ""
     @Published public var alertItem: AlertItem?
@@ -24,24 +28,61 @@ public final class AddIdentityViewModel: ObservableObject {
 
 public extension AddIdentityViewModel {
     func logInTapped() {
-        let identityID = UUID()
-        let instanceURL: URL
+        addIdentity(authenticated: true)
+    }
 
-        do {
-            instanceURL = try checkedURL()
-        } catch {
-            alertItem = AlertItem(error: error)
+    func browseAnonymouslyTapped() {
+        addIdentity(authenticated: false)
+    }
+
+    func refreshFilter() {
+        instanceFilterService.updateFilter()
+            .sink { _ in }
+            .store(in: &cancellables)
+    }
+}
+
+private extension AddIdentityViewModel {
+    private static let filteredURL = URL(string: "https://filtered")!
+    private static let HTTPSPrefix = "https://"
+
+    func addIdentity(authenticated: Bool) {
+        let identityID = UUID()
+        let url: URL
+
+        if urlFieldText.hasPrefix(Self.HTTPSPrefix), let prefixedURL = URL(string: urlFieldText) {
+            url = prefixedURL
+        } else if let unprefixedURL = URL(string: Self.HTTPSPrefix + urlFieldText) {
+            url = unprefixedURL
+        } else {
+            alertItem = AlertItem(error: AddIdentityError.unableToConnectToInstance)
 
             return
         }
 
-        allIdentitiesService.createIdentity(id: identityID, url: instanceURL, authenticated: true)
+        if instanceFilterService.isFiltered(url: url) {
+            loading = true
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + .random(in: 0.01...0.1)) {
+                self.alertItem = AlertItem(error: AddIdentityError.unableToConnectToInstance)
+                self.loading = false
+            }
+
+            return
+        }
+
+        allIdentitiesService.createIdentity(
+            id: identityID,
+            url: url,
+            authenticated: authenticated)
             .receive(on: DispatchQueue.main)
             .catch { [weak self] error -> Empty<Never, Never> in
                 if case AuthenticationError.canceled = error {
                     // no-op
                 } else {
-                    self?.alertItem = AlertItem(error: error)
+                    let displayedError = error is URLError ? AddIdentityError.unableToConnectToInstance : error
+
+                    self?.alertItem = AlertItem(error: displayedError)
                 }
 
                 return Empty()
@@ -57,57 +98,5 @@ public extension AddIdentityViewModel {
                 }
             } receiveValue: { _ in }
             .store(in: &cancellables)
-    }
-
-    func browseAnonymouslyTapped() {
-        let identityID = UUID()
-        let instanceURL: URL
-
-        do {
-            instanceURL = try checkedURL()
-        } catch {
-            alertItem = AlertItem(error: error)
-
-            return
-        }
-
-        // TODO: Ensure instance has not disabled public preview
-        allIdentitiesService.createIdentity(id: identityID, url: instanceURL, authenticated: false)
-            .assignErrorsToAlertItem(to: \.alertItem, on: self)
-            .sink { [weak self] in
-                guard let self = self, case .finished = $0 else { return }
-
-                self.addedIdentityIDSubject.send(identityID)
-            } receiveValue: { _ in }
-            .store(in: &cancellables)
-    }
-
-    func refreshFilter() {
-        instanceFilterService.updateFilter()
-            .sink { _ in }
-            .store(in: &cancellables)
-    }
-}
-
-private extension AddIdentityViewModel {
-    private static let filteredURL = URL(string: "https://filtered")!
-    private static let HTTPSPrefix = "https://"
-
-    func checkedURL() throws -> URL {
-        let url: URL
-
-        if urlFieldText.hasPrefix(Self.HTTPSPrefix), let prefixedURL = URL(string: urlFieldText) {
-            url = prefixedURL
-        } else if let unprefixedURL = URL(string: Self.HTTPSPrefix + urlFieldText) {
-            url = unprefixedURL
-        } else {
-            throw URLError(.badURL)
-        }
-
-        if instanceFilterService.isFiltered(url: url) {
-            return Self.filteredURL
-        }
-
-        return url
     }
 }

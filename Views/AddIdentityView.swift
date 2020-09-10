@@ -41,6 +41,12 @@ extension AddIdentityView {
     }
 }
 
+extension AddIdentityError: LocalizedError {
+    public var errorDescription: String? {
+        NSLocalizedString("add-identity.unable-to-connect-to-instance", comment: "")
+    }
+}
+
 #if DEBUG
 import PreviewViewModels
 
