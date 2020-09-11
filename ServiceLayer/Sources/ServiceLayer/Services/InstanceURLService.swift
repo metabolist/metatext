@@ -18,16 +18,24 @@ public struct InstanceURLService {
 }
 
 public extension InstanceURLService {
-    static func url(text: String) -> URL? {
-        guard text.count >= shortestPossibleURLLength else { return nil }
+    func url(text: String) -> URL? {
+        guard text.count >= Self.shortestPossibleURLLength else { return nil }
 
-        if text.hasPrefix(httpsPrefix), let prefixedURL = URL(string: text) {
-            return prefixedURL
-        } else if let unprefixedURL = URL(string: httpsPrefix + text) {
-            return unprefixedURL
+        let url: URL
+
+        if text.hasPrefix(Self.httpsPrefix), let prefixedURL = URL(string: text) {
+            url = prefixedURL
+        } else if let unprefixedURL = URL(string: Self.httpsPrefix + text) {
+            url = unprefixedURL
+        } else {
+            return nil
         }
 
-        return nil
+        if isFiltered(url: url) {
+            return nil
+        }
+
+        return url
     }
 
     func instance(url: URL) -> AnyPublisher<Instance?, Never> {
@@ -50,23 +58,6 @@ public extension InstanceURLService {
             .map { _ in true }
             .catch { _ in Just(false) }
             .eraseToAnyPublisher()
-    }
-
-    func isFiltered(url: URL) -> Bool {
-        guard let host = url.host else { return true }
-
-        let allHostComponents = host.components(separatedBy: ".")
-        var hostComponents = [String]()
-
-        for component in allHostComponents.reversed() {
-            hostComponents.insert(component, at: 0)
-
-            if filter.contains(hostComponents.joined(separator: ".")) {
-                return true
-            }
-        }
-
-        return false
     }
 
     func updateFilter() -> AnyPublisher<Never, Never> {
@@ -103,5 +94,22 @@ private extension InstanceURLService {
     // swiftlint:enable force_try
     var filter: BloomFilter<String> {
         userDefaultsClient.updatedInstanceFilter ?? Self.defaultFilter
+    }
+
+    private func isFiltered(url: URL) -> Bool {
+        guard let host = url.host else { return true }
+
+        let allHostComponents = host.components(separatedBy: ".")
+        var hostComponents = [String]()
+
+        for component in allHostComponents.reversed() {
+            hostComponents.insert(component, at: 0)
+
+            if filter.contains(hostComponents.joined(separator: ".")) {
+                return true
+            }
+        }
+
+        return false
     }
 }

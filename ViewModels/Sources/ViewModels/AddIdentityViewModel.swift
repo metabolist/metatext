@@ -28,17 +28,23 @@ public final class AddIdentityViewModel: ObservableObject {
         addedIdentityID = addedIdentityIDSubject.eraseToAnyPublisher()
 
         let url = $urlFieldText
-            .debounce(for: 0.5, scheduler: DispatchQueue.main)
+            .debounce(for: 0.5, scheduler: DispatchQueue.global())
             .removeDuplicates()
-            .compactMap(InstanceURLService.url(text:))
-            .filter { !instanceURLService.isFiltered(url: $0) }
+            .map(instanceURLService.url(text:))
             .share()
+        let urlPresent =  url.map { $0 != nil }.share()
 
-        url.flatMap(instanceURLService.instance(url:))
+        url.compactMap { $0 }
+            .flatMap(instanceURLService.instance(url:))
+            .combineLatest(urlPresent)
+            .map { $1 ? $0 : nil }
             .receive(on: DispatchQueue.main)
             .assign(to: &$instance)
 
-        url.flatMap(instanceURLService.isPublicTimelineAvailable(url:))
+        url.compactMap { $0 }
+            .flatMap(instanceURLService.isPublicTimelineAvailable(url:))
+            .combineLatest(urlPresent)
+            .map { $0 && $1 }
             .receive(on: DispatchQueue.main)
             .assign(to: &$isPublicTimelineAvailable)
     }
@@ -64,19 +70,8 @@ private extension AddIdentityViewModel {
     func addIdentity(authenticated: Bool) {
         let identityID = UUID()
 
-        guard let url = InstanceURLService.url(text: urlFieldText) else {
+        guard let url = instanceURLService.url(text: urlFieldText) else {
             alertItem = AlertItem(error: AddIdentityError.unableToConnectToInstance)
-
-            return
-        }
-
-        if instanceURLService.isFiltered(url: url) {
-            loading = true
-
-            DispatchQueue.main.asyncAfter(deadline: .now() + .random(in: 0.01...0.1)) {
-                self.alertItem = AlertItem(error: AddIdentityError.unableToConnectToInstance)
-                self.loading = false
-            }
 
             return
         }
