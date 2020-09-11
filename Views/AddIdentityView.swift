@@ -49,7 +49,7 @@ struct AddIdentityView: View {
                 .frame(maxWidth: .infinity, alignment: .center)
             }
         }
-        .animation(.default)
+        .animation(.default, if: !viewModel.loading)
         .alertItem($viewModel.alertItem)
         .onReceive(viewModel.addedIdentityID) { id in
             withAnimation {

@@ -10,4 +10,13 @@ extension View {
             Alert(title: Text($0.error.localizedDescription))
         }
     }
+
+    @ViewBuilder
+    func animation(_ animation: Animation?, if condition: Bool) -> some View {
+        if condition {
+            self.animation(animation)
+        } else {
+            self
+        }
+    }
 }
