@@ -11,7 +11,9 @@
 		D01F41D824F880C400D55A2D /* StatusTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01F41D524F880C400D55A2D /* StatusTableViewCell.swift */; };
 		D01F41D924F880C400D55A2D /* TouchFallthroughTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01F41D624F880C400D55A2D /* TouchFallthroughTextView.swift */; };
 		D01F41E424F8889700D55A2D /* AttachmentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01F41E224F8889700D55A2D /* AttachmentsView.swift */; };
+		D02E1F95250B13210071AD56 /* SafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02E1F94250B13210071AD56 /* SafariView.swift */; };
 		D06B492324D4611300642749 /* KingfisherSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = D06B492224D4611300642749 /* KingfisherSwiftUI */; };
+		D0B32F50250B373600311912 /* RegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B32F4F250B373600311912 /* RegistrationView.swift */; };
 		D0BEB1F324F8EE8C001B0F04 /* AttachmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB1F224F8EE8C001B0F04 /* AttachmentView.swift */; };
 		D0BEB1F724F9A84B001B0F04 /* LoadingTableFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB1F624F9A84B001B0F04 /* LoadingTableFooterView.swift */; };
 		D0BEB1FF24F9E5BB001B0F04 /* ListsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB1FE24F9E5BB001B0F04 /* ListsView.swift */; };
@@ -82,11 +84,13 @@
 		D01F41D524F880C400D55A2D /* StatusTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusTableViewCell.swift; sourceTree = "<group>"; };
 		D01F41D624F880C400D55A2D /* TouchFallthroughTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchFallthroughTextView.swift; sourceTree = "<group>"; };
 		D01F41E224F8889700D55A2D /* AttachmentsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttachmentsView.swift; sourceTree = "<group>"; };
+		D02E1F94250B13210071AD56 /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariView.swift; sourceTree = "<group>"; };
 		D047FA8C24C3E21200AF17C5 /* Metatext.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Metatext.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0666A2124C677B400F3F04B /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0666A2524C677B400F3F04B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D085C3BB25008DEC008A6C5E /* DB */ = {isa = PBXFileReference; lastKnownFileType = folder; path = DB; sourceTree = "<group>"; };
 		D0AD03552505814D0085A466 /* Base16 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Base16; sourceTree = "<group>"; };
+		D0B32F4F250B373600311912 /* RegistrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationView.swift; sourceTree = "<group>"; };
 		D0BDF66524FD7A6400C7FA1C /* ServiceLayer */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ServiceLayer; sourceTree = "<group>"; };
 		D0BEB1F224F8EE8C001B0F04 /* AttachmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentView.swift; sourceTree = "<group>"; };
 		D0BEB1F624F9A84B001B0F04 /* LoadingTableFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingTableFooterView.swift; sourceTree = "<group>"; };
@@ -253,7 +257,9 @@
 				D0C7D42D24F76169001EBDBB /* NotificationTypesPreferencesView.swift */,
 				D0C7D42824F76169001EBDBB /* PostingReadingPreferencesView.swift */,
 				D0C7D42624F76169001EBDBB /* PreferencesView.swift */,
+				D0B32F4F250B373600311912 /* RegistrationView.swift */,
 				D0C7D42724F76169001EBDBB /* RootView.swift */,
+				D02E1F94250B13210071AD56 /* SafariView.swift */,
 				D0C7D42924F76169001EBDBB /* SecondaryNavigationView.swift */,
 				D01F41D324F8807E00D55A2D /* Status Cell */,
 				D0C7D42524F76169001EBDBB /* StatusListView.swift */,
@@ -479,7 +485,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0C7D4A324F7616A001EBDBB /* TabNavigationView.swift in Sources */,
+				D02E1F95250B13210071AD56 /* SafariView.swift in Sources */,
 				D0C7D49C24F7616A001EBDBB /* RootView.swift in Sources */,
+				D0B32F50250B373600311912 /* RegistrationView.swift in Sources */,
 				D0BEB1F324F8EE8C001B0F04 /* AttachmentView.swift in Sources */,
 				D0C7D49A24F7616A001EBDBB /* StatusListView.swift in Sources */,
 				D01F41D924F880C400D55A2D /* TouchFallthroughTextView.swift in Sources */,

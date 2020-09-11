@@ -13,9 +13,13 @@ struct RootView: View {
                 .environmentObject(viewModel)
                 .transition(.opacity)
         } else {
-            AddIdentityView(viewModel: viewModel.addIdentityViewModel())
-                .environmentObject(viewModel)
-                .transition(.opacity)
+            NavigationView {
+                AddIdentityView(viewModel: viewModel.addIdentityViewModel())
+                    .navigationBarTitleDisplayMode(.inline)
+                    .navigationBarHidden(true)
+            }
+            .environmentObject(viewModel)
+            .transition(.opacity)
         }
     }
 }

@@ -22,16 +22,42 @@ struct AuthenticationService {
 
 extension AuthenticationService {
     func authenticate() -> AnyPublisher<(AppAuthorization, AccessToken), Error> {
-        let appAuthorization = mastodonAPIClient.request(
-            AppAuthorizationEndpoint.apps(
-                clientName: OAuth.clientName,
-                redirectURI: OAuth.callbackURL.absoluteString,
-                scopes: OAuth.scopes,
-                website: OAuth.website))
+        let authorization = appAuthorization().share()
+
+        return authorization
+            .zip(authorization.flatMap(authenticate(appAuthorization:)))
+            .eraseToAnyPublisher()
+    }
+
+    func register(username: String,
+                  email: String,
+                  password: String,
+                  reason: String?) -> AnyPublisher<(AppAuthorization, AccessToken), Error> {
+        let authorization = appAuthorization()
             .share()
 
-        return appAuthorization
-            .zip(appAuthorization.flatMap(authenticate(appAuthorization:)))
+        return authorization.zip(
+            authorization.flatMap { appAuthorization -> AnyPublisher<AccessToken, Error> in
+                mastodonAPIClient.request(
+                    AccessTokenEndpoint.oauthToken(
+                        clientID: appAuthorization.clientId,
+                        clientSecret: appAuthorization.clientSecret,
+                        grantType: OAuth.registrationGrantType,
+                        scopes: OAuth.scopes,
+                        code: nil,
+                        redirectURI: OAuth.callbackURL.absoluteString))
+                    .flatMap { accessToken -> AnyPublisher<AccessToken, Error> in
+                        mastodonAPIClient.accessToken = accessToken.accessToken
+
+                        return mastodonAPIClient.request(
+                            AccessTokenEndpoint.accounts(
+                                username: username,
+                                email: email,
+                                password: password,
+                                reason: reason))
+                    }
+                    .eraseToAnyPublisher()
+            })
             .eraseToAnyPublisher()
     }
 }
@@ -41,7 +67,8 @@ private extension AuthenticationService {
         static let clientName = "Metatext"
         static let scopes = "read write follow push"
         static let codeCallbackQueryItemName = "code"
-        static let grantType = "authorization_code"
+        static let authorizationCodeGrantType = "authorization_code"
+        static let registrationGrantType = "client_credentials"
         static let callbackURLScheme = "metatext"
         static let callbackURL = URL(string: "\(callbackURLScheme)://oauth.callback")!
         static let website = URL(string: "https://metabolist.com/metatext")!
@@ -61,6 +88,15 @@ private extension AuthenticationService {
         else { throw OAuthError.codeNotFound }
 
         return code
+    }
+
+    func appAuthorization() -> AnyPublisher<AppAuthorization, Error> {
+        mastodonAPIClient.request(
+            AppAuthorizationEndpoint.apps(
+                clientName: OAuth.clientName,
+                redirectURI: OAuth.callbackURL.absoluteString,
+                scopes: OAuth.scopes,
+                website: OAuth.website))
     }
 
     func authorizationURL(appAuthorization: AppAuthorization) throws -> URL {
@@ -106,9 +142,9 @@ private extension AuthenticationService {
                     AccessTokenEndpoint.oauthToken(
                         clientID: appAuthorization.clientId,
                         clientSecret: appAuthorization.clientSecret,
-                        code: $0,
-                        grantType: OAuth.grantType,
+                        grantType: OAuth.authorizationCodeGrantType,
                         scopes: OAuth.scopes,
+                        code: $0,
                         redirectURI: OAuth.callbackURL.absoluteString))
             }
             .eraseToAnyPublisher()

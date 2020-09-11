@@ -29,33 +29,26 @@ public extension AllIdentitiesService {
     }
 
     func createIdentity(id: UUID, url: URL, authenticated: Bool) -> AnyPublisher<Never, Error> {
-        let secrets = Secrets(identityID: id, keychain: environment.keychain)
-
-        do {
-            try secrets.setInstanceURL(url)
-        } catch {
-            return Fail(error: error).eraseToAnyPublisher()
-        }
-
-        let createIdentityPublisher = database.createIdentity(
+        createIdentity(
             id: id,
             url: url,
-            authenticated: authenticated)
-            .ignoreOutput()
-            .eraseToAnyPublisher()
+            authenticationPublisher: authenticated
+                ? AuthenticationService(url: url, environment: environment).authenticate()
+                : nil)
+    }
 
-        if authenticated {
-            return AuthenticationService(url: url, environment: environment).authenticate()
-                .tryMap {
-                    try secrets.setClientID($0.clientId)
-                    try secrets.setClientSecret($0.clientSecret)
-                    try secrets.setAccessToken($1.accessToken)
-                }
-                .flatMap { createIdentityPublisher }
-                .eraseToAnyPublisher()
-        } else {
-            return createIdentityPublisher
-        }
+    func createIdentity(
+        id: UUID,
+        url: URL,
+        username: String,
+        email: String,
+        password: String,
+        reason: String?) -> AnyPublisher<Never, Error> {
+        createIdentity(
+            id: id,
+            url: url,
+            authenticationPublisher: AuthenticationService(url: url, environment: environment)
+                .register(username: username, email: email, password: password, reason: reason))
     }
 
     func deleteIdentity(id: UUID) -> AnyPublisher<Never, Error> {
@@ -99,5 +92,40 @@ public extension AllIdentitiesService {
             .map(Publishers.MergeMany.init)
             .ignoreOutput()
             .eraseToAnyPublisher()
+    }
+}
+
+private extension AllIdentitiesService {
+    func createIdentity(
+        id: UUID,
+        url: URL,
+        authenticationPublisher: AnyPublisher<(AppAuthorization, AccessToken), Error>?) -> AnyPublisher<Never, Error> {
+        let secrets = Secrets(identityID: id, keychain: environment.keychain)
+
+        do {
+            try secrets.setInstanceURL(url)
+        } catch {
+            return Fail(error: error).eraseToAnyPublisher()
+        }
+
+        let createIdentityPublisher = database.createIdentity(
+            id: id,
+            url: url,
+            authenticated: authenticationPublisher != nil)
+            .ignoreOutput()
+            .eraseToAnyPublisher()
+
+        if let authenticationPublisher = authenticationPublisher {
+            return authenticationPublisher
+                .tryMap {
+                    try secrets.setClientID($0.clientId)
+                    try secrets.setClientSecret($0.clientSecret)
+                    try secrets.setAccessToken($1.accessToken)
+                }
+                .flatMap { createIdentityPublisher }
+                .eraseToAnyPublisher()
+        } else {
+            return createIdentityPublisher
+        }
     }
 }

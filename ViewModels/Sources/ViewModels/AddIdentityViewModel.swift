@@ -13,7 +13,7 @@ public final class AddIdentityViewModel: ObservableObject {
     @Published public var urlFieldText = ""
     @Published public var alertItem: AlertItem?
     @Published public private(set) var loading = false
-    @Published public private(set) var instance: Instance?
+    @Published public private(set) var instanceAndURL: (Instance, URL)?
     @Published public private(set) var isPublicTimelineAvailable = false
     public let addedIdentityID: AnyPublisher<UUID, Never>
 
@@ -32,18 +32,23 @@ public final class AddIdentityViewModel: ObservableObject {
             .removeDuplicates()
             .map(instanceURLService.url(text:))
             .share()
-        let urlPresent =  url.map { $0 != nil }.share()
 
         url.compactMap { $0 }
             .flatMap(instanceURLService.instance(url:))
-            .combineLatest(urlPresent)
-            .map { $1 ? $0 : nil }
+            .combineLatest(url)
+            .map {
+                if let instance = $0, let url = $1 {
+                    return (instance, url)
+                }
+
+                return nil
+            }
             .receive(on: DispatchQueue.main)
-            .assign(to: &$instance)
+            .assign(to: &$instanceAndURL)
 
         url.compactMap { $0 }
             .flatMap(instanceURLService.isPublicTimelineAvailable(url:))
-            .combineLatest(urlPresent)
+            .combineLatest(url.map { $0 != nil })
             .map { $0 && $1 }
             .receive(on: DispatchQueue.main)
             .assign(to: &$isPublicTimelineAvailable)
@@ -63,6 +68,10 @@ public extension AddIdentityViewModel {
         instanceURLService.updateFilter()
             .sink { _ in }
             .store(in: &cancellables)
+    }
+
+    func registrationViewModel(instance: Instance, url: URL) -> RegistrationViewModel {
+        RegistrationViewModel(instance: instance, url: url, allIdentitiesService: allIdentitiesService)
     }
 }
 

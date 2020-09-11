@@ -15,25 +15,21 @@ import ViewModels
 
 let db: IdentityDatabase = {
     let id = UUID()
-    let url = URL(string: "https://mastodon.social")!
     let db = try! IdentityDatabase(inMemory: true, keychain: MockKeychain.self)
-    let decoder = MastodonDecoder()
-    let instance = try! decoder.decode(Instance.self, from: StubData.instance)
-    let account = try! decoder.decode(Account.self, from: StubData.account)
     let secrets = Secrets(identityID: id, keychain: MockKeychain.self)
 
-    try! secrets.setInstanceURL(url)
+    try! secrets.setInstanceURL(.previewInstanceURL)
     try! secrets.setAccessToken(UUID().uuidString)
 
-    _ = db.createIdentity(id: id, url: url, authenticated: true)
+    _ = db.createIdentity(id: id, url: .previewInstanceURL, authenticated: true)
             .receive(on: ImmediateScheduler.shared)
             .sink { _ in } receiveValue: { _ in }
 
-    _ = db.updateInstance(instance, forIdentityID: id)
+    _ = db.updateInstance(.preview, forIdentityID: id)
         .receive(on: ImmediateScheduler.shared)
         .sink { _ in } receiveValue: { _ in }
 
-    _ = db.updateAccount(account, forIdentityID: id)
+    _ = db.updateAccount(.preview, forIdentityID: id)
         .receive(on: ImmediateScheduler.shared)
         .sink { _ in } receiveValue: { _ in }
 
@@ -41,6 +37,19 @@ let db: IdentityDatabase = {
 }()
 
 let environment = AppEnvironment.mock(fixtureDatabase: db)
+let decoder = MastodonDecoder()
+
+public extension URL {
+    static let previewInstanceURL = URL(string: "https://mastodon.social")!
+}
+
+public extension Account {
+    static let preview = try! decoder.decode(Account.self, from: StubData.account)
+}
+
+public extension Instance {
+    static let preview = try! decoder.decode(Instance.self, from: StubData.instance)
+}
 
 public extension RootViewModel {
     static let preview = try! RootViewModel(environment: environment) { Empty().eraseToAnyPublisher() }
