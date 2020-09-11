@@ -30,14 +30,13 @@ struct AddIdentityView: View {
             }
             if let instance = viewModel.instance {
                 Section {
-                    KFImage(instance.thumbnail)
-                        .placeholder {
-                            ProgressView()
-                        }
-                        .resizable()
-                        .scaledToFit()
-                        .listRowInsets(EdgeInsets())
                     VStack(alignment: .center) {
+                        KFImage(instance.thumbnail)
+                            .placeholder {
+                                ProgressView()
+                            }
+                            .resizable()
+                            .aspectRatio(16 / 9, contentMode: .fill)
                         Text(instance.title)
                             .font(.headline)
                         Text(instance.uri)
