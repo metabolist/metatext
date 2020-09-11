@@ -20,7 +20,7 @@ struct IdentitiesView: View {
                     })
             }
             section(title: "identities.accounts", identities: viewModel.authenticated)
-            section(title: "identities.browsing-anonymously", identities: viewModel.unauthenticated)
+            section(title: "identities.browsing", identities: viewModel.unauthenticated)
         }
         .toolbar {
             ToolbarItem(placement: ToolbarItemPlacement.navigationBarTrailing) {

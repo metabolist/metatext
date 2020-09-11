@@ -15,21 +15,7 @@ struct AddIdentityView: View {
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
                     .keyboardType(.URL)
-                Group {
-                    if viewModel.loading {
-                        ProgressView()
-                    } else {
-                        Button("add-identity.log-in",
-                               action: viewModel.logInTapped)
-                        if viewModel.isPublicTimelineAvailable {
-                            Button("add-identity.browse-anonymously", action: viewModel.browseAnonymouslyTapped)
-                        }
-                    }
-                }
-                .frame(maxWidth: .infinity, alignment: .center)
-            }
-            if let instance = viewModel.instance {
-                Section {
+                if let instance = viewModel.instance {
                     VStack(alignment: .center) {
                         KFImage(instance.thumbnail)
                             .placeholder {
@@ -37,15 +23,30 @@ struct AddIdentityView: View {
                             }
                             .resizable()
                             .aspectRatio(16 / 9, contentMode: .fill)
+                            .background(Color.blue)
+                        Spacer()
                         Text(instance.title)
                             .font(.headline)
                         Text(instance.uri)
                             .font(.subheadline)
                             .foregroundColor(.secondary)
+                        Spacer()
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
                     .listRowInsets(EdgeInsets())
                 }
+                Group {
+                    if viewModel.loading {
+                        ProgressView()
+                    } else {
+                        Button("add-identity.log-in",
+                               action: viewModel.logInTapped)
+                        if viewModel.isPublicTimelineAvailable {
+                            Button("add-identity.browse", action: viewModel.browseTapped)
+                        }
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .center)
             }
         }
         .animation(.default)

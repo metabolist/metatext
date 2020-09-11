@@ -55,7 +55,7 @@ public extension AddIdentityViewModel {
         addIdentity(authenticated: true)
     }
 
-    func browseAnonymouslyTapped() {
+    func browseTapped() {
         addIdentity(authenticated: false)
     }
 
