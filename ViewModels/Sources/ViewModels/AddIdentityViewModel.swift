@@ -42,7 +42,7 @@ public extension AddIdentityViewModel {
 
     func refreshFilter() {
         instanceURLService.updateFilter()
-            .sink { _ in }
+            .sink { _ in } receiveValue: { _ in }
             .store(in: &cancellables)
     }
 
@@ -61,12 +61,6 @@ private extension AddIdentityViewModel {
 
         url.receive(on: DispatchQueue.main).assign(to: &$url)
 
-        url.compactMap { $0 }
-            .flatMap(instanceURLService.isPublicTimelineAvailable(url:))
-            .replaceError(with: false)
-            .receive(on: DispatchQueue.main)
-            .assign(to: &$isPublicTimelineAvailable)
-
         url.flatMap { [weak self] url -> AnyPublisher<Instance?, Never> in
             guard let self = self, let url = url else {
                 return Just(nil).eraseToAnyPublisher()
@@ -79,6 +73,18 @@ private extension AddIdentityViewModel {
         }
         .receive(on: DispatchQueue.main)
         .assign(to: &$instance)
+
+        url.flatMap { [weak self] url -> AnyPublisher<Bool, Never> in
+            guard let self = self, let url = url else {
+                return Just(false).eraseToAnyPublisher()
+            }
+
+            return self.instanceURLService.isPublicTimelineAvailable(url: url)
+                .replaceError(with: false)
+                .eraseToAnyPublisher()
+        }
+        .receive(on: DispatchQueue.main)
+        .assign(to: &$isPublicTimelineAvailable)
     }
 
     func addIdentity(authenticated: Bool) {

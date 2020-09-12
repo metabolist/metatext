@@ -47,22 +47,19 @@ public extension InstanceURLService {
             .eraseToAnyPublisher()
     }
 
-    func isPublicTimelineAvailable(url: URL) -> AnyPublisher<Bool, Never> {
+    func isPublicTimelineAvailable(url: URL) -> AnyPublisher<Bool, Error> {
         httpClient.request(
             MastodonAPITarget(
                 baseURL: url,
                 endpoint: TimelinesEndpoint.public(local: true),
                 accessToken: nil))
             .map { _ in true }
-            .catch { _ in Just(false) }
             .eraseToAnyPublisher()
     }
 
-    func updateFilter() -> AnyPublisher<Never, Never> {
+    func updateFilter() -> AnyPublisher<Never, Error> {
         httpClient.request(UpdatedFilterTarget())
             .handleEvents(receiveOutput: { userDefaultsClient.updatedInstanceFilter = $0 })
-            .map { _ in () }
-            .replaceError(with: ())
             .ignoreOutput()
             .eraseToAnyPublisher()
     }
