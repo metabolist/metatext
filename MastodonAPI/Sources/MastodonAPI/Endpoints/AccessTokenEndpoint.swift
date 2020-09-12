@@ -13,7 +13,20 @@ public enum AccessTokenEndpoint {
             code: String?,
             redirectURI: String?
          )
-    case accounts(username: String, email: String, password: String, reason: String?)
+    case accounts(Registration)
+}
+
+public extension AccessTokenEndpoint {
+    struct Registration {
+        public var username = ""
+        public var email = ""
+        public var password = ""
+        public var locale = "en"
+        public var reason = ""
+        public var agreement = false
+
+        public init() {}
+    }
 }
 
 extension AccessTokenEndpoint: Endpoint {
@@ -56,15 +69,17 @@ extension AccessTokenEndpoint: Endpoint {
             params["redirect_uri"] = redirectURI
 
             return params
-        case let .accounts(username, email, password, reason):
+        case let .accounts(registration):
             var params: [String: Any] = [
-                "username": username,
-                "email": email,
-                "password": password,
-                "locale": Locale.autoupdatingCurrent.languageCode ?? "en", // TODO: probably need to map
-                "agreement": true]
+                "username": registration.username,
+                "email": registration.email,
+                "password": registration.password,
+                "locale": registration.locale,
+                "agreement": registration.agreement]
 
-            params["reason"] = reason
+            if !registration.reason.isEmpty {
+                params["reason"] = registration.reason
+            }
 
             return params
         }

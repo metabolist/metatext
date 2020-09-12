@@ -37,18 +37,12 @@ public extension AllIdentitiesService {
                 : nil)
     }
 
-    func createIdentity(
-        id: UUID,
-        url: URL,
-        username: String,
-        email: String,
-        password: String,
-        reason: String?) -> AnyPublisher<Never, Error> {
+    func createIdentity(id: UUID, url: URL, registration: Registration) -> AnyPublisher<Never, Error> {
         createIdentity(
             id: id,
             url: url,
             authenticationPublisher: AuthenticationService(url: url, environment: environment)
-                .register(username: username, email: email, password: password, reason: reason))
+                .register(registration))
     }
 
     func deleteIdentity(id: UUID) -> AnyPublisher<Never, Error> {

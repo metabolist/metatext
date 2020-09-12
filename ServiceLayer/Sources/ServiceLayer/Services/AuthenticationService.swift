@@ -29,10 +29,7 @@ extension AuthenticationService {
             .eraseToAnyPublisher()
     }
 
-    func register(username: String,
-                  email: String,
-                  password: String,
-                  reason: String?) -> AnyPublisher<(AppAuthorization, AccessToken), Error> {
+    func register(_ registration: Registration) -> AnyPublisher<(AppAuthorization, AccessToken), Error> {
         let authorization = appAuthorization()
             .share()
 
@@ -49,12 +46,7 @@ extension AuthenticationService {
                     .flatMap { accessToken -> AnyPublisher<AccessToken, Error> in
                         mastodonAPIClient.accessToken = accessToken.accessToken
 
-                        return mastodonAPIClient.request(
-                            AccessTokenEndpoint.accounts(
-                                username: username,
-                                email: email,
-                                password: password,
-                                reason: reason))
+                        return mastodonAPIClient.request(AccessTokenEndpoint.accounts(registration))
                     }
                     .eraseToAnyPublisher()
             })

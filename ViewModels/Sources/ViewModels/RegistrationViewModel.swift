@@ -3,7 +3,6 @@
 import Combine
 import Foundation
 import Mastodon
-import MastodonAPI
 import ServiceLayer
 
 public enum RegistrationError: Error {
@@ -15,14 +14,9 @@ public final class RegistrationViewModel: ObservableObject {
     public let serverRulesURL: URL
     public let termsOfServiceURL: URL
     @Published public var alertItem: AlertItem?
-    @Published public var username = ""
-    @Published public var email = ""
-    @Published public var password = ""
+    @Published public var registration = Registration()
     @Published public var passwordConfirmation = ""
-    @Published public var reason = ""
-    @Published public var passwordsMatch = false
-    @Published public var agreement = false
-    @Published public private(set) var registerButtonEnabled = false
+    @Published public private(set) var registerDisabled = true
     @Published public private(set) var registering = false
 
     private let url: URL
@@ -36,34 +30,27 @@ public final class RegistrationViewModel: ObservableObject {
         self.termsOfServiceURL = url.appendingPathComponent("terms")
         self.allIdentitiesService = allIdentitiesService
 
-        Publishers.CombineLatest4($username, $email, $password, $reason)
-            .map { username, email, password, reason in
-                !username.isEmpty
-                    && !email.isEmpty
-                    && !password.isEmpty
-                    && (!instance.approvalRequired || !reason.isEmpty)
+        $registration
+            .map {
+                $0.username.isEmpty
+                    || $0.email.isEmpty
+                    || $0.password.isEmpty
+                    || ($0.reason.isEmpty && instance.approvalRequired)
+                    || !$0.agreement
             }
-            .combineLatest($agreement)
-            .map { $0 && $1 }
-            .assign(to: &$registerButtonEnabled)
+            .assign(to: &$registerDisabled)
     }
 }
 
 public extension RegistrationViewModel {
     func registerTapped() {
-        guard password == passwordConfirmation else {
+        guard registration.password == passwordConfirmation else {
             alertItem = AlertItem(error: RegistrationError.passwordConfirmationMismatch)
 
             return
         }
 
-        allIdentitiesService.createIdentity(
-            id: UUID(),
-            url: url,
-            username: username,
-            email: email,
-            password: password,
-            reason: reason)
+        allIdentitiesService.createIdentity(id: UUID(), url: url, registration: registration)
             .handleEvents(receiveSubscription: { [weak self] _ in self?.registering = true })
             .mapError { error -> Error in
                 if error is URLError {
