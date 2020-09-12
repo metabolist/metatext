@@ -13,7 +13,8 @@ public final class AddIdentityViewModel: ObservableObject {
     @Published public var urlFieldText = ""
     @Published public var alertItem: AlertItem?
     @Published public private(set) var loading = false
-    @Published public private(set) var instanceAndURL: (Instance, URL)?
+    @Published public private(set) var url: URL?
+    @Published public private(set) var instance: Instance?
     @Published public private(set) var isPublicTimelineAvailable = false
     public let addedIdentityID: AnyPublisher<UUID, Never>
 
@@ -26,32 +27,7 @@ public final class AddIdentityViewModel: ObservableObject {
         self.allIdentitiesService = allIdentitiesService
         self.instanceURLService = instanceURLService
         addedIdentityID = addedIdentityIDSubject.eraseToAnyPublisher()
-
-        let url = $urlFieldText
-            .debounce(for: 0.5, scheduler: DispatchQueue.global())
-            .removeDuplicates()
-            .map(instanceURLService.url(text:))
-            .share()
-
-        url.compactMap { $0 }
-            .flatMap(instanceURLService.instance(url:))
-            .combineLatest(url)
-            .map {
-                if let instance = $0, let url = $1 {
-                    return (instance, url)
-                }
-
-                return nil
-            }
-            .receive(on: DispatchQueue.main)
-            .assign(to: &$instanceAndURL)
-
-        url.compactMap { $0 }
-            .flatMap(instanceURLService.isPublicTimelineAvailable(url:))
-            .combineLatest(url.map { $0 != nil })
-            .map { $0 && $1 }
-            .receive(on: DispatchQueue.main)
-            .assign(to: &$isPublicTimelineAvailable)
+        setupURLObservation()
     }
 }
 
@@ -76,6 +52,35 @@ public extension AddIdentityViewModel {
 }
 
 private extension AddIdentityViewModel {
+    func setupURLObservation() {
+        let url = $urlFieldText
+            .debounce(for: 0.5, scheduler: DispatchQueue.global())
+            .removeDuplicates()
+            .map(instanceURLService.url(text:))
+            .share()
+
+        url.receive(on: DispatchQueue.main).assign(to: &$url)
+
+        url.compactMap { $0 }
+            .flatMap(instanceURLService.isPublicTimelineAvailable(url:))
+            .replaceError(with: false)
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$isPublicTimelineAvailable)
+
+        url.flatMap { [weak self] url -> AnyPublisher<Instance?, Never> in
+            guard let self = self, let url = url else {
+                return Just(nil).eraseToAnyPublisher()
+            }
+
+            return self.instanceURLService.instance(url: url)
+                .map { $0 as Instance? }
+                .replaceError(with: nil)
+                .eraseToAnyPublisher()
+        }
+        .receive(on: DispatchQueue.main)
+        .assign(to: &$instance)
+    }
+
     func addIdentity(authenticated: Bool) {
         let identityID = UUID()
 

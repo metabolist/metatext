@@ -38,14 +38,12 @@ public extension InstanceURLService {
         return url
     }
 
-    func instance(url: URL) -> AnyPublisher<Instance?, Never> {
+    func instance(url: URL) -> AnyPublisher<Instance, Error> {
         httpClient.request(
             MastodonAPITarget(
                 baseURL: url,
                 endpoint: InstanceEndpoint.instance,
                 accessToken: nil))
-            .map { $0 as Instance? }
-            .catch { _ in Just(nil) }
             .eraseToAnyPublisher()
     }
 

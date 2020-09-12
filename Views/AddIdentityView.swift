@@ -19,7 +19,7 @@ struct AddIdentityView: View {
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
                     .keyboardType(.URL)
-                if let (instance, _) = viewModel.instanceAndURL {
+                if let instance = viewModel.instance {
                     VStack(alignment: .center) {
                         KFImage(instance.thumbnail)
                             .placeholder {
@@ -45,7 +45,7 @@ struct AddIdentityView: View {
                     } else {
                         Button("add-identity.log-in",
                                action: viewModel.logInTapped)
-                        if let (instance, url) = viewModel.instanceAndURL,
+                        if let instance = viewModel.instance, let url = viewModel.url,
                            instance.registrations {
                             ZStack {
                                 NavigationLink(
