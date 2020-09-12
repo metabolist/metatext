@@ -12,16 +12,19 @@ struct RegistrationView: View {
         Form {
             HStack {
                 TextField("registration.username", text: $viewModel.registration.username)
+                    .textContentType(.username)
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
-                Text("@" + viewModel.instance.uri)
+                Text("@".appending(viewModel.instance.uri))
                     .foregroundColor(.secondary)
             }
             TextField("registration.email", text: $viewModel.registration.email)
+                .textContentType(.emailAddress)
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
                 .keyboardType(.emailAddress)
             SecureField("registration.password", text: $viewModel.registration.password)
+                .textContentType(.password)
             SecureField("registration.password-confirmation", text: $viewModel.passwordConfirmation)
             if viewModel.instance.approvalRequired {
                 VStack(alignment: .leading) {
@@ -29,12 +32,8 @@ struct RegistrationView: View {
                     TextEditor(text: $viewModel.registration.reason)
                 }
             }
-            Button("registration.server-rules") {
-                presentURL = viewModel.serverRulesURL
-            }
-            Button("registration.terms-of-service") {
-                presentURL = viewModel.termsOfServiceURL
-            }
+            Button("registration.server-rules") { presentURL = viewModel.serverRulesURL }
+            Button("registration.terms-of-service") { presentURL = viewModel.termsOfServiceURL }
             Toggle("registration.agree-to-server-rules-and-terms-of-service",
                    isOn: $viewModel.registration.agreement)
             Group {

@@ -19,6 +19,7 @@ struct RootView: View {
                     .navigationBarHidden(true)
             }
             .environmentObject(viewModel)
+            .navigationViewStyle(StackNavigationViewStyle())
             .transition(.opacity)
         }
     }

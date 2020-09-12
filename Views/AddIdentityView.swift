@@ -6,13 +6,16 @@ import ViewModels
 
 struct AddIdentityView: View {
     @StateObject var viewModel: AddIdentityViewModel
+    @Environment(\.accessibilityReduceMotion) var accessibilityReduceMotion
     @EnvironmentObject var rootViewModel: RootViewModel
+
     @State private var navigateToRegister = false
 
     var body: some View {
         Form {
             Section {
                 TextField("add-identity.instance-url", text: $viewModel.urlFieldText)
+                    .textContentType(.URL)
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
                     .keyboardType(.URL)
@@ -69,7 +72,7 @@ struct AddIdentityView: View {
                 .frame(maxWidth: .infinity, alignment: .center)
             }
         }
-        .animation(.default, if: !viewModel.loading)
+        .animation(.default, if: !accessibilityReduceMotion)
         .alertItem($viewModel.alertItem)
         .onReceive(viewModel.addedIdentityID) { id in
             withAnimation {

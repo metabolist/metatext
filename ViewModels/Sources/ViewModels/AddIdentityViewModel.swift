@@ -111,8 +111,4 @@ private extension AddIdentityViewModel {
             } receiveValue: { _ in }
             .store(in: &cancellables)
     }
-
-    func checkIfPublicTimelineAvailable(url: URL) -> AnyPublisher<Bool, Never> {
-        Just(false).eraseToAnyPublisher()
-    }
 }
