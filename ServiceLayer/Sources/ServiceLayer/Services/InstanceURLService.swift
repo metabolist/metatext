@@ -18,8 +18,10 @@ public struct InstanceURLService {
 }
 
 public extension InstanceURLService {
-    func url(text: String) -> URL? {
-        guard text.count >= Self.shortestPossibleURLLength else { return nil }
+    func url(text: String) -> Result<URL, Error> {
+        guard text.count >= Self.shortestPossibleURLLength else {
+            return .failure(URLError(.badURL))
+        }
 
         let url: URL
 
@@ -28,14 +30,14 @@ public extension InstanceURLService {
         } else if let unprefixedURL = URL(string: Self.httpsPrefix + text) {
             url = unprefixedURL
         } else {
-            return nil
+            return .failure(URLError(.badURL))
         }
 
         if isFiltered(url: url) {
-            return nil
+            return .failure(URLError(.badURL))
         }
 
-        return url
+        return .success(url)
     }
 
     func instance(url: URL) -> AnyPublisher<Instance, Error> {

@@ -53,7 +53,16 @@ private extension AddIdentityViewModel {
         let url = $urlFieldText
             .debounce(for: 0.5, scheduler: DispatchQueue.global())
             .removeDuplicates()
-            .map(instanceURLService.url(text:))
+            .flatMap { [weak self] text -> AnyPublisher<URL?, Never> in
+                guard let self = self else {
+                    return Just(nil).eraseToAnyPublisher()
+                }
+
+                return self.instanceURLService.url(text: text).publisher
+                    .map { $0 as URL? }
+                    .replaceError(with: nil)
+                    .eraseToAnyPublisher()
+            }
             .share()
 
         url.receive(on: DispatchQueue.main).assign(to: &$url)
@@ -85,13 +94,9 @@ private extension AddIdentityViewModel {
     }
 
     func addIdentity(authenticated: Bool) {
-        guard let url = instanceURLService.url(text: urlFieldText) else {
-            alertItem = AlertItem(error: AddIdentityError.unableToConnectToInstance)
-
-            return
-        }
-
-        allIdentitiesService.createIdentity(url: url, authenticated: authenticated)
+        instanceURLService.url(text: urlFieldText).publisher
+            .map { ($0, authenticated) }
+            .flatMap(allIdentitiesService.createIdentity(url:authenticated:))
             .receive(on: DispatchQueue.main)
             .handleEvents(receiveSubscription: { [weak self] _ in self?.loading = true })
             .sink { [weak self] in
