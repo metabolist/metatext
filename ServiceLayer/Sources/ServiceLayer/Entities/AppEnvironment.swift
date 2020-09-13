@@ -13,6 +13,7 @@ public struct AppEnvironment {
     let keychain: Keychain.Type
     let userDefaults: UserDefaults
     let userNotificationClient: UserNotificationClient
+    let uuid: () -> UUID
     let inMemoryContent: Bool
     let fixtureDatabase: IdentityDatabase?
 
@@ -21,6 +22,7 @@ public struct AppEnvironment {
                 keychain: Keychain.Type,
                 userDefaults: UserDefaults,
                 userNotificationClient: UserNotificationClient,
+                uuid: @escaping () -> UUID,
                 inMemoryContent: Bool,
                 fixtureDatabase: IdentityDatabase?) {
         self.session = session
@@ -28,6 +30,7 @@ public struct AppEnvironment {
         self.keychain = keychain
         self.userDefaults = userDefaults
         self.userNotificationClient = userNotificationClient
+        self.uuid = uuid
         self.inMemoryContent = inMemoryContent
         self.fixtureDatabase = fixtureDatabase
     }
@@ -41,6 +44,7 @@ public extension AppEnvironment {
             keychain: LiveKeychain.self,
             userDefaults: .standard,
             userNotificationClient: .live(userNotificationCenter),
+            uuid: UUID.init,
             inMemoryContent: false,
             fixtureDatabase: nil)
     }

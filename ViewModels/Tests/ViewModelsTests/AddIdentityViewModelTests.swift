@@ -12,11 +12,13 @@ import XCTest
 
 class AddIdentityViewModelTests: XCTestCase {
     func testAddIdentity() throws {
-        let environment = AppEnvironment.mock()
+        let uuid = UUID(uuidString: "E621E1F8-C36C-495A-93FC-0C247A3E6E5F")!
+        let environment = AppEnvironment.mock(uuid: { uuid })
+        let allIdentitiesService = try AllIdentitiesService(environment: environment)
         let sut = AddIdentityViewModel(
-            allIdentitiesService: try AllIdentitiesService(environment: environment),
+            allIdentitiesService: allIdentitiesService,
             instanceURLService: InstanceURLService(environment: environment))
-        let addedIDRecorder = sut.addedIdentityID.record()
+        let addedIDRecorder = allIdentitiesService.identitiesCreated.record()
 
         sut.urlFieldText = "https://mastodon.social"
         sut.logInTapped()
@@ -25,11 +27,13 @@ class AddIdentityViewModelTests: XCTestCase {
     }
 
     func testAddIdentityWithoutScheme() throws {
-        let environment = AppEnvironment.mock()
+        let uuid = UUID(uuidString: "E621E1F8-C36C-495A-93FC-0C247A3E6E5F")!
+        let environment = AppEnvironment.mock(uuid: { uuid })
+        let allIdentitiesService = try AllIdentitiesService(environment: environment)
         let sut = AddIdentityViewModel(
-            allIdentitiesService: try AllIdentitiesService(environment: environment),
+            allIdentitiesService: allIdentitiesService,
             instanceURLService: InstanceURLService(environment: environment))
-        let addedIDRecorder = sut.addedIdentityID.record()
+        let addedIDRecorder = allIdentitiesService.identitiesCreated.record()
 
         sut.urlFieldText = "mastodon.social"
         sut.logInTapped()

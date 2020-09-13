@@ -8,14 +8,18 @@ import MastodonAPI
 import Secrets
 
 public struct AllIdentitiesService {
+    public let identitiesCreated: AnyPublisher<UUID, Never>
+
     private let environment: AppEnvironment
     private let database: IdentityDatabase
+    private let identitiesCreatedSubject = PassthroughSubject<UUID, Never>()
 
     public init(environment: AppEnvironment) throws {
         self.environment = environment
         self.database =  try environment.fixtureDatabase ?? IdentityDatabase(
             inMemory: environment.inMemoryContent,
             keychain: environment.keychain)
+        identitiesCreated = identitiesCreatedSubject.eraseToAnyPublisher()
     }
 }
 
@@ -28,18 +32,16 @@ public extension AllIdentitiesService {
         database.immediateMostRecentlyUsedIdentityIDObservation()
     }
 
-    func createIdentity(id: UUID, url: URL, authenticated: Bool) -> AnyPublisher<Never, Error> {
+    func createIdentity(url: URL, authenticated: Bool) -> AnyPublisher<Never, Error> {
         createIdentity(
-            id: id,
             url: url,
             authenticationPublisher: authenticated
                 ? AuthenticationService(url: url, environment: environment).authenticate()
                 : nil)
     }
 
-    func createIdentity(id: UUID, url: URL, registration: Registration) -> AnyPublisher<Never, Error> {
+    func createIdentity(url: URL, registration: Registration) -> AnyPublisher<Never, Error> {
         createIdentity(
-            id: id,
             url: url,
             authenticationPublisher: AuthenticationService(url: url, environment: environment)
                 .register(registration))
@@ -91,9 +93,9 @@ public extension AllIdentitiesService {
 
 private extension AllIdentitiesService {
     func createIdentity(
-        id: UUID,
         url: URL,
         authenticationPublisher: AnyPublisher<(AppAuthorization, AccessToken), Error>?) -> AnyPublisher<Never, Error> {
+        let id = environment.uuid()
         let secrets = Secrets(identityID: id, keychain: environment.keychain)
 
         do {
@@ -107,6 +109,11 @@ private extension AllIdentitiesService {
             url: url,
             authenticated: authenticationPublisher != nil)
             .ignoreOutput()
+            .handleEvents(receiveCompletion: {
+                if case .finished = $0 {
+                    identitiesCreatedSubject.send(id)
+                }
+            })
             .eraseToAnyPublisher()
 
         if let authenticationPublisher = authenticationPublisher {

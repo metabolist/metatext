@@ -74,11 +74,6 @@ struct AddIdentityView: View {
         }
         .animation(.default, if: !accessibilityReduceMotion)
         .alertItem($viewModel.alertItem)
-        .onReceive(viewModel.addedIdentityID) { id in
-            withAnimation {
-                rootViewModel.identitySelected(id: id)
-            }
-        }
         .onAppear(perform: viewModel.refreshFilter)
     }
 }

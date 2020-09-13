@@ -16,17 +16,14 @@ public final class AddIdentityViewModel: ObservableObject {
     @Published public private(set) var url: URL?
     @Published public private(set) var instance: Instance?
     @Published public private(set) var isPublicTimelineAvailable = false
-    public let addedIdentityID: AnyPublisher<UUID, Never>
 
     private let allIdentitiesService: AllIdentitiesService
     private let instanceURLService: InstanceURLService
-    private let addedIdentityIDSubject = PassthroughSubject<UUID, Never>()
     private var cancellables = Set<AnyCancellable>()
 
     init(allIdentitiesService: AllIdentitiesService, instanceURLService: InstanceURLService) {
         self.allIdentitiesService = allIdentitiesService
         self.instanceURLService = instanceURLService
-        addedIdentityID = addedIdentityIDSubject.eraseToAnyPublisher()
         setupURLObservation()
     }
 }
@@ -88,18 +85,13 @@ private extension AddIdentityViewModel {
     }
 
     func addIdentity(authenticated: Bool) {
-        let identityID = UUID()
-
         guard let url = instanceURLService.url(text: urlFieldText) else {
             alertItem = AlertItem(error: AddIdentityError.unableToConnectToInstance)
 
             return
         }
 
-        allIdentitiesService.createIdentity(
-            id: identityID,
-            url: url,
-            authenticated: authenticated)
+        allIdentitiesService.createIdentity(url: url, authenticated: authenticated)
             .receive(on: DispatchQueue.main)
             .handleEvents(receiveSubscription: { [weak self] _ in self?.loading = true })
             .sink { [weak self] in
@@ -107,10 +99,7 @@ private extension AddIdentityViewModel {
 
                 self.loading = false
 
-                switch $0 {
-                case .finished:
-                    self.addedIdentityIDSubject.send(identityID)
-                case let .failure(error):
+                if case let .failure(error) = $0 {
                     if case AuthenticationError.canceled = error {
                         return
                     }

@@ -14,6 +14,7 @@ public extension AppEnvironment {
                      keychain: Keychain.Type = MockKeychain.self,
                      userDefaults: UserDefaults = MockUserDefaults(),
                      userNotificationClient: UserNotificationClient = .mock,
+                     uuid: @escaping () -> UUID = UUID.init,
                      inMemoryContent: Bool = true,
                      fixtureDatabase: IdentityDatabase? = nil) -> Self {
         AppEnvironment(
@@ -22,6 +23,7 @@ public extension AppEnvironment {
             keychain: keychain,
             userDefaults: userDefaults,
             userNotificationClient: userNotificationClient,
+            uuid: uuid,
             inMemoryContent: inMemoryContent,
             fixtureDatabase: fixtureDatabase)
     }

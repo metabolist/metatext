@@ -27,6 +27,10 @@ public final class RootViewModel: ObservableObject {
 
         identitySelected(id: mostRecentlyUsedIdentityID, immediate: true)
 
+        allIdentitiesService.identitiesCreated
+            .sink { [weak self] in self?.identitySelected(id: $0) }
+            .store(in: &cancellables)
+
         userNotificationService.isAuthorized()
             .filter { $0 }
             .zip(registerForRemoteNotifications())
