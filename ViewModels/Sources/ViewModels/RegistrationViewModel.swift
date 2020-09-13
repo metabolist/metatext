@@ -50,7 +50,7 @@ public extension RegistrationViewModel {
             return
         }
 
-        allIdentitiesService.createIdentity(url: url, registration: registration)
+        allIdentitiesService.createIdentity(url: url, kind: .registration(registration))
             .handleEvents(receiveSubscription: { [weak self] _ in self?.registering = true })
             .mapError { error -> Error in
                 if error is URLError {

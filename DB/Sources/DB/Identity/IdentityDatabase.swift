@@ -33,12 +33,13 @@ public struct IdentityDatabase {
 }
 
 public extension IdentityDatabase {
-    func createIdentity(id: UUID, url: URL, authenticated: Bool) -> AnyPublisher<Never, Error> {
+    func createIdentity(id: UUID, url: URL, authenticated: Bool, pending: Bool) -> AnyPublisher<Never, Error> {
         databaseQueue.writePublisher(
             updates: IdentityRecord(
                 id: id,
                 url: url,
                 authenticated: authenticated,
+                pending: pending,
                 lastUsedAt: Date(),
                 preferences: Identity.Preferences(),
                 instanceURI: nil,
@@ -97,6 +98,16 @@ public extension IdentityDatabase {
                 .save)
             .ignoreOutput()
             .eraseToAnyPublisher()
+    }
+
+    func confirmIdentity(id: UUID) -> AnyPublisher<Never, Error> {
+        databaseQueue.writePublisher {
+            try IdentityRecord
+                .filter(Column("id") == id)
+                .updateAll($0, Column("pending").set(to: false))
+        }
+        .ignoreOutput()
+        .eraseToAnyPublisher()
     }
 
     func updatePreferences(_ preferences: Mastodon.Preferences,
@@ -230,6 +241,7 @@ private extension IdentityDatabase {
                 t.column("id", .text).notNull().primaryKey(onConflict: .replace)
                 t.column("url", .text).notNull()
                 t.column("authenticated", .boolean).notNull()
+                t.column("pending", .boolean).notNull()
                 t.column("lastUsedAt", .datetime).notNull()
                 t.column("instanceURI", .text)
                     .indexed()

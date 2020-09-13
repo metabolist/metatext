@@ -30,11 +30,11 @@ public final class AddIdentityViewModel: ObservableObject {
 
 public extension AddIdentityViewModel {
     func logInTapped() {
-        addIdentity(authenticated: true)
+        addIdentity(kind: .authentication)
     }
 
     func browseTapped() {
-        addIdentity(authenticated: false)
+        addIdentity(kind: .browsing)
     }
 
     func refreshFilter() {
@@ -93,10 +93,10 @@ private extension AddIdentityViewModel {
         .assign(to: &$isPublicTimelineAvailable)
     }
 
-    func addIdentity(authenticated: Bool) {
+    func addIdentity(kind: AllIdentitiesService.IdentityCreation) {
         instanceURLService.url(text: urlFieldText).publisher
-            .map { ($0, authenticated) }
-            .flatMap(allIdentitiesService.createIdentity(url:authenticated:))
+            .map { ($0, kind) }
+            .flatMap(allIdentitiesService.createIdentity(url:kind:))
             .receive(on: DispatchQueue.main)
             .handleEvents(receiveSubscription: { [weak self] _ in self?.loading = true })
             .sink { [weak self] in

@@ -59,31 +59,34 @@ public extension NavigationViewModel {
     }
 
     func refreshIdentity() {
-        if identification.identity.authenticated {
+        if identification.identity.pending {
+            identification.service.verifyCredentials()
+                .collect()
+                .map { _ in () }
+                .flatMap(identification.service.confirmIdentity)
+                .sink { _ in } receiveValue: { _ in }
+                .store(in: &cancellables)
+        } else if identification.identity.authenticated {
             identification.service.verifyCredentials()
                 .assignErrorsToAlertItem(to: \.alertItem, on: self)
                 .sink { _ in }
                 .store(in: &cancellables)
             identification.service.refreshLists()
-                .assignErrorsToAlertItem(to: \.alertItem, on: self)
-                .sink { _ in }
+                .sink { _ in } receiveValue: { _ in }
                 .store(in: &cancellables)
             identification.service.refreshFilters()
-                .assignErrorsToAlertItem(to: \.alertItem, on: self)
-                .sink { _ in }
+                .sink { _ in } receiveValue: { _ in }
                 .store(in: &cancellables)
 
             if identification.identity.preferences.useServerPostingReadingPreferences {
                 identification.service.refreshServerPreferences()
-                    .assignErrorsToAlertItem(to: \.alertItem, on: self)
-                    .sink { _ in }
+                    .sink { _ in } receiveValue: { _ in }
                     .store(in: &cancellables)
             }
         }
 
         identification.service.refreshInstance()
-            .assignErrorsToAlertItem(to: \.alertItem, on: self)
-            .sink { _ in }
+            .sink { _ in } receiveValue: { _ in }
             .store(in: &cancellables)
     }
 

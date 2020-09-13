@@ -23,7 +23,9 @@
 "secondary-navigation.preferences" = "Preferences";
 "identities.accounts" = "Accounts";
 "identities.browsing" = "Browsing";
+"identities.pending" = "Pending";
 "lists.new-list-title" = "New List Title";
+"pending.pending-confirmation" = "Your account is pending confirmation";
 "preferences" = "Preferences";
 "preferences.posting-reading" = "Posting and Reading";
 "preferences.posting" = "Posting";

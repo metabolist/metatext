@@ -8,6 +8,7 @@ public final class IdentitiesViewModel: ObservableObject {
     public let currentIdentityID: UUID
     @Published public var authenticated = [Identity]()
     @Published public var unauthenticated = [Identity]()
+    @Published public var pending = [Identity]()
     @Published public var alertItem: AlertItem?
 
     private let identification: Identification
@@ -21,9 +22,11 @@ public final class IdentitiesViewModel: ObservableObject {
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .share()
 
-        observation.map { $0.filter { $0.authenticated } }
+        observation.map { $0.filter { $0.authenticated && !$0.pending } }
             .assign(to: &$authenticated)
-        observation.map { $0.filter { !$0.authenticated } }
+        observation.map { $0.filter { !$0.authenticated && !$0.pending } }
             .assign(to: &$unauthenticated)
+        observation.map { $0.filter { $0.pending } }
+            .assign(to: &$pending)
     }
 }

@@ -56,6 +56,10 @@ public extension IdentityService {
             .eraseToAnyPublisher()
     }
 
+    func confirmIdentity() -> AnyPublisher<Never, Error> {
+        identityDatabase.confirmIdentity(id: identityID)
+    }
+
     func identitiesObservation() -> AnyPublisher<[Identity], Error> {
         identityDatabase.identitiesObservation()
     }

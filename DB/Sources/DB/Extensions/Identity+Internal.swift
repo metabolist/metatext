@@ -9,6 +9,7 @@ extension Identity {
             id: result.identity.id,
             url: result.identity.url,
             authenticated: result.identity.authenticated,
+            pending: result.identity.pending,
             lastUsedAt: result.identity.lastUsedAt,
             preferences: result.identity.preferences,
             instance: result.instance,

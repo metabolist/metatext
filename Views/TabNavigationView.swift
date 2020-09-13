@@ -11,17 +11,23 @@ struct TabNavigationView: View {
     @Environment(\.displayScale) var displayScale: CGFloat
 
     var body: some View {
-        TabView(selection: $viewModel.selectedTab) {
-            ForEach(viewModel.tabs) { tab in
-                NavigationView {
-                    view(tab: tab)
+        Group {
+            if viewModel.identification.identity.pending {
+                pendingView
+            } else {
+                TabView(selection: $viewModel.selectedTab) {
+                    ForEach(viewModel.tabs) { tab in
+                        NavigationView {
+                            view(tab: tab)
+                        }
+                        .navigationViewStyle(StackNavigationViewStyle())
+                        .tabItem {
+                            Label(tab.title, systemImage: tab.systemImageName)
+                                .accessibility(label: Text(tab.title))
+                        }
+                        .tag(tab)
+                    }
                 }
-                .navigationViewStyle(StackNavigationViewStyle())
-                .tabItem {
-                    Label(tab.title, systemImage: tab.systemImageName)
-                        .accessibility(label: Text(tab.title))
-                }
-                .tag(tab)
             }
         }
         .environmentObject(viewModel.identification)
@@ -41,13 +47,25 @@ struct TabNavigationView: View {
 
 private extension TabNavigationView {
     @ViewBuilder
+    var pendingView: some View {
+        NavigationView {
+            Text("pending.pending-confirmation")
+                .navigationBarItems(leading: secondaryNavigationButton)
+                .navigationTitle(viewModel.identification.identity.handle)
+                .navigationBarTitleDisplayMode(.inline)
+        }
+        .navigationViewStyle(StackNavigationViewStyle())
+    }
+
+    @ViewBuilder
     func view(tab: NavigationViewModel.Tab) -> some View {
         switch tab {
         case .timelines:
             StatusListView(viewModel: viewModel.viewModel(timeline: viewModel.timeline))
                 .id(viewModel.timeline.id)
                 .edgesIgnoringSafeArea(.all)
-                .navigationBarTitle(viewModel.timeline.title, displayMode: .inline)
+                .navigationTitle(viewModel.timeline.title)
+                .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .principal) {
                         VStack {
