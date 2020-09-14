@@ -24,7 +24,43 @@ public final class AddIdentityViewModel: ObservableObject {
     init(allIdentitiesService: AllIdentitiesService, instanceURLService: InstanceURLService) {
         self.allIdentitiesService = allIdentitiesService
         self.instanceURLService = instanceURLService
-        setupURLObservation()
+
+        let url = $urlFieldText
+            .debounce(for: 0.5, scheduler: DispatchQueue.global())
+            .removeDuplicates()
+            .flatMap {
+                instanceURLService.url(text: $0).publisher
+                    .map { $0 as URL? }
+                    .replaceError(with: nil)
+            }
+            .share()
+
+        url.receive(on: DispatchQueue.main).assign(to: &$url)
+
+        url.flatMap { url -> AnyPublisher<Instance?, Never> in
+            guard let url = url else {
+                return Just(nil).eraseToAnyPublisher()
+            }
+
+            return instanceURLService.instance(url: url)
+                .map { $0 as Instance? }
+                .replaceError(with: nil)
+                .eraseToAnyPublisher()
+        }
+        .receive(on: DispatchQueue.main)
+        .assign(to: &$instance)
+
+        url.flatMap { url -> AnyPublisher<Bool, Never> in
+            guard let url = url else {
+                return Just(false).eraseToAnyPublisher()
+            }
+
+            return instanceURLService.isPublicTimelineAvailable(url: url)
+                .replaceError(with: false)
+                .eraseToAnyPublisher()
+        }
+        .receive(on: DispatchQueue.main)
+        .assign(to: &$isPublicTimelineAvailable)
     }
 }
 
@@ -49,50 +85,6 @@ public extension AddIdentityViewModel {
 }
 
 private extension AddIdentityViewModel {
-    func setupURLObservation() {
-        let url = $urlFieldText
-            .debounce(for: 0.5, scheduler: DispatchQueue.global())
-            .removeDuplicates()
-            .flatMap { [weak self] text -> AnyPublisher<URL?, Never> in
-                guard let self = self else {
-                    return Just(nil).eraseToAnyPublisher()
-                }
-
-                return self.instanceURLService.url(text: text).publisher
-                    .map { $0 as URL? }
-                    .replaceError(with: nil)
-                    .eraseToAnyPublisher()
-            }
-            .share()
-
-        url.receive(on: DispatchQueue.main).assign(to: &$url)
-
-        url.flatMap { [weak self] url -> AnyPublisher<Instance?, Never> in
-            guard let self = self, let url = url else {
-                return Just(nil).eraseToAnyPublisher()
-            }
-
-            return self.instanceURLService.instance(url: url)
-                .map { $0 as Instance? }
-                .replaceError(with: nil)
-                .eraseToAnyPublisher()
-        }
-        .receive(on: DispatchQueue.main)
-        .assign(to: &$instance)
-
-        url.flatMap { [weak self] url -> AnyPublisher<Bool, Never> in
-            guard let self = self, let url = url else {
-                return Just(false).eraseToAnyPublisher()
-            }
-
-            return self.instanceURLService.isPublicTimelineAvailable(url: url)
-                .replaceError(with: false)
-                .eraseToAnyPublisher()
-        }
-        .receive(on: DispatchQueue.main)
-        .assign(to: &$isPublicTimelineAvailable)
-    }
-
     func addIdentity(kind: AllIdentitiesService.IdentityCreation) {
         instanceURLService.url(text: urlFieldText).publisher
             .map { ($0, kind) }
