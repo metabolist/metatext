@@ -13,6 +13,9 @@
 		D01F41D924F880C400D55A2D /* TouchFallthroughTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01F41D624F880C400D55A2D /* TouchFallthroughTextView.swift */; };
 		D01F41E424F8889700D55A2D /* AttachmentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01F41E224F8889700D55A2D /* AttachmentsView.swift */; };
 		D02E1F95250B13210071AD56 /* SafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02E1F94250B13210071AD56 /* SafariView.swift */; };
+		D0625E59250F092900502611 /* StatusListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0625E58250F092900502611 /* StatusListCell.swift */; };
+		D0625E5D250F0B5C00502611 /* StatusContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0625E5C250F0B5C00502611 /* StatusContentConfiguration.swift */; };
+		D0625E5F250F0CFF00502611 /* StatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0625E5E250F0CFF00502611 /* StatusView.swift */; };
 		D06B492324D4611300642749 /* KingfisherSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = D06B492224D4611300642749 /* KingfisherSwiftUI */; };
 		D0B32F50250B373600311912 /* RegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B32F4F250B373600311912 /* RegistrationView.swift */; };
 		D0BEB1F324F8EE8C001B0F04 /* AttachmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB1F224F8EE8C001B0F04 /* AttachmentView.swift */; };
@@ -88,6 +91,9 @@
 		D01F41E224F8889700D55A2D /* AttachmentsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttachmentsView.swift; sourceTree = "<group>"; };
 		D02E1F94250B13210071AD56 /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariView.swift; sourceTree = "<group>"; };
 		D047FA8C24C3E21200AF17C5 /* Metatext.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Metatext.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D0625E58250F092900502611 /* StatusListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusListCell.swift; sourceTree = "<group>"; };
+		D0625E5C250F0B5C00502611 /* StatusContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusContentConfiguration.swift; sourceTree = "<group>"; };
+		D0625E5E250F0CFF00502611 /* StatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusView.swift; sourceTree = "<group>"; };
 		D0666A2124C677B400F3F04B /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0666A2524C677B400F3F04B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D085C3BB25008DEC008A6C5E /* DB */ = {isa = PBXFileReference; lastKnownFileType = folder; path = DB; sourceTree = "<group>"; };
@@ -221,6 +227,16 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		D0625E55250F086B00502611 /* Status */ = {
+			isa = PBXGroup;
+			children = (
+				D0625E58250F092900502611 /* StatusListCell.swift */,
+				D0625E5C250F0B5C00502611 /* StatusContentConfiguration.swift */,
+				D0625E5E250F0CFF00502611 /* StatusView.swift */,
+			);
+			path = Status;
+			sourceTree = "<group>";
+		};
 		D0666A2224C677B400F3F04B /* Tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -248,6 +264,7 @@
 		D0C7D42024F76169001EBDBB /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D0625E55250F086B00502611 /* Status */,
 				D0C7D42424F76169001EBDBB /* AddIdentityView.swift */,
 				D01F41E024F8885900D55A2D /* Attachments */,
 				D0C7D42324F76169001EBDBB /* CustomEmojiText.swift */,
@@ -491,11 +508,14 @@
 				D02E1F95250B13210071AD56 /* SafariView.swift in Sources */,
 				D0C7D49C24F7616A001EBDBB /* RootView.swift in Sources */,
 				D0B32F50250B373600311912 /* RegistrationView.swift in Sources */,
+				D0625E5D250F0B5C00502611 /* StatusContentConfiguration.swift in Sources */,
 				D0BEB1F324F8EE8C001B0F04 /* AttachmentView.swift in Sources */,
 				D0C7D49A24F7616A001EBDBB /* StatusListView.swift in Sources */,
 				D01F41D924F880C400D55A2D /* TouchFallthroughTextView.swift in Sources */,
 				D0C7D4A524F7616A001EBDBB /* StatusListViewController.swift in Sources */,
 				D0C7D4D624F7616A001EBDBB /* NSMutableAttributedString+Extensions.swift in Sources */,
+				D0625E5F250F0CFF00502611 /* StatusView.swift in Sources */,
+				D0625E59250F092900502611 /* StatusListCell.swift in Sources */,
 				D0C7D49D24F7616A001EBDBB /* PostingReadingPreferencesView.swift in Sources */,
 				D0C7D49E24F7616A001EBDBB /* SecondaryNavigationView.swift in Sources */,
 				D0C7D4DA24F7616A001EBDBB /* View+Extensions.swift in Sources */,

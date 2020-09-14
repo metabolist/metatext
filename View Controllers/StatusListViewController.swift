@@ -17,12 +17,12 @@ final class StatusListViewController: UITableViewController {
             guard
                 let self = self,
                 let cell = tableView.dequeueReusableCell(
-                    withIdentifier: String(describing: StatusTableViewCell.self),
-                    for: indexPath) as? StatusTableViewCell
+                    withIdentifier: String(describing: StatusListCell.self),
+                    for: indexPath) as? StatusListCell
             else { return nil }
 
             cell.viewModel = self.viewModel.statusViewModel(id: statusID)
-            cell.delegate = self
+//            cell.delegate = self
 
             return cell
         }
@@ -42,17 +42,11 @@ final class StatusListViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        for cellClass in [StatusTableViewCell.self] {
-            let classString = String(describing: cellClass)
-            tableView.register(
-                UINib(nibName: classString, bundle: nil),
-                forCellReuseIdentifier: classString)
-        }
+        tableView.register(StatusListCell.self, forCellReuseIdentifier: String(describing: StatusListCell.self))
 
         tableView.dataSource = dataSource
         tableView.prefetchDataSource = self
         tableView.cellLayoutMarginsFollowReadableWidth = true
-        tableView.separatorInset = .zero
         tableView.tableFooterView = UIView()
 
         viewModel.$statusIDs
