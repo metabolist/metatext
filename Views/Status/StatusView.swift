@@ -148,6 +148,10 @@ private extension StatusView {
         favoriteButton.addAction(favoriteAction, for: .touchUpInside)
         contextParentFavoriteButton.addAction(favoriteAction, for: .touchUpInside)
 
+        let shareAction = UIAction { [weak self] _ in self?.statusConfiguration.viewModel.shareStatus() }
+
+        shareButton.addAction(shareAction, for: .touchUpInside)
+
         applyStatusConfiguration()
     }
 

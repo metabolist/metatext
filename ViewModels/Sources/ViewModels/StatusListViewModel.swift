@@ -9,15 +9,18 @@ public final class StatusListViewModel: ObservableObject {
     @Published public private(set) var statusIDs = [[String]]()
     @Published public var alertItem: AlertItem?
     @Published public private(set) var loading = false
+    public let statusEvents: AnyPublisher<StatusViewModel.Event, Never>
     public private(set) var maintainScrollPositionOfStatusID: String?
 
     private var statuses = [String: Status]()
     private let statusListService: StatusListService
     private var statusViewModelCache = [Status: (StatusViewModel, AnyCancellable)]()
+    private let statusEventsSubject = PassthroughSubject<StatusViewModel.Event, Never>()
     private var cancellables = Set<AnyCancellable>()
 
     init(statusListService: StatusListService) {
         self.statusListService = statusListService
+        statusEvents = statusEventsSubject.eraseToAnyPublisher()
 
         statusListService.statusSections
             .combineLatest(statusListService.filters.map { $0.regularExpression() })
@@ -54,15 +57,16 @@ public extension StatusListViewModel {
         guard let status = statuses[id] else { return nil }
 
         var statusViewModel: StatusViewModel
-
+        
         if let cachedViewModel = statusViewModelCache[status]?.0 {
             statusViewModel = cachedViewModel
         } else {
             statusViewModel = StatusViewModel(statusService: statusListService.statusService(status: status))
-            statusViewModelCache[status] = (statusViewModel, statusViewModel.events
-                .flatMap { $0 }
-                .assignErrorsToAlertItem(to: \.alertItem, on: self)
-                .sink { _ in })
+            statusViewModelCache[status] = (statusViewModel,
+                                            statusViewModel.events
+                                                .flatMap { $0 }
+                                                .assignErrorsToAlertItem(to: \.alertItem, on: self)
+                                                .sink { [weak self] in self?.statusEventsSubject.send($0) })
         }
 
         statusViewModel.isContextParent = status.id == statusListService.contextParentID

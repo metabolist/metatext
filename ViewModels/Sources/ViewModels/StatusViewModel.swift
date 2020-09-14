@@ -22,10 +22,10 @@ public struct StatusViewModel {
     public var isReplyInContext = false
     public var hasReplyFollowing = false
     public var sensitiveContentToggled = false
-    public let events: AnyPublisher<AnyPublisher<Never, Error>, Never>
+    public let events: AnyPublisher<AnyPublisher<Event, Error>, Never>
 
     private let statusService: StatusService
-    private let eventsInput = PassthroughSubject<AnyPublisher<Never, Error>, Never>()
+    private let eventsSubject = PassthroughSubject<AnyPublisher<Event, Error>, Never>()
 
     init(statusService: StatusService) {
         self.statusService = statusService
@@ -45,7 +45,16 @@ public struct StatusViewModel {
             .map(AttachmentViewModel.init(attachment:))
         pollOptionTitles = statusService.status.displayStatus.poll?.options.map { $0.title } ?? []
         pollEmoji = statusService.status.displayStatus.poll?.emojis ?? []
-        events = eventsInput.eraseToAnyPublisher()
+        events = eventsSubject.eraseToAnyPublisher()
+    }
+}
+
+public extension StatusViewModel {
+    enum Event {
+        case ignorableOutput
+        case statusListNavigation(StatusListViewModel)
+        case urlNavigation(URL)
+        case share(URL)
     }
 }
 
@@ -108,7 +117,13 @@ public extension StatusViewModel {
     }
 
     func toggleFavorited() {
-        eventsInput.send(statusService.toggleFavorited())
+        eventsSubject.send(statusService.toggleFavorited().map { _ in Event.ignorableOutput }.eraseToAnyPublisher())
+    }
+
+    func shareStatus() {
+        guard let url = statusService.status.displayStatus.url else { return }
+
+        eventsSubject.send(Just(Event.share(url)).setFailureType(to: Error.self).eraseToAnyPublisher())
     }
 }
 

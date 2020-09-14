@@ -78,6 +78,15 @@ final class StatusListViewController: UITableViewController {
             }
             .store(in: &cancellables)
 
+        viewModel.statusEvents.sink { [weak self] in
+            switch $0 {
+            case .ignorableOutput, .statusListNavigation, .urlNavigation: break
+            case let .share(url):
+                self?.share(url: url)
+            }
+        }
+        .store(in: &cancellables)
+
         viewModel.$loading
             .receive(on: RunLoop.main)
             .sink { [weak self] in
@@ -146,6 +155,12 @@ extension StatusListViewController: UITableViewDataSourcePrefetching {
 }
 
 private extension StatusListViewController {
+    func share(url: URL) {
+        let activityViewController = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+
+        present(activityViewController, animated: true, completion: nil)
+    }
+
     func sizeTableHeaderFooterViews() {
         // https://useyourloaf.com/blog/variable-height-table-view-header/
         if let headerView = tableView.tableHeaderView {
