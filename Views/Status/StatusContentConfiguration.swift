@@ -13,7 +13,6 @@ extension StatusContentConfiguration: UIContentConfiguration {
     }
 
     func updated(for state: UIConfigurationState) -> StatusContentConfiguration {
-        // TODO: Update stuff?
         self
     }
 }

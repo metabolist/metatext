@@ -22,7 +22,6 @@ final class StatusListViewController: UITableViewController {
             else { return nil }
 
             cell.viewModel = self.viewModel.statusViewModel(id: statusID)
-//            cell.delegate = self
 
             return cell
         }
@@ -146,21 +145,7 @@ extension StatusListViewController: UITableViewDataSourcePrefetching {
     }
 }
 
-extension StatusListViewController: StatusTableViewCellDelegate {
-    func statusTableViewCellDidHaveShareButtonTapped(_ cell: StatusTableViewCell) {
-        guard let url = cell.viewModel?.sharingURL else { return }
-
-        share(url: url)
-    }
-}
-
 private extension StatusListViewController {
-    func share(url: URL) {
-        let activityViewController = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-
-        present(activityViewController, animated: true, completion: nil)
-    }
-
     func sizeTableHeaderFooterViews() {
         // https://useyourloaf.com/blog/variable-height-table-view-header/
         if let headerView = tableView.tableHeaderView {

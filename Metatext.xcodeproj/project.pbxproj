@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		D0030982250C6C8500EACB32 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0030981250C6C8500EACB32 /* URL+Extensions.swift */; };
-		D01F41D724F880C400D55A2D /* StatusTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D01F41D424F880C400D55A2D /* StatusTableViewCell.xib */; };
-		D01F41D824F880C400D55A2D /* StatusTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01F41D524F880C400D55A2D /* StatusTableViewCell.swift */; };
 		D01F41D924F880C400D55A2D /* TouchFallthroughTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01F41D624F880C400D55A2D /* TouchFallthroughTextView.swift */; };
 		D01F41E424F8889700D55A2D /* AttachmentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01F41E224F8889700D55A2D /* AttachmentsView.swift */; };
 		D02E1F95250B13210071AD56 /* SafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02E1F94250B13210071AD56 /* SafariView.swift */; };
@@ -18,6 +16,7 @@
 		D0625E5F250F0CFF00502611 /* StatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0625E5E250F0CFF00502611 /* StatusView.swift */; };
 		D06B492324D4611300642749 /* KingfisherSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = D06B492224D4611300642749 /* KingfisherSwiftUI */; };
 		D0B32F50250B373600311912 /* RegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B32F4F250B373600311912 /* RegistrationView.swift */; };
+		D0B7434925100DBB00C13DB6 /* StatusView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D0B7434825100DBB00C13DB6 /* StatusView.xib */; };
 		D0BEB1F324F8EE8C001B0F04 /* AttachmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB1F224F8EE8C001B0F04 /* AttachmentView.swift */; };
 		D0BEB1F724F9A84B001B0F04 /* LoadingTableFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB1F624F9A84B001B0F04 /* LoadingTableFooterView.swift */; };
 		D0BEB1FF24F9E5BB001B0F04 /* ListsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB1FE24F9E5BB001B0F04 /* ListsView.swift */; };
@@ -85,8 +84,6 @@
 
 /* Begin PBXFileReference section */
 		D0030981250C6C8500EACB32 /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
-		D01F41D424F880C400D55A2D /* StatusTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StatusTableViewCell.xib; sourceTree = "<group>"; };
-		D01F41D524F880C400D55A2D /* StatusTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusTableViewCell.swift; sourceTree = "<group>"; };
 		D01F41D624F880C400D55A2D /* TouchFallthroughTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchFallthroughTextView.swift; sourceTree = "<group>"; };
 		D01F41E224F8889700D55A2D /* AttachmentsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttachmentsView.swift; sourceTree = "<group>"; };
 		D02E1F94250B13210071AD56 /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariView.swift; sourceTree = "<group>"; };
@@ -99,6 +96,7 @@
 		D085C3BB25008DEC008A6C5E /* DB */ = {isa = PBXFileReference; lastKnownFileType = folder; path = DB; sourceTree = "<group>"; };
 		D0AD03552505814D0085A466 /* Base16 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Base16; sourceTree = "<group>"; };
 		D0B32F4F250B373600311912 /* RegistrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationView.swift; sourceTree = "<group>"; };
+		D0B7434825100DBB00C13DB6 /* StatusView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StatusView.xib; sourceTree = "<group>"; };
 		D0BDF66524FD7A6400C7FA1C /* ServiceLayer */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ServiceLayer; sourceTree = "<group>"; };
 		D0BEB1F224F8EE8C001B0F04 /* AttachmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentView.swift; sourceTree = "<group>"; };
 		D0BEB1F624F9A84B001B0F04 /* LoadingTableFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingTableFooterView.swift; sourceTree = "<group>"; };
@@ -171,16 +169,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		D01F41D324F8807E00D55A2D /* Status Cell */ = {
-			isa = PBXGroup;
-			children = (
-				D01F41D524F880C400D55A2D /* StatusTableViewCell.swift */,
-				D01F41D424F880C400D55A2D /* StatusTableViewCell.xib */,
-				D01F41D624F880C400D55A2D /* TouchFallthroughTextView.swift */,
-			);
-			path = "Status Cell";
-			sourceTree = "<group>";
-		};
 		D01F41E024F8885900D55A2D /* Attachments */ = {
 			isa = PBXGroup;
 			children = (
@@ -230,9 +218,11 @@
 		D0625E55250F086B00502611 /* Status */ = {
 			isa = PBXGroup;
 			children = (
-				D0625E58250F092900502611 /* StatusListCell.swift */,
 				D0625E5C250F0B5C00502611 /* StatusContentConfiguration.swift */,
+				D0625E58250F092900502611 /* StatusListCell.swift */,
 				D0625E5E250F0CFF00502611 /* StatusView.swift */,
+				D0B7434825100DBB00C13DB6 /* StatusView.xib */,
+				D01F41D624F880C400D55A2D /* TouchFallthroughTextView.swift */,
 			);
 			path = Status;
 			sourceTree = "<group>";
@@ -280,7 +270,6 @@
 				D0C7D42724F76169001EBDBB /* RootView.swift */,
 				D02E1F94250B13210071AD56 /* SafariView.swift */,
 				D0C7D42924F76169001EBDBB /* SecondaryNavigationView.swift */,
-				D01F41D324F8807E00D55A2D /* Status Cell */,
 				D0C7D42524F76169001EBDBB /* StatusListView.swift */,
 				D0C7D42E24F76169001EBDBB /* TabNavigationView.swift */,
 			);
@@ -457,7 +446,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0C7D4C524F7616A001EBDBB /* Localizable.strings in Resources */,
-				D01F41D724F880C400D55A2D /* StatusTableViewCell.xib in Resources */,
+				D0B7434925100DBB00C13DB6 /* StatusView.xib in Resources */,
 				D0C7D4C224F7616A001EBDBB /* Assets.xcassets in Resources */,
 				D0C7D4C624F7616A001EBDBB /* Localizable.stringsdict in Resources */,
 			);
@@ -533,7 +522,6 @@
 				D0C7D49924F7616A001EBDBB /* AddIdentityView.swift in Sources */,
 				D0C7D4C324F7616A001EBDBB /* MetatextApp.swift in Sources */,
 				D0BEB20524FA1107001B0F04 /* FiltersView.swift in Sources */,
-				D01F41D824F880C400D55A2D /* StatusTableViewCell.swift in Sources */,
 				D0C7D49B24F7616A001EBDBB /* PreferencesView.swift in Sources */,
 				D0C7D4D724F7616A001EBDBB /* UIColor+Extensions.swift in Sources */,
 			);
