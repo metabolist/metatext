@@ -52,33 +52,7 @@ final class StatusListViewController: UITableViewController {
         navigationItem.title = viewModel.title
 
         viewModel.$statusIDs
-            .sink { [weak self] statusIDs in
-                guard let self = self else { return }
-
-                var offsetFromNavigationBar: CGFloat?
-
-                if
-                    let id = self.viewModel.maintainScrollPositionOfStatusID,
-                    let indexPath = self.dataSource.indexPath(for: id),
-                    let navigationBar = self.navigationController?.navigationBar {
-                    let navigationBarMaxY = self.tableView.convert(navigationBar.bounds, from: navigationBar).maxY
-                    offsetFromNavigationBar = self.tableView.rectForRow(at: indexPath).origin.y - navigationBarMaxY
-                }
-
-                self.dataSourceQueue.async {
-                    self.dataSource.apply(statusIDs.snapshot(), animatingDifferences: false) {
-                        if
-                            let id = self.viewModel.maintainScrollPositionOfStatusID,
-                            let indexPath = self.dataSource.indexPath(for: id) {
-                            self.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
-
-                            if let offsetFromNavigationBar = offsetFromNavigationBar {
-                                self.tableView.contentOffset.y -= offsetFromNavigationBar
-                            }
-                        }
-                    }
-                }
-            }
+            .sink { [weak self] in self?.update(statusIDs: $0) }
             .store(in: &cancellables)
 
         viewModel.events.sink { [weak self] in
@@ -162,6 +136,34 @@ extension StatusListViewController: UITableViewDataSourcePrefetching {
 }
 
 private extension StatusListViewController {
+    func update(statusIDs: [[String]]) {
+        var offsetFromNavigationBar: CGFloat?
+
+        if
+            let id = viewModel.maintainScrollPositionOfStatusID,
+            let indexPath = dataSource.indexPath(for: id),
+            let navigationBar = navigationController?.navigationBar {
+            let navigationBarMaxY = tableView.convert(navigationBar.bounds, from: navigationBar).maxY
+            offsetFromNavigationBar = tableView.rectForRow(at: indexPath).origin.y - navigationBarMaxY
+        }
+
+        dataSourceQueue.async { [weak self] in
+            guard let self = self else { return }
+
+            self.dataSource.apply(statusIDs.snapshot(), animatingDifferences: false) {
+                if
+                    let id = self.viewModel.maintainScrollPositionOfStatusID,
+                    let indexPath = self.dataSource.indexPath(for: id) {
+                    self.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
+
+                    if let offsetFromNavigationBar = offsetFromNavigationBar {
+                        self.tableView.contentOffset.y -= offsetFromNavigationBar
+                    }
+                }
+            }
+        }
+    }
+
     func share(url: URL) {
         let activityViewController = UIActivityViewController(activityItems: [url], applicationActivities: nil)
 
