@@ -46,6 +46,8 @@ public extension StatusListViewModel {
 }
 
 public extension StatusListViewModel {
+    var title: String? { statusListService.title }
+
     var paginates: Bool { statusListService.paginates }
 
     var contextParentID: String? { statusListService.contextParentID }
@@ -121,7 +123,9 @@ private extension StatusListViewModel {
                     StatusListViewModel(
                         statusListService: statusListService.contextService(statusID: id)))
             case let .tag(tag):
-                return nil
+                return .statusListNavigation(
+                    StatusListViewModel(
+                        statusListService: statusListService.service(timeline: Timeline.tag(tag))))
             }
         case let .share(url):
             return .share(url)

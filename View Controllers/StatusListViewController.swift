@@ -49,6 +49,8 @@ final class StatusListViewController: UITableViewController {
         tableView.cellLayoutMarginsFollowReadableWidth = true
         tableView.tableFooterView = UIView()
 
+        navigationItem.title = viewModel.title
+
         viewModel.$statusIDs
             .sink { [weak self] statusIDs in
                 guard let self = self else { return }

@@ -10,6 +10,7 @@ public struct StatusListService {
     public let statusSections: AnyPublisher<[[Status]], Error>
     public let paginates: Bool
     public let contextParentID: String?
+    public var title: String?
 
     private let filterContext: Filter.Context
     private let mastodonAPIClient: MastodonAPIClient
@@ -28,9 +29,16 @@ extension StatusListService {
             filterContext = .public
         }
 
+        var title: String?
+
+        if case let .tag(tag) = timeline {
+            title = "#".appending(tag)
+        }
+
         self.init(statusSections: contentDatabase.statusesObservation(timeline: timeline),
                   paginates: true,
                   contextParentID: nil,
+                  title: title,
                   filterContext: filterContext,
                   mastodonAPIClient: mastodonAPIClient,
                   contentDatabase: contentDatabase) { maxID, minID in
@@ -54,10 +62,15 @@ public extension StatusListService {
         StatusService(status: status, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }
 
+    func service(timeline: Timeline) -> Self {
+        Self(timeline: timeline, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+    }
+
     func contextService(statusID: String) -> Self {
         Self(statusSections: contentDatabase.contextObservation(parentID: statusID),
              paginates: false,
              contextParentID: statusID,
+             title: nil,
              filterContext: .thread,
              mastodonAPIClient: mastodonAPIClient,
              contentDatabase: contentDatabase) { _, _ in
