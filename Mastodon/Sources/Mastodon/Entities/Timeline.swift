@@ -27,7 +27,7 @@ extension Timeline: Identifiable {
         case let .list(list):
             return list.id
         case let .tag(tag):
-            return "#" + tag
+            return "#".appending(tag).lowercased()
         }
     }
 }

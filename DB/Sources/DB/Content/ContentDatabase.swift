@@ -88,7 +88,8 @@ public extension ContentDatabase {
             }
 
             try Timeline
-                .filter(!(Timeline.authenticatedDefaults.map(\.id) + lists.map(\.id)).contains(Column("id")))
+                .filter(!(Timeline.authenticatedDefaults.map(\.id) + lists.map(\.id)).contains(Column("id"))
+                            && Column("listTitle") != nil)
                 .deleteAll($0)
         }
         .ignoreOutput()

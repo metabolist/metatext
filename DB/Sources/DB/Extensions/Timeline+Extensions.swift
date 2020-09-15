@@ -20,7 +20,10 @@ extension Timeline: FetchableRecord, PersistableRecord {
         case (let id, .some(let title)):
             self = .list(MastodonList(id: id, title: title))
         default:
-            self = .tag(row[Columns.id])
+            var tag: String = row[Columns.id]
+
+            tag.removeFirst()
+            self = .tag(tag)
         }
     }
 
