@@ -9,18 +9,18 @@ public final class StatusListViewModel: ObservableObject {
     @Published public private(set) var statusIDs = [[String]]()
     @Published public var alertItem: AlertItem?
     @Published public private(set) var loading = false
-    public let statusEvents: AnyPublisher<StatusViewModel.Event, Never>
+    public let events: AnyPublisher<Event, Never>
     public private(set) var maintainScrollPositionOfStatusID: String?
 
     private var statuses = [String: Status]()
     private let statusListService: StatusListService
     private var statusViewModelCache = [Status: (StatusViewModel, AnyCancellable)]()
-    private let statusEventsSubject = PassthroughSubject<StatusViewModel.Event, Never>()
+    private let eventsSubject = PassthroughSubject<Event, Never>()
     private var cancellables = Set<AnyCancellable>()
 
     init(statusListService: StatusListService) {
         self.statusListService = statusListService
-        statusEvents = statusEventsSubject.eraseToAnyPublisher()
+        events = eventsSubject.eraseToAnyPublisher()
 
         statusListService.statusSections
             .combineLatest(statusListService.filters.map { $0.regularExpression() })
@@ -34,6 +34,14 @@ public final class StatusListViewModel: ObservableObject {
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .map { $0.map { $0.map(\.id) } }
             .assign(to: &$statusIDs)
+    }
+}
+
+public extension StatusListViewModel {
+    enum Event {
+        case statusListNavigation(StatusListViewModel)
+        case urlNavigation(URL)
+        case share(URL)
     }
 }
 
@@ -57,7 +65,7 @@ public extension StatusListViewModel {
         guard let status = statuses[id] else { return nil }
 
         var statusViewModel: StatusViewModel
-        
+
         if let cachedViewModel = statusViewModelCache[status]?.0 {
             statusViewModel = cachedViewModel
         } else {
@@ -66,7 +74,12 @@ public extension StatusListViewModel {
                                             statusViewModel.events
                                                 .flatMap { $0 }
                                                 .assignErrorsToAlertItem(to: \.alertItem, on: self)
-                                                .sink { [weak self] in self?.statusEventsSubject.send($0) })
+                                                .sink { [weak self] in
+                                                    guard let self = self,
+                                                          let event = self.event(statusEvent: $0)
+                                                    else { return }
+                                                    self.eventsSubject.send(event)
+                                                })
         }
 
         statusViewModel.isContextParent = status.id == statusListService.contextParentID
@@ -90,6 +103,28 @@ private extension StatusListViewModel {
 
         return statusSections.map {
             $0.filter { $0.filterableContent.range(of: regEx, options: [.regularExpression, .caseInsensitive]) == nil }
+        }
+    }
+
+    func event(statusEvent: StatusViewModel.Event) -> Event? {
+        switch statusEvent {
+        case .ignorableOutput:
+            return nil
+        case let .navigation(item):
+            switch item {
+            case let .url(url):
+                return .urlNavigation(url)
+            case let .accountID(id):
+                return nil
+            case let .statusID(id):
+                return .statusListNavigation(
+                    StatusListViewModel(
+                        statusListService: statusListService.contextService(statusID: id)))
+            case let .tag(tag):
+                return nil
+            }
+        case let .share(url):
+            return .share(url)
         }
     }
 

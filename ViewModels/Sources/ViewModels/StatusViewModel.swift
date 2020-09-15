@@ -52,8 +52,7 @@ public struct StatusViewModel {
 public extension StatusViewModel {
     enum Event {
         case ignorableOutput
-        case statusListNavigation(StatusListViewModel)
-        case urlNavigation(URL)
+        case navigation(URLItem)
         case share(URL)
     }
 }
@@ -114,6 +113,14 @@ public extension StatusViewModel {
         default:
             return true
         }
+    }
+
+    func urlSelected(_ url: URL) {
+        eventsSubject.send(
+            statusService.urlService.item(url: url)
+                .map { Event.navigation($0) }
+                .setFailureType(to: Error.self)
+                .eraseToAnyPublisher())
     }
 
     func toggleFavorited() {

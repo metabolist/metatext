@@ -8,12 +8,17 @@ import MastodonAPI
 
 public struct StatusService {
     public let status: Status
+    public let urlService: URLService
     private let mastodonAPIClient: MastodonAPIClient
     private let contentDatabase: ContentDatabase
 
-    init(status: Status, networkClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
+    init(status: Status, mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
         self.status = status
-        self.mastodonAPIClient = networkClient
+        self.urlService = URLService(
+            status: status.displayStatus,
+            mastodonAPIClient: mastodonAPIClient,
+            contentDatabase: contentDatabase)
+        self.mastodonAPIClient = mastodonAPIClient
         self.contentDatabase = contentDatabase
     }
 }

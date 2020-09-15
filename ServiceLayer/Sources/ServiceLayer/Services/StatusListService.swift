@@ -51,7 +51,7 @@ public extension StatusListService {
     }
 
     func statusService(status: Status) -> StatusService {
-        StatusService(status: status, networkClient: mastodonAPIClient, contentDatabase: contentDatabase)
+        StatusService(status: status, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }
 
     func contextService(statusID: String) -> Self {

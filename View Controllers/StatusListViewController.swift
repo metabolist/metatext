@@ -1,6 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import Combine
+import SafariServices
 import SwiftUI
 import ViewModels
 
@@ -78,11 +79,15 @@ final class StatusListViewController: UITableViewController {
             }
             .store(in: &cancellables)
 
-        viewModel.statusEvents.sink { [weak self] in
+        viewModel.events.sink { [weak self] in
+            guard let self = self else { return }
             switch $0 {
-            case .ignorableOutput, .statusListNavigation, .urlNavigation: break
             case let .share(url):
-                self?.share(url: url)
+                self.share(url: url)
+            case let .statusListNavigation(statusListViewModel):
+                self.show(StatusListViewController(viewModel: statusListViewModel), sender: self)
+            case let .urlNavigation(url):
+                self.present(SFSafariViewController(url: url), animated: true)
             }
         }
         .store(in: &cancellables)

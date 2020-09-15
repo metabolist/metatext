@@ -99,7 +99,9 @@ extension StatusView: UITextViewDelegate {
         in characterRange: NSRange,
         interaction: UITextItemInteraction) -> Bool {
         switch interaction {
-        case .invokeDefaultAction: print(URL); return false
+        case .invokeDefaultAction:
+            statusConfiguration.viewModel.urlSelected(URL)
+            return false
         case .preview: return false
         case .presentActions: return false
         @unknown default: return false
