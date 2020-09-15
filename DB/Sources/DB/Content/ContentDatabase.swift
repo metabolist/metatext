@@ -30,7 +30,7 @@ public struct ContentDatabase {
 
 public extension ContentDatabase {
     static func delete(forIdentityID identityID: UUID) throws {
-        try FileManager.default.removeItem(at: try fileURL(identityID: identityID))
+        try FileManager.default.removeItem(at: fileURL(identityID: identityID))
     }
 
     func insert(status: Status) -> AnyPublisher<Never, Error> {
