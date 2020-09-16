@@ -90,6 +90,7 @@ private extension TabNavigationView {
                         }
                     } label: {
                         Image(systemName: viewModel.timeline.systemImageName)
+                            .padding([.leading, .top, .bottom])
                     })
         default: Text(tab.title)
         }
@@ -119,6 +120,7 @@ private extension TabNavigationView {
                         }
                     }
                 })
+                .padding([.trailing, .top, .bottom])
         }
     }
 }
