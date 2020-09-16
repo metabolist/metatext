@@ -158,7 +158,7 @@ public extension ContentDatabase {
     }
 
     func listsObservation() -> AnyPublisher<[Timeline], Error> {
-        ValueObservation.tracking(Timeline.filter(!Timeline.authenticatedDefaults.map(\.id).contains(Column("id")))
+        ValueObservation.tracking(Timeline.filter(Column("listTitle") != nil)
                                     .order(Column("listTitle").collating(.localizedCaseInsensitiveCompare).asc)
                                     .fetchAll)
             .removeDuplicates()
