@@ -25,6 +25,7 @@ public struct ContentDatabase {
         }
 
         try Self.migrate(databaseQueue)
+        try Self.createTemporaryTables(databaseQueue)
     }
 }
 
@@ -73,7 +74,7 @@ public extension ContentDatabase {
                try StatusContextJoin.filter(
                     Column("parentId") == parentID
                         && Column("section") == section.rawValue
-                        && Column("index") >= statuses.count)
+                        && !statuses.map(\.id).contains(Column("statusId")))
                     .deleteAll($0)
             }
         }
@@ -269,21 +270,6 @@ private extension ContentDatabase {
                 t.primaryKey(["timelineId", "statusId"], onConflict: .replace)
             }
 
-            try db.create(table: "statusContextJoin") { t in
-                t.column("parentId", .text)
-                    .indexed()
-                    .notNull()
-                    .references("statusRecord", column: "id", onDelete: .cascade, onUpdate: .cascade)
-                t.column("statusId", .text)
-                    .indexed()
-                    .notNull()
-                    .references("statusRecord", column: "id", onDelete: .cascade, onUpdate: .cascade)
-                t.column("section", .text).notNull()
-                t.column("index", .integer).notNull()
-
-                t.primaryKey(["parentId", "statusId"], onConflict: .replace)
-            }
-
             try db.create(table: "filter") { t in
                 t.column("id", .text).notNull().primaryKey(onConflict: .replace)
                 t.column("phrase", .text).notNull()
@@ -297,4 +283,21 @@ private extension ContentDatabase {
         try migrator.migrate(writer)
     }
     // swiftlint:enable function_body_length
+
+    private static func createTemporaryTables(_ writer: DatabaseWriter) throws {
+        try writer.write { db in
+            try db.create(table: "statusContextJoin", temporary: true) { t in
+                t.column("parentId", .text)
+                    .indexed()
+                    .notNull()
+                t.column("statusId", .text)
+                    .indexed()
+                    .notNull()
+                t.column("section", .text).notNull()
+                t.column("index", .integer).notNull()
+
+                t.primaryKey(["parentId", "statusId"], onConflict: .replace)
+            }
+        }
+    }
 }
