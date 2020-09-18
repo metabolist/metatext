@@ -53,7 +53,7 @@ public extension InstanceURLService {
         httpClient.request(
             MastodonAPITarget(
                 baseURL: url,
-                endpoint: TimelinesEndpoint.public(local: true),
+                endpoint: StatusesEndpoint.timelinesPublic(local: true),
                 accessToken: nil))
             .map { _ in true }
             .eraseToAnyPublisher()

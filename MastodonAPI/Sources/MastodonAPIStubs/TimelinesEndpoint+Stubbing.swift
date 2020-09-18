@@ -4,7 +4,7 @@ import Foundation
 import MastodonAPI
 import Stubbing
 
-extension TimelinesEndpoint: Stubbing {
+extension StatusesEndpoint: Stubbing {
     public func data(url: URL) -> Data? {
         StubData.timeline
     }

@@ -47,6 +47,51 @@ extension StatusListService {
                 .eraseToAnyPublisher()
         }
     }
+
+    init(
+        accountID: String,
+        collection: AnyPublisher<AccountStatusCollection, Never>,
+        mastodonAPIClient: MastodonAPIClient,
+        contentDatabase: ContentDatabase) {
+        self.init(
+            statusSections: collection
+                .flatMap { contentDatabase.statusesObservation(accountID: accountID, collection: $0) }
+                .eraseToAnyPublisher(),
+            paginates: true,
+            contextParentID: nil,
+            title: "turn this into a closure or publisher",
+            filterContext: .account,
+            mastodonAPIClient: mastodonAPIClient,
+            contentDatabase: contentDatabase) { maxID, minID in
+            Just((maxID, minID)).combineLatest(collection).flatMap { params -> AnyPublisher<Never, Error> in
+                let ((maxID, minID), collection) = params
+                let excludeReplies: Bool
+                let onlyMedia: Bool
+
+                switch collection {
+                case .statuses:
+                    excludeReplies = true
+                    onlyMedia = false
+                case .statusesAndReplies:
+                    excludeReplies = false
+                    onlyMedia = false
+                case .media:
+                    excludeReplies = true
+                    onlyMedia = true
+                }
+
+                let endpoint = StatusesEndpoint.accountsStatuses(
+                    id: accountID,
+                    excludeReplies: excludeReplies,
+                    onlyMedia: onlyMedia,
+                    pinned: false)
+                return mastodonAPIClient.request(Paged(endpoint, maxID: maxID, minID: minID))
+                    .flatMap { contentDatabase.insert(statuses: $0, accountID: accountID, collection: collection) }
+                    .eraseToAnyPublisher()
+            }
+            .eraseToAnyPublisher()
+        }
+    }
 }
 
 public extension StatusListService {
@@ -64,6 +109,10 @@ public extension StatusListService {
 
     func service(timeline: Timeline) -> Self {
         Self(timeline: timeline, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+    }
+
+    func service(accountID: String) -> AccountStatusesService {
+        AccountStatusesService(id: accountID, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }
 
     func contextService(statusID: String) -> Self {

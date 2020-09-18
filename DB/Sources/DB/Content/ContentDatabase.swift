@@ -82,6 +82,38 @@ public extension ContentDatabase {
         .eraseToAnyPublisher()
     }
 
+    func insert(pinnedStatuses: [Status], accountID: String) -> AnyPublisher<Never, Error> {
+        databaseQueue.writePublisher {
+            for (index, status) in pinnedStatuses.enumerated() {
+                try status.save($0)
+
+                try AccountPinnedStatusJoin(accountId: accountID, statusId: status.id, index: index).save($0)
+            }
+
+            try AccountPinnedStatusJoin.filter(
+                Column("accountId") == accountID
+                    && !pinnedStatuses.map(\.id).contains(Column("statusId")))
+                .deleteAll($0)
+        }
+        .ignoreOutput()
+        .eraseToAnyPublisher()
+    }
+
+    func insert(
+        statuses: [Status],
+        accountID: String,
+        collection: AccountStatusCollection) -> AnyPublisher<Never, Error> {
+        databaseQueue.writePublisher {
+            for status in statuses {
+                try status.save($0)
+
+                try AccountStatusJoin(accountId: accountID, statusId: status.id, collection: collection).save($0)
+            }
+        }
+        .ignoreOutput()
+        .eraseToAnyPublisher()
+    }
+
     func setLists(_ lists: [MastodonList]) -> AnyPublisher<Never, Error> {
         databaseQueue.writePublisher {
             for list in lists {
@@ -151,6 +183,35 @@ public extension ContentDatabase {
             let descendants = try parent.status.descendants.fetchAll(db)
 
             return [ancestors, [parent], descendants]
+        }
+        .removeDuplicates()
+        .publisher(in: databaseQueue)
+        .map { $0.map { $0.map(Status.init(result:)) } }
+        .eraseToAnyPublisher()
+    }
+
+    func statusesObservation(
+        accountID: String,
+        collection: AccountStatusCollection) -> AnyPublisher<[[Status]], Error> {
+        ValueObservation.tracking { db -> [[StatusResult]] in
+            let statuses = try StatusRecord.filter(
+                AccountStatusJoin
+                    .select(Column("statusId"), as: String.self)
+                    .filter(sql: "accountId = ? AND collection = ?", arguments: [accountID, collection.rawValue])
+                    .contains(Column("id")))
+                .order(Column("createdAt").desc)
+                .statusResultRequest
+                .fetchAll(db)
+
+            if
+                case .statuses = collection,
+                let accountRecord = try AccountRecord.filter(Column("id") == accountID).fetchOne(db) {
+                let pinnedStatuses = try accountRecord.pinnedStatuses.fetchAll(db)
+
+                return [pinnedStatuses, statuses]
+            } else {
+                return [statuses]
+            }
         }
         .removeDuplicates()
         .publisher(in: databaseQueue)
@@ -287,16 +348,28 @@ private extension ContentDatabase {
     private static func createTemporaryTables(_ writer: DatabaseWriter) throws {
         try writer.write { db in
             try db.create(table: "statusContextJoin", temporary: true) { t in
-                t.column("parentId", .text)
-                    .indexed()
-                    .notNull()
-                t.column("statusId", .text)
-                    .indexed()
-                    .notNull()
+                t.column("parentId", .text).indexed().notNull()
+                t.column("statusId", .text).indexed().notNull()
                 t.column("section", .text).notNull()
                 t.column("index", .integer).notNull()
 
                 t.primaryKey(["parentId", "statusId"], onConflict: .replace)
+            }
+
+            try db.create(table: "accountPinnedStatusJoin", temporary: true) { t in
+                t.column("accountId", .text).indexed().notNull()
+                t.column("statusId", .text).indexed().notNull()
+                t.column("index", .integer).notNull()
+
+                t.primaryKey(["accountId", "statusId"], onConflict: .replace)
+            }
+
+            try db.create(table: "accountStatusJoin", temporary: true) { t in
+                t.column("accountId", .text).indexed().notNull()
+                t.column("statusId", .text).indexed().notNull()
+                t.column("collection", .text).notNull()
+
+                t.primaryKey(["accountId", "statusId", "collection"], onConflict: .replace)
             }
         }
     }

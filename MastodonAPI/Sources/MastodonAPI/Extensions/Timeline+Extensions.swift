@@ -4,18 +4,18 @@ import Foundation
 import Mastodon
 
 public extension Timeline {
-    var endpoint: TimelinesEndpoint {
+    var endpoint: StatusesEndpoint {
         switch self {
         case .home:
-            return .home
+            return .timelinesHome
         case .local:
-            return .public(local: true)
+            return .timelinesPublic(local: true)
         case .federated:
-            return .public(local: false)
+            return .timelinesPublic(local: false)
         case let .list(list):
-            return .list(id: list.id)
+            return .timelinesList(id: list.id)
         case let .tag(tag):
-            return .tag(tag)
+            return .timelinesTag(tag)
         }
     }
 }
