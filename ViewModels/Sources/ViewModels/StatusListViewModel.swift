@@ -28,7 +28,7 @@ public class StatusListViewModel: ObservableObject {
             .handleEvents(receiveOutput: { [weak self] in
                 self?.determineIfScrollPositionShouldBeMaintained(newStatusSections: $0)
                 self?.cleanViewModelCache(newStatusSections: $0)
-                self?.statuses = Dictionary(uniqueKeysWithValues: $0.reduce([], +).map { ($0.id, $0) })
+                self?.statuses = Dictionary(uniqueKeysWithValues: Set($0.reduce([], +)).map { ($0.id, $0) })
             })
             .receive(on: DispatchQueue.main)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)

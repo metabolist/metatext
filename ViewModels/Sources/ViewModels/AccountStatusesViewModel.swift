@@ -6,20 +6,25 @@ import Mastodon
 import ServiceLayer
 
 public class AccountStatusesViewModel: StatusListViewModel {
-    @Published var collection: AccountStatusCollection
+    @Published public private(set) var account: Account?
+    @Published public var collection = AccountStatusCollection.statuses
     private let accountStatusesService: AccountStatusesService
     private var cancellables = Set<AnyCancellable>()
 
     init(accountStatusesService: AccountStatusesService) {
         self.accountStatusesService = accountStatusesService
 
-        var collection = Published(initialValue: AccountStatusCollection.statuses)
-
-        _collection = collection
+        let collectionSubject = CurrentValueSubject<AccountStatusCollection, Never>(.statuses)
 
         super.init(
             statusListService: accountStatusesService.statusListService(
-                    collectionPublisher: collection.projectedValue.eraseToAnyPublisher()))
+                collectionPublisher: collectionSubject))
+
+        $collection.sink(receiveValue: collectionSubject.send).store(in: &cancellables)
+
+        accountStatusesService.accountObservation()
+            .assignErrorsToAlertItem(to: \.alertItem, on: self)
+            .assign(to: &$account)
     }
 
     public override func request(maxID: String? = nil, minID: String? = nil) {
@@ -35,5 +40,14 @@ public class AccountStatusesViewModel: StatusListViewModel {
 
     override func isPinned(status: Status) -> Bool {
         collection == .statuses && statusIDs.first?.contains(status.id) ?? false
+    }
+}
+
+public extension AccountStatusesViewModel {
+    func fetchAccount() {
+        accountStatusesService.fetchAccount()
+            .assignErrorsToAlertItem(to: \.alertItem, on: self)
+            .sink { _ in }
+            .store(in: &cancellables)
     }
 }

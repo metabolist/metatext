@@ -114,6 +114,16 @@ public extension ContentDatabase {
         .eraseToAnyPublisher()
     }
 
+    func insert(accounts: [Account]) -> AnyPublisher<Never, Error> {
+        databaseQueue.writePublisher {
+            for account in accounts {
+                try account.save($0)
+            }
+        }
+        .ignoreOutput()
+        .eraseToAnyPublisher()
+    }
+
     func setLists(_ lists: [MastodonList]) -> AnyPublisher<Never, Error> {
         databaseQueue.writePublisher {
             for list in lists {
@@ -244,6 +254,20 @@ public extension ContentDatabase {
         ValueObservation.tracking(Filter.filter(Column("expiresAt") < date).fetchAll)
             .removeDuplicates()
             .publisher(in: databaseQueue)
+            .eraseToAnyPublisher()
+    }
+
+    func accountObservation(id: String) -> AnyPublisher<Account?, Error> {
+        ValueObservation.tracking(AccountRecord.filter(Column("id") == id).accountResultRequest.fetchOne)
+            .removeDuplicates()
+            .publisher(in: databaseQueue)
+            .map {
+                if let result = $0 {
+                    return Account(result: result)
+                } else {
+                    return nil
+                }
+            }
             .eraseToAnyPublisher()
     }
 }

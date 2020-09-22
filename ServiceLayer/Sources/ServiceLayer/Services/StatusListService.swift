@@ -50,7 +50,7 @@ extension StatusListService {
 
     init(
         accountID: String,
-        collection: AnyPublisher<AccountStatusCollection, Never>,
+        collection: CurrentValueSubject<AccountStatusCollection, Never>,
         mastodonAPIClient: MastodonAPIClient,
         contentDatabase: ContentDatabase) {
         self.init(
@@ -63,33 +63,29 @@ extension StatusListService {
             filterContext: .account,
             mastodonAPIClient: mastodonAPIClient,
             contentDatabase: contentDatabase) { maxID, minID in
-            Just((maxID, minID)).combineLatest(collection).flatMap { params -> AnyPublisher<Never, Error> in
-                let ((maxID, minID), collection) = params
-                let excludeReplies: Bool
-                let onlyMedia: Bool
+            let excludeReplies: Bool
+            let onlyMedia: Bool
 
-                switch collection {
-                case .statuses:
-                    excludeReplies = true
-                    onlyMedia = false
-                case .statusesAndReplies:
-                    excludeReplies = false
-                    onlyMedia = false
-                case .media:
-                    excludeReplies = true
-                    onlyMedia = true
-                }
-
-                let endpoint = StatusesEndpoint.accountsStatuses(
-                    id: accountID,
-                    excludeReplies: excludeReplies,
-                    onlyMedia: onlyMedia,
-                    pinned: false)
-                return mastodonAPIClient.request(Paged(endpoint, maxID: maxID, minID: minID))
-                    .flatMap { contentDatabase.insert(statuses: $0, accountID: accountID, collection: collection) }
-                    .eraseToAnyPublisher()
+            switch collection.value {
+            case .statuses:
+                excludeReplies = true
+                onlyMedia = false
+            case .statusesAndReplies:
+                excludeReplies = false
+                onlyMedia = false
+            case .media:
+                excludeReplies = true
+                onlyMedia = true
             }
-            .eraseToAnyPublisher()
+
+            let endpoint = StatusesEndpoint.accountsStatuses(
+                id: accountID,
+                excludeReplies: excludeReplies,
+                onlyMedia: onlyMedia,
+                pinned: false)
+            return mastodonAPIClient.request(Paged(endpoint, maxID: maxID, minID: minID))
+                .flatMap { contentDatabase.insert(statuses: $0, accountID: accountID, collection: collection.value) }
+                .eraseToAnyPublisher()
         }
     }
 }

@@ -123,6 +123,13 @@ public extension StatusViewModel {
                 .eraseToAnyPublisher())
     }
 
+    func accountSelected() {
+        eventsSubject.send(
+            Just(Event.navigation(.accountID(statusService.status.displayStatus.account.id)))
+                .setFailureType(to: Error.self)
+                .eraseToAnyPublisher())
+    }
+
     func toggleFavorited() {
         eventsSubject.send(statusService.toggleFavorited().map { _ in Event.ignorableOutput }.eraseToAnyPublisher())
     }

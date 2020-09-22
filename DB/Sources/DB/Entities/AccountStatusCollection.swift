@@ -2,7 +2,7 @@
 
 import Foundation
 
-public enum AccountStatusCollection: String, Codable {
+public enum AccountStatusCollection: String, Codable, CaseIterable {
     case statuses
     case statusesAndReplies
     case media

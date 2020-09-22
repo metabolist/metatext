@@ -5,7 +5,7 @@ import SafariServices
 import SwiftUI
 import ViewModels
 
-final class StatusListViewController: UITableViewController {
+class StatusListViewController: UITableViewController {
     private let viewModel: StatusListViewModel
     private let loadingTableFooterView = LoadingTableFooterView()
     private var cancellables = Set<AnyCancellable>()
@@ -77,6 +77,21 @@ final class StatusListViewController: UITableViewController {
                 self.sizeTableHeaderFooterViews()
             }
             .store(in: &cancellables)
+
+        if let accountsStatusesViewModel = viewModel as? AccountStatusesViewModel {
+            // Initial size is to avoid unsatisfiable constraint warning
+            let accountHeaderView = AccountHeaderView(
+                frame: .init(
+                    origin: .zero,
+                    size: .init(width: 100, height: 100)))
+            accountHeaderView.viewModel = accountsStatusesViewModel
+            accountsStatusesViewModel.$account.dropFirst().receive(on: DispatchQueue.main).sink { [weak self] _ in
+                accountHeaderView.viewModel = accountsStatusesViewModel
+                self?.sizeTableHeaderFooterViews()
+            }
+            .store(in: &cancellables)
+            tableView.tableHeaderView = accountHeaderView
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {

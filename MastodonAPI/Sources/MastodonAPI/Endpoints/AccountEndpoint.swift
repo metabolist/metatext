@@ -6,6 +6,7 @@ import Mastodon
 
 public enum AccountEndpoint {
     case verifyCredentials
+    case accounts(id: String)
 }
 
 extension AccountEndpoint: Endpoint {
@@ -18,12 +19,13 @@ extension AccountEndpoint: Endpoint {
     public var pathComponentsInContext: [String] {
         switch self {
         case .verifyCredentials: return ["verify_credentials"]
+        case let .accounts(id): return [id]
         }
     }
 
     public var method: HTTPMethod {
         switch self {
-        case .verifyCredentials: return .get
+        case .verifyCredentials, .accounts: return .get
         }
     }
 }

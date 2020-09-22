@@ -145,6 +145,10 @@ private extension StatusView {
         avatarButton.setBackgroundImage(highlightedButtonBackgroundImage, for: .highlighted)
         contextParentAvatarButton.setBackgroundImage(highlightedButtonBackgroundImage, for: .highlighted)
 
+        let accountAction = UIAction { [weak self] _ in self?.statusConfiguration.viewModel.accountSelected() }
+
+        avatarButton.addAction(accountAction, for: .touchUpInside)
+
         let favoriteAction = UIAction { [weak self] _ in self?.statusConfiguration.viewModel.toggleFavorited() }
 
         favoriteButton.addAction(favoriteAction, for: .touchUpInside)

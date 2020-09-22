@@ -1,5 +1,8 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
+"account.statuses" = "Posts";
+"account.statuses-and-replies" = "Posts & Replies";
+"account.media" = "Media";
 "add" = "Add";
 "apns-default-message" = "New notification";
 "add-identity.instance-url" = "Instance URL";
