@@ -57,7 +57,7 @@ class CollectionViewController: UITableViewController {
         tableView.cellLayoutMarginsFollowReadableWidth = true
         tableView.tableFooterView = UIView()
 
-//        navigationItem.title = viewModel.title
+        viewModel.title.sink { [weak self] in self?.navigationItem.title = $0 }.store(in: &cancellables)
 
         viewModel.collectionItems
             .sink { [weak self] in self?.update(items: $0) }

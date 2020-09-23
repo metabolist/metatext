@@ -41,6 +41,15 @@ public class AccountStatusesViewModel: StatusListViewModel {
     override func isPinned(status: Status) -> Bool {
         collection == .statuses && items.first?.contains(CollectionItem(id: status.id, kind: .status)) ?? false
     }
+
+    public override var title: AnyPublisher<String?, Never> {
+        $account.map {
+            guard let acct = $0?.acct else { return nil }
+
+            return "@".appending(acct)
+        }
+        .eraseToAnyPublisher()
+    }
 }
 
 public extension AccountStatusesViewModel {

@@ -5,6 +5,7 @@ import Foundation
 
 public protocol CollectionViewModel {
     var collectionItems: AnyPublisher<[[CollectionItem]], Never> { get }
+    var title: AnyPublisher<String?, Never> { get }
     var alertItems: AnyPublisher<AlertItem, Never> { get }
     var loading: AnyPublisher<Bool, Never> { get }
     var navigationEvents: AnyPublisher<NavigationEvent, Never> { get }

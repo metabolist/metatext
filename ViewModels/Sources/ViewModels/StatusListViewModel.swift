@@ -38,6 +38,8 @@ public class StatusListViewModel: ObservableObject {
             .assign(to: &$items)
     }
 
+    public var title: AnyPublisher<String?, Never> { Just(statusListService.title).eraseToAnyPublisher() }
+
     public func request(maxID: String? = nil, minID: String? = nil) {
         statusListService.request(maxID: maxID, minID: minID)
             .receive(on: DispatchQueue.main)
@@ -94,8 +96,6 @@ extension StatusListViewModel: CollectionViewModel {
 }
 
 public extension StatusListViewModel {
-    var title: String? { statusListService.title }
-
     var paginates: Bool { statusListService.paginates }
 
     var contextParentID: String? { statusListService.contextParentID }

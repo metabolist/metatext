@@ -10,7 +10,7 @@ public struct StatusListService {
     public let statusSections: AnyPublisher<[[Status]], Error>
     public let paginates: Bool
     public let contextParentID: String?
-    public var title: String?
+    public let title: String?
 
     private let filterContext: Filter.Context
     private let mastodonAPIClient: MastodonAPIClient
@@ -59,7 +59,7 @@ extension StatusListService {
                 .eraseToAnyPublisher(),
             paginates: true,
             contextParentID: nil,
-            title: "turn this into a closure or publisher",
+            title: nil,
             filterContext: .account,
             mastodonAPIClient: mastodonAPIClient,
             contentDatabase: contentDatabase) { maxID, minID in
