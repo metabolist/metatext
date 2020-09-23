@@ -8,7 +8,7 @@ import Mastodon
 import UserNotifications
 
 public struct AppEnvironment {
-    let session: Session
+    let session: URLSession
     let webAuthSessionType: WebAuthSession.Type
     let keychain: Keychain.Type
     let userDefaults: UserDefaults
@@ -17,7 +17,7 @@ public struct AppEnvironment {
     let inMemoryContent: Bool
     let fixtureDatabase: IdentityDatabase?
 
-    public init(session: Session,
+    public init(session: URLSession,
                 webAuthSessionType: WebAuthSession.Type,
                 keychain: Keychain.Type,
                 userDefaults: UserDefaults,
@@ -39,7 +39,7 @@ public struct AppEnvironment {
 public extension AppEnvironment {
     static func live(userNotificationCenter: UNUserNotificationCenter) -> Self {
         Self(
-            session: Session(configuration: .default),
+            session: URLSession.shared,
             webAuthSessionType: LiveWebAuthSession.self,
             keychain: LiveKeychain.self,
             userDefaults: .standard,

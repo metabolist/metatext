@@ -22,7 +22,7 @@ extension ListEndpoint: Endpoint {
         }
     }
 
-    public var parameters: [String: Any]? {
+    public var jsonBody: [String: Any]? {
         switch self {
         case let .create(title):
             return ["title": title]

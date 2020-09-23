@@ -22,6 +22,7 @@ public struct Paged<T: Endpoint> {
 
 extension Paged: Endpoint {
     public typealias ResultType = T.ResultType
+    //    public typealias ResultType = PagedResult<T.ResultType>
 
     public var APIVersion: String { endpoint.APIVersion }
 
@@ -31,18 +32,25 @@ extension Paged: Endpoint {
 
     public var method: HTTPMethod { endpoint.method }
 
-    public var encoding: ParameterEncoding { endpoint.encoding }
+    public var queryParameters: [String: String]? {
+        var queryParameters = endpoint.queryParameters ?? [String: String]()
 
-    public var parameters: [String: Any]? {
-        var parameters = endpoint.parameters ?? [String: Any]()
+        queryParameters["max_id"] = maxID
+        queryParameters["min_id"] = minID
+        queryParameters["since_id"] = sinceID
 
-        parameters["max_id"] = maxID
-        parameters["min_id"] = minID
-        parameters["since_id"] = sinceID
-        parameters["limit"] = limit
+        if let limit = limit {
+            queryParameters["limit"] = String(limit)
+        }
 
-        return parameters
+        return queryParameters
     }
 
-    public var headers: HTTPHeaders? { endpoint.headers }
+    public var headers: [String: String]? { endpoint.headers }
 }
+
+//public struct PagedResult<T: Decodable>: Decodable {
+//    public let result: T
+//    public let maxID: String?
+//    public let sinceID: String?
+//}

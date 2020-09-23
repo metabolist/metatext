@@ -9,7 +9,7 @@ public final class MastodonAPIClient: HTTPClient {
     public var instanceURL: URL
     public var accessToken: String?
 
-    public required init(session: Session, instanceURL: URL) {
+    public required init(session: URLSession, instanceURL: URL) {
         self.instanceURL = instanceURL
         super.init(session: session, decoder: MastodonDecoder())
     }

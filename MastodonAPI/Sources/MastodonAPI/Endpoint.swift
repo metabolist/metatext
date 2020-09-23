@@ -9,9 +9,9 @@ public protocol Endpoint {
     var context: [String] { get }
     var pathComponentsInContext: [String] { get }
     var method: HTTPMethod { get }
-    var encoding: ParameterEncoding { get }
-    var parameters: [String: Any]? { get }
-    var headers: HTTPHeaders? { get }
+    var queryParameters: [String: String]? { get }
+    var jsonBody: [String: Any]? { get }
+    var headers: [String: String]? { get }
 }
 
 public extension Endpoint {
@@ -29,14 +29,9 @@ public extension Endpoint {
         context + pathComponentsInContext
     }
 
-    var encoding: ParameterEncoding {
-        switch method {
-        case .get: return URLEncoding.default
-        default: return JSONEncoding.default
-        }
-    }
+    var queryParameters: [String: String]? { nil }
 
-    var parameters: [String: Any]? { nil }
+    var jsonBody: [String: Any]? { nil }
 
-    var headers: HTTPHeaders? { nil }
+    var headers: [String: String]? { nil }
 }

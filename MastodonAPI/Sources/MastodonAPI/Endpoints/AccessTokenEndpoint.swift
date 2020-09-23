@@ -56,7 +56,7 @@ extension AccessTokenEndpoint: Endpoint {
         }
     }
 
-    public var parameters: [String: Any]? {
+    public var jsonBody: [String: Any]? {
         switch self {
         case let .oauthToken(clientID, clientSecret, grantType, scopes, code, redirectURI):
             var params = [

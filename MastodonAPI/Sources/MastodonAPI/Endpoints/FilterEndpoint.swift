@@ -36,7 +36,7 @@ extension FilterEndpoint: Endpoint {
         }
     }
 
-    public var parameters: [String: Any]? {
+    public var jsonBody: [String: Any]? {
         switch self {
         case let .create(phrase, context, irreversible, wholeWord, expiresIn):
             return params(phrase: phrase,

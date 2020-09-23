@@ -9,7 +9,7 @@ import ServiceLayer
 import Stubbing
 
 public extension AppEnvironment {
-    static func mock(session: Session = Session(configuration: .stubbing),
+    static func mock(session: URLSession = URLSession(configuration: .stubbing),
                      webAuthSessionType: WebAuthSession.Type = SuccessfulMockWebAuthSession.self,
                      keychain: Keychain.Type = MockKeychain.self,
                      userDefaults: UserDefaults = MockUserDefaults(),
@@ -18,7 +18,7 @@ public extension AppEnvironment {
                      inMemoryContent: Bool = true,
                      fixtureDatabase: IdentityDatabase? = nil) -> Self {
         AppEnvironment(
-            session: Session(configuration: .stubbing),
+            session: session,
             webAuthSessionType: webAuthSessionType,
             keychain: keychain,
             userDefaults: userDefaults,

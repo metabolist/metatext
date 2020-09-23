@@ -1,32 +1,43 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
-import Alamofire
 import Foundation
 
-public typealias HTTPMethod = Alamofire.HTTPMethod
-public typealias HTTPHeaders = Alamofire.HTTPHeaders
-public typealias ParameterEncoding = Alamofire.ParameterEncoding
-public typealias URLEncoding = Alamofire.URLEncoding
-public typealias JSONEncoding = Alamofire.JSONEncoding
-
-public protocol Target: URLRequestConvertible {
+public protocol Target {
     var baseURL: URL { get }
     var pathComponents: [String] { get }
     var method: HTTPMethod { get }
-    var encoding: ParameterEncoding { get }
-    var parameters: [String: Any]? { get }
-    var headers: HTTPHeaders? { get }
+    var queryParameters: [String: String]? { get }
+    var jsonBody: [String: Any]? { get }
+    var headers: [String: String]? { get }
 }
 
 public extension Target {
-    func asURLRequest() throws -> URLRequest {
+    func urlRequest() -> URLRequest {
         var url = baseURL
 
         for pathComponent in pathComponents {
             url.appendPathComponent(pathComponent)
         }
 
-        return try encoding.encode(try URLRequest(url: url, method: method, headers: headers), with: parameters)
+        if var components = URLComponents(url: url, resolvingAgainstBaseURL: true),
+           let queryItems = queryParameters?.map(URLQueryItem.init(name:value:)) {
+            components.queryItems = queryItems
+
+            if let queryComponentURL = components.url {
+                url = queryComponentURL
+            }
+        }
+
+        var urlRequest = URLRequest(url: url)
+
+        urlRequest.httpMethod = method.rawValue
+        urlRequest.allHTTPHeaderFields = headers
+
+        if let jsonBody = jsonBody {
+            urlRequest.httpBody = try? JSONSerialization.data(withJSONObject: jsonBody)
+        }
+
+        return urlRequest
     }
 }
 

@@ -33,7 +33,7 @@ extension PushSubscriptionEndpoint: Endpoint {
         }
     }
 
-    public var parameters: [String: Any]? {
+    public var jsonBody: [String: Any]? {
         switch self {
         case let .create(endpoint, publicKey, auth, alerts):
             return ["subscription":

@@ -23,7 +23,7 @@ extension AppAuthorizationEndpoint: Endpoint {
         }
     }
 
-    public var parameters: [String: Any]? {
+    public var jsonBody: [String: Any]? {
         switch self {
         case let .apps(clientName, redirectURI, scopes, website):
             var params = [

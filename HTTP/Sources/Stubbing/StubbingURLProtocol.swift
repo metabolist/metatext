@@ -62,7 +62,7 @@ private extension StubbingURLProtocol {
 
 extension StubbingURLProtocol: TargetProcessing {
     public static func process(target: Target) {
-        if let url = try? target.asURLRequest().url {
+        if let url = target.urlRequest().url {
             targetsForURLs[url] = target
         }
     }

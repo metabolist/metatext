@@ -16,13 +16,11 @@ let package = Package(
             name: "Stubbing",
             targets: ["Stubbing"])
     ],
-    dependencies: [
-        .package(url: "https://github.com/Alamofire/Alamofire.git", .upToNextMajor(from: "5.2.2"))
-    ],
+    dependencies: [],
     targets: [
         .target(
             name: "HTTP",
-            dependencies: ["Alamofire"]),
+            dependencies: []),
         .target(
             name: "Stubbing",
             dependencies: ["HTTP"]),

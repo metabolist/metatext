@@ -73,9 +73,9 @@ private struct UpdatedFilterTarget: DecodableTarget {
     let baseURL = URL(string: "https://filter.metabolist.com")!
     let pathComponents = ["filter"]
     let method = HTTPMethod.get
-    let encoding: ParameterEncoding = JSONEncoding.default
-    let parameters: [String: Any]? = nil
-    let headers: HTTPHeaders? = nil
+    let queryParameters: [String: String]? = nil
+    let jsonBody: [String: Any]? = nil
+    let headers: [String: String]? = nil
 }
 
 private extension InstanceURLService {

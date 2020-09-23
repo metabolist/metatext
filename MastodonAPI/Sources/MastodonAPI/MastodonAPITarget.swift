@@ -22,19 +22,19 @@ extension MastodonAPITarget: DecodableTarget {
 
     public var method: HTTPMethod { endpoint.method }
 
-    public var encoding: ParameterEncoding { endpoint.encoding }
+    public var queryParameters: [String: String]? { endpoint.queryParameters }
 
-    public var parameters: [String: Any]? { endpoint.parameters }
+    public var jsonBody: [String: Any]? { endpoint.jsonBody }
 
-    public var headers: HTTPHeaders? {
+    public var headers: [String: String]? {
         var headers = endpoint.headers
 
         if let accessToken = accessToken {
             if headers == nil {
-                headers = HTTPHeaders()
+                headers = [String: String]()
             }
 
-            headers?.add(.authorization(bearerToken: accessToken))
+            headers?["Authorization"] = "Bearer ".appending(accessToken)
         }
 
         return headers

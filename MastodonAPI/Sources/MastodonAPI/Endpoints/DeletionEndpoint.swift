@@ -42,7 +42,7 @@ extension DeletionEndpoint: Endpoint {
         }
     }
 
-    public var parameters: [String: Any]? {
+    public var jsonBody: [String: Any]? {
         switch self {
         case let .oauthRevoke(token, clientID, clientSecret):
             return ["token": token, "client_id": clientID, "client_secret": clientSecret]

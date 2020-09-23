@@ -39,12 +39,14 @@ extension StatusesEndpoint: Endpoint {
         }
     }
 
-    public var parameters: [String: Any]? {
+    public var queryParameters: [String: String]? {
         switch self {
         case let .timelinesPublic(local):
-            return ["local": local]
+            return ["local": String(local)]
         case let .accountsStatuses(_, excludeReplies, onlyMedia, pinned):
-            return ["exclude_replies": excludeReplies, "only_media": onlyMedia, "pinned": pinned]
+            return ["exclude_replies": String(excludeReplies),
+                    "only_media": String(onlyMedia),
+                    "pinned": String(pinned)]
         default:
             return nil
         }
