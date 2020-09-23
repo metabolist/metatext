@@ -53,6 +53,7 @@ public extension StatusViewModel {
     enum Event {
         case ignorableOutput
         case navigation(URLItem)
+        case accountListNavigation(AccountListViewModel)
         case share(URL)
     }
 }
@@ -128,6 +129,10 @@ public extension StatusViewModel {
             Just(Event.navigation(.accountID(statusService.status.displayStatus.account.id)))
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher())
+    }
+
+    func favoritedBySelected() {
+        
     }
 
     func toggleFavorited() {

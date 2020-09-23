@@ -148,15 +148,20 @@ private extension StatusView {
         let accountAction = UIAction { [weak self] _ in self?.statusConfiguration.viewModel.accountSelected() }
 
         avatarButton.addAction(accountAction, for: .touchUpInside)
+        contextParentAvatarButton.addAction(accountAction, for: .touchUpInside)
 
         let favoriteAction = UIAction { [weak self] _ in self?.statusConfiguration.viewModel.toggleFavorited() }
 
         favoriteButton.addAction(favoriteAction, for: .touchUpInside)
         contextParentFavoriteButton.addAction(favoriteAction, for: .touchUpInside)
 
-        let shareAction = UIAction { [weak self] _ in self?.statusConfiguration.viewModel.shareStatus() }
+        shareButton.addAction(
+            UIAction { [weak self] _ in self?.statusConfiguration.viewModel.shareStatus() },
+            for: .touchUpInside)
 
-        shareButton.addAction(shareAction, for: .touchUpInside)
+        contextParentFavoritedByButton.addAction(
+            UIAction { [weak self] _ in self?.statusConfiguration.viewModel.favoritedBySelected() },
+            for: .touchUpInside)
 
         applyStatusConfiguration()
     }

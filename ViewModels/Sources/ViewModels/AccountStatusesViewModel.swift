@@ -39,7 +39,7 @@ public class AccountStatusesViewModel: StatusListViewModel {
     }
 
     override func isPinned(status: Status) -> Bool {
-        collection == .statuses && statusIDs.first?.contains(status.id) ?? false
+        collection == .statuses && items.first?.contains(CollectionItem(id: status.id, kind: .status)) ?? false
     }
 }
 

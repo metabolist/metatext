@@ -5,30 +5,36 @@ import SafariServices
 import SwiftUI
 import ViewModels
 
-class StatusListViewController: UITableViewController {
-    private let viewModel: StatusListViewModel
+class CollectionViewController: UITableViewController {
+    private let viewModel: CollectionViewModel
     private let loadingTableFooterView = LoadingTableFooterView()
     private var cancellables = Set<AnyCancellable>()
-    private var cellHeightCaches = [CGFloat: [String: CGFloat]]()
+    private var cellHeightCaches = [CGFloat: [CollectionItem: CGFloat]]()
     private let dataSourceQueue =
-        DispatchQueue(label: "com.metabolist.metatext.status-list.data-source-queue")
+        DispatchQueue(label: "com.metabolist.metatext.collection.data-source-queue")
 
-    private lazy var dataSource: UITableViewDiffableDataSource<Int, String> = {
-        UITableViewDiffableDataSource(tableView: tableView) { [weak self] tableView, indexPath, statusID in
-            guard
-                let self = self,
-                let cell = tableView.dequeueReusableCell(
-                    withIdentifier: String(describing: StatusListCell.self),
-                    for: indexPath) as? StatusListCell
-            else { return nil }
+    private lazy var dataSource: UITableViewDiffableDataSource<Int, CollectionItem> = {
+        UITableViewDiffableDataSource(tableView: tableView) { [weak self] tableView, indexPath, item in
+            guard let self = self, let cellViewModel = self.viewModel.viewModel(item: item) else { return nil }
 
-            cell.viewModel = self.viewModel.statusViewModel(id: statusID)
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: String(describing: item.kind.cellClass),
+                for: indexPath)
+
+            switch (cell, cellViewModel) {
+            case (let statusListCell as StatusListCell, let statusViewModel as StatusViewModel):
+                statusListCell.viewModel = statusViewModel
+            case (let accountListCell as AccountListCell, let accountViewModel as AccountViewModel):
+                accountListCell.viewModel = accountViewModel
+            default:
+                return nil
+            }
 
             return cell
         }
     }()
 
-    init(viewModel: StatusListViewModel) {
+    init(viewModel: CollectionViewModel) {
         self.viewModel = viewModel
 
         super.init(style: .plain)
@@ -42,33 +48,35 @@ class StatusListViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.register(StatusListCell.self, forCellReuseIdentifier: String(describing: StatusListCell.self))
+        for kind in CollectionItem.Kind.allCases {
+            tableView.register(kind.cellClass, forCellReuseIdentifier: String(describing: kind.cellClass))
+        }
 
         tableView.dataSource = dataSource
         tableView.prefetchDataSource = self
         tableView.cellLayoutMarginsFollowReadableWidth = true
         tableView.tableFooterView = UIView()
 
-        navigationItem.title = viewModel.title
+//        navigationItem.title = viewModel.title
 
-        viewModel.$statusIDs
-            .sink { [weak self] in self?.update(statusIDs: $0) }
+        viewModel.collectionItems
+            .sink { [weak self] in self?.update(items: $0) }
             .store(in: &cancellables)
 
-        viewModel.events.sink { [weak self] in
+        viewModel.navigationEvents.sink { [weak self] in
             guard let self = self else { return }
             switch $0 {
             case let .share(url):
                 self.share(url: url)
-            case let .statusListNavigation(statusListViewModel):
-                self.show(StatusListViewController(viewModel: statusListViewModel), sender: self)
+            case let .collectionNavigation(collectionViewModel):
+                self.show(CollectionViewController(viewModel: collectionViewModel), sender: self)
             case let .urlNavigation(url):
                 self.present(SFSafariViewController(url: url), animated: true)
             }
         }
         .store(in: &cancellables)
 
-        viewModel.$loading
+        viewModel.loading
             .receive(on: RunLoop.main)
             .sink { [weak self] in
                 guard let self = self else { return }
@@ -97,7 +105,7 @@ class StatusListViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        viewModel.request()
+        viewModel.request(maxID: nil, minID: nil)
     }
 
     override func tableView(_ tableView: UITableView,
@@ -105,7 +113,7 @@ class StatusListViewController: UITableViewController {
                             forRowAt indexPath: IndexPath) {
         guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
 
-        var heightCache = cellHeightCaches[tableView.frame.width] ?? [String: CGFloat]()
+        var heightCache = cellHeightCaches[tableView.frame.width] ?? [CollectionItem: CGFloat]()
 
         heightCache[item] = cell.frame.height
         cellHeightCaches[tableView.frame.width] = heightCache
@@ -118,15 +126,15 @@ class StatusListViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        guard let id = dataSource.itemIdentifier(for: indexPath) else { return true }
+        guard let item = dataSource.itemIdentifier(for: indexPath) else { return true }
 
-        return id != viewModel.contextParentID
+        return viewModel.canSelect(item: item)
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let id = dataSource.itemIdentifier(for: indexPath) else { return }
+        guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
 
-        show(StatusListViewController(viewModel: viewModel.contextViewModel(id: id)), sender: self)
+        viewModel.itemSelected(item)
     }
 
     override func viewDidLayoutSubviews() {
@@ -136,27 +144,27 @@ class StatusListViewController: UITableViewController {
     }
 }
 
-extension StatusListViewController: UITableViewDataSourcePrefetching {
+extension CollectionViewController: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         guard
             viewModel.paginates,
             let indexPath = indexPaths.last,
             indexPath.section == dataSource.numberOfSections(in: tableView) - 1,
             indexPath.row == dataSource.tableView(tableView, numberOfRowsInSection: indexPath.section) - 1,
-            let maxID = dataSource.itemIdentifier(for: indexPath)
+            let maxID = dataSource.itemIdentifier(for: indexPath)?.id
         else { return }
 
-        viewModel.request(maxID: maxID)
+        viewModel.request(maxID: maxID, minID: nil)
     }
 }
 
-private extension StatusListViewController {
-    func update(statusIDs: [[String]]) {
+private extension CollectionViewController {
+    func update(items: [[CollectionItem]]) {
         var offsetFromNavigationBar: CGFloat?
 
         if
-            let id = viewModel.maintainScrollPositionOfStatusID,
-            let indexPath = dataSource.indexPath(for: id),
+            let item = viewModel.maintainScrollPositionOfItem,
+            let indexPath = dataSource.indexPath(for: item),
             let navigationBar = navigationController?.navigationBar {
             let navigationBarMaxY = tableView.convert(navigationBar.bounds, from: navigationBar).maxY
             offsetFromNavigationBar = tableView.rectForRow(at: indexPath).origin.y - navigationBarMaxY
@@ -165,10 +173,10 @@ private extension StatusListViewController {
         dataSourceQueue.async { [weak self] in
             guard let self = self else { return }
 
-            self.dataSource.apply(statusIDs.snapshot(), animatingDifferences: false) {
+            self.dataSource.apply(items.snapshot(), animatingDifferences: false) {
                 if
-                    let id = self.viewModel.maintainScrollPositionOfStatusID,
-                    let indexPath = self.dataSource.indexPath(for: id) {
+                    let item = self.viewModel.maintainScrollPositionOfItem,
+                    let indexPath = self.dataSource.indexPath(for: item) {
                     self.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
 
                     if let offsetFromNavigationBar = offsetFromNavigationBar {
