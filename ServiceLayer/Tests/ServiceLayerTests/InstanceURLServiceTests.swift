@@ -12,17 +12,30 @@ class InstanceURLServiceTests: XCTestCase {
     func testFiltering() throws {
         let sut = InstanceURLService(environment: .mock())
 
-        XCTAssertNotNil(sut.url(text: "unfiltered.instance"))
-        XCTAssertNil(sut.url(text: "filtered.instance"))
-        XCTAssertNil(sut.url(text: "subdomain.filtered.instance"))
+        if case .failure = sut.url(text: "unfiltered.instance") {
+            XCTFail("Expected success")
+        }
+
+        if case .success = sut.url(text: "filtered.instance") {
+            XCTFail("Expected failure")
+        }
+
+        if case .success = sut.url(text: "subdomain.filtered.instance") {
+            XCTFail("Expected failure")
+        }
     }
 
     func testUpdating() throws {
         let environment = AppEnvironment.mock()
         var sut = InstanceURLService(environment: environment)
 
-        XCTAssertNil(sut.url(text: "filtered.instance"))
-        XCTAssertNotNil(sut.url(text: "instance.filtered"))
+        if case .success = sut.url(text: "filtered.instance") {
+            XCTFail("Expected failure")
+        }
+
+        if case .failure = sut.url(text: "instance.filtered") {
+            XCTFail("Expected success")
+        }
 
         var updatedFilter = try BloomFilter<String>(hashes: [.djb232, .sdbm32], byteCount: 16)
 
@@ -37,12 +50,22 @@ class InstanceURLServiceTests: XCTestCase {
 
         _ = try wait(for: updateRecorder.next(), timeout: 1)
 
-        XCTAssertNotNil(sut.url(text: "filtered.instance"))
-        XCTAssertNil(sut.url(text: "instance.filtered"))
+        if case .failure = sut.url(text: "filtered.instance") {
+            XCTFail("Expected success")
+        }
+
+        if case .success = sut.url(text: "instance.filtered") {
+            XCTFail("Expected failure")
+        }
 
         sut = InstanceURLService(environment: environment)
 
-        XCTAssertNotNil(sut.url(text: "filtered.instance"))
-        XCTAssertNil(sut.url(text: "instance.filtered"))
+        if case .failure = sut.url(text: "filtered.instance") {
+            XCTFail("Expected success")
+        }
+
+        if case .success = sut.url(text: "instance.filtered") {
+            XCTFail("Expected failure")
+        }
     }
 }
