@@ -36,7 +36,7 @@ public struct Attachment: Codable, Hashable {
     public let type: AttachmentType
     public let url: URL
     public let remoteUrl: URL?
-    public let previewUrl: URL
+    public let previewUrl: URL?
     public let textUrl: URL?
     public let meta: Meta?
     public let description: String?
