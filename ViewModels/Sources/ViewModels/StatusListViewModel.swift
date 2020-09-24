@@ -9,6 +9,7 @@ public class StatusListViewModel: ObservableObject {
     @Published public private(set) var items = [[CollectionItem]]()
     @Published public var alertItem: AlertItem?
     public let navigationEvents: AnyPublisher<NavigationEvent, Never>
+    public private(set) var nextPageMaxID: String?
     public private(set) var maintainScrollPositionOfItem: CollectionItem?
 
     private var statuses = [String: Status]()
@@ -36,6 +37,10 @@ public class StatusListViewModel: ObservableObject {
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .map { $0.map { $0.map { CollectionItem(id: $0.id, kind: .status) } } }
             .assign(to: &$items)
+
+        statusListService.nextPageMaxIDs
+            .sink { [weak self] in self?.nextPageMaxID = $0 }
+            .store(in: &cancellables)
     }
 
     public var title: AnyPublisher<String?, Never> { Just(statusListService.title).eraseToAnyPublisher() }
@@ -96,8 +101,6 @@ extension StatusListViewModel: CollectionViewModel {
 }
 
 public extension StatusListViewModel {
-    var paginates: Bool { statusListService.paginates }
-
     var contextParentID: String? { statusListService.contextParentID }
 
     func statusViewModel(id: String) -> StatusViewModel? {

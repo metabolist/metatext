@@ -35,6 +35,7 @@ public extension Target {
 
         if let jsonBody = jsonBody {
             urlRequest.httpBody = try? JSONSerialization.data(withJSONObject: jsonBody)
+            urlRequest.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
         }
 
         return urlRequest

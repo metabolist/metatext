@@ -147,11 +147,10 @@ class CollectionViewController: UITableViewController {
 extension CollectionViewController: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         guard
-            viewModel.paginates,
+            let maxID = viewModel.nextPageMaxID,
             let indexPath = indexPaths.last,
             indexPath.section == dataSource.numberOfSections(in: tableView) - 1,
-            indexPath.row == dataSource.tableView(tableView, numberOfRowsInSection: indexPath.section) - 1,
-            let maxID = dataSource.itemIdentifier(for: indexPath)?.id
+            indexPath.row == dataSource.tableView(tableView, numberOfRowsInSection: indexPath.section) - 1
         else { return }
 
         viewModel.request(maxID: maxID, minID: nil)

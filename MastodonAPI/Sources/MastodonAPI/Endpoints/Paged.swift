@@ -21,8 +21,7 @@ public struct Paged<T: Endpoint> {
 }
 
 extension Paged: Endpoint {
-    public typealias ResultType = T.ResultType
-    //    public typealias ResultType = PagedResult<T.ResultType>
+    public typealias ResultType = PagedResult<T.ResultType>
 
     public var APIVersion: String { endpoint.APIVersion }
 
@@ -49,8 +48,13 @@ extension Paged: Endpoint {
     public var headers: [String: String]? { endpoint.headers }
 }
 
-//public struct PagedResult<T: Decodable>: Decodable {
-//    public let result: T
-//    public let maxID: String?
-//    public let sinceID: String?
-//}
+public struct PagedResult<T: Decodable>: Decodable {
+    public struct Info: Decodable {
+        public let maxID: String?
+        public let minID: String?
+        public let sinceID: String?
+    }
+
+    public let result: T
+    public let info: Info
+}

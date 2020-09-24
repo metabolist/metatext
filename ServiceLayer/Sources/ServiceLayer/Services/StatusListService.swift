@@ -8,7 +8,7 @@ import MastodonAPI
 
 public struct StatusListService {
     public let statusSections: AnyPublisher<[[Status]], Error>
-    public let paginates: Bool
+    public let nextPageMaxIDs: AnyPublisher<String?, Never>
     public let contextParentID: String?
     public let title: String?
 
@@ -35,15 +35,18 @@ extension StatusListService {
             title = "#".appending(tag)
         }
 
+        let nextPageMaxIDsSubject = PassthroughSubject<String?, Never>()
+
         self.init(statusSections: contentDatabase.statusesObservation(timeline: timeline),
-                  paginates: true,
+                  nextPageMaxIDs: nextPageMaxIDsSubject.eraseToAnyPublisher(),
                   contextParentID: nil,
                   title: title,
                   filterContext: filterContext,
                   mastodonAPIClient: mastodonAPIClient,
                   contentDatabase: contentDatabase) { maxID, minID in
-            mastodonAPIClient.request(Paged(timeline.endpoint, maxID: maxID, minID: minID))
-                .flatMap { contentDatabase.insert(statuses: $0, timeline: timeline) }
+            mastodonAPIClient.pagedRequest(timeline.endpoint, maxID: maxID, minID: minID)
+                .handleEvents(receiveOutput: { nextPageMaxIDsSubject.send($0.info.maxID) })
+                .flatMap { contentDatabase.insert(statuses: $0.result, timeline: timeline) }
                 .eraseToAnyPublisher()
         }
     }
@@ -53,11 +56,13 @@ extension StatusListService {
         collection: CurrentValueSubject<AccountStatusCollection, Never>,
         mastodonAPIClient: MastodonAPIClient,
         contentDatabase: ContentDatabase) {
+        let nextPageMaxIDsSubject = PassthroughSubject<String?, Never>()
+
         self.init(
             statusSections: collection
                 .flatMap { contentDatabase.statusesObservation(accountID: accountID, collection: $0) }
                 .eraseToAnyPublisher(),
-            paginates: true,
+            nextPageMaxIDs: nextPageMaxIDsSubject.eraseToAnyPublisher(),
             contextParentID: nil,
             title: nil,
             filterContext: .account,
@@ -83,8 +88,9 @@ extension StatusListService {
                 excludeReplies: excludeReplies,
                 onlyMedia: onlyMedia,
                 pinned: false)
-            return mastodonAPIClient.request(Paged(endpoint, maxID: maxID, minID: minID))
-                .flatMap { contentDatabase.insert(statuses: $0, accountID: accountID, collection: collection.value) }
+            return mastodonAPIClient.pagedRequest(endpoint, maxID: maxID, minID: minID)
+                .handleEvents(receiveOutput: { nextPageMaxIDsSubject.send($0.info.maxID) })
+                .flatMap { contentDatabase.insert(statuses: $0.result, accountID: accountID, collection: collection.value) }
                 .eraseToAnyPublisher()
         }
     }
@@ -113,7 +119,7 @@ public extension StatusListService {
 
     func contextService(statusID: String) -> Self {
         Self(statusSections: contentDatabase.contextObservation(parentID: statusID),
-             paginates: false,
+             nextPageMaxIDs: Empty().eraseToAnyPublisher(),
              contextParentID: statusID,
              title: nil,
              filterContext: .thread,
