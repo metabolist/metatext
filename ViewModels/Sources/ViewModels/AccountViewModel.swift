@@ -6,10 +6,14 @@ import Mastodon
 import ServiceLayer
 
 public class AccountViewModel: ObservableObject {
+    public let events: AnyPublisher<AnyPublisher<CollectionItemEvent, Error>, Never>
+
     private let accountService: AccountService
+    private let eventsSubject = PassthroughSubject<AnyPublisher<CollectionItemEvent, Error>, Never>()
 
     init(accountService: AccountService) {
         self.accountService = accountService
+        events = eventsSubject.eraseToAnyPublisher()
     }
 }
 

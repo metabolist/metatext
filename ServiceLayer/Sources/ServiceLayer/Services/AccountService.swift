@@ -8,13 +8,13 @@ import MastodonAPI
 
 public struct AccountService {
     public let account: Account
-    public let urlService: URLService
+    public let navigationService: NavigationService
     private let mastodonAPIClient: MastodonAPIClient
     private let contentDatabase: ContentDatabase
 
     init(account: Account, mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
         self.account = account
-        self.urlService = URLService(
+        self.navigationService = NavigationService(
             status: nil,
             mastodonAPIClient: mastodonAPIClient,
             contentDatabase: contentDatabase)

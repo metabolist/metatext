@@ -6,14 +6,13 @@ import Foundation
 import Mastodon
 import MastodonAPI
 
-public enum URLItem {
+public enum Navigation {
     case url(URL)
-    case statusID(String)
-    case accountID(String)
-    case tag(String)
+    case statusList(StatusListService)
+    case accountStatuses(AccountStatusesService)
 }
 
-public struct URLService {
+public struct NavigationService {
     private let status: Status?
     private let mastodonAPIClient: MastodonAPIClient
     private let contentDatabase: ContentDatabase
@@ -25,21 +24,49 @@ public struct URLService {
     }
 }
 
-public extension URLService {
-    func item(url: URL) -> AnyPublisher<URLItem, Never> {
+public extension NavigationService {
+    func item(url: URL) -> AnyPublisher<Navigation, Never> {
         if let tag = tag(url: url) {
-            return Just(.tag(tag)).eraseToAnyPublisher()
+            return Just(
+                .statusList(
+                    StatusListService(
+                        timeline: .tag(tag),
+                        mastodonAPIClient: mastodonAPIClient,
+                        contentDatabase: contentDatabase)))
+                .eraseToAnyPublisher()
         } else if let accountID = accountID(url: url) {
-            return Just(.accountID(accountID)).eraseToAnyPublisher()
+            return Just(.accountStatuses(accountStatusesService(id: accountID))).eraseToAnyPublisher()
         } else if mastodonAPIClient.instanceURL.host == url.host, let statusID = url.statusID {
-            return Just(.statusID(statusID)).eraseToAnyPublisher()
+            return Just(
+                .statusList(
+                    StatusListService(
+                        statusID: statusID,
+                        mastodonAPIClient: mastodonAPIClient,
+                        contentDatabase: contentDatabase)))
+                .eraseToAnyPublisher()
         }
 
         return Just(.url(url)).eraseToAnyPublisher()
     }
+
+    func contextStatusListService(id: String) -> StatusListService {
+        StatusListService(statusID: id, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+    }
+
+    func accountStatusesService(id: String) -> AccountStatusesService {
+        AccountStatusesService(id: id, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+    }
+
+    func statusService(status: Status) -> StatusService {
+        StatusService(status: status, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+    }
+
+    func accountService(account: Account) -> AccountService {
+        AccountService(account: account, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+    }
 }
 
-private extension URLService {
+private extension NavigationService {
     func tag(url: URL) -> String? {
         if status?.tags.first(where: { $0.url.path.lowercased() == url.path.lowercased() }) != nil {
             return url.lastPathComponent

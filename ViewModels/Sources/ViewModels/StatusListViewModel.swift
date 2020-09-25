@@ -64,9 +64,7 @@ extension StatusListViewModel: CollectionViewModel {
 
     public var alertItems: AnyPublisher<AlertItem, Never> { $alertItem.compactMap { $0 }.eraseToAnyPublisher() }
 
-    public var loading: AnyPublisher<Bool, Never> {
-        loadingSubject.eraseToAnyPublisher()
-    }
+    public var loading: AnyPublisher<Bool, Never> { loadingSubject.eraseToAnyPublisher() }
 
     public func itemSelected(_ item: CollectionItem) {
         switch item.kind {
@@ -76,7 +74,9 @@ extension StatusListViewModel: CollectionViewModel {
             navigationEventsSubject.send(
                 .collectionNavigation(
                     StatusListViewModel(
-                        statusListService: statusListService.contextService(statusID: displayStatusID))))
+                        statusListService: statusListService
+                            .navigationService
+                            .contextStatusListService(id: displayStatusID))))
         default:
             break
         }
@@ -100,7 +100,15 @@ extension StatusListViewModel: CollectionViewModel {
     }
 }
 
-public extension StatusListViewModel {
+private extension StatusListViewModel {
+    static func filter(statusSections: [[Status]], regularExpression: String?) -> [[Status]] {
+        guard let regEx = regularExpression else { return statusSections }
+
+        return statusSections.map {
+            $0.filter { $0.filterableContent.range(of: regEx, options: [.regularExpression, .caseInsensitive]) == nil }
+        }
+    }
+
     var contextParentID: String? { statusListService.contextParentID }
 
     func statusViewModel(id: String) -> StatusViewModel? {
@@ -111,15 +119,18 @@ public extension StatusListViewModel {
         if let cachedViewModel = statusViewModelCache[status]?.0 {
             statusViewModel = cachedViewModel
         } else {
-            statusViewModel = StatusViewModel(statusService: statusListService.statusService(status: status))
+            statusViewModel = StatusViewModel(
+                statusService: statusListService.navigationService.statusService(status: status))
             statusViewModelCache[status] = (statusViewModel,
                                             statusViewModel.events
                                                 .flatMap { $0 }
                                                 .assignErrorsToAlertItem(to: \.alertItem, on: self)
                                                 .sink { [weak self] in
-                                                    guard let self = self,
-                                                          let event = self.navigationEvent(statusEvent: $0)
+                                                    guard
+                                                        let self = self,
+                                                        let event = NavigationEvent($0)
                                                     else { return }
+
                                                     self.navigationEventsSubject.send(event)
                                                 })
         }
@@ -130,44 +141,6 @@ public extension StatusListViewModel {
         statusViewModel.hasReplyFollowing = hasReplyFollowing(status: status)
 
         return statusViewModel
-    }
-}
-
-private extension StatusListViewModel {
-    static func filter(statusSections: [[Status]], regularExpression: String?) -> [[Status]] {
-        guard let regEx = regularExpression else { return statusSections }
-
-        return statusSections.map {
-            $0.filter { $0.filterableContent.range(of: regEx, options: [.regularExpression, .caseInsensitive]) == nil }
-        }
-    }
-
-    func navigationEvent(statusEvent: StatusViewModel.Event) -> NavigationEvent? {
-        switch statusEvent {
-        case .ignorableOutput:
-            return nil
-        case let .navigation(item):
-            switch item {
-            case let .url(url):
-                return .urlNavigation(url)
-            case let .accountID(id):
-                return .collectionNavigation(
-                    AccountStatusesViewModel(accountStatusesService: statusListService.service(accountID: id)))
-            case let .statusID(id):
-                return .collectionNavigation(
-                    StatusListViewModel(
-                        statusListService: statusListService.contextService(statusID: id)))
-            case let .tag(tag):
-                return .collectionNavigation(
-                    StatusListViewModel(
-                        statusListService: statusListService.service(timeline: Timeline.tag(tag))))
-            }
-        case let .accountListNavigation(accountListViewModel):
-//            return .collectionNavigation(accountListViewModel)
-            return nil
-        case let .share(url):
-            return .share(url)
-        }
     }
 
     func determineIfScrollPositionShouldBeMaintained(newStatusSections: [[Status]]) {

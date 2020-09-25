@@ -8,13 +8,13 @@ import MastodonAPI
 
 public struct StatusService {
     public let status: Status
-    public let urlService: URLService
+    public let navigationService: NavigationService
     private let mastodonAPIClient: MastodonAPIClient
     private let contentDatabase: ContentDatabase
 
     init(status: Status, mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
         self.status = status
-        self.urlService = URLService(
+        self.navigationService = NavigationService(
             status: status.displayStatus,
             mastodonAPIClient: mastodonAPIClient,
             contentDatabase: contentDatabase)
@@ -30,5 +30,12 @@ public extension StatusService {
                                     : StatusEndpoint.favourite(id: status.displayStatus.id))
             .flatMap(contentDatabase.insert(status:))
             .eraseToAnyPublisher()
+    }
+
+    func favoritedByService() -> AccountListService {
+        AccountListService(
+            favoritedByStatusID: status.id,
+            mastodonAPIClient: mastodonAPIClient,
+            contentDatabase: contentDatabase)
     }
 }

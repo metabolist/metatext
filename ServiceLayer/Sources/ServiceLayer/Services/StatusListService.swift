@@ -11,6 +11,7 @@ public struct StatusListService {
     public let nextPageMaxIDs: AnyPublisher<String?, Never>
     public let contextParentID: String?
     public let title: String?
+    public let navigationService: NavigationService
 
     private let filterContext: Filter.Context
     private let mastodonAPIClient: MastodonAPIClient
@@ -41,12 +42,39 @@ extension StatusListService {
                   nextPageMaxIDs: nextPageMaxIDsSubject.eraseToAnyPublisher(),
                   contextParentID: nil,
                   title: title,
+                  navigationService: NavigationService(
+                    status: nil,
+                    mastodonAPIClient: mastodonAPIClient,
+                    contentDatabase: contentDatabase),
                   filterContext: filterContext,
                   mastodonAPIClient: mastodonAPIClient,
                   contentDatabase: contentDatabase) { maxID, minID in
             mastodonAPIClient.pagedRequest(timeline.endpoint, maxID: maxID, minID: minID)
                 .handleEvents(receiveOutput: { nextPageMaxIDsSubject.send($0.info.maxID) })
                 .flatMap { contentDatabase.insert(statuses: $0.result, timeline: timeline) }
+                .eraseToAnyPublisher()
+        }
+    }
+
+    init(statusID: String, mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
+        self.init(statusSections: contentDatabase.contextObservation(parentID: statusID),
+                  nextPageMaxIDs: Empty().eraseToAnyPublisher(),
+                  contextParentID: statusID,
+                  title: nil,
+                  navigationService: NavigationService(
+                    status: nil,
+                    mastodonAPIClient: mastodonAPIClient,
+                    contentDatabase: contentDatabase),
+                  filterContext: .thread,
+                  mastodonAPIClient: mastodonAPIClient,
+                  contentDatabase: contentDatabase) { _, _ in
+            Publishers.Merge(
+                mastodonAPIClient.request(StatusEndpoint.status(id: statusID))
+                    .flatMap(contentDatabase.insert(status:))
+                    .eraseToAnyPublisher(),
+                mastodonAPIClient.request(ContextEndpoint.context(id: statusID))
+                    .flatMap { contentDatabase.insert(context: $0, parentID: statusID) }
+                    .eraseToAnyPublisher())
                 .eraseToAnyPublisher()
         }
     }
@@ -65,6 +93,10 @@ extension StatusListService {
             nextPageMaxIDs: nextPageMaxIDsSubject.eraseToAnyPublisher(),
             contextParentID: nil,
             title: nil,
+            navigationService: NavigationService(
+              status: nil,
+              mastodonAPIClient: mastodonAPIClient,
+              contentDatabase: contentDatabase),
             filterContext: .account,
             mastodonAPIClient: mastodonAPIClient,
             contentDatabase: contentDatabase) { maxID, minID in
@@ -90,7 +122,12 @@ extension StatusListService {
                 pinned: false)
             return mastodonAPIClient.pagedRequest(endpoint, maxID: maxID, minID: minID)
                 .handleEvents(receiveOutput: { nextPageMaxIDsSubject.send($0.info.maxID) })
-                .flatMap { contentDatabase.insert(statuses: $0.result, accountID: accountID, collection: collection.value) }
+                .flatMap {
+                    contentDatabase.insert(
+                    statuses: $0.result,
+                    accountID: accountID,
+                    collection: collection.value)
+                }
                 .eraseToAnyPublisher()
         }
     }
@@ -103,36 +140,5 @@ public extension StatusListService {
 
     var filters: AnyPublisher<[Filter], Error> {
         contentDatabase.activeFiltersObservation(date: Date(), context: filterContext)
-    }
-
-    func statusService(status: Status) -> StatusService {
-        StatusService(status: status, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
-    }
-
-    func service(timeline: Timeline) -> Self {
-        Self(timeline: timeline, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
-    }
-
-    func service(accountID: String) -> AccountStatusesService {
-        AccountStatusesService(id: accountID, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
-    }
-
-    func contextService(statusID: String) -> Self {
-        Self(statusSections: contentDatabase.contextObservation(parentID: statusID),
-             nextPageMaxIDs: Empty().eraseToAnyPublisher(),
-             contextParentID: statusID,
-             title: nil,
-             filterContext: .thread,
-             mastodonAPIClient: mastodonAPIClient,
-             contentDatabase: contentDatabase) { _, _ in
-            Publishers.Merge(
-                mastodonAPIClient.request(StatusEndpoint.status(id: statusID))
-                    .flatMap(contentDatabase.insert(status:))
-                    .eraseToAnyPublisher(),
-                mastodonAPIClient.request(ContextEndpoint.context(id: statusID))
-                    .flatMap { contentDatabase.insert(context: $0, parentID: statusID) }
-                    .eraseToAnyPublisher())
-                .eraseToAnyPublisher()
-        }
     }
 }

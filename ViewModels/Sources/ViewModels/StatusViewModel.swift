@@ -22,10 +22,10 @@ public struct StatusViewModel {
     public var isReplyInContext = false
     public var hasReplyFollowing = false
     public var sensitiveContentToggled = false
-    public let events: AnyPublisher<AnyPublisher<Event, Error>, Never>
+    public let events: AnyPublisher<AnyPublisher<CollectionItemEvent, Error>, Never>
 
     private let statusService: StatusService
-    private let eventsSubject = PassthroughSubject<AnyPublisher<Event, Error>, Never>()
+    private let eventsSubject = PassthroughSubject<AnyPublisher<CollectionItemEvent, Error>, Never>()
 
     init(statusService: StatusService) {
         self.statusService = statusService
@@ -46,15 +46,6 @@ public struct StatusViewModel {
         pollOptionTitles = statusService.status.displayStatus.poll?.options.map { $0.title } ?? []
         pollEmoji = statusService.status.displayStatus.poll?.emojis ?? []
         events = eventsSubject.eraseToAnyPublisher()
-    }
-}
-
-public extension StatusViewModel {
-    enum Event {
-        case ignorableOutput
-        case navigation(URLItem)
-        case accountListNavigation(AccountListViewModel)
-        case share(URL)
     }
 }
 
@@ -118,31 +109,42 @@ public extension StatusViewModel {
 
     func urlSelected(_ url: URL) {
         eventsSubject.send(
-            statusService.urlService.item(url: url)
-                .map { Event.navigation($0) }
+            statusService.navigationService.item(url: url)
+                .map { CollectionItemEvent.navigation($0) }
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher())
     }
 
     func accountSelected() {
         eventsSubject.send(
-            Just(Event.navigation(.accountID(statusService.status.displayStatus.account.id)))
+            Just(CollectionItemEvent.navigation(
+                    .accountStatuses(
+                        statusService.navigationService.accountStatusesService(
+                            id: statusService.status.displayStatus.account.id))))
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher())
     }
 
     func favoritedBySelected() {
-        
+        eventsSubject.send(
+            Just(CollectionItemEvent.accountListNavigation(
+                    AccountListViewModel(
+                        accountListService: statusService.favoritedByService())))
+                .setFailureType(to: Error.self)
+                .eraseToAnyPublisher())
     }
 
     func toggleFavorited() {
-        eventsSubject.send(statusService.toggleFavorited().map { _ in Event.ignorableOutput }.eraseToAnyPublisher())
+        eventsSubject.send(
+            statusService.toggleFavorited()
+                .map { _ in CollectionItemEvent.ignorableOutput }
+                .eraseToAnyPublisher())
     }
 
     func shareStatus() {
         guard let url = statusService.status.displayStatus.url else { return }
 
-        eventsSubject.send(Just(Event.share(url)).setFailureType(to: Error.self).eraseToAnyPublisher())
+        eventsSubject.send(Just(CollectionItemEvent.share(url)).setFailureType(to: Error.self).eraseToAnyPublisher())
     }
 }
 
