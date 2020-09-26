@@ -44,6 +44,23 @@ class AccountHeaderView: UIView {
     }
 }
 
+extension AccountHeaderView: UITextViewDelegate {
+    func textView(
+        _ textView: UITextView,
+        shouldInteractWith URL: URL,
+        in characterRange: NSRange,
+        interaction: UITextItemInteraction) -> Bool {
+        switch interaction {
+        case .invokeDefaultAction:
+            viewModel?.accountViewModel?.urlSelected(URL)
+            return false
+        case .preview: return false
+        case .presentActions: return false
+        @unknown default: return false
+        }
+    }
+}
+
 private extension AccountHeaderView {
     func initializationActions() {
         let baseStackView = UIStackView()
@@ -55,6 +72,7 @@ private extension AccountHeaderView {
         baseStackView.axis = .vertical
 
         noteTextView.isScrollEnabled = false
+        noteTextView.delegate = self
         baseStackView.addArrangedSubview(noteTextView)
 
         for (index, collection) in AccountStatusCollection.allCases.enumerated() {

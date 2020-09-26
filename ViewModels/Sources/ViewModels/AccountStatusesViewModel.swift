@@ -28,6 +28,17 @@ public class AccountStatusesViewModel: StatusListViewModel {
             .assign(to: &$accountViewModel)
     }
 
+    public override var navigationEvents: AnyPublisher<NavigationEvent, Never> {
+        $accountViewModel.compactMap { $0 }
+            .flatMap(\.events)
+            .flatMap { $0 }
+            .map(NavigationEvent.init)
+            .compactMap { $0 }
+            .assignErrorsToAlertItem(to: \.alertItem, on: self)
+            .merge(with: super.navigationEvents)
+            .eraseToAnyPublisher()
+    }
+
     public override func request(maxID: String? = nil, minID: String? = nil) {
         if case .statuses = collection, maxID == nil {
             accountStatusesService.fetchPinnedStatuses()

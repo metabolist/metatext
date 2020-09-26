@@ -11,7 +11,7 @@ public enum NavigationEvent {
 }
 
 extension NavigationEvent {
-    init?(_ event: CollectionItemEvent) {
+    public init?(_ event: CollectionItemEvent) {
         switch event {
         case .ignorableOutput:
             return nil

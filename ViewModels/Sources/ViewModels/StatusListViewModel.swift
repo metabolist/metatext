@@ -8,7 +8,6 @@ import ServiceLayer
 public class StatusListViewModel: ObservableObject {
     @Published public private(set) var items = [[CollectionItem]]()
     @Published public var alertItem: AlertItem?
-    public let navigationEvents: AnyPublisher<NavigationEvent, Never>
     public private(set) var nextPageMaxID: String?
     public private(set) var maintainScrollPositionOfItem: CollectionItem?
 
@@ -22,7 +21,6 @@ public class StatusListViewModel: ObservableObject {
 
     init(statusListService: StatusListService) {
         self.statusListService = statusListService
-        navigationEvents = navigationEventsSubject.eraseToAnyPublisher()
 
         statusListService.statusSections
             .combineLatest(statusListService.filters.map { $0.regularExpression() })
@@ -42,6 +40,8 @@ public class StatusListViewModel: ObservableObject {
             .sink { [weak self] in self?.nextPageMaxID = $0 }
             .store(in: &cancellables)
     }
+
+    public var navigationEvents: AnyPublisher<NavigationEvent, Never> { navigationEventsSubject.eraseToAnyPublisher() }
 
     public var title: AnyPublisher<String?, Never> { Just(statusListService.title).eraseToAnyPublisher() }
 

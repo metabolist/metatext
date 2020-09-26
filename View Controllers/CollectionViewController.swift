@@ -171,10 +171,10 @@ private extension CollectionViewController {
                 .dropFirst()
                 .receive(on: DispatchQueue.main)
                 .sink { [weak self] _ in
-                accountHeaderView.viewModel = accountsStatusesViewModel
-                self?.sizeTableHeaderFooterViews()
-            }
-            .store(in: &cancellables)
+                    accountHeaderView.viewModel = accountsStatusesViewModel
+                    self?.sizeTableHeaderFooterViews()
+                }
+                .store(in: &cancellables)
             tableView.tableHeaderView = accountHeaderView
         }
     }
