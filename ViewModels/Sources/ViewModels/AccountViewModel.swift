@@ -18,11 +18,13 @@ public class AccountViewModel: ObservableObject {
 }
 
 public extension AccountViewModel {
-    var avatarURL: URL {
-        accountService.account.avatar
-    }
+    var avatarURL: URL { accountService.account.avatar }
 
-    var note: NSAttributedString {
-        accountService.account.note.attributed
-    }
+    var displayName: String { accountService.account.displayName }
+
+    var accountName: String { "@".appending(accountService.account.acct) }
+
+    var note: NSAttributedString { accountService.account.note.attributed }
+
+    var emoji: [Emoji] { accountService.account.emojis }
 }
