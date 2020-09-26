@@ -11,19 +11,19 @@ struct BitArray {
 }
 
 extension BitArray {
-    var bitCount: Int { bytes.count * Self.bitsInByte }
+    var bitCount: Int { bytes.count * UInt8.bitWidth }
 
     var data: Data { Data(bytes) }
 
     subscript(index: Int) -> Bool {
         get {
-            let (byteIndex, bitIndex) = index.quotientAndRemainder(dividingBy: Self.bitsInByte)
+            let (byteIndex, bitIndex) = index.quotientAndRemainder(dividingBy: UInt8.bitWidth)
 
             return bytes[byteIndex] & Self.mask(bitIndex: bitIndex) > 0
         }
 
         set {
-            let (byteIndex, bitIndex) = index.quotientAndRemainder(dividingBy: Self.bitsInByte)
+            let (byteIndex, bitIndex) = index.quotientAndRemainder(dividingBy: UInt8.bitWidth)
 
             if newValue {
                 bytes[byteIndex] |= Self.mask(bitIndex: bitIndex)
@@ -47,8 +47,6 @@ extension BitArray: Codable {
 }
 
 private extension BitArray {
-    static let bitsInByte = 8
-
     static func mask(bitIndex: Int) -> UInt8 {
         UInt8(2 << (bitIndex - 1))
     }
