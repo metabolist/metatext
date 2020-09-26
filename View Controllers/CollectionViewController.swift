@@ -8,6 +8,7 @@ import ViewModels
 class CollectionViewController: UITableViewController {
     private let viewModel: CollectionViewModel
     private let loadingTableFooterView = LoadingTableFooterView()
+    private let webfingerIndicatorView = WebfingerIndicatorView()
     private var cancellables = Set<AnyCancellable>()
     private var cellHeightCaches = [CGFloat: [CollectionItem: CGFloat]]()
     private let dataSourceQueue =
@@ -57,49 +58,15 @@ class CollectionViewController: UITableViewController {
         tableView.cellLayoutMarginsFollowReadableWidth = true
         tableView.tableFooterView = UIView()
 
-        viewModel.title.sink { [weak self] in self?.navigationItem.title = $0 }.store(in: &cancellables)
+        view.addSubview(webfingerIndicatorView)
+        webfingerIndicatorView.translatesAutoresizingMaskIntoConstraints = false
 
-        viewModel.collectionItems
-            .sink { [weak self] in self?.update(items: $0) }
-            .store(in: &cancellables)
+        NSLayoutConstraint.activate([
+            webfingerIndicatorView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            webfingerIndicatorView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor)
+        ])
 
-        viewModel.navigationEvents.sink { [weak self] in
-            guard let self = self else { return }
-            switch $0 {
-            case let .share(url):
-                self.share(url: url)
-            case let .collectionNavigation(collectionViewModel):
-                self.show(CollectionViewController(viewModel: collectionViewModel), sender: self)
-            case let .urlNavigation(url):
-                self.present(SFSafariViewController(url: url), animated: true)
-            }
-        }
-        .store(in: &cancellables)
-
-        viewModel.loading
-            .receive(on: RunLoop.main)
-            .sink { [weak self] in
-                guard let self = self else { return }
-
-                self.tableView.tableFooterView = $0 ? self.loadingTableFooterView : UIView()
-                self.sizeTableHeaderFooterViews()
-            }
-            .store(in: &cancellables)
-
-        if let accountsStatusesViewModel = viewModel as? AccountStatusesViewModel {
-            // Initial size is to avoid unsatisfiable constraint warning
-            let accountHeaderView = AccountHeaderView(
-                frame: .init(
-                    origin: .zero,
-                    size: .init(width: 100, height: 100)))
-            accountHeaderView.viewModel = accountsStatusesViewModel
-            accountsStatusesViewModel.$account.dropFirst().receive(on: DispatchQueue.main).sink { [weak self] _ in
-                accountHeaderView.viewModel = accountsStatusesViewModel
-                self?.sizeTableHeaderFooterViews()
-            }
-            .store(in: &cancellables)
-            tableView.tableHeaderView = accountHeaderView
-        }
+        setupViewModelBindings()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -158,6 +125,57 @@ extension CollectionViewController: UITableViewDataSourcePrefetching {
 }
 
 private extension CollectionViewController {
+    func setupViewModelBindings() {
+        viewModel.title.sink { [weak self] in self?.navigationItem.title = $0 }.store(in: &cancellables)
+
+        viewModel.collectionItems
+            .sink { [weak self] in self?.update(items: $0) }
+            .store(in: &cancellables)
+
+        viewModel.navigationEvents.receive(on: DispatchQueue.main).sink { [weak self] in
+            guard let self = self else { return }
+
+            switch $0 {
+            case let .share(url):
+                self.share(url: url)
+            case let .collectionNavigation(collectionViewModel):
+                self.show(CollectionViewController(viewModel: collectionViewModel), sender: self)
+            case let .urlNavigation(url):
+                self.present(SFSafariViewController(url: url), animated: true)
+            case .webfingerStart:
+                self.webfingerIndicatorView.startAnimating()
+            case .webfingerEnd:
+                self.webfingerIndicatorView.stopAnimating()
+            }
+        }
+        .store(in: &cancellables)
+
+        viewModel.loading
+            .receive(on: RunLoop.main)
+            .sink { [weak self] in
+                guard let self = self else { return }
+
+                self.tableView.tableFooterView = $0 ? self.loadingTableFooterView : UIView()
+                self.sizeTableHeaderFooterViews()
+            }
+            .store(in: &cancellables)
+
+        if let accountsStatusesViewModel = viewModel as? AccountStatusesViewModel {
+            // Initial size is to avoid unsatisfiable constraint warning
+            let accountHeaderView = AccountHeaderView(
+                frame: .init(
+                    origin: .zero,
+                    size: .init(width: 100, height: 100)))
+            accountHeaderView.viewModel = accountsStatusesViewModel
+            accountsStatusesViewModel.$account.dropFirst().receive(on: DispatchQueue.main).sink { [weak self] _ in
+                accountHeaderView.viewModel = accountsStatusesViewModel
+                self?.sizeTableHeaderFooterViews()
+            }
+            .store(in: &cancellables)
+            tableView.tableHeaderView = accountHeaderView
+        }
+    }
+
     func update(items: [[CollectionItem]]) {
         var offsetFromNavigationBar: CGFloat?
 

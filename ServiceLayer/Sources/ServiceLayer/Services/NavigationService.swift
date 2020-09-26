@@ -10,6 +10,8 @@ public enum Navigation {
     case url(URL)
     case statusList(StatusListService)
     case accountStatuses(AccountStatusesService)
+    case webfingerStart
+    case webfingerEnd
 }
 
 public struct NavigationService {
@@ -46,7 +48,11 @@ public extension NavigationService {
                 .eraseToAnyPublisher()
         }
 
-        return Just(.url(url)).eraseToAnyPublisher()
+        if url.shouldWebfinger {
+            return webfinger(url: url)
+        } else {
+            return Just(.url(url)).eraseToAnyPublisher()
+        }
     }
 
     func contextStatusListService(id: String) -> StatusListService {
@@ -87,6 +93,37 @@ private extension NavigationService {
         }
 
         return nil
+    }
+
+    func webfinger(url: URL) -> AnyPublisher<Navigation, Never> {
+        let navigationSubject = PassthroughSubject<Navigation, Never>()
+
+        let request = mastodonAPIClient.request(ResultsEndpoint.search(query: url.absoluteString, resolve: true))
+            .handleEvents(
+                receiveSubscription: { _ in navigationSubject.send(.webfingerStart) },
+                receiveCompletion: { _ in navigationSubject.send(.webfingerEnd) })
+            .map { results -> Navigation in
+                if let tag = results.hashtags.first {
+                    return .statusList(
+                        StatusListService(
+                            timeline: .tag(tag.name),
+                            mastodonAPIClient: mastodonAPIClient,
+                            contentDatabase: contentDatabase))
+                } else if let account = results.accounts.first {
+                    return .accountStatuses(accountStatusesService(id: account.id))
+                } else if let status = results.statuses.first {
+                    return .statusList(
+                        StatusListService(
+                            statusID: status.id,
+                            mastodonAPIClient: mastodonAPIClient,
+                            contentDatabase: contentDatabase))
+                } else {
+                    return .url(url)
+                }
+            }
+            .replaceError(with: .url(url))
+
+        return navigationSubject.merge(with: request).eraseToAnyPublisher()
     }
 }
 

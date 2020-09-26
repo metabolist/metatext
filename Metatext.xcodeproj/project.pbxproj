@@ -47,6 +47,7 @@
 		D0C7D4D724F7616A001EBDBB /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D46C24F76169001EBDBB /* UIColor+Extensions.swift */; };
 		D0C7D4D924F7616A001EBDBB /* KingfisherOptionsInfo+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D46E24F76169001EBDBB /* KingfisherOptionsInfo+Extensions.swift */; };
 		D0C7D4DA24F7616A001EBDBB /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D46F24F76169001EBDBB /* View+Extensions.swift */; };
+		D0E1F583251F13EC00D45315 /* WebfingerIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E1F582251F13EC00D45315 /* WebfingerIndicatorView.swift */; };
 		D0E2C1D124FD97F000854680 /* ViewModels in Frameworks */ = {isa = PBXBuildFile; productRef = D0E2C1D024FD97F000854680 /* ViewModels */; };
 		D0E5361C24E3EB4D00FB1CE1 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E5361B24E3EB4D00FB1CE1 /* NotificationService.swift */; };
 		D0E5362024E3EB4D00FB1CE1 /* Notification Service Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D0E5361924E3EB4D00FB1CE1 /* Notification Service Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -139,6 +140,7 @@
 		D0C7D46F24F76169001EBDBB /* View+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		D0D7C013250440610039AD6F /* CodableBloomFilter */ = {isa = PBXFileReference; lastKnownFileType = folder; path = CodableBloomFilter; sourceTree = "<group>"; };
 		D0E0F1E424FC49FC002C04BF /* Mastodon */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Mastodon; sourceTree = "<group>"; };
+		D0E1F582251F13EC00D45315 /* WebfingerIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebfingerIndicatorView.swift; sourceTree = "<group>"; };
 		D0E2C1CF24FD8BA400854680 /* ViewModels */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ViewModels; sourceTree = "<group>"; };
 		D0E5361924E3EB4D00FB1CE1 /* Notification Service Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Notification Service Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0E5361B24E3EB4D00FB1CE1 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
@@ -288,6 +290,7 @@
 				D0625E55250F086B00502611 /* Status */,
 				D0C7D42E24F76169001EBDBB /* TabNavigationView.swift */,
 				D01F41D624F880C400D55A2D /* TouchFallthroughTextView.swift */,
+				D0E1F582251F13EC00D45315 /* WebfingerIndicatorView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -545,6 +548,7 @@
 				D0C7D4C424F7616A001EBDBB /* AppDelegate.swift in Sources */,
 				D0C7D49924F7616A001EBDBB /* AddIdentityView.swift in Sources */,
 				D0C7D4C324F7616A001EBDBB /* MetatextApp.swift in Sources */,
+				D0E1F583251F13EC00D45315 /* WebfingerIndicatorView.swift in Sources */,
 				D0BEB20524FA1107001B0F04 /* FiltersView.swift in Sources */,
 				D0C7D49B24F7616A001EBDBB /* PreferencesView.swift in Sources */,
 				D0C7D4D724F7616A001EBDBB /* UIColor+Extensions.swift in Sources */,

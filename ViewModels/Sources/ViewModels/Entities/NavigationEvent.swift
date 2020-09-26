@@ -6,6 +6,8 @@ public enum NavigationEvent {
     case collectionNavigation(CollectionViewModel)
     case urlNavigation(URL)
     case share(URL)
+    case webfingerStart
+    case webfingerEnd
 }
 
 extension NavigationEvent {
@@ -21,6 +23,10 @@ extension NavigationEvent {
                 self = .collectionNavigation(StatusListViewModel(statusListService: statusListService))
             case let .accountStatuses(accountStatusesService):
                 self = .collectionNavigation(AccountStatusesViewModel(accountStatusesService: accountStatusesService))
+            case .webfingerStart:
+                self = .webfingerStart
+            case .webfingerEnd:
+                self = .webfingerEnd
             }
         case let .accountListNavigation(accountListViewModel):
             self = .collectionNavigation(accountListViewModel)
