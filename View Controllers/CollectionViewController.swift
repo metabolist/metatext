@@ -226,6 +226,8 @@ private extension CollectionViewController {
                 tableView.tableHeaderView = headerView
                 tableView.layoutIfNeeded()
             }
+
+            view.insertSubview(webfingerIndicatorView, aboveSubview: headerView)
         }
 
         if let footerView = tableView.tableFooterView {
