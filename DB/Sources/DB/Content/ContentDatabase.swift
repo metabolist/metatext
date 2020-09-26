@@ -124,7 +124,7 @@ public extension ContentDatabase {
         .eraseToAnyPublisher()
     }
 
-    func setLists(_ lists: [MastodonList]) -> AnyPublisher<Never, Error> {
+    func setLists(_ lists: [List]) -> AnyPublisher<Never, Error> {
         databaseQueue.writePublisher {
             for list in lists {
                 try Timeline.list(list).save($0)
@@ -139,7 +139,7 @@ public extension ContentDatabase {
         .eraseToAnyPublisher()
     }
 
-    func createList(_ list: MastodonList) -> AnyPublisher<Never, Error> {
+    func createList(_ list: List) -> AnyPublisher<Never, Error> {
         databaseQueue.writePublisher(updates: Timeline.list(list).save)
             .ignoreOutput()
             .eraseToAnyPublisher()

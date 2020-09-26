@@ -9,7 +9,7 @@ public enum ListsEndpoint {
 }
 
 extension ListsEndpoint: Endpoint {
-    public typealias ResultType = [MastodonList]
+    public typealias ResultType = [List]
 
     public var pathComponentsInContext: [String] {
         ["lists"]

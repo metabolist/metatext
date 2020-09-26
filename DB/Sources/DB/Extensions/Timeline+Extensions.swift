@@ -18,7 +18,7 @@ extension Timeline: FetchableRecord, PersistableRecord {
         case (Timeline.federated.id, _):
             self = .federated
         case (let id, .some(let title)):
-            self = .list(MastodonList(id: id, title: title))
+            self = .list(List(id: id, title: title))
         default:
             var tag: String = row[Columns.id]
 

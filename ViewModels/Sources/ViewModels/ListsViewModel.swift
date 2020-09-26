@@ -6,7 +6,7 @@ import Mastodon
 import ServiceLayer
 
 public final class ListsViewModel: ObservableObject {
-    @Published public private(set) var lists = [MastodonList]()
+    @Published public private(set) var lists = [List]()
     @Published public private(set) var creatingList = false
     @Published public var alertItem: AlertItem?
 
@@ -47,7 +47,7 @@ public extension ListsViewModel {
             .store(in: &cancellables)
     }
 
-    func delete(list: MastodonList) {
+    func delete(list: List) {
         identification.service.deleteList(id: list.id)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .sink { _ in }

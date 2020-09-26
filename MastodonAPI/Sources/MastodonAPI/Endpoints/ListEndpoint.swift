@@ -9,7 +9,7 @@ public enum ListEndpoint {
 }
 
 extension ListEndpoint: Endpoint {
-    public typealias ResultType = MastodonList
+    public typealias ResultType = List
 
     public var context: [String] {
         defaultContext + ["lists"]

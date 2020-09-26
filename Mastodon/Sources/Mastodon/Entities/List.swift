@@ -2,7 +2,7 @@
 
 import Foundation
 
-public struct MastodonList: Codable, Hashable, Identifiable {
+public struct List: Codable, Hashable, Identifiable {
     public let id: String
     public let title: String
 

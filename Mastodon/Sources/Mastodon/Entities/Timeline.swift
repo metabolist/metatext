@@ -6,7 +6,7 @@ public enum Timeline: Hashable {
     case home
     case local
     case federated
-    case list(MastodonList)
+    case list(List)
     case tag(String)
 }
 
