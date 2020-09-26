@@ -17,7 +17,13 @@ extension HTML: Codable {
         let container = try decoder.singleValueContainer()
 
         raw = try container.decode(String.self)
-        attributed = HTMLParser(string: raw).parse()
+
+        if let cachedAttributedString = Self.attributedStringCache.object(forKey: raw as NSString) {
+            attributed = cachedAttributedString
+        } else {
+            attributed = HTMLParser(string: raw).parse()
+            Self.attributedStringCache.setObject(attributed, forKey: raw as NSString)
+        }
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -25,6 +31,10 @@ extension HTML: Codable {
 
         try container.encode(raw)
     }
+}
+
+private extension HTML {
+    static var attributedStringCache = NSCache<NSString, NSAttributedString>()
 }
 
 // https://docs.joinmastodon.org/spec/activitypub/#sanitization
@@ -48,7 +58,9 @@ private class HTMLParser: NSObject {
     private static let closingContainerTag = "</\(containerTag)>"
 
     init(string: String) {
-        rawString = Self.openingContainerTag + string + Self.closingContainerTag
+        rawString = Self.openingContainerTag
+            .appending(string.replacingOccurrences(of: "<br>", with: "<br/>"))
+            .appending(Self.closingContainerTag)
         parser = XMLParser(data: Data(rawString.utf8))
         parseStopColumn = rawString.count - Self.closingContainerTag.count
 
@@ -81,7 +93,7 @@ extension HTMLParser: XMLParserDelegate {
         attributesStack.append(attributeDict)
 
         if elementName == "a", let hrefString = attributeDict["href"], let href = URL(string: hrefString) {
-            currentLink = Link(href: href, location: constructedString.count)
+            currentLink = Link(href: href, location: constructedString.utf16.count)
         } else if elementName == "br" {
             constructedString.append("\n")
         }
@@ -98,7 +110,7 @@ extension HTMLParser: XMLParserDelegate {
         }
 
         if elementName == "a", var link = currentLink {
-            link.length = constructedString.count - link.location
+            link.length = constructedString.utf16.count - link.location
             links.insert(link)
         } else if elementName == "p", parser.columnNumber < parseStopColumn {
             constructedString.append("\n\n")
