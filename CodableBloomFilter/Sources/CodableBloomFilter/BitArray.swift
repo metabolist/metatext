@@ -17,18 +17,18 @@ extension BitArray {
 
     subscript(index: Int) -> Bool {
         get {
-            let (byteIndex, bitIndex) = index.quotientAndRemainder(dividingBy: UInt8.bitWidth)
+            let (byteIndex, mask) = Self.byteIndexAndMask(index: index)
 
-            return bytes[byteIndex] & Self.mask(bitIndex: bitIndex) > 0
+            return bytes[byteIndex] & mask > 0
         }
 
         set {
-            let (byteIndex, bitIndex) = index.quotientAndRemainder(dividingBy: UInt8.bitWidth)
+            let (byteIndex, mask) = Self.byteIndexAndMask(index: index)
 
             if newValue {
-                bytes[byteIndex] |= Self.mask(bitIndex: bitIndex)
+                bytes[byteIndex] |= mask
             } else {
-                bytes[byteIndex] &= ~Self.mask(bitIndex: bitIndex)
+                bytes[byteIndex] &= ~mask
             }
         }
     }
@@ -47,7 +47,10 @@ extension BitArray: Codable {
 }
 
 private extension BitArray {
-    static func mask(bitIndex: Int) -> UInt8 {
-        UInt8(2 << (bitIndex - 1))
+    static func byteIndexAndMask(index: Int) -> (Int, UInt8) {
+        let (byteIndex, bitIndex) = index.quotientAndRemainder(dividingBy: UInt8.bitWidth)
+        let mask = UInt8(2 << (bitIndex - 1))
+
+        return (byteIndex, mask)
     }
 }
