@@ -39,6 +39,23 @@ extension AccountView: UIContentView {
     }
 }
 
+extension AccountView: UITextViewDelegate {
+    func textView(
+        _ textView: UITextView,
+        shouldInteractWith URL: URL,
+        in characterRange: NSRange,
+        interaction: UITextItemInteraction) -> Bool {
+        switch interaction {
+        case .invokeDefaultAction:
+            accountConfiguration.viewModel.urlSelected(URL)
+            return false
+        case .preview: return false
+        case .presentActions: return false
+        @unknown default: return false
+        }
+    }
+}
+
 private extension AccountView {
     static let spacing: CGFloat = 8
     static let stackViewSpacing: CGFloat = 4
@@ -67,6 +84,7 @@ private extension AccountView {
         accountLabel.textColor = .secondaryLabel
         noteTextView.isScrollEnabled = false
         noteTextView.backgroundColor = .clear
+        noteTextView.delegate = self
 
         NSLayoutConstraint.activate([
             avatarImageView.widthAnchor.constraint(equalToConstant: Self.avatarDimension),

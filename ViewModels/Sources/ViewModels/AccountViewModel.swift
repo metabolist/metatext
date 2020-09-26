@@ -27,4 +27,12 @@ public extension AccountViewModel {
     var note: NSAttributedString { accountService.account.note.attributed }
 
     var emoji: [Emoji] { accountService.account.emojis }
+
+    func urlSelected(_ url: URL) {
+        eventsSubject.send(
+            accountService.navigationService.item(url: url)
+                .map { CollectionItemEvent.navigation($0) }
+                .setFailureType(to: Error.self)
+                .eraseToAnyPublisher())
+    }
 }
