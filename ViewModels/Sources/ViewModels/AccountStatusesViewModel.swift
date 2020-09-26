@@ -6,7 +6,7 @@ import Mastodon
 import ServiceLayer
 
 public class AccountStatusesViewModel: StatusListViewModel {
-    @Published public private(set) var account: Account?
+    @Published public private(set) var accountViewModel: AccountViewModel?
     @Published public var collection = AccountStatusCollection.statuses
     private let accountStatusesService: AccountStatusesService
     private var cancellables = Set<AnyCancellable>()
@@ -22,9 +22,10 @@ public class AccountStatusesViewModel: StatusListViewModel {
 
         $collection.sink(receiveValue: collectionSubject.send).store(in: &cancellables)
 
-        accountStatusesService.accountObservation()
+        accountStatusesService.accountService()
+            .map(AccountViewModel.init(accountService:))
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
-            .assign(to: &$account)
+            .assign(to: &$accountViewModel)
     }
 
     public override func request(maxID: String? = nil, minID: String? = nil) {
@@ -43,12 +44,7 @@ public class AccountStatusesViewModel: StatusListViewModel {
     }
 
     public override var title: AnyPublisher<String?, Never> {
-        $account.map {
-            guard let acct = $0?.acct else { return nil }
-
-            return "@".appending(acct)
-        }
-        .eraseToAnyPublisher()
+        $accountViewModel.map { $0?.accountName }.eraseToAnyPublisher()
     }
 }
 

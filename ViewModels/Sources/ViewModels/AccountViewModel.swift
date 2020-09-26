@@ -20,6 +20,8 @@ public class AccountViewModel: ObservableObject {
 public extension AccountViewModel {
     var avatarURL: URL { accountService.account.avatar }
 
+    var headerURL: URL { accountService.account.header }
+
     var displayName: String { accountService.account.displayName }
 
     var accountName: String { "@".appending(accountService.account.acct) }

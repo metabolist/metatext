@@ -11,18 +11,18 @@ class AccountHeaderView: UIView {
 
     var viewModel: AccountStatusesViewModel? {
         didSet {
-            if let account = viewModel?.account {
-                headerImageView.kf.setImage(with: account.header)
+            if let accountViewModel = viewModel?.accountViewModel {
+                headerImageView.kf.setImage(with: accountViewModel.headerURL)
 
                 let noteFont = UIFont.preferredFont(forTextStyle: .callout)
-                let mutableNote = NSMutableAttributedString(attributedString: account.note.attributed)
+                let mutableNote = NSMutableAttributedString(attributedString: accountViewModel.note)
                 let noteRange = NSRange(location: 0, length: mutableNote.length)
                 mutableNote.removeAttribute(.font, range: noteRange)
                 mutableNote.addAttributes(
                     [.font: noteFont as Any,
                      .foregroundColor: UIColor.label],
                     range: noteRange)
-                mutableNote.insert(emoji: account.emojis, view: noteTextView)
+                mutableNote.insert(emoji: accountViewModel.emoji, view: noteTextView)
                 mutableNote.resizeAttachments(toLineHeight: noteFont.lineHeight)
                 noteTextView.attributedText = mutableNote
                 noteTextView.isHidden = false

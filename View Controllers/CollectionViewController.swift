@@ -167,7 +167,10 @@ private extension CollectionViewController {
                     origin: .zero,
                     size: .init(width: 100, height: 100)))
             accountHeaderView.viewModel = accountsStatusesViewModel
-            accountsStatusesViewModel.$account.dropFirst().receive(on: DispatchQueue.main).sink { [weak self] _ in
+            accountsStatusesViewModel.$accountViewModel
+                .dropFirst()
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] _ in
                 accountHeaderView.viewModel = accountsStatusesViewModel
                 self?.sizeTableHeaderFooterViews()
             }

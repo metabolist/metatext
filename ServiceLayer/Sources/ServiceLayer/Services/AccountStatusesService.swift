@@ -19,8 +19,11 @@ public struct AccountStatusesService {
 }
 
 public extension AccountStatusesService {
-    func accountObservation() -> AnyPublisher<Account?, Error> {
+    func accountService() -> AnyPublisher<AccountService, Error> {
         contentDatabase.accountObservation(id: accountID)
+            .compactMap { $0 }
+            .map { AccountService(account: $0, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase) }
+            .eraseToAnyPublisher()
     }
 
     func statusListService(
