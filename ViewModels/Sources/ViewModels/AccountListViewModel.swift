@@ -74,7 +74,7 @@ extension AccountListViewModel: CollectionViewModel {
                 profileService = navigationService.profileService(id: item.id)
             }
 
-            navigationEventsSubject.send(.collectionNavigation(ProfileViewModel(profileService: profileService)))
+            navigationEventsSubject.send(.profileNavigation(ProfileViewModel(profileService: profileService)))
         default:
             break
         }

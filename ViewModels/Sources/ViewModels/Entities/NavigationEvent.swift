@@ -4,6 +4,7 @@ import Foundation
 
 public enum NavigationEvent {
     case collectionNavigation(CollectionViewModel)
+    case profileNavigation(ProfileViewModel)
     case urlNavigation(URL)
     case share(URL)
     case webfingerStart
@@ -22,7 +23,7 @@ extension NavigationEvent {
             case let .statusList(statusListService):
                 self = .collectionNavigation(StatusListViewModel(statusListService: statusListService))
             case let .profile(profileService):
-                self = .collectionNavigation(ProfileViewModel(profileService: profileService))
+                self = .profileNavigation(ProfileViewModel(profileService: profileService))
             case .webfingerStart:
                 self = .webfingerStart
             case .webfingerEnd:

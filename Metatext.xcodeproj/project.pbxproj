@@ -17,6 +17,7 @@
 		D0625E5D250F0B5C00502611 /* StatusContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0625E5C250F0B5C00502611 /* StatusContentConfiguration.swift */; };
 		D0625E5F250F0CFF00502611 /* StatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0625E5E250F0CFF00502611 /* StatusView.swift */; };
 		D06B492324D4611300642749 /* KingfisherSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = D06B492224D4611300642749 /* KingfisherSwiftUI */; };
+		D06BC5E625202AD90079541D /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06BC5E525202AD90079541D /* ProfileViewController.swift */; };
 		D0B32F50250B373600311912 /* RegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B32F4F250B373600311912 /* RegistrationView.swift */; };
 		D0B5FE9B251583DB00478838 /* ProfileCollection+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B5FE9A251583DB00478838 /* ProfileCollection+Extensions.swift */; };
 		D0B7434925100DBB00C13DB6 /* StatusView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D0B7434825100DBB00C13DB6 /* StatusView.xib */; };
@@ -103,6 +104,7 @@
 		D0625E5E250F0CFF00502611 /* StatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusView.swift; sourceTree = "<group>"; };
 		D0666A2124C677B400F3F04B /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0666A2524C677B400F3F04B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D06BC5E525202AD90079541D /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		D085C3BB25008DEC008A6C5E /* DB */ = {isa = PBXFileReference; lastKnownFileType = folder; path = DB; sourceTree = "<group>"; };
 		D0AD03552505814D0085A466 /* Base16 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Base16; sourceTree = "<group>"; };
 		D0B32F4F250B373600311912 /* RegistrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationView.swift; sourceTree = "<group>"; };
@@ -300,6 +302,7 @@
 		D0C7D43024F76169001EBDBB /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				D06BC5E525202AD90079541D /* ProfileViewController.swift */,
 				D0F0B12D251A97E400942152 /* TableViewController.swift */,
 			);
 			path = "View Controllers";
@@ -539,6 +542,7 @@
 				D0C7D4D524F7616A001EBDBB /* String+Extensions.swift in Sources */,
 				D0C7D4A224F7616A001EBDBB /* NotificationTypesPreferencesView.swift in Sources */,
 				D0BEB1F724F9A84B001B0F04 /* LoadingTableFooterView.swift in Sources */,
+				D06BC5E625202AD90079541D /* ProfileViewController.swift in Sources */,
 				D01C6FAC252024BD003D0300 /* Array+Extensions.swift in Sources */,
 				D0C7D4D924F7616A001EBDBB /* KingfisherOptionsInfo+Extensions.swift in Sources */,
 				D0F0B10E251A868200942152 /* AccountView.swift in Sources */,

@@ -124,13 +124,44 @@ extension TableViewController: UITableViewDataSourcePrefetching {
     }
 }
 
+extension TableViewController {
+    func sizeTableHeaderFooterViews() {
+        // https://useyourloaf.com/blog/variable-height-table-view-header/
+        if let headerView = tableView.tableHeaderView {
+            let size = headerView.systemLayoutSizeFitting(
+                CGSize(width: tableView.frame.width, height: .greatestFiniteMagnitude),
+                withHorizontalFittingPriority: .required,
+                verticalFittingPriority: .fittingSizeLevel)
+
+            if headerView.frame.size.height != size.height {
+                headerView.frame.size.height = size.height
+                tableView.tableHeaderView = headerView
+                tableView.layoutIfNeeded()
+            }
+
+            view.insertSubview(webfingerIndicatorView, aboveSubview: headerView)
+        }
+
+        if let footerView = tableView.tableFooterView {
+            let size = footerView.systemLayoutSizeFitting(
+                CGSize(width: tableView.frame.width, height: .greatestFiniteMagnitude),
+                withHorizontalFittingPriority: .required,
+                verticalFittingPriority: .fittingSizeLevel)
+
+            if footerView.frame.size.height != size.height {
+                footerView.frame.size.height = size.height
+                tableView.tableFooterView = footerView
+                tableView.layoutIfNeeded()
+            }
+        }
+    }
+}
+
 private extension TableViewController {
     func setupViewModelBindings() {
         viewModel.title.sink { [weak self] in self?.navigationItem.title = $0 }.store(in: &cancellables)
 
-        viewModel.collectionItems
-            .sink { [weak self] in self?.update(items: $0) }
-            .store(in: &cancellables)
+        viewModel.collectionItems.sink { [weak self] in self?.update(items: $0) }.store(in: &cancellables)
 
         viewModel.navigationEvents.receive(on: DispatchQueue.main).sink { [weak self] in
             guard let self = self else { return }
@@ -138,8 +169,10 @@ private extension TableViewController {
             switch $0 {
             case let .share(url):
                 self.share(url: url)
-            case let .collectionNavigation(collectionViewModel):
-                self.show(TableViewController(viewModel: collectionViewModel), sender: self)
+            case let .collectionNavigation(viewModel):
+                self.show(TableViewController(viewModel: viewModel), sender: self)
+            case let .profileNavigation(viewModel):
+                self.show(ProfileViewController(viewModel: viewModel), sender: self)
             case let .urlNavigation(url):
                 self.present(SFSafariViewController(url: url), animated: true)
             case .webfingerStart:
@@ -150,33 +183,13 @@ private extension TableViewController {
         }
         .store(in: &cancellables)
 
-        viewModel.loading
-            .receive(on: RunLoop.main)
-            .sink { [weak self] in
-                guard let self = self else { return }
+        viewModel.loading.receive(on: RunLoop.main).sink { [weak self] in
+            guard let self = self else { return }
 
-                self.tableView.tableFooterView = $0 ? self.loadingTableFooterView : UIView()
-                self.sizeTableHeaderFooterViews()
-            }
-            .store(in: &cancellables)
-
-        if let accountsStatusesViewModel = viewModel as? ProfileViewModel {
-            // Initial size is to avoid unsatisfiable constraint warning
-            let accountHeaderView = AccountHeaderView(
-                frame: .init(
-                    origin: .zero,
-                    size: .init(width: 100, height: 100)))
-            accountHeaderView.viewModel = accountsStatusesViewModel
-            accountsStatusesViewModel.$accountViewModel
-                .dropFirst()
-                .receive(on: DispatchQueue.main)
-                .sink { [weak self] _ in
-                    accountHeaderView.viewModel = accountsStatusesViewModel
-                    self?.sizeTableHeaderFooterViews()
-                }
-                .store(in: &cancellables)
-            tableView.tableHeaderView = accountHeaderView
+            self.tableView.tableFooterView = $0 ? self.loadingTableFooterView : UIView()
+            self.sizeTableHeaderFooterViews()
         }
+        .store(in: &cancellables)
     }
 
     func update(items: [[CollectionItem]]) {
@@ -211,36 +224,5 @@ private extension TableViewController {
         let activityViewController = UIActivityViewController(activityItems: [url], applicationActivities: nil)
 
         present(activityViewController, animated: true, completion: nil)
-    }
-
-    func sizeTableHeaderFooterViews() {
-        // https://useyourloaf.com/blog/variable-height-table-view-header/
-        if let headerView = tableView.tableHeaderView {
-            let size = headerView.systemLayoutSizeFitting(
-                CGSize(width: tableView.frame.width, height: .greatestFiniteMagnitude),
-                withHorizontalFittingPriority: .required,
-                verticalFittingPriority: .fittingSizeLevel)
-
-            if headerView.frame.size.height != size.height {
-                headerView.frame.size.height = size.height
-                tableView.tableHeaderView = headerView
-                tableView.layoutIfNeeded()
-            }
-
-            view.insertSubview(webfingerIndicatorView, aboveSubview: headerView)
-        }
-
-        if let footerView = tableView.tableFooterView {
-            let size = footerView.systemLayoutSizeFitting(
-                CGSize(width: tableView.frame.width, height: .greatestFiniteMagnitude),
-                withHorizontalFittingPriority: .required,
-                verticalFittingPriority: .fittingSizeLevel)
-
-            if footerView.frame.size.height != size.height {
-                footerView.frame.size.height = size.height
-                tableView.tableFooterView = footerView
-                tableView.layoutIfNeeded()
-            }
-        }
     }
 }
