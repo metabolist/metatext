@@ -5,7 +5,7 @@ import SafariServices
 import SwiftUI
 import ViewModels
 
-class CollectionViewController: UITableViewController {
+class TableViewController: UITableViewController {
     private let viewModel: CollectionViewModel
     private let loadingTableFooterView = LoadingTableFooterView()
     private let webfingerIndicatorView = WebfingerIndicatorView()
@@ -111,7 +111,7 @@ class CollectionViewController: UITableViewController {
     }
 }
 
-extension CollectionViewController: UITableViewDataSourcePrefetching {
+extension TableViewController: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         guard
             let maxID = viewModel.nextPageMaxID,
@@ -124,7 +124,7 @@ extension CollectionViewController: UITableViewDataSourcePrefetching {
     }
 }
 
-private extension CollectionViewController {
+private extension TableViewController {
     func setupViewModelBindings() {
         viewModel.title.sink { [weak self] in self?.navigationItem.title = $0 }.store(in: &cancellables)
 
@@ -139,7 +139,7 @@ private extension CollectionViewController {
             case let .share(url):
                 self.share(url: url)
             case let .collectionNavigation(collectionViewModel):
-                self.show(CollectionViewController(viewModel: collectionViewModel), sender: self)
+                self.show(TableViewController(viewModel: collectionViewModel), sender: self)
             case let .urlNavigation(url):
                 self.present(SFSafariViewController(url: url), animated: true)
             case .webfingerStart:

@@ -31,7 +31,7 @@
 		D0C7D49724F7616A001EBDBB /* IdentitiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42224F76169001EBDBB /* IdentitiesView.swift */; };
 		D0C7D49824F7616A001EBDBB /* CustomEmojiText.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42324F76169001EBDBB /* CustomEmojiText.swift */; };
 		D0C7D49924F7616A001EBDBB /* AddIdentityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42424F76169001EBDBB /* AddIdentityView.swift */; };
-		D0C7D49A24F7616A001EBDBB /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42524F76169001EBDBB /* CollectionView.swift */; };
+		D0C7D49A24F7616A001EBDBB /* TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42524F76169001EBDBB /* TableView.swift */; };
 		D0C7D49B24F7616A001EBDBB /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42624F76169001EBDBB /* PreferencesView.swift */; };
 		D0C7D49C24F7616A001EBDBB /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42724F76169001EBDBB /* RootView.swift */; };
 		D0C7D49D24F7616A001EBDBB /* PostingReadingPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42824F76169001EBDBB /* PostingReadingPreferencesView.swift */; };
@@ -55,7 +55,7 @@
 		D0F0B10E251A868200942152 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F0B10D251A868200942152 /* AccountView.swift */; };
 		D0F0B113251A86A000942152 /* AccountContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F0B112251A86A000942152 /* AccountContentConfiguration.swift */; };
 		D0F0B126251A90F400942152 /* AccountListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F0B125251A90F400942152 /* AccountListCell.swift */; };
-		D0F0B12E251A97E400942152 /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F0B12D251A97E400942152 /* CollectionViewController.swift */; };
+		D0F0B12E251A97E400942152 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F0B12D251A97E400942152 /* TableViewController.swift */; };
 		D0F0B136251AA12700942152 /* CollectionItemKind+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F0B135251AA12700942152 /* CollectionItemKind+Extensions.swift */; };
 /* End PBXBuildFile section */
 
@@ -123,7 +123,7 @@
 		D0C7D42224F76169001EBDBB /* IdentitiesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentitiesView.swift; sourceTree = "<group>"; };
 		D0C7D42324F76169001EBDBB /* CustomEmojiText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomEmojiText.swift; sourceTree = "<group>"; };
 		D0C7D42424F76169001EBDBB /* AddIdentityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddIdentityView.swift; sourceTree = "<group>"; };
-		D0C7D42524F76169001EBDBB /* CollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionView.swift; sourceTree = "<group>"; };
+		D0C7D42524F76169001EBDBB /* TableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableView.swift; sourceTree = "<group>"; };
 		D0C7D42624F76169001EBDBB /* PreferencesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
 		D0C7D42724F76169001EBDBB /* RootView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		D0C7D42824F76169001EBDBB /* PostingReadingPreferencesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostingReadingPreferencesView.swift; sourceTree = "<group>"; };
@@ -151,7 +151,7 @@
 		D0F0B10D251A868200942152 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
 		D0F0B112251A86A000942152 /* AccountContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountContentConfiguration.swift; sourceTree = "<group>"; };
 		D0F0B125251A90F400942152 /* AccountListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountListCell.swift; sourceTree = "<group>"; };
-		D0F0B12D251A97E400942152 /* CollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
+		D0F0B12D251A97E400942152 /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		D0F0B135251AA12700942152 /* CollectionItemKind+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CollectionItemKind+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -275,7 +275,7 @@
 				D0F0B10D251A868200942152 /* AccountView.swift */,
 				D0C7D42424F76169001EBDBB /* AddIdentityView.swift */,
 				D01F41E024F8885900D55A2D /* Attachments */,
-				D0C7D42524F76169001EBDBB /* CollectionView.swift */,
+				D0C7D42524F76169001EBDBB /* TableView.swift */,
 				D0C7D42324F76169001EBDBB /* CustomEmojiText.swift */,
 				D0BEB21024FA2A90001B0F04 /* EditFilterView.swift */,
 				D0BEB20424FA1107001B0F04 /* FiltersView.swift */,
@@ -300,7 +300,7 @@
 		D0C7D43024F76169001EBDBB /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				D0F0B12D251A97E400942152 /* CollectionViewController.swift */,
+				D0F0B12D251A97E400942152 /* TableViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -525,8 +525,8 @@
 				D0F0B136251AA12700942152 /* CollectionItemKind+Extensions.swift in Sources */,
 				D0625E5D250F0B5C00502611 /* StatusContentConfiguration.swift in Sources */,
 				D0BEB1F324F8EE8C001B0F04 /* AttachmentView.swift in Sources */,
-				D0C7D49A24F7616A001EBDBB /* CollectionView.swift in Sources */,
-				D0F0B12E251A97E400942152 /* CollectionViewController.swift in Sources */,
+				D0C7D49A24F7616A001EBDBB /* TableView.swift in Sources */,
+				D0F0B12E251A97E400942152 /* TableViewController.swift in Sources */,
 				D0F0B113251A86A000942152 /* AccountContentConfiguration.swift in Sources */,
 				D01F41D924F880C400D55A2D /* TouchFallthroughTextView.swift in Sources */,
 				D0C7D4D624F7616A001EBDBB /* NSMutableAttributedString+Extensions.swift in Sources */,
