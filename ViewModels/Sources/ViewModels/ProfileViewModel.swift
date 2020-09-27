@@ -66,12 +66,3 @@ public class ProfileViewModel: StatusListViewModel {
         $accountViewModel.map { $0?.accountName }.eraseToAnyPublisher()
     }
 }
-
-public extension ProfileViewModel {
-    func fetchAccount() {
-        profileService.fetchAccount()
-            .assignErrorsToAlertItem(to: \.alertItem, on: self)
-            .sink { _ in }
-            .store(in: &cancellables)
-    }
-}

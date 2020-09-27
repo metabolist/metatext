@@ -70,10 +70,4 @@ public extension ProfileService {
             .flatMap { contentDatabase.insert(pinnedStatuses: $0, accountID: accountID) }
             .eraseToAnyPublisher()
     }
-
-    func fetchAccount() -> AnyPublisher<Never, Error> {
-        mastodonAPIClient.request(AccountEndpoint.accounts(id: accountID))
-            .flatMap { contentDatabase.insert(accounts: [$0]) }
-            .eraseToAnyPublisher()
-    }
 }
