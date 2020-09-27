@@ -66,18 +66,15 @@ extension AccountListViewModel: CollectionViewModel {
         switch item.kind {
         case .account:
             let navigationService = accountListService.navigationService
-            let accountStatusesService: AccountStatusesService
+            let profileService: ProfileService
 
             if let account = accounts[item.id] {
-                accountStatusesService = navigationService.accountStatusesService(account: account)
+                profileService = navigationService.profileService(account: account)
             } else {
-                accountStatusesService = navigationService.accountStatusesService(id: item.id)
+                profileService = navigationService.profileService(id: item.id)
             }
 
-            navigationEventsSubject.send(
-                .collectionNavigation(
-                    AccountStatusesViewModel(
-                        accountStatusesService: accountStatusesService)))
+            navigationEventsSubject.send(.collectionNavigation(ProfileViewModel(profileService: profileService)))
         default:
             break
         }

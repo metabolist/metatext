@@ -3,7 +3,7 @@
 import Foundation
 import ViewModels
 
-extension AccountStatusCollection {
+extension ProfileCollection {
     var title: String {
         switch self {
         case .statuses:

@@ -102,7 +102,7 @@ public extension ContentDatabase {
     func insert(
         statuses: [Status],
         accountID: String,
-        collection: AccountStatusCollection) -> AnyPublisher<Never, Error> {
+        collection: ProfileCollection) -> AnyPublisher<Never, Error> {
         databaseQueue.writePublisher {
             for status in statuses {
                 try status.save($0)
@@ -202,7 +202,7 @@ public extension ContentDatabase {
 
     func statusesObservation(
         accountID: String,
-        collection: AccountStatusCollection) -> AnyPublisher<[[Status]], Error> {
+        collection: ProfileCollection) -> AnyPublisher<[[Status]], Error> {
         ValueObservation.tracking { db -> [[StatusResult]] in
             let statuses = try StatusRecord.filter(
                 AccountStatusJoin

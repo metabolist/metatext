@@ -18,7 +18,7 @@
 		D0625E5F250F0CFF00502611 /* StatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0625E5E250F0CFF00502611 /* StatusView.swift */; };
 		D06B492324D4611300642749 /* KingfisherSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = D06B492224D4611300642749 /* KingfisherSwiftUI */; };
 		D0B32F50250B373600311912 /* RegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B32F4F250B373600311912 /* RegistrationView.swift */; };
-		D0B5FE9B251583DB00478838 /* AccountStatusCollection+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B5FE9A251583DB00478838 /* AccountStatusCollection+Extensions.swift */; };
+		D0B5FE9B251583DB00478838 /* ProfileCollection+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B5FE9A251583DB00478838 /* ProfileCollection+Extensions.swift */; };
 		D0B7434925100DBB00C13DB6 /* StatusView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D0B7434825100DBB00C13DB6 /* StatusView.xib */; };
 		D0BEB1F324F8EE8C001B0F04 /* AttachmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB1F224F8EE8C001B0F04 /* AttachmentView.swift */; };
 		D0BEB1F724F9A84B001B0F04 /* LoadingTableFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB1F624F9A84B001B0F04 /* LoadingTableFooterView.swift */; };
@@ -106,7 +106,7 @@
 		D085C3BB25008DEC008A6C5E /* DB */ = {isa = PBXFileReference; lastKnownFileType = folder; path = DB; sourceTree = "<group>"; };
 		D0AD03552505814D0085A466 /* Base16 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Base16; sourceTree = "<group>"; };
 		D0B32F4F250B373600311912 /* RegistrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationView.swift; sourceTree = "<group>"; };
-		D0B5FE9A251583DB00478838 /* AccountStatusCollection+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AccountStatusCollection+Extensions.swift"; sourceTree = "<group>"; };
+		D0B5FE9A251583DB00478838 /* ProfileCollection+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileCollection+Extensions.swift"; sourceTree = "<group>"; };
 		D0B7434825100DBB00C13DB6 /* StatusView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StatusView.xib; sourceTree = "<group>"; };
 		D0BDF66524FD7A6400C7FA1C /* ServiceLayer */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ServiceLayer; sourceTree = "<group>"; };
 		D0BEB1F224F8EE8C001B0F04 /* AttachmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentView.swift; sourceTree = "<group>"; };
@@ -326,7 +326,7 @@
 		D0C7D46824F76169001EBDBB /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				D0B5FE9A251583DB00478838 /* AccountStatusCollection+Extensions.swift */,
+				D0B5FE9A251583DB00478838 /* ProfileCollection+Extensions.swift */,
 				D01C6FAB252024BD003D0300 /* Array+Extensions.swift */,
 				D0F0B135251AA12700942152 /* CollectionItemKind+Extensions.swift */,
 				D0C7D46E24F76169001EBDBB /* KingfisherOptionsInfo+Extensions.swift */,
@@ -533,7 +533,7 @@
 				D0625E5F250F0CFF00502611 /* StatusView.swift in Sources */,
 				D0625E59250F092900502611 /* StatusListCell.swift in Sources */,
 				D0C7D49D24F7616A001EBDBB /* PostingReadingPreferencesView.swift in Sources */,
-				D0B5FE9B251583DB00478838 /* AccountStatusCollection+Extensions.swift in Sources */,
+				D0B5FE9B251583DB00478838 /* ProfileCollection+Extensions.swift in Sources */,
 				D0C7D49E24F7616A001EBDBB /* SecondaryNavigationView.swift in Sources */,
 				D0C7D4DA24F7616A001EBDBB /* View+Extensions.swift in Sources */,
 				D0C7D4D524F7616A001EBDBB /* String+Extensions.swift in Sources */,

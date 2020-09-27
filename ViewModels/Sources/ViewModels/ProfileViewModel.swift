@@ -5,24 +5,24 @@ import Foundation
 import Mastodon
 import ServiceLayer
 
-public class AccountStatusesViewModel: StatusListViewModel {
+public class ProfileViewModel: StatusListViewModel {
     @Published public private(set) var accountViewModel: AccountViewModel?
-    @Published public var collection = AccountStatusCollection.statuses
-    private let accountStatusesService: AccountStatusesService
+    @Published public var collection = ProfileCollection.statuses
+    private let profileService: ProfileService
     private var cancellables = Set<AnyCancellable>()
 
-    init(accountStatusesService: AccountStatusesService) {
-        self.accountStatusesService = accountStatusesService
+    init(profileService: ProfileService) {
+        self.profileService = profileService
 
-        let collectionSubject = CurrentValueSubject<AccountStatusCollection, Never>(.statuses)
+        let collectionSubject = CurrentValueSubject<ProfileCollection, Never>(.statuses)
 
         super.init(
-            statusListService: accountStatusesService.statusListService(
+            statusListService: profileService.statusListService(
                 collectionPublisher: collectionSubject))
 
         $collection.sink(receiveValue: collectionSubject.send).store(in: &cancellables)
 
-        accountStatusesService.accountService
+        profileService.accountService
             .map(AccountViewModel.init(accountService:))
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$accountViewModel)
@@ -53,7 +53,7 @@ public class AccountStatusesViewModel: StatusListViewModel {
 
     public override func request(maxID: String? = nil, minID: String? = nil) {
         if case .statuses = collection, maxID == nil {
-            accountStatusesService.fetchPinnedStatuses()
+            profileService.fetchPinnedStatuses()
                 .assignErrorsToAlertItem(to: \.alertItem, on: self)
                 .sink { _ in }
                 .store(in: &cancellables)
@@ -67,9 +67,9 @@ public class AccountStatusesViewModel: StatusListViewModel {
     }
 }
 
-public extension AccountStatusesViewModel {
+public extension ProfileViewModel {
     func fetchAccount() {
-        accountStatusesService.fetchAccount()
+        profileService.fetchAccount()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .sink { _ in }
             .store(in: &cancellables)

@@ -81,7 +81,7 @@ extension StatusListService {
 
     init(
         accountID: String,
-        collection: CurrentValueSubject<AccountStatusCollection, Never>,
+        collection: CurrentValueSubject<ProfileCollection, Never>,
         mastodonAPIClient: MastodonAPIClient,
         contentDatabase: ContentDatabase) {
         let nextPageMaxIDsSubject = PassthroughSubject<String?, Never>()

@@ -118,8 +118,8 @@ public extension StatusViewModel {
     func accountSelected() {
         eventsSubject.send(
             Just(CollectionItemEvent.navigation(
-                    .accountStatuses(
-                        statusService.navigationService.accountStatusesService(
+                    .profile(
+                        statusService.navigationService.profileService(
                             account: statusService.status.displayStatus.account))))
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher())

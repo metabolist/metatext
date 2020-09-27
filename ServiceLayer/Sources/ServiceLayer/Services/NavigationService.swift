@@ -9,7 +9,7 @@ import MastodonAPI
 public enum Navigation {
     case url(URL)
     case statusList(StatusListService)
-    case accountStatuses(AccountStatusesService)
+    case profile(ProfileService)
     case webfingerStart
     case webfingerEnd
 }
@@ -37,7 +37,7 @@ public extension NavigationService {
                         contentDatabase: contentDatabase)))
                 .eraseToAnyPublisher()
         } else if let accountID = accountID(url: url) {
-            return Just(.accountStatuses(accountStatusesService(id: accountID))).eraseToAnyPublisher()
+            return Just(.profile(profileService(id: accountID))).eraseToAnyPublisher()
         } else if mastodonAPIClient.instanceURL.host == url.host, let statusID = url.statusID {
             return Just(
                 .statusList(
@@ -59,12 +59,12 @@ public extension NavigationService {
         StatusListService(statusID: id, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }
 
-    func accountStatusesService(id: String) -> AccountStatusesService {
-        AccountStatusesService(id: id, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+    func profileService(id: String) -> ProfileService {
+        ProfileService(id: id, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }
 
-    func accountStatusesService(account: Account) -> AccountStatusesService {
-        AccountStatusesService(account: account, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+    func profileService(account: Account) -> ProfileService {
+        ProfileService(account: account, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }
 
     func statusService(status: Status) -> StatusService {
@@ -114,7 +114,7 @@ private extension NavigationService {
                             mastodonAPIClient: mastodonAPIClient,
                             contentDatabase: contentDatabase))
                 } else if let account = results.accounts.first {
-                    return .accountStatuses(accountStatusesService(account: account))
+                    return .profile(profileService(account: account))
                 } else if let status = results.statuses.first {
                     return .statusList(
                         StatusListService(

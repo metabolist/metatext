@@ -160,7 +160,7 @@ private extension TableViewController {
             }
             .store(in: &cancellables)
 
-        if let accountsStatusesViewModel = viewModel as? AccountStatusesViewModel {
+        if let accountsStatusesViewModel = viewModel as? ProfileViewModel {
             // Initial size is to avoid unsatisfiable constraint warning
             let accountHeaderView = AccountHeaderView(
                 frame: .init(

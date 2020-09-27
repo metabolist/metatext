@@ -9,7 +9,7 @@ class AccountHeaderView: UIView {
     let noteTextView = TouchFallthroughTextView()
     let segmentedControl = UISegmentedControl()
 
-    var viewModel: AccountStatusesViewModel? {
+    var viewModel: ProfileViewModel? {
         didSet {
             if let accountViewModel = viewModel?.accountViewModel {
                 headerImageView.kf.setImage(with: accountViewModel.headerURL)
@@ -75,7 +75,7 @@ private extension AccountHeaderView {
         noteTextView.delegate = self
         baseStackView.addArrangedSubview(noteTextView)
 
-        for (index, collection) in AccountStatusCollection.allCases.enumerated() {
+        for (index, collection) in ProfileCollection.allCases.enumerated() {
             segmentedControl.insertSegment(
                 action: UIAction(title: collection.title) { [weak self] _ in
                     self?.viewModel?.collection = collection

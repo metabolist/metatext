@@ -6,7 +6,7 @@ import Foundation
 import Mastodon
 import MastodonAPI
 
-public struct AccountStatusesService {
+public struct ProfileService {
     public let accountService: AnyPublisher<AccountService, Error>
 
     private let accountID: String
@@ -50,9 +50,9 @@ public struct AccountStatusesService {
     }
 }
 
-public extension AccountStatusesService {
+public extension ProfileService {
     func statusListService(
-        collectionPublisher: CurrentValueSubject<AccountStatusCollection, Never>) -> StatusListService {
+        collectionPublisher: CurrentValueSubject<ProfileCollection, Never>) -> StatusListService {
         StatusListService(
             accountID: accountID,
             collection: collectionPublisher,
