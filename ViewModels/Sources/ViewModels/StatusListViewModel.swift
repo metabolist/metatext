@@ -41,6 +41,8 @@ public class StatusListViewModel: ObservableObject {
             .store(in: &cancellables)
     }
 
+    public var collectionItems: AnyPublisher<[[CollectionItem]], Never> { $items.eraseToAnyPublisher() }
+
     public var navigationEvents: AnyPublisher<NavigationEvent, Never> { navigationEventsSubject.eraseToAnyPublisher() }
 
     public var title: AnyPublisher<String?, Never> { Just(statusListService.title).eraseToAnyPublisher() }
@@ -55,13 +57,9 @@ public class StatusListViewModel: ObservableObject {
             .sink { _ in }
             .store(in: &cancellables)
     }
-
-    func isPinned(status: Status) -> Bool { false }
 }
 
 extension StatusListViewModel: CollectionViewModel {
-    public var collectionItems: AnyPublisher<[[CollectionItem]], Never> { $items.eraseToAnyPublisher() }
-
     public var alertItems: AnyPublisher<AlertItem, Never> { $alertItem.compactMap { $0 }.eraseToAnyPublisher() }
 
     public var loading: AnyPublisher<Bool, Never> { loadingSubject.eraseToAnyPublisher() }
@@ -93,7 +91,7 @@ extension StatusListViewModel: CollectionViewModel {
     public func viewModel(item: CollectionItem) -> Any? {
         switch item.kind {
         case .status:
-            return statusViewModel(id: item.id)
+            return statusViewModel(item: item)
         default:
             return nil
         }
@@ -111,8 +109,8 @@ private extension StatusListViewModel {
 
     var contextParentID: String? { statusListService.contextParentID }
 
-    func statusViewModel(id: String) -> StatusViewModel? {
-        guard let status = statuses[id] else { return nil }
+    func statusViewModel(item: CollectionItem) -> StatusViewModel? {
+        guard let status = statuses[item.id] else { return nil }
 
         var statusViewModel: StatusViewModel
 
@@ -136,7 +134,7 @@ private extension StatusListViewModel {
         }
 
         statusViewModel.isContextParent = status.id == statusListService.contextParentID
-        statusViewModel.isPinned = isPinned(status: status)
+        statusViewModel.isPinned = item.info[.pinned] != nil
         statusViewModel.isReplyInContext = isReplyInContext(status: status)
         statusViewModel.hasReplyFollowing = hasReplyFollowing(status: status)
 

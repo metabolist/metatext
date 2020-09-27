@@ -28,6 +28,18 @@ public class AccountStatusesViewModel: StatusListViewModel {
             .assign(to: &$accountViewModel)
     }
 
+    public override var collectionItems: AnyPublisher<[[CollectionItem]], Never> {
+        // The pinned key is added to the info of collection items in the first section
+        // so a diffable data source can potentially render it in both sections
+        super.collectionItems
+            .map {
+                $0.enumerated().map {
+                    $0 == 0 ? $1.map { .init(id: $0.id, kind: $0.kind, info: [.pinned: true]) } : $1
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+
     public override var navigationEvents: AnyPublisher<NavigationEvent, Never> {
         $accountViewModel.compactMap { $0 }
             .flatMap(\.events)
@@ -48,10 +60,6 @@ public class AccountStatusesViewModel: StatusListViewModel {
         }
 
         super.request(maxID: maxID, minID: minID)
-    }
-
-    override func isPinned(status: Status) -> Bool {
-        collection == .statuses && items.first?.contains(CollectionItem(id: status.id, kind: .status)) ?? false
     }
 
     public override var title: AnyPublisher<String?, Never> {
