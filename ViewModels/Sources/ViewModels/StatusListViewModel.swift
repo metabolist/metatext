@@ -160,6 +160,7 @@ private extension StatusListViewModel {
 
     func isReplyInContext(status: Status) -> Bool {
         guard
+            let contextParentID = contextParentID,
             let index = flatStatusIDs.firstIndex(where: { $0 == status.id }),
             index > 0
         else { return false }
@@ -171,6 +172,7 @@ private extension StatusListViewModel {
 
     func hasReplyFollowing(status: Status) -> Bool {
         guard
+            let contextParentID = contextParentID,
             let index = flatStatusIDs.firstIndex(where: { $0 == status.id }),
             flatStatusIDs.count > index + 1,
             let nextStatus = statuses[flatStatusIDs[index + 1]]
