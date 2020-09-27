@@ -22,7 +22,7 @@ public class AccountStatusesViewModel: StatusListViewModel {
 
         $collection.sink(receiveValue: collectionSubject.send).store(in: &cancellables)
 
-        accountStatusesService.accountService()
+        accountStatusesService.accountService
             .map(AccountViewModel.init(accountService:))
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$accountViewModel)

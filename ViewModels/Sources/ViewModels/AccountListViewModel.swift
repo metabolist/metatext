@@ -65,12 +65,19 @@ extension AccountListViewModel: CollectionViewModel {
     public func itemSelected(_ item: CollectionItem) {
         switch item.kind {
         case .account:
+            let navigationService = accountListService.navigationService
+            let accountStatusesService: AccountStatusesService
+
+            if let account = accounts[item.id] {
+                accountStatusesService = navigationService.accountStatusesService(account: account)
+            } else {
+                accountStatusesService = navigationService.accountStatusesService(id: item.id)
+            }
+
             navigationEventsSubject.send(
                 .collectionNavigation(
                     AccountStatusesViewModel(
-                        accountStatusesService: accountListService
-                            .navigationService
-                            .accountStatusesService(id: item.id))))
+                        accountStatusesService: accountStatusesService)))
         default:
             break
         }

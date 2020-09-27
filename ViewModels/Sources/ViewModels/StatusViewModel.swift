@@ -120,7 +120,7 @@ public extension StatusViewModel {
             Just(CollectionItemEvent.navigation(
                     .accountStatuses(
                         statusService.navigationService.accountStatusesService(
-                            id: statusService.status.displayStatus.account.id))))
+                            account: statusService.status.displayStatus.account))))
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher())
     }

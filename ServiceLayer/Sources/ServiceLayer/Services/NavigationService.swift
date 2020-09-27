@@ -63,6 +63,10 @@ public extension NavigationService {
         AccountStatusesService(id: id, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }
 
+    func accountStatusesService(account: Account) -> AccountStatusesService {
+        AccountStatusesService(account: account, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+    }
+
     func statusService(status: Status) -> StatusService {
         StatusService(status: status, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }
@@ -110,7 +114,7 @@ private extension NavigationService {
                             mastodonAPIClient: mastodonAPIClient,
                             contentDatabase: contentDatabase))
                 } else if let account = results.accounts.first {
-                    return .accountStatuses(accountStatusesService(id: account.id))
+                    return .accountStatuses(accountStatusesService(account: account))
                 } else if let status = results.statuses.first {
                     return .statusList(
                         StatusListService(
