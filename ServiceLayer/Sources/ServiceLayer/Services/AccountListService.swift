@@ -11,6 +11,7 @@ public struct AccountListService {
     public let nextPageMaxIDs: AnyPublisher<String?, Never>
     public let navigationService: NavigationService
 
+    private let list: AccountList
     private let mastodonAPIClient: MastodonAPIClient
     private let contentDatabase: ContentDatabase
     private let requestClosure: (_ maxID: String?, _ minID: String?) -> AnyPublisher<Never, Error>
@@ -18,27 +19,23 @@ public struct AccountListService {
 
 extension AccountListService {
     init(favoritedByStatusID statusID: String, mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
-        let accountSectionsSubject = PassthroughSubject<[[Account]], Error>()
+        let list = AccountList()
         let nextPageMaxIDsSubject = PassthroughSubject<String?, Never>()
 
         self.init(
-            accountSections: accountSectionsSubject.eraseToAnyPublisher(),
+            accountSections: contentDatabase.accountListObservation(list).map { [$0] }.eraseToAnyPublisher(),
             nextPageMaxIDs: nextPageMaxIDsSubject.eraseToAnyPublisher(),
             navigationService: NavigationService(
                 status: nil,
                 mastodonAPIClient: mastodonAPIClient,
                 contentDatabase: contentDatabase),
+            list: list,
             mastodonAPIClient: mastodonAPIClient,
             contentDatabase: contentDatabase) { maxID, minID -> AnyPublisher<Never, Error> in
             mastodonAPIClient.pagedRequest(
                 AccountsEndpoint.statusFavouritedBy(id: statusID), maxID: maxID, minID: minID)
-                .handleEvents(
-                    receiveOutput: {
-                        nextPageMaxIDsSubject.send($0.info.maxID)
-                        accountSectionsSubject.send([$0.result])
-                    },
-                    receiveCompletion: accountSectionsSubject.send)
-                .flatMap { contentDatabase.insert(accounts: $0.result) }
+                .handleEvents(receiveOutput: { nextPageMaxIDsSubject.send($0.info.maxID) })
+                .flatMap { contentDatabase.append(accounts: $0.result, toList: list) }
                 .eraseToAnyPublisher()
         }
     }

@@ -115,10 +115,15 @@ public extension ContentDatabase {
         .eraseToAnyPublisher()
     }
 
-    func insert(accounts: [Account]) -> AnyPublisher<Never, Error> {
+    func append(accounts: [Account], toList list: AccountList) -> AnyPublisher<Never, Error> {
         databaseWriter.writePublisher {
-            for account in accounts {
+            try list.save($0)
+
+            let count = try list.accounts.fetchCount($0)
+
+            for (index, account) in accounts.enumerated() {
                 try account.save($0)
+                try AccountListJoin(accountId: account.id, listId: list.id, index: count + index).save($0)
             }
         }
         .ignoreOutput()
@@ -271,6 +276,14 @@ public extension ContentDatabase {
             }
             .eraseToAnyPublisher()
     }
+
+    func accountListObservation(_ list: AccountList) -> AnyPublisher<[Account], Error> {
+        ValueObservation.tracking(list.accounts.fetchAll)
+            .removeDuplicates()
+            .publisher(in: databaseWriter)
+            .map { $0.map(Account.init(result:)) }
+            .eraseToAnyPublisher()
+    }
 }
 
 private extension ContentDatabase {
@@ -390,6 +403,20 @@ private extension ContentDatabase {
 
                 t.primaryKey(["accountId", "statusId", "collection"], onConflict: .replace)
             }
+
+            try db.create(table: "accountList") { t in
+                t.column("id", .text).primaryKey(onConflict: .replace)
+            }
+
+            try db.create(table: "accountListJoin") { t in
+                t.column("accountId", .text).indexed().notNull()
+                    .references("accountRecord", column: "id", onDelete: .cascade, onUpdate: .cascade)
+                t.column("listId", .text).indexed().notNull()
+                    .references("accountList", column: "id", onDelete: .cascade, onUpdate: .cascade)
+                t.column("index", .integer).notNull()
+
+                t.primaryKey(["accountId", "listId"], onConflict: .replace)
+            }
         }
 
         return migrator
@@ -401,6 +428,7 @@ private extension ContentDatabase {
             try StatusContextJoin.deleteAll($0)
             try AccountPinnedStatusJoin.deleteAll($0)
             try AccountStatusJoin.deleteAll($0)
+            try AccountList.deleteAll($0)
         } completion: { _, _ in }
     }
 }
