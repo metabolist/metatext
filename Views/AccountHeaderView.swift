@@ -68,6 +68,8 @@ private extension AccountHeaderView {
         addSubview(headerImageView)
         addSubview(baseStackView)
         headerImageView.translatesAutoresizingMaskIntoConstraints = false
+        headerImageView.contentMode = .scaleAspectFill
+        headerImageView.clipsToBounds = true
         baseStackView.translatesAutoresizingMaskIntoConstraints = false
         baseStackView.axis = .vertical
 
@@ -91,7 +93,7 @@ private extension AccountHeaderView {
 
         let headerImageAspectRatioConstraint = headerImageView.heightAnchor.constraint(
             equalTo: headerImageView.widthAnchor,
-            multiplier: 9 / 16)
+            multiplier: 1 / 3)
 
         headerImageAspectRatioConstraint.priority = .init(999)
 
