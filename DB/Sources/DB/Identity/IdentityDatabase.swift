@@ -12,29 +12,29 @@ public enum IdentityDatabaseError: Error {
 }
 
 public struct IdentityDatabase {
-    private let databaseQueue: DatabaseQueue
+    private let databaseWriter: DatabaseWriter
 
     public init(inMemory: Bool, keychain: Keychain.Type) throws {
         if inMemory {
-            databaseQueue = DatabaseQueue()
+            databaseWriter = DatabaseQueue()
         } else {
             let path = try FileManager.default.databaseDirectoryURL(name: Self.name).path
             var configuration = Configuration()
 
             configuration.prepareDatabase {
-                try $0.usePassphrase(try Secrets.databaseKey(identityID: nil, keychain: keychain))
+                try $0.usePassphrase(Secrets.databaseKey(identityID: nil, keychain: keychain))
             }
 
-            databaseQueue = try DatabaseQueue(path: path, configuration: configuration)
+            databaseWriter = try DatabasePool(path: path, configuration: configuration)
         }
 
-        try Self.migrate(databaseQueue)
+        try migrate()
     }
 }
 
 public extension IdentityDatabase {
     func createIdentity(id: UUID, url: URL, authenticated: Bool, pending: Bool) -> AnyPublisher<Never, Error> {
-        databaseQueue.writePublisher(
+        databaseWriter.writePublisher(
             updates: IdentityRecord(
                 id: id,
                 url: url,
@@ -51,13 +51,13 @@ public extension IdentityDatabase {
     }
 
     func deleteIdentity(id: UUID) -> AnyPublisher<Never, Error> {
-        databaseQueue.writePublisher(updates: IdentityRecord.filter(Column("id") == id).deleteAll)
+        databaseWriter.writePublisher(updates: IdentityRecord.filter(Column("id") == id).deleteAll)
             .ignoreOutput()
             .eraseToAnyPublisher()
     }
 
     func updateLastUsedAt(identityID: UUID) -> AnyPublisher<Never, Error> {
-        databaseQueue.writePublisher {
+        databaseWriter.writePublisher {
             try IdentityRecord
                 .filter(Column("id") == identityID)
                 .updateAll($0, Column("lastUsedAt").set(to: Date()))
@@ -67,7 +67,7 @@ public extension IdentityDatabase {
     }
 
     func updateInstance(_ instance: Instance, forIdentityID identityID: UUID) -> AnyPublisher<Never, Error> {
-        databaseQueue.writePublisher {
+        databaseWriter.writePublisher {
             try Identity.Instance(
                 uri: instance.uri,
                 streamingAPI: instance.urls.streamingApi,
@@ -83,7 +83,7 @@ public extension IdentityDatabase {
     }
 
     func updateAccount(_ account: Account, forIdentityID identityID: UUID) -> AnyPublisher<Never, Error> {
-        databaseQueue.writePublisher(
+        databaseWriter.writePublisher(
             updates: Identity.Account(
                 id: account.id,
                 identityID: identityID,
@@ -101,7 +101,7 @@ public extension IdentityDatabase {
     }
 
     func confirmIdentity(id: UUID) -> AnyPublisher<Never, Error> {
-        databaseQueue.writePublisher {
+        databaseWriter.writePublisher {
             try IdentityRecord
                 .filter(Column("id") == id)
                 .updateAll($0, Column("pending").set(to: false))
@@ -112,7 +112,7 @@ public extension IdentityDatabase {
 
     func updatePreferences(_ preferences: Mastodon.Preferences,
                            forIdentityID identityID: UUID) -> AnyPublisher<Never, Error> {
-        databaseQueue.writePublisher {
+        databaseWriter.writePublisher {
             guard let storedPreferences = try IdentityRecord.filter(Column("id") == identityID)
                     .fetchOne($0)?
                     .preferences else {
@@ -127,7 +127,7 @@ public extension IdentityDatabase {
 
     func updatePreferences(_ preferences: Identity.Preferences,
                            forIdentityID identityID: UUID) -> AnyPublisher<Never, Error> {
-        databaseQueue.writePublisher(updates: Self.writePreferences(preferences, id: identityID))
+        databaseWriter.writePublisher(updates: Self.writePreferences(preferences, id: identityID))
             .ignoreOutput()
             .eraseToAnyPublisher()
     }
@@ -135,7 +135,7 @@ public extension IdentityDatabase {
     func updatePushSubscription(alerts: PushSubscription.Alerts,
                                 deviceToken: Data? = nil,
                                 forIdentityID identityID: UUID) -> AnyPublisher<Never, Error> {
-        databaseQueue.writePublisher {
+        databaseWriter.writePublisher {
             let data = try IdentityRecord.databaseJSONEncoder(for: "pushSubscriptionAlerts").encode(alerts)
 
             try IdentityRecord
@@ -159,7 +159,7 @@ public extension IdentityDatabase {
                 .identityResultRequest
                 .fetchOne)
             .removeDuplicates()
-            .publisher(in: databaseQueue, scheduling: immediate ? .immediate : .async(onQueue: .main))
+            .publisher(in: databaseWriter, scheduling: immediate ? .immediate : .async(onQueue: .main))
             .tryMap {
                 guard let result = $0 else { throw IdentityDatabaseError.identityNotFound }
 
@@ -175,7 +175,7 @@ public extension IdentityDatabase {
                 .identityResultRequest
                 .fetchAll)
             .removeDuplicates()
-            .publisher(in: databaseQueue)
+            .publisher(in: databaseWriter)
             .map { $0.map(Identity.init(result:)) }
             .eraseToAnyPublisher()
     }
@@ -189,7 +189,7 @@ public extension IdentityDatabase {
                 .limit(9)
                 .fetchAll)
             .removeDuplicates()
-            .publisher(in: databaseQueue)
+            .publisher(in: databaseWriter)
             .map { $0.map(Identity.init(result:)) }
             .eraseToAnyPublisher()
     }
@@ -197,12 +197,12 @@ public extension IdentityDatabase {
     func immediateMostRecentlyUsedIdentityIDObservation() -> AnyPublisher<UUID?, Error> {
         ValueObservation.tracking(IdentityRecord.select(Column("id")).order(Column("lastUsedAt").desc).fetchOne)
             .removeDuplicates()
-            .publisher(in: databaseQueue, scheduling: .immediate)
+            .publisher(in: databaseWriter, scheduling: .immediate)
             .eraseToAnyPublisher()
     }
 
     func identitiesWithOutdatedDeviceTokens(deviceToken: Data) -> AnyPublisher<[Identity], Error> {
-        databaseQueue.readPublisher(
+        databaseWriter.readPublisher(
             value: IdentityRecord
                 .order(Column("lastUsedAt").desc)
                 .identityResultRequest
@@ -214,9 +214,9 @@ public extension IdentityDatabase {
 }
 
 private extension IdentityDatabase {
-    private static let name = "Identity"
+    static let name = "Identity"
 
-    private static func writePreferences(_ preferences: Identity.Preferences, id: UUID) -> (Database) throws -> Void {
+    static func writePreferences(_ preferences: Identity.Preferences, id: UUID) -> (Database) throws -> Void {
         {
             let data = try IdentityRecord.databaseJSONEncoder(for: "preferences").encode(preferences)
 
@@ -226,7 +226,7 @@ private extension IdentityDatabase {
         }
     }
 
-    private static func migrate(_ writer: DatabaseWriter) throws {
+    func migrate() throws {
         var migrator = DatabaseMigrator()
 
         migrator.registerMigration("createIdentities") { db in
@@ -238,13 +238,12 @@ private extension IdentityDatabase {
             }
 
             try db.create(table: "identityRecord", ifNotExists: true) { t in
-                t.column("id", .text).notNull().primaryKey(onConflict: .replace)
+                t.column("id", .text).indexed().notNull().primaryKey(onConflict: .replace)
                 t.column("url", .text).notNull()
                 t.column("authenticated", .boolean).notNull()
                 t.column("pending", .boolean).notNull()
                 t.column("lastUsedAt", .datetime).notNull()
                 t.column("instanceURI", .text)
-                    .indexed()
                     .references("instance", column: "uri")
                 t.column("preferences", .blob).notNull()
                 t.column("pushSubscriptionAlerts", .blob).notNull()
@@ -253,9 +252,7 @@ private extension IdentityDatabase {
 
             try db.create(table: "account", ifNotExists: true) { t in
                 t.column("id", .text).notNull().primaryKey(onConflict: .replace)
-                t.column("identityID", .text)
-                    .notNull()
-                    .indexed()
+                t.column("identityID", .text).notNull()
                     .references("identityRecord", column: "id", onDelete: .cascade)
                 t.column("username", .text).notNull()
                 t.column("displayName", .text).notNull()
@@ -268,6 +265,6 @@ private extension IdentityDatabase {
             }
         }
 
-        try migrator.migrate(writer)
+        try migrator.migrate(databaseWriter)
     }
 }
