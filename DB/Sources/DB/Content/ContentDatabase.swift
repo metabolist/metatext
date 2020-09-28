@@ -397,11 +397,11 @@ private extension ContentDatabase {
 
     func clean() {
         databaseWriter.asyncWrite {
-            try TimelineStatusJoin.filter(Column("id") != Timeline.home.id).deleteAll($0)
+            try TimelineStatusJoin.filter(Column("timelineId") != Timeline.home.id).deleteAll($0)
+            try StatusContextJoin.deleteAll($0)
+            try AccountPinnedStatusJoin.deleteAll($0)
+            try AccountStatusJoin.deleteAll($0)
         } completion: { _, _ in }
-        databaseWriter.asyncWrite { try StatusContextJoin.deleteAll($0) } completion: { _, _ in }
-        databaseWriter.asyncWrite { try AccountPinnedStatusJoin.deleteAll($0) } completion: { _, _ in }
-        databaseWriter.asyncWrite { try AccountStatusJoin.deleteAll($0) } completion: { _, _ in }
     }
 }
 // swiftlint:enable file_length
