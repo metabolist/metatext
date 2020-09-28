@@ -7,25 +7,26 @@ import Keychain
 import Mastodon
 import Secrets
 
+// swiftlint:disable file_length
 public struct ContentDatabase {
-    private let databaseQueue: DatabaseQueue
+    private let databaseWriter: DatabaseWriter
 
     public init(identityID: UUID, inMemory: Bool, keychain: Keychain.Type) throws {
         if inMemory {
-            databaseQueue = DatabaseQueue()
+            databaseWriter = DatabaseQueue()
         } else {
             let path = try Self.fileURL(identityID: identityID).path
             var configuration = Configuration()
 
             configuration.prepareDatabase {
-                try $0.usePassphrase(try Secrets.databaseKey(identityID: identityID, keychain: keychain))
+                try $0.usePassphrase(Secrets.databaseKey(identityID: identityID, keychain: keychain))
             }
 
-            databaseQueue = try DatabaseQueue(path: path, configuration: configuration)
+            databaseWriter = try DatabasePool(path: path, configuration: configuration)
         }
 
-        try Self.migrate(databaseQueue)
-        try Self.createTemporaryTables(databaseQueue)
+        try migrate()
+        clean()
     }
 }
 
@@ -35,13 +36,13 @@ public extension ContentDatabase {
     }
 
     func insert(status: Status) -> AnyPublisher<Never, Error> {
-        databaseQueue.writePublisher(updates: status.save)
+        databaseWriter.writePublisher(updates: status.save)
         .ignoreOutput()
         .eraseToAnyPublisher()
     }
 
     func insert(statuses: [Status], timeline: Timeline) -> AnyPublisher<Never, Error> {
-        databaseQueue.writePublisher {
+        databaseWriter.writePublisher {
             try timeline.save($0)
 
             for status in statuses {
@@ -55,7 +56,7 @@ public extension ContentDatabase {
     }
 
     func insert(context: Context, parentID: String) -> AnyPublisher<Never, Error> {
-        databaseQueue.writePublisher {
+        databaseWriter.writePublisher {
             for status in context.ancestors + context.descendants {
                 try status.save($0)
             }
@@ -83,7 +84,7 @@ public extension ContentDatabase {
     }
 
     func insert(pinnedStatuses: [Status], accountID: String) -> AnyPublisher<Never, Error> {
-        databaseQueue.writePublisher {
+        databaseWriter.writePublisher {
             for (index, status) in pinnedStatuses.enumerated() {
                 try status.save($0)
 
@@ -103,7 +104,7 @@ public extension ContentDatabase {
         statuses: [Status],
         accountID: String,
         collection: ProfileCollection) -> AnyPublisher<Never, Error> {
-        databaseQueue.writePublisher {
+        databaseWriter.writePublisher {
             for status in statuses {
                 try status.save($0)
 
@@ -115,7 +116,7 @@ public extension ContentDatabase {
     }
 
     func insert(accounts: [Account]) -> AnyPublisher<Never, Error> {
-        databaseQueue.writePublisher {
+        databaseWriter.writePublisher {
             for account in accounts {
                 try account.save($0)
             }
@@ -125,7 +126,7 @@ public extension ContentDatabase {
     }
 
     func setLists(_ lists: [List]) -> AnyPublisher<Never, Error> {
-        databaseQueue.writePublisher {
+        databaseWriter.writePublisher {
             for list in lists {
                 try Timeline.list(list).save($0)
             }
@@ -140,19 +141,19 @@ public extension ContentDatabase {
     }
 
     func createList(_ list: List) -> AnyPublisher<Never, Error> {
-        databaseQueue.writePublisher(updates: Timeline.list(list).save)
+        databaseWriter.writePublisher(updates: Timeline.list(list).save)
             .ignoreOutput()
             .eraseToAnyPublisher()
     }
 
     func deleteList(id: String) -> AnyPublisher<Never, Error> {
-        databaseQueue.writePublisher(updates: Timeline.filter(Column("id") == id).deleteAll)
+        databaseWriter.writePublisher(updates: Timeline.filter(Column("id") == id).deleteAll)
             .ignoreOutput()
             .eraseToAnyPublisher()
     }
 
     func setFilters(_ filters: [Filter]) -> AnyPublisher<Never, Error> {
-        databaseQueue.writePublisher {
+        databaseWriter.writePublisher {
             for filter in filters {
                 try filter.save($0)
             }
@@ -164,13 +165,13 @@ public extension ContentDatabase {
     }
 
     func createFilter(_ filter: Filter) -> AnyPublisher<Never, Error> {
-        databaseQueue.writePublisher(updates: filter.save)
+        databaseWriter.writePublisher(updates: filter.save)
             .ignoreOutput()
             .eraseToAnyPublisher()
     }
 
     func deleteFilter(id: String) -> AnyPublisher<Never, Error> {
-        databaseQueue.writePublisher(updates: Filter.filter(Column("id") == id).deleteAll)
+        databaseWriter.writePublisher(updates: Filter.filter(Column("id") == id).deleteAll)
             .ignoreOutput()
             .eraseToAnyPublisher()
     }
@@ -178,7 +179,7 @@ public extension ContentDatabase {
     func statusesObservation(timeline: Timeline) -> AnyPublisher<[[Status]], Error> {
         ValueObservation.tracking(timeline.statuses.fetchAll)
             .removeDuplicates()
-            .publisher(in: databaseQueue)
+            .publisher(in: databaseWriter)
             .map { [$0.map(Status.init(result:))] }
             .eraseToAnyPublisher()
     }
@@ -195,7 +196,7 @@ public extension ContentDatabase {
             return [ancestors, [parent], descendants]
         }
         .removeDuplicates()
-        .publisher(in: databaseQueue)
+        .publisher(in: databaseWriter)
         .map { $0.map { $0.map(Status.init(result:)) } }
         .eraseToAnyPublisher()
     }
@@ -224,7 +225,7 @@ public extension ContentDatabase {
             }
         }
         .removeDuplicates()
-        .publisher(in: databaseQueue)
+        .publisher(in: databaseWriter)
         .map { $0.map { $0.map(Status.init(result:)) } }
         .eraseToAnyPublisher()
     }
@@ -234,14 +235,14 @@ public extension ContentDatabase {
                                     .order(Column("listTitle").collating(.localizedCaseInsensitiveCompare).asc)
                                     .fetchAll)
             .removeDuplicates()
-            .publisher(in: databaseQueue)
+            .publisher(in: databaseWriter)
             .eraseToAnyPublisher()
     }
 
     func activeFiltersObservation(date: Date, context: Filter.Context? = nil) -> AnyPublisher<[Filter], Error> {
         ValueObservation.tracking(Filter.filter(Column("expiresAt") == nil || Column("expiresAt") > date).fetchAll)
             .removeDuplicates()
-            .publisher(in: databaseQueue)
+            .publisher(in: databaseWriter)
             .map {
                 guard let context = context else { return $0 }
 
@@ -253,14 +254,14 @@ public extension ContentDatabase {
     func expiredFiltersObservation(date: Date) -> AnyPublisher<[Filter], Error> {
         ValueObservation.tracking(Filter.filter(Column("expiresAt") < date).fetchAll)
             .removeDuplicates()
-            .publisher(in: databaseQueue)
+            .publisher(in: databaseWriter)
             .eraseToAnyPublisher()
     }
 
     func accountObservation(id: String) -> AnyPublisher<Account?, Error> {
         ValueObservation.tracking(AccountRecord.filter(Column("id") == id).accountResultRequest.fetchOne)
             .removeDuplicates()
-            .publisher(in: databaseQueue)
+            .publisher(in: databaseWriter)
             .map {
                 if let result = $0 {
                     return Account(result: result)
@@ -277,13 +278,13 @@ private extension ContentDatabase {
         try FileManager.default.databaseDirectoryURL(name: identityID.uuidString)
     }
 
-    // swiftlint:disable function_body_length
-    static func migrate(_ writer: DatabaseWriter) throws {
+    // swiftlint:disable:next function_body_length
+    func migrate() throws {
         var migrator = DatabaseMigrator()
 
         migrator.registerMigration("0.1.0") { db in
             try db.create(table: "accountRecord") { t in
-                t.column("id", .text).notNull().primaryKey(onConflict: .replace)
+                t.column("id", .text).indexed().notNull().primaryKey(onConflict: .replace)
                 t.column("username", .text).notNull()
                 t.column("acct", .text).notNull()
                 t.column("displayName", .text).notNull()
@@ -302,14 +303,14 @@ private extension ContentDatabase {
                 t.column("emojis", .blob).notNull()
                 t.column("bot", .boolean).notNull()
                 t.column("discoverable", .boolean)
-                t.column("movedId", .text).indexed().references("accountRecord", column: "id")
+                t.column("movedId", .text).references("accountRecord", column: "id")
             }
 
             try db.create(table: "statusRecord") { t in
-                t.column("id", .text).notNull().primaryKey(onConflict: .replace)
+                t.column("id", .text).indexed().notNull().primaryKey(onConflict: .replace)
                 t.column("uri", .text).notNull()
                 t.column("createdAt", .datetime).notNull()
-                t.column("accountId", .text).indexed().notNull().references("accountRecord", column: "id")
+                t.column("accountId", .text).notNull().references("accountRecord", column: "id")
                 t.column("content", .text).notNull()
                 t.column("visibility", .text).notNull()
                 t.column("sensitive", .boolean).notNull()
@@ -325,7 +326,7 @@ private extension ContentDatabase {
                 t.column("url", .text)
                 t.column("inReplyToId", .text)
                 t.column("inReplyToAccountId", .text)
-                t.column("reblogId", .text).indexed().references("statusRecord", column: "id")
+                t.column("reblogId", .text).references("statusRecord", column: "id")
                 t.column("poll", .blob)
                 t.column("card", .blob)
                 t.column("language", .text)
@@ -338,63 +339,70 @@ private extension ContentDatabase {
             }
 
             try db.create(table: "timeline") { t in
-                t.column("id", .text).notNull().primaryKey(onConflict: .replace)
-                t.column("listTitle", .text)
+                t.column("id", .text).indexed().notNull().primaryKey(onConflict: .replace)
+                t.column("listTitle", .text).indexed()
             }
 
             try db.create(table: "timelineStatusJoin") { t in
-                t.column("timelineId", .text)
-                    .indexed()
-                    .notNull()
+                t.column("timelineId", .text).indexed().notNull()
                     .references("timeline", column: "id", onDelete: .cascade, onUpdate: .cascade)
-                t.column("statusId", .text)
-                    .indexed()
-                    .notNull()
+                t.column("statusId", .text).indexed().notNull()
                     .references("statusRecord", column: "id", onDelete: .cascade, onUpdate: .cascade)
 
                 t.primaryKey(["timelineId", "statusId"], onConflict: .replace)
             }
 
             try db.create(table: "filter") { t in
-                t.column("id", .text).notNull().primaryKey(onConflict: .replace)
+                t.column("id", .text).indexed().notNull().primaryKey(onConflict: .replace)
                 t.column("phrase", .text).notNull()
                 t.column("context", .blob).notNull()
-                t.column("expiresAt", .date)
+                t.column("expiresAt", .date).indexed()
                 t.column("irreversible", .boolean).notNull()
                 t.column("wholeWord", .boolean).notNull()
             }
-        }
 
-        try migrator.migrate(writer)
-    }
-    // swiftlint:enable function_body_length
-
-    private static func createTemporaryTables(_ writer: DatabaseWriter) throws {
-        try writer.write { db in
-            try db.create(table: "statusContextJoin", temporary: true) { t in
+            try db.create(table: "statusContextJoin") { t in
                 t.column("parentId", .text).indexed().notNull()
+                    .references("statusRecord", column: "id", onDelete: .cascade, onUpdate: .cascade)
                 t.column("statusId", .text).indexed().notNull()
-                t.column("section", .text).notNull()
+                    .references("statusRecord", column: "id", onDelete: .cascade, onUpdate: .cascade)
+                t.column("section", .text).indexed().notNull()
                 t.column("index", .integer).notNull()
 
                 t.primaryKey(["parentId", "statusId"], onConflict: .replace)
             }
 
-            try db.create(table: "accountPinnedStatusJoin", temporary: true) { t in
+            try db.create(table: "accountPinnedStatusJoin") { t in
                 t.column("accountId", .text).indexed().notNull()
+                    .references("accountRecord", column: "id", onDelete: .cascade, onUpdate: .cascade)
                 t.column("statusId", .text).indexed().notNull()
+                    .references("statusRecord", column: "id", onDelete: .cascade, onUpdate: .cascade)
                 t.column("index", .integer).notNull()
 
                 t.primaryKey(["accountId", "statusId"], onConflict: .replace)
             }
 
-            try db.create(table: "accountStatusJoin", temporary: true) { t in
+            try db.create(table: "accountStatusJoin") { t in
                 t.column("accountId", .text).indexed().notNull()
+                    .references("accountRecord", column: "id", onDelete: .cascade, onUpdate: .cascade)
                 t.column("statusId", .text).indexed().notNull()
-                t.column("collection", .text).notNull()
+                    .references("statusRecord", column: "id", onDelete: .cascade, onUpdate: .cascade)
+                t.column("collection", .text).indexed().notNull()
 
                 t.primaryKey(["accountId", "statusId", "collection"], onConflict: .replace)
             }
         }
+
+        try migrator.migrate(databaseWriter)
+    }
+
+    func clean() {
+        databaseWriter.asyncWrite {
+            try TimelineStatusJoin.filter(Column("id") != Timeline.home.id).deleteAll($0)
+        } completion: { _, _ in }
+        databaseWriter.asyncWrite { try StatusContextJoin.deleteAll($0) } completion: { _, _ in }
+        databaseWriter.asyncWrite { try AccountPinnedStatusJoin.deleteAll($0) } completion: { _, _ in }
+        databaseWriter.asyncWrite { try AccountStatusJoin.deleteAll($0) } completion: { _, _ in }
     }
 }
+// swiftlint:enable file_length
