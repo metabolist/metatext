@@ -25,7 +25,7 @@ public struct ContentDatabase {
             databaseWriter = try DatabasePool(path: path, configuration: configuration)
         }
 
-        try migrate()
+        try migrator.migrate(databaseWriter)
         clean()
     }
 }
@@ -278,8 +278,7 @@ private extension ContentDatabase {
         try FileManager.default.databaseDirectoryURL(name: identityID.uuidString)
     }
 
-    // swiftlint:disable:next function_body_length
-    func migrate() throws {
+    private var migrator: DatabaseMigrator {
         var migrator = DatabaseMigrator()
 
         migrator.registerMigration("0.1.0") { db in
@@ -393,7 +392,7 @@ private extension ContentDatabase {
             }
         }
 
-        try migrator.migrate(databaseWriter)
+        return migrator
     }
 
     func clean() {

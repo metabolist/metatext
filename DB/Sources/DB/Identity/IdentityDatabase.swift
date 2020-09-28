@@ -28,7 +28,7 @@ public struct IdentityDatabase {
             databaseWriter = try DatabasePool(path: path, configuration: configuration)
         }
 
-        try migrate()
+        try migrator.migrate(databaseWriter)
     }
 }
 
@@ -214,7 +214,7 @@ public extension IdentityDatabase {
 }
 
 private extension IdentityDatabase {
-    static let name = "Identity"
+    static let name = "identity"
 
     static func writePreferences(_ preferences: Identity.Preferences, id: UUID) -> (Database) throws -> Void {
         {
@@ -226,10 +226,10 @@ private extension IdentityDatabase {
         }
     }
 
-    func migrate() throws {
+    private var migrator: DatabaseMigrator {
         var migrator = DatabaseMigrator()
 
-        migrator.registerMigration("createIdentities") { db in
+        migrator.registerMigration("0.1.0") { db in
             try db.create(table: "instance", ifNotExists: true) { t in
                 t.column("uri", .text).notNull().primaryKey(onConflict: .replace)
                 t.column("streamingAPI", .text)
@@ -265,6 +265,6 @@ private extension IdentityDatabase {
             }
         }
 
-        try migrator.migrate(databaseWriter)
+        return migrator
     }
 }
