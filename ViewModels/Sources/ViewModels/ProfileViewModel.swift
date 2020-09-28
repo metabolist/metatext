@@ -33,8 +33,12 @@ public class ProfileViewModel: StatusListViewModel {
         // so a diffable data source can potentially render it in both sections
         super.collectionItems
             .map {
-                $0.enumerated().map {
-                    $0 == 0 ? $1.map { .init(id: $0.id, kind: $0.kind, info: [.pinned: true]) } : $1
+                $0.enumerated().map { [weak self] in
+                    if let self = self, self.collection == .statuses, $0 == 0 {
+                        return $1.map { .init(id: $0.id, kind: $0.kind, info: [.pinned: true]) }
+                    } else {
+                        return $1
+                    }
                 }
             }
             .eraseToAnyPublisher()
