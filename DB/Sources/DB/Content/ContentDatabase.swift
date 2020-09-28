@@ -232,7 +232,7 @@ public extension ContentDatabase {
 
     func listsObservation() -> AnyPublisher<[Timeline], Error> {
         ValueObservation.tracking(Timeline.filter(Column("listTitle") != nil)
-                                    .order(Column("listTitle").collating(.localizedCaseInsensitiveCompare).asc)
+                                    .order(Column("listTitle").asc)
                                     .fetchAll)
             .removeDuplicates()
             .publisher(in: databaseWriter)
@@ -340,7 +340,7 @@ private extension ContentDatabase {
 
             try db.create(table: "timeline") { t in
                 t.column("id", .text).indexed().notNull().primaryKey(onConflict: .replace)
-                t.column("listTitle", .text).indexed()
+                t.column("listTitle", .text).indexed().collate(.localizedCaseInsensitiveCompare)
             }
 
             try db.create(table: "timelineStatusJoin") { t in
