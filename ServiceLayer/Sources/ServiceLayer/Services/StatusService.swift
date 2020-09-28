@@ -32,9 +32,16 @@ public extension StatusService {
             .eraseToAnyPublisher()
     }
 
+    func rebloggedByService() -> AccountListService {
+        AccountListService(
+            endpoint: .statusRebloggedBy(id: status.id),
+            mastodonAPIClient: mastodonAPIClient,
+            contentDatabase: contentDatabase)
+    }
+
     func favoritedByService() -> AccountListService {
         AccountListService(
-            favoritedByStatusID: status.id,
+            endpoint: .statusFavouritedBy(id: status.id),
             mastodonAPIClient: mastodonAPIClient,
             contentDatabase: contentDatabase)
     }

@@ -159,6 +159,10 @@ private extension StatusView {
             UIAction { [weak self] _ in self?.statusConfiguration.viewModel.shareStatus() },
             for: .touchUpInside)
 
+        contextParentRebloggedByButton.addAction(
+            UIAction { [weak self] _ in self?.statusConfiguration.viewModel.rebloggedBySelected() },
+            for: .touchUpInside)
+
         contextParentFavoritedByButton.addAction(
             UIAction { [weak self] _ in self?.statusConfiguration.viewModel.favoritedBySelected() },
             for: .touchUpInside)

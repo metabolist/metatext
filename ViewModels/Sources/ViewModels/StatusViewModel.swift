@@ -125,6 +125,15 @@ public extension StatusViewModel {
                 .eraseToAnyPublisher())
     }
 
+    func rebloggedBySelected() {
+        eventsSubject.send(
+            Just(CollectionItemEvent.accountListNavigation(
+                    AccountListViewModel(
+                        accountListService: statusService.rebloggedByService())))
+                .setFailureType(to: Error.self)
+                .eraseToAnyPublisher())
+    }
+
     func favoritedBySelected() {
         eventsSubject.send(
             Just(CollectionItemEvent.accountListNavigation(

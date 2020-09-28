@@ -17,8 +17,14 @@ public struct AccountListService {
     private let requestClosure: (_ maxID: String?, _ minID: String?) -> AnyPublisher<Never, Error>
 }
 
+public extension AccountListService {
+    func request(maxID: String?, minID: String?) -> AnyPublisher<Never, Error> {
+        requestClosure(maxID, minID)
+    }
+}
+
 extension AccountListService {
-    init(favoritedByStatusID statusID: String, mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
+    init(endpoint: AccountsEndpoint, mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
         let list = AccountList()
         let nextPageMaxIDsSubject = PassthroughSubject<String?, Never>()
 
@@ -32,17 +38,10 @@ extension AccountListService {
             list: list,
             mastodonAPIClient: mastodonAPIClient,
             contentDatabase: contentDatabase) { maxID, minID -> AnyPublisher<Never, Error> in
-            mastodonAPIClient.pagedRequest(
-                AccountsEndpoint.statusFavouritedBy(id: statusID), maxID: maxID, minID: minID)
+            mastodonAPIClient.pagedRequest(endpoint, maxID: maxID, minID: minID)
                 .handleEvents(receiveOutput: { nextPageMaxIDsSubject.send($0.info.maxID) })
                 .flatMap { contentDatabase.append(accounts: $0.result, toList: list) }
                 .eraseToAnyPublisher()
         }
-    }
-}
-
-public extension AccountListService {
-    func request(maxID: String?, minID: String?) -> AnyPublisher<Never, Error> {
-        requestClosure(maxID, minID)
     }
 }
