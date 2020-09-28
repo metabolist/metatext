@@ -283,7 +283,7 @@ private extension ContentDatabase {
 
         migrator.registerMigration("0.1.0") { db in
             try db.create(table: "accountRecord") { t in
-                t.column("id", .text).indexed().notNull().primaryKey(onConflict: .replace)
+                t.column("id", .text).primaryKey(onConflict: .replace)
                 t.column("username", .text).notNull()
                 t.column("acct", .text).notNull()
                 t.column("displayName", .text).notNull()
@@ -306,7 +306,7 @@ private extension ContentDatabase {
             }
 
             try db.create(table: "statusRecord") { t in
-                t.column("id", .text).indexed().notNull().primaryKey(onConflict: .replace)
+                t.column("id", .text).primaryKey(onConflict: .replace)
                 t.column("uri", .text).notNull()
                 t.column("createdAt", .datetime).notNull()
                 t.column("accountId", .text).notNull().references("accountRecord", column: "id")
@@ -338,7 +338,7 @@ private extension ContentDatabase {
             }
 
             try db.create(table: "timeline") { t in
-                t.column("id", .text).indexed().notNull().primaryKey(onConflict: .replace)
+                t.column("id", .text).primaryKey(onConflict: .replace)
                 t.column("listTitle", .text).indexed().collate(.localizedCaseInsensitiveCompare)
             }
 
@@ -352,7 +352,7 @@ private extension ContentDatabase {
             }
 
             try db.create(table: "filter") { t in
-                t.column("id", .text).indexed().notNull().primaryKey(onConflict: .replace)
+                t.column("id", .text).primaryKey(onConflict: .replace)
                 t.column("phrase", .text).notNull()
                 t.column("context", .blob).notNull()
                 t.column("expiresAt", .date).indexed()

@@ -231,14 +231,14 @@ private extension IdentityDatabase {
 
         migrator.registerMigration("0.1.0") { db in
             try db.create(table: "instance", ifNotExists: true) { t in
-                t.column("uri", .text).notNull().primaryKey(onConflict: .replace)
+                t.column("uri", .text).primaryKey(onConflict: .replace)
                 t.column("streamingAPI", .text)
                 t.column("title", .text)
                 t.column("thumbnail", .text)
             }
 
             try db.create(table: "identityRecord", ifNotExists: true) { t in
-                t.column("id", .text).indexed().notNull().primaryKey(onConflict: .replace)
+                t.column("id", .text).primaryKey(onConflict: .replace)
                 t.column("url", .text).notNull()
                 t.column("authenticated", .boolean).notNull()
                 t.column("pending", .boolean).notNull()
@@ -251,7 +251,7 @@ private extension IdentityDatabase {
             }
 
             try db.create(table: "account", ifNotExists: true) { t in
-                t.column("id", .text).notNull().primaryKey(onConflict: .replace)
+                t.column("id", .text).primaryKey(onConflict: .replace)
                 t.column("identityID", .text).notNull()
                     .references("identityRecord", column: "id", onDelete: .cascade)
                 t.column("username", .text).notNull()
