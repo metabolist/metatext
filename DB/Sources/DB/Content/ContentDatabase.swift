@@ -26,7 +26,7 @@ public struct ContentDatabase {
         }
 
         try migrator.migrate(databaseWriter)
-        clean()
+        try clean()
     }
 }
 
@@ -425,14 +425,13 @@ private extension ContentDatabase {
         return migrator
     }
 
-    func clean() {
-        databaseWriter.asyncWrite {
-            try TimelineStatusJoin.filter(TimelineStatusJoin.Columns.timelineId != Timeline.home.id).deleteAll($0)
-            try StatusContextJoin.deleteAll($0)
-            try AccountPinnedStatusJoin.deleteAll($0)
-            try AccountStatusJoin.deleteAll($0)
+    func clean() throws {
+        try databaseWriter.write {
+            try Timeline.deleteAll($0)
+            try StatusRecord.deleteAll($0)
+            try AccountRecord.deleteAll($0)
             try AccountList.deleteAll($0)
-        } completion: { _, _ in }
+        }
     }
 }
 // swiftlint:enable file_length
