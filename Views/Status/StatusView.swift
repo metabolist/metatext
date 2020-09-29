@@ -169,6 +169,17 @@ private extension StatusView {
             UIAction { [weak self] _ in self?.statusConfiguration.viewModel.favoritedBySelected() },
             for: .touchUpInside)
 
+        applicationButton.addAction(
+            UIAction { [weak self] _ in
+                guard
+                    let viewModel = self?.statusConfiguration.viewModel,
+                    let url = viewModel.applicationURL
+                else { return }
+
+                viewModel.urlSelected(url)
+            },
+            for: .touchUpInside)
+
         applyStatusConfiguration()
     }
 
