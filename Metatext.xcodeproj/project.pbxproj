@@ -53,6 +53,8 @@
 		D0E2C1D124FD97F000854680 /* ViewModels in Frameworks */ = {isa = PBXBuildFile; productRef = D0E2C1D024FD97F000854680 /* ViewModels */; };
 		D0E5361C24E3EB4D00FB1CE1 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E5361B24E3EB4D00FB1CE1 /* NotificationService.swift */; };
 		D0E5362024E3EB4D00FB1CE1 /* Notification Service Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D0E5361924E3EB4D00FB1CE1 /* Notification Service Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D0EA59402522AC8700804347 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EA593F2522AC8700804347 /* CardView.swift */; };
+		D0EA59482522B8B600804347 /* ViewConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EA59472522B8B600804347 /* ViewConstants.swift */; };
 		D0F0B10E251A868200942152 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F0B10D251A868200942152 /* AccountView.swift */; };
 		D0F0B113251A86A000942152 /* AccountContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F0B112251A86A000942152 /* AccountContentConfiguration.swift */; };
 		D0F0B126251A90F400942152 /* AccountListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F0B125251A90F400942152 /* AccountListCell.swift */; };
@@ -150,6 +152,8 @@
 		D0E5361B24E3EB4D00FB1CE1 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		D0E5361D24E3EB4D00FB1CE1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D0E5362824E4A06B00FB1CE1 /* Notification Service Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Notification Service Extension.entitlements"; sourceTree = "<group>"; };
+		D0EA593F2522AC8700804347 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
+		D0EA59472522B8B600804347 /* ViewConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewConstants.swift; sourceTree = "<group>"; };
 		D0F0B10D251A868200942152 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
 		D0F0B112251A86A000942152 /* AccountContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountContentConfiguration.swift; sourceTree = "<group>"; };
 		D0F0B125251A90F400942152 /* AccountListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountListCell.swift; sourceTree = "<group>"; };
@@ -236,6 +240,7 @@
 		D0625E55250F086B00502611 /* Status */ = {
 			isa = PBXGroup;
 			children = (
+				D0EA593F2522AC8700804347 /* CardView.swift */,
 				D0625E5C250F0B5C00502611 /* StatusContentConfiguration.swift */,
 				D0625E58250F092900502611 /* StatusListCell.swift */,
 				D0625E5E250F0CFF00502611 /* StatusView.swift */,
@@ -277,7 +282,6 @@
 				D0F0B10D251A868200942152 /* AccountView.swift */,
 				D0C7D42424F76169001EBDBB /* AddIdentityView.swift */,
 				D01F41E024F8885900D55A2D /* Attachments */,
-				D0C7D42524F76169001EBDBB /* TableView.swift */,
 				D0C7D42324F76169001EBDBB /* CustomEmojiText.swift */,
 				D0BEB21024FA2A90001B0F04 /* EditFilterView.swift */,
 				D0BEB20424FA1107001B0F04 /* FiltersView.swift */,
@@ -292,8 +296,10 @@
 				D02E1F94250B13210071AD56 /* SafariView.swift */,
 				D0C7D42924F76169001EBDBB /* SecondaryNavigationView.swift */,
 				D0625E55250F086B00502611 /* Status */,
+				D0C7D42524F76169001EBDBB /* TableView.swift */,
 				D0C7D42E24F76169001EBDBB /* TabNavigationView.swift */,
 				D01F41D624F880C400D55A2D /* TouchFallthroughTextView.swift */,
+				D0EA59472522B8B600804347 /* ViewConstants.swift */,
 				D0E1F582251F13EC00D45315 /* WebfingerIndicatorView.swift */,
 			);
 			path = Views;
@@ -545,10 +551,12 @@
 				D06BC5E625202AD90079541D /* ProfileViewController.swift in Sources */,
 				D01C6FAC252024BD003D0300 /* Array+Extensions.swift in Sources */,
 				D0C7D4D924F7616A001EBDBB /* KingfisherOptionsInfo+Extensions.swift in Sources */,
+				D0EA59402522AC8700804347 /* CardView.swift in Sources */,
 				D0F0B10E251A868200942152 /* AccountView.swift in Sources */,
 				D0BEB1FF24F9E5BB001B0F04 /* ListsView.swift in Sources */,
 				D0C7D49724F7616A001EBDBB /* IdentitiesView.swift in Sources */,
 				D01EF22425182B1F00650C6B /* AccountHeaderView.swift in Sources */,
+				D0EA59482522B8B600804347 /* ViewConstants.swift in Sources */,
 				D0C7D49824F7616A001EBDBB /* CustomEmojiText.swift in Sources */,
 				D01F41E424F8889700D55A2D /* AttachmentsView.swift in Sources */,
 				D0BEB21124FA2A91001B0F04 /* EditFilterView.swift in Sources */,

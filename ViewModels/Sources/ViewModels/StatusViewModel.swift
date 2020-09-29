@@ -90,13 +90,13 @@ public extension StatusViewModel {
 
     var sharingURL: URL? { statusService.status.displayStatus.url }
 
-    var cardURL: URL? { statusService.status.displayStatus.card?.url }
-
-    var cardTitle: String? { statusService.status.displayStatus.card?.title }
-
-    var cardDescription: String? { statusService.status.displayStatus.card?.description }
-
-    var cardImageURL: URL? { statusService.status.displayStatus.card?.image }
+    var cardViewModel: CardViewModel? {
+        if let card = statusService.status.displayStatus.card {
+            return CardViewModel(card: card)
+        } else {
+            return nil
+        }
+    }
 
     var canBeReblogged: Bool {
         switch statusService.status.displayStatus.visibility {

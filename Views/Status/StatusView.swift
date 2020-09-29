@@ -20,12 +20,7 @@ class StatusView: UIView {
     @IBOutlet weak var favoriteButton: UIButton!
     @IBOutlet weak var shareButton: UIButton!
     @IBOutlet weak var attachmentsView: AttachmentsView!
-    @IBOutlet weak var cardView: UIView!
-    @IBOutlet weak var cardImageView: UIImageView!
-    @IBOutlet weak var cardTitleLabel: UILabel!
-    @IBOutlet weak var cardDescriptionLabel: UILabel!
-    @IBOutlet weak var cardURLLabel: UILabel!
-    @IBOutlet weak var cardButton: UIButton!
+    @IBOutlet weak var cardView: CardView!
     @IBOutlet weak var sensitiveContentView: UIStackView!
     @IBOutlet weak var hasReplyFollowingView: UIView!
     @IBOutlet weak var inReplyToView: UIView!
@@ -86,7 +81,6 @@ extension StatusView: UIContentView {
 
             avatarImageView.kf.cancelDownloadTask()
             contextParentAvatarImageView.kf.cancelDownloadTask()
-            cardImageView.kf.cancelDownloadTask()
             applyStatusConfiguration()
         }
     }
@@ -135,13 +129,11 @@ private extension StatusView {
 
         avatarImageView.kf.indicatorType = .activity
         contextParentAvatarImageView.kf.indicatorType = .activity
-        cardImageView.kf.indicatorType = .activity
 
         contentTextView.delegate = self
 
         let highlightedButtonBackgroundImage = UIColor(white: 0, alpha: 0.5).image()
 
-        cardButton.setBackgroundImage(highlightedButtonBackgroundImage, for: .highlighted)
         avatarButton.setBackgroundImage(highlightedButtonBackgroundImage, for: .highlighted)
         contextParentAvatarButton.setBackgroundImage(highlightedButtonBackgroundImage, for: .highlighted)
 
@@ -149,6 +141,17 @@ private extension StatusView {
 
         avatarButton.addAction(accountAction, for: .touchUpInside)
         contextParentAvatarButton.addAction(accountAction, for: .touchUpInside)
+
+        cardView.button.addAction(
+            UIAction { [weak self] _ in
+                guard
+                    let viewModel = self?.statusConfiguration.viewModel,
+                    let url = viewModel.cardViewModel?.url
+                else { return }
+
+                viewModel.urlSelected(url)
+            },
+            for: .touchUpInside)
 
         let favoriteAction = UIAction { [weak self] _ in self?.statusConfiguration.viewModel.toggleFavorited() }
 
@@ -287,29 +290,8 @@ private extension StatusView {
         attachmentsView.attachmentViewModels = viewModel.attachmentViewModels
         setNeedsLayout()
 
-        if let cardURL = viewModel.cardURL {
-            cardTitleLabel.text = viewModel.cardTitle
-            cardDescriptionLabel.text = viewModel.cardDescription
-            cardDescriptionLabel.isHidden = cardDescriptionLabel.text == ""
-                || cardDescriptionLabel.text == cardTitleLabel.text
-            if
-                let host = cardURL.host, host.hasPrefix("www."),
-                let withoutWww = cardURL.host?.components(separatedBy: "www.").last {
-                cardURLLabel.text = withoutWww
-            } else {
-                cardURLLabel.text = cardURL.host
-            }
-
-            if let cardImageURL = viewModel.cardImageURL {
-                cardImageView.isHidden = false
-                cardImageView.kf.setImage(with: cardImageURL)
-            } else {
-                cardImageView.isHidden = true
-            }
-            cardView.isHidden = false
-        } else {
-            cardView.isHidden = true
-        }
+        cardView.viewModel = viewModel.cardViewModel
+        cardView.isHidden = viewModel.cardViewModel == nil
 
         sensitiveContentView.isHidden = !viewModel.shouldDisplaySensitiveContent
 
