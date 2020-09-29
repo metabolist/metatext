@@ -81,21 +81,17 @@ extension StatusRecord: FetchableRecord, PersistableRecord {
 }
 
 extension StatusRecord {
-    static let account = belongsTo(AccountRecord.self, key: "account",
-                                   using: ForeignKey([StatusRecord.Columns.accountId]))
+    static let account = belongsTo(AccountRecord.self)
     static let accountMoved = hasOne(AccountRecord.self,
                                      through: Self.account,
-                                     using: AccountRecord.moved,
-                                     key: "accountMoved")
+                                     using: AccountRecord.moved)
     static let reblogAccount = hasOne(AccountRecord.self,
                                       through: Self.reblog,
-                                      using: Self.account,
-                                      key: "reblogAccount")
+                                      using: Self.account)
     static let reblogAccountMoved = hasOne(AccountRecord.self,
                                            through: Self.reblogAccount,
-                                           using: AccountRecord.moved,
-                                           key: "reblogAccountMoved")
-    static let reblog = belongsTo(StatusRecord.self, key: "reblog")
+                                           using: AccountRecord.moved)
+    static let reblog = belongsTo(StatusRecord.self)
     static let ancestorJoins = hasMany(
         StatusContextJoin.self,
         using: ForeignKey([StatusContextJoin.Columns.parentId]))
@@ -114,11 +110,11 @@ extension StatusRecord {
                                    using: StatusContextJoin.status)
 
     var ancestors: QueryInterfaceRequest<StatusResult> {
-        request(for: Self.ancestors).statusResultRequest
+        StatusResult.request(request(for: Self.ancestors))
     }
 
     var descendants: QueryInterfaceRequest<StatusResult> {
-        request(for: Self.descendants).statusResultRequest
+        StatusResult.request(request(for: Self.descendants))
     }
 
     init(status: Status) {

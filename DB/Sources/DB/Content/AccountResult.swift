@@ -8,9 +8,8 @@ struct AccountResult: Codable, Hashable, FetchableRecord {
     let moved: AccountRecord?
 }
 
-extension QueryInterfaceRequest where RowDecoder == AccountRecord {
-    var accountResultRequest: QueryInterfaceRequest<AccountResult> {
-        including(optional: AccountRecord.moved)
-            .asRequest(of: AccountResult.self)
+extension AccountResult {
+    static func request(_ request: QueryInterfaceRequest<AccountRecord>) -> QueryInterfaceRequest<Self> {
+        request.including(optional: AccountRecord.moved.forKey(CodingKeys.moved)).asRequest(of: self)
     }
 }

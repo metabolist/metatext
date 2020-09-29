@@ -29,8 +29,8 @@ extension IdentityRecord {
         static let pushSubscriptionAlerts = Column(IdentityRecord.CodingKeys.pushSubscriptionAlerts)
     }
 
-    static let instance = belongsTo(Identity.Instance.self, key: "instance")
-    static let account = hasOne(Identity.Account.self, key: "account")
+    static let instance = belongsTo(Identity.Instance.self)
+    static let account = hasOne(Identity.Account.self)
 
     var instance: QueryInterfaceRequest<Identity.Instance> {
         request(for: Self.instance)

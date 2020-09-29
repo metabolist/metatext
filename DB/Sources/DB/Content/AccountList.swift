@@ -12,16 +12,13 @@ public struct AccountList: Codable, FetchableRecord, PersistableRecord {
 }
 
 extension AccountList {
-    static let joins = hasMany(
-        AccountListJoin.self,
-        using: ForeignKey([AccountListJoin.Columns.listId]))
-        .order(AccountListJoin.Columns.index)
+    static let joins = hasMany(AccountListJoin.self).order(AccountListJoin.Columns.index)
     static let accounts = hasMany(
         AccountRecord.self,
         through: joins,
         using: AccountListJoin.account)
 
     var accounts: QueryInterfaceRequest<AccountResult> {
-        request(for: Self.accounts).accountResultRequest
+        AccountResult.request(request(for: Self.accounts))
     }
 }

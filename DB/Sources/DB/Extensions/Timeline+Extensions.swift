@@ -46,6 +46,6 @@ extension Timeline {
         .order(StatusRecord.Columns.createdAt.desc)
 
     var statuses: QueryInterfaceRequest<StatusResult> {
-        request(for: Self.statuses).statusResultRequest
+        StatusResult.request(request(for: Self.statuses))
     }
 }

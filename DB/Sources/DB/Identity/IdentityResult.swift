@@ -10,10 +10,10 @@ struct IdentityResult: Codable, Hashable, FetchableRecord {
     let account: Identity.Account?
 }
 
-extension QueryInterfaceRequest where RowDecoder == IdentityRecord {
-    var identityResultRequest: QueryInterfaceRequest<IdentityResult> {
-        including(optional: IdentityRecord.instance)
-            .including(optional: IdentityRecord.account)
-            .asRequest(of: IdentityResult.self)
+extension IdentityResult {
+    static func request(_ request: QueryInterfaceRequest<IdentityRecord>) -> QueryInterfaceRequest<Self> {
+        request.including(optional: IdentityRecord.instance.forKey(CodingKeys.instance))
+            .including(optional: IdentityRecord.account.forKey(CodingKeys.account))
+            .asRequest(of: self)
     }
 }

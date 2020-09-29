@@ -63,10 +63,8 @@ extension AccountRecord: FetchableRecord, PersistableRecord {
 }
 
 extension AccountRecord {
-    static let moved = belongsTo(AccountRecord.self, key: "moved")
-    static let pinnedStatusJoins = hasMany(
-        AccountPinnedStatusJoin.self,
-        using: ForeignKey([AccountPinnedStatusJoin.Columns.accountId]))
+    static let moved = belongsTo(AccountRecord.self)
+    static let pinnedStatusJoins = hasMany(AccountPinnedStatusJoin.self)
         .order(AccountPinnedStatusJoin.Columns.index)
     static let pinnedStatuses = hasMany(
         StatusRecord.self,
@@ -74,7 +72,7 @@ extension AccountRecord {
         using: AccountPinnedStatusJoin.status)
 
     var pinnedStatuses: QueryInterfaceRequest<StatusResult> {
-        request(for: Self.pinnedStatuses).statusResultRequest
+        StatusResult.request(request(for: Self.pinnedStatuses))
     }
 
     init(account: Account) {

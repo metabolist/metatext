@@ -190,8 +190,7 @@ public extension ContentDatabase {
 
     func contextObservation(parentID: String) -> AnyPublisher<[[Status]], Error> {
         ValueObservation.tracking { db -> [[StatusResult]] in
-            guard let parent = try StatusRecord.filter(StatusRecord.Columns.id == parentID)
-                    .statusResultRequest
+            guard let parent = try StatusResult.request(StatusRecord.filter(StatusRecord.Columns.id == parentID))
                     .fetchOne(db) else {
                 return [[]]
             }
@@ -211,13 +210,12 @@ public extension ContentDatabase {
         accountID: String,
         collection: ProfileCollection) -> AnyPublisher<[[Status]], Error> {
         ValueObservation.tracking { db -> [[StatusResult]] in
-            let statuses = try StatusRecord.filter(
+            let statuses = try StatusResult.request(StatusRecord.filter(
                 AccountStatusJoin
                     .select(AccountStatusJoin.Columns.statusId, as: String.self)
                     .filter(sql: "accountId = ? AND collection = ?", arguments: [accountID, collection.rawValue])
                     .contains(StatusRecord.Columns.id))
-                .order(StatusRecord.Columns.createdAt.desc)
-                .statusResultRequest
+                .order(StatusRecord.Columns.createdAt.desc))
                 .fetchAll(db)
 
             if
@@ -266,7 +264,7 @@ public extension ContentDatabase {
     }
 
     func accountObservation(id: String) -> AnyPublisher<Account?, Error> {
-        ValueObservation.tracking(AccountRecord.filter(AccountRecord.Columns.id == id).accountResultRequest.fetchOne)
+        ValueObservation.tracking(AccountResult.request(AccountRecord.filter(AccountRecord.Columns.id == id)).fetchOne)
             .removeDuplicates()
             .publisher(in: databaseWriter)
             .map {

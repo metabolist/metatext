@@ -8,7 +8,7 @@ struct AccountPinnedStatusJoin: Codable, FetchableRecord, PersistableRecord {
     let statusId: String
     let index: Int
 
-    static let status = belongsTo(StatusRecord.self, using: ForeignKey([Columns.statusId]))
+    static let status = belongsTo(StatusRecord.self)
 }
 
 extension AccountPinnedStatusJoin {

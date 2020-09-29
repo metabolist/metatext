@@ -156,10 +156,7 @@ public extension IdentityDatabase {
 
     func identityObservation(id: UUID, immediate: Bool) -> AnyPublisher<Identity, Error> {
         ValueObservation.tracking(
-            IdentityRecord
-                .filter(IdentityRecord.Columns.id == id)
-                .identityResultRequest
-                .fetchOne)
+            IdentityResult.request(IdentityRecord.filter(IdentityRecord.Columns.id == id)).fetchOne)
             .removeDuplicates()
             .publisher(in: databaseWriter, scheduling: immediate ? .immediate : .async(onQueue: .main))
             .tryMap {
@@ -172,10 +169,7 @@ public extension IdentityDatabase {
 
     func identitiesObservation() -> AnyPublisher<[Identity], Error> {
         ValueObservation.tracking(
-            IdentityRecord
-                .order(IdentityRecord.Columns.lastUsedAt.desc)
-                .identityResultRequest
-                .fetchAll)
+            IdentityResult.request(IdentityRecord.order(IdentityRecord.Columns.lastUsedAt.desc)).fetchAll)
             .removeDuplicates()
             .publisher(in: databaseWriter)
             .map { $0.map(Identity.init(result:)) }
@@ -184,9 +178,7 @@ public extension IdentityDatabase {
 
     func recentIdentitiesObservation(excluding: UUID) -> AnyPublisher<[Identity], Error> {
         ValueObservation.tracking(
-            IdentityRecord
-                .order(IdentityRecord.Columns.lastUsedAt.desc)
-                .identityResultRequest
+            IdentityResult.request(IdentityRecord.order(IdentityRecord.Columns.lastUsedAt.desc))
                 .filter(IdentityRecord.Columns.id != excluding)
                 .limit(9)
                 .fetchAll)
@@ -207,9 +199,7 @@ public extension IdentityDatabase {
 
     func identitiesWithOutdatedDeviceTokens(deviceToken: Data) -> AnyPublisher<[Identity], Error> {
         databaseWriter.readPublisher(
-            value: IdentityRecord
-                .order(IdentityRecord.Columns.lastUsedAt.desc)
-                .identityResultRequest
+            value: IdentityResult.request(IdentityRecord.order(IdentityRecord.Columns.lastUsedAt.desc))
                 .filter(IdentityRecord.Columns.lastRegisteredDeviceToken != deviceToken)
                 .fetchAll)
             .map { $0.map(Identity.init(result:)) }

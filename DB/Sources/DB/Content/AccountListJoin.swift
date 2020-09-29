@@ -8,7 +8,7 @@ struct AccountListJoin: Codable, FetchableRecord, PersistableRecord {
     let listId: UUID
     let index: Int
 
-    static let account = belongsTo(AccountRecord.self, using: ForeignKey([Columns.accountId]))
+    static let account = belongsTo(AccountRecord.self)
 }
 
 extension AccountListJoin {
