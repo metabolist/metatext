@@ -73,9 +73,9 @@ public extension ContentDatabase {
                 }
 
                try StatusContextJoin.filter(
-                    Column("parentId") == parentID
-                        && Column("section") == section.rawValue
-                        && !statuses.map(\.id).contains(Column("statusId")))
+                StatusContextJoin.Columns.parentId == parentID
+                    && StatusContextJoin.Columns.section == section.rawValue
+                    && !statuses.map(\.id).contains(StatusContextJoin.Columns.statusId))
                     .deleteAll($0)
             }
         }
@@ -92,8 +92,8 @@ public extension ContentDatabase {
             }
 
             try AccountPinnedStatusJoin.filter(
-                Column("accountId") == accountID
-                    && !pinnedStatuses.map(\.id).contains(Column("statusId")))
+                AccountPinnedStatusJoin.Columns.accountId == accountID
+                    && !pinnedStatuses.map(\.id).contains(AccountPinnedStatusJoin.Columns.statusId))
                 .deleteAll($0)
         }
         .ignoreOutput()
@@ -137,8 +137,8 @@ public extension ContentDatabase {
             }
 
             try Timeline
-                .filter(!(Timeline.authenticatedDefaults.map(\.id) + lists.map(\.id)).contains(Column("id"))
-                            && Column("listTitle") != nil)
+                .filter(!(Timeline.authenticatedDefaults.map(\.id) + lists.map(\.id)).contains(Timeline.Columns.id)
+                            && Timeline.Columns.listTitle != nil)
                 .deleteAll($0)
         }
         .ignoreOutput()
@@ -152,7 +152,7 @@ public extension ContentDatabase {
     }
 
     func deleteList(id: String) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher(updates: Timeline.filter(Column("id") == id).deleteAll)
+        databaseWriter.writePublisher(updates: Timeline.filter(Timeline.Columns.id == id).deleteAll)
             .ignoreOutput()
             .eraseToAnyPublisher()
     }
@@ -163,7 +163,7 @@ public extension ContentDatabase {
                 try filter.save($0)
             }
 
-            try Filter.filter(!filters.map(\.id).contains(Column("id"))).deleteAll($0)
+            try Filter.filter(!filters.map(\.id).contains(Filter.Columns.id)).deleteAll($0)
         }
         .ignoreOutput()
         .eraseToAnyPublisher()
@@ -176,7 +176,7 @@ public extension ContentDatabase {
     }
 
     func deleteFilter(id: String) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher(updates: Filter.filter(Column("id") == id).deleteAll)
+        databaseWriter.writePublisher(updates: Filter.filter(Filter.Columns.id == id).deleteAll)
             .ignoreOutput()
             .eraseToAnyPublisher()
     }
@@ -191,7 +191,9 @@ public extension ContentDatabase {
 
     func contextObservation(parentID: String) -> AnyPublisher<[[Status]], Error> {
         ValueObservation.tracking { db -> [[StatusResult]] in
-            guard let parent = try StatusRecord.filter(Column("id") == parentID).statusResultRequest.fetchOne(db) else {
+            guard let parent = try StatusRecord.filter(StatusRecord.Columns.id == parentID)
+                    .statusResultRequest
+                    .fetchOne(db) else {
                 return [[]]
             }
 
@@ -212,16 +214,16 @@ public extension ContentDatabase {
         ValueObservation.tracking { db -> [[StatusResult]] in
             let statuses = try StatusRecord.filter(
                 AccountStatusJoin
-                    .select(Column("statusId"), as: String.self)
+                    .select(AccountStatusJoin.Columns.statusId, as: String.self)
                     .filter(sql: "accountId = ? AND collection = ?", arguments: [accountID, collection.rawValue])
-                    .contains(Column("id")))
-                .order(Column("createdAt").desc)
+                    .contains(StatusRecord.Columns.id))
+                .order(StatusRecord.Columns.createdAt.desc)
                 .statusResultRequest
                 .fetchAll(db)
 
             if
                 case .statuses = collection,
-                let accountRecord = try AccountRecord.filter(Column("id") == accountID).fetchOne(db) {
+                let accountRecord = try AccountRecord.filter(AccountRecord.Columns.id == accountID).fetchOne(db) {
                 let pinnedStatuses = try accountRecord.pinnedStatuses.fetchAll(db)
 
                 return [pinnedStatuses, statuses]
@@ -236,8 +238,8 @@ public extension ContentDatabase {
     }
 
     func listsObservation() -> AnyPublisher<[Timeline], Error> {
-        ValueObservation.tracking(Timeline.filter(Column("listTitle") != nil)
-                                    .order(Column("listTitle").asc)
+        ValueObservation.tracking(Timeline.filter(Timeline.Columns.listTitle != nil)
+                                    .order(Timeline.Columns.listTitle.asc)
                                     .fetchAll)
             .removeDuplicates()
             .publisher(in: databaseWriter)
@@ -245,7 +247,8 @@ public extension ContentDatabase {
     }
 
     func activeFiltersObservation(date: Date, context: Filter.Context? = nil) -> AnyPublisher<[Filter], Error> {
-        ValueObservation.tracking(Filter.filter(Column("expiresAt") == nil || Column("expiresAt") > date).fetchAll)
+        ValueObservation.tracking(
+            Filter.filter(Filter.Columns.expiresAt == nil || Filter.Columns.expiresAt > date).fetchAll)
             .removeDuplicates()
             .publisher(in: databaseWriter)
             .map {
@@ -257,14 +260,14 @@ public extension ContentDatabase {
     }
 
     func expiredFiltersObservation(date: Date) -> AnyPublisher<[Filter], Error> {
-        ValueObservation.tracking(Filter.filter(Column("expiresAt") < date).fetchAll)
+        ValueObservation.tracking(Filter.filter(Filter.Columns.expiresAt < date).fetchAll)
             .removeDuplicates()
             .publisher(in: databaseWriter)
             .eraseToAnyPublisher()
     }
 
     func accountObservation(id: String) -> AnyPublisher<Account?, Error> {
-        ValueObservation.tracking(AccountRecord.filter(Column("id") == id).accountResultRequest.fetchOne)
+        ValueObservation.tracking(AccountRecord.filter(AccountRecord.Columns.id == id).accountResultRequest.fetchOne)
             .removeDuplicates()
             .publisher(in: databaseWriter)
             .map {
@@ -424,7 +427,7 @@ private extension ContentDatabase {
 
     func clean() {
         databaseWriter.asyncWrite {
-            try TimelineStatusJoin.filter(Column("timelineId") != Timeline.home.id).deleteAll($0)
+            try TimelineStatusJoin.filter(TimelineStatusJoin.Columns.timelineId != Timeline.home.id).deleteAll($0)
             try StatusContextJoin.deleteAll($0)
             try AccountPinnedStatusJoin.deleteAll($0)
             try AccountStatusJoin.deleteAll($0)

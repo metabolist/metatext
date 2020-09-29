@@ -51,7 +51,7 @@ public extension IdentityDatabase {
     }
 
     func deleteIdentity(id: UUID) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher(updates: IdentityRecord.filter(Column("id") == id).deleteAll)
+        databaseWriter.writePublisher(updates: IdentityRecord.filter(IdentityRecord.Columns.id == id).deleteAll)
             .ignoreOutput()
             .eraseToAnyPublisher()
     }
@@ -59,8 +59,8 @@ public extension IdentityDatabase {
     func updateLastUsedAt(identityID: UUID) -> AnyPublisher<Never, Error> {
         databaseWriter.writePublisher {
             try IdentityRecord
-                .filter(Column("id") == identityID)
-                .updateAll($0, Column("lastUsedAt").set(to: Date()))
+                .filter(IdentityRecord.Columns.id == identityID)
+                .updateAll($0, IdentityRecord.Columns.lastUsedAt.set(to: Date()))
         }
         .ignoreOutput()
         .eraseToAnyPublisher()
@@ -75,8 +75,8 @@ public extension IdentityDatabase {
                 thumbnail: instance.thumbnail)
                 .save($0)
             try IdentityRecord
-                .filter(Column("id") == identityID)
-                .updateAll($0, Column("instanceURI").set(to: instance.uri))
+                .filter(IdentityRecord.Columns.id == identityID)
+                .updateAll($0, IdentityRecord.Columns.instanceURI.set(to: instance.uri))
         }
         .ignoreOutput()
         .eraseToAnyPublisher()
@@ -103,8 +103,8 @@ public extension IdentityDatabase {
     func confirmIdentity(id: UUID) -> AnyPublisher<Never, Error> {
         databaseWriter.writePublisher {
             try IdentityRecord
-                .filter(Column("id") == id)
-                .updateAll($0, Column("pending").set(to: false))
+                .filter(IdentityRecord.Columns.id == id)
+                .updateAll($0, IdentityRecord.Columns.pending.set(to: false))
         }
         .ignoreOutput()
         .eraseToAnyPublisher()
@@ -113,7 +113,7 @@ public extension IdentityDatabase {
     func updatePreferences(_ preferences: Mastodon.Preferences,
                            forIdentityID identityID: UUID) -> AnyPublisher<Never, Error> {
         databaseWriter.writePublisher {
-            guard let storedPreferences = try IdentityRecord.filter(Column("id") == identityID)
+            guard let storedPreferences = try IdentityRecord.filter(IdentityRecord.Columns.id == identityID)
                     .fetchOne($0)?
                     .preferences else {
                 throw IdentityDatabaseError.identityNotFound
@@ -136,16 +136,18 @@ public extension IdentityDatabase {
                                 deviceToken: Data? = nil,
                                 forIdentityID identityID: UUID) -> AnyPublisher<Never, Error> {
         databaseWriter.writePublisher {
-            let data = try IdentityRecord.databaseJSONEncoder(for: "pushSubscriptionAlerts").encode(alerts)
+            let data = try IdentityRecord.databaseJSONEncoder(
+                for: IdentityRecord.Columns.pushSubscriptionAlerts.name)
+                .encode(alerts)
 
             try IdentityRecord
-                .filter(Column("id") == identityID)
-                .updateAll($0, Column("pushSubscriptionAlerts").set(to: data))
+                .filter(IdentityRecord.Columns.id == identityID)
+                .updateAll($0, IdentityRecord.Columns.pushSubscriptionAlerts.set(to: data))
 
             if let deviceToken = deviceToken {
                 try IdentityRecord
-                    .filter(Column("id") == identityID)
-                    .updateAll($0, Column("lastRegisteredDeviceToken").set(to: deviceToken))
+                    .filter(IdentityRecord.Columns.id == identityID)
+                    .updateAll($0, IdentityRecord.Columns.lastRegisteredDeviceToken.set(to: deviceToken))
             }
         }
         .ignoreOutput()
@@ -155,7 +157,7 @@ public extension IdentityDatabase {
     func identityObservation(id: UUID, immediate: Bool) -> AnyPublisher<Identity, Error> {
         ValueObservation.tracking(
             IdentityRecord
-                .filter(Column("id") == id)
+                .filter(IdentityRecord.Columns.id == id)
                 .identityResultRequest
                 .fetchOne)
             .removeDuplicates()
@@ -171,7 +173,7 @@ public extension IdentityDatabase {
     func identitiesObservation() -> AnyPublisher<[Identity], Error> {
         ValueObservation.tracking(
             IdentityRecord
-                .order(Column("lastUsedAt").desc)
+                .order(IdentityRecord.Columns.lastUsedAt.desc)
                 .identityResultRequest
                 .fetchAll)
             .removeDuplicates()
@@ -183,9 +185,9 @@ public extension IdentityDatabase {
     func recentIdentitiesObservation(excluding: UUID) -> AnyPublisher<[Identity], Error> {
         ValueObservation.tracking(
             IdentityRecord
-                .order(Column("lastUsedAt").desc)
+                .order(IdentityRecord.Columns.lastUsedAt.desc)
                 .identityResultRequest
-                .filter(Column("id") != excluding)
+                .filter(IdentityRecord.Columns.id != excluding)
                 .limit(9)
                 .fetchAll)
             .removeDuplicates()
@@ -195,7 +197,9 @@ public extension IdentityDatabase {
     }
 
     func immediateMostRecentlyUsedIdentityIDObservation() -> AnyPublisher<UUID?, Error> {
-        ValueObservation.tracking(IdentityRecord.select(Column("id")).order(Column("lastUsedAt").desc).fetchOne)
+        ValueObservation.tracking(
+            IdentityRecord.select(IdentityRecord.Columns.id)
+                .order(IdentityRecord.Columns.lastUsedAt.desc).fetchOne)
             .removeDuplicates()
             .publisher(in: databaseWriter, scheduling: .immediate)
             .eraseToAnyPublisher()
@@ -204,9 +208,9 @@ public extension IdentityDatabase {
     func identitiesWithOutdatedDeviceTokens(deviceToken: Data) -> AnyPublisher<[Identity], Error> {
         databaseWriter.readPublisher(
             value: IdentityRecord
-                .order(Column("lastUsedAt").desc)
+                .order(IdentityRecord.Columns.lastUsedAt.desc)
                 .identityResultRequest
-                .filter(Column("lastRegisteredDeviceToken") != deviceToken)
+                .filter(IdentityRecord.Columns.lastRegisteredDeviceToken != deviceToken)
                 .fetchAll)
             .map { $0.map(Identity.init(result:)) }
             .eraseToAnyPublisher()
@@ -218,11 +222,12 @@ private extension IdentityDatabase {
 
     static func writePreferences(_ preferences: Identity.Preferences, id: UUID) -> (Database) throws -> Void {
         {
-            let data = try IdentityRecord.databaseJSONEncoder(for: "preferences").encode(preferences)
+            let data = try IdentityRecord.databaseJSONEncoder(
+                for: IdentityRecord.Columns.preferences.name).encode(preferences)
 
             try IdentityRecord
-                .filter(Column("id") == id)
-                .updateAll($0, Column("preferences").set(to: data))
+                .filter(IdentityRecord.Columns.id == id)
+                .updateAll($0, IdentityRecord.Columns.preferences.set(to: data))
         }
     }
 

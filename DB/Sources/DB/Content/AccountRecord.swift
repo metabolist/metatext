@@ -27,6 +27,31 @@ struct AccountRecord: Codable, Hashable {
     let movedId: String?
 }
 
+extension AccountRecord {
+    enum Columns {
+        static let id = Column(AccountRecord.CodingKeys.id)
+        static let username = Column(AccountRecord.CodingKeys.username)
+        static let acct = Column(AccountRecord.CodingKeys.acct)
+        static let displayName = Column(AccountRecord.CodingKeys.displayName)
+        static let locked = Column(AccountRecord.CodingKeys.locked)
+        static let createdAt = Column(AccountRecord.CodingKeys.createdAt)
+        static let followersCount = Column(AccountRecord.CodingKeys.followersCount)
+        static let followingCount = Column(AccountRecord.CodingKeys.followingCount)
+        static let statusesCount = Column(AccountRecord.CodingKeys.statusesCount)
+        static let note = Column(AccountRecord.CodingKeys.note)
+        static let url = Column(AccountRecord.CodingKeys.url)
+        static let avatar = Column(AccountRecord.CodingKeys.avatar)
+        static let avatarStatic = Column(AccountRecord.CodingKeys.avatarStatic)
+        static let header = Column(AccountRecord.CodingKeys.header)
+        static let headerStatic = Column(AccountRecord.CodingKeys.headerStatic)
+        static let fields = Column(AccountRecord.CodingKeys.fields)
+        static let emojis = Column(AccountRecord.CodingKeys.emojis)
+        static let bot = Column(AccountRecord.CodingKeys.bot)
+        static let discoverable = Column(AccountRecord.CodingKeys.discoverable)
+        static let movedId = Column(AccountRecord.CodingKeys.movedId)
+    }
+}
+
 extension AccountRecord: FetchableRecord, PersistableRecord {
     static func databaseJSONDecoder(for column: String) -> JSONDecoder {
         MastodonDecoder()
@@ -41,8 +66,8 @@ extension AccountRecord {
     static let moved = belongsTo(AccountRecord.self, key: "moved")
     static let pinnedStatusJoins = hasMany(
         AccountPinnedStatusJoin.self,
-        using: ForeignKey([Column("accountId")]))
-        .order(Column("index"))
+        using: ForeignKey([AccountPinnedStatusJoin.Columns.accountId]))
+        .order(AccountPinnedStatusJoin.Columns.index)
     static let pinnedStatuses = hasMany(
         StatusRecord.self,
         through: pinnedStatusJoins,

@@ -9,3 +9,10 @@ struct TimelineStatusJoin: Codable, FetchableRecord, PersistableRecord {
 
     static let status = belongsTo(StatusRecord.self)
 }
+
+extension TimelineStatusJoin {
+    enum Columns {
+        static let timelineId = Column(TimelineStatusJoin.CodingKeys.timelineId)
+        static let statusId = Column(TimelineStatusJoin.CodingKeys.statusId)
+    }
+}

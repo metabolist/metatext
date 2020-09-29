@@ -17,6 +17,18 @@ struct IdentityRecord: Codable, Hashable, FetchableRecord, PersistableRecord {
 }
 
 extension IdentityRecord {
+    enum Columns {
+        static let id = Column(IdentityRecord.CodingKeys.id)
+        static let url = Column(IdentityRecord.CodingKeys.url)
+        static let authenticated = Column(IdentityRecord.CodingKeys.authenticated)
+        static let pending = Column(IdentityRecord.CodingKeys.pending)
+        static let lastUsedAt = Column(IdentityRecord.CodingKeys.lastUsedAt)
+        static let preferences = Column(IdentityRecord.CodingKeys.preferences)
+        static let instanceURI = Column(IdentityRecord.CodingKeys.instanceURI)
+        static let lastRegisteredDeviceToken = Column(IdentityRecord.CodingKeys.lastRegisteredDeviceToken)
+        static let pushSubscriptionAlerts = Column(IdentityRecord.CodingKeys.pushSubscriptionAlerts)
+    }
+
     static let instance = belongsTo(Identity.Instance.self, key: "instance")
     static let account = hasOne(Identity.Account.self, key: "account")
 

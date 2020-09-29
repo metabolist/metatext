@@ -14,5 +14,14 @@ struct StatusContextJoin: Codable, FetchableRecord, PersistableRecord {
     let section: Section
     let index: Int
 
-    static let status = belongsTo(StatusRecord.self, using: ForeignKey([Column("statusId")]))
+    static let status = belongsTo(StatusRecord.self, using: ForeignKey([Columns.statusId]))
+}
+
+extension StatusContextJoin {
+    enum Columns {
+        static let parentId = Column(StatusContextJoin.CodingKeys.parentId)
+        static let statusId = Column(StatusContextJoin.CodingKeys.statusId)
+        static let section = Column(StatusContextJoin.CodingKeys.section)
+        static let index = Column(StatusContextJoin.CodingKeys.index)
+    }
 }

@@ -6,7 +6,8 @@ import Mastodon
 
 extension Timeline: FetchableRecord, PersistableRecord {
     enum Columns: String, ColumnExpression {
-        case id, listTitle
+        case id
+        case listTitle
     }
 
     public init(row: Row) {
@@ -42,7 +43,7 @@ extension Timeline {
         StatusRecord.self,
         through: statusJoins,
         using: TimelineStatusJoin.status)
-        .order(Column("createdAt").desc)
+        .order(StatusRecord.Columns.createdAt.desc)
 
     var statuses: QueryInterfaceRequest<StatusResult> {
         request(for: Self.statuses).statusResultRequest

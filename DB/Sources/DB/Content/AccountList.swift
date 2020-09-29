@@ -14,8 +14,8 @@ public struct AccountList: Codable, FetchableRecord, PersistableRecord {
 extension AccountList {
     static let joins = hasMany(
         AccountListJoin.self,
-        using: ForeignKey([Column("listId")]))
-        .order(Column("index"))
+        using: ForeignKey([AccountListJoin.Columns.listId]))
+        .order(AccountListJoin.Columns.index)
     static let accounts = hasMany(
         AccountRecord.self,
         through: joins,

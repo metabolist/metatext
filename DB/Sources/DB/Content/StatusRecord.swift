@@ -36,6 +36,40 @@ struct StatusRecord: Codable, Hashable {
     let pinned: Bool?
 }
 
+extension StatusRecord {
+    enum Columns {
+        static let id = Column(StatusRecord.CodingKeys.id)
+        static let uri = Column(StatusRecord.CodingKeys.uri)
+        static let createdAt = Column(StatusRecord.CodingKeys.createdAt)
+        static let accountId = Column(StatusRecord.CodingKeys.accountId)
+        static let content = Column(StatusRecord.CodingKeys.content)
+        static let visibility = Column(StatusRecord.CodingKeys.visibility)
+        static let sensitive = Column(StatusRecord.CodingKeys.sensitive)
+        static let spoilerText = Column(StatusRecord.CodingKeys.spoilerText)
+        static let mediaAttachments = Column(StatusRecord.CodingKeys.mediaAttachments)
+        static let mentions = Column(StatusRecord.CodingKeys.mentions)
+        static let tags = Column(StatusRecord.CodingKeys.tags)
+        static let emojis = Column(StatusRecord.CodingKeys.emojis)
+        static let reblogsCount = Column(StatusRecord.CodingKeys.reblogsCount)
+        static let favouritesCount = Column(StatusRecord.CodingKeys.favouritesCount)
+        static let repliesCount = Column(StatusRecord.CodingKeys.repliesCount)
+        static let application = Column(StatusRecord.CodingKeys.application)
+        static let url = Column(StatusRecord.CodingKeys.url)
+        static let inReplyToId = Column(StatusRecord.CodingKeys.inReplyToId)
+        static let inReplyToAccountId = Column(StatusRecord.CodingKeys.inReplyToAccountId)
+        static let reblogId = Column(StatusRecord.CodingKeys.reblogId)
+        static let poll = Column(StatusRecord.CodingKeys.poll)
+        static let card = Column(StatusRecord.CodingKeys.card)
+        static let language = Column(StatusRecord.CodingKeys.language)
+        static let text = Column(StatusRecord.CodingKeys.text)
+        static let favourited = Column(StatusRecord.CodingKeys.favourited)
+        static let reblogged = Column(StatusRecord.CodingKeys.reblogged)
+        static let muted = Column(StatusRecord.CodingKeys.muted)
+        static let bookmarked = Column(StatusRecord.CodingKeys.bookmarked)
+        static let pinned = Column(StatusRecord.CodingKeys.pinned)
+    }
+}
+
 extension StatusRecord: FetchableRecord, PersistableRecord {
     static func databaseJSONDecoder(for column: String) -> JSONDecoder {
         MastodonDecoder()
@@ -47,7 +81,8 @@ extension StatusRecord: FetchableRecord, PersistableRecord {
 }
 
 extension StatusRecord {
-    static let account = belongsTo(AccountRecord.self, key: "account", using: ForeignKey([Column("accountId")]))
+    static let account = belongsTo(AccountRecord.self, key: "account",
+                                   using: ForeignKey([StatusRecord.Columns.accountId]))
     static let accountMoved = hasOne(AccountRecord.self,
                                      through: Self.account,
                                      using: AccountRecord.moved,
@@ -61,12 +96,16 @@ extension StatusRecord {
                                            using: AccountRecord.moved,
                                            key: "reblogAccountMoved")
     static let reblog = belongsTo(StatusRecord.self, key: "reblog")
-    static let ancestorJoins = hasMany(StatusContextJoin.self, using: ForeignKey([Column("parentID")]))
-        .filter(Column("section") == StatusContextJoin.Section.ancestors.rawValue)
-        .order(Column("index"))
-    static let descendantJoins = hasMany(StatusContextJoin.self, using: ForeignKey([Column("parentID")]))
-        .filter(Column("section") == StatusContextJoin.Section.descendants.rawValue)
-        .order(Column("index"))
+    static let ancestorJoins = hasMany(
+        StatusContextJoin.self,
+        using: ForeignKey([StatusContextJoin.Columns.parentId]))
+        .filter(StatusContextJoin.Columns.section == StatusContextJoin.Section.ancestors.rawValue)
+        .order(StatusContextJoin.Columns.index)
+    static let descendantJoins = hasMany(
+        StatusContextJoin.self,
+        using: ForeignKey([StatusContextJoin.Columns.parentId]))
+        .filter(StatusContextJoin.Columns.section == StatusContextJoin.Section.descendants.rawValue)
+        .order(StatusContextJoin.Columns.index)
     static let ancestors = hasMany(StatusRecord.self,
                                    through: ancestorJoins,
                                    using: StatusContextJoin.status)
