@@ -3,12 +3,12 @@
 import Foundation
 import GRDB
 
-struct AccountResult: Codable, Hashable, FetchableRecord {
+struct AccountInfo: Codable, Hashable, FetchableRecord {
     let account: AccountRecord
     let moved: AccountRecord?
 }
 
-extension AccountResult {
+extension AccountInfo {
     static func request(_ request: QueryInterfaceRequest<AccountRecord>) -> QueryInterfaceRequest<Self> {
         request.including(optional: AccountRecord.moved.forKey(CodingKeys.moved)).asRequest(of: self)
     }

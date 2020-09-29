@@ -156,35 +156,35 @@ public extension IdentityDatabase {
 
     func identityObservation(id: UUID, immediate: Bool) -> AnyPublisher<Identity, Error> {
         ValueObservation.tracking(
-            IdentityResult.request(IdentityRecord.filter(IdentityRecord.Columns.id == id)).fetchOne)
+            IdentityInfo.request(IdentityRecord.filter(IdentityRecord.Columns.id == id)).fetchOne)
             .removeDuplicates()
             .publisher(in: databaseWriter, scheduling: immediate ? .immediate : .async(onQueue: .main))
             .tryMap {
-                guard let result = $0 else { throw IdentityDatabaseError.identityNotFound }
+                guard let info = $0 else { throw IdentityDatabaseError.identityNotFound }
 
-                return Identity(result: result)
+                return Identity(info: info)
             }
             .eraseToAnyPublisher()
     }
 
     func identitiesObservation() -> AnyPublisher<[Identity], Error> {
         ValueObservation.tracking(
-            IdentityResult.request(IdentityRecord.order(IdentityRecord.Columns.lastUsedAt.desc)).fetchAll)
+            IdentityInfo.request(IdentityRecord.order(IdentityRecord.Columns.lastUsedAt.desc)).fetchAll)
             .removeDuplicates()
             .publisher(in: databaseWriter)
-            .map { $0.map(Identity.init(result:)) }
+            .map { $0.map(Identity.init(info:)) }
             .eraseToAnyPublisher()
     }
 
     func recentIdentitiesObservation(excluding: UUID) -> AnyPublisher<[Identity], Error> {
         ValueObservation.tracking(
-            IdentityResult.request(IdentityRecord.order(IdentityRecord.Columns.lastUsedAt.desc))
+            IdentityInfo.request(IdentityRecord.order(IdentityRecord.Columns.lastUsedAt.desc))
                 .filter(IdentityRecord.Columns.id != excluding)
                 .limit(9)
                 .fetchAll)
             .removeDuplicates()
             .publisher(in: databaseWriter)
-            .map { $0.map(Identity.init(result:)) }
+            .map { $0.map(Identity.init(info:)) }
             .eraseToAnyPublisher()
     }
 
@@ -199,10 +199,10 @@ public extension IdentityDatabase {
 
     func identitiesWithOutdatedDeviceTokens(deviceToken: Data) -> AnyPublisher<[Identity], Error> {
         databaseWriter.readPublisher(
-            value: IdentityResult.request(IdentityRecord.order(IdentityRecord.Columns.lastUsedAt.desc))
+            value: IdentityInfo.request(IdentityRecord.order(IdentityRecord.Columns.lastUsedAt.desc))
                 .filter(IdentityRecord.Columns.lastRegisteredDeviceToken != deviceToken)
                 .fetchAll)
-            .map { $0.map(Identity.init(result:)) }
+            .map { $0.map(Identity.init(info:)) }
             .eraseToAnyPublisher()
     }
 }

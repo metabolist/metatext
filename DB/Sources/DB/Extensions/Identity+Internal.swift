@@ -4,18 +4,18 @@ import Foundation
 import GRDB
 
 extension Identity {
-    init(result: IdentityResult) {
+    init(info: IdentityInfo) {
         self.init(
-            id: result.identity.id,
-            url: result.identity.url,
-            authenticated: result.identity.authenticated,
-            pending: result.identity.pending,
-            lastUsedAt: result.identity.lastUsedAt,
-            preferences: result.identity.preferences,
-            instance: result.instance,
-            account: result.account,
-            lastRegisteredDeviceToken: result.identity.lastRegisteredDeviceToken,
-            pushSubscriptionAlerts: result.identity.pushSubscriptionAlerts)
+            id: info.identity.id,
+            url: info.identity.url,
+            authenticated: info.identity.authenticated,
+            pending: info.identity.pending,
+            lastUsedAt: info.identity.lastUsedAt,
+            preferences: info.identity.preferences,
+            instance: info.instance,
+            account: info.account,
+            lastRegisteredDeviceToken: info.identity.lastRegisteredDeviceToken,
+            pushSubscriptionAlerts: info.identity.pushSubscriptionAlerts)
     }
 }
 

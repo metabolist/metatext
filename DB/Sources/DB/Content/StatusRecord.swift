@@ -109,12 +109,12 @@ extension StatusRecord {
                                    through: descendantJoins,
                                    using: StatusContextJoin.status)
 
-    var ancestors: QueryInterfaceRequest<StatusResult> {
-        StatusResult.request(request(for: Self.ancestors))
+    var ancestors: QueryInterfaceRequest<StatusInfo> {
+        StatusInfo.request(request(for: Self.ancestors))
     }
 
-    var descendants: QueryInterfaceRequest<StatusResult> {
-        StatusResult.request(request(for: Self.descendants))
+    var descendants: QueryInterfaceRequest<StatusInfo> {
+        StatusInfo.request(request(for: Self.descendants))
     }
 
     init(status: Status) {

@@ -13,14 +13,14 @@ extension Account {
         try AccountRecord(account: self).save(db)
     }
 
-    convenience init(result: AccountResult) {
+    convenience init(info: AccountInfo) {
         var moved: Account?
 
-        if let movedRecord = result.moved {
+        if let movedRecord = info.moved {
             moved = Self(record: movedRecord, moved: nil)
         }
 
-        self.init(record: result.account, moved: moved)
+        self.init(record: info.account, moved: moved)
     }
 }
 

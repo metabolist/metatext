@@ -184,13 +184,13 @@ public extension ContentDatabase {
         ValueObservation.tracking(timeline.statuses.fetchAll)
             .removeDuplicates()
             .publisher(in: databaseWriter)
-            .map { [$0.map(Status.init(result:))] }
+            .map { [$0.map(Status.init(info:))] }
             .eraseToAnyPublisher()
     }
 
     func contextObservation(parentID: String) -> AnyPublisher<[[Status]], Error> {
-        ValueObservation.tracking { db -> [[StatusResult]] in
-            guard let parent = try StatusResult.request(StatusRecord.filter(StatusRecord.Columns.id == parentID))
+        ValueObservation.tracking { db -> [[StatusInfo]] in
+            guard let parent = try StatusInfo.request(StatusRecord.filter(StatusRecord.Columns.id == parentID))
                     .fetchOne(db) else {
                 return [[]]
             }
@@ -202,15 +202,15 @@ public extension ContentDatabase {
         }
         .removeDuplicates()
         .publisher(in: databaseWriter)
-        .map { $0.map { $0.map(Status.init(result:)) } }
+        .map { $0.map { $0.map(Status.init(info:)) } }
         .eraseToAnyPublisher()
     }
 
     func statusesObservation(
         accountID: String,
         collection: ProfileCollection) -> AnyPublisher<[[Status]], Error> {
-        ValueObservation.tracking { db -> [[StatusResult]] in
-            let statuses = try StatusResult.request(StatusRecord.filter(
+        ValueObservation.tracking { db -> [[StatusInfo]] in
+            let statuses = try StatusInfo.request(StatusRecord.filter(
                 AccountStatusJoin
                     .select(AccountStatusJoin.Columns.statusId, as: String.self)
                     .filter(sql: "accountId = ? AND collection = ?", arguments: [accountID, collection.rawValue])
@@ -230,7 +230,7 @@ public extension ContentDatabase {
         }
         .removeDuplicates()
         .publisher(in: databaseWriter)
-        .map { $0.map { $0.map(Status.init(result:)) } }
+        .map { $0.map { $0.map(Status.init(info:)) } }
         .eraseToAnyPublisher()
     }
 
@@ -264,12 +264,12 @@ public extension ContentDatabase {
     }
 
     func accountObservation(id: String) -> AnyPublisher<Account?, Error> {
-        ValueObservation.tracking(AccountResult.request(AccountRecord.filter(AccountRecord.Columns.id == id)).fetchOne)
+        ValueObservation.tracking(AccountInfo.request(AccountRecord.filter(AccountRecord.Columns.id == id)).fetchOne)
             .removeDuplicates()
             .publisher(in: databaseWriter)
             .map {
-                if let result = $0 {
-                    return Account(result: result)
+                if let info = $0 {
+                    return Account(info: info)
                 } else {
                     return nil
                 }
@@ -281,7 +281,7 @@ public extension ContentDatabase {
         ValueObservation.tracking(list.accounts.fetchAll)
             .removeDuplicates()
             .publisher(in: databaseWriter)
-            .map { $0.map(Account.init(result:)) }
+            .map { $0.map(Account.init(info:)) }
             .eraseToAnyPublisher()
     }
 }

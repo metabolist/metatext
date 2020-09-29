@@ -71,8 +71,8 @@ extension AccountRecord {
         through: pinnedStatusJoins,
         using: AccountPinnedStatusJoin.status)
 
-    var pinnedStatuses: QueryInterfaceRequest<StatusResult> {
-        StatusResult.request(request(for: Self.pinnedStatuses))
+    var pinnedStatuses: QueryInterfaceRequest<StatusInfo> {
+        StatusInfo.request(request(for: Self.pinnedStatuses))
     }
 
     init(account: Account) {

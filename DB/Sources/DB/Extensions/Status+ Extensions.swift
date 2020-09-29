@@ -16,15 +16,15 @@ extension Status {
         try StatusRecord(status: self).save(db)
     }
 
-    convenience init(result: StatusResult) {
+    convenience init(info: StatusInfo) {
         var reblog: Status?
 
-        if let reblogResult = result.reblog, let reblogAccountResult = result.reblogAccountResult {
-            reblog = Status(record: reblogResult, account: Account(result: reblogAccountResult), reblog: nil)
+        if let reblogRecord = info.reblog, let reblogAccountInfo = info.reblogAccountInfo {
+            reblog = Status(record: reblogRecord, account: Account(info: reblogAccountInfo), reblog: nil)
         }
 
-        self.init(record: result.status,
-                  account: Account(result: result.accountResult),
+        self.init(record: info.status,
+                  account: Account(info: info.accountInfo),
                   reblog: reblog)
     }
 }

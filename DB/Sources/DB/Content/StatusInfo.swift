@@ -3,7 +3,7 @@
 import Foundation
 import GRDB
 
-struct StatusResult: Codable, Hashable, FetchableRecord {
+struct StatusInfo: Codable, Hashable, FetchableRecord {
     let account: AccountRecord
     let accountMoved: AccountRecord?
     let status: StatusRecord
@@ -12,7 +12,7 @@ struct StatusResult: Codable, Hashable, FetchableRecord {
     let reblog: StatusRecord?
 }
 
-extension StatusResult {
+extension StatusInfo {
     static func request(_ request: QueryInterfaceRequest<StatusRecord>) -> QueryInterfaceRequest<Self> {
         request.including(required: StatusRecord.account.forKey(CodingKeys.account))
             .including(optional: StatusRecord.accountMoved.forKey(CodingKeys.accountMoved))
@@ -22,13 +22,13 @@ extension StatusResult {
             .asRequest(of: self)
     }
 
-    var accountResult: AccountResult {
-        AccountResult(account: account, moved: accountMoved)
+    var accountInfo: AccountInfo {
+        AccountInfo(account: account, moved: accountMoved)
     }
 
-    var reblogAccountResult: AccountResult? {
+    var reblogAccountInfo: AccountInfo? {
         guard let reblogAccount = reblogAccount else { return nil }
 
-        return AccountResult(account: reblogAccount, moved: reblogAccountMoved)
+        return AccountInfo(account: reblogAccount, moved: reblogAccountMoved)
     }
 }

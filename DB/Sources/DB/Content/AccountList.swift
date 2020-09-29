@@ -18,7 +18,7 @@ extension AccountList {
         through: joins,
         using: AccountListJoin.account)
 
-    var accounts: QueryInterfaceRequest<AccountResult> {
-        AccountResult.request(request(for: Self.accounts))
+    var accounts: QueryInterfaceRequest<AccountInfo> {
+        AccountInfo.request(request(for: Self.accounts))
     }
 }
