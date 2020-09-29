@@ -47,29 +47,30 @@ final class AttachmentsView: UIView {
 }
 
 private extension AttachmentsView {
-    static let spacing: CGFloat = 4
-    static let cornerRadius: CGFloat = 8
 
     func initializationActions() {
         backgroundColor = .clear
         layoutMargins = .zero
         clipsToBounds = true
-        layer.cornerRadius = Self.cornerRadius
+        layer.cornerRadius = .defaultCornerRadius
         addSubview(containerStackView)
         containerStackView.translatesAutoresizingMaskIntoConstraints = false
         containerStackView.distribution = .fillEqually
-        containerStackView.spacing = Self.spacing
-        containerStackView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
-        containerStackView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
-        containerStackView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor).isActive = true
-        containerStackView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor).isActive = true
+        containerStackView.spacing = .compactSpacing
         leftStackView.distribution = .fillEqually
-        leftStackView.spacing = Self.spacing
+        leftStackView.spacing = .compactSpacing
         leftStackView.axis = .vertical
         rightStackView.distribution = .fillEqually
-        rightStackView.spacing = Self.spacing
+        rightStackView.spacing = .compactSpacing
         rightStackView.axis = .vertical
         containerStackView.addArrangedSubview(leftStackView)
         containerStackView.addArrangedSubview(rightStackView)
+
+        NSLayoutConstraint.activate([
+            containerStackView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+            containerStackView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+            containerStackView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+            containerStackView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
+        ])
     }
 }

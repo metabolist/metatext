@@ -9,7 +9,7 @@ class WebfingerIndicatorView: UIVisualEffectView {
         super.init(effect: nil)
 
         clipsToBounds = true
-        layer.cornerRadius = 8
+        layer.cornerRadius = .defaultCornerRadius
 
         contentView.addSubview(activityIndicatorView)
         activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
@@ -17,13 +17,13 @@ class WebfingerIndicatorView: UIVisualEffectView {
 
         NSLayoutConstraint.activate([
         trailingAnchor.constraint(
-            equalTo: activityIndicatorView.trailingAnchor, constant: 8),
+            equalTo: activityIndicatorView.trailingAnchor, constant: .defaultSpacing),
         bottomAnchor.constraint(
-            equalTo: activityIndicatorView.bottomAnchor, constant: 8),
+            equalTo: activityIndicatorView.bottomAnchor, constant: .defaultSpacing),
         activityIndicatorView.topAnchor.constraint(
-            equalTo: topAnchor, constant: 8),
+            equalTo: topAnchor, constant: .defaultSpacing),
         activityIndicatorView.leadingAnchor.constraint(
-            equalTo: leadingAnchor, constant: 8),
+            equalTo: leadingAnchor, constant: .defaultSpacing),
         activityIndicatorView.centerXAnchor.constraint(
             equalTo: contentView.safeAreaLayoutGuide.centerXAnchor),
         activityIndicatorView.centerYAnchor.constraint(
@@ -44,15 +44,15 @@ extension WebfingerIndicatorView {
         isHidden = false
         activityIndicatorView.startAnimating()
 
-        UIView.animate(withDuration: 0.5) {
-            self.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+        UIView.animate(withDuration: .defaultAnimationDuration) {
+            self.effect = UIBlurEffect(style: .systemChromeMaterial)
         }
     }
 
     func stopAnimating() {
         activityIndicatorView.stopAnimating()
 
-        UIView.animate(withDuration: 0.5) {
+        UIView.animate(withDuration: .defaultAnimationDuration) {
             self.effect = nil
         } completion: { _ in
             self.isHidden = true

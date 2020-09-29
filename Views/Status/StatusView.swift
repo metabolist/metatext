@@ -104,6 +104,7 @@ extension StatusView: UITextViewDelegate {
 }
 
 private extension StatusView {
+    // swiftlint:disable function_body_length
     func initialSetup() {
         Bundle.main.loadNibNamed(String(describing: type(of: self)), owner: self, options: nil)
 
@@ -132,10 +133,8 @@ private extension StatusView {
 
         contentTextView.delegate = self
 
-        let highlightedButtonBackgroundImage = UIColor(white: 0, alpha: 0.5).image()
-
-        avatarButton.setBackgroundImage(highlightedButtonBackgroundImage, for: .highlighted)
-        contextParentAvatarButton.setBackgroundImage(highlightedButtonBackgroundImage, for: .highlighted)
+        avatarButton.setBackgroundImage(.highlightedButtonBackground, for: .highlighted)
+        contextParentAvatarButton.setBackgroundImage(.highlightedButtonBackground, for: .highlighted)
 
         let accountAction = UIAction { [weak self] _ in self?.statusConfiguration.viewModel.accountSelected() }
 
@@ -173,7 +172,6 @@ private extension StatusView {
         applyStatusConfiguration()
     }
 
-    // swiftlint:disable function_body_length
     func applyStatusConfiguration() {
         let viewModel = statusConfiguration.viewModel
         let mutableContent = NSMutableAttributedString(attributedString: viewModel.content)

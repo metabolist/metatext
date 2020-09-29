@@ -10,9 +10,13 @@ final class LoadingTableFooterView: UIView {
 
         addSubview(activityIndicatorView)
         activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
-        activityIndicatorView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        activityIndicatorView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor).isActive = true
-        activityIndicatorView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor).isActive = true
+
+        NSLayoutConstraint.activate([
+            activityIndicatorView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            activityIndicatorView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+            activityIndicatorView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
+        ])
+
         activityIndicatorView.startAnimating()
     }
 

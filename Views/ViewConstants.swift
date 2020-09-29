@@ -8,6 +8,10 @@ extension CGFloat {
     static let defaultCornerRadius: Self = 8
 }
 
+extension TimeInterval {
+    static let defaultAnimationDuration: Self = 0.5
+}
+
 extension UIImage {
     static let highlightedButtonBackground = UIColor(white: 0, alpha: 0.5).image()
 }

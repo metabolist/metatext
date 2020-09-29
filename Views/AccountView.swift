@@ -57,8 +57,6 @@ extension AccountView: UITextViewDelegate {
 }
 
 private extension AccountView {
-    static let spacing: CGFloat = 8
-    static let stackViewSpacing: CGFloat = 4
     static let avatarDimension: CGFloat = 50
 
     func initialSetup() {
@@ -71,7 +69,7 @@ private extension AccountView {
         avatarImageView.clipsToBounds = true
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
-        stackView.spacing = Self.stackViewSpacing
+        stackView.spacing = .compactSpacing
         stackView.addArrangedSubview(displayNameLabel)
         stackView.addArrangedSubview(accountLabel)
         stackView.addArrangedSubview(noteTextView)
@@ -92,7 +90,7 @@ private extension AccountView {
             avatarImageView.topAnchor.constraint(equalTo: readableContentGuide.topAnchor),
             avatarImageView.leadingAnchor.constraint(equalTo: readableContentGuide.leadingAnchor),
             avatarImageView.bottomAnchor.constraint(lessThanOrEqualTo: readableContentGuide.bottomAnchor),
-            stackView.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: Self.spacing),
+            stackView.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: .defaultSpacing),
             stackView.topAnchor.constraint(equalTo: readableContentGuide.topAnchor),
             stackView.trailingAnchor.constraint(equalTo: readableContentGuide.trailingAnchor),
             stackView.bottomAnchor.constraint(equalTo: readableContentGuide.bottomAnchor)

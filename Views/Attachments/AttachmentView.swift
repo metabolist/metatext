@@ -17,23 +17,12 @@ final class AttachmentView: UIView {
         layoutMargins = .zero
         addSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
-        imageView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
-        imageView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor).isActive = true
-        imageView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor).isActive = true
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
 
         addSubview(button)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
-        button.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
-        button.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor).isActive = true
-        button.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor).isActive = true
-
-        let highlightedButtonBackgroundImage = UIColor(white: 0, alpha: 0.5).image()
-
-        button.setBackgroundImage(highlightedButtonBackgroundImage, for: .highlighted)
+        button.setBackgroundImage(.highlightedButtonBackground, for: .highlighted)
 
         switch viewModel.attachment.type {
         case .image:
@@ -41,6 +30,17 @@ final class AttachmentView: UIView {
         default:
             break
         }
+
+        NSLayoutConstraint.activate([
+            imageView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+            imageView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+            imageView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
+            button.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+            button.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+            button.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+            button.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
+        ])
     }
 
     @available(*, unavailable)
