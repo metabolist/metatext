@@ -41,6 +41,7 @@ public struct ProfileService {
         if let account = account {
             accountPublisher = accountPublisher
                 .merge(with: Just(account).setFailureType(to: Error.self))
+                .removeDuplicates()
                 .eraseToAnyPublisher()
         }
 
