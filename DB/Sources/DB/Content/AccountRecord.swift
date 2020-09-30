@@ -81,7 +81,8 @@ extension AccountRecord {
             request(for: Self.hasMany(
                         StatusRecord.self,
                         through: Self.statusJoins.filter(AccountStatusJoin.Columns.collection == collection.rawValue),
-                        using: AccountStatusJoin.status)))
+                        using: AccountStatusJoin.status)
+                        .order(StatusRecord.Columns.createdAt.desc)))
     }
 
     init(account: Account) {
