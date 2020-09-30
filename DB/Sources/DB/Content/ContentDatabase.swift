@@ -192,7 +192,7 @@ public extension ContentDatabase {
         ValueObservation.tracking { db -> [[StatusInfo]] in
             guard let parent = try StatusInfo.request(StatusRecord.filter(StatusRecord.Columns.id == parentID))
                     .fetchOne(db) else {
-                return [[]]
+                return []
             }
 
             let ancestors = try parent.record.ancestors.fetchAll(db)
@@ -210,20 +210,16 @@ public extension ContentDatabase {
         accountID: String,
         collection: ProfileCollection) -> AnyPublisher<[[Status]], Error> {
         ValueObservation.tracking { db -> [[StatusInfo]] in
-            let statuses = try StatusInfo.request(StatusRecord.filter(
-                AccountStatusJoin
-                    .select(AccountStatusJoin.Columns.statusId, as: String.self)
-                    .filter(sql: "accountId = ? AND collection = ?", arguments: [accountID, collection.rawValue])
-                    .contains(StatusRecord.Columns.id))
-                .order(StatusRecord.Columns.createdAt.desc))
-                .fetchAll(db)
+            guard let accountRecord = try AccountRecord
+                    .filter(AccountRecord.Columns.id == accountID)
+                    .fetchOne(db) else {
+                return []
+            }
 
-            if
-                case .statuses = collection,
-                let accountRecord = try AccountRecord.filter(AccountRecord.Columns.id == accountID).fetchOne(db) {
-                let pinnedStatuses = try accountRecord.pinnedStatuses.fetchAll(db)
+            let statuses = try accountRecord.statuses(collection: collection).fetchAll(db)
 
-                return [pinnedStatuses, statuses]
+            if case .statuses = collection {
+                return [try accountRecord.pinnedStatuses.fetchAll(db), statuses]
             } else {
                 return [statuses]
             }
