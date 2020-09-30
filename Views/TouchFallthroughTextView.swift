@@ -5,6 +5,8 @@ import UIKit
 final class TouchFallthroughTextView: UITextView {
     var shouldFallthrough: Bool = true
 
+    private var linkHighlightView: UIView?
+
     override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
         initializationActions()
@@ -17,6 +19,35 @@ final class TouchFallthroughTextView: UITextView {
 
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         shouldFallthrough ? urlAndRect(at: point) != nil : super.point(inside: point, with: event)
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+
+        guard let touch = touches.first,
+              let (_, rect) = urlAndRect(at: touch.location(in: self)) else {
+            return
+        }
+
+        let linkHighlightView = UIView(frame: rect)
+
+        self.linkHighlightView = linkHighlightView
+        linkHighlightView.transform = Self.linkHighlightViewTransform
+        linkHighlightView.layer.cornerRadius = .defaultCornerRadius
+        linkHighlightView.backgroundColor = .secondarySystemBackground
+        insertSubview(linkHighlightView, at: 0)
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+
+        removeLinkHighlightView()
+    }
+
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesCancelled(touches, with: event)
+
+        removeLinkHighlightView()
     }
 
     override var selectedTextRange: UITextRange? {
@@ -91,10 +122,22 @@ final class TouchFallthroughTextView: UITextView {
 }
 
 private extension TouchFallthroughTextView {
-    private func initializationActions() {
+    static let linkHighlightViewTransform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+
+    func initializationActions() {
+        clipsToBounds = false
         textDragInteraction?.isEnabled = false
         textContainerInset = .zero
         textContainer.lineFragmentPadding = 0
         linkTextAttributes = [.foregroundColor: tintColor as Any, .underlineColor: UIColor.clear]
+    }
+
+    func removeLinkHighlightView() {
+        UIView.animate(withDuration: .defaultAnimationDuration) {
+            self.linkHighlightView?.alpha = 0
+        } completion: { _ in
+            self.linkHighlightView?.removeFromSuperview()
+            self.linkHighlightView = nil
+        }
     }
 }
