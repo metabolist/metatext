@@ -16,11 +16,11 @@ extension Account {
     convenience init(info: AccountInfo) {
         var moved: Account?
 
-        if let movedRecord = info.moved {
+        if let movedRecord = info.movedRecord {
             moved = Self(record: movedRecord, moved: nil)
         }
 
-        self.init(record: info.account, moved: moved)
+        self.init(record: info.record, moved: moved)
     }
 }
 

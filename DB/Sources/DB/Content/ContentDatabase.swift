@@ -195,8 +195,8 @@ public extension ContentDatabase {
                 return [[]]
             }
 
-            let ancestors = try parent.status.ancestors.fetchAll(db)
-            let descendants = try parent.status.descendants.fetchAll(db)
+            let ancestors = try parent.record.ancestors.fetchAll(db)
+            let descendants = try parent.record.descendants.fetchAll(db)
 
             return [ancestors, [parent], descendants]
         }

@@ -6,16 +6,16 @@ import GRDB
 extension Identity {
     init(info: IdentityInfo) {
         self.init(
-            id: info.identity.id,
-            url: info.identity.url,
-            authenticated: info.identity.authenticated,
-            pending: info.identity.pending,
-            lastUsedAt: info.identity.lastUsedAt,
-            preferences: info.identity.preferences,
+            id: info.record.id,
+            url: info.record.url,
+            authenticated: info.record.authenticated,
+            pending: info.record.pending,
+            lastUsedAt: info.record.lastUsedAt,
+            preferences: info.record.preferences,
             instance: info.instance,
             account: info.account,
-            lastRegisteredDeviceToken: info.identity.lastRegisteredDeviceToken,
-            pushSubscriptionAlerts: info.identity.pushSubscriptionAlerts)
+            lastRegisteredDeviceToken: info.record.lastRegisteredDeviceToken,
+            pushSubscriptionAlerts: info.record.pushSubscriptionAlerts)
     }
 }
 

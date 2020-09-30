@@ -19,11 +19,11 @@ extension Status {
     convenience init(info: StatusInfo) {
         var reblog: Status?
 
-        if let reblogRecord = info.reblog, let reblogAccountInfo = info.reblogAccountInfo {
+        if let reblogRecord = info.reblogRecord, let reblogAccountInfo = info.reblogAccountInfo {
             reblog = Status(record: reblogRecord, account: Account(info: reblogAccountInfo), reblog: nil)
         }
 
-        self.init(record: info.status,
+        self.init(record: info.record,
                   account: Account(info: info.accountInfo),
                   reblog: reblog)
     }

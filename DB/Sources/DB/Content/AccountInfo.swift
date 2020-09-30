@@ -4,12 +4,16 @@ import Foundation
 import GRDB
 
 struct AccountInfo: Codable, Hashable, FetchableRecord {
-    let account: AccountRecord
-    let moved: AccountRecord?
+    let record: AccountRecord
+    let movedRecord: AccountRecord?
 }
 
 extension AccountInfo {
+    static func addingIncludes<T: DerivableRequest>(_ request: T) -> T where T.RowDecoder == AccountRecord {
+        request.including(optional: AccountRecord.moved.forKey(CodingKeys.movedRecord))
+    }
+
     static func request(_ request: QueryInterfaceRequest<AccountRecord>) -> QueryInterfaceRequest<Self> {
-        request.including(optional: AccountRecord.moved.forKey(CodingKeys.moved)).asRequest(of: self)
+        addingIncludes(request).asRequest(of: self)
     }
 }
