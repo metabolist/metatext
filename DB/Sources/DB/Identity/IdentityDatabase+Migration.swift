@@ -20,8 +20,7 @@ extension IdentityDatabase {
                 t.column("authenticated", .boolean).notNull()
                 t.column("pending", .boolean).notNull()
                 t.column("lastUsedAt", .datetime).notNull()
-                t.column("instanceURI", .text)
-                    .references("instance", column: "uri")
+                t.column("instanceURI", .text).references("instance")
                 t.column("preferences", .blob).notNull()
                 t.column("pushSubscriptionAlerts", .blob).notNull()
                 t.column("lastRegisteredDeviceToken", .blob)
@@ -30,7 +29,7 @@ extension IdentityDatabase {
             try db.create(table: "account", ifNotExists: true) { t in
                 t.column("id", .text).primaryKey(onConflict: .replace)
                 t.column("identityID", .text).notNull()
-                    .references("identityRecord", column: "id", onDelete: .cascade)
+                    .references("identityRecord", onDelete: .cascade)
                 t.column("username", .text).notNull()
                 t.column("displayName", .text).notNull()
                 t.column("url", .text).notNull()
