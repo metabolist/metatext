@@ -4,48 +4,32 @@ import Foundation
 import GRDB
 import Mastodon
 
-extension Timeline: FetchableRecord, PersistableRecord {
-    enum Columns: String, ColumnExpression {
-        case id
-        case listTitle
-    }
-
-    public init(row: Row) {
-        switch (row[Columns.id] as String, row[Columns.listTitle] as String?) {
-        case (Timeline.home.id, _):
-            self = .home
-        case (Timeline.local.id, _):
-            self = .local
-        case (Timeline.federated.id, _):
-            self = .federated
-        case (let id, .some(let title)):
-            self = .list(List(id: id, title: title))
-        default:
-            var tag: String = row[Columns.id]
-
-            tag.removeFirst()
-            self = .tag(tag)
-        }
-    }
-
-    public func encode(to container: inout PersistenceContainer) {
-        container[Columns.id] = id
-
-        if case let .list(list) = self {
-            container[Columns.listTitle] = list.title
-        }
-    }
-}
-
 extension Timeline {
-    static let statusJoins = hasMany(TimelineStatusJoin.self)
-    static let statuses = hasMany(
-        StatusRecord.self,
-        through: statusJoins,
-        using: TimelineStatusJoin.status)
-        .order(StatusRecord.Columns.createdAt.desc)
+    func save(_ db: Database) throws {
+        try TimelineRecord(timeline: self).save(db)
+    }
 
-    var statuses: QueryInterfaceRequest<StatusInfo> {
-        StatusInfo.request(request(for: Self.statuses))
+    init?(record: TimelineRecord) {
+        switch (record.id,
+                record.listId,
+                record.listTitle,
+                record.tag,
+                record.accountId,
+                record.profileCollection) {
+        case (Timeline.home.id, _, _, _, _, _):
+            self = .home
+        case (Timeline.local.id, _, _, _, _, _):
+            self = .local
+        case (Timeline.federated.id, _, _, _, _, _):
+            self = .federated
+        case (_, .some(let listId), .some(let listTitle), _, _, _):
+            self = .list(List(id: listId, title: listTitle))
+        case (_, _, _, .some(let tag), _, _):
+            self = .tag(tag)
+        case (_, _, _, _, .some(let accountId), .some(let profileCollection)):
+            self = .profile(accountId: accountId, profileCollection: profileCollection)
+        default:
+            return nil
+        }
     }
 }

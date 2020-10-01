@@ -7,7 +7,7 @@ import Mastodon
 import MastodonAPI
 
 public struct ProfileService {
-    public let accountService: AnyPublisher<AccountService, Error>
+    public let accountServicePublisher: AnyPublisher<AccountService, Error>
 
     private let accountID: String
     private let mastodonAPIClient: MastodonAPIClient
@@ -45,18 +45,16 @@ public struct ProfileService {
                 .eraseToAnyPublisher()
         }
 
-        accountService = accountPublisher
+        accountServicePublisher = accountPublisher
             .map { AccountService(account: $0, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase) }
             .eraseToAnyPublisher()
     }
 }
 
 public extension ProfileService {
-    func statusListService(
-        collectionPublisher: CurrentValueSubject<ProfileCollection, Never>) -> StatusListService {
+    func statusListService(profileCollection: ProfileCollection) -> StatusListService {
         StatusListService(
-            accountID: accountID,
-            collection: collectionPublisher,
+            timeline: .profile(accountId: accountID, profileCollection: profileCollection),
             mastodonAPIClient: mastodonAPIClient,
             contentDatabase: contentDatabase)
     }

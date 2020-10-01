@@ -99,21 +99,6 @@ public extension ContentDatabase {
         .eraseToAnyPublisher()
     }
 
-    func insert(
-        statuses: [Status],
-        accountID: String,
-        collection: ProfileCollection) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher {
-            for status in statuses {
-                try status.save($0)
-
-                try AccountStatusJoin(accountId: accountID, statusId: status.id, collection: collection).save($0)
-            }
-        }
-        .ignoreOutput()
-        .eraseToAnyPublisher()
-    }
-
     func append(accounts: [Account], toList list: AccountList) -> AnyPublisher<Never, Error> {
         databaseWriter.writePublisher {
             try list.save($0)
@@ -135,9 +120,9 @@ public extension ContentDatabase {
                 try Timeline.list(list).save($0)
             }
 
-            try Timeline
-                .filter(!(Timeline.authenticatedDefaults.map(\.id) + lists.map(\.id)).contains(Timeline.Columns.id)
-                            && Timeline.Columns.listTitle != nil)
+            try TimelineRecord
+                .filter(!lists.map(\.id).contains(TimelineRecord.Columns.listId)
+                            && TimelineRecord.Columns.listTitle != nil)
                 .deleteAll($0)
         }
         .ignoreOutput()
@@ -151,7 +136,7 @@ public extension ContentDatabase {
     }
 
     func deleteList(id: String) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher(updates: Timeline.filter(Timeline.Columns.id == id).deleteAll)
+        databaseWriter.writePublisher(updates: TimelineRecord.filter(TimelineRecord.Columns.listId == id).deleteAll)
             .ignoreOutput()
             .eraseToAnyPublisher()
     }
@@ -181,11 +166,22 @@ public extension ContentDatabase {
     }
 
     func statusesObservation(timeline: Timeline) -> AnyPublisher<[[Status]], Error> {
-        ValueObservation.tracking(timeline.statuses.fetchAll)
-            .removeDuplicates()
-            .publisher(in: databaseWriter)
-            .map { [$0.map(Status.init(info:))] }
-            .eraseToAnyPublisher()
+        ValueObservation.tracking { db -> [[StatusInfo]] in
+            let statuses = try TimelineRecord(timeline: timeline).statuses.fetchAll(db)
+
+            if case let .profile(accountId, profileCollection) = timeline, profileCollection == .statuses {
+                let pinnedStatuses = try AccountRecord.filter(AccountRecord.Columns.id == accountId)
+                    .fetchOne(db)?.pinnedStatuses.fetchAll(db) ?? []
+
+                return [pinnedStatuses, statuses]
+            } else {
+                return [statuses]
+            }
+        }
+        .removeDuplicates()
+        .map { $0.map { $0.map(Status.init(info:)) } }
+        .publisher(in: databaseWriter)
+        .eraseToAnyPublisher()
     }
 
     func contextObservation(parentID: String) -> AnyPublisher<[[Status]], Error> {
@@ -201,40 +197,17 @@ public extension ContentDatabase {
             return [ancestors, [parent], descendants]
         }
         .removeDuplicates()
-        .publisher(in: databaseWriter)
         .map { $0.map { $0.map(Status.init(info:)) } }
-        .eraseToAnyPublisher()
-    }
-
-    func statusesObservation(
-        accountID: String,
-        collection: ProfileCollection) -> AnyPublisher<[[Status]], Error> {
-        ValueObservation.tracking { db -> [[StatusInfo]] in
-            guard let accountRecord = try AccountRecord
-                    .filter(AccountRecord.Columns.id == accountID)
-                    .fetchOne(db) else {
-                return []
-            }
-
-            let statuses = try accountRecord.statuses(collection: collection).fetchAll(db)
-
-            if case .statuses = collection {
-                return [try accountRecord.pinnedStatuses.fetchAll(db), statuses]
-            } else {
-                return [statuses]
-            }
-        }
-        .removeDuplicates()
         .publisher(in: databaseWriter)
-        .map { $0.map { $0.map(Status.init(info:)) } }
         .eraseToAnyPublisher()
     }
 
     func listsObservation() -> AnyPublisher<[Timeline], Error> {
-        ValueObservation.tracking(Timeline.filter(Timeline.Columns.listTitle != nil)
-                                    .order(Timeline.Columns.listTitle.asc)
+        ValueObservation.tracking(TimelineRecord.filter(TimelineRecord.Columns.listId != nil)
+                                    .order(TimelineRecord.Columns.listTitle.asc)
                                     .fetchAll)
             .removeDuplicates()
+            .map { $0.map(Timeline.init(record:)).compactMap { $0 } }
             .publisher(in: databaseWriter)
             .eraseToAnyPublisher()
     }
@@ -243,12 +216,12 @@ public extension ContentDatabase {
         ValueObservation.tracking(
             Filter.filter(Filter.Columns.expiresAt == nil || Filter.Columns.expiresAt > date).fetchAll)
             .removeDuplicates()
-            .publisher(in: databaseWriter)
             .map {
                 guard let context = context else { return $0 }
 
                 return $0.filter { $0.context.contains(context) }
             }
+            .publisher(in: databaseWriter)
             .eraseToAnyPublisher()
     }
 
@@ -262,7 +235,6 @@ public extension ContentDatabase {
     func accountObservation(id: String) -> AnyPublisher<Account?, Error> {
         ValueObservation.tracking(AccountInfo.request(AccountRecord.filter(AccountRecord.Columns.id == id)).fetchOne)
             .removeDuplicates()
-            .publisher(in: databaseWriter)
             .map {
                 if let info = $0 {
                     return Account(info: info)
@@ -270,14 +242,15 @@ public extension ContentDatabase {
                     return nil
                 }
             }
+            .publisher(in: databaseWriter)
             .eraseToAnyPublisher()
     }
 
     func accountListObservation(_ list: AccountList) -> AnyPublisher<[Account], Error> {
         ValueObservation.tracking(list.accounts.fetchAll)
             .removeDuplicates()
-            .publisher(in: databaseWriter)
             .map { $0.map(Account.init(info:)) }
+            .publisher(in: databaseWriter)
             .eraseToAnyPublisher()
     }
 }
@@ -289,7 +262,7 @@ private extension ContentDatabase {
 
     func clean() throws {
         try databaseWriter.write {
-            try Timeline.deleteAll($0)
+            try TimelineRecord.deleteAll($0)
             try StatusRecord.deleteAll($0)
             try AccountRecord.deleteAll($0)
             try AccountList.deleteAll($0)

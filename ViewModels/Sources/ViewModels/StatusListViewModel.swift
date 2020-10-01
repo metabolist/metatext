@@ -5,7 +5,7 @@ import Foundation
 import Mastodon
 import ServiceLayer
 
-public class StatusListViewModel: ObservableObject {
+final public class StatusListViewModel: ObservableObject {
     @Published public private(set) var items = [[CollectionItem]]()
     @Published public var alertItem: AlertItem?
     public private(set) var nextPageMaxID: String?
@@ -40,12 +40,18 @@ public class StatusListViewModel: ObservableObject {
             .sink { [weak self] in self?.nextPageMaxID = $0 }
             .store(in: &cancellables)
     }
+}
 
+extension StatusListViewModel: CollectionViewModel {
     public var collectionItems: AnyPublisher<[[CollectionItem]], Never> { $items.eraseToAnyPublisher() }
 
-    public var navigationEvents: AnyPublisher<NavigationEvent, Never> { navigationEventsSubject.eraseToAnyPublisher() }
-
     public var title: AnyPublisher<String?, Never> { Just(statusListService.title).eraseToAnyPublisher() }
+
+    public var alertItems: AnyPublisher<AlertItem, Never> { $alertItem.compactMap { $0 }.eraseToAnyPublisher() }
+
+    public var loading: AnyPublisher<Bool, Never> { loadingSubject.eraseToAnyPublisher() }
+
+    public var navigationEvents: AnyPublisher<NavigationEvent, Never> { navigationEventsSubject.eraseToAnyPublisher() }
 
     public func request(maxID: String? = nil, minID: String? = nil) {
         statusListService.request(maxID: maxID, minID: minID)
@@ -57,12 +63,6 @@ public class StatusListViewModel: ObservableObject {
             .sink { _ in }
             .store(in: &cancellables)
     }
-}
-
-extension StatusListViewModel: CollectionViewModel {
-    public var alertItems: AnyPublisher<AlertItem, Never> { $alertItem.compactMap { $0 }.eraseToAnyPublisher() }
-
-    public var loading: AnyPublisher<Bool, Never> { loadingSubject.eraseToAnyPublisher() }
 
     public func itemSelected(_ item: CollectionItem) {
         switch item.kind {

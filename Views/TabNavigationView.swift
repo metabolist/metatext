@@ -1,7 +1,6 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import KingfisherSwiftUI
-import enum Mastodon.Timeline
 import SwiftUI
 import ViewModels
 
@@ -138,6 +137,8 @@ private extension Timeline {
             return list.title
         case let .tag(tag):
             return "#" + tag
+        case .profile:
+            return ""
         }
     }
 
@@ -148,6 +149,7 @@ private extension Timeline {
         case .federated: return "globe"
         case .list: return "scroll"
         case .tag: return "number"
+        case .profile: return "person"
         }
     }
 }

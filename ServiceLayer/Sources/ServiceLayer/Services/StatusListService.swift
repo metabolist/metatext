@@ -21,15 +21,6 @@ public struct StatusListService {
 
 extension StatusListService {
     init(timeline: Timeline, mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
-        let filterContext: Filter.Context
-
-        switch timeline {
-        case .home, .list:
-            filterContext = .home
-        case .local, .federated, .tag:
-            filterContext = .public
-        }
-
         var title: String?
 
         if case let .tag(tag) = timeline {
@@ -46,7 +37,7 @@ extension StatusListService {
                     status: nil,
                     mastodonAPIClient: mastodonAPIClient,
                     contentDatabase: contentDatabase),
-                  filterContext: filterContext,
+                  filterContext: timeline.filterContext,
                   mastodonAPIClient: mastodonAPIClient,
                   contentDatabase: contentDatabase) { maxID, minID in
             mastodonAPIClient.pagedRequest(timeline.endpoint, maxID: maxID, minID: minID)
@@ -78,32 +69,36 @@ extension StatusListService {
                 .eraseToAnyPublisher()
         }
     }
+}
 
-    init(
-        accountID: String,
-        collection: CurrentValueSubject<ProfileCollection, Never>,
-        mastodonAPIClient: MastodonAPIClient,
-        contentDatabase: ContentDatabase) {
-        let nextPageMaxIDsSubject = PassthroughSubject<String?, Never>()
+public extension StatusListService {
+    func request(maxID: String?, minID: String?) -> AnyPublisher<Never, Error> {
+        requestClosure(maxID, minID)
+    }
 
-        self.init(
-            statusSections: collection
-                .flatMap { contentDatabase.statusesObservation(accountID: accountID, collection: $0) }
-                .eraseToAnyPublisher(),
-            nextPageMaxIDs: nextPageMaxIDsSubject.eraseToAnyPublisher(),
-            contextParentID: nil,
-            title: nil,
-            navigationService: NavigationService(
-              status: nil,
-              mastodonAPIClient: mastodonAPIClient,
-              contentDatabase: contentDatabase),
-            filterContext: .account,
-            mastodonAPIClient: mastodonAPIClient,
-            contentDatabase: contentDatabase) { maxID, minID in
+    var filters: AnyPublisher<[Filter], Error> {
+        contentDatabase.activeFiltersObservation(date: Date(), context: filterContext)
+    }
+}
+
+private extension Timeline {
+    var endpoint: StatusesEndpoint {
+        switch self {
+        case .home:
+            return .timelinesHome
+        case .local:
+            return .timelinesPublic(local: true)
+        case .federated:
+            return .timelinesPublic(local: false)
+        case let .list(list):
+            return .timelinesList(id: list.id)
+        case let .tag(tag):
+            return .timelinesTag(tag)
+        case let .profile(accountId, profileCollection):
             let excludeReplies: Bool
             let onlyMedia: Bool
 
-            switch collection.value {
+            switch profileCollection {
             case .statuses:
                 excludeReplies = true
                 onlyMedia = false
@@ -115,30 +110,22 @@ extension StatusListService {
                 onlyMedia = true
             }
 
-            let endpoint = StatusesEndpoint.accountsStatuses(
-                id: accountID,
+            return .accountsStatuses(
+                id: accountId,
                 excludeReplies: excludeReplies,
                 onlyMedia: onlyMedia,
                 pinned: false)
-            return mastodonAPIClient.pagedRequest(endpoint, maxID: maxID, minID: minID)
-                .handleEvents(receiveOutput: { nextPageMaxIDsSubject.send($0.info.maxID) })
-                .flatMap {
-                    contentDatabase.insert(
-                    statuses: $0.result,
-                    accountID: accountID,
-                    collection: collection.value)
-                }
-                .eraseToAnyPublisher()
         }
     }
-}
 
-public extension StatusListService {
-    func request(maxID: String?, minID: String?) -> AnyPublisher<Never, Error> {
-        requestClosure(maxID, minID)
-    }
-
-    var filters: AnyPublisher<[Filter], Error> {
-        contentDatabase.activeFiltersObservation(date: Date(), context: filterContext)
+    var filterContext: Filter.Context {
+        switch self {
+        case .home, .list:
+            return .home
+        case .local, .federated, .tag:
+            return .public
+        case .profile:
+            return .account
+        }
     }
 }

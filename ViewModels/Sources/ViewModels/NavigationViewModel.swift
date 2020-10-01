@@ -53,7 +53,7 @@ public extension NavigationViewModel {
         switch timeline {
         case .home, .list:
             return identification.identity.handle
-        case .local, .federated, .tag:
+        case .local, .federated, .tag, .profile:
             return identification.identity.instance?.uri ?? ""
         }
     }

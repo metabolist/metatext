@@ -27,14 +27,14 @@ extension ContentDatabase {
                 t.column("emojis", .blob).notNull()
                 t.column("bot", .boolean).notNull()
                 t.column("discoverable", .boolean)
-                t.column("movedId", .text).references("accountRecord", column: "id")
+                t.column("movedId", .text).references("accountRecord")
             }
 
             try db.create(table: "statusRecord") { t in
                 t.column("id", .text).primaryKey(onConflict: .replace)
                 t.column("uri", .text).notNull()
                 t.column("createdAt", .datetime).notNull()
-                t.column("accountId", .text).notNull().references("accountRecord", column: "id")
+                t.column("accountId", .text).notNull().references("accountRecord")
                 t.column("content", .text).notNull()
                 t.column("visibility", .text).notNull()
                 t.column("sensitive", .boolean).notNull()
@@ -50,7 +50,7 @@ extension ContentDatabase {
                 t.column("url", .text)
                 t.column("inReplyToId", .text)
                 t.column("inReplyToAccountId", .text)
-                t.column("reblogId", .text).references("statusRecord", column: "id")
+                t.column("reblogId", .text).references("statusRecord")
                 t.column("poll", .blob)
                 t.column("card", .blob)
                 t.column("language", .text)
@@ -62,16 +62,20 @@ extension ContentDatabase {
                 t.column("pinned", .boolean)
             }
 
-            try db.create(table: "timeline") { t in
+            try db.create(table: "timelineRecord") { t in
                 t.column("id", .text).primaryKey(onConflict: .replace)
+                t.column("listId", .text)
                 t.column("listTitle", .text).indexed().collate(.localizedCaseInsensitiveCompare)
+                t.column("tag", .text)
+                t.column("accountId", .text).references("accountRecord", onDelete: .cascade, onUpdate: .cascade)
+                t.column("profileCollection", .text)
             }
 
             try db.create(table: "timelineStatusJoin") { t in
                 t.column("timelineId", .text).indexed().notNull()
-                    .references("timeline", column: "id", onDelete: .cascade, onUpdate: .cascade)
+                    .references("timelineRecord", onDelete: .cascade, onUpdate: .cascade)
                 t.column("statusId", .text).indexed().notNull()
-                    .references("statusRecord", column: "id", onDelete: .cascade, onUpdate: .cascade)
+                    .references("statusRecord", onDelete: .cascade, onUpdate: .cascade)
 
                 t.primaryKey(["timelineId", "statusId"], onConflict: .replace)
             }
@@ -87,9 +91,9 @@ extension ContentDatabase {
 
             try db.create(table: "statusContextJoin") { t in
                 t.column("parentId", .text).indexed().notNull()
-                    .references("statusRecord", column: "id", onDelete: .cascade, onUpdate: .cascade)
+                    .references("statusRecord", onDelete: .cascade, onUpdate: .cascade)
                 t.column("statusId", .text).indexed().notNull()
-                    .references("statusRecord", column: "id", onDelete: .cascade, onUpdate: .cascade)
+                    .references("statusRecord", onDelete: .cascade, onUpdate: .cascade)
                 t.column("section", .text).indexed().notNull()
                 t.column("index", .integer).notNull()
 
@@ -98,22 +102,12 @@ extension ContentDatabase {
 
             try db.create(table: "accountPinnedStatusJoin") { t in
                 t.column("accountId", .text).indexed().notNull()
-                    .references("accountRecord", column: "id", onDelete: .cascade, onUpdate: .cascade)
+                    .references("accountRecord", onDelete: .cascade, onUpdate: .cascade)
                 t.column("statusId", .text).indexed().notNull()
-                    .references("statusRecord", column: "id", onDelete: .cascade, onUpdate: .cascade)
+                    .references("statusRecord", onDelete: .cascade, onUpdate: .cascade)
                 t.column("index", .integer).notNull()
 
                 t.primaryKey(["accountId", "statusId"], onConflict: .replace)
-            }
-
-            try db.create(table: "accountStatusJoin") { t in
-                t.column("accountId", .text).indexed().notNull()
-                    .references("accountRecord", column: "id", onDelete: .cascade, onUpdate: .cascade)
-                t.column("statusId", .text).indexed().notNull()
-                    .references("statusRecord", column: "id", onDelete: .cascade, onUpdate: .cascade)
-                t.column("collection", .text).indexed().notNull()
-
-                t.primaryKey(["accountId", "statusId", "collection"], onConflict: .replace)
             }
 
             try db.create(table: "accountList") { t in
@@ -122,9 +116,9 @@ extension ContentDatabase {
 
             try db.create(table: "accountListJoin") { t in
                 t.column("accountId", .text).indexed().notNull()
-                    .references("accountRecord", column: "id", onDelete: .cascade, onUpdate: .cascade)
+                    .references("accountRecord", onDelete: .cascade, onUpdate: .cascade)
                 t.column("listId", .text).indexed().notNull()
-                    .references("accountList", column: "id", onDelete: .cascade, onUpdate: .cascade)
+                    .references("accountList", onDelete: .cascade, onUpdate: .cascade)
                 t.column("index", .integer).notNull()
 
                 t.primaryKey(["accountId", "listId"], onConflict: .replace)

@@ -70,19 +70,9 @@ extension AccountRecord {
         StatusRecord.self,
         through: pinnedStatusJoins,
         using: AccountPinnedStatusJoin.status)
-    static let statusJoins = hasMany(AccountStatusJoin.self)
 
     var pinnedStatuses: QueryInterfaceRequest<StatusInfo> {
         StatusInfo.request(request(for: Self.pinnedStatuses))
-    }
-
-    func statuses(collection: ProfileCollection) -> QueryInterfaceRequest<StatusInfo> {
-        StatusInfo.request(
-            request(for: Self.hasMany(
-                        StatusRecord.self,
-                        through: Self.statusJoins.filter(AccountStatusJoin.Columns.collection == collection.rawValue),
-                        using: AccountStatusJoin.status)
-                        .order(StatusRecord.Columns.createdAt.desc)))
     }
 
     init(account: Account) {

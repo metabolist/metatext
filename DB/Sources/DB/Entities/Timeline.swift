@@ -1,6 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import Foundation
+import Mastodon
 
 public enum Timeline: Hashable {
     case home
@@ -8,6 +9,7 @@ public enum Timeline: Hashable {
     case federated
     case list(List)
     case tag(String)
+    case profile(accountId: String, profileCollection: ProfileCollection)
 }
 
 public extension Timeline {
@@ -25,9 +27,11 @@ extension Timeline: Identifiable {
         case .federated:
             return "federated"
         case let .list(list):
-            return list.id
+            return "list-".appending(list.id)
         case let .tag(tag):
-            return "#".appending(tag).lowercased()
+            return "tag-".appending(tag).lowercased()
+        case let .profile(accountId, profileCollection):
+            return "profile-\(accountId)-\(profileCollection)"
         }
     }
 }
