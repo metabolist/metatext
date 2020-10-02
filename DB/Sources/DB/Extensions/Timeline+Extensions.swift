@@ -5,10 +5,6 @@ import GRDB
 import Mastodon
 
 extension Timeline {
-    func save(_ db: Database) throws {
-        try TimelineRecord(timeline: self).save(db)
-    }
-
     init?(record: TimelineRecord) {
         switch (record.id,
                 record.listId,

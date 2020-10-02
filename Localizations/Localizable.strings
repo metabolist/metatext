@@ -28,6 +28,7 @@
 "identities.browsing" = "Browsing";
 "identities.pending" = "Pending";
 "lists.new-list-title" = "New List Title";
+"load-more" = "Load More";
 "pending.pending-confirmation" = "Your account is pending confirmation";
 "preferences" = "Preferences";
 "preferences.posting-reading" = "Posting and Reading";

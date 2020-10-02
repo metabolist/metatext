@@ -27,6 +27,12 @@ class TableViewController: UITableViewController {
                 statusListCell.viewModel = statusViewModel
             case (let accountListCell as AccountListCell, let accountViewModel as AccountViewModel):
                 accountListCell.viewModel = accountViewModel
+            case (let loadMoreCell as LoadMoreCell, let loadMoreViewModel as LoadMoreViewModel):
+                var contentConfiguration = loadMoreCell.defaultContentConfiguration()
+
+                contentConfiguration.text = NSLocalizedString("load-more", comment: "")
+
+                loadMoreCell.contentConfiguration = contentConfiguration
             default:
                 return nil
             }

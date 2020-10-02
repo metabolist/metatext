@@ -85,6 +85,8 @@ extension StatusListViewModel: CollectionViewModel {
         switch item.kind {
         case .status:
             return statusViewModel(item: item)
+        case .loadMore:
+            return LoadMoreViewModel()
         default:
             return nil
         }

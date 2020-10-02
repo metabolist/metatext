@@ -42,12 +42,22 @@ public extension ContentDatabase {
 
     func insert(statuses: [Status], timeline: Timeline) -> AnyPublisher<Never, Error> {
         databaseWriter.writePublisher {
-            try timeline.save($0)
+            let timelineRecord = TimelineRecord(timeline: timeline)
+
+            try timelineRecord.save($0)
+
+            let maxIDPresent = try String.fetchOne($0, timelineRecord.statuses.select(max(StatusRecord.Columns.id)))
 
             for status in statuses {
                 try status.save($0)
 
                 try TimelineStatusJoin(timelineId: timeline.id, statusId: status.id).save($0)
+            }
+
+            if let maxIDPresent = maxIDPresent,
+               let minIDInserted = statuses.map(\.id).min(),
+               minIDInserted > maxIDPresent {
+                try LoadMore(timelineId: timeline.id, afterStatusId: minIDInserted).save($0)
             }
         }
         .ignoreOutput()
@@ -117,7 +127,7 @@ public extension ContentDatabase {
     func setLists(_ lists: [List]) -> AnyPublisher<Never, Error> {
         databaseWriter.writePublisher {
             for list in lists {
-                try Timeline.list(list).save($0)
+                try TimelineRecord(timeline: Timeline.list(list)).save($0)
             }
 
             try TimelineRecord
@@ -130,7 +140,7 @@ public extension ContentDatabase {
     }
 
     func createList(_ list: List) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher(updates: Timeline.list(list).save)
+        databaseWriter.writePublisher(updates: TimelineRecord(timeline: Timeline.list(list)).save)
             .ignoreOutput()
             .eraseToAnyPublisher()
     }
@@ -191,7 +201,7 @@ public extension ContentDatabase {
                 guard let index = timelineItems.firstIndex(where: {
                     guard case let .status(configuration) = $0 else { return false }
 
-                    return loadMore.afterStatusId < configuration.status.id
+                    return loadMore.afterStatusId > configuration.status.id
                 }) else { continue }
 
                 timelineItems.insert(.loadMore(loadMore), at: index)
