@@ -21,4 +21,8 @@ extension StatusInfo {
     static func request(_ request: QueryInterfaceRequest<StatusRecord>) -> QueryInterfaceRequest<Self> {
         addingIncludes(request).asRequest(of: self)
     }
+
+    var filterableContent: String {
+        (record.filterableContent + (reblogRecord?.filterableContent ?? [])).joined(separator: " ")
+    }
 }

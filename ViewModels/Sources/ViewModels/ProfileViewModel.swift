@@ -39,18 +39,8 @@ final public class ProfileViewModel {
 }
 
 extension ProfileViewModel: CollectionViewModel {
-    public var collectionItems: AnyPublisher<[[CollectionItem]], Never> {
-        collectionViewModel.flatMap(\.collectionItems).map {
-            $0.enumerated().map { [weak self] in
-                if let self = self, self.collection == .statuses, $0 == 0 {
-                    // The pinned key is added to the info of collection items in the first section
-                    // so a diffable data source can potentially render it in both sections
-                    return $1.map { .init(id: $0.id, kind: $0.kind, info: [.pinned: true]) }
-                } else {
-                    return $1
-                }
-            }
-        }.eraseToAnyPublisher()
+    public var collectionItems: AnyPublisher<[[CollectionItemIdentifier]], Never> {
+        collectionViewModel.flatMap(\.collectionItems).eraseToAnyPublisher()
     }
 
     public var title: AnyPublisher<String?, Never> {
@@ -80,7 +70,7 @@ extension ProfileViewModel: CollectionViewModel {
         collectionViewModel.value.nextPageMaxID
     }
 
-    public var maintainScrollPositionOfItem: CollectionItem? {
+    public var maintainScrollPositionOfItem: CollectionItemIdentifier? {
         collectionViewModel.value.maintainScrollPositionOfItem
     }
 
@@ -95,15 +85,15 @@ extension ProfileViewModel: CollectionViewModel {
         collectionViewModel.value.request(maxID: maxID, minID: minID)
     }
 
-    public func itemSelected(_ item: CollectionItem) {
+    public func itemSelected(_ item: CollectionItemIdentifier) {
         collectionViewModel.value.itemSelected(item)
     }
 
-    public func canSelect(item: CollectionItem) -> Bool {
+    public func canSelect(item: CollectionItemIdentifier) -> Bool {
         collectionViewModel.value.canSelect(item: item)
     }
 
-    public func viewModel(item: CollectionItem) -> Any? {
+    public func viewModel(item: CollectionItemIdentifier) -> Any? {
         collectionViewModel.value.viewModel(item: item)
     }
 }

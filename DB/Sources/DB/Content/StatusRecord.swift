@@ -117,6 +117,10 @@ extension StatusRecord {
         StatusInfo.request(request(for: Self.descendants))
     }
 
+    var filterableContent: [String] {
+        [content.attributed.string, spoilerText] + (poll?.options.map(\.title) ?? [])
+    }
+
     init(status: Status) {
         id = status.id
         uri = status.uri

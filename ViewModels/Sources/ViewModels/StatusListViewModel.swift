@@ -6,15 +6,15 @@ import Mastodon
 import ServiceLayer
 
 final public class StatusListViewModel: ObservableObject {
-    @Published public private(set) var items = [[CollectionItem]]()
+    @Published public private(set) var items = [[CollectionItemIdentifier]]()
     @Published public var alertItem: AlertItem?
     public private(set) var nextPageMaxID: String?
-    public private(set) var maintainScrollPositionOfItem: CollectionItem?
+    public private(set) var maintainScrollPositionOfItem: CollectionItemIdentifier?
 
-    private var statuses = [String: Status]()
+    private var timelineItems = [CollectionItemIdentifier: Timeline.Item]()
     private var flatStatusIDs = [String]()
     private let statusListService: StatusListService
-    private var statusViewModelCache = [Status: (StatusViewModel, AnyCancellable)]()
+    private var viewModelCache = [Timeline.Item: (Any, AnyCancellable)]()
     private let navigationEventsSubject = PassthroughSubject<NavigationEvent, Never>()
     private let loadingSubject = PassthroughSubject<Bool, Never>()
     private var cancellables = Set<AnyCancellable>()
@@ -22,18 +22,11 @@ final public class StatusListViewModel: ObservableObject {
     init(statusListService: StatusListService) {
         self.statusListService = statusListService
 
-        statusListService.statusSections
-            .combineLatest(statusListService.filters.map { $0.regularExpression() })
-            .map(Self.filter(statusSections:regularExpression:))
-            .handleEvents(receiveOutput: { [weak self] in
-                self?.determineIfScrollPositionShouldBeMaintained(newStatusSections: $0)
-                self?.cleanViewModelCache(newStatusSections: $0)
-                self?.statuses = Dictionary(uniqueKeysWithValues: Set($0.reduce([], +)).map { ($0.id, $0) })
-                self?.flatStatusIDs = $0.reduce([], +).map(\.id)
-            })
+        statusListService.sections
+            .handleEvents(receiveOutput: { [weak self] in self?.process(sections: $0) })
+            .map { $0.map { $0.map(CollectionItemIdentifier.init(timelineItem:)) } }
             .receive(on: DispatchQueue.main)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
-            .map { $0.map { $0.map { CollectionItem(id: $0.id, kind: .status) } } }
             .assign(to: &$items)
 
         statusListService.nextPageMaxIDs
@@ -43,7 +36,7 @@ final public class StatusListViewModel: ObservableObject {
 }
 
 extension StatusListViewModel: CollectionViewModel {
-    public var collectionItems: AnyPublisher<[[CollectionItem]], Never> { $items.eraseToAnyPublisher() }
+    public var collectionItems: AnyPublisher<[[CollectionItemIdentifier]], Never> { $items.eraseToAnyPublisher() }
 
     public var title: AnyPublisher<String?, Never> { Just(statusListService.title).eraseToAnyPublisher() }
 
@@ -64,23 +57,23 @@ extension StatusListViewModel: CollectionViewModel {
             .store(in: &cancellables)
     }
 
-    public func itemSelected(_ item: CollectionItem) {
-        switch item.kind {
-        case .status:
-            let displayStatusID = statuses[item.id]?.displayStatus.id ?? item.id
+    public func itemSelected(_ item: CollectionItemIdentifier) {
+        guard let timelineItem = timelineItems[item] else { return }
 
+        switch timelineItem {
+        case let .status(configuration):
             navigationEventsSubject.send(
                 .collectionNavigation(
                     StatusListViewModel(
                         statusListService: statusListService
                             .navigationService
-                            .contextStatusListService(id: displayStatusID))))
+                            .contextStatusListService(id: configuration.status.displayStatus.id))))
         default:
             break
         }
     }
 
-    public func canSelect(item: CollectionItem) -> Bool {
+    public func canSelect(item: CollectionItemIdentifier) -> Bool {
         if case .status = item.kind, item.id == statusListService.contextParentID {
             return false
         }
@@ -88,7 +81,7 @@ extension StatusListViewModel: CollectionViewModel {
         return true
     }
 
-    public func viewModel(item: CollectionItem) -> Any? {
+    public func viewModel(item: CollectionItemIdentifier) -> Any? {
         switch item.kind {
         case .status:
             return statusViewModel(item: item)
@@ -99,83 +92,59 @@ extension StatusListViewModel: CollectionViewModel {
 }
 
 private extension StatusListViewModel {
-    static func filter(statusSections: [[Status]], regularExpression: String?) -> [[Status]] {
-        guard let regEx = regularExpression else { return statusSections }
-
-        return statusSections.map {
-            $0.filter { $0.filterableContent.range(of: regEx, options: [.regularExpression, .caseInsensitive]) == nil }
-        }
-    }
-
-    var contextParentID: String? { statusListService.contextParentID }
-
-    func statusViewModel(item: CollectionItem) -> StatusViewModel? {
-        guard let status = statuses[item.id] else { return nil }
+    func statusViewModel(item: CollectionItemIdentifier) -> StatusViewModel? {
+        guard let timelineItem = timelineItems[item],
+              case let .status(configuration) = timelineItem
+        else { return nil }
 
         var statusViewModel: StatusViewModel
 
-        if let cachedViewModel = statusViewModelCache[status]?.0 {
+        if let cachedViewModel = viewModelCache[timelineItem]?.0 as? StatusViewModel {
             statusViewModel = cachedViewModel
         } else {
             statusViewModel = StatusViewModel(
-                statusService: statusListService.navigationService.statusService(status: status))
-            statusViewModelCache[status] = (statusViewModel,
-                                            statusViewModel.events
-                                                .flatMap { $0 }
-                                                .assignErrorsToAlertItem(to: \.alertItem, on: self)
-                                                .sink { [weak self] in
-                                                    guard
-                                                        let self = self,
-                                                        let event = NavigationEvent($0)
-                                                    else { return }
+                statusService: statusListService.navigationService.statusService(status: configuration.status))
+            viewModelCache[timelineItem] = (statusViewModel,
+                                      statusViewModel.events
+                                        .flatMap { $0 }
+                                        .assignErrorsToAlertItem(to: \.alertItem, on: self)
+                                        .sink { [weak self] in
+                                            guard
+                                                let self = self,
+                                                let event = NavigationEvent($0)
+                                            else { return }
 
-                                                    self.navigationEventsSubject.send(event)
-                                                })
+                                            self.navigationEventsSubject.send(event)
+                                        })
         }
 
-        statusViewModel.isContextParent = status.id == statusListService.contextParentID
-        statusViewModel.isPinned = item.info[.pinned] != nil
-        statusViewModel.isReplyInContext = isReplyInContext(status: status)
-        statusViewModel.hasReplyFollowing = hasReplyFollowing(status: status)
+        statusViewModel.isContextParent = configuration.status.id == statusListService.contextParentID
+        statusViewModel.isPinned = configuration.pinned
+        statusViewModel.isReplyInContext = configuration.isReplyInContext
+        statusViewModel.hasReplyFollowing = configuration.hasReplyFollowing
 
         return statusViewModel
     }
 
-    func determineIfScrollPositionShouldBeMaintained(newStatusSections: [[Status]]) {
+    func process(sections: [[Timeline.Item]]) {
+        determineIfScrollPositionShouldBeMaintained(newSections: sections)
+
+        let timelineItemKeys = Set(sections.reduce([], +))
+
+        timelineItems = Dictionary(uniqueKeysWithValues: timelineItemKeys.map { (.init(timelineItem: $0), $0) })
+        viewModelCache = viewModelCache.filter { timelineItemKeys.contains($0.key) }
+    }
+
+    func determineIfScrollPositionShouldBeMaintained(newSections: [[Timeline.Item]]) {
         maintainScrollPositionOfItem = nil // clear old value
 
         // Maintain scroll position of parent after initial load of context
-        if let contextParentID = contextParentID, flatStatusIDs == [contextParentID] || flatStatusIDs == [] {
-            maintainScrollPositionOfItem = CollectionItem(id: contextParentID, kind: .status)
+        if let contextParentID = statusListService.contextParentID {
+            let contextParentIdentifier = CollectionItemIdentifier(id: contextParentID, kind: .status, info: [:])
+
+            if items == [[], [contextParentIdentifier], []] || items.isEmpty {
+                maintainScrollPositionOfItem = contextParentIdentifier
+            }
         }
-    }
-
-    func cleanViewModelCache(newStatusSections: [[Status]]) {
-        let newStatuses = Set(newStatusSections.reduce([], +))
-
-        statusViewModelCache = statusViewModelCache.filter { newStatuses.contains($0.key) }
-    }
-
-    func isReplyInContext(status: Status) -> Bool {
-        guard
-            let contextParentID = contextParentID,
-            let index = flatStatusIDs.firstIndex(where: { $0 == status.id }),
-            index > 0
-        else { return false }
-
-        let previousStatusID = flatStatusIDs[index - 1]
-
-        return previousStatusID != contextParentID && status.inReplyToId == previousStatusID
-    }
-
-    func hasReplyFollowing(status: Status) -> Bool {
-        guard
-            let contextParentID = contextParentID,
-            let index = flatStatusIDs.firstIndex(where: { $0 == status.id }),
-            flatStatusIDs.count > index + 1,
-            let nextStatus = statuses[flatStatusIDs[index + 1]]
-        else { return false }
-
-        return status.id != contextParentID && nextStatus.inReplyToId == status.id
     }
 }

@@ -71,6 +71,13 @@ extension ContentDatabase {
                 t.column("profileCollection", .text)
             }
 
+            try db.create(table: "loadMore") { t in
+                t.column("timelineId").notNull().references("timelineRecord", onDelete: .cascade)
+                t.column("afterStatusId", .text).notNull()
+
+                t.primaryKey(["timelineId", "afterStatusId"], onConflict: .replace)
+            }
+
             try db.create(table: "timelineStatusJoin") { t in
                 t.column("timelineId", .text).indexed().notNull()
                     .references("timelineRecord", onDelete: .cascade)

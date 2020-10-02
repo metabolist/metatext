@@ -165,39 +165,81 @@ public extension ContentDatabase {
             .eraseToAnyPublisher()
     }
 
-    func statusesObservation(timeline: Timeline) -> AnyPublisher<[[Status]], Error> {
-        ValueObservation.tracking { db -> [[StatusInfo]] in
-            let statuses = try TimelineRecord(timeline: timeline).statuses.fetchAll(db)
+    // Awkward maps explained: https://github.com/groue/GRDB.swift#valueobservation-performance
+
+    func observation(timeline: Timeline) -> AnyPublisher<[[Timeline.Item]], Error> {
+        ValueObservation.tracking { db -> ([StatusInfo], [StatusInfo]?, [LoadMore], [Filter]) in
+            let timelineRecord = TimelineRecord(timeline: timeline)
+            let statuses = try timelineRecord.statuses.fetchAll(db)
+            let loadMores = try timelineRecord.loadMores.fetchAll(db)
+            let filters = try Filter.active.fetchAll(db)
 
             if case let .profile(accountId, profileCollection) = timeline, profileCollection == .statuses {
                 let pinnedStatuses = try AccountRecord.filter(AccountRecord.Columns.id == accountId)
-                    .fetchOne(db)?.pinnedStatuses.fetchAll(db) ?? []
+                    .fetchOne(db)?.pinnedStatuses.fetchAll(db)
 
-                return [pinnedStatuses, statuses]
+                return (statuses, pinnedStatuses, loadMores, filters)
             } else {
-                return [statuses]
+                return (statuses, nil, loadMores, filters)
+            }
+        }
+        .map { statuses, pinnedStatuses, loadMores, filters -> [[Timeline.Item]] in
+            var timelineItems = statuses.filtered(filters: filters, context: timeline.filterContext)
+                .map { Timeline.Item.status(.init(status: .init(info: $0))) }
+
+            for loadMore in loadMores {
+                guard let index = timelineItems.firstIndex(where: {
+                    guard case let .status(configuration) = $0 else { return false }
+
+                    return loadMore.afterStatusId < configuration.status.id
+                }) else { continue }
+
+                timelineItems.insert(.loadMore(loadMore), at: index)
+            }
+
+            if let pinnedStatuses = pinnedStatuses {
+                return [pinnedStatuses.filtered(filters: filters, context: timeline.filterContext)
+                            .map { Timeline.Item.status(.init(status: .init(info: $0), pinned: true)) },
+                        timelineItems]
+            } else {
+                return [timelineItems]
             }
         }
         .removeDuplicates()
-        .map { $0.map { $0.map(Status.init(info:)) } }
         .publisher(in: databaseWriter)
         .eraseToAnyPublisher()
     }
 
-    func contextObservation(parentID: String) -> AnyPublisher<[[Status]], Error> {
-        ValueObservation.tracking { db -> [[StatusInfo]] in
+    func contextObservation(parentID: String) -> AnyPublisher<[[Timeline.Item]], Error> {
+        ValueObservation.tracking { db -> ([[StatusInfo]], [Filter]) in
             guard let parent = try StatusInfo.request(StatusRecord.filter(StatusRecord.Columns.id == parentID))
                     .fetchOne(db) else {
-                return []
+                return ([], [])
             }
 
             let ancestors = try parent.record.ancestors.fetchAll(db)
             let descendants = try parent.record.descendants.fetchAll(db)
 
-            return [ancestors, [parent], descendants]
+            return ([ancestors, [parent], descendants], try Filter.active.fetchAll(db))
+        }
+        .map { statusSections, filters in
+            statusSections.map { section in
+                section.filtered(filters: filters, context: .thread)
+                    .enumerated()
+                    .map { index, statusInfo in
+                        let isReplyInContext = index > 0
+                            && section[index - 1].record.id == statusInfo.record.inReplyToId
+                        let hasReplyFollowing = section.count > index + 1
+                            && section[index + 1].record.inReplyToId == statusInfo.record.id
+
+                        return Timeline.Item.status(
+                            .init(status: .init(info: statusInfo),
+                                  isReplyInContext: isReplyInContext,
+                                  hasReplyFollowing: hasReplyFollowing))
+                    }
+            }
         }
         .removeDuplicates()
-        .map { $0.map { $0.map(Status.init(info:)) } }
         .publisher(in: databaseWriter)
         .eraseToAnyPublisher()
     }
@@ -212,15 +254,10 @@ public extension ContentDatabase {
             .eraseToAnyPublisher()
     }
 
-    func activeFiltersObservation(date: Date, context: Filter.Context? = nil) -> AnyPublisher<[Filter], Error> {
+    func activeFiltersObservation(date: Date) -> AnyPublisher<[Filter], Error> {
         ValueObservation.tracking(
             Filter.filter(Filter.Columns.expiresAt == nil || Filter.Columns.expiresAt > date).fetchAll)
             .removeDuplicates()
-            .map {
-                guard let context = context else { return $0 }
-
-                return $0.filter { $0.context.contains(context) }
-            }
             .publisher(in: databaseWriter)
             .eraseToAnyPublisher()
     }

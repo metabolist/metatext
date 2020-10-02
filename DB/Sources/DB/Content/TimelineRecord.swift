@@ -39,9 +39,14 @@ extension TimelineRecord {
         through: statusJoins,
         using: TimelineStatusJoin.status)
         .order(StatusRecord.Columns.createdAt.desc)
+    static let loadMores = hasMany(LoadMore.self)
 
     var statuses: QueryInterfaceRequest<StatusInfo> {
         StatusInfo.request(request(for: Self.statuses))
+    }
+
+    var loadMores: QueryInterfaceRequest<LoadMore> {
+        request(for: Self.loadMores)
     }
 
     init(timeline: Timeline) {

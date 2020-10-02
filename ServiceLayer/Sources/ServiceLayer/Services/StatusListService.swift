@@ -7,7 +7,7 @@ import Mastodon
 import MastodonAPI
 
 public struct StatusListService {
-    public let statusSections: AnyPublisher<[[Status]], Error>
+    public let sections: AnyPublisher<[[Timeline.Item]], Error>
     public let nextPageMaxIDs: AnyPublisher<String?, Never>
     public let contextParentID: String?
     public let title: String?
@@ -29,7 +29,7 @@ extension StatusListService {
 
         let nextPageMaxIDsSubject = PassthroughSubject<String?, Never>()
 
-        self.init(statusSections: contentDatabase.statusesObservation(timeline: timeline),
+        self.init(sections: contentDatabase.observation(timeline: timeline),
                   nextPageMaxIDs: nextPageMaxIDsSubject.eraseToAnyPublisher(),
                   contextParentID: nil,
                   title: title,
@@ -48,7 +48,7 @@ extension StatusListService {
     }
 
     init(statusID: String, mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
-        self.init(statusSections: contentDatabase.contextObservation(parentID: statusID),
+        self.init(sections: contentDatabase.contextObservation(parentID: statusID),
                   nextPageMaxIDs: Empty().eraseToAnyPublisher(),
                   contextParentID: statusID,
                   title: nil,
@@ -74,10 +74,6 @@ extension StatusListService {
 public extension StatusListService {
     func request(maxID: String?, minID: String?) -> AnyPublisher<Never, Error> {
         requestClosure(maxID, minID)
-    }
-
-    var filters: AnyPublisher<[Filter], Error> {
-        contentDatabase.activeFiltersObservation(date: Date(), context: filterContext)
     }
 }
 
@@ -115,17 +111,6 @@ private extension Timeline {
                 excludeReplies: excludeReplies,
                 onlyMedia: onlyMedia,
                 pinned: false)
-        }
-    }
-
-    var filterContext: Filter.Context {
-        switch self {
-        case .home, .list:
-            return .home
-        case .local, .federated, .tag:
-            return .public
-        case .profile:
-            return .account
         }
     }
 }

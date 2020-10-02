@@ -10,11 +10,11 @@ class TableViewController: UITableViewController {
     private let loadingTableFooterView = LoadingTableFooterView()
     private let webfingerIndicatorView = WebfingerIndicatorView()
     private var cancellables = Set<AnyCancellable>()
-    private var cellHeightCaches = [CGFloat: [CollectionItem: CGFloat]]()
+    private var cellHeightCaches = [CGFloat: [CollectionItemIdentifier: CGFloat]]()
     private let dataSourceQueue =
         DispatchQueue(label: "com.metabolist.metatext.collection.data-source-queue")
 
-    private lazy var dataSource: UITableViewDiffableDataSource<Int, CollectionItem> = {
+    private lazy var dataSource: UITableViewDiffableDataSource<Int, CollectionItemIdentifier> = {
         UITableViewDiffableDataSource(tableView: tableView) { [weak self] tableView, indexPath, item in
             guard let self = self, let cellViewModel = self.viewModel.viewModel(item: item) else { return nil }
 
@@ -49,7 +49,7 @@ class TableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        for kind in CollectionItem.Kind.allCases {
+        for kind in CollectionItemIdentifier.Kind.allCases {
             tableView.register(kind.cellClass, forCellReuseIdentifier: String(describing: kind.cellClass))
         }
 
@@ -80,7 +80,7 @@ class TableViewController: UITableViewController {
                             forRowAt indexPath: IndexPath) {
         guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
 
-        var heightCache = cellHeightCaches[tableView.frame.width] ?? [CollectionItem: CGFloat]()
+        var heightCache = cellHeightCaches[tableView.frame.width] ?? [CollectionItemIdentifier: CGFloat]()
 
         heightCache[item] = cell.frame.height
         cellHeightCaches[tableView.frame.width] = heightCache
@@ -192,7 +192,7 @@ private extension TableViewController {
         .store(in: &cancellables)
     }
 
-    func update(items: [[CollectionItem]]) {
+    func update(items: [[CollectionItemIdentifier]]) {
         var offsetFromNavigationBar: CGFloat?
 
         if

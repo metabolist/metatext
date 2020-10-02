@@ -6,7 +6,7 @@ import Mastodon
 import ServiceLayer
 
 public final class AccountListViewModel: ObservableObject {
-    @Published public private(set) var items = [[CollectionItem]]()
+    @Published public private(set) var items = [[CollectionItemIdentifier]]()
     @Published public var alertItem: AlertItem?
     public let navigationEvents: AnyPublisher<NavigationEvent, Never>
     public private(set) var nextPageMaxID: String?
@@ -27,7 +27,7 @@ public final class AccountListViewModel: ObservableObject {
                 self?.cleanViewModelCache(newAccountSections: $0)
                 self?.accounts = Dictionary(uniqueKeysWithValues: Set($0.reduce([], +)).map { ($0.id, $0) })
             })
-            .map { $0.map { $0.map { CollectionItem(id: $0.id, kind: .account) } } }
+            .map { $0.map { $0.map(CollectionItemIdentifier.init(account:)) } }
             .receive(on: DispatchQueue.main)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$items)
@@ -39,7 +39,7 @@ public final class AccountListViewModel: ObservableObject {
 }
 
 extension AccountListViewModel: CollectionViewModel {
-    public var collectionItems: AnyPublisher<[[CollectionItem]], Never> { $items.eraseToAnyPublisher() }
+    public var collectionItems: AnyPublisher<[[CollectionItemIdentifier]], Never> { $items.eraseToAnyPublisher() }
 
     public var title: AnyPublisher<String?, Never> { Just(nil).eraseToAnyPublisher() }
 
@@ -47,7 +47,7 @@ extension AccountListViewModel: CollectionViewModel {
 
     public var loading: AnyPublisher<Bool, Never> { loadingSubject.eraseToAnyPublisher() }
 
-    public var maintainScrollPositionOfItem: CollectionItem? {
+    public var maintainScrollPositionOfItem: CollectionItemIdentifier? {
         nil
     }
 
@@ -62,7 +62,7 @@ extension AccountListViewModel: CollectionViewModel {
             .store(in: &cancellables)
     }
 
-    public func itemSelected(_ item: CollectionItem) {
+    public func itemSelected(_ item: CollectionItemIdentifier) {
         switch item.kind {
         case .account:
             let navigationService = accountListService.navigationService
@@ -80,11 +80,11 @@ extension AccountListViewModel: CollectionViewModel {
         }
     }
 
-    public func canSelect(item: CollectionItem) -> Bool {
+    public func canSelect(item: CollectionItemIdentifier) -> Bool {
         true
     }
 
-    public func viewModel(item: CollectionItem) -> Any? {
+    public func viewModel(item: CollectionItemIdentifier) -> Any? {
         switch item.kind {
         case .account:
             return accountViewModel(id: item.id)
