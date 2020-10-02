@@ -67,7 +67,7 @@ extension ContentDatabase {
                 t.column("listId", .text)
                 t.column("listTitle", .text).indexed().collate(.localizedCaseInsensitiveCompare)
                 t.column("tag", .text)
-                t.column("accountId", .text).references("accountRecord", onDelete: .cascade)
+                t.column("accountId", .text)
                 t.column("profileCollection", .text)
             }
 
