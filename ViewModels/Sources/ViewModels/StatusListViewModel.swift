@@ -12,7 +12,6 @@ final public class StatusListViewModel: ObservableObject {
     public private(set) var maintainScrollPositionOfItem: CollectionItemIdentifier?
 
     private var timelineItems = [CollectionItemIdentifier: Timeline.Item]()
-    private var flatStatusIDs = [String]()
     private let statusListService: StatusListService
     private var viewModelCache = [Timeline.Item: (Any, AnyCancellable)]()
     private let navigationEventsSubject = PassthroughSubject<NavigationEvent, Never>()
