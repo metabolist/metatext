@@ -35,8 +35,6 @@ public struct ProfileService {
         self.contentDatabase = contentDatabase
 
         var accountPublisher = contentDatabase.accountObservation(id: accountID)
-            .compactMap { $0 }
-            .eraseToAnyPublisher()
 
         if let account = account {
             accountPublisher = accountPublisher

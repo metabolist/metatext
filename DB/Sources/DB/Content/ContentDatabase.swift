@@ -218,17 +218,12 @@ public extension ContentDatabase {
             .eraseToAnyPublisher()
     }
 
-    func accountObservation(id: String) -> AnyPublisher<Account?, Error> {
+    func accountObservation(id: String) -> AnyPublisher<Account, Error> {
         ValueObservation.tracking(AccountInfo.request(AccountRecord.filter(AccountRecord.Columns.id == id)).fetchOne)
             .removeDuplicates()
-            .map {
-                if let info = $0 {
-                    return Account(info: info)
-                } else {
-                    return nil
-                }
-            }
             .publisher(in: databaseWriter)
+            .compactMap { $0 }
+            .map(Account.init(info:))
             .eraseToAnyPublisher()
     }
 
