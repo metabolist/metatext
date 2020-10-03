@@ -8,6 +8,8 @@ import Mastodon
 import Secrets
 
 public struct ContentDatabase {
+    public let activeFiltersPublisher: AnyPublisher<[Filter], Error>
+
     private let databaseWriter: DatabaseWriter
 
     public init(identityID: UUID, inMemory: Bool, keychain: Keychain.Type) throws {
@@ -24,8 +26,15 @@ public struct ContentDatabase {
             databaseWriter = try DatabasePool(path: path, configuration: configuration)
         }
 
-        try migrator.migrate(databaseWriter)
-        try clean()
+        try Self.migrator.migrate(databaseWriter)
+        try Self.clean(databaseWriter)
+
+        activeFiltersPublisher = ValueObservation.tracking {
+            try Filter.filter(Filter.Columns.expiresAt == nil || Filter.Columns.expiresAt > Date()).fetchAll($0)
+        }
+        .removeDuplicates()
+        .publisher(in: databaseWriter)
+        .eraseToAnyPublisher()
     }
 }
 
@@ -173,26 +182,23 @@ public extension ContentDatabase {
     }
 
     func observation(timeline: Timeline) -> AnyPublisher<[[Timeline.Item]], Error> {
-        ValueObservation.tracking { db -> (TimelineItemsInfo?, [Filter]) in
-            (try TimelineItemsInfo.request(
-                TimelineRecord.filter(TimelineRecord.Columns.id == timeline.id)).fetchOne(db),
-            try Filter.active.fetchAll(db))
-        }
-        .map { $0?.items(filters: $1) ?? [] }
-        .removeDuplicates()
-        .publisher(in: databaseWriter)
-        .eraseToAnyPublisher()
+        ValueObservation.tracking(
+            TimelineItemsInfo.request(TimelineRecord.filter(TimelineRecord.Columns.id == timeline.id)).fetchOne)
+            .removeDuplicates()
+            .publisher(in: databaseWriter)
+            .combineLatest(activeFiltersPublisher)
+            .compactMap { $0?.items(filters: $1) }
+            .eraseToAnyPublisher()
     }
 
     func contextObservation(parentID: String) -> AnyPublisher<[[Timeline.Item]], Error> {
-        ValueObservation.tracking { db -> (ContextItemsInfo?, [Filter]) in
-            (try ContextItemsInfo.request(StatusRecord.filter(StatusRecord.Columns.id == parentID)).fetchOne(db),
-            try Filter.active.fetchAll(db))
-        }
-        .map { $0?.items(filters: $1) ?? [] }
-        .removeDuplicates()
-        .publisher(in: databaseWriter)
-        .eraseToAnyPublisher()
+        ValueObservation.tracking(
+            ContextItemsInfo.request(StatusRecord.filter(StatusRecord.Columns.id == parentID)).fetchOne)
+            .removeDuplicates()
+            .publisher(in: databaseWriter)
+            .combineLatest(activeFiltersPublisher)
+            .compactMap { $0?.items(filters: $1) }
+            .eraseToAnyPublisher()
     }
 
     func listsObservation() -> AnyPublisher<[Timeline], Error> {
@@ -205,16 +211,8 @@ public extension ContentDatabase {
             .eraseToAnyPublisher()
     }
 
-    func activeFiltersObservation(date: Date) -> AnyPublisher<[Filter], Error> {
-        ValueObservation.tracking(
-            Filter.filter(Filter.Columns.expiresAt == nil || Filter.Columns.expiresAt > date).fetchAll)
-            .removeDuplicates()
-            .publisher(in: databaseWriter)
-            .eraseToAnyPublisher()
-    }
-
-    func expiredFiltersObservation(date: Date) -> AnyPublisher<[Filter], Error> {
-        ValueObservation.tracking(Filter.filter(Filter.Columns.expiresAt < date).fetchAll)
+    func expiredFiltersObservation() -> AnyPublisher<[Filter], Error> {
+        ValueObservation.tracking { try Filter.filter(Filter.Columns.expiresAt < Date()).fetchAll($0) }
             .removeDuplicates()
             .publisher(in: databaseWriter)
             .eraseToAnyPublisher()
@@ -248,7 +246,7 @@ private extension ContentDatabase {
         try FileManager.default.databaseDirectoryURL(name: identityID.uuidString)
     }
 
-    func clean() throws {
+    static func clean(_ databaseWriter: DatabaseWriter) throws {
         try databaseWriter.write {
             try TimelineRecord.deleteAll($0)
             try StatusRecord.deleteAll($0)

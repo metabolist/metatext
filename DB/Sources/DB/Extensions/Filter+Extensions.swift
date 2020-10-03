@@ -23,10 +23,6 @@ extension Filter {
         case irreversible
         case wholeWord
     }
-
-    static var active: QueryInterfaceRequest<Self> {
-        filter(Filter.Columns.expiresAt == nil || Filter.Columns.expiresAt > Date())
-    }
 }
 
 extension Array where Element == StatusInfo {

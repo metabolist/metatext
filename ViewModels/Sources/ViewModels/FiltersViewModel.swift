@@ -16,13 +16,11 @@ public final class FiltersViewModel: ObservableObject {
     public init(identification: Identification) {
         self.identification = identification
 
-        let now = Date()
-
-        identification.service.activeFiltersObservation(date: now)
+        identification.service.activeFiltersObservation()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$activeFilters)
 
-        identification.service.expiredFiltersObservation(date: now)
+        identification.service.expiredFiltersObservation()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$expiredFilters)
     }
