@@ -71,7 +71,7 @@ extension ContentDatabase {
                 t.column("profileCollection", .text)
             }
 
-            try db.create(table: "loadMore") { t in
+            try db.create(table: "loadMoreRecord") { t in
                 t.column("timelineId").notNull().references("timelineRecord", onDelete: .cascade)
                 t.column("afterStatusId", .text).notNull()
 
@@ -96,12 +96,21 @@ extension ContentDatabase {
                 t.column("wholeWord", .boolean).notNull()
             }
 
-            try db.create(table: "statusContextJoin") { t in
+            try db.create(table: "statusAncestorJoin") { t in
                 t.column("parentId", .text).indexed().notNull()
                     .references("statusRecord", onDelete: .cascade)
                 t.column("statusId", .text).indexed().notNull()
                     .references("statusRecord", onDelete: .cascade)
-                t.column("section", .text).indexed().notNull()
+                t.column("index", .integer).notNull()
+
+                t.primaryKey(["parentId", "statusId"], onConflict: .replace)
+            }
+
+            try db.create(table: "statusDescendantJoin") { t in
+                t.column("parentId", .text).indexed().notNull()
+                    .references("statusRecord", onDelete: .cascade)
+                t.column("statusId", .text).indexed().notNull()
+                    .references("statusRecord", onDelete: .cascade)
                 t.column("index", .integer).notNull()
 
                 t.primaryKey(["parentId", "statusId"], onConflict: .replace)

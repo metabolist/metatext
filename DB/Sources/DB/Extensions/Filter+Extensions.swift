@@ -30,8 +30,8 @@ extension Filter {
 }
 
 extension Array where Element == StatusInfo {
-    func filtered(filters: [Filter], context: Filter.Context) -> Self {
-        guard let regEx = filters.filter({ $0.context.contains(context) }).regularExpression() else { return self }
+    func filtered(regularExpression: String?) -> Self {
+        guard let regEx = regularExpression else { return self }
 
         return filter { $0.filterableContent.range(of: regEx, options: [.regularExpression, .caseInsensitive]) == nil }
     }

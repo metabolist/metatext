@@ -93,21 +93,19 @@ extension StatusRecord {
                                            using: AccountRecord.moved)
     static let reblog = belongsTo(StatusRecord.self)
     static let ancestorJoins = hasMany(
-        StatusContextJoin.self,
-        using: ForeignKey([StatusContextJoin.Columns.parentId]))
-        .filter(StatusContextJoin.Columns.section == StatusContextJoin.Section.ancestors.rawValue)
-        .order(StatusContextJoin.Columns.index)
+        StatusAncestorJoin.self,
+        using: ForeignKey([StatusAncestorJoin.Columns.parentId]))
+        .order(StatusAncestorJoin.Columns.index)
     static let descendantJoins = hasMany(
-        StatusContextJoin.self,
-        using: ForeignKey([StatusContextJoin.Columns.parentId]))
-        .filter(StatusContextJoin.Columns.section == StatusContextJoin.Section.descendants.rawValue)
-        .order(StatusContextJoin.Columns.index)
+        StatusDescendantJoin.self,
+        using: ForeignKey([StatusDescendantJoin.Columns.parentId]))
+        .order(StatusDescendantJoin.Columns.index)
     static let ancestors = hasMany(StatusRecord.self,
                                    through: ancestorJoins,
-                                   using: StatusContextJoin.status)
+                                   using: StatusAncestorJoin.status)
     static let descendants = hasMany(StatusRecord.self,
                                    through: descendantJoins,
-                                   using: StatusContextJoin.status)
+                                   using: StatusDescendantJoin.status)
 
     var ancestors: QueryInterfaceRequest<StatusInfo> {
         StatusInfo.request(request(for: Self.ancestors))

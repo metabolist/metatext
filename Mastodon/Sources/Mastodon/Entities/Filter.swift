@@ -36,10 +36,12 @@ extension Array where Element == Filter {
     // swiftlint:disable line_length
     // Adapted from https://github.com/tootsuite/mastodon/blob/bf477cee9f31036ebf3d164ddec1cebef5375513/app/javascript/mastodon/selectors/index.js#L43
     // swiftlint:enable line_length
-    public func regularExpression() -> String? {
-        guard !isEmpty else { return nil }
+    public func regularExpression(context: Filter.Context) -> String? {
+        let inContext = filter { $0.context.contains(context) }
 
-        return map {
+        guard !inContext.isEmpty else { return nil }
+
+        return inContext.map {
             var expression = NSRegularExpression.escapedPattern(for: $0.phrase)
 
             if $0.wholeWord {
