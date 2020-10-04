@@ -67,8 +67,8 @@ extension StatusListViewModel: CollectionViewModel {
                         statusListService: statusListService
                             .navigationService
                             .contextStatusListService(id: configuration.status.displayStatus.id))))
-        default:
-            break
+        case .loadMore:
+            loadMoreViewModel(item: item)?.loadMore()
         }
     }
 
@@ -85,7 +85,7 @@ extension StatusListViewModel: CollectionViewModel {
         case .status:
             return statusViewModel(item: item)
         case .loadMore:
-            return LoadMoreViewModel()
+            return loadMoreViewModel(item: item)
         default:
             return nil
         }
@@ -125,6 +125,33 @@ private extension StatusListViewModel {
         statusViewModel.hasReplyFollowing = configuration.hasReplyFollowing
 
         return statusViewModel
+    }
+
+    func loadMoreViewModel(item: CollectionItemIdentifier) -> LoadMoreViewModel? {
+        guard let timelineItem = timelineItems[item],
+              case let .loadMore(loadMore) = timelineItem
+        else { return nil }
+
+        if let cachedViewModel = viewModelCache[timelineItem]?.0 as? LoadMoreViewModel {
+            return cachedViewModel
+        }
+
+        let loadMoreViewModel = LoadMoreViewModel(
+            loadMoreService: statusListService.navigationService.loadMoreService(loadMore: loadMore))
+
+        viewModelCache[timelineItem] = (loadMoreViewModel, loadMoreViewModel.events
+                                            .flatMap { $0 }
+                                            .assignErrorsToAlertItem(to: \.alertItem, on: self)
+                                            .sink { [weak self] in
+                                                guard
+                                                    let self = self,
+                                                    let event = NavigationEvent($0)
+                                                else { return }
+
+                                                self.navigationEventsSubject.send(event)
+                                            })
+
+        return loadMoreViewModel
     }
 
     func process(sections: [[Timeline.Item]]) {

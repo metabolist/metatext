@@ -38,7 +38,7 @@ extension TimelineRecord {
         StatusRecord.self,
         through: statusJoins,
         using: TimelineStatusJoin.status)
-        .order(StatusRecord.Columns.createdAt.desc)
+        .order(StatusRecord.Columns.id.desc)
     static let account = belongsTo(AccountRecord.self, using: ForeignKey([Columns.accountId]))
     static let loadMores = hasMany(LoadMoreRecord.self)
 

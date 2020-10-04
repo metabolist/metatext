@@ -21,8 +21,13 @@ public extension LoadMoreService {
         mastodonAPIClient.pagedRequest(
             loadMore.timeline.endpoint,
             maxID: direction == .down ? loadMore.afterStatusId : nil,
-            minID: direction == .up ? loadMore.afterStatusId : nil)
-            .flatMap { contentDatabase.insert(statuses: $0.result, timeline: loadMore.timeline) }
+            minID: direction == .up ? loadMore.beforeStatusId : nil)
+            .flatMap {
+                contentDatabase.insert(
+                    statuses: $0.result,
+                    timeline: loadMore.timeline,
+                    loadMoreAndDirection: (loadMore, direction))
+            }
             .eraseToAnyPublisher()
     }
 }

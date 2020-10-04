@@ -74,6 +74,7 @@ extension ContentDatabase {
             try db.create(table: "loadMoreRecord") { t in
                 t.column("timelineId").notNull().references("timelineRecord", onDelete: .cascade)
                 t.column("afterStatusId", .text).notNull()
+                t.column("beforeStatusId", .text).notNull()
 
                 t.primaryKey(["timelineId", "afterStatusId"], onConflict: .replace)
             }

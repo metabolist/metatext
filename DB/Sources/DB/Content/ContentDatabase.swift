@@ -49,7 +49,10 @@ public extension ContentDatabase {
         .eraseToAnyPublisher()
     }
 
-    func insert(statuses: [Status], timeline: Timeline) -> AnyPublisher<Never, Error> {
+    func insert(
+        statuses: [Status],
+        timeline: Timeline,
+        loadMoreAndDirection: (LoadMore, LoadMore.Direction)? = nil) -> AnyPublisher<Never, Error> {
         databaseWriter.writePublisher {
             let timelineRecord = TimelineRecord(timeline: timeline)
 
@@ -66,7 +69,38 @@ public extension ContentDatabase {
             if let maxIDPresent = maxIDPresent,
                let minIDInserted = statuses.map(\.id).min(),
                minIDInserted > maxIDPresent {
-                try LoadMoreRecord(timelineId: timeline.id, afterStatusId: minIDInserted).save($0)
+                try LoadMoreRecord(
+                    timelineId: timeline.id,
+                    afterStatusId: minIDInserted,
+                    beforeStatusId: maxIDPresent)
+                    .save($0)
+            }
+
+            guard let (loadMore, direction) = loadMoreAndDirection else { return }
+
+            try LoadMoreRecord(
+                timelineId: loadMore.timeline.id,
+                afterStatusId: loadMore.afterStatusId,
+                beforeStatusId: loadMore.beforeStatusId)
+                .delete($0)
+
+            switch direction {
+            case .up:
+                if let maxIDInserted = statuses.map(\.id).max(), maxIDInserted < loadMore.afterStatusId {
+                    try LoadMoreRecord(
+                        timelineId: loadMore.timeline.id,
+                        afterStatusId: loadMore.afterStatusId,
+                        beforeStatusId: maxIDInserted)
+                        .save($0)
+                }
+            case .down:
+                if let minIDInserted = statuses.map(\.id).min(), minIDInserted > loadMore.beforeStatusId {
+                    try LoadMoreRecord(
+                        timelineId: loadMore.timeline.id,
+                        afterStatusId: minIDInserted,
+                        beforeStatusId: loadMore.beforeStatusId)
+                        .save($0)
+                }
             }
         }
         .ignoreOutput()

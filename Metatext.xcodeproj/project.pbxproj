@@ -54,6 +54,8 @@
 		D0E2C1D124FD97F000854680 /* ViewModels in Frameworks */ = {isa = PBXBuildFile; productRef = D0E2C1D024FD97F000854680 /* ViewModels */; };
 		D0E5361C24E3EB4D00FB1CE1 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E5361B24E3EB4D00FB1CE1 /* NotificationService.swift */; };
 		D0E5362024E3EB4D00FB1CE1 /* Notification Service Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D0E5361924E3EB4D00FB1CE1 /* Notification Service Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D0E569DB2529319100FA1D72 /* LoadMoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E569DA2529319100FA1D72 /* LoadMoreView.swift */; };
+		D0E569E0252931B100FA1D72 /* LoadMoreContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E569DF252931B100FA1D72 /* LoadMoreContentConfiguration.swift */; };
 		D0EA59402522AC8700804347 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EA593F2522AC8700804347 /* CardView.swift */; };
 		D0EA59482522B8B600804347 /* ViewConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EA59472522B8B600804347 /* ViewConstants.swift */; };
 		D0F0B10E251A868200942152 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F0B10D251A868200942152 /* AccountView.swift */; };
@@ -154,6 +156,8 @@
 		D0E5361B24E3EB4D00FB1CE1 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		D0E5361D24E3EB4D00FB1CE1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D0E5362824E4A06B00FB1CE1 /* Notification Service Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Notification Service Extension.entitlements"; sourceTree = "<group>"; };
+		D0E569DA2529319100FA1D72 /* LoadMoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreView.swift; sourceTree = "<group>"; };
+		D0E569DF252931B100FA1D72 /* LoadMoreContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreContentConfiguration.swift; sourceTree = "<group>"; };
 		D0EA593F2522AC8700804347 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		D0EA59472522B8B600804347 /* ViewConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewConstants.swift; sourceTree = "<group>"; };
 		D0F0B10D251A868200942152 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
@@ -291,6 +295,8 @@
 				D0BEB1FE24F9E5BB001B0F04 /* ListsView.swift */,
 				D0BEB1F624F9A84B001B0F04 /* LoadingTableFooterView.swift */,
 				D0B8510B25259E56004E0744 /* LoadMoreCell.swift */,
+				D0E569DF252931B100FA1D72 /* LoadMoreContentConfiguration.swift */,
+				D0E569DA2529319100FA1D72 /* LoadMoreView.swift */,
 				D0C7D42D24F76169001EBDBB /* NotificationTypesPreferencesView.swift */,
 				D0C7D42824F76169001EBDBB /* PostingReadingPreferencesView.swift */,
 				D0C7D42624F76169001EBDBB /* PreferencesView.swift */,
@@ -534,6 +540,7 @@
 				D0C7D49C24F7616A001EBDBB /* RootView.swift in Sources */,
 				D0F0B126251A90F400942152 /* AccountListCell.swift in Sources */,
 				D0B32F50250B373600311912 /* RegistrationView.swift in Sources */,
+				D0E569E0252931B100FA1D72 /* LoadMoreContentConfiguration.swift in Sources */,
 				D0F0B136251AA12700942152 /* CollectionItemKind+Extensions.swift in Sources */,
 				D0625E5D250F0B5C00502611 /* StatusContentConfiguration.swift in Sources */,
 				D0BEB1F324F8EE8C001B0F04 /* AttachmentView.swift in Sources */,
@@ -544,6 +551,7 @@
 				D0C7D4D624F7616A001EBDBB /* NSMutableAttributedString+Extensions.swift in Sources */,
 				D0625E5F250F0CFF00502611 /* StatusView.swift in Sources */,
 				D0625E59250F092900502611 /* StatusListCell.swift in Sources */,
+				D0E569DB2529319100FA1D72 /* LoadMoreView.swift in Sources */,
 				D0C7D49D24F7616A001EBDBB /* PostingReadingPreferencesView.swift in Sources */,
 				D0B5FE9B251583DB00478838 /* ProfileCollection+Extensions.swift in Sources */,
 				D0C7D49E24F7616A001EBDBB /* SecondaryNavigationView.swift in Sources */,

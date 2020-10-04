@@ -74,6 +74,10 @@ public extension NavigationService {
     func accountService(account: Account) -> AccountService {
         AccountService(account: account, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }
+
+    func loadMoreService(loadMore: LoadMore) -> LoadMoreService {
+        LoadMoreService(loadMore: loadMore, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+    }
 }
 
 private extension NavigationService {

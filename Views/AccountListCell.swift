@@ -15,9 +15,12 @@ class AccountListCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        let isPhoneIdiom = UIDevice.current.userInterfaceIdiom == .phone
-
-        separatorInset.right = isPhoneIdiom ? 0 : layoutMargins.right
-        separatorInset.left = isPhoneIdiom ? 0 : layoutMargins.left
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            separatorInset.left = 0
+            separatorInset.right = 0
+        } else {
+            separatorInset.left = layoutMargins.left
+            separatorInset.right = layoutMargins.right
+        }
     }
 }

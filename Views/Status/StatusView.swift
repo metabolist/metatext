@@ -125,7 +125,7 @@ private extension StatusView {
         ])
 
         for constraint in separatorConstraints {
-            constraint.constant = 1 / UIScreen.main.scale
+            constraint.constant = .hairline
         }
 
         avatarImageView.kf.indicatorType = .activity

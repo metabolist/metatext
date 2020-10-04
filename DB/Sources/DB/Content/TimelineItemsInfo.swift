@@ -42,7 +42,10 @@ extension TimelineItemsInfo {
             }) else { continue }
 
             timelineItems.insert(
-                .loadMore(LoadMore(timeline: timeline, afterStatusId: loadMoreRecord.afterStatusId)),
+                .loadMore(LoadMore(
+                            timeline: timeline,
+                            afterStatusId: loadMoreRecord.afterStatusId,
+                            beforeStatusId: loadMoreRecord.beforeStatusId)),
                 at: index)
         }
 

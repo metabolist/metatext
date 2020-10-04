@@ -6,6 +6,7 @@ extension CGFloat {
     static let defaultSpacing: Self = 8
     static let compactSpacing: Self = 4
     static let defaultCornerRadius: Self = 8
+    static let hairline = 1 / UIScreen.main.scale
 }
 
 extension TimeInterval {
