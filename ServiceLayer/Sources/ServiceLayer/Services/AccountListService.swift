@@ -6,44 +6,38 @@ import Foundation
 import Mastodon
 import MastodonAPI
 
-public struct AccountListService: CollectionService {
+public struct AccountListService {
     public let sections: AnyPublisher<[[CollectionItem]], Error>
     public let nextPageMaxIDs: AnyPublisher<String?, Never>
     public let navigationService: NavigationService
 
     private let list: AccountList
+    private let endpoint: AccountsEndpoint
     private let mastodonAPIClient: MastodonAPIClient
     private let contentDatabase: ContentDatabase
-    private let requestClosure: (_ maxID: String?, _ minID: String?) -> AnyPublisher<Never, Error>
-}
+    private let nextPageMaxIDsSubject = PassthroughSubject<String?, Never>()
 
-public extension AccountListService {
-    func request(maxID: String?, minID: String?) -> AnyPublisher<Never, Error> {
-        requestClosure(maxID, minID)
+    init(endpoint: AccountsEndpoint, mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
+        list = AccountList()
+        self.endpoint = endpoint
+        self.mastodonAPIClient = mastodonAPIClient
+        self.contentDatabase = contentDatabase
+        sections = contentDatabase.accountListObservation(list)
+            .map { [$0.map(CollectionItem.account)] }
+            .eraseToAnyPublisher()
+        nextPageMaxIDs = nextPageMaxIDsSubject.eraseToAnyPublisher()
+        navigationService = NavigationService(
+            status: nil,
+            mastodonAPIClient: mastodonAPIClient,
+            contentDatabase: contentDatabase)
     }
 }
 
-extension AccountListService {
-    init(endpoint: AccountsEndpoint, mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
-        let list = AccountList()
-        let nextPageMaxIDsSubject = PassthroughSubject<String?, Never>()
-
-        self.init(
-            sections: contentDatabase.accountListObservation(list)
-                .map { [$0.map { CollectionItem.account($0) }] }
-                .eraseToAnyPublisher(),
-            nextPageMaxIDs: nextPageMaxIDsSubject.eraseToAnyPublisher(),
-            navigationService: NavigationService(
-                status: nil,
-                mastodonAPIClient: mastodonAPIClient,
-                contentDatabase: contentDatabase),
-            list: list,
-            mastodonAPIClient: mastodonAPIClient,
-            contentDatabase: contentDatabase) { maxID, minID -> AnyPublisher<Never, Error> in
-            mastodonAPIClient.pagedRequest(endpoint, maxID: maxID, minID: minID)
-                .handleEvents(receiveOutput: { nextPageMaxIDsSubject.send($0.info.maxID) })
-                .flatMap { contentDatabase.append(accounts: $0.result, toList: list) }
-                .eraseToAnyPublisher()
-        }
+extension AccountListService: CollectionService {
+    public func request(maxID: String?, minID: String?) -> AnyPublisher<Never, Error> {
+        mastodonAPIClient.pagedRequest(endpoint, maxID: maxID, minID: minID)
+            .handleEvents(receiveOutput: { nextPageMaxIDsSubject.send($0.info.maxID) })
+            .flatMap { contentDatabase.append(accounts: $0.result, toList: list) }
+            .eraseToAnyPublisher()
     }
 }

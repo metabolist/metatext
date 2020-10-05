@@ -6,7 +6,7 @@ import Foundation
 import Mastodon
 import MastodonAPI
 
-public struct TimelineService: CollectionService {
+public struct TimelineService {
     public let sections: AnyPublisher<[[CollectionItem]], Error>
     public let navigationService: NavigationService
     public let nextPageMaxIDs: AnyPublisher<String?, Never>
@@ -35,7 +35,9 @@ public struct TimelineService: CollectionService {
             title = nil
         }
     }
+}
 
+extension TimelineService: CollectionService {
     public func request(maxID: String?, minID: String?) -> AnyPublisher<Never, Error> {
         mastodonAPIClient.pagedRequest(timeline.endpoint, maxID: maxID, minID: minID)
             .handleEvents(receiveOutput: { nextPageMaxIDsSubject.send($0.info.maxID) })
