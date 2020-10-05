@@ -11,14 +11,14 @@ final public class ProfileViewModel {
     @Published public var alertItem: AlertItem?
 
     private let profileService: ProfileService
-    private let collectionViewModel: CurrentValueSubject<ListViewModel, Never>
+    private let collectionViewModel: CurrentValueSubject<CollectionItemsViewModel, Never>
     private var cancellables = Set<AnyCancellable>()
 
     init(profileService: ProfileService) {
         self.profileService = profileService
 
         collectionViewModel = CurrentValueSubject(
-            ListViewModel(collectionService: profileService.timelineService(profileCollection: .statuses)))
+            CollectionItemsViewModel(collectionService: profileService.timelineService(profileCollection: .statuses)))
 
         profileService.accountServicePublisher
             .map(AccountViewModel.init(accountService:))
@@ -27,7 +27,7 @@ final public class ProfileViewModel {
 
         $collection.dropFirst()
             .map(profileService.timelineService(profileCollection:))
-            .map(ListViewModel.init(collectionService:))
+            .map(CollectionItemsViewModel.init(collectionService:))
             .sink { [weak self] in
                 guard let self = self else { return }
 

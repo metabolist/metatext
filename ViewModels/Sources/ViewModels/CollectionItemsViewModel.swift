@@ -5,7 +5,7 @@ import Foundation
 import Mastodon
 import ServiceLayer
 
-final public class ListViewModel: ObservableObject {
+final public class CollectionItemsViewModel: ObservableObject {
     @Published public var alertItem: AlertItem?
     public private(set) var nextPageMaxID: String?
     public private(set) var maintainScrollPositionOfItem: CollectionItemIdentifier?
@@ -33,7 +33,7 @@ final public class ListViewModel: ObservableObject {
     }
 }
 
-extension ListViewModel: CollectionViewModel {
+extension CollectionItemsViewModel: CollectionViewModel {
     public var sections: AnyPublisher<[[CollectionItemIdentifier]], Never> {
         items.map { $0.map { $0.map(CollectionItemIdentifier.init(item:)) } }.eraseToAnyPublisher()
     }
@@ -64,7 +64,7 @@ extension ListViewModel: CollectionViewModel {
         case let .status(configuration):
             navigationEventsSubject.send(
                 .collectionNavigation(
-                    ListViewModel(
+                    CollectionItemsViewModel(
                         collectionService: collectionService
                             .navigationService
                             .contextService(id: configuration.status.displayStatus.id))))
@@ -134,7 +134,7 @@ extension ListViewModel: CollectionViewModel {
     }
 }
 
-private extension ListViewModel {
+private extension CollectionItemsViewModel {
     func cache(viewModel: CollectionItemViewModel, forItem item: CollectionItem) {
         viewModelCache[item] = (viewModel, viewModel.events.flatMap { $0.compactMap(NavigationEvent.init) }
                                     .assignErrorsToAlertItem(to: \.alertItem, on: self)

@@ -21,7 +21,7 @@ extension NavigationEvent {
             case let .url(url):
                 self = .urlNavigation(url)
             case let .collection(statusListService):
-                self = .collectionNavigation(ListViewModel(collectionService: statusListService))
+                self = .collectionNavigation(CollectionItemsViewModel(collectionService: statusListService))
             case let .profile(profileService):
                 self = .profileNavigation(ProfileViewModel(profileService: profileService))
             case .webfingerStart:
