@@ -36,10 +36,10 @@ public extension NavigationService {
                         mastodonAPIClient: mastodonAPIClient,
                         contentDatabase: contentDatabase)))
                 .eraseToAnyPublisher()
-        } else if let accountID = accountID(url: url) {
-            return Just(.profile(profileService(id: accountID))).eraseToAnyPublisher()
-        } else if mastodonAPIClient.instanceURL.host == url.host, let statusID = url.statusID {
-            return Just(.collection(contextService(id: statusID))).eraseToAnyPublisher()
+        } else if let accountId = accountId(url: url) {
+            return Just(.profile(profileService(id: accountId))).eraseToAnyPublisher()
+        } else if mastodonAPIClient.instanceURL.host == url.host, let statusId = url.statusId {
+            return Just(.collection(contextService(id: statusId))).eraseToAnyPublisher()
         }
 
         if url.shouldWebfinger {
@@ -49,11 +49,11 @@ public extension NavigationService {
         }
     }
 
-    func contextService(id: String) -> ContextService {
-        ContextService(parentID: id, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+    func contextService(id: Status.Id) -> ContextService {
+        ContextService(id: id, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }
 
-    func profileService(id: String) -> ProfileService {
+    func profileService(id: Account.Id) -> ProfileService {
         ProfileService(id: id, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }
 
@@ -86,12 +86,12 @@ private extension NavigationService {
         return nil
     }
 
-    func accountID(url: URL) -> String? {
-        if let mentionID = status?.mentions.first(where: { $0.url.path.lowercased() == url.path.lowercased() })?.id {
-            return mentionID
+    func accountId(url: URL) -> String? {
+        if let mentionId = status?.mentions.first(where: { $0.url.path.lowercased() == url.path.lowercased() })?.id {
+            return mentionId
         } else if
             mastodonAPIClient.instanceURL.host == url.host {
-            return url.accountID
+            return url.accountId
         }
 
         return nil
@@ -131,21 +131,21 @@ private extension URL {
             || (pathComponents.count == 3 && pathComponents[0...1] == ["/", "users"])
     }
 
-    var accountID: String? {
-        if let accountID = pathComponents.last, pathComponents == ["/", "web", "accounts", accountID] {
-            return accountID
+    var accountId: Account.Id? {
+        if let accountId = pathComponents.last, pathComponents == ["/", "web", "accounts", accountId] {
+            return accountId
         }
 
         return nil
     }
 
-    var statusID: String? {
-        guard let statusID = pathComponents.last else { return nil }
+    var statusId: Status.Id? {
+        guard let statusId = pathComponents.last else { return nil }
 
         if pathComponents.count == 3, pathComponents[1].starts(with: "@") {
-            return statusID
-        } else if pathComponents == ["/", "web", "statuses", statusID] {
-            return statusID
+            return statusId
+        } else if pathComponents == ["/", "web", "statuses", statusId] {
+            return statusId
         }
 
         return nil
@@ -160,6 +160,6 @@ private extension URL {
     }
 
     var shouldWebfinger: Bool {
-        isAccountURL || accountID != nil || statusID != nil || tag != nil
+        isAccountURL || accountId != nil || statusId != nil || tag != nil
     }
 }

@@ -5,7 +5,7 @@ import GRDB
 import Mastodon
 
 struct AccountRecord: Codable, Hashable {
-    let id: String
+    let id: Account.Id
     let username: String
     let acct: String
     let displayName: String
@@ -24,7 +24,7 @@ struct AccountRecord: Codable, Hashable {
     let emojis: [Emoji]
     let bot: Bool
     let discoverable: Bool
-    let movedId: String?
+    let movedId: Account.Id?
 }
 
 extension AccountRecord {

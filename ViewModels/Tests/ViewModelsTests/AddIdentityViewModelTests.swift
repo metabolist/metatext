@@ -18,12 +18,12 @@ class AddIdentityViewModelTests: XCTestCase {
         let sut = AddIdentityViewModel(
             allIdentitiesService: allIdentitiesService,
             instanceURLService: InstanceURLService(environment: environment))
-        let addedIDRecorder = allIdentitiesService.identitiesCreated.record()
+        let addedIdRecorder = allIdentitiesService.identitiesCreated.record()
 
         sut.urlFieldText = "https://mastodon.social"
         sut.logInTapped()
 
-        _ = try wait(for: addedIDRecorder.next(), timeout: 1)
+        _ = try wait(for: addedIdRecorder.next(), timeout: 1)
     }
 
     func testAddIdentityWithoutScheme() throws {
@@ -33,12 +33,12 @@ class AddIdentityViewModelTests: XCTestCase {
         let sut = AddIdentityViewModel(
             allIdentitiesService: allIdentitiesService,
             instanceURLService: InstanceURLService(environment: environment))
-        let addedIDRecorder = allIdentitiesService.identitiesCreated.record()
+        let addedIdRecorder = allIdentitiesService.identitiesCreated.record()
 
         sut.urlFieldText = "mastodon.social"
         sut.logInTapped()
 
-        _ = try wait(for: addedIDRecorder.next(), timeout: 1)
+        _ = try wait(for: addedIdRecorder.next(), timeout: 1)
     }
 
     func testInvalidURL() throws {

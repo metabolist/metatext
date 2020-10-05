@@ -13,7 +13,7 @@ public final class Status: Codable, Identifiable {
         public static var unknownCase: Self { .unknown }
     }
 
-    public let id: String
+    public let id: Status.Id
     public let uri: String
     public let createdAt: Date
     public let account: Account
@@ -30,8 +30,8 @@ public final class Status: Codable, Identifiable {
     @DecodableDefault.Zero public private(set) var repliesCount: Int
     public let application: Application?
     public let url: URL?
-    public let inReplyToId: String?
-    public let inReplyToAccountId: String?
+    public let inReplyToId: Status.Id?
+    public let inReplyToAccountId: Account.Id?
     public let reblog: Status?
     public let poll: Poll?
     public let card: Card?
@@ -44,7 +44,7 @@ public final class Status: Codable, Identifiable {
     public let pinned: Bool?
 
     public init(
-        id: String,
+        id: Status.Id,
         uri: String,
         createdAt: Date,
         account: Account,
@@ -61,8 +61,8 @@ public final class Status: Codable, Identifiable {
         repliesCount: Int,
         application: Application?,
         url: URL?,
-        inReplyToId: String?,
-        inReplyToAccountId: String?,
+        inReplyToId: Status.Id?,
+        inReplyToAccountId: Account.Id?,
         reblog: Status?,
         poll: Poll?,
         card: Card?,
@@ -106,6 +106,8 @@ public final class Status: Codable, Identifiable {
 }
 
 public extension Status {
+    typealias Id = String
+
     var displayStatus: Status {
         reblog ?? self
     }

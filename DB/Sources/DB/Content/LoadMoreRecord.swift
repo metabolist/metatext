@@ -5,9 +5,9 @@ import GRDB
 import Mastodon
 
 struct LoadMoreRecord: Codable, Hashable {
-    let timelineId: String
-    let afterStatusId: String
-    let beforeStatusId: String
+    let timelineId: Timeline.Id
+    let afterStatusId: Status.Id
+    let beforeStatusId: Status.Id
 }
 
 extension LoadMoreRecord {

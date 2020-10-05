@@ -9,7 +9,7 @@ import MastodonAPI
 public struct ProfileService {
     public let accountServicePublisher: AnyPublisher<AccountService, Error>
 
-    private let accountID: String
+    private let id: Account.Id
     private let mastodonAPIClient: MastodonAPIClient
     private let contentDatabase: ContentDatabase
 
@@ -21,20 +21,20 @@ public struct ProfileService {
             contentDatabase: contentDatabase)
     }
 
-    init(id: String, mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
+    init(id: Account.Id, mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
         self.init(id: id, account: nil, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }
 
     private init(
-        id: String,
+        id: Account.Id,
         account: Account?,
         mastodonAPIClient: MastodonAPIClient,
         contentDatabase: ContentDatabase) {
-        accountID = id
+        self.id = id
         self.mastodonAPIClient = mastodonAPIClient
         self.contentDatabase = contentDatabase
 
-        var accountPublisher = contentDatabase.accountObservation(id: accountID)
+        var accountPublisher = contentDatabase.accountObservation(id: id)
 
         if let account = account {
             accountPublisher = accountPublisher
@@ -52,7 +52,7 @@ public struct ProfileService {
 public extension ProfileService {
     func timelineService(profileCollection: ProfileCollection) -> TimelineService {
         TimelineService(
-            timeline: .profile(accountId: accountID, profileCollection: profileCollection),
+            timeline: .profile(accountId: id, profileCollection: profileCollection),
             mastodonAPIClient: mastodonAPIClient,
             contentDatabase: contentDatabase)
     }
@@ -60,11 +60,11 @@ public extension ProfileService {
     func fetchPinnedStatuses() -> AnyPublisher<Never, Error> {
         mastodonAPIClient.request(
             StatusesEndpoint.accountsStatuses(
-                id: accountID,
+                id: id,
                 excludeReplies: true,
                 onlyMedia: false,
                 pinned: true))
-            .flatMap { contentDatabase.insert(pinnedStatuses: $0, accountID: accountID) }
+            .flatMap { contentDatabase.insert(pinnedStatuses: $0, accountId: id) }
             .eraseToAnyPublisher()
     }
 }

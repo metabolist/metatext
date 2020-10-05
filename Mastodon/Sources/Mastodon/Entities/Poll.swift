@@ -8,7 +8,7 @@ public struct Poll: Codable, Hashable {
         public var votesCount: Int
     }
 
-    public let id: String
+    public let id: Id
     public let expiresAt: Date
     public let expired: Bool
     public let multiple: Bool
@@ -18,4 +18,8 @@ public struct Poll: Codable, Hashable {
     @DecodableDefault.EmptyList public private(set) var ownVotes: [Int]
     public let options: [Option]
     public let emojis: [Emoji]
+}
+
+public extension Poll {
+    typealias Id = String
 }

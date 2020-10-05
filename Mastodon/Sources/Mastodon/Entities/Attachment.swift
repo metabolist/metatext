@@ -32,7 +32,7 @@ public struct Attachment: Codable, Hashable {
     }
     // swiftlint:enable nesting
 
-    public let id: String
+    public let id: Id
     public let type: AttachmentType
     public let url: URL
     public let remoteUrl: URL?
@@ -40,4 +40,8 @@ public struct Attachment: Codable, Hashable {
     public let textUrl: URL?
     public let meta: Meta?
     public let description: String?
+}
+
+public extension Attachment {
+    typealias Id = String
 }

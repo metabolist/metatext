@@ -62,7 +62,7 @@ enum NotificationServiceError: Error {
 }
 
 private extension NotificationService {
-    static let identityIDUserInfoKey = "i"
+    static let identityIdUserInfoKey = "i"
     static let encryptedMessageUserInfoKey = "m"
     static let saltUserInfoKey = "s"
     static let serverPublicKeyUserInfoKey = "k"
@@ -82,8 +82,8 @@ private extension NotificationService {
 
     static func extractAndDecrypt(userInfo: [AnyHashable: Any]) throws -> Data {
         guard
-            let identityIDString = userInfo[identityIDUserInfoKey] as? String,
-            let identityID = UUID(uuidString: identityIDString),
+            let identityIdString = userInfo[identityIdUserInfoKey] as? String,
+            let identityId = UUID(uuidString: identityIdString),
             let encryptedMessageBase64 = (userInfo[encryptedMessageUserInfoKey] as? String)?.URLSafeBase64ToBase64(),
             let encryptedMessage = Data(base64Encoded: encryptedMessageBase64),
             let saltBase64 = (userInfo[saltUserInfoKey] as? String)?.URLSafeBase64ToBase64(),
@@ -92,7 +92,7 @@ private extension NotificationService {
             let serverPublicKeyData = Data(base64Encoded: serverPublicKeyBase64)
         else { throw NotificationServiceError.userInfoDataAbsent }
 
-        let secretsService = Secrets(identityID: identityID, keychain: LiveKeychain.self)
+        let secretsService = Secrets(identityId: identityId, keychain: LiveKeychain.self)
 
         guard
             let auth = try secretsService.getPushAuth(),

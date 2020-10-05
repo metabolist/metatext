@@ -12,7 +12,7 @@ public enum FilterEndpoint {
             wholeWord: Bool,
             expiresIn: Date?)
     case update(
-            id: String,
+            id: Filter.Id,
             phrase: String,
             context: [Filter.Context],
             irreversible: Bool,

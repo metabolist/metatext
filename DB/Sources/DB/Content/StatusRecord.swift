@@ -5,10 +5,10 @@ import GRDB
 import Mastodon
 
 struct StatusRecord: Codable, Hashable {
-    let id: String
+    let id: Status.Id
     let uri: String
     let createdAt: Date
-    let accountId: String
+    let accountId: Account.Id
     let content: HTML
     let visibility: Status.Visibility
     let sensitive: Bool
@@ -22,9 +22,9 @@ struct StatusRecord: Codable, Hashable {
     let repliesCount: Int
     let application: Application?
     let url: URL?
-    let inReplyToId: String?
-    let inReplyToAccountId: String?
-    let reblogId: String?
+    let inReplyToId: Status.Id?
+    let inReplyToAccountId: Account.Id?
+    let reblogId: Status.Id?
     let poll: Poll?
     let card: Card?
     let language: String?

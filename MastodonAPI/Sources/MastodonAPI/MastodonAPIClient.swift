@@ -39,17 +39,17 @@ extension MastodonAPIClient {
 
     public func pagedRequest<E: Endpoint>(
         _ endpoint: E,
-        maxID: String? = nil,
-        minID: String? = nil,
-        sinceID: String? = nil,
+        maxId: String? = nil,
+        minId: String? = nil,
+        sinceId: String? = nil,
         limit: Int? = nil) -> AnyPublisher<PagedResult<E.ResultType>, Error> {
-        let pagedTarget = target(endpoint: Paged(endpoint, maxID: maxID, minID: minID, sinceID: sinceID, limit: limit))
+        let pagedTarget = target(endpoint: Paged(endpoint, maxId: maxId, minId: minId, sinceId: sinceId, limit: limit))
         let dataTask = dataTaskPublisher(pagedTarget).share()
         let decoded = dataTask.map(\.data).decode(type: E.ResultType.self, decoder: decoder)
         let info = dataTask.map { _, response -> PagedResult<E.ResultType>.Info in
-            var maxID: String?
-            var minID: String?
-            var sinceID: String?
+            var maxId: String?
+            var minId: String?
+            var sinceId: String?
 
             if let links = response.value(forHTTPHeaderField: "Link") {
                 let queryItems = Self.linkDataDetector.matches(
@@ -62,12 +62,12 @@ extension MastodonAPIClient {
                     }
                     .reduce([], +)
 
-                maxID = queryItems.first { $0.name == "max_id" }?.value
-                minID = queryItems.first { $0.name == "min_id" }?.value
-                sinceID = queryItems.first { $0.name == "since_id" }?.value
+                maxId = queryItems.first { $0.name == "max_id" }?.value
+                minId = queryItems.first { $0.name == "min_id" }?.value
+                sinceId = queryItems.first { $0.name == "since_id" }?.value
             }
 
-            return PagedResult.Info(maxID: maxID, minID: minID, sinceID: sinceID)
+            return PagedResult.Info(maxId: maxId, minId: minId, sinceId: sinceId)
         }
 
         return decoded.zip(info).map(PagedResult.init(result:info:)).eraseToAnyPublisher()

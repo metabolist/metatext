@@ -9,7 +9,7 @@ public final class Account: Codable, Identifiable {
         public let verifiedAt: Date?
     }
 
-    public let id: String
+    public let id: Id
     public let username: String
     public let acct: String
     public let displayName: String
@@ -30,7 +30,7 @@ public final class Account: Codable, Identifiable {
     @DecodableDefault.False public private(set) var discoverable: Bool
     public var moved: Account?
 
-    public init(id: String,
+    public init(id: Id,
                 username: String,
                 acct: String,
                 displayName: String,
@@ -71,6 +71,10 @@ public final class Account: Codable, Identifiable {
         self.discoverable = discoverable
         self.moved = moved
     }
+}
+
+public extension Account {
+    typealias Id = String
 }
 
 extension Account: Hashable {

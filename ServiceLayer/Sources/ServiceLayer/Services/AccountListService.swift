@@ -8,14 +8,14 @@ import MastodonAPI
 
 public struct AccountListService {
     public let sections: AnyPublisher<[[CollectionItem]], Error>
-    public let nextPageMaxIDs: AnyPublisher<String, Never>
+    public let nextPageMaxId: AnyPublisher<String, Never>
     public let navigationService: NavigationService
 
     private let list: AccountList
     private let endpoint: AccountsEndpoint
     private let mastodonAPIClient: MastodonAPIClient
     private let contentDatabase: ContentDatabase
-    private let nextPageMaxIDsSubject = PassthroughSubject<String, Never>()
+    private let nextPageMaxIdSubject = PassthroughSubject<String, Never>()
 
     init(endpoint: AccountsEndpoint, mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
         list = AccountList()
@@ -25,18 +25,18 @@ public struct AccountListService {
         sections = contentDatabase.accountListObservation(list)
             .map { [$0.map(CollectionItem.account)] }
             .eraseToAnyPublisher()
-        nextPageMaxIDs = nextPageMaxIDsSubject.eraseToAnyPublisher()
+        nextPageMaxId = nextPageMaxIdSubject.eraseToAnyPublisher()
         navigationService = NavigationService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }
 }
 
 extension AccountListService: CollectionService {
-    public func request(maxID: String?, minID: String?) -> AnyPublisher<Never, Error> {
-        mastodonAPIClient.pagedRequest(endpoint, maxID: maxID, minID: minID)
+    public func request(maxId: String?, minId: String?) -> AnyPublisher<Never, Error> {
+        mastodonAPIClient.pagedRequest(endpoint, maxId: maxId, minId: minId)
             .handleEvents(receiveOutput: {
-                guard let maxID = $0.info.maxID else { return }
+                guard let maxId = $0.info.maxId else { return }
 
-                nextPageMaxIDsSubject.send(maxID)
+                nextPageMaxIdSubject.send(maxId)
             })
             .flatMap { contentDatabase.append(accounts: $0.result, toList: list) }
             .eraseToAnyPublisher()

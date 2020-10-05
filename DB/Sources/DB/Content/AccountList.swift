@@ -4,11 +4,15 @@ import Foundation
 import GRDB
 
 public struct AccountList: Codable, FetchableRecord, PersistableRecord {
-    let id: UUID
+    let id: Id
 
     public init() {
-        id = UUID()
+        id = Id()
     }
+}
+
+public extension AccountList {
+    typealias Id = UUID
 }
 
 extension AccountList {

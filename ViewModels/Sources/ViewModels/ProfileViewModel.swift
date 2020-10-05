@@ -66,23 +66,23 @@ extension ProfileViewModel: CollectionViewModel {
             .eraseToAnyPublisher()
     }
 
-    public var nextPageMaxID: String? {
-        collectionViewModel.value.nextPageMaxID
+    public var nextPageMaxId: String? {
+        collectionViewModel.value.nextPageMaxId
     }
 
     public var maintainScrollPositionOfItem: CollectionItemIdentifier? {
         collectionViewModel.value.maintainScrollPositionOfItem
     }
 
-    public func request(maxID: String?, minID: String?) {
-        if case .statuses = collection, maxID == nil {
+    public func request(maxId: String?, minId: String?) {
+        if case .statuses = collection, maxId == nil {
             profileService.fetchPinnedStatuses()
                 .assignErrorsToAlertItem(to: \.alertItem, on: self)
                 .sink { _ in }
                 .store(in: &cancellables)
         }
 
-        collectionViewModel.value.request(maxID: maxID, minID: minID)
+        collectionViewModel.value.request(maxId: maxId, minId: minId)
     }
 
     public func select(indexPath: IndexPath) {

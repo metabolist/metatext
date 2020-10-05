@@ -12,15 +12,15 @@ public struct ContentDatabase {
 
     private let databaseWriter: DatabaseWriter
 
-    public init(identityID: UUID, inMemory: Bool, keychain: Keychain.Type) throws {
+    public init(id: Identity.Id, inMemory: Bool, keychain: Keychain.Type) throws {
         if inMemory {
             databaseWriter = DatabaseQueue()
         } else {
-            let path = try Self.fileURL(identityID: identityID).path
+            let path = try Self.fileURL(id: id).path
             var configuration = Configuration()
 
             configuration.prepareDatabase {
-                try $0.usePassphrase(Secrets.databaseKey(identityID: identityID, keychain: keychain))
+                try $0.usePassphrase(Secrets.databaseKey(identityId: id, keychain: keychain))
             }
 
             databaseWriter = try DatabasePool(path: path, configuration: configuration)
@@ -39,8 +39,8 @@ public struct ContentDatabase {
 }
 
 public extension ContentDatabase {
-    static func delete(forIdentityID identityID: UUID) throws {
-        try FileManager.default.removeItem(at: fileURL(identityID: identityID))
+    static func delete(id: Identity.Id) throws {
+        try FileManager.default.removeItem(at: fileURL(id: id))
     }
 
     func insert(status: Status) -> AnyPublisher<Never, Error> {
@@ -58,7 +58,7 @@ public extension ContentDatabase {
 
             try timelineRecord.save($0)
 
-            let maxIDPresent = try String.fetchOne($0, timelineRecord.statuses.select(max(StatusRecord.Columns.id)))
+            let maxIdPresent = try String.fetchOne($0, timelineRecord.statuses.select(max(StatusRecord.Columns.id)))
 
             for status in statuses {
                 try status.save($0)
@@ -66,13 +66,13 @@ public extension ContentDatabase {
                 try TimelineStatusJoin(timelineId: timeline.id, statusId: status.id).save($0)
             }
 
-            if let maxIDPresent = maxIDPresent,
-               let minIDInserted = statuses.map(\.id).min(),
-               minIDInserted > maxIDPresent {
+            if let maxIdPresent = maxIdPresent,
+               let minIdInserted = statuses.map(\.id).min(),
+               minIdInserted > maxIdPresent {
                 try LoadMoreRecord(
                     timelineId: timeline.id,
-                    afterStatusId: minIDInserted,
-                    beforeStatusId: maxIDPresent)
+                    afterStatusId: minIdInserted,
+                    beforeStatusId: maxIdPresent)
                     .save($0)
             }
 
@@ -86,18 +86,18 @@ public extension ContentDatabase {
 
             switch direction {
             case .up:
-                if let maxIDInserted = statuses.map(\.id).max(), maxIDInserted < loadMore.afterStatusId {
+                if let maxIdInserted = statuses.map(\.id).max(), maxIdInserted < loadMore.afterStatusId {
                     try LoadMoreRecord(
                         timelineId: loadMore.timeline.id,
                         afterStatusId: loadMore.afterStatusId,
-                        beforeStatusId: maxIDInserted)
+                        beforeStatusId: maxIdInserted)
                         .save($0)
                 }
             case .down:
-                if let minIDInserted = statuses.map(\.id).min(), minIDInserted > loadMore.beforeStatusId {
+                if let minIdInserted = statuses.map(\.id).min(), minIdInserted > loadMore.beforeStatusId {
                     try LoadMoreRecord(
                         timelineId: loadMore.timeline.id,
-                        afterStatusId: minIDInserted,
+                        afterStatusId: minIdInserted,
                         beforeStatusId: loadMore.beforeStatusId)
                         .save($0)
                 }
@@ -107,25 +107,25 @@ public extension ContentDatabase {
         .eraseToAnyPublisher()
     }
 
-    func insert(context: Context, parentID: String) -> AnyPublisher<Never, Error> {
+    func insert(context: Context, parentId: Status.Id) -> AnyPublisher<Never, Error> {
         databaseWriter.writePublisher {
             for (index, status) in context.ancestors.enumerated() {
                 try status.save($0)
-                try StatusAncestorJoin(parentId: parentID, statusId: status.id, index: index).save($0)
+                try StatusAncestorJoin(parentId: parentId, statusId: status.id, index: index).save($0)
             }
 
             for (index, status) in context.descendants.enumerated() {
                 try status.save($0)
-                try StatusDescendantJoin(parentId: parentID, statusId: status.id, index: index).save($0)
+                try StatusDescendantJoin(parentId: parentId, statusId: status.id, index: index).save($0)
             }
 
             try StatusAncestorJoin.filter(
-                StatusAncestorJoin.Columns.parentId == parentID
+                StatusAncestorJoin.Columns.parentId == parentId
                     && !context.ancestors.map(\.id).contains(StatusAncestorJoin.Columns.statusId))
                 .deleteAll($0)
 
             try StatusDescendantJoin.filter(
-                StatusDescendantJoin.Columns.parentId == parentID
+                StatusDescendantJoin.Columns.parentId == parentId
                     && !context.descendants.map(\.id).contains(StatusDescendantJoin.Columns.statusId))
                 .deleteAll($0)
         }
@@ -133,15 +133,15 @@ public extension ContentDatabase {
         .eraseToAnyPublisher()
     }
 
-    func insert(pinnedStatuses: [Status], accountID: String) -> AnyPublisher<Never, Error> {
+    func insert(pinnedStatuses: [Status], accountId: Account.Id) -> AnyPublisher<Never, Error> {
         databaseWriter.writePublisher {
             for (index, status) in pinnedStatuses.enumerated() {
                 try status.save($0)
-                try AccountPinnedStatusJoin(accountId: accountID, statusId: status.id, index: index).save($0)
+                try AccountPinnedStatusJoin(accountId: accountId, statusId: status.id, index: index).save($0)
             }
 
             try AccountPinnedStatusJoin.filter(
-                AccountPinnedStatusJoin.Columns.accountId == accountID
+                AccountPinnedStatusJoin.Columns.accountId == accountId
                     && !pinnedStatuses.map(\.id).contains(AccountPinnedStatusJoin.Columns.statusId))
                 .deleteAll($0)
         }
@@ -185,7 +185,7 @@ public extension ContentDatabase {
             .eraseToAnyPublisher()
     }
 
-    func deleteList(id: String) -> AnyPublisher<Never, Error> {
+    func deleteList(id: List.Id) -> AnyPublisher<Never, Error> {
         databaseWriter.writePublisher(updates: TimelineRecord.filter(TimelineRecord.Columns.listId == id).deleteAll)
             .ignoreOutput()
             .eraseToAnyPublisher()
@@ -209,7 +209,7 @@ public extension ContentDatabase {
             .eraseToAnyPublisher()
     }
 
-    func deleteFilter(id: String) -> AnyPublisher<Never, Error> {
+    func deleteFilter(id: Filter.Id) -> AnyPublisher<Never, Error> {
         databaseWriter.writePublisher(updates: Filter.filter(Filter.Columns.id == id).deleteAll)
             .ignoreOutput()
             .eraseToAnyPublisher()
@@ -225,9 +225,9 @@ public extension ContentDatabase {
             .eraseToAnyPublisher()
     }
 
-    func contextObservation(parentID: String) -> AnyPublisher<[[CollectionItem]], Error> {
+    func contextObservation(id: Status.Id) -> AnyPublisher<[[CollectionItem]], Error> {
         ValueObservation.tracking(
-            ContextItemsInfo.request(StatusRecord.filter(StatusRecord.Columns.id == parentID)).fetchOne)
+            ContextItemsInfo.request(StatusRecord.filter(StatusRecord.Columns.id == id)).fetchOne)
             .removeDuplicates()
             .publisher(in: databaseWriter)
             .combineLatest(activeFiltersPublisher)
@@ -252,7 +252,7 @@ public extension ContentDatabase {
             .eraseToAnyPublisher()
     }
 
-    func accountObservation(id: String) -> AnyPublisher<Account, Error> {
+    func accountObservation(id: Account.Id) -> AnyPublisher<Account, Error> {
         ValueObservation.tracking(AccountInfo.request(AccountRecord.filter(AccountRecord.Columns.id == id)).fetchOne)
             .removeDuplicates()
             .publisher(in: databaseWriter)
@@ -271,8 +271,8 @@ public extension ContentDatabase {
 }
 
 private extension ContentDatabase {
-    static func fileURL(identityID: UUID) throws -> URL {
-        try FileManager.default.databaseDirectoryURL(name: identityID.uuidString)
+    static func fileURL(id: Identity.Id) throws -> URL {
+        try FileManager.default.databaseDirectoryURL(name: id.uuidString)
     }
 
     static func clean(_ databaseWriter: DatabaseWriter) throws {

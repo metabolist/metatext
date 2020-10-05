@@ -9,14 +9,13 @@ import MastodonAPI
 public struct TimelineService {
     public let sections: AnyPublisher<[[CollectionItem]], Error>
     public let navigationService: NavigationService
-    public let nextPageMaxIDs: AnyPublisher<String, Never>
+    public let nextPageMaxId: AnyPublisher<String, Never>
     public let title: AnyPublisher<String, Never>
-    public let contextParentID: String? = nil
 
     private let timeline: Timeline
     private let mastodonAPIClient: MastodonAPIClient
     private let contentDatabase: ContentDatabase
-    private let nextPageMaxIDsSubject = PassthroughSubject<String, Never>()
+    private let nextPageMaxIdSubject = PassthroughSubject<String, Never>()
 
     init(timeline: Timeline, mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
         self.timeline = timeline
@@ -24,7 +23,7 @@ public struct TimelineService {
         self.contentDatabase = contentDatabase
         sections = contentDatabase.observation(timeline: timeline)
         navigationService = NavigationService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
-        nextPageMaxIDs = nextPageMaxIDsSubject.eraseToAnyPublisher()
+        nextPageMaxId = nextPageMaxIdSubject.eraseToAnyPublisher()
 
         if case let .tag(tag) = timeline {
             title = Just("#".appending(tag)).eraseToAnyPublisher()
@@ -35,12 +34,12 @@ public struct TimelineService {
 }
 
 extension TimelineService: CollectionService {
-    public func request(maxID: String?, minID: String?) -> AnyPublisher<Never, Error> {
-        mastodonAPIClient.pagedRequest(timeline.endpoint, maxID: maxID, minID: minID)
+    public func request(maxId: String?, minId: String?) -> AnyPublisher<Never, Error> {
+        mastodonAPIClient.pagedRequest(timeline.endpoint, maxId: maxId, minId: minId)
             .handleEvents(receiveOutput: {
-                guard let maxID = $0.info.maxID else { return }
+                guard let maxId = $0.info.maxId else { return }
 
-                nextPageMaxIDsSubject.send(maxID)
+                nextPageMaxIdSubject.send(maxId)
             })
             .flatMap { contentDatabase.insert(statuses: $0.result, timeline: timeline) }
             .eraseToAnyPublisher()

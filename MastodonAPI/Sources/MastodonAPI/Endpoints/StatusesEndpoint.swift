@@ -8,8 +8,8 @@ public enum StatusesEndpoint {
     case timelinesPublic(local: Bool)
     case timelinesTag(String)
     case timelinesHome
-    case timelinesList(id: String)
-    case accountsStatuses(id: String, excludeReplies: Bool, onlyMedia: Bool, pinned: Bool)
+    case timelinesList(id: List.Id)
+    case accountsStatuses(id: Account.Id, excludeReplies: Bool, onlyMedia: Bool, pinned: Bool)
 }
 
 extension StatusesEndpoint: Endpoint {

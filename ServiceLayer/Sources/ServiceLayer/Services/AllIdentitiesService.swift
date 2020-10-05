@@ -8,11 +8,11 @@ import MastodonAPI
 import Secrets
 
 public struct AllIdentitiesService {
-    public let identitiesCreated: AnyPublisher<UUID, Never>
+    public let identitiesCreated: AnyPublisher<Identity.Id, Never>
 
     private let environment: AppEnvironment
     private let database: IdentityDatabase
-    private let identitiesCreatedSubject = PassthroughSubject<UUID, Never>()
+    private let identitiesCreatedSubject = PassthroughSubject<Identity.Id, Never>()
 
     public init(environment: AppEnvironment) throws {
         self.environment = environment
@@ -30,17 +30,17 @@ public extension AllIdentitiesService {
         case browsing
     }
 
-    func identityService(id: UUID) throws -> IdentityService {
+    func identityService(id: Identity.Id) throws -> IdentityService {
         try IdentityService(id: id, database: database, environment: environment)
     }
 
-    func immediateMostRecentlyUsedIdentityIDObservation() -> AnyPublisher<UUID?, Error> {
-        database.immediateMostRecentlyUsedIdentityIDObservation()
+    func immediateMostRecentlyUsedIdentityIdObservation() -> AnyPublisher<Identity.Id?, Error> {
+        database.immediateMostRecentlyUsedIdentityIdObservation()
     }
 
     func createIdentity(url: URL, kind: IdentityCreation) -> AnyPublisher<Never, Error> {
         let id = environment.uuid()
-        let secrets = Secrets(identityID: id, keychain: environment.keychain)
+        let secrets = Secrets(identityId: id, keychain: environment.keychain)
 
         do {
             try secrets.setInstanceURL(url)
@@ -76,7 +76,7 @@ public extension AllIdentitiesService {
 
         return authenticationPublisher
             .tryMap {
-                try secrets.setClientID($0.clientId)
+                try secrets.setClientId($0.clientId)
                 try secrets.setClientSecret($0.clientSecret)
                 try secrets.setAccessToken($1.accessToken)
             }
@@ -84,13 +84,13 @@ public extension AllIdentitiesService {
             .eraseToAnyPublisher()
     }
 
-    func deleteIdentity(id: UUID) -> AnyPublisher<Never, Error> {
+    func deleteIdentity(id: Identity.Id) -> AnyPublisher<Never, Error> {
         database.deleteIdentity(id: id)
             .collect()
             .tryMap { _ -> AnyPublisher<Never, Error> in
-                try ContentDatabase.delete(forIdentityID: id)
+                try ContentDatabase.delete(id: id)
 
-                let secrets = Secrets(identityID: id, keychain: environment.keychain)
+                let secrets = Secrets(identityId: id, keychain: environment.keychain)
 
                 defer { secrets.deleteAllItems() }
 
@@ -100,7 +100,7 @@ public extension AllIdentitiesService {
                         instanceURL: try secrets.getInstanceURL())
                         .request(DeletionEndpoint.oauthRevoke(
                                     token: try secrets.getAccessToken(),
-                                    clientID: try secrets.getClientID(),
+                                    clientId: try secrets.getClientId(),
                                     clientSecret: try secrets.getClientSecret()))
                         .ignoreOutput()
                         .eraseToAnyPublisher()

@@ -28,7 +28,7 @@ extension IdentityDatabase {
 
             try db.create(table: "account", ifNotExists: true) { t in
                 t.column("id", .text).primaryKey(onConflict: .replace)
-                t.column("identityID", .text).notNull()
+                t.column("identityId", .text).notNull()
                     .references("identityRecord", onDelete: .cascade)
                 t.column("username", .text).notNull()
                 t.column("displayName", .text).notNull()

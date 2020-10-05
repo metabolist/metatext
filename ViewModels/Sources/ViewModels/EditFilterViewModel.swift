@@ -28,7 +28,7 @@ public final class EditFilterViewModel: ObservableObject {
 }
 
 public extension EditFilterViewModel {
-    var isNew: Bool { filter.id == Filter.newFilterID }
+    var isNew: Bool { filter.id == Filter.newFilterId }
 
     var isSaveDisabled: Bool { filter.phrase == "" || filter.context.isEmpty }
 

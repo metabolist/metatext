@@ -34,14 +34,14 @@ public extension StatusService {
 
     func rebloggedByService() -> AccountListService {
         AccountListService(
-            endpoint: .statusRebloggedBy(id: status.id),
+            endpoint: .rebloggedBy(id: status.id),
             mastodonAPIClient: mastodonAPIClient,
             contentDatabase: contentDatabase)
     }
 
     func favoritedByService() -> AccountListService {
         AccountListService(
-            endpoint: .statusFavouritedBy(id: status.id),
+            endpoint: .favouritedBy(id: status.id),
             mastodonAPIClient: mastodonAPIClient,
             contentDatabase: contentDatabase)
     }

@@ -7,7 +7,7 @@ import ServiceLayer
 public final class RootViewModel: ObservableObject {
     @Published public private(set) var navigationViewModel: NavigationViewModel?
 
-    @Published private var mostRecentlyUsedIdentityID: UUID?
+    @Published private var mostRecentlyUsedIdentityId: Identity.Id?
     private let environment: AppEnvironment
     private let allIdentitiesService: AllIdentitiesService
     private let userNotificationService: UserNotificationService
@@ -21,11 +21,11 @@ public final class RootViewModel: ObservableObject {
         userNotificationService = UserNotificationService(environment: environment)
         self.registerForRemoteNotifications = registerForRemoteNotifications
 
-        allIdentitiesService.immediateMostRecentlyUsedIdentityIDObservation()
+        allIdentitiesService.immediateMostRecentlyUsedIdentityIdObservation()
             .replaceError(with: nil)
-            .assign(to: &$mostRecentlyUsedIdentityID)
+            .assign(to: &$mostRecentlyUsedIdentityId)
 
-        identitySelected(id: mostRecentlyUsedIdentityID, immediate: true)
+        identitySelected(id: mostRecentlyUsedIdentityId, immediate: true)
 
         allIdentitiesService.identitiesCreated
             .sink { [weak self] in self?.identitySelected(id: $0) }
@@ -42,11 +42,11 @@ public final class RootViewModel: ObservableObject {
 }
 
 public extension RootViewModel {
-    func identitySelected(id: UUID?) {
+    func identitySelected(id: Identity.Id?) {
         identitySelected(id: id, immediate: false)
     }
 
-    func deleteIdentity(id: UUID) {
+    func deleteIdentity(id: Identity.Id) {
         allIdentitiesService.deleteIdentity(id: id)
             .sink { _ in } receiveValue: { _ in }
             .store(in: &cancellables)
@@ -60,7 +60,7 @@ public extension RootViewModel {
 }
 
 private extension RootViewModel {
-    func identitySelected(id: UUID?, immediate: Bool) {
+    func identitySelected(id: Identity.Id?, immediate: Bool) {
         navigationViewModel?.presentingSecondaryNavigation = false
 
         guard
@@ -74,7 +74,7 @@ private extension RootViewModel {
         let observation = identityService.observation(immediate: immediate)
             .catch { [weak self] _ -> Empty<Identity, Never> in
                 DispatchQueue.main.async {
-                    self?.identitySelected(id: self?.mostRecentlyUsedIdentityID, immediate: false)
+                    self?.identitySelected(id: self?.mostRecentlyUsedIdentityId, immediate: false)
                 }
 
                 return Empty()

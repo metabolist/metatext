@@ -2,10 +2,11 @@
 
 import Foundation
 import GRDB
+import Mastodon
 
 struct AccountListJoin: Codable, FetchableRecord, PersistableRecord {
-    let accountId: String
-    let listId: UUID
+    let accountId: Account.Id
+    let listId: AccountList.Id
     let index: Int
 
     static let account = belongsTo(AccountRecord.self)

@@ -5,7 +5,7 @@ import HTTP
 import Mastodon
 
 public enum ContextEndpoint {
-    case context(id: String)
+    case context(id: Status.Id)
 }
 
 extension ContextEndpoint: Endpoint {

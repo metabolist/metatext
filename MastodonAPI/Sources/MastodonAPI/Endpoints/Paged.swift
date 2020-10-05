@@ -6,16 +6,16 @@ import Mastodon
 
 public struct Paged<T: Endpoint> {
     public let endpoint: T
-    public let maxID: String?
-    public let minID: String?
-    public let sinceID: String?
+    public let maxId: String?
+    public let minId: String?
+    public let sinceId: String?
     public let limit: Int?
 
-    public init(_ endpoint: T, maxID: String? = nil, minID: String? = nil, sinceID: String? = nil, limit: Int? = nil) {
+    public init(_ endpoint: T, maxId: String? = nil, minId: String? = nil, sinceId: String? = nil, limit: Int? = nil) {
         self.endpoint = endpoint
-        self.maxID = maxID
-        self.minID = minID
-        self.sinceID = sinceID
+        self.maxId = maxId
+        self.minId = minId
+        self.sinceId = sinceId
         self.limit = limit
     }
 }
@@ -34,9 +34,9 @@ extension Paged: Endpoint {
     public var queryParameters: [String: String]? {
         var queryParameters = endpoint.queryParameters ?? [String: String]()
 
-        queryParameters["max_id"] = maxID
-        queryParameters["min_id"] = minID
-        queryParameters["since_id"] = sinceID
+        queryParameters["max_id"] = maxId
+        queryParameters["min_id"] = minId
+        queryParameters["since_id"] = sinceId
 
         if let limit = limit {
             queryParameters["limit"] = String(limit)
@@ -50,9 +50,9 @@ extension Paged: Endpoint {
 
 public struct PagedResult<T: Decodable>: Decodable {
     public struct Info: Decodable {
-        public let maxID: String?
-        public let minID: String?
-        public let sinceID: String?
+        public let maxId: String?
+        public let minId: String?
+        public let sinceId: String?
     }
 
     public let result: T

@@ -9,27 +9,27 @@ import MastodonAPI
 public struct ContextService {
     public let sections: AnyPublisher<[[CollectionItem]], Error>
     public let navigationService: NavigationService
-    public var contextParentID: String? { parentID }
+    public var contextParentId: String? { id }
 
-    private let parentID: String
+    private let id: Status.Id
     private let mastodonAPIClient: MastodonAPIClient
     private let contentDatabase: ContentDatabase
 
-    init(parentID: String, mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
-        self.parentID = parentID
+    init(id: Status.Id, mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
+        self.id = id
         self.mastodonAPIClient = mastodonAPIClient
         self.contentDatabase = contentDatabase
-        sections = contentDatabase.contextObservation(parentID: parentID)
+        sections = contentDatabase.contextObservation(id: id)
         navigationService = NavigationService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }
 }
 
 extension ContextService: CollectionService {
-    public func request(maxID: String?, minID: String?) -> AnyPublisher<Never, Error> {
-        mastodonAPIClient.request(StatusEndpoint.status(id: parentID))
+    public func request(maxId: String?, minId: String?) -> AnyPublisher<Never, Error> {
+        mastodonAPIClient.request(StatusEndpoint.status(id: id))
             .flatMap(contentDatabase.insert(status:))
-            .merge(with: mastodonAPIClient.request(ContextEndpoint.context(id: parentID))
-                    .flatMap { contentDatabase.insert(context: $0, parentID: parentID) })
+            .merge(with: mastodonAPIClient.request(ContextEndpoint.context(id: id))
+                    .flatMap { contentDatabase.insert(context: $0, parentId: id) })
             .eraseToAnyPublisher()
     }
 }

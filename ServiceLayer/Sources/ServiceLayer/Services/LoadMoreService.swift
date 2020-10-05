@@ -20,8 +20,8 @@ public extension LoadMoreService {
     func request(direction: LoadMore.Direction) -> AnyPublisher<Never, Error> {
         mastodonAPIClient.pagedRequest(
             loadMore.timeline.endpoint,
-            maxID: direction == .down ? loadMore.afterStatusId : nil,
-            minID: direction == .up ? loadMore.beforeStatusId : nil)
+            maxId: direction == .down ? loadMore.afterStatusId : nil,
+            minId: direction == .up ? loadMore.beforeStatusId : nil)
             .flatMap {
                 contentDatabase.insert(
                     statuses: $0.result,

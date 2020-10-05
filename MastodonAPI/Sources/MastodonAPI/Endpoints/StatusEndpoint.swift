@@ -5,9 +5,9 @@ import HTTP
 import Mastodon
 
 public enum StatusEndpoint {
-    case status(id: String)
-    case favourite(id: String)
-    case unfavourite(id: String)
+    case status(id: Status.Id)
+    case favourite(id: Status.Id)
+    case unfavourite(id: Status.Id)
 }
 
 extension StatusEndpoint: Endpoint {

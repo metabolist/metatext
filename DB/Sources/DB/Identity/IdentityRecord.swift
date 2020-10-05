@@ -5,7 +5,7 @@ import GRDB
 import Mastodon
 
 struct IdentityRecord: Codable, Hashable, FetchableRecord, PersistableRecord {
-    let id: UUID
+    let id: Identity.Id
     let url: URL
     let authenticated: Bool
     let pending: Bool

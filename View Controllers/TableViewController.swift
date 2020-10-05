@@ -74,7 +74,7 @@ class TableViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        viewModel.request(maxID: nil, minID: nil)
+        viewModel.request(maxId: nil, minId: nil)
     }
 
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -130,13 +130,13 @@ class TableViewController: UITableViewController {
 extension TableViewController: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         guard
-            let maxID = viewModel.nextPageMaxID,
+            let maxId = viewModel.nextPageMaxId,
             let indexPath = indexPaths.last,
             indexPath.section == dataSource.numberOfSections(in: tableView) - 1,
             indexPath.row == dataSource.tableView(tableView, numberOfRowsInSection: indexPath.section) - 1
         else { return }
 
-        viewModel.request(maxID: maxID, minID: nil)
+        viewModel.request(maxId: maxId, minId: nil)
     }
 }
 

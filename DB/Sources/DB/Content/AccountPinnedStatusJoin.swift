@@ -2,10 +2,11 @@
 
 import Foundation
 import GRDB
+import Mastodon
 
 struct AccountPinnedStatusJoin: Codable, FetchableRecord, PersistableRecord {
-    let accountId: String
-    let statusId: String
+    let accountId: Account.Id
+    let statusId: Status.Id
     let index: Int
 }
 

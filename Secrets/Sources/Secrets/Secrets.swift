@@ -14,11 +14,11 @@ enum SecretsStorableError: Error {
 }
 
 public struct Secrets {
-    public let identityID: UUID
+    public let identityId: UUID
     private let keychain: Keychain.Type
 
-    public init(identityID: UUID, keychain: Keychain.Type) {
-        self.identityID = identityID
+    public init(identityId: UUID, keychain: Keychain.Type) {
+        self.identityId = identityId
         self.keychain = keychain
     }
 }
@@ -26,7 +26,7 @@ public struct Secrets {
 public extension Secrets {
     enum Item: String, CaseIterable {
         case instanceURL
-        case clientID
+        case clientId
         case clientSecret
         case accessToken
         case pushKey
@@ -56,12 +56,12 @@ extension Secrets.Item {
 
 public extension Secrets {
     // https://www.zetetic.net/sqlcipher/sqlcipher-api/#key
-    static func databaseKey(identityID: UUID?, keychain: Keychain.Type) throws -> String {
+    static func databaseKey(identityId: UUID?, keychain: Keychain.Type) throws -> String {
         let passphraseData: Data
         let scopedSecrets: Secrets?
 
-        if let identityID = identityID {
-            scopedSecrets = Secrets(identityID: identityID, keychain: keychain)
+        if let identityId = identityId {
+            scopedSecrets = Secrets(identityId: identityId, keychain: keychain)
         } else {
             scopedSecrets = nil
         }
@@ -114,12 +114,12 @@ public extension Secrets {
         try set(instanceURL, forItem: .instanceURL)
     }
 
-    func getClientID() throws -> String {
-        try item(.clientID)
+    func getClientId() throws -> String {
+        try item(.clientId)
     }
 
-    func setClientID(_ clientID: String) throws {
-        try set(clientID, forItem: .clientID)
+    func setClientId(_ clientId: String) throws {
+        try set(clientId, forItem: .clientId)
     }
 
     func getClientSecret() throws -> String {
@@ -200,7 +200,7 @@ private extension Secrets {
     }
 
     func scopedKey(item: Item) -> String {
-        identityID.uuidString + "." + item.rawValue
+        identityId.uuidString + "." + item.rawValue
     }
 
     func set(_ data: SecretsStorable, forItem item: Item) throws {

@@ -5,8 +5,8 @@ import Mastodon
 
 public struct LoadMore: Hashable {
     public let timeline: Timeline
-    public let afterStatusId: String
-    public let beforeStatusId: String
+    public let afterStatusId: Status.Id
+    public let beforeStatusId: Status.Id
 }
 
 public extension LoadMore {

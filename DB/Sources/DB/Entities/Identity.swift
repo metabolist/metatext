@@ -4,7 +4,7 @@ import Foundation
 import Mastodon
 
 public struct Identity: Codable, Hashable, Identifiable {
-    public let id: UUID
+    public let id: Id
     public let url: URL
     public let authenticated: Bool
     public let pending: Bool
@@ -17,6 +17,8 @@ public struct Identity: Codable, Hashable, Identifiable {
 }
 
 public extension Identity {
+    typealias Id = UUID
+
     struct Instance: Codable, Hashable {
         public let uri: String
         public let streamingAPI: URL
@@ -25,8 +27,8 @@ public extension Identity {
     }
 
     struct Account: Codable, Hashable {
-        public let id: String
-        public let identityID: UUID
+        public let id: Mastodon.Account.Id
+        public let identityId: Identity.Id
         public let username: String
         public let displayName: String
         public let url: URL

@@ -5,8 +5,8 @@ import HTTP
 import Mastodon
 
 public enum AccountsEndpoint {
-    case statusRebloggedBy(id: String)
-    case statusFavouritedBy(id: String)
+    case rebloggedBy(id: Status.Id)
+    case favouritedBy(id: Status.Id)
 }
 
 extension AccountsEndpoint: Endpoint {
@@ -14,23 +14,23 @@ extension AccountsEndpoint: Endpoint {
 
     public var context: [String] {
         switch self {
-        case .statusRebloggedBy, .statusFavouritedBy:
+        case .rebloggedBy, .favouritedBy:
             return defaultContext + ["statuses"]
         }
     }
 
     public var pathComponentsInContext: [String] {
         switch self {
-        case let .statusRebloggedBy(id):
+        case let .rebloggedBy(id):
             return [id, "reblogged_by"]
-        case let .statusFavouritedBy(id):
+        case let .favouritedBy(id):
             return [id, "favourited_by"]
         }
     }
 
     public var method: HTTPMethod {
         switch self {
-        case .statusRebloggedBy, .statusFavouritedBy:
+        case .rebloggedBy, .favouritedBy:
             return .get
         }
     }

@@ -9,9 +9,9 @@ public protocol CollectionViewModel {
     var alertItems: AnyPublisher<AlertItem, Never> { get }
     var loading: AnyPublisher<Bool, Never> { get }
     var navigationEvents: AnyPublisher<NavigationEvent, Never> { get }
-    var nextPageMaxID: String? { get }
+    var nextPageMaxId: String? { get }
     var maintainScrollPositionOfItem: CollectionItemIdentifier? { get }
-    func request(maxID: String?, minID: String?)
+    func request(maxId: String?, minId: String?)
     func select(indexPath: IndexPath)
     func canSelect(indexPath: IndexPath) -> Bool
     func viewModel(indexPath: IndexPath) -> CollectionItemViewModel

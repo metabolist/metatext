@@ -2,10 +2,11 @@
 
 import Foundation
 import GRDB
+import Mastodon
 
 struct StatusDescendantJoin: Codable, FetchableRecord, PersistableRecord {
-    let parentId: String
-    let statusId: String
+    let parentId: Status.Id
+    let statusId: Status.Id
     let index: Int
 
     static let status = belongsTo(StatusRecord.self, using: ForeignKey([Columns.statusId]))

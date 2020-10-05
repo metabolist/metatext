@@ -47,7 +47,7 @@ private extension IdentitiesView {
                         } label: {
                             row(identity: identity)
                         }
-                        .disabled(identity.id == viewModel.currentIdentityID)
+                        .disabled(identity.id == viewModel.currentIdentityId)
                         .buttonStyle(PlainButtonStyle())
                     }
                     .onDelete {
@@ -94,7 +94,7 @@ private extension IdentitiesView {
                 Spacer()
             }
             Spacer()
-            if identity.id == viewModel.currentIdentityID {
+            if identity.id == viewModel.currentIdentityId {
                 Image(systemName: "checkmark.circle")
             }
         }

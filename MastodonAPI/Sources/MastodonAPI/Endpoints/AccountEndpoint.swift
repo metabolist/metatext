@@ -6,7 +6,7 @@ import Mastodon
 
 public enum AccountEndpoint {
     case verifyCredentials
-    case accounts(id: String)
+    case accounts(id: Account.Id)
 }
 
 extension AccountEndpoint: Endpoint {

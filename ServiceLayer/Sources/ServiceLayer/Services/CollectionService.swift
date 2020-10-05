@@ -4,17 +4,17 @@ import Combine
 
 public protocol CollectionService {
     var sections: AnyPublisher<[[CollectionItem]], Error> { get }
-    var nextPageMaxIDs: AnyPublisher<String, Never> { get }
+    var nextPageMaxId: AnyPublisher<String, Never> { get }
     var title: AnyPublisher<String, Never> { get }
     var navigationService: NavigationService { get }
-    var contextParentID: String? { get }
-    func request(maxID: String?, minID: String?) -> AnyPublisher<Never, Error>
+    var contextParentId: String? { get }
+    func request(maxId: String?, minId: String?) -> AnyPublisher<Never, Error>
 }
 
 extension CollectionService {
-    public var nextPageMaxIDs: AnyPublisher<String, Never> { Empty().eraseToAnyPublisher() }
+    public var nextPageMaxId: AnyPublisher<String, Never> { Empty().eraseToAnyPublisher() }
 
     public var title: AnyPublisher<String, Never> { Empty().eraseToAnyPublisher() }
 
-    public var contextParentID: String? { nil }
+    public var contextParentId: String? { nil }
 }

@@ -7,7 +7,7 @@ import ServiceLayer
 
 final public class CollectionItemsViewModel: ObservableObject {
     @Published public var alertItem: AlertItem?
-    public private(set) var nextPageMaxID: String?
+    public private(set) var nextPageMaxId: String?
     public private(set) var maintainScrollPositionOfItem: CollectionItemIdentifier?
 
     private let items = CurrentValueSubject<[[CollectionItem]], Never>([])
@@ -27,8 +27,8 @@ final public class CollectionItemsViewModel: ObservableObject {
             .sink { _ in }
             .store(in: &cancellables)
 
-        collectionService.nextPageMaxIDs
-            .sink { [weak self] in self?.nextPageMaxID = $0 }
+        collectionService.nextPageMaxId
+            .sink { [weak self] in self?.nextPageMaxId = $0 }
             .store(in: &cancellables)
     }
 }
@@ -46,8 +46,8 @@ extension CollectionItemsViewModel: CollectionViewModel {
 
     public var navigationEvents: AnyPublisher<NavigationEvent, Never> { navigationEventsSubject.eraseToAnyPublisher() }
 
-    public func request(maxID: String? = nil, minID: String? = nil) {
-        collectionService.request(maxID: maxID, minID: minID)
+    public func request(maxId: String? = nil, minId: String? = nil) {
+        collectionService.request(maxId: maxId, minId: minId)
             .receive(on: DispatchQueue.main)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .handleEvents(
@@ -80,7 +80,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
 
     public func canSelect(indexPath: IndexPath) -> Bool {
         if case let .status(configuration) = items.value[indexPath.section][indexPath.item],
-           configuration.status.id == collectionService.contextParentID {
+           configuration.status.id == collectionService.contextParentId {
             return false
         }
 
@@ -102,7 +102,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
                 cache(viewModel: viewModel, forItem: item)
             }
 
-            viewModel.isContextParent = configuration.status.id == collectionService.contextParentID
+            viewModel.isContextParent = configuration.status.id == collectionService.contextParentId
             viewModel.isPinned = configuration.pinned
             viewModel.isReplyInContext = configuration.isReplyInContext
             viewModel.hasReplyFollowing = configuration.hasReplyFollowing
@@ -154,12 +154,12 @@ private extension CollectionItemsViewModel {
         maintainScrollPositionOfItem = nil // clear old value
 
         // Maintain scroll position of parent after initial load of context
-        if let contextParentID = collectionService.contextParentID {
-            let contextParentIdentifier = CollectionItemIdentifier(id: contextParentID, kind: .status, info: [:])
-            let onlyContextParentID = [[], [contextParentIdentifier], []]
+        if let contextParentId = collectionService.contextParentId {
+            let contextParentIdentifier = CollectionItemIdentifier(id: contextParentId, kind: .status, info: [:])
+            let onlyContextParentId = [[], [contextParentIdentifier], []]
 
             if items.value.isEmpty
-                || items.value.map({ $0.map(CollectionItemIdentifier.init(item:)) }) == onlyContextParentID {
+                || items.value.map({ $0.map(CollectionItemIdentifier.init(item:)) }) == onlyContextParentId {
                 maintainScrollPositionOfItem = contextParentIdentifier
             }
         }

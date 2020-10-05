@@ -9,25 +9,25 @@ import MastodonAPI
 import Secrets
 
 public struct IdentityService {
-    private let identityID: UUID
+    private let id: Identity.Id
     private let identityDatabase: IdentityDatabase
     private let contentDatabase: ContentDatabase
     private let environment: AppEnvironment
     private let mastodonAPIClient: MastodonAPIClient
     private let secrets: Secrets
 
-    init(id: UUID, database: IdentityDatabase, environment: AppEnvironment) throws {
-        identityID = id
+    init(id: Identity.Id, database: IdentityDatabase, environment: AppEnvironment) throws {
+        self.id = id
         identityDatabase = database
         self.environment = environment
         secrets = Secrets(
-            identityID: id,
+            identityId: id,
             keychain: environment.keychain)
         mastodonAPIClient = MastodonAPIClient(session: environment.session,
                                               instanceURL: try secrets.getInstanceURL())
         mastodonAPIClient.accessToken = try? secrets.getAccessToken()
 
-        contentDatabase = try ContentDatabase(identityID: id,
+        contentDatabase = try ContentDatabase(id: id,
                                               inMemory: environment.inMemoryContent,
                                               keychain: environment.keychain)
     }
@@ -35,29 +35,29 @@ public struct IdentityService {
 
 public extension IdentityService {
     func updateLastUse() -> AnyPublisher<Never, Error> {
-        identityDatabase.updateLastUsedAt(identityID: identityID)
+        identityDatabase.updateLastUsedAt(id: id)
     }
 
     func verifyCredentials() -> AnyPublisher<Never, Error> {
         mastodonAPIClient.request(AccountEndpoint.verifyCredentials)
-            .flatMap { identityDatabase.updateAccount($0, forIdentityID: identityID) }
+            .flatMap { identityDatabase.updateAccount($0, id: id) }
             .eraseToAnyPublisher()
     }
 
     func refreshServerPreferences() -> AnyPublisher<Never, Error> {
         mastodonAPIClient.request(PreferencesEndpoint.preferences)
-            .flatMap { identityDatabase.updatePreferences($0, forIdentityID: identityID) }
+            .flatMap { identityDatabase.updatePreferences($0, id: id) }
             .eraseToAnyPublisher()
     }
 
     func refreshInstance() -> AnyPublisher<Never, Error> {
         mastodonAPIClient.request(InstanceEndpoint.instance)
-            .flatMap { identityDatabase.updateInstance($0, forIdentityID: identityID) }
+            .flatMap { identityDatabase.updateInstance($0, id: id) }
             .eraseToAnyPublisher()
     }
 
     func confirmIdentity() -> AnyPublisher<Never, Error> {
-        identityDatabase.confirmIdentity(id: identityID)
+        identityDatabase.confirmIdentity(id: id)
     }
 
     func identitiesObservation() -> AnyPublisher<[Identity], Error> {
@@ -65,7 +65,7 @@ public extension IdentityService {
     }
 
     func recentIdentitiesObservation() -> AnyPublisher<[Identity], Error> {
-        identityDatabase.recentIdentitiesObservation(excluding: identityID)
+        identityDatabase.recentIdentitiesObservation(excluding: id)
     }
 
     func refreshLists() -> AnyPublisher<Never, Error> {
@@ -80,7 +80,7 @@ public extension IdentityService {
             .eraseToAnyPublisher()
     }
 
-    func deleteList(id: String) -> AnyPublisher<Never, Error> {
+    func deleteList(id: List.Id) -> AnyPublisher<Never, Error> {
         mastodonAPIClient.request(DeletionEndpoint.list(id: id))
             .map { _ in id }
             .flatMap(contentDatabase.deleteList(id:))
@@ -88,7 +88,7 @@ public extension IdentityService {
     }
 
     func observation(immediate: Bool) -> AnyPublisher<Identity, Error> {
-        identityDatabase.identityObservation(id: identityID, immediate: immediate)
+        identityDatabase.identityObservation(id: id, immediate: immediate)
     }
 
     func listsObservation() -> AnyPublisher<[Timeline], Error> {
@@ -122,7 +122,7 @@ public extension IdentityService {
             .eraseToAnyPublisher()
     }
 
-    func deleteFilter(id: String) -> AnyPublisher<Never, Error> {
+    func deleteFilter(id: Filter.Id) -> AnyPublisher<Never, Error> {
         mastodonAPIClient.request(DeletionEndpoint.filter(id: id))
             .flatMap { _ in contentDatabase.deleteFilter(id: id) }
             .eraseToAnyPublisher()
@@ -137,7 +137,7 @@ public extension IdentityService {
     }
 
     func updatePreferences(_ preferences: Identity.Preferences) -> AnyPublisher<Never, Error> {
-        identityDatabase.updatePreferences(preferences, forIdentityID: identityID)
+        identityDatabase.updatePreferences(preferences, id: id)
             .collect()
             .filter { _ in preferences.useServerPostingReadingPreferences }
             .flatMap { _ in refreshServerPreferences() }
@@ -157,7 +157,7 @@ public extension IdentityService {
 
         let endpoint = Self.pushSubscriptionEndpointURL
             .appendingPathComponent(deviceToken.base16EncodedString())
-            .appendingPathComponent(identityID.uuidString)
+            .appendingPathComponent(id.uuidString)
 
         return mastodonAPIClient.request(
             PushSubscriptionEndpoint.create(
@@ -165,15 +165,15 @@ public extension IdentityService {
                 publicKey: publicKey,
                 auth: auth,
                 alerts: alerts))
-            .map { ($0.alerts, deviceToken, identityID) }
-            .flatMap(identityDatabase.updatePushSubscription(alerts:deviceToken:forIdentityID:))
+            .map { ($0.alerts, deviceToken, id) }
+            .flatMap(identityDatabase.updatePushSubscription(alerts:deviceToken:id:))
             .eraseToAnyPublisher()
     }
 
     func updatePushSubscription(alerts: PushSubscription.Alerts) -> AnyPublisher<Never, Error> {
         mastodonAPIClient.request(PushSubscriptionEndpoint.update(alerts: alerts))
-            .map { ($0.alerts, nil, identityID) }
-            .flatMap(identityDatabase.updatePushSubscription(alerts:deviceToken:forIdentityID:))
+            .map { ($0.alerts, nil, id) }
+            .flatMap(identityDatabase.updatePushSubscription(alerts:deviceToken:id:))
             .eraseToAnyPublisher()
     }
 

@@ -5,11 +5,11 @@ import GRDB
 import Mastodon
 
 struct TimelineRecord: Codable, Hashable {
-    let id: String
-    let listId: String?
+    let id: Timeline.Id
+    let listId: List.Id?
     let listTitle: String?
     let tag: String?
-    let accountId: String?
+    let accountId: Account.Id?
     let profileCollection: ProfileCollection?
 }
 

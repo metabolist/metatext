@@ -9,10 +9,12 @@ public enum Timeline: Hashable {
     case federated
     case list(List)
     case tag(String)
-    case profile(accountId: String, profileCollection: ProfileCollection)
+    case profile(accountId: Account.Id, profileCollection: ProfileCollection)
 }
 
 public extension Timeline {
+    typealias Id = String
+
     static let unauthenticatedDefaults: [Timeline] = [.local, .federated]
     static let authenticatedDefaults: [Timeline] = [.home, .local, .federated]
 
@@ -29,7 +31,7 @@ public extension Timeline {
 }
 
 extension Timeline: Identifiable {
-    public var id: String {
+    public var id: Id {
         switch self {
         case .home:
             return "home"

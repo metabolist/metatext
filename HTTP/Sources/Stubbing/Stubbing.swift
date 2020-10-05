@@ -2,7 +2,7 @@
 
 import Foundation
 
-public typealias HTTPStub = Result<(URLResponse, Data), Error>
+public typealias HTTPStub = Result<(HTTPURLResponse, Data), Error>
 
 public protocol Stubbing {
     func stub(url: URL) -> HTTPStub?

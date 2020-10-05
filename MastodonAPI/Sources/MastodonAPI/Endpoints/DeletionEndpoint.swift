@@ -5,9 +5,9 @@ import HTTP
 import Mastodon
 
 public enum DeletionEndpoint {
-    case oauthRevoke(token: String, clientID: String, clientSecret: String)
-    case list(id: String)
-    case filter(id: String)
+    case oauthRevoke(token: String, clientId: String, clientSecret: String)
+    case list(id: List.Id)
+    case filter(id: Filter.Id)
 }
 
 extension DeletionEndpoint: Endpoint {
@@ -44,8 +44,8 @@ extension DeletionEndpoint: Endpoint {
 
     public var jsonBody: [String: Any]? {
         switch self {
-        case let .oauthRevoke(token, clientID, clientSecret):
-            return ["token": token, "client_id": clientID, "client_secret": clientSecret]
+        case let .oauthRevoke(token, clientId, clientSecret):
+            return ["token": token, "client_id": clientId, "client_secret": clientSecret]
         case .list, .filter:
             return nil
         }

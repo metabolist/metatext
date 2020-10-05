@@ -5,7 +5,7 @@ import Foundation
 import ServiceLayer
 
 public final class IdentitiesViewModel: ObservableObject {
-    public let currentIdentityID: UUID
+    public let currentIdentityId: Identity.Id
     @Published public var authenticated = [Identity]()
     @Published public var unauthenticated = [Identity]()
     @Published public var pending = [Identity]()
@@ -16,7 +16,7 @@ public final class IdentitiesViewModel: ObservableObject {
 
     public init(identification: Identification) {
         self.identification = identification
-        currentIdentityID = identification.identity.id
+        currentIdentityId = identification.identity.id
 
         let observation = identification.service.identitiesObservation()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)

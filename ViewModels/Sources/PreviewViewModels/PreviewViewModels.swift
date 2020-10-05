@@ -14,9 +14,9 @@ import ViewModels
 // swiftlint:disable force_try
 
 let db: IdentityDatabase = {
-    let id = UUID()
+    let id = Identity.Id()
     let db = try! IdentityDatabase(inMemory: true, keychain: MockKeychain.self)
-    let secrets = Secrets(identityID: id, keychain: MockKeychain.self)
+    let secrets = Secrets(identityId: id, keychain: MockKeychain.self)
 
     try! secrets.setInstanceURL(.previewInstanceURL)
     try! secrets.setAccessToken(UUID().uuidString)
@@ -25,11 +25,11 @@ let db: IdentityDatabase = {
             .receive(on: ImmediateScheduler.shared)
             .sink { _ in } receiveValue: { _ in }
 
-    _ = db.updateInstance(.preview, forIdentityID: id)
+    _ = db.updateInstance(.preview, id: id)
         .receive(on: ImmediateScheduler.shared)
         .sink { _ in } receiveValue: { _ in }
 
-    _ = db.updateAccount(.preview, forIdentityID: id)
+    _ = db.updateAccount(.preview, id: id)
         .receive(on: ImmediateScheduler.shared)
         .sink { _ in } receiveValue: { _ in }
 

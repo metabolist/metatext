@@ -29,7 +29,8 @@ extension AuthenticationService {
             .eraseToAnyPublisher()
     }
 
-    func register(_ registration: Registration, id: UUID) -> AnyPublisher<(AppAuthorization, AccessToken), Error> {
+    func register(_ registration: Registration,
+                  id: Identity.Id) -> AnyPublisher<(AppAuthorization, AccessToken), Error> {
         let redirectURI = OAuth.registrationCallbackURL.appendingPathComponent(id.uuidString)
         let authorization = appAuthorization(redirectURI: redirectURI)
             .share()
@@ -38,7 +39,7 @@ extension AuthenticationService {
             authorization.flatMap { appAuthorization -> AnyPublisher<AccessToken, Error> in
                 mastodonAPIClient.request(
                     AccessTokenEndpoint.oauthToken(
-                        clientID: appAuthorization.clientId,
+                        clientId: appAuthorization.clientId,
                         clientSecret: appAuthorization.clientSecret,
                         grantType: OAuth.registrationGrantType,
                         scopes: OAuth.scopes,
@@ -134,7 +135,7 @@ private extension AuthenticationService {
             .flatMap {
                 mastodonAPIClient.request(
                     AccessTokenEndpoint.oauthToken(
-                        clientID: appAuthorization.clientId,
+                        clientId: appAuthorization.clientId,
                         clientSecret: appAuthorization.clientSecret,
                         grantType: OAuth.authorizationCodeGrantType,
                         scopes: OAuth.scopes,

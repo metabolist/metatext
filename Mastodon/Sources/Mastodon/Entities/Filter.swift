@@ -14,7 +14,7 @@ public struct Filter: Codable, Hashable, Identifiable {
         public static var unknownCase: Self { .unknown }
     }
 
-    public let id: String
+    public let id: Id
     public var phrase: String
     public var context: [Context]
     public var expiresAt: Date?
@@ -23,8 +23,10 @@ public struct Filter: Codable, Hashable, Identifiable {
 }
 
 public extension Filter {
-    static let newFilterID: String = "com.metabolist.metatext.new-filter-id"
-    static let new = Self(id: newFilterID,
+    typealias Id = String
+
+    static let newFilterId: Id = "com.metabolist.metatext.new-filter-id"
+    static let new = Self(id: newFilterId,
                           phrase: "",
                           context: [],
                           expiresAt: nil,

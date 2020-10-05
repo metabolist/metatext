@@ -2,10 +2,11 @@
 
 import Foundation
 import GRDB
+import Mastodon
 
 struct TimelineStatusJoin: Codable, FetchableRecord, PersistableRecord {
-    let timelineId: String
-    let statusId: String
+    let timelineId: Timeline.Id
+    let statusId: Status.Id
 
     static let status = belongsTo(StatusRecord.self)
 }

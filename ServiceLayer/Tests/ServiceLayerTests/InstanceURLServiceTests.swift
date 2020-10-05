@@ -42,7 +42,7 @@ class InstanceURLServiceTests: XCTestCase {
         updatedFilter.insert("instance.filtered")
 
         let updatedFilterData = try JSONEncoder().encode(updatedFilter)
-        let stub: HTTPStub = .success((URLResponse(), updatedFilterData))
+        let stub: HTTPStub = .success((HTTPURLResponse(), updatedFilterData))
 
         StubbingURLProtocol.setStub(stub, forURL: URL(string: "https://filter.metabolist.com/filter")!)
 
