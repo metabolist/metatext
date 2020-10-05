@@ -51,7 +51,7 @@ extension TimelineItemsInfo {
 
         if let pinnedStatusInfos = pinnedStatusesInfo?.pinnedStatusInfos {
             return [pinnedStatusInfos.filtered(regularExpression: filterRegularExpression)
-                        .map { CollectionItem.status(.init(status: .init(info: $0), pinned: true)) },
+                        .map { CollectionItem.status(.init(status: .init(info: $0), isPinned: true)) },
                     timelineItems]
         } else {
             return [timelineItems]

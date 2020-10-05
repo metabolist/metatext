@@ -27,7 +27,7 @@ extension CollectionItemIdentifier {
         case let .status(configuration):
             id = configuration.status.id
             kind = .status
-            info = configuration.pinned ? [.pinned: true] : [:]
+            info = configuration.isPinned ? [.pinned: true] : [:]
         case let .loadMore(loadMore):
             id = loadMore.afterStatusId
             kind = .loadMore

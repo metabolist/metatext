@@ -81,7 +81,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
     public func canSelect(indexPath: IndexPath) -> Bool {
         switch items.value[indexPath.section][indexPath.item] {
         case let .status(configuration):
-            return configuration.status.id != collectionService.contextParentId
+            return !configuration.isContextParent
         case .loadMore:
             return !((viewModel(indexPath: indexPath) as? LoadMoreViewModel)?.loading ?? false)
         default:
@@ -104,8 +104,8 @@ extension CollectionItemsViewModel: CollectionViewModel {
                 cache(viewModel: viewModel, forItem: item)
             }
 
-            viewModel.isContextParent = configuration.status.id == collectionService.contextParentId
-            viewModel.isPinned = configuration.pinned
+            viewModel.isContextParent = configuration.isContextParent
+            viewModel.isPinned = configuration.isPinned
             viewModel.isReplyInContext = configuration.isReplyInContext
             viewModel.hasReplyFollowing = configuration.hasReplyFollowing
 
@@ -156,14 +156,14 @@ private extension CollectionItemsViewModel {
         maintainScrollPositionOfItem = nil // clear old value
 
         // Maintain scroll position of parent after initial load of context
-        if let contextParentId = collectionService.contextParentId {
-            let contextParentIdentifier = CollectionItemIdentifier(id: contextParentId, kind: .status, info: [:])
-            let onlyContextParentId = [[], [contextParentIdentifier], []]
+        if collectionService is ContextService,
+           items.value.isEmpty || items.value.map(\.count) == [0, 1, 0],
+           let contextParent = newItems.reduce([], +).first(where: {
+            guard case let .status(configuration) = $0 else { return false }
 
-            if items.value.isEmpty
-                || items.value.map({ $0.map(CollectionItemIdentifier.init(item:)) }) == onlyContextParentId {
-                maintainScrollPositionOfItem = contextParentIdentifier
-            }
+            return configuration.isContextParent
+           }) {
+            maintainScrollPositionOfItem = .init(item: contextParent)
         }
     }
 }

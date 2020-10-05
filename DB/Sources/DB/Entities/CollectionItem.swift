@@ -11,13 +11,19 @@ public enum CollectionItem: Hashable {
 public extension CollectionItem {
     struct StatusConfiguration: Hashable {
         public let status: Status
-        public let pinned: Bool
+        public let isContextParent: Bool
+        public let isPinned: Bool
         public let isReplyInContext: Bool
         public let hasReplyFollowing: Bool
 
-        init(status: Status, pinned: Bool = false, isReplyInContext: Bool = false, hasReplyFollowing: Bool = false) {
+        init(status: Status,
+             isContextParent: Bool = false,
+             isPinned: Bool = false,
+             isReplyInContext: Bool = false,
+             hasReplyFollowing: Bool = false) {
             self.status = status
-            self.pinned = pinned
+            self.isContextParent = isContextParent
+            self.isPinned = isPinned
             self.isReplyInContext = isReplyInContext
             self.hasReplyFollowing = hasReplyFollowing
         }

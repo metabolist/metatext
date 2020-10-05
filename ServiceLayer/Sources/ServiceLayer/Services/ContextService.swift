@@ -9,7 +9,6 @@ import MastodonAPI
 public struct ContextService {
     public let sections: AnyPublisher<[[CollectionItem]], Error>
     public let navigationService: NavigationService
-    public var contextParentId: String? { id }
 
     private let id: Status.Id
     private let mastodonAPIClient: MastodonAPIClient
