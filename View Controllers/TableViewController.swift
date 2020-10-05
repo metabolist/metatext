@@ -77,6 +77,22 @@ class TableViewController: UITableViewController {
         viewModel.request(maxID: nil, minID: nil)
     }
 
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard scrollView.isDragging else { return }
+
+        let up = scrollView.panGestureRecognizer.translation(in: scrollView.superview).y > 0
+
+        for loadMoreView in visibleLoadMoreViews {
+            loadMoreView.directionChanged(up: up)
+        }
+    }
+
+    override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        for loadMoreView in visibleLoadMoreViews {
+            loadMoreView.finalizeDirectionChange()
+        }
+    }
+
     override func tableView(_ tableView: UITableView,
                             willDisplay cell: UITableViewCell,
                             forRowAt indexPath: IndexPath) {
@@ -101,6 +117,8 @@ class TableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+
         guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
 
         viewModel.itemSelected(item)
@@ -160,6 +178,10 @@ extension TableViewController {
 }
 
 private extension TableViewController {
+    var visibleLoadMoreViews: [LoadMoreView] {
+        tableView.visibleCells.compactMap { $0.contentView as? LoadMoreView }
+    }
+
     func setupViewModelBindings() {
         viewModel.title.sink { [weak self] in self?.navigationItem.title = $0 }.store(in: &cancellables)
 
