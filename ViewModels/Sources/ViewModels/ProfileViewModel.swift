@@ -85,15 +85,15 @@ extension ProfileViewModel: CollectionViewModel {
         collectionViewModel.value.request(maxID: maxID, minID: minID)
     }
 
-    public func select(identifier: CollectionItemIdentifier) {
-        collectionViewModel.value.select(identifier: identifier)
+    public func select(indexPath: IndexPath) {
+        collectionViewModel.value.select(indexPath: indexPath)
     }
 
-    public func canSelect(identifier: CollectionItemIdentifier) -> Bool {
-        collectionViewModel.value.canSelect(identifier: identifier)
+    public func canSelect(indexPath: IndexPath) -> Bool {
+        collectionViewModel.value.canSelect(indexPath: indexPath)
     }
 
-    public func viewModel(identifier: CollectionItemIdentifier) -> CollectionItemViewModel? {
-        collectionViewModel.value.viewModel(identifier: identifier)
+    public func viewModel(indexPath: IndexPath) -> CollectionItemViewModel {
+        collectionViewModel.value.viewModel(indexPath: indexPath)
     }
 }

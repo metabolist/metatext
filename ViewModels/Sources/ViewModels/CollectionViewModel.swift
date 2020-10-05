@@ -12,7 +12,7 @@ public protocol CollectionViewModel {
     var nextPageMaxID: String? { get }
     var maintainScrollPositionOfItem: CollectionItemIdentifier? { get }
     func request(maxID: String?, minID: String?)
-    func select(identifier: CollectionItemIdentifier)
-    func canSelect(identifier: CollectionItemIdentifier) -> Bool
-    func viewModel(identifier: CollectionItemIdentifier) -> CollectionItemViewModel?
+    func select(indexPath: IndexPath)
+    func canSelect(indexPath: IndexPath) -> Bool
+    func viewModel(indexPath: IndexPath) -> CollectionItemViewModel
 }

@@ -16,9 +16,7 @@ class TableViewController: UITableViewController {
 
     private lazy var dataSource: UITableViewDiffableDataSource<Int, CollectionItemIdentifier> = {
         UITableViewDiffableDataSource(tableView: tableView) { [weak self] tableView, indexPath, identifier in
-            guard let self = self,
-                  let cellViewModel = self.viewModel.viewModel(identifier: identifier)
-            else { return nil }
+            guard let cellViewModel = self?.viewModel.viewModel(indexPath: indexPath) else { return nil }
 
             let cell = tableView.dequeueReusableCell(
                 withIdentifier: String(describing: identifier.kind.cellClass),
@@ -113,17 +111,13 @@ class TableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        guard let identifier = dataSource.itemIdentifier(for: indexPath) else { return true }
-
-        return viewModel.canSelect(identifier: identifier)
+        viewModel.canSelect(indexPath: indexPath)
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
-        guard let identifier = dataSource.itemIdentifier(for: indexPath) else { return }
-
-        viewModel.select(identifier: identifier)
+        viewModel.select(indexPath: indexPath)
     }
 
     override func viewDidLayoutSubviews() {
