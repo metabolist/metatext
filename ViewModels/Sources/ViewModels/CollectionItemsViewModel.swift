@@ -79,12 +79,14 @@ extension CollectionItemsViewModel: CollectionViewModel {
     }
 
     public func canSelect(indexPath: IndexPath) -> Bool {
-        if case let .status(configuration) = items.value[indexPath.section][indexPath.item],
-           configuration.status.id == collectionService.contextParentId {
-            return false
+        switch items.value[indexPath.section][indexPath.item] {
+        case let .status(configuration):
+            return configuration.status.id != collectionService.contextParentId
+        case .loadMore:
+            return !((viewModel(indexPath: indexPath) as? LoadMoreViewModel)?.loading ?? false)
+        default:
+            return true
         }
-
-        return true
     }
 
     public func viewModel(indexPath: IndexPath) -> CollectionItemViewModel {
