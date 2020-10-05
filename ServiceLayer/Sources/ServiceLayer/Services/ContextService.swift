@@ -22,10 +22,7 @@ public struct ContextService {
         self.mastodonAPIClient = mastodonAPIClient
         self.contentDatabase = contentDatabase
         sections = contentDatabase.contextObservation(parentID: statusID)
-        navigationService = NavigationService(
-            status: nil,
-            mastodonAPIClient: mastodonAPIClient,
-            contentDatabase: contentDatabase)
+        navigationService = NavigationService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }
 }
 

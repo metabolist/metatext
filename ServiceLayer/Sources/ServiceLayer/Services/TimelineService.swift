@@ -23,10 +23,7 @@ public struct TimelineService {
         self.mastodonAPIClient = mastodonAPIClient
         self.contentDatabase = contentDatabase
         sections = contentDatabase.observation(timeline: timeline)
-        navigationService = NavigationService(
-            status: nil,
-            mastodonAPIClient: mastodonAPIClient,
-            contentDatabase: contentDatabase)
+        navigationService = NavigationService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
         nextPageMaxIDs = nextPageMaxIDsSubject.eraseToAnyPublisher()
 
         if case let .tag(tag) = timeline {

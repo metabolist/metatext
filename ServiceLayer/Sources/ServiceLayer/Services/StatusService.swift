@@ -15,9 +15,9 @@ public struct StatusService {
     init(status: Status, mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
         self.status = status
         self.navigationService = NavigationService(
-            status: status.displayStatus,
             mastodonAPIClient: mastodonAPIClient,
-            contentDatabase: contentDatabase)
+            contentDatabase: contentDatabase,
+            status: status.displayStatus)
         self.mastodonAPIClient = mastodonAPIClient
         self.contentDatabase = contentDatabase
     }

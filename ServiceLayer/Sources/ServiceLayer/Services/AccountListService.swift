@@ -26,10 +26,7 @@ public struct AccountListService {
             .map { [$0.map(CollectionItem.account)] }
             .eraseToAnyPublisher()
         nextPageMaxIDs = nextPageMaxIDsSubject.eraseToAnyPublisher()
-        navigationService = NavigationService(
-            status: nil,
-            mastodonAPIClient: mastodonAPIClient,
-            contentDatabase: contentDatabase)
+        navigationService = NavigationService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }
 }
 

@@ -15,14 +15,14 @@ public enum Navigation {
 }
 
 public struct NavigationService {
-    private let status: Status?
     private let mastodonAPIClient: MastodonAPIClient
     private let contentDatabase: ContentDatabase
+    private let status: Status?
 
-    init(status: Status?, mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
-        self.status = status
+    init(mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase, status: Status? = nil) {
         self.mastodonAPIClient = mastodonAPIClient
         self.contentDatabase = contentDatabase
+        self.status = status
     }
 }
 
