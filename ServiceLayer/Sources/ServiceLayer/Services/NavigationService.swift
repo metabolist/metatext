@@ -50,7 +50,7 @@ public extension NavigationService {
     }
 
     func contextService(id: String) -> ContextService {
-        ContextService(statusID: id, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+        ContextService(parentID: id, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }
 
     func profileService(id: String) -> ProfileService {
