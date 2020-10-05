@@ -50,8 +50,8 @@ public struct ProfileService {
 }
 
 public extension ProfileService {
-    func statusListService(profileCollection: ProfileCollection) -> StatusListService {
-        StatusListService(
+    func timelineService(profileCollection: ProfileCollection) -> TimelineService {
+        TimelineService(
             timeline: .profile(accountId: accountID, profileCollection: profileCollection),
             mastodonAPIClient: mastodonAPIClient,
             contentDatabase: contentDatabase)

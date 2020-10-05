@@ -66,7 +66,7 @@ extension ListViewModel: CollectionViewModel {
                     ListViewModel(
                         collectionService: collectionService
                             .navigationService
-                            .contextStatusListService(id: configuration.status.displayStatus.id))))
+                            .contextService(id: configuration.status.displayStatus.id))))
         case .loadMore:
             loadMoreViewModel(item: identifier)?.loadMore()
         case let .account(account):

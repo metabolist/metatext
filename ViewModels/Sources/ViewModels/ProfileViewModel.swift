@@ -18,7 +18,7 @@ final public class ProfileViewModel {
         self.profileService = profileService
 
         collectionViewModel = CurrentValueSubject(
-            ListViewModel(collectionService: profileService.statusListService(profileCollection: .statuses)))
+            ListViewModel(collectionService: profileService.timelineService(profileCollection: .statuses)))
 
         profileService.accountServicePublisher
             .map(AccountViewModel.init(accountService:))
@@ -26,7 +26,7 @@ final public class ProfileViewModel {
             .assign(to: &$accountViewModel)
 
         $collection.dropFirst()
-            .map(profileService.statusListService(profileCollection:))
+            .map(profileService.timelineService(profileCollection:))
             .map(ListViewModel.init(collectionService:))
             .sink { [weak self] in
                 guard let self = self else { return }

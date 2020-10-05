@@ -31,7 +31,7 @@ public extension NavigationService {
         if let tag = tag(url: url) {
             return Just(
                 .collection(
-                    StatusListService(
+                    TimelineService(
                         timeline: .tag(tag),
                         mastodonAPIClient: mastodonAPIClient,
                         contentDatabase: contentDatabase)))
@@ -39,13 +39,7 @@ public extension NavigationService {
         } else if let accountID = accountID(url: url) {
             return Just(.profile(profileService(id: accountID))).eraseToAnyPublisher()
         } else if mastodonAPIClient.instanceURL.host == url.host, let statusID = url.statusID {
-            return Just(
-                .collection(
-                    StatusListService(
-                        statusID: statusID,
-                        mastodonAPIClient: mastodonAPIClient,
-                        contentDatabase: contentDatabase)))
-                .eraseToAnyPublisher()
+            return Just(.collection(contextService(id: statusID))).eraseToAnyPublisher()
         }
 
         if url.shouldWebfinger {
@@ -55,8 +49,8 @@ public extension NavigationService {
         }
     }
 
-    func contextStatusListService(id: String) -> StatusListService {
-        StatusListService(statusID: id, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+    func contextService(id: String) -> ContextService {
+        ContextService(statusID: id, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }
 
     func profileService(id: String) -> ProfileService {
@@ -113,18 +107,14 @@ private extension NavigationService {
             .map { results -> Navigation in
                 if let tag = results.hashtags.first {
                     return .collection(
-                        StatusListService(
+                        TimelineService(
                             timeline: .tag(tag.name),
                             mastodonAPIClient: mastodonAPIClient,
                             contentDatabase: contentDatabase))
                 } else if let account = results.accounts.first {
                     return .profile(profileService(account: account))
                 } else if let status = results.statuses.first {
-                    return .collection(
-                        StatusListService(
-                            statusID: status.id,
-                            mastodonAPIClient: mastodonAPIClient,
-                            contentDatabase: contentDatabase))
+                    return .collection(contextService(id: status.id))
                 } else {
                     return .url(url)
                 }

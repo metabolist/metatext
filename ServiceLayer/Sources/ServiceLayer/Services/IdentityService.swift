@@ -177,8 +177,8 @@ public extension IdentityService {
             .eraseToAnyPublisher()
     }
 
-    func service(timeline: Timeline) -> StatusListService {
-        StatusListService(timeline: timeline, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+    func service(timeline: Timeline) -> TimelineService {
+        TimelineService(timeline: timeline, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }
 }
 
