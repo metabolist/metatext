@@ -38,7 +38,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
         items.map { $0.map { $0.map(CollectionItemIdentifier.init(item:)) } }.eraseToAnyPublisher()
     }
 
-    public var title: AnyPublisher<String?, Never> { Just(collectionService.title).eraseToAnyPublisher() }
+    public var title: AnyPublisher<String, Never> { collectionService.title }
 
     public var alertItems: AnyPublisher<AlertItem, Never> { $alertItem.compactMap { $0 }.eraseToAnyPublisher() }
 

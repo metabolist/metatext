@@ -9,8 +9,6 @@ import MastodonAPI
 public struct ContextService {
     public let sections: AnyPublisher<[[CollectionItem]], Error>
     public let navigationService: NavigationService
-    public let nextPageMaxIDs: AnyPublisher<String?, Never> = Empty().eraseToAnyPublisher()
-    public let title: String? = nil
     public var contextParentID: String? { statusID }
 
     private let statusID: String

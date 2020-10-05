@@ -43,8 +43,8 @@ extension ProfileViewModel: CollectionViewModel {
         collectionViewModel.flatMap(\.sections).eraseToAnyPublisher()
     }
 
-    public var title: AnyPublisher<String?, Never> {
-        $accountViewModel.map { $0?.accountName }.eraseToAnyPublisher()
+    public var title: AnyPublisher<String, Never> {
+        $accountViewModel.compactMap { $0?.accountName }.eraseToAnyPublisher()
     }
 
     public var alertItems: AnyPublisher<AlertItem, Never> {
