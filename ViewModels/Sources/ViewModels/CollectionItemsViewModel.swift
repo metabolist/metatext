@@ -61,13 +61,13 @@ extension CollectionItemsViewModel: CollectionViewModel {
         let item = items.value[indexPath.section][indexPath.item]
 
         switch item {
-        case let .status(configuration):
+        case let .status(status, _):
             navigationEventsSubject.send(
                 .collectionNavigation(
                     CollectionItemsViewModel(
                         collectionService: collectionService
                             .navigationService
-                            .contextService(id: configuration.status.displayStatus.id))))
+                            .contextService(id: status.displayStatus.id))))
         case .loadMore:
             (viewModel(indexPath: indexPath) as? LoadMoreViewModel)?.loadMore()
         case let .account(account):
@@ -80,7 +80,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
 
     public func canSelect(indexPath: IndexPath) -> Bool {
         switch items.value[indexPath.section][indexPath.item] {
-        case let .status(configuration):
+        case let .status(_, configuration):
             return !configuration.isContextParent
         case .loadMore:
             return !((viewModel(indexPath: indexPath) as? LoadMoreViewModel)?.loading ?? false)
@@ -93,14 +93,13 @@ extension CollectionItemsViewModel: CollectionViewModel {
         let item = items.value[indexPath.section][indexPath.item]
 
         switch item {
-        case let .status(configuration):
+        case let .status(status, configuration):
             var viewModel: StatusViewModel
 
             if let cachedViewModel = viewModelCache[item]?.0 as? StatusViewModel {
                 viewModel = cachedViewModel
             } else {
-                viewModel = StatusViewModel(
-                    statusService: collectionService.navigationService.statusService(status: configuration.status))
+                viewModel = .init(statusService: collectionService.navigationService.statusService(status: status))
                 cache(viewModel: viewModel, forItem: item)
             }
 
@@ -159,7 +158,7 @@ private extension CollectionItemsViewModel {
         if collectionService is ContextService,
            items.value.isEmpty || items.value.map(\.count) == [0, 1, 0],
            let contextParent = newItems.reduce([], +).first(where: {
-            guard case let .status(configuration) = $0 else { return false }
+            guard case let .status(_, configuration) = $0 else { return false }
 
             return configuration.isContextParent
            }) {

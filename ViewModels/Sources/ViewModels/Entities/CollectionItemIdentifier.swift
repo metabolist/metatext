@@ -24,8 +24,8 @@ public extension CollectionItemIdentifier {
 extension CollectionItemIdentifier {
     init(item: CollectionItem) {
         switch item {
-        case let .status(configuration):
-            id = configuration.status.id
+        case let .status(status, configuration):
+            id = status.id
             kind = .status
             info = configuration.isPinned ? [.pinned: true] : [:]
         case let .loadMore(loadMore):

@@ -32,13 +32,13 @@ extension TimelineItemsInfo {
         let timeline = Timeline(record: timelineRecord)!
         let filterRegularExpression = filters.regularExpression(context: timeline.filterContext)
         var timelineItems = statusInfos.filtered(regularExpression: filterRegularExpression)
-            .map { CollectionItem.status(.init(status: .init(info: $0))) }
+            .map { CollectionItem.status(.init(info: $0), .init()) }
 
         for loadMoreRecord in loadMoreRecords {
             guard let index = timelineItems.firstIndex(where: {
-                guard case let .status(configuration) = $0 else { return false }
+                guard case let .status(status, _) = $0 else { return false }
 
-                return loadMoreRecord.afterStatusId > configuration.status.id
+                return loadMoreRecord.afterStatusId > status.id
             }) else { continue }
 
             timelineItems.insert(
@@ -51,7 +51,7 @@ extension TimelineItemsInfo {
 
         if let pinnedStatusInfos = pinnedStatusesInfo?.pinnedStatusInfos {
             return [pinnedStatusInfos.filtered(regularExpression: filterRegularExpression)
-                        .map { CollectionItem.status(.init(status: .init(info: $0), isPinned: true)) },
+                        .map { CollectionItem.status(.init(info: $0), .init(isPinned: true)) },
                     timelineItems]
         } else {
             return [timelineItems]

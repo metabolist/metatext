@@ -33,10 +33,11 @@ extension ContextItemsInfo {
                     let hasReplyFollowing = section.count > index + 1
                         && section[index + 1].record.inReplyToId == statusInfo.record.id
 
-                    return .status(.init(status: .init(info: statusInfo),
-                                         isContextParent: statusInfo.record.id == parent.record.id,
-                                         isReplyInContext: isReplyInContext,
-                                         hasReplyFollowing: hasReplyFollowing))
+                    return .status(
+                        .init(info: statusInfo),
+                        .init(isContextParent: statusInfo.record.id == parent.record.id,
+                              isReplyInContext: isReplyInContext,
+                              hasReplyFollowing: hasReplyFollowing))
                 }
         }
     }
