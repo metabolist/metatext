@@ -5,7 +5,7 @@ import Foundation
 import Mastodon
 import ServiceLayer
 
-public struct StatusViewModel {
+public struct StatusViewModel: CollectionItemViewModel {
     public let content: NSAttributedString
     public let contentEmoji: [Emoji]
     public let displayName: String
@@ -127,18 +127,14 @@ public extension StatusViewModel {
 
     func rebloggedBySelected() {
         eventsSubject.send(
-            Just(CollectionItemEvent.accountListNavigation(
-                    AccountListViewModel(
-                        accountListService: statusService.rebloggedByService())))
+            Just(CollectionItemEvent.navigation(.collection(statusService.rebloggedByService())))
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher())
     }
 
     func favoritedBySelected() {
         eventsSubject.send(
-            Just(CollectionItemEvent.accountListNavigation(
-                    AccountListViewModel(
-                        accountListService: statusService.favoritedByService())))
+            Just(CollectionItemEvent.navigation(.collection(statusService.favoritedByService())))
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher())
     }

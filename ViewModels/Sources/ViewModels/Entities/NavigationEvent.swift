@@ -20,8 +20,8 @@ extension NavigationEvent {
             switch item {
             case let .url(url):
                 self = .urlNavigation(url)
-            case let .statusList(statusListService):
-                self = .collectionNavigation(StatusListViewModel(statusListService: statusListService))
+            case let .collection(statusListService):
+                self = .collectionNavigation(ListViewModel(collectionService: statusListService))
             case let .profile(profileService):
                 self = .profileNavigation(ProfileViewModel(profileService: profileService))
             case .webfingerStart:
@@ -29,8 +29,6 @@ extension NavigationEvent {
             case .webfingerEnd:
                 self = .webfingerEnd
             }
-        case let .accountListNavigation(accountListViewModel):
-            self = .collectionNavigation(accountListViewModel)
         case let .share(url):
             self = .share(url)
         }

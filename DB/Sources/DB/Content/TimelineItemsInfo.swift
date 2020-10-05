@@ -28,11 +28,11 @@ extension TimelineItemsInfo {
         addingIncludes(request).asRequest(of: self)
     }
 
-    func items(filters: [Filter]) -> [[Timeline.Item]] {
+    func items(filters: [Filter]) -> [[CollectionItem]] {
         let timeline = Timeline(record: timelineRecord)!
         let filterRegularExpression = filters.regularExpression(context: timeline.filterContext)
         var timelineItems = statusInfos.filtered(regularExpression: filterRegularExpression)
-            .map { Timeline.Item.status(.init(status: .init(info: $0))) }
+            .map { CollectionItem.status(.init(status: .init(info: $0))) }
 
         for loadMoreRecord in loadMoreRecords {
             guard let index = timelineItems.firstIndex(where: {
@@ -51,7 +51,7 @@ extension TimelineItemsInfo {
 
         if let pinnedStatusInfos = pinnedStatusesInfo?.pinnedStatusInfos {
             return [pinnedStatusInfos.filtered(regularExpression: filterRegularExpression)
-                        .map { Timeline.Item.status(.init(status: .init(info: $0), pinned: true)) },
+                        .map { CollectionItem.status(.init(status: .init(info: $0), pinned: true)) },
                     timelineItems]
         } else {
             return [timelineItems]

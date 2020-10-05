@@ -215,7 +215,7 @@ public extension ContentDatabase {
             .eraseToAnyPublisher()
     }
 
-    func observation(timeline: Timeline) -> AnyPublisher<[[Timeline.Item]], Error> {
+    func observation(timeline: Timeline) -> AnyPublisher<[[CollectionItem]], Error> {
         ValueObservation.tracking(
             TimelineItemsInfo.request(TimelineRecord.filter(TimelineRecord.Columns.id == timeline.id)).fetchOne)
             .removeDuplicates()
@@ -225,7 +225,7 @@ public extension ContentDatabase {
             .eraseToAnyPublisher()
     }
 
-    func contextObservation(parentID: String) -> AnyPublisher<[[Timeline.Item]], Error> {
+    func contextObservation(parentID: String) -> AnyPublisher<[[CollectionItem]], Error> {
         ValueObservation.tracking(
             ContextItemsInfo.request(StatusRecord.filter(StatusRecord.Columns.id == parentID)).fetchOne)
             .removeDuplicates()

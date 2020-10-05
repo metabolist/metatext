@@ -11,14 +11,14 @@ final public class ProfileViewModel {
     @Published public var alertItem: AlertItem?
 
     private let profileService: ProfileService
-    private let collectionViewModel: CurrentValueSubject<StatusListViewModel, Never>
+    private let collectionViewModel: CurrentValueSubject<ListViewModel, Never>
     private var cancellables = Set<AnyCancellable>()
 
     init(profileService: ProfileService) {
         self.profileService = profileService
 
         collectionViewModel = CurrentValueSubject(
-            StatusListViewModel(statusListService: profileService.statusListService(profileCollection: .statuses)))
+            ListViewModel(collectionService: profileService.statusListService(profileCollection: .statuses)))
 
         profileService.accountServicePublisher
             .map(AccountViewModel.init(accountService:))
@@ -27,7 +27,7 @@ final public class ProfileViewModel {
 
         $collection.dropFirst()
             .map(profileService.statusListService(profileCollection:))
-            .map(StatusListViewModel.init(statusListService:))
+            .map(ListViewModel.init(collectionService:))
             .sink { [weak self] in
                 guard let self = self else { return }
 
@@ -39,8 +39,8 @@ final public class ProfileViewModel {
 }
 
 extension ProfileViewModel: CollectionViewModel {
-    public var collectionItems: AnyPublisher<[[CollectionItemIdentifier]], Never> {
-        collectionViewModel.flatMap(\.collectionItems).eraseToAnyPublisher()
+    public var sections: AnyPublisher<[[CollectionItemIdentifier]], Never> {
+        collectionViewModel.flatMap(\.sections).eraseToAnyPublisher()
     }
 
     public var title: AnyPublisher<String?, Never> {
@@ -85,15 +85,15 @@ extension ProfileViewModel: CollectionViewModel {
         collectionViewModel.value.request(maxID: maxID, minID: minID)
     }
 
-    public func itemSelected(_ item: CollectionItemIdentifier) {
-        collectionViewModel.value.itemSelected(item)
+    public func select(identifier: CollectionItemIdentifier) {
+        collectionViewModel.value.select(identifier: identifier)
     }
 
-    public func canSelect(item: CollectionItemIdentifier) -> Bool {
-        collectionViewModel.value.canSelect(item: item)
+    public func canSelect(identifier: CollectionItemIdentifier) -> Bool {
+        collectionViewModel.value.canSelect(identifier: identifier)
     }
 
-    public func viewModel(item: CollectionItemIdentifier) -> Any? {
-        collectionViewModel.value.viewModel(item: item)
+    public func viewModel(identifier: CollectionItemIdentifier) -> CollectionItemViewModel? {
+        collectionViewModel.value.viewModel(identifier: identifier)
     }
 }

@@ -6,8 +6,8 @@ import Foundation
 import Mastodon
 import MastodonAPI
 
-public struct AccountListService {
-    public let accountSections: AnyPublisher<[[Account]], Error>
+public struct AccountListService: CollectionService {
+    public let sections: AnyPublisher<[[CollectionItem]], Error>
     public let nextPageMaxIDs: AnyPublisher<String?, Never>
     public let navigationService: NavigationService
 
@@ -29,7 +29,9 @@ extension AccountListService {
         let nextPageMaxIDsSubject = PassthroughSubject<String?, Never>()
 
         self.init(
-            accountSections: contentDatabase.accountListObservation(list).map { [$0] }.eraseToAnyPublisher(),
+            sections: contentDatabase.accountListObservation(list)
+                .map { [$0.map { CollectionItem.account($0) }] }
+                .eraseToAnyPublisher(),
             nextPageMaxIDs: nextPageMaxIDsSubject.eraseToAnyPublisher(),
             navigationService: NavigationService(
                 status: nil,

@@ -90,8 +90,8 @@ public extension NavigationViewModel {
             .store(in: &cancellables)
     }
 
-    func viewModel(timeline: Timeline) -> StatusListViewModel {
-        StatusListViewModel(statusListService: identification.service.service(timeline: timeline))
+    func viewModel(timeline: Timeline) -> ListViewModel {
+        ListViewModel(collectionService: identification.service.service(timeline: timeline))
     }
 }
 

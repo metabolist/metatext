@@ -21,7 +21,7 @@ extension ContextItemsInfo {
         addingIncludes(request).asRequest(of: self)
     }
 
-    func items(filters: [Filter]) -> [[Timeline.Item]] {
+    func items(filters: [Filter]) -> [[CollectionItem]] {
         let regularExpression = filters.regularExpression(context: .thread)
 
         return [ancestors, [parent], descendants].map { section in

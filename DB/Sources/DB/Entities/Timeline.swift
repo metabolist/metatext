@@ -16,11 +16,6 @@ public extension Timeline {
     static let unauthenticatedDefaults: [Timeline] = [.local, .federated]
     static let authenticatedDefaults: [Timeline] = [.home, .local, .federated]
 
-    enum Item: Hashable {
-        case status(StatusConfiguration)
-        case loadMore(LoadMore)
-    }
-
     var filterContext: Filter.Context {
         switch self {
         case .home, .list:
@@ -29,22 +24,6 @@ public extension Timeline {
             return .public
         case .profile:
             return .account
-        }
-    }
-}
-
-public extension Timeline.Item {
-    struct StatusConfiguration: Hashable {
-        public let status: Status
-        public let pinned: Bool
-        public let isReplyInContext: Bool
-        public let hasReplyFollowing: Bool
-
-        init(status: Status, pinned: Bool = false, isReplyInContext: Bool = false, hasReplyFollowing: Bool = false) {
-            self.status = status
-            self.pinned = pinned
-            self.isReplyInContext = isReplyInContext
-            self.hasReplyFollowing = hasReplyFollowing
         }
     }
 }

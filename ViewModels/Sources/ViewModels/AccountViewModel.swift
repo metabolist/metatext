@@ -5,7 +5,7 @@ import Foundation
 import Mastodon
 import ServiceLayer
 
-public class AccountViewModel: ObservableObject {
+public struct AccountViewModel: CollectionItemViewModel {
     public let events: AnyPublisher<AnyPublisher<CollectionItemEvent, Error>, Never>
 
     private let accountService: AccountService

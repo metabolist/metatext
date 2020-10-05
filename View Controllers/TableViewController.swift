@@ -15,11 +15,13 @@ class TableViewController: UITableViewController {
         DispatchQueue(label: "com.metabolist.metatext.collection.data-source-queue")
 
     private lazy var dataSource: UITableViewDiffableDataSource<Int, CollectionItemIdentifier> = {
-        UITableViewDiffableDataSource(tableView: tableView) { [weak self] tableView, indexPath, item in
-            guard let self = self, let cellViewModel = self.viewModel.viewModel(item: item) else { return nil }
+        UITableViewDiffableDataSource(tableView: tableView) { [weak self] tableView, indexPath, identifier in
+            guard let self = self,
+                  let cellViewModel = self.viewModel.viewModel(identifier: identifier)
+            else { return nil }
 
             let cell = tableView.dequeueReusableCell(
-                withIdentifier: String(describing: item.kind.cellClass),
+                withIdentifier: String(describing: identifier.kind.cellClass),
                 for: indexPath)
 
             switch (cell, cellViewModel) {
@@ -111,17 +113,17 @@ class TableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        guard let item = dataSource.itemIdentifier(for: indexPath) else { return true }
+        guard let identifier = dataSource.itemIdentifier(for: indexPath) else { return true }
 
-        return viewModel.canSelect(item: item)
+        return viewModel.canSelect(identifier: identifier)
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
-        guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
+        guard let identifier = dataSource.itemIdentifier(for: indexPath) else { return }
 
-        viewModel.itemSelected(item)
+        viewModel.select(identifier: identifier)
     }
 
     override func viewDidLayoutSubviews() {
@@ -185,7 +187,7 @@ private extension TableViewController {
     func setupViewModelBindings() {
         viewModel.title.sink { [weak self] in self?.navigationItem.title = $0 }.store(in: &cancellables)
 
-        viewModel.collectionItems.sink { [weak self] in self?.update(items: $0) }.store(in: &cancellables)
+        viewModel.sections.sink { [weak self] in self?.update(items: $0) }.store(in: &cancellables)
 
         viewModel.navigationEvents.receive(on: DispatchQueue.main).sink { [weak self] in
             guard let self = self else { return }

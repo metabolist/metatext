@@ -3,7 +3,7 @@
 import Combine
 import ServiceLayer
 
-final public class LoadMoreViewModel: ObservableObject {
+final public class LoadMoreViewModel: ObservableObject, CollectionItemViewModel {
     public var direction = LoadMore.Direction.up
     @Published public private(set) var loading = false
     public let events: AnyPublisher<AnyPublisher<CollectionItemEvent, Error>, Never>

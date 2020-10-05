@@ -6,8 +6,8 @@ import Foundation
 import Mastodon
 import MastodonAPI
 
-public struct StatusListService {
-    public let sections: AnyPublisher<[[Timeline.Item]], Error>
+public struct StatusListService: CollectionService {
+    public let sections: AnyPublisher<[[CollectionItem]], Error>
     public let nextPageMaxIDs: AnyPublisher<String?, Never>
     public let contextParentID: String?
     public let title: String?

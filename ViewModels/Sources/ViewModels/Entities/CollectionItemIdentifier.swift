@@ -1,6 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import Mastodon
+import ServiceLayer
 
 public struct CollectionItemIdentifier: Hashable {
     public let id: String
@@ -21,8 +22,8 @@ public extension CollectionItemIdentifier {
 }
 
 extension CollectionItemIdentifier {
-    init(timelineItem: Timeline.Item) {
-        switch timelineItem {
+    init(item: CollectionItem) {
+        switch item {
         case let .status(configuration):
             id = configuration.status.id
             kind = .status
@@ -31,12 +32,10 @@ extension CollectionItemIdentifier {
             id = loadMore.afterStatusId
             kind = .loadMore
             info = [:]
+        case let .account(account):
+            id = account.id
+            kind = .account
+            info = [:]
         }
-    }
-
-    init(account: Account) {
-        id = account.id
-        kind = .account
-        info = [:]
     }
 }

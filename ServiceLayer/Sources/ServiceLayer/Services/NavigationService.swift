@@ -8,7 +8,7 @@ import MastodonAPI
 
 public enum Navigation {
     case url(URL)
-    case statusList(StatusListService)
+    case collection(CollectionService)
     case profile(ProfileService)
     case webfingerStart
     case webfingerEnd
@@ -30,7 +30,7 @@ public extension NavigationService {
     func item(url: URL) -> AnyPublisher<Navigation, Never> {
         if let tag = tag(url: url) {
             return Just(
-                .statusList(
+                .collection(
                     StatusListService(
                         timeline: .tag(tag),
                         mastodonAPIClient: mastodonAPIClient,
@@ -40,7 +40,7 @@ public extension NavigationService {
             return Just(.profile(profileService(id: accountID))).eraseToAnyPublisher()
         } else if mastodonAPIClient.instanceURL.host == url.host, let statusID = url.statusID {
             return Just(
-                .statusList(
+                .collection(
                     StatusListService(
                         statusID: statusID,
                         mastodonAPIClient: mastodonAPIClient,
@@ -112,7 +112,7 @@ private extension NavigationService {
                 receiveCompletion: { _ in navigationSubject.send(.webfingerEnd) })
             .map { results -> Navigation in
                 if let tag = results.hashtags.first {
-                    return .statusList(
+                    return .collection(
                         StatusListService(
                             timeline: .tag(tag.name),
                             mastodonAPIClient: mastodonAPIClient,
@@ -120,7 +120,7 @@ private extension NavigationService {
                 } else if let account = results.accounts.first {
                     return .profile(profileService(account: account))
                 } else if let status = results.statuses.first {
-                    return .statusList(
+                    return .collection(
                         StatusListService(
                             statusID: status.id,
                             mastodonAPIClient: mastodonAPIClient,
