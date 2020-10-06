@@ -22,7 +22,7 @@ public struct AccountListService {
         self.endpoint = endpoint
         self.mastodonAPIClient = mastodonAPIClient
         self.contentDatabase = contentDatabase
-        sections = contentDatabase.accountListObservation(list)
+        sections = contentDatabase.accountListPublisher(list)
             .map { [$0.map(CollectionItem.account)] }
             .eraseToAnyPublisher()
         nextPageMaxId = nextPageMaxIdSubject.eraseToAnyPublisher()

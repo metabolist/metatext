@@ -60,12 +60,12 @@ public extension IdentityService {
         identityDatabase.confirmIdentity(id: id)
     }
 
-    func identitiesObservation() -> AnyPublisher<[Identity], Error> {
-        identityDatabase.identitiesObservation()
+    func identitiesPublisher() -> AnyPublisher<[Identity], Error> {
+        identityDatabase.identitiesPublisher()
     }
 
-    func recentIdentitiesObservation() -> AnyPublisher<[Identity], Error> {
-        identityDatabase.recentIdentitiesObservation(excluding: id)
+    func recentIdentitiesPublisher() -> AnyPublisher<[Identity], Error> {
+        identityDatabase.recentIdentitiesPublisher(excluding: id)
     }
 
     func refreshLists() -> AnyPublisher<Never, Error> {
@@ -87,12 +87,12 @@ public extension IdentityService {
             .eraseToAnyPublisher()
     }
 
-    func observation(immediate: Bool) -> AnyPublisher<Identity, Error> {
-        identityDatabase.identityObservation(id: id, immediate: immediate)
+    func identityPublisher(immediate: Bool) -> AnyPublisher<Identity, Error> {
+        identityDatabase.identityPublisher(id: id, immediate: immediate)
     }
 
-    func listsObservation() -> AnyPublisher<[Timeline], Error> {
-        contentDatabase.listsObservation()
+    func listsPublisher() -> AnyPublisher<[Timeline], Error> {
+        contentDatabase.listsPublisher()
     }
 
     func refreshFilters() -> AnyPublisher<Never, Error> {
@@ -128,12 +128,12 @@ public extension IdentityService {
             .eraseToAnyPublisher()
     }
 
-    func activeFiltersObservation() -> AnyPublisher<[Filter], Error> {
+    func activeFiltersPublisher() -> AnyPublisher<[Filter], Error> {
         contentDatabase.activeFiltersPublisher
     }
 
-    func expiredFiltersObservation() -> AnyPublisher<[Filter], Error> {
-        contentDatabase.expiredFiltersObservation()
+    func expiredFiltersPublisher() -> AnyPublisher<[Filter], Error> {
+        contentDatabase.expiredFiltersPublisher()
     }
 
     func updatePreferences(_ preferences: Identity.Preferences) -> AnyPublisher<Never, Error> {

@@ -18,15 +18,15 @@ public final class IdentitiesViewModel: ObservableObject {
         self.identification = identification
         currentIdentityId = identification.identity.id
 
-        let observation = identification.service.identitiesObservation()
+        let identitiesPublisher = identification.service.identitiesPublisher()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .share()
 
-        observation.map { $0.filter { $0.authenticated && !$0.pending } }
+        identitiesPublisher.map { $0.filter { $0.authenticated && !$0.pending } }
             .assign(to: &$authenticated)
-        observation.map { $0.filter { !$0.authenticated && !$0.pending } }
+        identitiesPublisher.map { $0.filter { !$0.authenticated && !$0.pending } }
             .assign(to: &$unauthenticated)
-        observation.map { $0.filter { $0.pending } }
+        identitiesPublisher.map { $0.filter { $0.pending } }
             .assign(to: &$pending)
     }
 }

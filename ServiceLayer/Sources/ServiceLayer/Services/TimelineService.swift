@@ -21,7 +21,7 @@ public struct TimelineService {
         self.timeline = timeline
         self.mastodonAPIClient = mastodonAPIClient
         self.contentDatabase = contentDatabase
-        sections = contentDatabase.observation(timeline: timeline)
+        sections = contentDatabase.timelinePublisher(timeline)
         navigationService = NavigationService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
         nextPageMaxId = nextPageMaxIdSubject.eraseToAnyPublisher()
 

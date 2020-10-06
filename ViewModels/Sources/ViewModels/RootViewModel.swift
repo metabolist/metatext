@@ -21,7 +21,7 @@ public final class RootViewModel: ObservableObject {
         userNotificationService = UserNotificationService(environment: environment)
         self.registerForRemoteNotifications = registerForRemoteNotifications
 
-        allIdentitiesService.immediateMostRecentlyUsedIdentityIdObservation()
+        allIdentitiesService.immediateMostRecentlyUsedIdentityIdPublisher()
             .replaceError(with: nil)
             .assign(to: &$mostRecentlyUsedIdentityId)
 
@@ -71,7 +71,7 @@ private extension RootViewModel {
             return
         }
 
-        let observation = identityService.observation(immediate: immediate)
+        let identityPublisher = identityService.identityPublisher(immediate: immediate)
             .catch { [weak self] _ -> Empty<Identity, Never> in
                 DispatchQueue.main.async {
                     self?.identitySelected(id: self?.mostRecentlyUsedIdentityId, immediate: false)
@@ -81,12 +81,12 @@ private extension RootViewModel {
             }
             .share()
 
-        observation
+        identityPublisher
             .filter { [weak self] in $0.id != self?.navigationViewModel?.identification.identity.id }
             .map { [weak self] in
                 let identification = Identification(
                     identity: $0,
-                    observation: observation.eraseToAnyPublisher(),
+                    publisher: identityPublisher.eraseToAnyPublisher(),
                     service: identityService)
 
                 if let self = self {

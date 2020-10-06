@@ -152,7 +152,7 @@ public extension IdentityDatabase {
         .eraseToAnyPublisher()
     }
 
-    func identityObservation(id: Identity.Id, immediate: Bool) -> AnyPublisher<Identity, Error> {
+    func identityPublisher(id: Identity.Id, immediate: Bool) -> AnyPublisher<Identity, Error> {
         ValueObservation.tracking(
             IdentityInfo.request(IdentityRecord.filter(IdentityRecord.Columns.id == id)).fetchOne)
             .removeDuplicates()
@@ -165,7 +165,7 @@ public extension IdentityDatabase {
             .eraseToAnyPublisher()
     }
 
-    func identitiesObservation() -> AnyPublisher<[Identity], Error> {
+    func identitiesPublisher() -> AnyPublisher<[Identity], Error> {
         ValueObservation.tracking(
             IdentityInfo.request(IdentityRecord.order(IdentityRecord.Columns.lastUsedAt.desc)).fetchAll)
             .removeDuplicates()
@@ -174,7 +174,7 @@ public extension IdentityDatabase {
             .eraseToAnyPublisher()
     }
 
-    func recentIdentitiesObservation(excluding: Identity.Id) -> AnyPublisher<[Identity], Error> {
+    func recentIdentitiesPublisher(excluding: Identity.Id) -> AnyPublisher<[Identity], Error> {
         ValueObservation.tracking(
             IdentityInfo.request(IdentityRecord.order(IdentityRecord.Columns.lastUsedAt.desc))
                 .filter(IdentityRecord.Columns.id != excluding)
@@ -186,7 +186,7 @@ public extension IdentityDatabase {
             .eraseToAnyPublisher()
     }
 
-    func immediateMostRecentlyUsedIdentityIdObservation() -> AnyPublisher<Identity.Id?, Error> {
+    func immediateMostRecentlyUsedIdentityIdPublisher() -> AnyPublisher<Identity.Id?, Error> {
         ValueObservation.tracking(
             IdentityRecord.select(IdentityRecord.Columns.id)
                 .order(IdentityRecord.Columns.lastUsedAt.desc).fetchOne)
@@ -195,7 +195,7 @@ public extension IdentityDatabase {
             .eraseToAnyPublisher()
     }
 
-    func identitiesWithOutdatedDeviceTokens(deviceToken: Data) -> AnyPublisher<[Identity], Error> {
+    func fetchIdentitiesWithOutdatedDeviceTokens(deviceToken: Data) -> AnyPublisher<[Identity], Error> {
         databaseWriter.readPublisher(
             value: IdentityInfo.request(IdentityRecord.order(IdentityRecord.Columns.lastUsedAt.desc))
                 .filter(IdentityRecord.Columns.lastRegisteredDeviceToken != deviceToken)

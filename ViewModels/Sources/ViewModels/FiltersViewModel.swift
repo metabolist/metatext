@@ -16,11 +16,11 @@ public final class FiltersViewModel: ObservableObject {
     public init(identification: Identification) {
         self.identification = identification
 
-        identification.service.activeFiltersObservation()
+        identification.service.activeFiltersPublisher()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$activeFilters)
 
-        identification.service.expiredFiltersObservation()
+        identification.service.expiredFiltersPublisher()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$expiredFilters)
     }

@@ -215,7 +215,7 @@ public extension ContentDatabase {
             .eraseToAnyPublisher()
     }
 
-    func observation(timeline: Timeline) -> AnyPublisher<[[CollectionItem]], Error> {
+    func timelinePublisher(_ timeline: Timeline) -> AnyPublisher<[[CollectionItem]], Error> {
         ValueObservation.tracking(
             TimelineItemsInfo.request(TimelineRecord.filter(TimelineRecord.Columns.id == timeline.id)).fetchOne)
             .removeDuplicates()
@@ -225,7 +225,7 @@ public extension ContentDatabase {
             .eraseToAnyPublisher()
     }
 
-    func contextObservation(id: Status.Id) -> AnyPublisher<[[CollectionItem]], Error> {
+    func contextPublisher(id: Status.Id) -> AnyPublisher<[[CollectionItem]], Error> {
         ValueObservation.tracking(
             ContextItemsInfo.request(StatusRecord.filter(StatusRecord.Columns.id == id)).fetchOne)
             .removeDuplicates()
@@ -235,7 +235,7 @@ public extension ContentDatabase {
             .eraseToAnyPublisher()
     }
 
-    func listsObservation() -> AnyPublisher<[Timeline], Error> {
+    func listsPublisher() -> AnyPublisher<[Timeline], Error> {
         ValueObservation.tracking(TimelineRecord.filter(TimelineRecord.Columns.listId != nil)
                                     .order(TimelineRecord.Columns.listTitle.asc)
                                     .fetchAll)
@@ -245,14 +245,14 @@ public extension ContentDatabase {
             .eraseToAnyPublisher()
     }
 
-    func expiredFiltersObservation() -> AnyPublisher<[Filter], Error> {
+    func expiredFiltersPublisher() -> AnyPublisher<[Filter], Error> {
         ValueObservation.tracking { try Filter.filter(Filter.Columns.expiresAt < Date()).fetchAll($0) }
             .removeDuplicates()
             .publisher(in: databaseWriter)
             .eraseToAnyPublisher()
     }
 
-    func accountObservation(id: Account.Id) -> AnyPublisher<Account, Error> {
+    func accountPublisher(id: Account.Id) -> AnyPublisher<Account, Error> {
         ValueObservation.tracking(AccountInfo.request(AccountRecord.filter(AccountRecord.Columns.id == id)).fetchOne)
             .removeDuplicates()
             .publisher(in: databaseWriter)
@@ -261,7 +261,7 @@ public extension ContentDatabase {
             .eraseToAnyPublisher()
     }
 
-    func accountListObservation(_ list: AccountList) -> AnyPublisher<[Account], Error> {
+    func accountListPublisher(_ list: AccountList) -> AnyPublisher<[Account], Error> {
         ValueObservation.tracking(list.accounts.fetchAll)
             .removeDuplicates()
             .map { $0.map(Account.init(info:)) }

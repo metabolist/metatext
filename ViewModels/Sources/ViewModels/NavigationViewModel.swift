@@ -27,12 +27,12 @@ public final class NavigationViewModel: ObservableObject {
             .sink { [weak self] _ in self?.objectWillChange.send() }
             .store(in: &cancellables)
 
-        identification.service.recentIdentitiesObservation()
+        identification.service.recentIdentitiesPublisher()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$recentIdentities)
 
         if identification.identity.authenticated {
-            identification.service.listsObservation()
+            identification.service.listsPublisher()
                 .map { Timeline.authenticatedDefaults + $0 }
                 .assignErrorsToAlertItem(to: \.alertItem, on: self)
                 .assign(to: &$timelinesAndLists)

@@ -34,7 +34,7 @@ public struct ProfileService {
         self.mastodonAPIClient = mastodonAPIClient
         self.contentDatabase = contentDatabase
 
-        var accountPublisher = contentDatabase.accountObservation(id: id)
+        var accountPublisher = contentDatabase.accountPublisher(id: id)
 
         if let account = account {
             accountPublisher = accountPublisher

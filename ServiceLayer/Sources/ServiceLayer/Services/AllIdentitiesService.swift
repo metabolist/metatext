@@ -34,8 +34,8 @@ public extension AllIdentitiesService {
         try IdentityService(id: id, database: database, environment: environment)
     }
 
-    func immediateMostRecentlyUsedIdentityIdObservation() -> AnyPublisher<Identity.Id?, Error> {
-        database.immediateMostRecentlyUsedIdentityIdObservation()
+    func immediateMostRecentlyUsedIdentityIdPublisher() -> AnyPublisher<Identity.Id?, Error> {
+        database.immediateMostRecentlyUsedIdentityIdPublisher()
     }
 
     func createIdentity(url: URL, kind: IdentityCreation) -> AnyPublisher<Never, Error> {
@@ -113,7 +113,7 @@ public extension AllIdentitiesService {
     }
 
     func updatePushSubscriptions(deviceToken: Data) -> AnyPublisher<Never, Error> {
-        database.identitiesWithOutdatedDeviceTokens(deviceToken: deviceToken)
+        database.fetchIdentitiesWithOutdatedDeviceTokens(deviceToken: deviceToken)
             .tryMap { identities -> [AnyPublisher<Never, Never>] in
                 try identities.map {
                     try IdentityService(id: $0.id, database: database, environment: environment)

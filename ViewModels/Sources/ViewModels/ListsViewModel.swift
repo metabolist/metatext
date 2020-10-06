@@ -16,7 +16,7 @@ public final class ListsViewModel: ObservableObject {
     public init(identification: Identification) {
         self.identification = identification
 
-        identification.service.listsObservation()
+        identification.service.listsPublisher()
             .map {
                 $0.compactMap {
                     guard case let .list(list) = $0 else { return nil }
