@@ -12,7 +12,7 @@ final public class CollectionItemsViewModel: ObservableObject {
 
     private let items = CurrentValueSubject<[[CollectionItem]], Never>([])
     private let collectionService: CollectionService
-    private var viewModelCache = [CollectionItem: (CollectionItemViewModel, AnyCancellable)]()
+    private var viewModelCache = [CollectionItem: (viewModel: CollectionItemViewModel, events: AnyCancellable)]()
     private let navigationEventsSubject = PassthroughSubject<NavigationEvent, Never>()
     private let loadingSubject = PassthroughSubject<Bool, Never>()
     private var topVisibleIndexPath = IndexPath(item: 0, section: 0)
@@ -98,12 +98,13 @@ extension CollectionItemsViewModel: CollectionViewModel {
 
     public func viewModel(indexPath: IndexPath) -> CollectionItemViewModel {
         let item = items.value[indexPath.section][indexPath.item]
+        let cachedViewModel = viewModelCache[item]?.viewModel
 
         switch item {
         case let .status(status, configuration):
             var viewModel: StatusViewModel
 
-            if let cachedViewModel = viewModelCache[item]?.0 as? StatusViewModel {
+            if let cachedViewModel = cachedViewModel as? StatusViewModel {
                 viewModel = cachedViewModel
             } else {
                 viewModel = .init(statusService: collectionService.navigationService.statusService(status: status))
@@ -114,7 +115,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
 
             return viewModel
         case let .loadMore(loadMore):
-            if let cachedViewModel = viewModelCache[item]?.0 as? LoadMoreViewModel {
+            if let cachedViewModel = cachedViewModel {
                 return cachedViewModel
             }
 
@@ -125,7 +126,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
 
             return viewModel
         case let .account(account):
-            if let cachedViewModel = viewModelCache[item]?.0 as? AccountViewModel {
+            if let cachedViewModel = cachedViewModel {
                 return cachedViewModel
             }
 
@@ -174,7 +175,7 @@ private extension CollectionItemsViewModel {
                     if case let .remove(_, item, _) = removal,
                        case let .loadMore(loadMore) = item,
                        loadMore == lastSelectedLoadMore,
-                       let direction = (viewModelCache[item]?.0 as? LoadMoreViewModel)?.direction,
+                       let direction = (viewModelCache[item]?.viewModel as? LoadMoreViewModel)?.direction,
                        direction == .up,
                        let statusAfterLoadMore = flatItems.first(where: {
                         guard case let .status(status, _) = $0 else { return false }
