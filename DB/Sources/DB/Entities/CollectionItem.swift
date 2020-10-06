@@ -26,3 +26,7 @@ public extension CollectionItem {
         }
     }
 }
+
+public extension CollectionItem.StatusConfiguration {
+    static let `default` = Self()
+}

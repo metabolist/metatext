@@ -188,20 +188,21 @@ private extension StatusView {
         let mutableContent = NSMutableAttributedString(attributedString: viewModel.content)
         let mutableDisplayName = NSMutableAttributedString(string: viewModel.displayName)
         let mutableSpoilerText = NSMutableAttributedString(string: viewModel.spoilerText)
-        let contentFont = UIFont.preferredFont(forTextStyle: viewModel.isContextParent ? .title3 : .callout)
+        let contentTextStyle: UIFont.TextStyle = viewModel.configuration.isContextParent ? .title3 : .callout
+        let contentFont = UIFont.preferredFont(forTextStyle: contentTextStyle)
 
-        contentTextView.shouldFallthrough = !viewModel.isContextParent
-        avatarReplyContextView.isHidden = viewModel.isContextParent
-        nameDateView.isHidden = viewModel.isContextParent
-        contextParentAvatarNameView.isHidden = !viewModel.isContextParent
-        actionButtonsView.isHidden = viewModel.isContextParent
-        contextParentItems.isHidden = !viewModel.isContextParent
+        contentTextView.shouldFallthrough = !viewModel.configuration.isContextParent
+        avatarReplyContextView.isHidden = viewModel.configuration.isContextParent
+        nameDateView.isHidden = viewModel.configuration.isContextParent
+        contextParentAvatarNameView.isHidden = !viewModel.configuration.isContextParent
+        actionButtonsView.isHidden = viewModel.configuration.isContextParent
+        contextParentItems.isHidden = !viewModel.configuration.isContextParent
 
         let avatarImageView: UIImageView
         let displayNameLabel: UILabel
         let accountLabel: UILabel
 
-        if viewModel.isContextParent {
+        if viewModel.configuration.isContextParent {
             avatarImageView = contextParentAvatarImageView
             displayNameLabel = contextParentDisplayNameLabel
             accountLabel = contextParentAccountLabel
@@ -283,7 +284,7 @@ private extension StatusView {
                 withConfiguration: UIImage.SymbolConfiguration(scale: .small))
             metaLabel.isHidden = false
             metaIcon.isHidden = false
-        } else if viewModel.isPinned {
+        } else if viewModel.configuration.isPinned {
             metaLabel.text = NSLocalizedString("status.pinned-post", comment: "")
             metaIcon.image = UIImage(
                 systemName: "pin",
@@ -304,9 +305,9 @@ private extension StatusView {
 
         sensitiveContentView.isHidden = !viewModel.shouldDisplaySensitiveContent
 
-        inReplyToView.isHidden = !viewModel.isReplyInContext
+        inReplyToView.isHidden = !viewModel.configuration.isReplyInContext
 
-        hasReplyFollowingView.isHidden = !viewModel.hasReplyFollowing
+        hasReplyFollowingView.isHidden = !viewModel.configuration.hasReplyFollowing
     }
     // swiftlint:enable function_body_length
 
@@ -314,7 +315,7 @@ private extension StatusView {
         let reblogColor: UIColor = reblogged ? .systemGreen : .secondaryLabel
         let reblogButton: UIButton
 
-        if statusConfiguration.viewModel.isContextParent {
+        if statusConfiguration.viewModel.configuration.isContextParent {
             reblogButton = contextParentReblogButton
         } else {
             reblogButton = self.reblogButton
@@ -329,7 +330,7 @@ private extension StatusView {
         let favoriteButton: UIButton
         let scale: UIImage.SymbolScale
 
-        if statusConfiguration.viewModel.isContextParent {
+        if statusConfiguration.viewModel.configuration.isContextParent {
             favoriteButton = contextParentFavoriteButton
             scale = .medium
         } else {

@@ -17,10 +17,7 @@ public struct StatusViewModel: CollectionItemViewModel {
     public let attachmentViewModels: [AttachmentViewModel]
     public let pollOptionTitles: [String]
     public let pollEmoji: [Emoji]
-    public var isPinned = false
-    public var isContextParent = false
-    public var isReplyInContext = false
-    public var hasReplyFollowing = false
+    public var configuration = CollectionItem.StatusConfiguration.default
     public var sensitiveContentToggled = false
     public let events: AnyPublisher<AnyPublisher<CollectionItemEvent, Error>, Never>
 

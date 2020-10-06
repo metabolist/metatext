@@ -103,10 +103,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
                 cache(viewModel: viewModel, forItem: item)
             }
 
-            viewModel.isContextParent = configuration.isContextParent
-            viewModel.isPinned = configuration.isPinned
-            viewModel.isReplyInContext = configuration.isReplyInContext
-            viewModel.hasReplyFollowing = configuration.hasReplyFollowing
+            viewModel.configuration = configuration
 
             return viewModel
         case let .loadMore(loadMore):

@@ -15,7 +15,7 @@ class StatusListCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        if viewModel?.hasReplyFollowing ?? false {
+        if viewModel?.configuration.hasReplyFollowing ?? false {
             separatorInset.right = .greatestFiniteMagnitude
         } else {
             separatorInset.right = UIDevice.current.userInterfaceIdiom == .phone ? 0 : layoutMargins.right
