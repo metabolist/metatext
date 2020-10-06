@@ -15,6 +15,7 @@ final public class CollectionItemsViewModel: ObservableObject {
     private var viewModelCache = [CollectionItem: (CollectionItemViewModel, AnyCancellable)]()
     private let navigationEventsSubject = PassthroughSubject<NavigationEvent, Never>()
     private let loadingSubject = PassthroughSubject<Bool, Never>()
+    private var lastSelectedLoadMore: LoadMore?
     private var cancellables = Set<AnyCancellable>()
 
     init(collectionService: CollectionService) {
@@ -68,7 +69,8 @@ extension CollectionItemsViewModel: CollectionViewModel {
                         collectionService: collectionService
                             .navigationService
                             .contextService(id: status.displayStatus.id))))
-        case .loadMore:
+        case let .loadMore(loadMore):
+            lastSelectedLoadMore = loadMore
             (viewModel(indexPath: indexPath) as? LoadMoreViewModel)?.loadMore()
         case let .account(account):
             navigationEventsSubject.send(
@@ -140,7 +142,7 @@ private extension CollectionItemsViewModel {
     }
 
     func process(items: [[CollectionItem]]) {
-        determineIfScrollPositionShouldBeMaintained(newItems: items)
+        maintainScrollPositionOfItem = identifierForScrollPositionMaintenance(newItems: items)
         self.items.send(items)
 
         let itemsSet = Set(items.reduce([], +))
@@ -148,18 +150,38 @@ private extension CollectionItemsViewModel {
         viewModelCache = viewModelCache.filter { itemsSet.contains($0.key) }
     }
 
-    func determineIfScrollPositionShouldBeMaintained(newItems: [[CollectionItem]]) {
-        maintainScrollPositionOfItem = nil // clear old value
-
-        // Maintain scroll position of parent after initial load of context
+    func identifierForScrollPositionMaintenance(newItems: [[CollectionItem]]) -> CollectionItemIdentifier? {
+        let flatNewItems = newItems.reduce([], +)
         if collectionService is ContextService,
            items.value.isEmpty || items.value.map(\.count) == [0, 1, 0],
-           let contextParent = newItems.reduce([], +).first(where: {
+           let contextParent = flatNewItems.first(where: {
             guard case let .status(_, configuration) = $0 else { return false }
 
-            return configuration.isContextParent
+            return configuration.isContextParent // Maintain scroll position of parent after initial load of context
            }) {
-            maintainScrollPositionOfItem = .init(item: contextParent)
+            return .init(item: contextParent)
+        } else if collectionService is TimelineService {
+            let flatItems = items.value.reduce([], +)
+            let difference = flatNewItems.difference(from: flatItems)
+
+            if let lastSelectedLoadMore = lastSelectedLoadMore {
+                for removal in difference.removals {
+                    if case let .remove(_, item, _) = removal,
+                       case let .loadMore(loadMore) = item,
+                       loadMore == lastSelectedLoadMore,
+                       let direction = (viewModelCache[item]?.0 as? LoadMoreViewModel)?.direction,
+                       direction == .up,
+                       let statusAfterLoadMore = flatItems.first(where: {
+                        guard case let .status(status, _) = $0 else { return false }
+
+                        return status.id == loadMore.beforeStatusId
+                       }) {
+                        return .init(item: statusAfterLoadMore)
+                    }
+                }
+            }
         }
+
+        return nil
     }
 }
