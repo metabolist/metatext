@@ -146,7 +146,7 @@ private extension Timeline {
         switch self {
         case .home: return "house"
         case .local: return "person.3"
-        case .federated: return "globe"
+        case .federated: return "network"
         case .list: return "scroll"
         case .tag: return "number"
         case .profile: return "person"
