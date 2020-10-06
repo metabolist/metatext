@@ -85,6 +85,10 @@ extension ProfileViewModel: CollectionViewModel {
         collectionViewModel.value.request(maxId: maxId, minId: minId)
     }
 
+    public func viewedAtTop(indexPath: IndexPath) {
+        collectionViewModel.value.viewedAtTop(indexPath: indexPath)
+    }
+
     public func select(indexPath: IndexPath) {
         collectionViewModel.value.select(indexPath: indexPath)
     }

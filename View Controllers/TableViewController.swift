@@ -210,6 +210,12 @@ private extension TableViewController {
             self.sizeTableHeaderFooterViews()
         }
         .store(in: &cancellables)
+
+        tableView.publisher(for: \.contentOffset)
+            .compactMap { [weak self] _ in self?.tableView.indexPathsForVisibleRows?.first }
+            .removeDuplicates()
+            .sink { [weak self] in self?.viewModel.viewedAtTop(indexPath: $0) }
+            .store(in: &cancellables)
     }
 
     func update(items: [[CollectionItemIdentifier]]) {

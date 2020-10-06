@@ -15,6 +15,7 @@ final public class CollectionItemsViewModel: ObservableObject {
     private var viewModelCache = [CollectionItem: (CollectionItemViewModel, AnyCancellable)]()
     private let navigationEventsSubject = PassthroughSubject<NavigationEvent, Never>()
     private let loadingSubject = PassthroughSubject<Bool, Never>()
+    private var topVisibleIndexPath = IndexPath(item: 0, section: 0)
     private var lastSelectedLoadMore: LoadMore?
     private var cancellables = Set<AnyCancellable>()
 
@@ -78,6 +79,10 @@ extension CollectionItemsViewModel: CollectionViewModel {
                     ProfileViewModel(
                         profileService: collectionService.navigationService.profileService(account: account))))
         }
+    }
+
+    public func viewedAtTop(indexPath: IndexPath) {
+        topVisibleIndexPath = indexPath
     }
 
     public func canSelect(indexPath: IndexPath) -> Bool {
@@ -178,6 +183,17 @@ private extension CollectionItemsViewModel {
                        }) {
                         return .init(item: statusAfterLoadMore)
                     }
+                }
+            }
+
+            if items.value.count > topVisibleIndexPath.section,
+               items.value[topVisibleIndexPath.section].count > topVisibleIndexPath.item {
+                let topVisibleItem = items.value[topVisibleIndexPath.section][topVisibleIndexPath.item]
+
+                if newItems.count > topVisibleIndexPath.section,
+                   let newIndex = newItems[topVisibleIndexPath.section].firstIndex(of: topVisibleItem),
+                   newIndex > topVisibleIndexPath.item {
+                    return .init(item: topVisibleItem)
                 }
             }
         }
