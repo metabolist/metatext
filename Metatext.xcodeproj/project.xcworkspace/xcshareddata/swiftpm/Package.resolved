@@ -14,8 +14,8 @@
         "package": "GRDB",
         "repositoryURL": "https://github.com/metabolist/GRDB.swift.git",
         "state": {
-          "branch": "0a438ba",
-          "revision": "0a438ba6004bce382ffc200b7fd3ed81d8b733d8",
+          "branch": "dc09b03",
+          "revision": "dc09b033f649f0df0958fa80f777e247b31228f9",
           "version": null
         }
       },
