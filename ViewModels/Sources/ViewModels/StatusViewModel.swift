@@ -18,14 +18,15 @@ public struct StatusViewModel: CollectionItemViewModel {
     public let pollOptionTitles: [String]
     public let pollEmoji: [Emoji]
     public var configuration = CollectionItem.StatusConfiguration.default
-    public var sensitiveContentToggled = false
     public let events: AnyPublisher<AnyPublisher<CollectionItemEvent, Error>, Never>
 
     private let statusService: StatusService
     private let eventsSubject = PassthroughSubject<AnyPublisher<CollectionItemEvent, Error>, Never>()
+    private let identification: Identification
 
-    init(statusService: StatusService) {
+    init(statusService: StatusService, identification: Identification) {
         self.statusService = statusService
+        self.identification = identification
         content = statusService.status.displayStatus.content.attributed
         contentEmoji = statusService.status.displayStatus.emojis
         displayName = statusService.status.displayStatus.account.displayName == ""
@@ -47,11 +48,13 @@ public struct StatusViewModel: CollectionItemViewModel {
 }
 
 public extension StatusViewModel {
-    var shouldDisplaySensitiveContent: Bool {
-        if statusService.status.displayStatus.sensitive {
-            return sensitiveContentToggled
+    var shouldShowMore: Bool {
+        guard statusService.status.spoilerText != "" else { return true }
+
+        if identification.identity.preferences.readingExpandSpoilers {
+            return !configuration.showMoreToggled
         } else {
-            return true
+            return configuration.showMoreToggled
         }
     }
 
@@ -102,6 +105,13 @@ public extension StatusViewModel {
         default:
             return true
         }
+    }
+
+    func toggleShowMore() {
+        eventsSubject.send(
+            statusService.toggleShowMore()
+                .map { _ in CollectionItemEvent.ignorableOutput }
+                .eraseToAnyPublisher())
     }
 
     func urlSelected(_ url: URL) {

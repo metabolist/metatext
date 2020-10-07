@@ -45,12 +45,12 @@
                 <outlet property="nameDateView" destination="svp-hj-Xn6" id="SzA-ME-jU0"/>
                 <outlet property="reblogButton" destination="ZKl-Hp-Y42" id="bxe-wr-kB7"/>
                 <outlet property="replyButton" destination="6HD-MP-H72" id="5fb-z4-qlm"/>
-                <outlet property="sensitiveContentView" destination="BXI-3E-NWh" id="sXO-EM-fTI"/>
                 <outlet property="shareButton" destination="zAD-2Z-vhu" id="ZzV-wg-rOZ"/>
+                <outlet property="showMoreView" destination="BXI-3E-NWh" id="Zsm-ho-TbZ"/>
                 <outlet property="spoilerTextLabel" destination="5Gq-2q-Cvx" id="owo-VU-cIm"/>
                 <outlet property="timeApplicationDividerView" destination="hYj-vy-Net" id="F8o-xH-FFP"/>
                 <outlet property="timeLabel" destination="FEN-6u-xs5" id="epT-vQ-T9R"/>
-                <outlet property="toggleSensitiveContentButton" destination="XqE-Oj-oxH" id="EQB-cR-eOL"/>
+                <outlet property="toggleShowMoreButton" destination="XqE-Oj-oxH" id="D1n-WP-y9y"/>
                 <outletCollection property="separatorConstraints" destination="VEz-6j-37B" collectionClass="NSMutableArray" id="liC-8J-DV0"/>
                 <outletCollection property="separatorConstraints" destination="H9G-jZ-cek" collectionClass="NSMutableArray" id="E4b-tA-2gG"/>
             </connections>

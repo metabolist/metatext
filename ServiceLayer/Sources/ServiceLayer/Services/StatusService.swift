@@ -24,6 +24,10 @@ public struct StatusService {
 }
 
 public extension StatusService {
+    func toggleShowMore() -> AnyPublisher<Never, Error> {
+        contentDatabase.toggleShowMore(id: status.displayStatus.id)
+    }
+
     func toggleFavorited() -> AnyPublisher<Never, Error> {
         mastodonAPIClient.request(status.displayStatus.favourited
                                     ? StatusEndpoint.unfavourite(id: status.displayStatus.id)

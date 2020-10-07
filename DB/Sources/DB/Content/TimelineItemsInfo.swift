@@ -32,7 +32,11 @@ extension TimelineItemsInfo {
         let timeline = Timeline(record: timelineRecord)!
         let filterRegularExpression = filters.regularExpression(context: timeline.filterContext)
         var timelineItems = statusInfos.filtered(regularExpression: filterRegularExpression)
-            .map { CollectionItem.status(.init(info: $0), .init()) }
+            .map {
+                CollectionItem.status(
+                    .init(info: $0),
+                    .init(showMoreToggled: $0.showMoreToggled))
+            }
 
         for loadMoreRecord in loadMoreRecords {
             guard let index = timelineItems.firstIndex(where: {
@@ -51,7 +55,11 @@ extension TimelineItemsInfo {
 
         if let pinnedStatusInfos = pinnedStatusesInfo?.pinnedStatusInfos {
             return [pinnedStatusInfos.filtered(regularExpression: filterRegularExpression)
-                        .map { CollectionItem.status(.init(info: $0), .init(isPinned: true)) },
+                        .map {
+                            CollectionItem.status(
+                                .init(info: $0),
+                                .init(showMoreToggled: $0.showMoreToggled, isPinned: true))
+                        },
                     timelineItems]
         } else {
             return [timelineItems]

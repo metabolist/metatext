@@ -149,6 +149,39 @@ public extension ContentDatabase {
         .eraseToAnyPublisher()
     }
 
+    func toggleShowMore(id: Status.Id) -> AnyPublisher<Never, Error> {
+        databaseWriter.writePublisher {
+            if let toggle = try StatusShowMoreToggle
+                .filter(StatusShowMoreToggle.Columns.statusId == id)
+                .fetchOne($0) {
+                try toggle.delete($0)
+            } else {
+                try StatusShowMoreToggle(statusId: id).save($0)
+            }
+        }
+        .ignoreOutput()
+        .eraseToAnyPublisher()
+    }
+
+    func showMore(ids: Set<Status.Id>) -> AnyPublisher<Never, Error> {
+        databaseWriter.writePublisher {
+            for id in ids {
+                try StatusShowMoreToggle(statusId: id).save($0)
+            }
+        }
+        .ignoreOutput()
+        .eraseToAnyPublisher()
+    }
+
+    func showLess(ids: Set<Status.Id>) -> AnyPublisher<Never, Error> {
+        databaseWriter.writePublisher(
+            updates: StatusShowMoreToggle
+                .filter(ids.contains(StatusShowMoreToggle.Columns.statusId))
+                .deleteAll)
+            .ignoreOutput()
+            .eraseToAnyPublisher()
+    }
+
     func append(accounts: [Account], toList list: AccountList) -> AnyPublisher<Never, Error> {
         databaseWriter.writePublisher {
             try list.save($0)

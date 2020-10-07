@@ -8,6 +8,8 @@ struct StatusInfo: Codable, Hashable, FetchableRecord {
     let accountInfo: AccountInfo
     let reblogAccountInfo: AccountInfo?
     let reblogRecord: StatusRecord?
+    let showMoreToggle: StatusShowMoreToggle?
+    let reblogShowMoreToggle: StatusShowMoreToggle?
 }
 
 extension StatusInfo {
@@ -16,6 +18,9 @@ extension StatusInfo {
             .including(optional: AccountInfo.addingIncludes(StatusRecord.reblogAccount)
                         .forKey(CodingKeys.reblogAccountInfo))
             .including(optional: StatusRecord.reblog.forKey(CodingKeys.reblogRecord))
+            .including(optional: StatusRecord.showMoreToggle.forKey(CodingKeys.showMoreToggle))
+            .including(optional: StatusRecord.reblogShowMoreToggle
+                        .forKey(CodingKeys.reblogShowMoreToggle))
     }
 
     static func request(_ request: QueryInterfaceRequest<StatusRecord>) -> QueryInterfaceRequest<Self> {
@@ -24,5 +29,9 @@ extension StatusInfo {
 
     var filterableContent: String {
         (record.filterableContent + (reblogRecord?.filterableContent ?? [])).joined(separator: " ")
+    }
+
+    var showMoreToggled: Bool {
+        showMoreToggle != nil || reblogShowMoreToggle != nil
     }
 }

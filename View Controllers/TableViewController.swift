@@ -12,30 +12,9 @@ class TableViewController: UITableViewController {
     private let webfingerIndicatorView = WebfingerIndicatorView()
     private var cancellables = Set<AnyCancellable>()
     private var cellHeightCaches = [CGFloat: [CollectionItemIdentifier: CGFloat]]()
-    private let dataSourceQueue =
-        DispatchQueue(label: "com.metabolist.metatext.collection.data-source-queue")
 
-    private lazy var dataSource: UITableViewDiffableDataSource<Int, CollectionItemIdentifier> = {
-        UITableViewDiffableDataSource(tableView: tableView) { [weak self] tableView, indexPath, identifier in
-            guard let cellViewModel = self?.viewModel.viewModel(indexPath: indexPath) else { return nil }
-
-            let cell = tableView.dequeueReusableCell(
-                withIdentifier: String(describing: identifier.kind.cellClass),
-                for: indexPath)
-
-            switch (cell, cellViewModel) {
-            case (let statusListCell as StatusListCell, let statusViewModel as StatusViewModel):
-                statusListCell.viewModel = statusViewModel
-            case (let accountListCell as AccountListCell, let accountViewModel as AccountViewModel):
-                accountListCell.viewModel = accountViewModel
-            case (let loadMoreCell as LoadMoreCell, let loadMoreViewModel as LoadMoreViewModel):
-                loadMoreCell.viewModel = loadMoreViewModel
-            default:
-                return nil
-            }
-
-            return cell
-        }
+    private lazy var dataSource: TableViewDataSource = {
+        .init(tableView: tableView, viewModelProvider: viewModel.viewModel(indexPath:))
     }()
 
     init(viewModel: CollectionViewModel, identification: Identification) {
@@ -52,10 +31,6 @@ class TableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        for kind in CollectionItemIdentifier.Kind.allCases {
-            tableView.register(kind.cellClass, forCellReuseIdentifier: String(describing: kind.cellClass))
-        }
 
         tableView.dataSource = dataSource
         tableView.prefetchDataSource = self
@@ -183,10 +158,14 @@ private extension TableViewController {
     func setupViewModelBindings() {
         viewModel.title.sink { [weak self] in self?.navigationItem.title = $0 }.store(in: &cancellables)
 
-        viewModel.sections.sink { [weak self] in self?.update(items: $0) }.store(in: &cancellables)
+        viewModel.updates.sink { [weak self] in self?.update($0) }.store(in: &cancellables)
 
         viewModel.events.receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.handle(event: $0) }
+            .store(in: &cancellables)
+
+        viewModel.showMoreForAll.receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.set(showMoreForAllState: $0) }
             .store(in: &cancellables)
 
         viewModel.loading.receive(on: RunLoop.main).sink { [weak self] in
@@ -204,29 +183,27 @@ private extension TableViewController {
             .store(in: &cancellables)
     }
 
-    func update(items: [[CollectionItemIdentifier]]) {
+    func update(_ update: CollectionUpdate) {
         var offsetFromNavigationBar: CGFloat?
 
         if
-            let item = viewModel.maintainScrollPositionOfItem,
+            let item = update.maintainScrollPosition,
             let indexPath = dataSource.indexPath(for: item),
             let navigationBar = navigationController?.navigationBar {
             let navigationBarMaxY = tableView.convert(navigationBar.bounds, from: navigationBar).maxY
             offsetFromNavigationBar = tableView.rectForRow(at: indexPath).origin.y - navigationBarMaxY
         }
 
-        dataSourceQueue.async { [weak self] in
+        self.dataSource.apply(update.items.snapshot()) { [weak self] in
             guard let self = self else { return }
 
-            self.dataSource.apply(items.snapshot(), animatingDifferences: false) {
-                if
-                    let item = self.viewModel.maintainScrollPositionOfItem,
-                    let indexPath = self.dataSource.indexPath(for: item) {
-                    self.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
+            if
+                let item = update.maintainScrollPosition,
+                let indexPath = self.dataSource.indexPath(for: item) {
+                self.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
 
-                    if let offsetFromNavigationBar = offsetFromNavigationBar {
-                        self.tableView.contentOffset.y -= offsetFromNavigationBar
-                    }
+                if let offsetFromNavigationBar = offsetFromNavigationBar {
+                    self.tableView.contentOffset.y -= offsetFromNavigationBar
                 }
             }
         }
@@ -261,6 +238,23 @@ private extension TableViewController {
             case .webfingerEnd:
                 webfingerIndicatorView.stopAnimating()
             }
+        }
+    }
+
+    func set(showMoreForAllState: ShowMoreForAllState) {
+        switch showMoreForAllState {
+        case .hidden:
+            navigationItem.rightBarButtonItem = nil
+        case .showMore:
+            navigationItem.rightBarButtonItem = UIBarButtonItem(
+                title: NSLocalizedString("status.show-more", comment: ""),
+                image: UIImage(systemName: "eye.slash"),
+                primaryAction: UIAction { [weak self] _ in self?.viewModel.toggleShowMoreForAll() })
+        case .showLess:
+            navigationItem.rightBarButtonItem = UIBarButtonItem(
+                title: NSLocalizedString("status.show-less", comment: ""),
+                image: UIImage(systemName: "eye"),
+                primaryAction: UIAction { [weak self] _ in self?.viewModel.toggleShowMoreForAll() })
         }
     }
 

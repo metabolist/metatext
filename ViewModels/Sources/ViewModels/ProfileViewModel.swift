@@ -41,12 +41,16 @@ final public class ProfileViewModel {
 }
 
 extension ProfileViewModel: CollectionViewModel {
-    public var sections: AnyPublisher<[[CollectionItemIdentifier]], Never> {
-        collectionViewModel.flatMap(\.sections).eraseToAnyPublisher()
+    public var updates: AnyPublisher<CollectionUpdate, Never> {
+        collectionViewModel.flatMap(\.updates).eraseToAnyPublisher()
     }
 
     public var title: AnyPublisher<String, Never> {
         $accountViewModel.compactMap { $0?.accountName }.eraseToAnyPublisher()
+    }
+
+    public var showMoreForAll: AnyPublisher<ShowMoreForAllState, Never> {
+        collectionViewModel.flatMap(\.showMoreForAll).eraseToAnyPublisher()
     }
 
     public var alertItems: AnyPublisher<AlertItem, Never> {
@@ -68,10 +72,6 @@ extension ProfileViewModel: CollectionViewModel {
 
     public var nextPageMaxId: String? {
         collectionViewModel.value.nextPageMaxId
-    }
-
-    public var maintainScrollPositionOfItem: CollectionItemIdentifier? {
-        collectionViewModel.value.maintainScrollPositionOfItem
     }
 
     public func request(maxId: String?, minId: String?) {
@@ -99,5 +99,9 @@ extension ProfileViewModel: CollectionViewModel {
 
     public func viewModel(indexPath: IndexPath) -> CollectionItemViewModel {
         collectionViewModel.value.viewModel(indexPath: indexPath)
+    }
+
+    public func toggleShowMoreForAll() {
+        collectionViewModel.value.toggleShowMoreForAll()
     }
 }

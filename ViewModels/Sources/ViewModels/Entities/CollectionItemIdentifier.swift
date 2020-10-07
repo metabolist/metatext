@@ -6,7 +6,8 @@ import ServiceLayer
 public struct CollectionItemIdentifier: Hashable {
     public let id: String
     public let kind: Kind
-    public let info: [InfoKey: AnyHashable]
+    public let pinned: Bool
+    public let showMoreToggled: Bool
 }
 
 public extension CollectionItemIdentifier {
@@ -14,10 +15,6 @@ public extension CollectionItemIdentifier {
         case status
         case loadMore
         case account
-    }
-
-    enum InfoKey {
-        case pinned
     }
 }
 
@@ -27,15 +24,22 @@ extension CollectionItemIdentifier {
         case let .status(status, configuration):
             id = status.id
             kind = .status
-            info = configuration.isPinned ? [.pinned: true] : [:]
+            pinned = configuration.isPinned
+            showMoreToggled = configuration.showMoreToggled
         case let .loadMore(loadMore):
             id = loadMore.afterStatusId
             kind = .loadMore
-            info = [:]
+            pinned = false
+            showMoreToggled = false
         case let .account(account):
             id = account.id
             kind = .account
-            info = [:]
+            pinned = false
+            showMoreToggled = false
         }
+    }
+
+    public static func isSameExceptShowMoreToggled(lhs: Self, rhs: Self) -> Bool {
+        lhs.id == rhs.id && lhs.kind == rhs.kind && lhs.pinned == rhs.pinned
     }
 }

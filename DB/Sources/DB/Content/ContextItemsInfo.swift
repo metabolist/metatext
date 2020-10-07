@@ -35,7 +35,8 @@ extension ContextItemsInfo {
 
                     return .status(
                         .init(info: statusInfo),
-                        .init(isContextParent: statusInfo.record.id == parent.record.id,
+                        .init(showMoreToggled: statusInfo.showMoreToggled,
+                              isContextParent: statusInfo.record.id == parent.record.id,
                               isReplyInContext: isReplyInContext,
                               hasReplyFollowing: hasReplyFollowing))
                 }

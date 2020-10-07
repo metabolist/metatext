@@ -92,6 +92,11 @@ extension StatusRecord {
                                            through: Self.reblogAccount,
                                            using: AccountRecord.moved)
     static let reblog = belongsTo(StatusRecord.self)
+    static let showMoreToggle = hasOne(StatusShowMoreToggle.self)
+    static let reblogShowMoreToggle = hasOne(
+        StatusShowMoreToggle.self,
+        through: Self.reblog,
+        using: Self.showMoreToggle)
     static let ancestorJoins = hasMany(
         StatusAncestorJoin.self,
         using: ForeignKey([StatusAncestorJoin.Columns.parentId]))

@@ -14,14 +14,14 @@ class StatusView: UIView {
     @IBOutlet weak var accountLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var spoilerTextLabel: UILabel!
-    @IBOutlet weak var toggleSensitiveContentButton: UIButton!
+    @IBOutlet weak var toggleShowMoreButton: UIButton!
     @IBOutlet weak var replyButton: UIButton!
     @IBOutlet weak var reblogButton: UIButton!
     @IBOutlet weak var favoriteButton: UIButton!
     @IBOutlet weak var shareButton: UIButton!
     @IBOutlet weak var attachmentsView: AttachmentsView!
     @IBOutlet weak var cardView: CardView!
-    @IBOutlet weak var sensitiveContentView: UIStackView!
+    @IBOutlet weak var showMoreView: UIStackView!
     @IBOutlet weak var hasReplyFollowingView: UIView!
     @IBOutlet weak var inReplyToView: UIView!
     @IBOutlet weak var avatarReplyContextView: UIView!
@@ -65,7 +65,7 @@ class StatusView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        for button: UIButton in [toggleSensitiveContentButton] where button.frame.height != 0 {
+        for button: UIButton in [toggleShowMoreButton] where button.frame.height != 0 {
             button.layer.cornerRadius = button.frame.height / 2
         }
     }
@@ -140,6 +140,10 @@ private extension StatusView {
 
         avatarButton.addAction(accountAction, for: .touchUpInside)
         contextParentAvatarButton.addAction(accountAction, for: .touchUpInside)
+
+        toggleShowMoreButton.addAction(
+            UIAction { [weak self] _ in self?.statusConfiguration.viewModel.toggleShowMore() },
+            for: .touchUpInside)
 
         cardView.button.addAction(
             UIAction { [weak self] _ in
@@ -229,8 +233,8 @@ private extension StatusView {
         mutableSpoilerText.resizeAttachments(toLineHeight: spoilerTextLabel.font.lineHeight)
         spoilerTextLabel.attributedText = mutableSpoilerText
         spoilerTextLabel.isHidden = !viewModel.sensitive || spoilerTextLabel.text == ""
-        toggleSensitiveContentButton.setTitle(
-            viewModel.shouldDisplaySensitiveContent
+        toggleShowMoreButton.setTitle(
+            viewModel.shouldShowMore
                 ? NSLocalizedString("status.show-less", comment: "")
                 : NSLocalizedString("status.show-more", comment: ""),
             for: .normal)
@@ -242,7 +246,7 @@ private extension StatusView {
         applicationButton.setTitle(viewModel.applicationName, for: .normal)
         applicationButton.isEnabled = viewModel.applicationURL != nil
         avatarImageView.kf.setImage(with: viewModel.avatarURL)
-        toggleSensitiveContentButton.isHidden = !viewModel.sensitive
+        toggleShowMoreButton.isHidden = !viewModel.sensitive
         replyButton.setTitle(viewModel.repliesCount == 0 ? "" : String(viewModel.repliesCount), for: .normal)
         reblogButton.setTitle(viewModel.reblogsCount == 0 ? "" : String(viewModel.reblogsCount), for: .normal)
         setReblogButtonColor(reblogged: viewModel.reblogged)
@@ -303,7 +307,7 @@ private extension StatusView {
         cardView.viewModel = viewModel.cardViewModel
         cardView.isHidden = viewModel.cardViewModel == nil
 
-        sensitiveContentView.isHidden = !viewModel.shouldDisplaySensitiveContent
+        showMoreView.isHidden = !viewModel.shouldShowMore
 
         inReplyToView.isHidden = !viewModel.configuration.isReplyInContext
 

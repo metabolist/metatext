@@ -44,4 +44,8 @@ extension TimelineService: CollectionService {
             .flatMap { contentDatabase.insert(statuses: $0.result, timeline: timeline) }
             .eraseToAnyPublisher()
     }
+
+    public func toggleShowMore(id: Status.Id) -> AnyPublisher<Never, Error> {
+        contentDatabase.toggleShowMore(id: id)
+    }
 }

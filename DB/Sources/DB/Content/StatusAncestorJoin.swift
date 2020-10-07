@@ -8,8 +8,6 @@ struct StatusAncestorJoin: Codable, FetchableRecord, PersistableRecord {
     let parentId: Status.Id
     let statusId: Status.Id
     let index: Int
-
-    static let status = belongsTo(StatusRecord.self, using: ForeignKey([Columns.statusId]))
 }
 
 extension StatusAncestorJoin {
@@ -18,4 +16,6 @@ extension StatusAncestorJoin {
         static let statusId = Column(StatusAncestorJoin.CodingKeys.statusId)
         static let index = Column(StatusAncestorJoin.CodingKeys.index)
     }
+
+    static let status = belongsTo(StatusRecord.self, using: ForeignKey([Columns.statusId]))
 }

@@ -31,4 +31,16 @@ extension ContextService: CollectionService {
                     .flatMap { contentDatabase.insert(context: $0, parentId: id) })
             .eraseToAnyPublisher()
     }
+
+    public func toggleShowMore(id: Status.Id) -> AnyPublisher<Never, Error> {
+        contentDatabase.toggleShowMore(id: id)
+    }
+
+    public func showMore(ids: Set<Status.Id>) -> AnyPublisher<Never, Error> {
+        contentDatabase.showMore(ids: ids)
+    }
+
+    public func showLess(ids: Set<Status.Id>) -> AnyPublisher<Never, Error> {
+        contentDatabase.showLess(ids: ids)
+    }
 }

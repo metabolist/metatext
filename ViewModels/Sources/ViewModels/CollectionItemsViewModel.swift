@@ -8,7 +8,6 @@ import ServiceLayer
 final public class CollectionItemsViewModel: ObservableObject {
     @Published public var alertItem: AlertItem?
     public private(set) var nextPageMaxId: String?
-    public private(set) var maintainScrollPositionOfItem: CollectionItemIdentifier?
 
     private let items = CurrentValueSubject<[[CollectionItem]], Never>([])
     private let collectionService: CollectionService
@@ -16,6 +15,8 @@ final public class CollectionItemsViewModel: ObservableObject {
     private var viewModelCache = [CollectionItem: (viewModel: CollectionItemViewModel, events: AnyCancellable)]()
     private let eventsSubject = PassthroughSubject<CollectionItemEvent, Never>()
     private let loadingSubject = PassthroughSubject<Bool, Never>()
+    private let showMoreForAllSubject: CurrentValueSubject<ShowMoreForAllState, Never>
+    private var maintainScrollPosition: CollectionItemIdentifier?
     private var topVisibleIndexPath = IndexPath(item: 0, section: 0)
     private var lastSelectedLoadMore: LoadMore?
     private var cancellables = Set<AnyCancellable>()
@@ -23,6 +24,9 @@ final public class CollectionItemsViewModel: ObservableObject {
     public init(collectionService: CollectionService, identification: Identification) {
         self.collectionService = collectionService
         self.identification = identification
+        showMoreForAllSubject = CurrentValueSubject(
+            collectionService is ContextService && !identification.identity.preferences.readingExpandSpoilers
+                ? .showMore : .hidden)
 
         collectionService.sections
             .handleEvents(receiveOutput: { [weak self] in self?.process(items: $0) })
@@ -38,11 +42,19 @@ final public class CollectionItemsViewModel: ObservableObject {
 }
 
 extension CollectionItemsViewModel: CollectionViewModel {
-    public var sections: AnyPublisher<[[CollectionItemIdentifier]], Never> {
-        items.map { $0.map { $0.map(CollectionItemIdentifier.init(item:)) } }.eraseToAnyPublisher()
+    public var updates: AnyPublisher<CollectionUpdate, Never> {
+        items.map { [weak self] in
+            CollectionUpdate(items: $0.map { $0.map(CollectionItemIdentifier.init(item:)) },
+                             maintainScrollPosition: self?.maintainScrollPosition)
+        }
+        .eraseToAnyPublisher()
     }
 
     public var title: AnyPublisher<String, Never> { collectionService.title }
+
+    public var showMoreForAll: AnyPublisher<ShowMoreForAllState, Never> {
+        showMoreForAllSubject.eraseToAnyPublisher()
+    }
 
     public var alertItems: AnyPublisher<AlertItem, Never> { $alertItem.compactMap { $0 }.eraseToAnyPublisher() }
 
@@ -107,7 +119,9 @@ extension CollectionItemsViewModel: CollectionViewModel {
             if let cachedViewModel = cachedViewModel as? StatusViewModel {
                 viewModel = cachedViewModel
             } else {
-                viewModel = .init(statusService: collectionService.navigationService.statusService(status: status))
+                viewModel = .init(
+                    statusService: collectionService.navigationService.statusService(status: status),
+                    identification: identification)
                 cache(viewModel: viewModel, forItem: item)
             }
 
@@ -138,6 +152,31 @@ extension CollectionItemsViewModel: CollectionViewModel {
             return viewModel
         }
     }
+
+    public func toggleShowMoreForAll() {
+        let statusIds = Set(items.value.reduce([], +).compactMap { item -> Status.Id? in
+            guard case let .status(status, _) = item else { return nil }
+
+            return status.id
+        })
+
+        switch showMoreForAllSubject.value {
+        case .hidden:
+            break
+        case .showMore:
+            (collectionService as? ContextService)?.showMore(ids: statusIds)
+                .assignErrorsToAlertItem(to: \.alertItem, on: self)
+                .collect()
+                .sink { [weak self] _ in self?.showMoreForAllSubject.send(.showLess) }
+                .store(in: &cancellables)
+        case .showLess:
+            (collectionService as? ContextService)?.showLess(ids: statusIds)
+                .assignErrorsToAlertItem(to: \.alertItem, on: self)
+                .collect()
+                .sink { [weak self] _ in self?.showMoreForAllSubject.send(.showMore) }
+                .store(in: &cancellables)
+        }
+    }
 }
 
 private extension CollectionItemsViewModel {
@@ -148,7 +187,7 @@ private extension CollectionItemsViewModel {
     }
 
     func process(items: [[CollectionItem]]) {
-        maintainScrollPositionOfItem = identifierForScrollPositionMaintenance(newItems: items)
+        maintainScrollPosition = identifierForScrollPositionMaintenance(newItems: items)
         self.items.send(items)
 
         let itemsSet = Set(items.reduce([], +))
@@ -158,6 +197,7 @@ private extension CollectionItemsViewModel {
 
     func identifierForScrollPositionMaintenance(newItems: [[CollectionItem]]) -> CollectionItemIdentifier? {
         let flatNewItems = newItems.reduce([], +)
+
         if collectionService is ContextService,
            items.value.isEmpty || items.value.map(\.count) == [0, 1, 0],
            let contextParent = flatNewItems.first(where: {
