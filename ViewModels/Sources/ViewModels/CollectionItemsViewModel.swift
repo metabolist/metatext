@@ -12,15 +12,17 @@ final public class CollectionItemsViewModel: ObservableObject {
 
     private let items = CurrentValueSubject<[[CollectionItem]], Never>([])
     private let collectionService: CollectionService
+    private let identification: Identification
     private var viewModelCache = [CollectionItem: (viewModel: CollectionItemViewModel, events: AnyCancellable)]()
-    private let navigationEventsSubject = PassthroughSubject<NavigationEvent, Never>()
+    private let eventsSubject = PassthroughSubject<CollectionItemEvent, Never>()
     private let loadingSubject = PassthroughSubject<Bool, Never>()
     private var topVisibleIndexPath = IndexPath(item: 0, section: 0)
     private var lastSelectedLoadMore: LoadMore?
     private var cancellables = Set<AnyCancellable>()
 
-    init(collectionService: CollectionService) {
+    public init(collectionService: CollectionService, identification: Identification) {
         self.collectionService = collectionService
+        self.identification = identification
 
         collectionService.sections
             .handleEvents(receiveOutput: { [weak self] in self?.process(items: $0) })
@@ -46,7 +48,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
 
     public var loading: AnyPublisher<Bool, Never> { loadingSubject.eraseToAnyPublisher() }
 
-    public var navigationEvents: AnyPublisher<NavigationEvent, Never> { navigationEventsSubject.eraseToAnyPublisher() }
+    public var events: AnyPublisher<CollectionItemEvent, Never> { eventsSubject.eraseToAnyPublisher() }
 
     public func request(maxId: String? = nil, minId: String? = nil) {
         collectionService.request(maxId: maxId, minId: minId)
@@ -64,20 +66,18 @@ extension CollectionItemsViewModel: CollectionViewModel {
 
         switch item {
         case let .status(status, _):
-            navigationEventsSubject.send(
-                .collectionNavigation(
-                    CollectionItemsViewModel(
-                        collectionService: collectionService
-                            .navigationService
-                            .contextService(id: status.displayStatus.id))))
+            eventsSubject.send(
+                .navigation(.collection(collectionService
+                                            .navigationService
+                                            .contextService(id: status.displayStatus.id))))
         case let .loadMore(loadMore):
             lastSelectedLoadMore = loadMore
             (viewModel(indexPath: indexPath) as? LoadMoreViewModel)?.loadMore()
         case let .account(account):
-            navigationEventsSubject.send(
-                .profileNavigation(
-                    ProfileViewModel(
-                        profileService: collectionService.navigationService.profileService(account: account))))
+            eventsSubject.send(
+                .navigation(.profile(collectionService
+                                        .navigationService
+                                        .profileService(account: account))))
         }
     }
 
@@ -142,9 +142,9 @@ extension CollectionItemsViewModel: CollectionViewModel {
 
 private extension CollectionItemsViewModel {
     func cache(viewModel: CollectionItemViewModel, forItem item: CollectionItem) {
-        viewModelCache[item] = (viewModel, viewModel.events.flatMap { $0.compactMap(NavigationEvent.init) }
+        viewModelCache[item] = (viewModel, viewModel.events.flatMap { $0 }
                                     .assignErrorsToAlertItem(to: \.alertItem, on: self)
-                                    .sink { [weak self] in self?.navigationEventsSubject.send($0) })
+                                    .sink { [weak self] in self?.eventsSubject.send($0) })
     }
 
     func process(items: [[CollectionItem]]) {

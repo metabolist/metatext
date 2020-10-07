@@ -14,11 +14,13 @@ final public class ProfileViewModel {
     private let collectionViewModel: CurrentValueSubject<CollectionItemsViewModel, Never>
     private var cancellables = Set<AnyCancellable>()
 
-    init(profileService: ProfileService) {
+    public init(profileService: ProfileService, identification: Identification) {
         self.profileService = profileService
 
         collectionViewModel = CurrentValueSubject(
-            CollectionItemsViewModel(collectionService: profileService.timelineService(profileCollection: .statuses)))
+            CollectionItemsViewModel(
+                collectionService: profileService.timelineService(profileCollection: .statuses),
+                identification: identification))
 
         profileService.accountServicePublisher
             .map(AccountViewModel.init(accountService:))
@@ -27,7 +29,7 @@ final public class ProfileViewModel {
 
         $collection.dropFirst()
             .map(profileService.timelineService(profileCollection:))
-            .map(CollectionItemsViewModel.init(collectionService:))
+            .map { CollectionItemsViewModel(collectionService: $0, identification: identification) }
             .sink { [weak self] in
                 guard let self = self else { return }
 
@@ -55,14 +57,12 @@ extension ProfileViewModel: CollectionViewModel {
         collectionViewModel.flatMap(\.loading).eraseToAnyPublisher()
     }
 
-    public var navigationEvents: AnyPublisher<NavigationEvent, Never> {
+    public var events: AnyPublisher<CollectionItemEvent, Never> {
         $accountViewModel.compactMap { $0 }
             .flatMap(\.events)
             .flatMap { $0 }
-            .map(NavigationEvent.init)
-            .compactMap { $0 }
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
-            .merge(with: collectionViewModel.flatMap(\.navigationEvents))
+            .merge(with: collectionViewModel.flatMap(\.events))
             .eraseToAnyPublisher()
     }
 

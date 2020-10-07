@@ -91,7 +91,9 @@ public extension NavigationViewModel {
     }
 
     func viewModel(timeline: Timeline) -> CollectionItemsViewModel {
-        CollectionItemsViewModel(collectionService: identification.service.service(timeline: timeline))
+        CollectionItemsViewModel(
+            collectionService: identification.service.service(timeline: timeline),
+            identification: identification)
     }
 }
 

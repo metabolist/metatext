@@ -8,10 +8,10 @@ final class ProfileViewController: TableViewController {
     private let viewModel: ProfileViewModel
     private var cancellables = Set<AnyCancellable>()
 
-    required init(viewModel: ProfileViewModel) {
+    required init(viewModel: ProfileViewModel, identification: Identification) {
         self.viewModel = viewModel
 
-        super.init(viewModel: viewModel)
+        super.init(viewModel: viewModel, identification: identification)
     }
 
     override func viewDidLoad() {

@@ -4,10 +4,11 @@ import SwiftUI
 import ViewModels
 
 struct TableView: UIViewControllerRepresentable {
+    @EnvironmentObject var identification: Identification
     let viewModel: CollectionViewModel
 
     func makeUIViewController(context: Context) -> TableViewController {
-        TableViewController(viewModel: viewModel)
+        TableViewController(viewModel: viewModel, identification: identification)
     }
 
     func updateUIViewController(_ uiViewController: TableViewController, context: Context) {

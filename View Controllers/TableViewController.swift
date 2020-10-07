@@ -7,6 +7,7 @@ import ViewModels
 
 class TableViewController: UITableViewController {
     private let viewModel: CollectionViewModel
+    private let identification: Identification
     private let loadingTableFooterView = LoadingTableFooterView()
     private let webfingerIndicatorView = WebfingerIndicatorView()
     private var cancellables = Set<AnyCancellable>()
@@ -37,8 +38,9 @@ class TableViewController: UITableViewController {
         }
     }()
 
-    init(viewModel: CollectionViewModel) {
+    init(viewModel: CollectionViewModel, identification: Identification) {
         self.viewModel = viewModel
+        self.identification = identification
 
         super.init(style: .plain)
     }
@@ -183,25 +185,9 @@ private extension TableViewController {
 
         viewModel.sections.sink { [weak self] in self?.update(items: $0) }.store(in: &cancellables)
 
-        viewModel.navigationEvents.receive(on: DispatchQueue.main).sink { [weak self] in
-            guard let self = self else { return }
-
-            switch $0 {
-            case let .share(url):
-                self.share(url: url)
-            case let .collectionNavigation(viewModel):
-                self.show(TableViewController(viewModel: viewModel), sender: self)
-            case let .profileNavigation(viewModel):
-                self.show(ProfileViewController(viewModel: viewModel), sender: self)
-            case let .urlNavigation(url):
-                self.present(SFSafariViewController(url: url), animated: true)
-            case .webfingerStart:
-                self.webfingerIndicatorView.startAnimating()
-            case .webfingerEnd:
-                self.webfingerIndicatorView.stopAnimating()
-            }
-        }
-        .store(in: &cancellables)
+        viewModel.events.receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.handle(event: $0) }
+            .store(in: &cancellables)
 
         viewModel.loading.receive(on: RunLoop.main).sink { [weak self] in
             guard let self = self else { return }
@@ -242,6 +228,38 @@ private extension TableViewController {
                         self.tableView.contentOffset.y -= offsetFromNavigationBar
                     }
                 }
+            }
+        }
+    }
+
+    func handle(event: CollectionItemEvent) {
+        switch event {
+        case .ignorableOutput:
+            break
+        case let .share(url):
+            share(url: url)
+        case let.navigation(navigation):
+            switch navigation {
+            case let .collection(collectionService):
+                show(TableViewController(
+                        viewModel: CollectionItemsViewModel(
+                            collectionService: collectionService,
+                            identification: identification),
+                        identification: identification),
+                     sender: self)
+            case let .profile(profileService):
+                show(ProfileViewController(
+                        viewModel: ProfileViewModel(
+                            profileService: profileService,
+                            identification: identification),
+                        identification: identification),
+                     sender: self)
+            case let .url(url):
+                present(SFSafariViewController(url: url), animated: true)
+            case .webfingerStart:
+                webfingerIndicatorView.startAnimating()
+            case .webfingerEnd:
+                webfingerIndicatorView.stopAnimating()
             }
         }
     }

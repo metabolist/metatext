@@ -8,7 +8,7 @@ public protocol CollectionViewModel {
     var title: AnyPublisher<String, Never> { get }
     var alertItems: AnyPublisher<AlertItem, Never> { get }
     var loading: AnyPublisher<Bool, Never> { get }
-    var navigationEvents: AnyPublisher<NavigationEvent, Never> { get }
+    var events: AnyPublisher<CollectionItemEvent, Never> { get }
     var nextPageMaxId: String? { get }
     var maintainScrollPositionOfItem: CollectionItemIdentifier? { get }
     func request(maxId: String?, minId: String?)
