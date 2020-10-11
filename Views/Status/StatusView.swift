@@ -246,7 +246,7 @@ private extension StatusView {
         applicationButton.setTitle(viewModel.applicationName, for: .normal)
         applicationButton.isEnabled = viewModel.applicationURL != nil
         avatarImageView.kf.setImage(with: viewModel.avatarURL)
-        toggleShowMoreButton.isHidden = !viewModel.sensitive
+        toggleShowMoreButton.isHidden = viewModel.spoilerText == ""
         replyButton.setTitle(viewModel.repliesCount == 0 ? "" : String(viewModel.repliesCount), for: .normal)
         reblogButton.setTitle(viewModel.reblogsCount == 0 ? "" : String(viewModel.reblogsCount), for: .normal)
         setReblogButtonColor(reblogged: viewModel.reblogged)

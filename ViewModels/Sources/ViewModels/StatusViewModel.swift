@@ -49,7 +49,7 @@ public struct StatusViewModel: CollectionItemViewModel {
 
 public extension StatusViewModel {
     var shouldShowMore: Bool {
-        guard statusService.status.spoilerText != "" else { return true }
+        guard spoilerText != "" else { return true }
 
         if identification.identity.preferences.readingExpandSpoilers {
             return !configuration.showMoreToggled
