@@ -240,9 +240,9 @@
 		D0625E55250F086B00502611 /* Status */ = {
 			isa = PBXGroup;
 			children = (
-				D0BEB1F224F8EE8C001B0F04 /* StatusAttachmentView.swift */,
-				D01F41E224F8889700D55A2D /* StatusAttachmentsView.swift */,
 				D0EA593F2522AC8700804347 /* CardView.swift */,
+				D01F41E224F8889700D55A2D /* StatusAttachmentsView.swift */,
+				D0BEB1F224F8EE8C001B0F04 /* StatusAttachmentView.swift */,
 				D0625E5C250F0B5C00502611 /* StatusContentConfiguration.swift */,
 				D0625E58250F092900502611 /* StatusListCell.swift */,
 				D0625E5E250F0CFF00502611 /* StatusView.swift */,
