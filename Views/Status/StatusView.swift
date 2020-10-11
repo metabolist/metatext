@@ -19,7 +19,7 @@ class StatusView: UIView {
     @IBOutlet weak var reblogButton: UIButton!
     @IBOutlet weak var favoriteButton: UIButton!
     @IBOutlet weak var shareButton: UIButton!
-    @IBOutlet weak var attachmentsView: AttachmentsView!
+    @IBOutlet weak var attachmentsView: StatusAttachmentsView!
     @IBOutlet weak var cardView: CardView!
     @IBOutlet weak var showMoreView: UIStackView!
     @IBOutlet weak var hasReplyFollowingView: UIView!

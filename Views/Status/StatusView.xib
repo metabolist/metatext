@@ -238,7 +238,7 @@
                                             <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                         </textView>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="diz-eN-CAY" customClass="AttachmentsView" customModule="Metatext" customModuleProvider="target">
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="diz-eN-CAY" customClass="StatusAttachmentsView" customModule="Metatext" customModuleProvider="target">
                                             <rect key="frame" x="0.0" y="45" width="478" height="269"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="diz-eN-CAY" secondAttribute="height" multiplier="16:9" priority="999" id="yvF-tL-A5X"/>

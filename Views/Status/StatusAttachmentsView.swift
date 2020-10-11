@@ -3,7 +3,7 @@
 import UIKit
 import ViewModels
 
-final class AttachmentsView: UIView {
+final class StatusAttachmentsView: UIView {
     private let containerStackView = UIStackView()
     private let leftStackView = UIStackView()
     private let rightStackView = UIStackView()
@@ -22,12 +22,14 @@ final class AttachmentsView: UIView {
             rightStackView.isHidden = attachmentCount == 1
 
             for (index, viewModel) in attachmentViewModels.enumerated() {
+                let attachmentView = StatusAttachmentView(viewModel: viewModel)
+
                 if attachmentCount == 2 && index == 1
                     || attachmentCount == 3 && index != 0
                     || attachmentCount > 3 && index % 2 != 0 {
-                    rightStackView.addArrangedSubview(AttachmentView(viewModel: viewModel))
+                    rightStackView.addArrangedSubview(attachmentView)
                 } else {
-                    leftStackView.addArrangedSubview(AttachmentView(viewModel: viewModel))
+                    leftStackView.addArrangedSubview(attachmentView)
                 }
             }
         }
@@ -46,8 +48,7 @@ final class AttachmentsView: UIView {
     }
 }
 
-private extension AttachmentsView {
-
+private extension StatusAttachmentsView {
     func initializationActions() {
         backgroundColor = .clear
         layoutMargins = .zero

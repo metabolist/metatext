@@ -11,7 +11,7 @@
 		D01C6FAC252024BD003D0300 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01C6FAB252024BD003D0300 /* Array+Extensions.swift */; };
 		D01EF22425182B1F00650C6B /* AccountHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01EF22325182B1F00650C6B /* AccountHeaderView.swift */; };
 		D01F41D924F880C400D55A2D /* TouchFallthroughTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01F41D624F880C400D55A2D /* TouchFallthroughTextView.swift */; };
-		D01F41E424F8889700D55A2D /* AttachmentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01F41E224F8889700D55A2D /* AttachmentsView.swift */; };
+		D01F41E424F8889700D55A2D /* StatusAttachmentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01F41E224F8889700D55A2D /* StatusAttachmentsView.swift */; };
 		D02E1F95250B13210071AD56 /* SafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02E1F94250B13210071AD56 /* SafariView.swift */; };
 		D0625E59250F092900502611 /* StatusListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0625E58250F092900502611 /* StatusListCell.swift */; };
 		D0625E5D250F0B5C00502611 /* StatusContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0625E5C250F0B5C00502611 /* StatusContentConfiguration.swift */; };
@@ -23,7 +23,7 @@
 		D0B5FE9B251583DB00478838 /* ProfileCollection+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B5FE9A251583DB00478838 /* ProfileCollection+Extensions.swift */; };
 		D0B7434925100DBB00C13DB6 /* StatusView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D0B7434825100DBB00C13DB6 /* StatusView.xib */; };
 		D0B8510C25259E56004E0744 /* LoadMoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B8510B25259E56004E0744 /* LoadMoreCell.swift */; };
-		D0BEB1F324F8EE8C001B0F04 /* AttachmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB1F224F8EE8C001B0F04 /* AttachmentView.swift */; };
+		D0BEB1F324F8EE8C001B0F04 /* StatusAttachmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB1F224F8EE8C001B0F04 /* StatusAttachmentView.swift */; };
 		D0BEB1F724F9A84B001B0F04 /* LoadingTableFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB1F624F9A84B001B0F04 /* LoadingTableFooterView.swift */; };
 		D0BEB1FF24F9E5BB001B0F04 /* ListsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB1FE24F9E5BB001B0F04 /* ListsView.swift */; };
 		D0BEB20524FA1107001B0F04 /* FiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB20424FA1107001B0F04 /* FiltersView.swift */; };
@@ -102,7 +102,7 @@
 		D01C6FAB252024BD003D0300 /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
 		D01EF22325182B1F00650C6B /* AccountHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountHeaderView.swift; sourceTree = "<group>"; };
 		D01F41D624F880C400D55A2D /* TouchFallthroughTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchFallthroughTextView.swift; sourceTree = "<group>"; };
-		D01F41E224F8889700D55A2D /* AttachmentsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttachmentsView.swift; sourceTree = "<group>"; };
+		D01F41E224F8889700D55A2D /* StatusAttachmentsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusAttachmentsView.swift; sourceTree = "<group>"; };
 		D02E1F94250B13210071AD56 /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariView.swift; sourceTree = "<group>"; };
 		D047FA8C24C3E21200AF17C5 /* Metatext.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Metatext.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0625E58250F092900502611 /* StatusListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusListCell.swift; sourceTree = "<group>"; };
@@ -119,7 +119,7 @@
 		D0B7434825100DBB00C13DB6 /* StatusView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StatusView.xib; sourceTree = "<group>"; };
 		D0B8510B25259E56004E0744 /* LoadMoreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreCell.swift; sourceTree = "<group>"; };
 		D0BDF66524FD7A6400C7FA1C /* ServiceLayer */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ServiceLayer; sourceTree = "<group>"; };
-		D0BEB1F224F8EE8C001B0F04 /* AttachmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentView.swift; sourceTree = "<group>"; };
+		D0BEB1F224F8EE8C001B0F04 /* StatusAttachmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusAttachmentView.swift; sourceTree = "<group>"; };
 		D0BEB1F624F9A84B001B0F04 /* LoadingTableFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingTableFooterView.swift; sourceTree = "<group>"; };
 		D0BEB1FE24F9E5BB001B0F04 /* ListsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsView.swift; sourceTree = "<group>"; };
 		D0BEB20424FA1107001B0F04 /* FiltersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersView.swift; sourceTree = "<group>"; };
@@ -199,15 +199,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		D01F41E024F8885900D55A2D /* Attachments */ = {
-			isa = PBXGroup;
-			children = (
-				D01F41E224F8889700D55A2D /* AttachmentsView.swift */,
-				D0BEB1F224F8EE8C001B0F04 /* AttachmentView.swift */,
-			);
-			path = Attachments;
-			sourceTree = "<group>";
-		};
 		D047FA7F24C3E21000AF17C5 = {
 			isa = PBXGroup;
 			children = (
@@ -249,6 +240,8 @@
 		D0625E55250F086B00502611 /* Status */ = {
 			isa = PBXGroup;
 			children = (
+				D0BEB1F224F8EE8C001B0F04 /* StatusAttachmentView.swift */,
+				D01F41E224F8889700D55A2D /* StatusAttachmentsView.swift */,
 				D0EA593F2522AC8700804347 /* CardView.swift */,
 				D0625E5C250F0B5C00502611 /* StatusContentConfiguration.swift */,
 				D0625E58250F092900502611 /* StatusListCell.swift */,
@@ -298,7 +291,6 @@
 				D0F0B125251A90F400942152 /* AccountListCell.swift */,
 				D0F0B10D251A868200942152 /* AccountView.swift */,
 				D0C7D42424F76169001EBDBB /* AddIdentityView.swift */,
-				D01F41E024F8885900D55A2D /* Attachments */,
 				D0C7D42324F76169001EBDBB /* CustomEmojiText.swift */,
 				D0BEB21024FA2A90001B0F04 /* EditFilterView.swift */,
 				D0BEB20424FA1107001B0F04 /* FiltersView.swift */,
@@ -554,7 +546,7 @@
 				D0E569E0252931B100FA1D72 /* LoadMoreContentConfiguration.swift in Sources */,
 				D0F0B136251AA12700942152 /* CollectionItemKind+Extensions.swift in Sources */,
 				D0625E5D250F0B5C00502611 /* StatusContentConfiguration.swift in Sources */,
-				D0BEB1F324F8EE8C001B0F04 /* AttachmentView.swift in Sources */,
+				D0BEB1F324F8EE8C001B0F04 /* StatusAttachmentView.swift in Sources */,
 				D0C7D49A24F7616A001EBDBB /* TableView.swift in Sources */,
 				D0F0B12E251A97E400942152 /* TableViewController.swift in Sources */,
 				D0F0B113251A86A000942152 /* AccountContentConfiguration.swift in Sources */,
@@ -581,7 +573,7 @@
 				D0EA59482522B8B600804347 /* ViewConstants.swift in Sources */,
 				D0C7D49824F7616A001EBDBB /* CustomEmojiText.swift in Sources */,
 				D0B8510C25259E56004E0744 /* LoadMoreCell.swift in Sources */,
-				D01F41E424F8889700D55A2D /* AttachmentsView.swift in Sources */,
+				D01F41E424F8889700D55A2D /* StatusAttachmentsView.swift in Sources */,
 				D0BEB21124FA2A91001B0F04 /* EditFilterView.swift in Sources */,
 				D0030982250C6C8500EACB32 /* URL+Extensions.swift in Sources */,
 				D0A1F4F7252E7D4B004435BF /* TableViewDataSource.swift in Sources */,
