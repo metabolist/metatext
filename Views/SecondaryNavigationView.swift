@@ -18,7 +18,7 @@ struct SecondaryNavigationView: View {
                         label: {
                             HStack {
                                 KFImage(viewModel.identification.identity.image,
-                                        options: .downsampled(dimension: 50, scaleFactor: displayScale))
+                                        options: .downsampled(dimension: .avatarDimension, scaleFactor: displayScale))
                                 VStack(alignment: .leading) {
                                     if viewModel.identification.identity.authenticated {
                                         if let account = viewModel.identification.identity.account {

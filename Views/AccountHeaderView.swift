@@ -95,7 +95,7 @@ private extension AccountHeaderView {
             equalTo: headerImageView.widthAnchor,
             multiplier: 1 / 3)
 
-        headerImageAspectRatioConstraint.priority = .init(999)
+        headerImageAspectRatioConstraint.priority = .justBelowMax
 
         NSLayoutConstraint.activate([
             headerImageAspectRatioConstraint,

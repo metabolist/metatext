@@ -57,15 +57,13 @@ extension AccountView: UITextViewDelegate {
 }
 
 private extension AccountView {
-    static let avatarDimension: CGFloat = 50
-
     func initialSetup() {
         let stackView = UIStackView()
 
         addSubview(avatarImageView)
         addSubview(stackView)
         avatarImageView.translatesAutoresizingMaskIntoConstraints = false
-        avatarImageView.layer.cornerRadius = Self.avatarDimension / 2
+        avatarImageView.layer.cornerRadius = .avatarDimension / 2
         avatarImageView.clipsToBounds = true
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
@@ -85,8 +83,8 @@ private extension AccountView {
         noteTextView.delegate = self
 
         NSLayoutConstraint.activate([
-            avatarImageView.widthAnchor.constraint(equalToConstant: Self.avatarDimension),
-            avatarImageView.heightAnchor.constraint(equalToConstant: Self.avatarDimension),
+            avatarImageView.widthAnchor.constraint(equalToConstant: .avatarDimension),
+            avatarImageView.heightAnchor.constraint(equalToConstant: .avatarDimension),
             avatarImageView.topAnchor.constraint(equalTo: readableContentGuide.topAnchor),
             avatarImageView.leadingAnchor.constraint(equalTo: readableContentGuide.leadingAnchor),
             avatarImageView.bottomAnchor.constraint(lessThanOrEqualTo: readableContentGuide.bottomAnchor),
