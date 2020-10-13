@@ -52,18 +52,17 @@ final class StatusAttachmentsView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        initializationActions()
+        initialSetup()
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
-
-        initializationActions()
+        fatalError("init(coder:) has not been implemented")
     }
 }
 
 private extension StatusAttachmentsView {
-    func initializationActions() {
+    func initialSetup() {
         backgroundColor = .clear
         layoutMargins = .zero
         clipsToBounds = true

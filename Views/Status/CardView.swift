@@ -35,19 +35,18 @@ final class CardView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        initializationActions()
+        initialSetup()
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
-
-        initializationActions()
+        fatalError("init(coder:) has not been implemented")
     }
 }
 
 private extension CardView {
     // swiftlint:disable:next function_body_length
-    func initializationActions() {
+    func initialSetup() {
         backgroundColor = .secondarySystemBackground
         layer.cornerRadius = .defaultCornerRadius
         clipsToBounds = true

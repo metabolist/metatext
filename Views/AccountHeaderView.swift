@@ -35,7 +35,7 @@ class AccountHeaderView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        initializationActions()
+        initialSetup()
     }
 
     @available(*, unavailable)
@@ -62,7 +62,7 @@ extension AccountHeaderView: UITextViewDelegate {
 }
 
 private extension AccountHeaderView {
-    func initializationActions() {
+    func initialSetup() {
         let baseStackView = UIStackView()
 
         addSubview(headerImageView)

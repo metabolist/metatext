@@ -17,6 +17,7 @@ class AccountView: UIView {
         super.init(frame: .zero)
 
         initialSetup()
+        applyAccountConfiguration()
     }
 
     @available(*, unavailable)
@@ -93,8 +94,6 @@ private extension AccountView {
             stackView.trailingAnchor.constraint(equalTo: readableContentGuide.trailingAnchor),
             stackView.bottomAnchor.constraint(equalTo: readableContentGuide.bottomAnchor)
         ])
-
-        applyAccountConfiguration()
     }
 
     func applyAccountConfiguration() {

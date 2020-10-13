@@ -50,6 +50,7 @@ final class StatusView: UIView {
         super.init(frame: .zero)
 
         initialSetup()
+        applyStatusConfiguration()
     }
 
     @available(*, unavailable)
@@ -287,8 +288,6 @@ private extension StatusView {
             avatarButton.bottomAnchor.constraint(equalTo: avatarImageView.bottomAnchor),
             avatarButton.trailingAnchor.constraint(equalTo: avatarImageView.trailingAnchor)
         ])
-
-        applyStatusConfiguration()
     }
 
     func applyStatusConfiguration() {

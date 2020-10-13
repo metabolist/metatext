@@ -9,12 +9,17 @@ final class TouchFallthroughTextView: UITextView {
 
     override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
-        initializationActions()
+
+        clipsToBounds = false
+        textDragInteraction?.isEnabled = false
+        textContainerInset = .zero
+        self.textContainer.lineFragmentPadding = 0
+        linkTextAttributes = [.foregroundColor: tintColor as Any, .underlineColor: UIColor.clear]
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        initializationActions()
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
@@ -123,14 +128,6 @@ final class TouchFallthroughTextView: UITextView {
 
 private extension TouchFallthroughTextView {
     static let linkHighlightViewTransform = CGAffineTransform(scaleX: 1.1, y: 1.1)
-
-    func initializationActions() {
-        clipsToBounds = false
-        textDragInteraction?.isEnabled = false
-        textContainerInset = .zero
-        textContainer.lineFragmentPadding = 0
-        linkTextAttributes = [.foregroundColor: tintColor as Any, .underlineColor: UIColor.clear]
-    }
 
     func removeLinkHighlightView() {
         UIView.animate(withDuration: .defaultAnimationDuration) {
