@@ -4,10 +4,11 @@ import Mastodon
 import ServiceLayer
 
 public struct CollectionItemIdentifier: Hashable {
-    public let id: String
-    public let kind: Kind
-    public let pinned: Bool
-    public let showMoreToggled: Bool
+    private let item: CollectionItem
+
+    init(item: CollectionItem) {
+        self.item = item
+    }
 }
 
 public extension CollectionItemIdentifier {
@@ -16,30 +17,29 @@ public extension CollectionItemIdentifier {
         case loadMore
         case account
     }
+
+    var kind: Kind {
+        switch item {
+        case .status:
+            return .status
+        case .loadMore:
+            return .loadMore
+        case .account:
+            return .account
+        }
+    }
 }
 
 extension CollectionItemIdentifier {
-    init(item: CollectionItem) {
-        switch item {
-        case let .status(status, configuration):
-            id = status.id
-            kind = .status
-            pinned = configuration.isPinned
-            showMoreToggled = configuration.showMoreToggled
-        case let .loadMore(loadMore):
-            id = loadMore.afterStatusId
-            kind = .loadMore
-            pinned = false
-            showMoreToggled = false
-        case let .account(account):
-            id = account.id
-            kind = .account
-            pinned = false
-            showMoreToggled = false
-        }
-    }
-
     public static func isSameExceptShowMoreToggled(lhs: Self, rhs: Self) -> Bool {
-        lhs.id == rhs.id && lhs.kind == rhs.kind && lhs.pinned == rhs.pinned
+        guard case let .status(lhsStatus, lhsConfiguration) = lhs.item,
+              case let .status(rhsStatus, rhsConfiguration) = rhs.item,
+              lhsStatus == rhsStatus
+        else { return false }
+
+        return lhsConfiguration.isContextParent == rhsConfiguration.isContextParent
+            && lhsConfiguration.isPinned == rhsConfiguration.isPinned
+            && lhsConfiguration.isReplyInContext == rhsConfiguration.isReplyInContext
+            && lhsConfiguration.hasReplyFollowing == rhsConfiguration.hasReplyFollowing
     }
 }
