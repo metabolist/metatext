@@ -9,7 +9,7 @@ final class StatusAttachmentsView: UIView {
     private let rightStackView = UIStackView()
     private var aspectRatioConstraint: NSLayoutConstraint?
 
-    var attachmentViewModels = [AttachmentViewModel]() {
+    var viewModel: StatusViewModel? {
         didSet {
             for stackView in [leftStackView, rightStackView] {
                 for view in stackView.arrangedSubviews {
@@ -18,6 +18,7 @@ final class StatusAttachmentsView: UIView {
                 }
             }
 
+            let attachmentViewModels = viewModel?.attachmentViewModels ?? []
             let attachmentCount = attachmentViewModels.count
 
             rightStackView.isHidden = attachmentCount == 1
@@ -36,7 +37,7 @@ final class StatusAttachmentsView: UIView {
 
             let newAspectRatio: CGFloat
 
-            if attachmentViewModels.count == 1, let aspectRatio = attachmentViewModels.first?.aspectRatio {
+            if attachmentCount == 1, let aspectRatio = attachmentViewModels.first?.aspectRatio {
                 newAspectRatio = max(CGFloat(aspectRatio), 16 / 9)
             } else {
                 newAspectRatio = 16 / 9

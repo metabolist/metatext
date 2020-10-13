@@ -393,7 +393,7 @@ private extension StatusView {
         timeLabel.isHidden = isContextParent
 
         attachmentsView.isHidden = viewModel.attachmentViewModels.count == 0
-        attachmentsView.attachmentViewModels = viewModel.attachmentViewModels
+        attachmentsView.viewModel = viewModel
 
         cardView.viewModel = viewModel.cardViewModel
         cardView.isHidden = viewModel.cardViewModel == nil
