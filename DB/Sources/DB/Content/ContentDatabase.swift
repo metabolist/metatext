@@ -149,37 +149,56 @@ public extension ContentDatabase {
         .eraseToAnyPublisher()
     }
 
-    func toggleShowMore(id: Status.Id) -> AnyPublisher<Never, Error> {
+    func toggleShowContent(id: Status.Id) -> AnyPublisher<Never, Error> {
         databaseWriter.writePublisher {
-            if let toggle = try StatusShowMoreToggle
-                .filter(StatusShowMoreToggle.Columns.statusId == id)
+            if let toggle = try StatusShowContentToggle
+                .filter(StatusShowContentToggle.Columns.statusId == id)
                 .fetchOne($0) {
                 try toggle.delete($0)
             } else {
-                try StatusShowMoreToggle(statusId: id).save($0)
+                try StatusShowContentToggle(statusId: id).save($0)
             }
         }
         .ignoreOutput()
         .eraseToAnyPublisher()
     }
 
-    func showMore(ids: Set<Status.Id>) -> AnyPublisher<Never, Error> {
+    func toggleShowAttachments(id: Status.Id) -> AnyPublisher<Never, Error> {
+        databaseWriter.writePublisher {
+            if let toggle = try StatusShowAttachmentsToggle
+                .filter(StatusShowAttachmentsToggle.Columns.statusId == id)
+                .fetchOne($0) {
+                try toggle.delete($0)
+            } else {
+                try StatusShowAttachmentsToggle(statusId: id).save($0)
+            }
+        }
+        .ignoreOutput()
+        .eraseToAnyPublisher()
+    }
+
+    func expand(ids: Set<Status.Id>) -> AnyPublisher<Never, Error> {
         databaseWriter.writePublisher {
             for id in ids {
-                try StatusShowMoreToggle(statusId: id).save($0)
+                try StatusShowContentToggle(statusId: id).save($0)
+                try StatusShowAttachmentsToggle(statusId: id).save($0)
             }
         }
         .ignoreOutput()
         .eraseToAnyPublisher()
     }
 
-    func showLess(ids: Set<Status.Id>) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher(
-            updates: StatusShowMoreToggle
-                .filter(ids.contains(StatusShowMoreToggle.Columns.statusId))
-                .deleteAll)
-            .ignoreOutput()
-            .eraseToAnyPublisher()
+    func collapse(ids: Set<Status.Id>) -> AnyPublisher<Never, Error> {
+        databaseWriter.writePublisher {
+            try StatusShowContentToggle
+                .filter(ids.contains(StatusShowContentToggle.Columns.statusId))
+                .deleteAll($0)
+            try StatusShowAttachmentsToggle
+                .filter(ids.contains(StatusShowContentToggle.Columns.statusId))
+                .deleteAll($0)
+        }
+        .ignoreOutput()
+        .eraseToAnyPublisher()
     }
 
     func append(accounts: [Account], toList list: AccountList) -> AnyPublisher<Never, Error> {

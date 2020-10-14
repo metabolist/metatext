@@ -35,7 +35,8 @@ extension TimelineItemsInfo {
             .map {
                 CollectionItem.status(
                     .init(info: $0),
-                    .init(showMoreToggled: $0.showMoreToggled))
+                    .init(showContentToggled: $0.showContentToggled,
+                          showAttachmentsToggled: $0.showAttachmentsToggled))
             }
 
         for loadMoreRecord in loadMoreRecords {
@@ -58,7 +59,9 @@ extension TimelineItemsInfo {
                         .map {
                             CollectionItem.status(
                                 .init(info: $0),
-                                .init(showMoreToggled: $0.showMoreToggled, isPinned: true))
+                                .init(showContentToggled: $0.showContentToggled,
+                                      showAttachmentsToggled: $0.showAttachmentsToggled,
+                                      isPinned: true))
                         },
                     timelineItems]
         } else {

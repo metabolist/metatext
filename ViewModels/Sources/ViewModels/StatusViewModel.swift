@@ -48,14 +48,29 @@ public struct StatusViewModel: CollectionItemViewModel {
 }
 
 public extension StatusViewModel {
-    var shouldShowMore: Bool {
+    var shouldShowContent: Bool {
         guard spoilerText != "" else { return true }
 
         if identification.identity.preferences.readingExpandSpoilers {
-            return !configuration.showMoreToggled
+            return !configuration.showContentToggled
         } else {
-            return configuration.showMoreToggled
+            return configuration.showContentToggled
         }
+    }
+
+    var shouldShowAttachments: Bool {
+        switch identification.identity.preferences.readingExpandMedia {
+        case .default, .unknown:
+            return !sensitive || configuration.showAttachmentsToggled
+        case .showAll:
+            return !configuration.showAttachmentsToggled
+        case .hideAll:
+            return configuration.showAttachmentsToggled
+        }
+    }
+
+    var shouldShowHideAttachmentsButton: Bool {
+        sensitive || identification.identity.preferences.readingExpandMedia == .hideAll
     }
 
     var accountName: String { "@" + statusService.status.displayStatus.account.acct }
@@ -107,9 +122,16 @@ public extension StatusViewModel {
         }
     }
 
-    func toggleShowMore() {
+    func toggleShowContent() {
         eventsSubject.send(
-            statusService.toggleShowMore()
+            statusService.toggleShowContent()
+                .map { _ in CollectionItemEvent.ignorableOutput }
+                .eraseToAnyPublisher())
+    }
+
+    func toggleShowAttachments() {
+        eventsSubject.send(
+            statusService.toggleShowAttachments()
                 .map { _ in CollectionItemEvent.ignorableOutput }
                 .eraseToAnyPublisher())
     }

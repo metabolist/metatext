@@ -1,7 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
-public enum ShowMoreForAllState {
+public enum ExpandAllState {
     case hidden
-    case showMore
-    case showLess
+    case expand
+    case collapse
 }

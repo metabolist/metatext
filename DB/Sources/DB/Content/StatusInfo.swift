@@ -8,8 +8,10 @@ struct StatusInfo: Codable, Hashable, FetchableRecord {
     let accountInfo: AccountInfo
     let reblogAccountInfo: AccountInfo?
     let reblogRecord: StatusRecord?
-    let showMoreToggle: StatusShowMoreToggle?
-    let reblogShowMoreToggle: StatusShowMoreToggle?
+    let showContentToggle: StatusShowContentToggle?
+    let reblogShowContentToggle: StatusShowContentToggle?
+    let showAttachmentsToggle: StatusShowAttachmentsToggle?
+    let reblogShowAttachmentsToggle: StatusShowAttachmentsToggle?
 }
 
 extension StatusInfo {
@@ -18,9 +20,11 @@ extension StatusInfo {
             .including(optional: AccountInfo.addingIncludes(StatusRecord.reblogAccount)
                         .forKey(CodingKeys.reblogAccountInfo))
             .including(optional: StatusRecord.reblog.forKey(CodingKeys.reblogRecord))
-            .including(optional: StatusRecord.showMoreToggle.forKey(CodingKeys.showMoreToggle))
-            .including(optional: StatusRecord.reblogShowMoreToggle
-                        .forKey(CodingKeys.reblogShowMoreToggle))
+            .including(optional: StatusRecord.showContentToggle.forKey(CodingKeys.showContentToggle))
+            .including(optional: StatusRecord.reblogShowContentToggle.forKey(CodingKeys.reblogShowContentToggle))
+            .including(optional: StatusRecord.showAttachmentsToggle.forKey(CodingKeys.showAttachmentsToggle))
+            .including(optional: StatusRecord.reblogShowAttachmentsToggle
+                        .forKey(CodingKeys.reblogShowAttachmentsToggle))
     }
 
     static func request(_ request: QueryInterfaceRequest<StatusRecord>) -> QueryInterfaceRequest<Self> {
@@ -31,7 +35,11 @@ extension StatusInfo {
         (record.filterableContent + (reblogRecord?.filterableContent ?? [])).joined(separator: " ")
     }
 
-    var showMoreToggled: Bool {
-        showMoreToggle != nil || reblogShowMoreToggle != nil
+    var showContentToggled: Bool {
+        showContentToggle != nil || reblogShowContentToggle != nil
+    }
+
+    var showAttachmentsToggled: Bool {
+        showAttachmentsToggle != nil || reblogShowAttachmentsToggle != nil
     }
 }

@@ -15,7 +15,7 @@ final public class CollectionItemsViewModel: ObservableObject {
     private var viewModelCache = [CollectionItem: (viewModel: CollectionItemViewModel, events: AnyCancellable)]()
     private let eventsSubject = PassthroughSubject<CollectionItemEvent, Never>()
     private let loadingSubject = PassthroughSubject<Bool, Never>()
-    private let showMoreForAllSubject: CurrentValueSubject<ShowMoreForAllState, Never>
+    private let expandAllSubject: CurrentValueSubject<ExpandAllState, Never>
     private var maintainScrollPosition: CollectionItemIdentifier?
     private var topVisibleIndexPath = IndexPath(item: 0, section: 0)
     private var lastSelectedLoadMore: LoadMore?
@@ -24,9 +24,9 @@ final public class CollectionItemsViewModel: ObservableObject {
     public init(collectionService: CollectionService, identification: Identification) {
         self.collectionService = collectionService
         self.identification = identification
-        showMoreForAllSubject = CurrentValueSubject(
+        expandAllSubject = CurrentValueSubject(
             collectionService is ContextService && !identification.identity.preferences.readingExpandSpoilers
-                ? .showMore : .hidden)
+                ? .expand : .hidden)
 
         collectionService.sections
             .handleEvents(receiveOutput: { [weak self] in self?.process(items: $0) })
@@ -52,8 +52,8 @@ extension CollectionItemsViewModel: CollectionViewModel {
 
     public var title: AnyPublisher<String, Never> { collectionService.title }
 
-    public var showMoreForAll: AnyPublisher<ShowMoreForAllState, Never> {
-        showMoreForAllSubject.eraseToAnyPublisher()
+    public var expandAll: AnyPublisher<ExpandAllState, Never> {
+        expandAllSubject.eraseToAnyPublisher()
     }
 
     public var alertItems: AnyPublisher<AlertItem, Never> { $alertItem.compactMap { $0 }.eraseToAnyPublisher() }
@@ -153,27 +153,27 @@ extension CollectionItemsViewModel: CollectionViewModel {
         }
     }
 
-    public func toggleShowMoreForAll() {
+    public func toggleExpandAll() {
         let statusIds = Set(items.value.reduce([], +).compactMap { item -> Status.Id? in
             guard case let .status(status, _) = item else { return nil }
 
             return status.id
         })
 
-        switch showMoreForAllSubject.value {
+        switch expandAllSubject.value {
         case .hidden:
             break
-        case .showMore:
-            (collectionService as? ContextService)?.showMore(ids: statusIds)
+        case .expand:
+            (collectionService as? ContextService)?.expand(ids: statusIds)
                 .assignErrorsToAlertItem(to: \.alertItem, on: self)
                 .collect()
-                .sink { [weak self] _ in self?.showMoreForAllSubject.send(.showLess) }
+                .sink { [weak self] _ in self?.expandAllSubject.send(.collapse) }
                 .store(in: &cancellables)
-        case .showLess:
-            (collectionService as? ContextService)?.showLess(ids: statusIds)
+        case .collapse:
+            (collectionService as? ContextService)?.collapse(ids: statusIds)
                 .assignErrorsToAlertItem(to: \.alertItem, on: self)
                 .collect()
-                .sink { [weak self] _ in self?.showMoreForAllSubject.send(.showMore) }
+                .sink { [weak self] _ in self?.expandAllSubject.send(.expand) }
                 .store(in: &cancellables)
         }
     }

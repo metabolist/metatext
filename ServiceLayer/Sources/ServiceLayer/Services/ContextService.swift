@@ -32,15 +32,11 @@ extension ContextService: CollectionService {
             .eraseToAnyPublisher()
     }
 
-    public func toggleShowMore(id: Status.Id) -> AnyPublisher<Never, Error> {
-        contentDatabase.toggleShowMore(id: id)
+    public func expand(ids: Set<Status.Id>) -> AnyPublisher<Never, Error> {
+        contentDatabase.expand(ids: ids)
     }
 
-    public func showMore(ids: Set<Status.Id>) -> AnyPublisher<Never, Error> {
-        contentDatabase.showMore(ids: ids)
-    }
-
-    public func showLess(ids: Set<Status.Id>) -> AnyPublisher<Never, Error> {
-        contentDatabase.showLess(ids: ids)
+    public func collapse(ids: Set<Status.Id>) -> AnyPublisher<Never, Error> {
+        contentDatabase.collapse(ids: ids)
     }
 }

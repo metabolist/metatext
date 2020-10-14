@@ -9,7 +9,6 @@ public protocol CollectionService {
     var title: AnyPublisher<String, Never> { get }
     var navigationService: NavigationService { get }
     func request(maxId: String?, minId: String?) -> AnyPublisher<Never, Error>
-    func toggleShowMore(id: Status.Id) -> AnyPublisher<Never, Error>
 }
 
 extension CollectionService {

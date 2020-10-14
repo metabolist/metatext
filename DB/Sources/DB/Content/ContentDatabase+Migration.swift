@@ -62,7 +62,11 @@ extension ContentDatabase {
                 t.column("pinned", .boolean)
             }
 
-            try db.create(table: "statusShowMoreToggle") { t in
+            try db.create(table: "statusShowContentToggle") { t in
+                t.column("statusId", .text).primaryKey().references("statusRecord", onDelete: .cascade)
+            }
+
+            try db.create(table: "statusShowAttachmentsToggle") { t in
                 t.column("statusId", .text).primaryKey().references("statusRecord", onDelete: .cascade)
             }
 

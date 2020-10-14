@@ -41,8 +41,4 @@ extension AccountListService: CollectionService {
             .flatMap { contentDatabase.append(accounts: $0.result, toList: list) }
             .eraseToAnyPublisher()
     }
-
-    public func toggleShowMore(id: Status.Id) -> AnyPublisher<Never, Error> {
-        contentDatabase.toggleShowMore(id: id)
-    }
 }

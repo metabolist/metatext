@@ -10,18 +10,21 @@ public enum CollectionItem: Hashable {
 
 public extension CollectionItem {
     struct StatusConfiguration: Hashable {
-        public let showMoreToggled: Bool
+        public let showContentToggled: Bool
+        public let showAttachmentsToggled: Bool
         public let isContextParent: Bool
         public let isPinned: Bool
         public let isReplyInContext: Bool
         public let hasReplyFollowing: Bool
 
-        init(showMoreToggled: Bool,
+        init(showContentToggled: Bool,
+             showAttachmentsToggled: Bool,
              isContextParent: Bool = false,
              isPinned: Bool = false,
              isReplyInContext: Bool = false,
              hasReplyFollowing: Bool = false) {
-            self.showMoreToggled = showMoreToggled
+            self.showContentToggled = showContentToggled
+            self.showAttachmentsToggled = showAttachmentsToggled
             self.isContextParent = isContextParent
             self.isPinned = isPinned
             self.isReplyInContext = isReplyInContext
@@ -31,5 +34,5 @@ public extension CollectionItem {
 }
 
 public extension CollectionItem.StatusConfiguration {
-    static let `default` = Self(showMoreToggled: false)
+    static let `default` = Self(showContentToggled: false, showAttachmentsToggled: false)
 }

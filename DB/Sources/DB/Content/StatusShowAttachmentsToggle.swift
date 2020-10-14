@@ -4,17 +4,17 @@ import Foundation
 import GRDB
 import Mastodon
 
-struct StatusShowMoreToggle: Codable, Hashable {
+struct StatusShowAttachmentsToggle: Codable, Hashable {
     let statusId: Status.Id
 }
 
-extension StatusShowMoreToggle {
+extension StatusShowAttachmentsToggle {
     enum Columns {
-        static let statusId = Column(StatusShowMoreToggle.CodingKeys.statusId)
+        static let statusId = Column(StatusShowAttachmentsToggle.CodingKeys.statusId)
     }
 }
 
-extension StatusShowMoreToggle: FetchableRecord, PersistableRecord {
+extension StatusShowAttachmentsToggle: FetchableRecord, PersistableRecord {
     static func databaseJSONDecoder(for column: String) -> JSONDecoder {
         MastodonDecoder()
     }

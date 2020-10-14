@@ -164,8 +164,8 @@ private extension TableViewController {
             .sink { [weak self] in self?.handle(event: $0) }
             .store(in: &cancellables)
 
-        viewModel.showMoreForAll.receive(on: DispatchQueue.main)
-            .sink { [weak self] in self?.set(showMoreForAllState: $0) }
+        viewModel.expandAll.receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.set(expandAllState: $0) }
             .store(in: &cancellables)
 
         viewModel.loading.receive(on: RunLoop.main).sink { [weak self] in
@@ -194,7 +194,7 @@ private extension TableViewController {
             offsetFromNavigationBar = tableView.rectForRow(at: indexPath).origin.y - navigationBarMaxY
         }
 
-        self.dataSource.apply(update.items.snapshot()) { [weak self] in
+        self.dataSource.apply(update.items.snapshot(), animatingDifferences: false) { [weak self] in
             guard let self = self else { return }
 
             if
@@ -241,20 +241,20 @@ private extension TableViewController {
         }
     }
 
-    func set(showMoreForAllState: ShowMoreForAllState) {
-        switch showMoreForAllState {
+    func set(expandAllState: ExpandAllState) {
+        switch expandAllState {
         case .hidden:
             navigationItem.rightBarButtonItem = nil
-        case .showMore:
+        case .expand:
             navigationItem.rightBarButtonItem = UIBarButtonItem(
                 title: NSLocalizedString("status.show-more", comment: ""),
-                image: UIImage(systemName: "eye.slash"),
-                primaryAction: UIAction { [weak self] _ in self?.viewModel.toggleShowMoreForAll() })
-        case .showLess:
+                image: UIImage(systemName: "eye"),
+                primaryAction: UIAction { [weak self] _ in self?.viewModel.toggleExpandAll() })
+        case .collapse:
             navigationItem.rightBarButtonItem = UIBarButtonItem(
                 title: NSLocalizedString("status.show-less", comment: ""),
-                image: UIImage(systemName: "eye"),
-                primaryAction: UIAction { [weak self] _ in self?.viewModel.toggleShowMoreForAll() })
+                image: UIImage(systemName: "eye.slash"),
+                primaryAction: UIAction { [weak self] _ in self?.viewModel.toggleExpandAll() })
         }
     }
 

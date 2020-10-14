@@ -24,8 +24,12 @@ public struct StatusService {
 }
 
 public extension StatusService {
-    func toggleShowMore() -> AnyPublisher<Never, Error> {
-        contentDatabase.toggleShowMore(id: status.displayStatus.id)
+    func toggleShowContent() -> AnyPublisher<Never, Error> {
+        contentDatabase.toggleShowContent(id: status.displayStatus.id)
+    }
+
+    func toggleShowAttachments() -> AnyPublisher<Never, Error> {
+        contentDatabase.toggleShowAttachments(id: status.displayStatus.id)
     }
 
     func toggleFavorited() -> AnyPublisher<Never, Error> {

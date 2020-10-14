@@ -11,6 +11,8 @@
 "add-identity.join" = "Join";
 "add-identity.request-invite" = "Request an invite";
 "add-identity.unable-to-connect-to-instance" = "Unable to connect to instance";
+"attachment.sensitive-content" = "Sensitive content";
+"attachment.media-hidden" = "Media hidden";
 "registration.review-terms-of-use-and-privacy-policy-%@" = "Please review %@'s Terms of Use and Privacy Policy to continue";
 "registration.username" = "Username";
 "registration.email" = "Email";

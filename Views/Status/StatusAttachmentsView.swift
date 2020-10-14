@@ -7,6 +7,10 @@ final class StatusAttachmentsView: UIView {
     private let containerStackView = UIStackView()
     private let leftStackView = UIStackView()
     private let rightStackView = UIStackView()
+    private let curtain = UIVisualEffectView(effect: UIBlurEffect(style: .systemMaterial))
+    private let curtainButton = UIButton(type: .system)
+    private let hideButtonBackground = UIVisualEffectView(effect: UIBlurEffect(style: .systemMaterial))
+    private let hideButton = UIButton()
     private var aspectRatioConstraint: NSLayoutConstraint?
 
     var viewModel: StatusViewModel? {
@@ -47,6 +51,15 @@ final class StatusAttachmentsView: UIView {
             aspectRatioConstraint = widthAnchor.constraint(equalTo: heightAnchor, multiplier: newAspectRatio)
             aspectRatioConstraint?.priority = .justBelowMax
             aspectRatioConstraint?.isActive = true
+
+            curtain.isHidden = viewModel?.shouldShowAttachments ?? false
+            curtainButton.setTitle(
+                NSLocalizedString((viewModel?.sensitive ?? false)
+                                    ? "attachment.sensitive-content"
+                                    : "attachment.media-hidden",
+                                  comment: ""),
+                                   for: .normal)
+            hideButtonBackground.isHidden = !(viewModel?.shouldShowHideAttachmentsButton ?? false)
         }
     }
 
@@ -63,6 +76,7 @@ final class StatusAttachmentsView: UIView {
 }
 
 private extension StatusAttachmentsView {
+    // swiftlint:disable:next function_body_length
     func initialSetup() {
         backgroundColor = .clear
         layoutMargins = .zero
@@ -81,11 +95,57 @@ private extension StatusAttachmentsView {
         containerStackView.addArrangedSubview(leftStackView)
         containerStackView.addArrangedSubview(rightStackView)
 
+        let toggleShowAttachmentsAction = UIAction { [weak self] _ in
+            self?.viewModel?.toggleShowAttachments()
+        }
+
+        addSubview(hideButtonBackground)
+        hideButtonBackground.translatesAutoresizingMaskIntoConstraints = false
+        hideButtonBackground.clipsToBounds = true
+        hideButtonBackground.layer.cornerRadius = .defaultCornerRadius
+
+        hideButton.addAction(toggleShowAttachmentsAction, for: .touchUpInside)
+        hideButtonBackground.contentView.addSubview(hideButton)
+        hideButton.translatesAutoresizingMaskIntoConstraints = false
+        hideButton.setImage(
+            UIImage(systemName: "eye.slash", withConfiguration: UIImage.SymbolConfiguration(scale: .medium)),
+            for: .normal)
+        addSubview(curtain)
+        curtain.translatesAutoresizingMaskIntoConstraints = false
+        curtain.contentView.addSubview(curtainButton)
+
+        curtainButton.addAction(toggleShowAttachmentsAction, for: .touchUpInside)
+        curtainButton.translatesAutoresizingMaskIntoConstraints = false
+        curtainButton.titleLabel?.font = .preferredFont(forTextStyle: .headline)
+        curtainButton.titleLabel?.adjustsFontForContentSizeCategory = true
+
         NSLayoutConstraint.activate([
-            containerStackView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
-            containerStackView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
-            containerStackView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-            containerStackView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
+            containerStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            containerStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            containerStackView.topAnchor.constraint(equalTo: topAnchor),
+            containerStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            hideButtonBackground.topAnchor.constraint(equalTo: topAnchor, constant: .defaultSpacing),
+            hideButtonBackground.leadingAnchor.constraint(equalTo: leadingAnchor, constant: .defaultSpacing),
+            hideButton.topAnchor.constraint(
+                equalTo: hideButtonBackground.contentView.topAnchor,
+                constant: .compactSpacing),
+            hideButton.leadingAnchor.constraint(
+                equalTo: hideButtonBackground.contentView.leadingAnchor,
+                constant: .compactSpacing),
+            hideButtonBackground.contentView.trailingAnchor.constraint(
+                equalTo: hideButton.trailingAnchor,
+                constant: .compactSpacing),
+            hideButtonBackground.contentView.bottomAnchor.constraint(
+                equalTo: hideButton.bottomAnchor,
+                constant: .compactSpacing),
+            curtain.topAnchor.constraint(equalTo: topAnchor),
+            curtain.leadingAnchor.constraint(equalTo: leadingAnchor),
+            curtain.trailingAnchor.constraint(equalTo: trailingAnchor),
+            curtain.bottomAnchor.constraint(equalTo: bottomAnchor),
+            curtainButton.topAnchor.constraint(equalTo: curtain.contentView.topAnchor),
+            curtainButton.leadingAnchor.constraint(equalTo: curtain.contentView.leadingAnchor),
+            curtainButton.trailingAnchor.constraint(equalTo: curtain.contentView.trailingAnchor),
+            curtainButton.bottomAnchor.constraint(equalTo: curtain.contentView.bottomAnchor)
         ])
     }
 }

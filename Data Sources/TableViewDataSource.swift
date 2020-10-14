@@ -30,20 +30,5 @@ class TableViewDataSource: UITableViewDiffableDataSource<Int, CollectionItemIden
 
             return cell
         }
-
-        defaultRowAnimation = .none
-    }
-
-    override func apply(_ snapshot: NSDiffableDataSourceSnapshot<Int, CollectionItemIdentifier>,
-                        animatingDifferences: Bool = true,
-                        completion: (() -> Void)? = nil) {
-        let differenceExceptShowMoreToggled = self.snapshot().itemIdentifiers.difference(
-            from: snapshot.itemIdentifiers,
-            by: CollectionItemIdentifier.isSameExceptShowMoreToggled(lhs:rhs:))
-        let animated = snapshot.itemIdentifiers.count > 0 && differenceExceptShowMoreToggled.count == 0
-
-        updateQueue.async {
-            super.apply(snapshot, animatingDifferences: animated, completion: completion)
-        }
     }
 }

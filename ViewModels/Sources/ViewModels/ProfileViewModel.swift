@@ -49,8 +49,8 @@ extension ProfileViewModel: CollectionViewModel {
         $accountViewModel.compactMap { $0?.accountName }.eraseToAnyPublisher()
     }
 
-    public var showMoreForAll: AnyPublisher<ShowMoreForAllState, Never> {
-        collectionViewModel.flatMap(\.showMoreForAll).eraseToAnyPublisher()
+    public var expandAll: AnyPublisher<ExpandAllState, Never> {
+        collectionViewModel.flatMap(\.expandAll).eraseToAnyPublisher()
     }
 
     public var alertItems: AnyPublisher<AlertItem, Never> {
@@ -101,7 +101,7 @@ extension ProfileViewModel: CollectionViewModel {
         collectionViewModel.value.viewModel(indexPath: indexPath)
     }
 
-    public func toggleShowMoreForAll() {
-        collectionViewModel.value.toggleShowMoreForAll()
+    public func toggleExpandAll() {
+        collectionViewModel.value.toggleExpandAll()
     }
 }

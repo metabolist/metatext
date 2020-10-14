@@ -13,7 +13,7 @@ final class StatusView: UIView {
     let accountLabel = UILabel()
     let timeLabel = UILabel()
     let spoilerTextLabel = UILabel()
-    let toggleShowMoreButton = UIButton(type: .system)
+    let toggleShowContentButton = UIButton(type: .system)
     let contentTextView = TouchFallthroughTextView()
     let attachmentsView = StatusAttachmentsView()
     let cardView = CardView()
@@ -148,12 +148,12 @@ private extension StatusView {
         spoilerTextLabel.adjustsFontForContentSizeCategory = true
         mainStackView.addArrangedSubview(spoilerTextLabel)
 
-        toggleShowMoreButton.titleLabel?.font = .preferredFont(forTextStyle: .headline)
-        toggleShowMoreButton.titleLabel?.adjustsFontForContentSizeCategory = true
-        toggleShowMoreButton.addAction(
-            UIAction { [weak self] _ in self?.statusConfiguration.viewModel.toggleShowMore() },
+        toggleShowContentButton.titleLabel?.font = .preferredFont(forTextStyle: .headline)
+        toggleShowContentButton.titleLabel?.adjustsFontForContentSizeCategory = true
+        toggleShowContentButton.addAction(
+            UIAction { [weak self] _ in self?.statusConfiguration.viewModel.toggleShowContent() },
             for: .touchUpInside)
-        mainStackView.addArrangedSubview(toggleShowMoreButton)
+        mainStackView.addArrangedSubview(toggleShowContentButton)
 
         contentTextView.adjustsFontForContentSizeCategory = true
         contentTextView.isScrollEnabled = false
@@ -365,14 +365,14 @@ private extension StatusView {
         spoilerTextLabel.font = contentFont
         spoilerTextLabel.attributedText = mutableSpoilerText
         spoilerTextLabel.isHidden = spoilerTextLabel.text == ""
-        toggleShowMoreButton.setTitle(
-            viewModel.shouldShowMore
+        toggleShowContentButton.setTitle(
+            viewModel.shouldShowContent
                 ? NSLocalizedString("status.show-less", comment: "")
                 : NSLocalizedString("status.show-more", comment: ""),
             for: .normal)
-        toggleShowMoreButton.isHidden = viewModel.spoilerText == ""
+        toggleShowContentButton.isHidden = viewModel.spoilerText == ""
 
-        contentTextView.isHidden = !viewModel.shouldShowMore
+        contentTextView.isHidden = !viewModel.shouldShowContent
 
         nameAccountTimeStackView.axis = isContextParent ? .vertical : .horizontal
         nameAccountTimeStackView.alignment = isContextParent ? .leading : .fill
