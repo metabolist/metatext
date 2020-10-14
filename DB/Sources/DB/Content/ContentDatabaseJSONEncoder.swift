@@ -1,9 +1,10 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import Foundation
+import Mastodon
 
-public final class MastodonEncoder: JSONEncoder {
-    public override init() {
+final class ContentDatabaseJSONEncoder: JSONEncoder {
+    override init() {
         super.init()
 
         let dateFormatter = DateFormatter()

@@ -4,7 +4,7 @@ import Foundation
 import GRDB
 import Mastodon
 
-struct TimelineStatusJoin: Codable, FetchableRecord, PersistableRecord {
+struct TimelineStatusJoin: ContentDatabaseRecord {
     let timelineId: Timeline.Id
     let statusId: Status.Id
 

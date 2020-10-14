@@ -4,7 +4,7 @@ import Foundation
 import GRDB
 import Mastodon
 
-struct StatusRecord: Codable, Hashable {
+struct StatusRecord: ContentDatabaseRecord, Hashable {
     let id: Status.Id
     let uri: String
     let createdAt: Date
@@ -67,16 +67,6 @@ extension StatusRecord {
         static let muted = Column(StatusRecord.CodingKeys.muted)
         static let bookmarked = Column(StatusRecord.CodingKeys.bookmarked)
         static let pinned = Column(StatusRecord.CodingKeys.pinned)
-    }
-}
-
-extension StatusRecord: FetchableRecord, PersistableRecord {
-    static func databaseJSONDecoder(for column: String) -> JSONDecoder {
-        MastodonDecoder()
-    }
-
-    static func databaseJSONEncoder(for column: String) -> JSONEncoder {
-        MastodonEncoder()
     }
 }
 

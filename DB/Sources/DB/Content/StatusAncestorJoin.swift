@@ -4,7 +4,7 @@ import Foundation
 import GRDB
 import Mastodon
 
-struct StatusAncestorJoin: Codable, FetchableRecord, PersistableRecord {
+struct StatusAncestorJoin: ContentDatabaseRecord {
     let parentId: Status.Id
     let statusId: Status.Id
     let index: Int

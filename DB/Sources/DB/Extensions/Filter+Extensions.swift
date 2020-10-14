@@ -4,15 +4,7 @@ import Foundation
 import GRDB
 import Mastodon
 
-extension Filter: FetchableRecord, PersistableRecord {
-    public static func databaseJSONDecoder(for column: String) -> JSONDecoder {
-        MastodonDecoder()
-    }
-
-    public static func databaseJSONEncoder(for column: String) -> JSONEncoder {
-        MastodonEncoder()
-    }
-}
+extension Filter: ContentDatabaseRecord {}
 
 extension Filter {
     enum Columns: String, ColumnExpression {

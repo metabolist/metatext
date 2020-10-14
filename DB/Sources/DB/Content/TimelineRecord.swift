@@ -4,23 +4,13 @@ import Foundation
 import GRDB
 import Mastodon
 
-struct TimelineRecord: Codable, Hashable {
+struct TimelineRecord: ContentDatabaseRecord, Hashable {
     let id: Timeline.Id
     let listId: List.Id?
     let listTitle: String?
     let tag: String?
     let accountId: Account.Id?
     let profileCollection: ProfileCollection?
-}
-
-extension TimelineRecord: FetchableRecord, PersistableRecord {
-    static func databaseJSONDecoder(for column: String) -> JSONDecoder {
-        MastodonDecoder()
-    }
-
-    static func databaseJSONEncoder(for column: String) -> JSONEncoder {
-        MastodonEncoder()
-    }
 }
 
 extension TimelineRecord {

@@ -4,7 +4,7 @@ import Foundation
 import GRDB
 import Mastodon
 
-struct AccountListJoin: Codable, FetchableRecord, PersistableRecord {
+struct AccountListJoin: ContentDatabaseRecord {
     let accountId: Account.Id
     let listId: AccountList.Id
     let index: Int

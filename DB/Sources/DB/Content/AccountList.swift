@@ -3,7 +3,7 @@
 import Foundation
 import GRDB
 
-public struct AccountList: Codable, FetchableRecord, PersistableRecord {
+public struct AccountList: ContentDatabaseRecord {
     let id: Id
 
     public init() {
