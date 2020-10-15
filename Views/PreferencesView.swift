@@ -22,6 +22,11 @@ struct PreferencesView: View {
                                     viewModel: .init(identification: identification)))
                 }
             }
+            Section(header: Text("preferences.app")) {
+                NavigationLink("preferences.media",
+                               destination: MediaPreferencesView(
+                                viewModel: .init(identification: identification)))
+            }
         }
         .navigationTitle("preferences")
     }

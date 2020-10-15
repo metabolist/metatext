@@ -18,11 +18,11 @@ public struct StatusViewModel: CollectionItemViewModel {
     public let pollOptionTitles: [String]
     public let pollEmoji: [Emoji]
     public var configuration = CollectionItem.StatusConfiguration.default
+    public let identification: Identification
     public let events: AnyPublisher<AnyPublisher<CollectionItemEvent, Error>, Never>
 
     private let statusService: StatusService
     private let eventsSubject = PassthroughSubject<AnyPublisher<CollectionItemEvent, Error>, Never>()
-    private let identification: Identification
 
     init(statusService: StatusService, identification: Identification) {
         self.statusService = statusService
@@ -76,6 +76,8 @@ public extension StatusViewModel {
     var accountName: String { "@" + statusService.status.displayStatus.account.acct }
 
     var avatarURL: URL { statusService.status.displayStatus.account.avatar }
+
+    var avatarStaticURL: URL { statusService.status.displayStatus.account.avatarStatic }
 
     var time: String? { statusService.status.displayStatus.createdAt.timeAgo }
 

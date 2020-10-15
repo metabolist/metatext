@@ -16,7 +16,7 @@ final public class CollectionItemsViewModel: ObservableObject {
     private let eventsSubject = PassthroughSubject<CollectionItemEvent, Never>()
     private let loadingSubject = PassthroughSubject<Bool, Never>()
     private let expandAllSubject: CurrentValueSubject<ExpandAllState, Never>
-    private var maintainScrollPosition: CollectionItemIdentifier?
+    private var maintainScrollPosition: CollectionItem?
     private var topVisibleIndexPath = IndexPath(item: 0, section: 0)
     private var lastSelectedLoadMore: LoadMore?
     private var cancellables = Set<AnyCancellable>()
@@ -44,7 +44,7 @@ final public class CollectionItemsViewModel: ObservableObject {
 extension CollectionItemsViewModel: CollectionViewModel {
     public var updates: AnyPublisher<CollectionUpdate, Never> {
         items.map { [weak self] in
-            CollectionUpdate(items: $0.map { $0.map(CollectionItemIdentifier.init(item:)) },
+            CollectionUpdate(items: $0,
                              maintainScrollPosition: self?.maintainScrollPosition)
         }
         .eraseToAnyPublisher()
@@ -145,7 +145,8 @@ extension CollectionItemsViewModel: CollectionViewModel {
             }
 
             let viewModel = AccountViewModel(
-                accountService: collectionService.navigationService.accountService(account: account))
+                accountService: collectionService.navigationService.accountService(account: account),
+                identification: identification)
 
             cache(viewModel: viewModel, forItem: item)
 
@@ -187,7 +188,7 @@ private extension CollectionItemsViewModel {
     }
 
     func process(items: [[CollectionItem]]) {
-        maintainScrollPosition = identifierForScrollPositionMaintenance(newItems: items)
+        maintainScrollPosition = itemForScrollPositionMaintenance(newItems: items)
         self.items.send(items)
 
         let itemsSet = Set(items.reduce([], +))
@@ -195,7 +196,7 @@ private extension CollectionItemsViewModel {
         viewModelCache = viewModelCache.filter { itemsSet.contains($0.key) }
     }
 
-    func identifierForScrollPositionMaintenance(newItems: [[CollectionItem]]) -> CollectionItemIdentifier? {
+    func itemForScrollPositionMaintenance(newItems: [[CollectionItem]]) -> CollectionItem? {
         let flatNewItems = newItems.reduce([], +)
 
         if collectionService is ContextService,
@@ -205,7 +206,7 @@ private extension CollectionItemsViewModel {
 
             return configuration.isContextParent // Maintain scroll position of parent after initial load of context
            }) {
-            return .init(item: contextParent)
+            return contextParent
         } else if collectionService is TimelineService {
             let flatItems = items.value.reduce([], +)
             let difference = flatNewItems.difference(from: flatItems)
@@ -222,7 +223,7 @@ private extension CollectionItemsViewModel {
 
                         return status.id == loadMore.beforeStatusId
                        }) {
-                        return .init(item: statusAfterLoadMore)
+                        return statusAfterLoadMore
                     }
                 }
             }
@@ -234,7 +235,7 @@ private extension CollectionItemsViewModel {
                 if newItems.count > topVisibleIndexPath.section,
                    let newIndex = newItems[topVisibleIndexPath.section].firstIndex(of: topVisibleItem),
                    newIndex > topVisibleIndexPath.item {
-                    return .init(item: topVisibleItem)
+                    return topVisibleItem
                 }
             }
         }

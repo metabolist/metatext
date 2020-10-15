@@ -1,5 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
+import Combine
+import Network
 import UIKit
 import ViewModels
 
@@ -12,6 +14,7 @@ final class StatusAttachmentsView: UIView {
     private let hideButtonBackground = UIVisualEffectView(effect: UIBlurEffect(style: .systemMaterial))
     private let hideButton = UIButton()
     private var aspectRatioConstraint: NSLayoutConstraint?
+    private var cancellables = Set<AnyCancellable>()
 
     var viewModel: StatusViewModel? {
         didSet {
@@ -72,6 +75,27 @@ final class StatusAttachmentsView: UIView {
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension StatusAttachmentsView {
+    var shouldAutoplay: Bool {
+        guard !isHidden, let viewModel = viewModel, viewModel.shouldShowAttachments else { return false }
+
+        let appPreferences = viewModel.identification.appPreferences
+        let onWifi = NWPathMonitor(requiredInterfaceType: .wifi).currentPath.status == .satisfied
+        let hasVideoAttachment = viewModel.attachmentViewModels.contains { $0.attachment.type == .video }
+        let shouldAutoplayVideo = appPreferences.autoplayVideos == .always
+            || appPreferences.autoplayVideos == .wifi && onWifi
+
+        if hasVideoAttachment && shouldAutoplayVideo {
+            return true
+        }
+
+        let hasGIFAttachment = viewModel.attachmentViewModels.contains { $0.attachment.type == .gifv }
+        let shouldAutoplayGIF = appPreferences.autoplayGIFs == .always || appPreferences.autoplayGIFs == .wifi && onWifi
+
+        return hasGIFAttachment && shouldAutoplayGIF
     }
 }
 
@@ -147,5 +171,20 @@ private extension StatusAttachmentsView {
             curtainButton.trailingAnchor.constraint(equalTo: curtain.contentView.trailingAnchor),
             curtainButton.bottomAnchor.constraint(equalTo: curtain.contentView.bottomAnchor)
         ])
+
+        NotificationCenter.default.publisher(for: TableViewController.autoplayableAttachmentsViewNotification)
+            .sink { [weak self] in
+                guard let self = self else { return }
+
+                for attachmentView in self.attachmentViews {
+                    attachmentView.playing = $0.object as? Self === self
+                }
+            }
+            .store(in: &cancellables)
+    }
+
+    var attachmentViews: [StatusAttachmentView] {
+        (leftStackView.arrangedSubviews + rightStackView.arrangedSubviews)
+            .compactMap { $0 as? StatusAttachmentView }
     }
 }

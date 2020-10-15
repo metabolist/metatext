@@ -11,7 +11,7 @@ class TableViewController: UITableViewController {
     private let loadingTableFooterView = LoadingTableFooterView()
     private let webfingerIndicatorView = WebfingerIndicatorView()
     private var cancellables = Set<AnyCancellable>()
-    private var cellHeightCaches = [CGFloat: [CollectionItemIdentifier: CGFloat]]()
+    private var cellHeightCaches = [CGFloat: [CollectionItem: CGFloat]]()
 
     private lazy var dataSource: TableViewDataSource = {
         .init(tableView: tableView, viewModelProvider: viewModel.viewModel(indexPath:))
@@ -54,6 +54,18 @@ class TableViewController: UITableViewController {
         viewModel.request(maxId: nil, minId: nil)
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        updateAutoplayViews()
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
+        updateAutoplayViews()
+    }
+
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard scrollView.isDragging else { return }
 
@@ -62,6 +74,8 @@ class TableViewController: UITableViewController {
         for loadMoreView in visibleLoadMoreViews {
             loadMoreView.directionChanged(up: up)
         }
+
+        updateAutoplayViews()
     }
 
     override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
@@ -75,7 +89,7 @@ class TableViewController: UITableViewController {
                             forRowAt indexPath: IndexPath) {
         guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
 
-        var heightCache = cellHeightCaches[tableView.frame.width] ?? [CollectionItemIdentifier: CGFloat]()
+        var heightCache = cellHeightCaches[tableView.frame.width] ?? [CollectionItem: CGFloat]()
 
         heightCache[item] = cell.frame.height
         cellHeightCaches[tableView.frame.width] = heightCache
@@ -102,6 +116,12 @@ class TableViewController: UITableViewController {
 
         sizeTableHeaderFooterViews()
     }
+}
+
+extension TableViewController {
+    static let autoplayableAttachmentsView = PassthroughSubject<StatusAttachmentsView?, Never>()
+    static let autoplayableAttachmentsViewNotification =
+        Notification.Name("com.metabolist.metatext.attachment-view-became-autoplayable")
 }
 
 extension TableViewController: UITableViewDataSourcePrefetching {
@@ -151,6 +171,9 @@ extension TableViewController {
 }
 
 private extension TableViewController {
+    static let autoplayViews = [PlayerView](repeating: .init(), count: 4)
+    static var visibleVideoURLs = Set<URL>()
+
     var visibleLoadMoreViews: [LoadMoreView] {
         tableView.visibleCells.compactMap { $0.contentView as? LoadMoreView }
     }
@@ -178,8 +201,18 @@ private extension TableViewController {
 
         tableView.publisher(for: \.contentOffset)
             .compactMap { [weak self] _ in self?.tableView.indexPathsForVisibleRows?.first }
-            .removeDuplicates()
             .sink { [weak self] in self?.viewModel.viewedAtTop(indexPath: $0) }
+            .store(in: &cancellables)
+
+        Self.autoplayableAttachmentsView
+            .removeDuplicates()
+            .sink {
+                let notification = Notification(
+                    name: Self.autoplayableAttachmentsViewNotification,
+                    object: $0,
+                    userInfo: nil)
+                NotificationCenter.default.post(notification)
+            }
             .store(in: &cancellables)
     }
 
@@ -206,6 +239,8 @@ private extension TableViewController {
                     self.tableView.contentOffset.y -= offsetFromNavigationBar
                 }
             }
+
+            self.updateAutoplayViews()
         }
     }
 
@@ -262,5 +297,22 @@ private extension TableViewController {
         let activityViewController = UIActivityViewController(activityItems: [url], applicationActivities: nil)
 
         present(activityViewController, animated: true, completion: nil)
+    }
+
+    func updateAutoplayViews() {
+        if let visibleView = navigationController?.visibleViewController?.view,
+           view.isDescendant(of: visibleView),
+           let superview = view.superview,
+           let attachmentsViewClosestToCenter = tableView.visibleCells
+            .compactMap({ ($0.contentView as? StatusView)?.attachmentsView })
+            .filter(\.shouldAutoplay)
+            .min(by: {
+                abs(superview.convert($0.frame, from: $0.superview).midY - view.frame.midY)
+                    < abs(superview.convert($1.frame, from: $1.superview).midY - view.frame.midY)
+            }) {
+            Self.autoplayableAttachmentsView.send(attachmentsViewClosestToCenter)
+        } else {
+            Self.autoplayableAttachmentsView.send(nil)
+        }
     }
 }

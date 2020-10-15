@@ -34,7 +34,6 @@ extension AccountView: UIContentView {
 
             self.accountConfiguration = accountConfiguration
 
-            avatarImageView.kf.cancelDownloadTask()
             applyAccountConfiguration()
         }
     }
@@ -97,7 +96,16 @@ private extension AccountView {
     }
 
     func applyAccountConfiguration() {
-        avatarImageView.kf.setImage(with: accountConfiguration.viewModel.avatarURL)
+        let appPreferences = accountConfiguration.viewModel.identification.appPreferences
+        let avatarURL: URL
+
+        if !appPreferences.shouldReduceMotion && appPreferences.animateAvatars == .everywhere {
+            avatarURL = accountConfiguration.viewModel.avatarURL
+        } else {
+            avatarURL = accountConfiguration.viewModel.avatarStaticURL
+        }
+
+        avatarImageView.kf.setImage(with: avatarURL)
 
         if accountConfiguration.viewModel.displayName == "" {
             displayNameLabel.isHidden = true

@@ -3,18 +3,18 @@
 import UIKit
 import ViewModels
 
-class TableViewDataSource: UITableViewDiffableDataSource<Int, CollectionItemIdentifier> {
+final class TableViewDataSource: UITableViewDiffableDataSource<Int, CollectionItem> {
     private let updateQueue =
         DispatchQueue(label: "com.metabolist.metatext.collection-data-source.update-queue")
 
     init(tableView: UITableView, viewModelProvider: @escaping (IndexPath) -> CollectionItemViewModel) {
-        for kind in CollectionItemIdentifier.Kind.allCases {
-            tableView.register(kind.cellClass, forCellReuseIdentifier: String(describing: kind.cellClass))
+        for cellClass in CollectionItem.cellClasses {
+            tableView.register(cellClass, forCellReuseIdentifier: String(describing: cellClass))
         }
 
-        super.init(tableView: tableView) { tableView, indexPath, identifier in
+        super.init(tableView: tableView) { tableView, indexPath, item in
             let cell = tableView.dequeueReusableCell(
-                withIdentifier: String(describing: identifier.kind.cellClass),
+                withIdentifier: String(describing: item.cellClass),
                 for: indexPath)
 
             switch (cell, viewModelProvider(indexPath)) {
@@ -29,6 +29,14 @@ class TableViewDataSource: UITableViewDiffableDataSource<Int, CollectionItemIden
             }
 
             return cell
+        }
+    }
+
+    override func apply(_ snapshot: NSDiffableDataSourceSnapshot<Int, CollectionItem>,
+                        animatingDifferences: Bool = true,
+                        completion: (() -> Void)? = nil) {
+        updateQueue.async {
+            super.apply(snapshot, animatingDifferences: animatingDifferences, completion: completion)
         }
     }
 }

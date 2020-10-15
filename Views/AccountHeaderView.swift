@@ -12,7 +12,16 @@ class AccountHeaderView: UIView {
     var viewModel: ProfileViewModel? {
         didSet {
             if let accountViewModel = viewModel?.accountViewModel {
-                headerImageView.kf.setImage(with: accountViewModel.headerURL)
+                let appPreferences = accountViewModel.identification.appPreferences
+                let headerURL: URL
+
+                if !appPreferences.shouldReduceMotion, appPreferences.animateHeaders {
+                    headerURL = accountViewModel.headerURL
+                } else {
+                    headerURL = accountViewModel.headerStaticURL
+                }
+
+                headerImageView.kf.setImage(with: headerURL)
 
                 let noteFont = UIFont.preferredFont(forTextStyle: .callout)
                 let mutableNote = NSMutableAttributedString(attributedString: accountViewModel.note)

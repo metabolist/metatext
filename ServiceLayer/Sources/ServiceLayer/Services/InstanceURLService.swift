@@ -9,11 +9,11 @@ import MastodonAPI
 
 public struct InstanceURLService {
     private let httpClient: HTTPClient
-    private var userDefaultsClient: UserDefaultsClient
+    private var appPreferences: AppPreferences
 
     public init(environment: AppEnvironment) {
         httpClient = HTTPClient(session: environment.session, decoder: MastodonDecoder())
-        userDefaultsClient = UserDefaultsClient(userDefaults: environment.userDefaults)
+        appPreferences = AppPreferences(environment: environment)
     }
 }
 
@@ -61,7 +61,7 @@ public extension InstanceURLService {
 
     func updateFilter() -> AnyPublisher<Never, Error> {
         httpClient.request(UpdatedFilterTarget())
-            .handleEvents(receiveOutput: { userDefaultsClient.updateInstanceFilter($0) })
+            .handleEvents(receiveOutput: { appPreferences.updateInstanceFilter($0) })
             .ignoreOutput()
             .eraseToAnyPublisher()
     }
@@ -119,7 +119,7 @@ private extension InstanceURLService {
         ]))
 
     var filter: BloomFilter<String> {
-        userDefaultsClient.updatedInstanceFilter ?? Self.defaultFilter
+        appPreferences.updatedInstanceFilter ?? Self.defaultFilter
     }
 
     private func isFiltered(url: URL) -> Bool {

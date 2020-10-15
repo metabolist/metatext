@@ -7,12 +7,14 @@ import ServiceLayer
 
 public struct AccountViewModel: CollectionItemViewModel {
     public let events: AnyPublisher<AnyPublisher<CollectionItemEvent, Error>, Never>
+    public let identification: Identification
 
     private let accountService: AccountService
     private let eventsSubject = PassthroughSubject<AnyPublisher<CollectionItemEvent, Error>, Never>()
 
-    init(accountService: AccountService) {
+    init(accountService: AccountService, identification: Identification) {
         self.accountService = accountService
+        self.identification = identification
         events = eventsSubject.eraseToAnyPublisher()
     }
 }
@@ -20,7 +22,11 @@ public struct AccountViewModel: CollectionItemViewModel {
 public extension AccountViewModel {
     var avatarURL: URL { accountService.account.avatar }
 
+    var avatarStaticURL: URL { accountService.account.avatarStatic }
+
     var headerURL: URL { accountService.account.header }
+
+    var headerStaticURL: URL { accountService.account.headerStatic }
 
     var displayName: String { accountService.account.displayName }
 

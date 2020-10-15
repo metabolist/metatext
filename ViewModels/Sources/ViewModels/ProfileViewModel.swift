@@ -23,7 +23,7 @@ final public class ProfileViewModel {
                 identification: identification))
 
         profileService.accountServicePublisher
-            .map(AccountViewModel.init(accountService:))
+            .map { AccountViewModel(accountService: $0, identification: identification) }
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$accountViewModel)
 

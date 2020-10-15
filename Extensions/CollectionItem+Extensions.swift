@@ -2,7 +2,9 @@
 
 import ViewModels
 
-extension CollectionItemIdentifier.Kind {
+extension CollectionItem {
+    static let cellClasses = [StatusListCell.self, AccountListCell.self, LoadMoreCell.self]
+
     var cellClass: AnyClass {
         switch self {
         case .status:

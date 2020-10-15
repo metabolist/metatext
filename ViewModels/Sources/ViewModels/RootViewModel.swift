@@ -84,25 +84,26 @@ private extension RootViewModel {
         identityPublisher
             .filter { [weak self] in $0.id != self?.navigationViewModel?.identification.identity.id }
             .map { [weak self] in
+                guard let self = self else { return nil }
+
                 let identification = Identification(
                     identity: $0,
                     publisher: identityPublisher.eraseToAnyPublisher(),
-                    service: identityService)
+                    service: identityService,
+                    environment: self.environment)
 
-                if let self = self {
-                    identification.service.updateLastUse()
-                        .sink { _ in } receiveValue: { _ in }
-                        .store(in: &self.cancellables)
+                identification.service.updateLastUse()
+                    .sink { _ in } receiveValue: { _ in }
+                    .store(in: &self.cancellables)
 
-                    self.userNotificationService.isAuthorized()
-                        .filter { $0 }
-                        .zip(self.registerForRemoteNotifications())
-                        .filter { identification.identity.lastRegisteredDeviceToken != $1 }
-                        .map { ($1, identification.identity.pushSubscriptionAlerts) }
-                        .flatMap(identification.service.createPushSubscription(deviceToken:alerts:))
-                        .sink { _ in } receiveValue: { _ in }
-                        .store(in: &self.cancellables)
-                }
+                self.userNotificationService.isAuthorized()
+                    .filter { $0 }
+                    .zip(self.registerForRemoteNotifications())
+                    .filter { identification.identity.lastRegisteredDeviceToken != $1 }
+                    .map { ($1, identification.identity.pushSubscriptionAlerts) }
+                    .flatMap(identification.service.createPushSubscription(deviceToken:alerts:))
+                    .sink { _ in } receiveValue: { _ in }
+                    .store(in: &self.cancellables)
 
                 return NavigationViewModel(identification: identification)
             }

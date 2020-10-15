@@ -6,11 +6,16 @@ import ServiceLayer
 
 public final class Identification: ObservableObject {
     @Published private(set) public var identity: Identity
+    @Published public var appPreferences: AppPreferences
     let service: IdentityService
 
-    init(identity: Identity, publisher: AnyPublisher<Identity, Never>, service: IdentityService) {
+    init(identity: Identity,
+         publisher: AnyPublisher<Identity, Never>,
+         service: IdentityService,
+         environment: AppEnvironment) {
         self.identity = identity
         self.service = service
+        appPreferences = AppPreferences(environment: environment)
 
         DispatchQueue.main.async {
             publisher.dropFirst().assign(to: &self.$identity)
