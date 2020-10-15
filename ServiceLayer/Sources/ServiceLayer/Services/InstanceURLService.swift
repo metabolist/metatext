@@ -61,7 +61,7 @@ public extension InstanceURLService {
 
     func updateFilter() -> AnyPublisher<Never, Error> {
         httpClient.request(UpdatedFilterTarget())
-            .handleEvents(receiveOutput: { userDefaultsClient.updatedInstanceFilter = $0 })
+            .handleEvents(receiveOutput: { userDefaultsClient.updateInstanceFilter($0) })
             .ignoreOutput()
             .eraseToAnyPublisher()
     }
@@ -81,13 +81,43 @@ private struct UpdatedFilterTarget: DecodableTarget {
 private extension InstanceURLService {
     static let httpsPrefix = "https://"
     static let shortestPossibleURLLength = 4
-    // swiftlint:disable line_length
-    static let defaultFilterData = #"{"hashes":["djb232","djb2a32","fnv132","fnv1a32","sdbm32"],"data":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAIAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAgAAAAAQAAAAAABAAACAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAABAAAEAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAIAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAIAAAQAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAQAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAADAAAAAAAAAAAAA=="}"#
-        .data(using: .utf8)!
-    // swiftlint:enable line_length
-    // swiftlint:disable force_try
-    static let defaultFilter = try! JSONDecoder().decode(BloomFilter<String>.self, from: defaultFilterData)
-    // swiftlint:enable force_try
+    static let defaultFilter = BloomFilter<String>(
+        hashes: [.djb232, .djb2a32, .sdbm32, .fnv132, .fnv1a32],
+        data: Data([
+            0, 0, 0, 16, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 8, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 2, 2, 8, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 32, 0, 0, 0, 0, 0, 0, 18, 0, 0, 0, 0, 0, 0,
+            128, 0, 0, 32, 0, 128, 0, 0, 0, 4, 16, 4, 32, 0, 0, 16, 16, 4, 32, 0, 0, 128, 0, 16, 0, 0, 0, 0, 0, 0, 0, 4,
+            0, 0, 0, 0, 4, 0, 0, 3, 2, 0, 0, 0, 4, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 132, 0, 0, 64, 0, 0, 0, 2,
+            0, 0, 0, 0, 0, 0, 64, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 1, 0, 0,
+            0, 0, 0, 96, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 128, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 8, 0, 1, 0, 8, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64, 160,
+            0, 0, 0, 8, 64, 0, 1, 32, 0, 0, 1, 0, 0, 0, 0, 64, 8, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 0, 32, 0, 0, 0, 0, 0, 130, 65, 0, 4, 0, 0, 0, 0,
+            0, 0, 0, 8, 0, 0, 0, 0, 128, 65, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 64, 0, 0, 64, 0, 128, 0, 0, 0, 16,
+            0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 2, 128, 0, 1, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 8, 0, 0, 0, 0, 0, 0, 0, 16, 0, 1, 48, 0, 0, 0, 2, 0, 0, 0, 0, 48, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0,
+            0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 16, 0, 0, 0, 16, 0, 16, 0, 2, 64,
+            0, 0, 0, 128, 0, 0, 0, 64, 16, 0, 128, 0, 0, 0, 0, 0, 0, 0, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 8, 0, 0, 0, 4, 8, 0, 64, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 66,
+            0, 64, 0, 16, 8, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 1, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 64, 0, 128, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 10, 0,
+            0, 4, 0, 0, 0, 1, 24, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 128, 4, 64, 0, 128, 0, 0, 0,
+            0, 0, 0, 0, 0, 32, 0, 0, 0, 0, 0, 0, 0, 8, 0, 8, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 16, 0, 2, 0, 0, 0,
+            0, 0, 0, 0, 128, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64, 0, 129, 8, 0, 8, 0, 0, 0, 8, 0, 0,
+            0, 2, 0, 0, 128, 8, 36, 32, 0, 64, 0, 0, 0, 4, 0, 32, 0, 0, 0, 0, 0, 16, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 8, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 16, 0, 0, 0, 136, 128, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 16, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 64, 0, 64, 0, 0, 0, 16, 0, 0, 0, 8, 0, 0, 0, 0, 16, 0,
+            0, 0, 0, 32, 0, 4, 0, 0, 0, 0, 0, 128, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64, 0,
+            0, 0, 0, 8, 0, 4, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 1, 0, 0, 0, 160, 0, 0, 0, 4, 0, 0, 16, 0, 0, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 64,
+            16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 16, 0, 0, 0, 4, 0, 1, 0, 0, 0, 16, 0, 0,
+            0, 0, 0, 0, 0, 0, 128, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 4, 0, 64, 0, 1, 4, 0, 0, 0, 0,
+            0, 0, 0, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 128, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 12, 16, 0, 72, 0, 0, 0, 0, 0, 0
+        ]))
+
     var filter: BloomFilter<String> {
         userDefaultsClient.updatedInstanceFilter ?? Self.defaultFilter
     }

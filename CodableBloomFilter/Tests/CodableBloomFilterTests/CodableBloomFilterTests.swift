@@ -12,18 +12,8 @@ final class CodableBloomFilterTests: XCTestCase {
         XCTAssertEqual(Hash.fnv1a32.apply("hash"), 3469047761)
     }
 
-    func noHashesProvided() throws {
-        XCTAssertThrowsError(try BloomFilter<String>(hashes: [], byteCount: 8)) {
-            guard case BloomFilterError.noHashesProvided = $0 else {
-                XCTFail("Expected no hashers provided error")
-
-                return
-            }
-        }
-    }
-
     func testContains() throws {
-        var sut = try BloomFilter<String>(hashes: [.sdbm32, .djb232], byteCount: 8)
+        var sut = BloomFilter<String>(hashes: [.sdbm32, .djb232], byteCount: 8)
 
         sut.insert("lol")
         sut.insert("ok")
@@ -35,7 +25,7 @@ final class CodableBloomFilterTests: XCTestCase {
     }
 
     func testData() throws {
-        var sut = try BloomFilter<String>(hashes: [.sdbm32, .djb232], byteCount: 8)
+        var sut = BloomFilter<String>(hashes: [.sdbm32, .djb232], byteCount: 8)
 
         sut.insert("lol")
         sut.insert("ok")
@@ -44,7 +34,7 @@ final class CodableBloomFilterTests: XCTestCase {
     }
 
     func testFromData() throws {
-        let sut = try BloomFilter<String>(hashes: [.sdbm32, .djb232], data: Data([0, 16, 0, 0, 0, 2, 0, 144]))
+        let sut = BloomFilter<String>(hashes: [.sdbm32, .djb232], data: Data([0, 16, 0, 0, 0, 2, 0, 144]))
 
         XCTAssert(sut.contains("lol"))
         XCTAssert(sut.contains("ok"))
@@ -53,7 +43,7 @@ final class CodableBloomFilterTests: XCTestCase {
     }
 
     func testCoding() throws {
-        var sut = try BloomFilter<String>(hashes: [.sdbm32, .djb232], byteCount: 8)
+        var sut = BloomFilter<String>(hashes: [.sdbm32, .djb232], byteCount: 8)
         let expectedData = Data(#"{"data":"ABAAAAACAJA=","hashes":["djb232","sdbm32"]}"#.utf8)
 
         sut.insert("lol")
@@ -88,7 +78,7 @@ final class CodableBloomFilterTests: XCTestCase {
     }
 
     func testDataEncodingStrategy() throws {
-        var sut = try BloomFilter<String>(hashes: [.sdbm32, .djb232], byteCount: 8)
+        var sut = BloomFilter<String>(hashes: [.sdbm32, .djb232], byteCount: 8)
         let expectedData = Data(#"{"data":"0010000000020090","hashes":["djb232","sdbm32"]}"#.utf8)
 
         sut.insert("lol")

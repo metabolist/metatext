@@ -3,7 +3,7 @@
 import CodableBloomFilter
 import Foundation
 
-final class UserDefaultsClient {
+struct UserDefaultsClient {
     private let userDefaults: UserDefaults
 
     init(userDefaults: UserDefaults) {
@@ -13,23 +13,15 @@ final class UserDefaultsClient {
 
 extension UserDefaultsClient {
     var updatedInstanceFilter: BloomFilter<String>? {
-        get {
-            guard let data = self[.updatedFilter] as Data? else {
-                return nil
-            }
-
-            return try? JSONDecoder().decode(BloomFilter<String>.self, from: data)
+        guard let data = self[.updatedFilter] as Data? else {
+            return nil
         }
 
-        set {
-            var data: Data?
+        return try? JSONDecoder().decode(BloomFilter<String>.self, from: data)
+    }
 
-            if let newValue = newValue {
-                data = try? JSONEncoder().encode(newValue)
-            }
-
-            self[.updatedFilter] = data
-        }
+    func updateInstanceFilter( _ filter: BloomFilter<String>) {
+        userDefaults.set(try? JSONEncoder().encode(filter), forKey: Item.updatedFilter.rawValue)
     }
 }
 
