@@ -127,28 +127,28 @@ public extension StatusViewModel {
     func toggleShowContent() {
         eventsSubject.send(
             statusService.toggleShowContent()
-                .map { _ in CollectionItemEvent.ignorableOutput }
+                .map { _ in .ignorableOutput }
                 .eraseToAnyPublisher())
     }
 
     func toggleShowAttachments() {
         eventsSubject.send(
             statusService.toggleShowAttachments()
-                .map { _ in CollectionItemEvent.ignorableOutput }
+                .map { _ in .ignorableOutput }
                 .eraseToAnyPublisher())
     }
 
     func urlSelected(_ url: URL) {
         eventsSubject.send(
             statusService.navigationService.item(url: url)
-                .map { CollectionItemEvent.navigation($0) }
+                .map { .navigation($0) }
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher())
     }
 
     func accountSelected() {
         eventsSubject.send(
-            Just(CollectionItemEvent.navigation(
+            Just(.navigation(
                     .profile(
                         statusService.navigationService.profileService(
                             account: statusService.status.displayStatus.account))))
@@ -158,14 +158,14 @@ public extension StatusViewModel {
 
     func rebloggedBySelected() {
         eventsSubject.send(
-            Just(CollectionItemEvent.navigation(.collection(statusService.rebloggedByService())))
+            Just(.navigation(.collection(statusService.rebloggedByService())))
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher())
     }
 
     func favoritedBySelected() {
         eventsSubject.send(
-            Just(CollectionItemEvent.navigation(.collection(statusService.favoritedByService())))
+            Just(.navigation(.collection(statusService.favoritedByService())))
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher())
     }
@@ -173,14 +173,18 @@ public extension StatusViewModel {
     func toggleFavorited() {
         eventsSubject.send(
             statusService.toggleFavorited()
-                .map { _ in CollectionItemEvent.ignorableOutput }
+                .map { _ in .ignorableOutput }
                 .eraseToAnyPublisher())
+    }
+
+    func attachmentSelected(viewModel: AttachmentViewModel) {
+        eventsSubject.send(Just(.attachment(viewModel, self)).setFailureType(to: Error.self).eraseToAnyPublisher())
     }
 
     func shareStatus() {
         guard let url = statusService.status.displayStatus.url else { return }
 
-        eventsSubject.send(Just(CollectionItemEvent.share(url)).setFailureType(to: Error.self).eraseToAnyPublisher())
+        eventsSubject.send(Just(.share(url)).setFailureType(to: Error.self).eraseToAnyPublisher())
     }
 }
 

@@ -30,8 +30,12 @@ final class StatusAttachmentsView: UIView {
 
             rightStackView.isHidden = attachmentCount == 1
 
-            for (index, viewModel) in attachmentViewModels.enumerated() {
-                let attachmentView = StatusAttachmentView(viewModel: viewModel)
+            for (index, attachmentViewModel) in attachmentViewModels.enumerated() {
+                let attachmentView = StatusAttachmentView(viewModel: attachmentViewModel)
+
+                attachmentView.button.addAction(
+                    UIAction { [weak self] _ in self?.viewModel?.attachmentSelected(viewModel: attachmentViewModel) },
+                    for: .touchUpInside)
 
                 if attachmentCount == 2 && index == 1
                     || attachmentCount == 3 && index != 0

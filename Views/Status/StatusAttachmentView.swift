@@ -109,6 +109,10 @@ private extension StatusAttachmentView {
         switch viewModel.attachment.type {
         case .image, .video, .gifv:
             imageView.kf.setImage(with: viewModel.attachment.previewUrl)
+        case .audio:
+            playImageView.image = UIImage(systemName: "waveform.circle",
+                                          withConfiguration: UIImage.SymbolConfiguration(textStyle: .largeTitle))
+            backgroundColor = .secondarySystemBackground
         default:
             break
         }

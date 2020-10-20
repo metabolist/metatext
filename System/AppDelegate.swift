@@ -1,5 +1,6 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
+import AVKit
 import Combine
 import UIKit
 
@@ -26,6 +27,8 @@ extension AppDelegate: UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         self.application = application
+
+        try? AVAudioSession.sharedInstance().setCategory(.ambient, mode: .default)
 
         return true
     }

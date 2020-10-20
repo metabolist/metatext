@@ -1,5 +1,6 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
+import AVKit
 import Combine
 import SafariServices
 import SwiftUI
@@ -170,6 +171,16 @@ extension TableViewController {
     }
 }
 
+extension TableViewController: AVPlayerViewControllerDelegate {
+    func playerViewController(
+        _ playerViewController: AVPlayerViewController,
+        willEndFullScreenPresentationWithAnimationCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        try? AVAudioSession.sharedInstance().setCategory(.ambient, mode: .default)
+        playerViewController.player?.isMuted = true
+        updateAutoplayViews()
+    }
+}
+
 private extension TableViewController {
     static let autoplayViews = [PlayerView](repeating: .init(), count: 4)
     static var visibleVideoURLs = Set<URL>()
@@ -250,7 +261,7 @@ private extension TableViewController {
             break
         case let .share(url):
             share(url: url)
-        case let.navigation(navigation):
+        case let .navigation(navigation):
             switch navigation {
             case let .collection(collectionService):
                 show(TableViewController(
@@ -273,6 +284,35 @@ private extension TableViewController {
             case .webfingerEnd:
                 webfingerIndicatorView.stopAnimating()
             }
+        case let .attachment(attachmentViewModel, statusViewModel):
+            present(attachmentViewModel: attachmentViewModel, statusViewModel: statusViewModel)
+        }
+    }
+
+    func present(attachmentViewModel: AttachmentViewModel, statusViewModel: StatusViewModel) {
+        switch attachmentViewModel.attachment.type {
+        case .audio, .video:
+            let playerViewController = AVPlayerViewController()
+            let player: AVPlayer
+
+            if attachmentViewModel.attachment.type == .video {
+                player = PlayerCache.shared.player(url: attachmentViewModel.attachment.url)
+            } else {
+                player = AVPlayer(url: attachmentViewModel.attachment.url)
+            }
+
+            playerViewController.delegate = self
+            playerViewController.player = player
+
+            present(playerViewController, animated: true) {
+                try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+                player.isMuted = false
+                player.play()
+            }
+        case .image, .gifv:
+            break
+        case .unknown:
+            break
         }
     }
 

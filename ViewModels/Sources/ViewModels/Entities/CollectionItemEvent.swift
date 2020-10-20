@@ -6,5 +6,6 @@ import ServiceLayer
 public enum CollectionItemEvent {
     case ignorableOutput
     case navigation(Navigation)
+    case attachment(AttachmentViewModel, StatusViewModel)
     case share(URL)
 }
