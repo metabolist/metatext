@@ -310,7 +310,12 @@ private extension TableViewController {
                 player.play()
             }
         case .image, .gifv:
-            break
+            let imagePageViewController = ImagePageViewController(
+                initiallyVisible: attachmentViewModel,
+                statusViewModel: statusViewModel)
+            let imageNavigationController = ImageNavigationController(imagePageViewController: imagePageViewController)
+
+            present(imageNavigationController, animated: true)
         case .unknown:
             break
         }

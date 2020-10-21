@@ -100,6 +100,7 @@ private extension StatusAttachmentView {
 
         addSubview(playerView)
         playerView.translatesAutoresizingMaskIntoConstraints = false
+        playerView.videoGravity = .resizeAspectFill
         playerView.isHidden = true
 
         addSubview(button)

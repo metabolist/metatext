@@ -13,6 +13,7 @@ extension CGFloat {
 
 extension TimeInterval {
     static let defaultAnimationDuration: Self = 0.5
+    static let shortAnimationDuration = defaultAnimationDuration / 2
 }
 
 extension UIImage {

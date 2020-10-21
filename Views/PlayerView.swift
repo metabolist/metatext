@@ -15,12 +15,22 @@ class PlayerView: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+    }
 
-        (layer as? AVPlayerLayer)?.videoGravity = .resizeAspectFill
+    var videoGravity: AVLayerVideoGravity {
+        get { playerLayer.videoGravity }
+        set { playerLayer.videoGravity = newValue }
     }
 
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+private extension PlayerView {
+    var playerLayer: AVPlayerLayer {
+        // swiftlint:disable:next force_cast
+        layer as! AVPlayerLayer
     }
 }
