@@ -6,12 +6,19 @@ import Mastodon
 public struct AttachmentViewModel {
     public let attachment: Attachment
 
-    init(attachment: Attachment) {
+    private let status: Status
+
+    init(attachment: Attachment, status: Status) {
         self.attachment = attachment
+        self.status = status
     }
 }
 
 public extension AttachmentViewModel {
+    var tag: Int {
+        attachment.id.appending(status.id).hashValue
+    }
+
     var aspectRatio: Double? {
         if
             let info = attachment.meta?.original,

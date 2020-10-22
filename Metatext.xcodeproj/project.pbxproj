@@ -22,6 +22,10 @@
 		D08B8D3D253F929E00B1EBEF /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08B8D3C253F929E00B1EBEF /* ImageViewController.swift */; };
 		D08B8D42253F92B600B1EBEF /* ImagePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08B8D41253F92B600B1EBEF /* ImagePageViewController.swift */; };
 		D08B8D4A253FC36500B1EBEF /* ImageNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08B8D49253FC36500B1EBEF /* ImageNavigationController.swift */; };
+		D08B8D602540DE3B00B1EBEF /* ZoomAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08B8D5D2540DE3A00B1EBEF /* ZoomAnimator.swift */; };
+		D08B8D612540DE3B00B1EBEF /* ZoomDismissalInteractionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08B8D5E2540DE3A00B1EBEF /* ZoomDismissalInteractionController.swift */; };
+		D08B8D622540DE3B00B1EBEF /* ZoomTransitionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08B8D5F2540DE3A00B1EBEF /* ZoomTransitionController.swift */; };
+		D08B8D672540DEB200B1EBEF /* ZoomAnimatableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08B8D662540DEB200B1EBEF /* ZoomAnimatableView.swift */; };
 		D0A1F4F7252E7D4B004435BF /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A1F4F6252E7D4B004435BF /* TableViewDataSource.swift */; };
 		D0A3C2F725390A9700739F88 /* AppPreferences+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A3C2F625390A9700739F88 /* AppPreferences+Extensions.swift */; };
 		D0B32F50250B373600311912 /* RegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B32F4F250B373600311912 /* RegistrationView.swift */; };
@@ -122,6 +126,10 @@
 		D08B8D3C253F929E00B1EBEF /* ImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
 		D08B8D41253F92B600B1EBEF /* ImagePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePageViewController.swift; sourceTree = "<group>"; };
 		D08B8D49253FC36500B1EBEF /* ImageNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageNavigationController.swift; sourceTree = "<group>"; };
+		D08B8D5D2540DE3A00B1EBEF /* ZoomAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoomAnimator.swift; sourceTree = "<group>"; };
+		D08B8D5E2540DE3A00B1EBEF /* ZoomDismissalInteractionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoomDismissalInteractionController.swift; sourceTree = "<group>"; };
+		D08B8D5F2540DE3A00B1EBEF /* ZoomTransitionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoomTransitionController.swift; sourceTree = "<group>"; };
+		D08B8D662540DEB200B1EBEF /* ZoomAnimatableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoomAnimatableView.swift; sourceTree = "<group>"; };
 		D0A1F4F6252E7D4B004435BF /* TableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewDataSource.swift; sourceTree = "<group>"; };
 		D0A3C2F625390A9700739F88 /* AppPreferences+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppPreferences+Extensions.swift"; sourceTree = "<group>"; };
 		D0AD03552505814D0085A466 /* Base16 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Base16; sourceTree = "<group>"; };
@@ -234,6 +242,7 @@
 				D0C7D41D24F76169001EBDBB /* Supporting Files */,
 				D0C7D45324F76169001EBDBB /* System */,
 				D0666A2224C677B400F3F04B /* Tests */,
+				D08B8D5C2540DDFC00B1EBEF /* Transitions */,
 				D0C7D43024F76169001EBDBB /* View Controllers */,
 				D0E2C1CF24FD8BA400854680 /* ViewModels */,
 				D0C7D42024F76169001EBDBB /* Views */,
@@ -276,6 +285,17 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D08B8D5C2540DDFC00B1EBEF /* Transitions */ = {
+			isa = PBXGroup;
+			children = (
+				D08B8D662540DEB200B1EBEF /* ZoomAnimatableView.swift */,
+				D08B8D5D2540DE3A00B1EBEF /* ZoomAnimator.swift */,
+				D08B8D5E2540DE3A00B1EBEF /* ZoomDismissalInteractionController.swift */,
+				D08B8D5F2540DE3A00B1EBEF /* ZoomTransitionController.swift */,
+			);
+			path = Transitions;
 			sourceTree = "<group>";
 		};
 		D0A1F4F5252E7D2A004435BF /* Data Sources */ = {
@@ -569,12 +589,14 @@
 				D0C7D49C24F7616A001EBDBB /* RootView.swift in Sources */,
 				D0F0B126251A90F400942152 /* AccountListCell.swift in Sources */,
 				D0B32F50250B373600311912 /* RegistrationView.swift in Sources */,
+				D08B8D612540DE3B00B1EBEF /* ZoomDismissalInteractionController.swift in Sources */,
 				D0E569E0252931B100FA1D72 /* LoadMoreContentConfiguration.swift in Sources */,
 				D0FE1C9825368A9D003EF1EB /* PlayerCache.swift in Sources */,
 				D0F0B136251AA12700942152 /* CollectionItem+Extensions.swift in Sources */,
 				D0625E5D250F0B5C00502611 /* StatusContentConfiguration.swift in Sources */,
 				D0BEB1F324F8EE8C001B0F04 /* StatusAttachmentView.swift in Sources */,
 				D0C7D49A24F7616A001EBDBB /* TableView.swift in Sources */,
+				D08B8D622540DE3B00B1EBEF /* ZoomTransitionController.swift in Sources */,
 				D0F0B12E251A97E400942152 /* TableViewController.swift in Sources */,
 				D0FE1C8F253686F9003EF1EB /* PlayerView.swift in Sources */,
 				D0F0B113251A86A000942152 /* AccountContentConfiguration.swift in Sources */,
@@ -586,6 +608,8 @@
 				D0C7D49D24F7616A001EBDBB /* PostingReadingPreferencesView.swift in Sources */,
 				D0B5FE9B251583DB00478838 /* ProfileCollection+Extensions.swift in Sources */,
 				D0C7D49E24F7616A001EBDBB /* SecondaryNavigationView.swift in Sources */,
+				D08B8D602540DE3B00B1EBEF /* ZoomAnimator.swift in Sources */,
+				D08B8D672540DEB200B1EBEF /* ZoomAnimatableView.swift in Sources */,
 				D0C7D4DA24F7616A001EBDBB /* View+Extensions.swift in Sources */,
 				D0C7D4D524F7616A001EBDBB /* String+Extensions.swift in Sources */,
 				D0C7D4A224F7616A001EBDBB /* NotificationTypesPreferencesView.swift in Sources */,

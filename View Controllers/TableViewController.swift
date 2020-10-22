@@ -13,6 +13,7 @@ class TableViewController: UITableViewController {
     private let webfingerIndicatorView = WebfingerIndicatorView()
     private var cancellables = Set<AnyCancellable>()
     private var cellHeightCaches = [CGFloat: [CollectionItem: CGFloat]]()
+    private var transitionViewTag = -1
 
     private lazy var dataSource: TableViewDataSource = {
         .init(tableView: tableView, viewModelProvider: viewModel.viewModel(indexPath:))
@@ -181,10 +182,36 @@ extension TableViewController: AVPlayerViewControllerDelegate {
     }
 }
 
-private extension TableViewController {
-    static let autoplayViews = [PlayerView](repeating: .init(), count: 4)
-    static var visibleVideoURLs = Set<URL>()
+extension TableViewController: ZoomAnimatorDelegate {
+    func transitionWillStartWith(zoomAnimator: ZoomAnimator) {
+        view.layoutIfNeeded()
 
+        guard let imageViewController = (presentedViewController as? ImageNavigationController)?.currentViewController
+        else { return }
+
+        if imageViewController.playerView.tag != 0 {
+            transitionViewTag = imageViewController.playerView.tag
+        } else if imageViewController.imageView.tag != 0 {
+            transitionViewTag = imageViewController.imageView.tag
+        }
+    }
+
+    func transitionDidEndWith(zoomAnimator: ZoomAnimator) {
+
+    }
+
+    func referenceView(for zoomAnimator: ZoomAnimator) -> UIView? {
+        tableView.visibleCells.compactMap { $0.viewWithTag(transitionViewTag) }.first
+    }
+
+    func referenceViewFrameInTransitioningView(for zoomAnimator: ZoomAnimator) -> CGRect? {
+        guard let referenceView = referenceView(for: zoomAnimator) else { return nil }
+
+        return tabBarController?.view.convert(referenceView.frame, from: referenceView.superview)
+    }
+}
+
+private extension TableViewController {
     var visibleLoadMoreViews: [LoadMoreView] {
         tableView.visibleCells.compactMap { $0.contentView as? LoadMoreView }
     }
@@ -314,6 +341,9 @@ private extension TableViewController {
                 initiallyVisible: attachmentViewModel,
                 statusViewModel: statusViewModel)
             let imageNavigationController = ImageNavigationController(imagePageViewController: imagePageViewController)
+
+            imageNavigationController.transitionController.fromDelegate = self
+            transitionViewTag = attachmentViewModel.tag
 
             present(imageNavigationController, animated: true)
         case .unknown:

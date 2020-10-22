@@ -5,11 +5,12 @@ import UIKit
 import ViewModels
 
 class ImageViewController: UIViewController {
+    let scrollView = UIScrollView()
+    let imageView = AnimatedImageView()
+    let playerView = PlayerView()
+
     private let viewModel: AttachmentViewModel
-    private let scrollView = UIScrollView()
     private let contentView = UIView()
-    private let imageView = AnimatedImageView()
-    private let playerView = PlayerView()
     private let descriptionBackgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterial))
     private let descriptionTextView = UITextView()
 
@@ -93,6 +94,7 @@ class ImageViewController: UIViewController {
 
         switch viewModel.attachment.type {
         case .image:
+            imageView.tag = viewModel.tag
             playerView.isHidden = true
             imageView.isHidden = false
             imageView.kf.indicatorType = .activity
@@ -111,6 +113,7 @@ class ImageViewController: UIViewController {
                     options: [.keepCurrentImageWhileLoading])
             })
         case .gifv:
+            playerView.tag = viewModel.tag
             playerView.isHidden = false
             imageView.isHidden = true
             let player = PlayerCache.shared.player(url: viewModel.attachment.url)

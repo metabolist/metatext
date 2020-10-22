@@ -14,8 +14,12 @@ final class StatusAttachmentView: UIView {
         didSet {
             if playing {
                 play()
+                imageView.tag = 0
+                playerView.tag = viewModel.tag
             } else {
                 stop()
+                imageView.tag = viewModel.tag
+                playerView.tag = 0
             }
         }
     }
@@ -79,6 +83,7 @@ private extension StatusAttachmentView {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
+        imageView.tag = viewModel.tag
 
         let blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
         let playView = UIVisualEffectView(effect: blurEffect)

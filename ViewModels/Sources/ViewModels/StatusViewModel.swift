@@ -40,7 +40,7 @@ public struct StatusViewModel: CollectionItemViewModel {
             : statusService.status.account.displayName
         rebloggedByDisplayNameEmoji = statusService.status.account.emojis
         attachmentViewModels = statusService.status.displayStatus.mediaAttachments
-            .map(AttachmentViewModel.init(attachment:))
+            .map { AttachmentViewModel(attachment: $0, status: statusService.status) }
         pollOptionTitles = statusService.status.displayStatus.poll?.options.map { $0.title } ?? []
         pollEmoji = statusService.status.displayStatus.poll?.emojis ?? []
         events = eventsSubject.eraseToAnyPublisher()
