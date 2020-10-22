@@ -336,10 +336,20 @@ private extension StatusView {
             let metaText = String.localizedStringWithFormat(
                 NSLocalizedString("status.reblogged-by", comment: ""),
                 viewModel.rebloggedByDisplayName)
-            let mutableMetaText = NSMutableAttributedString(string: metaText)
-            mutableMetaText.insert(emoji: viewModel.rebloggedByDisplayNameEmoji, view: infoLabel)
-            mutableMetaText.resizeAttachments(toLineHeight: infoLabel.font.lineHeight)
-            infoLabel.attributedText = mutableMetaText
+            let mutableInfoText = NSMutableAttributedString(string: metaText)
+
+            let range = (mutableInfoText.string as NSString).range(of: viewModel.rebloggedByDisplayName)
+
+            if range.location != NSNotFound,
+               let boldFontDescriptor = infoLabel.font.fontDescriptor.withSymbolicTraits([.traitBold]) {
+                let boldFont = UIFont(descriptor: boldFontDescriptor, size: infoLabel.font.pointSize)
+
+                mutableInfoText.setAttributes([NSAttributedString.Key.font: boldFont], range: range)
+            }
+
+            mutableInfoText.insert(emoji: viewModel.rebloggedByDisplayNameEmoji, view: infoLabel)
+            mutableInfoText.resizeAttachments(toLineHeight: infoLabel.font.lineHeight)
+            infoLabel.attributedText = mutableInfoText
             infoIcon.image = UIImage(
                 systemName: "arrow.2.squarepath",
                 withConfiguration: UIImage.SymbolConfiguration(scale: .small))
