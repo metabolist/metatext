@@ -5,9 +5,11 @@ import Foundation
 
 public struct AppPreferences {
     private let userDefaults: UserDefaults
+    private let systemReduceMotion: () -> Bool
 
     public init(environment: AppEnvironment) {
         self.userDefaults = environment.userDefaults
+        self.systemReduceMotion = environment.reduceMotion
     }
 }
 
@@ -72,6 +74,10 @@ public extension AppPreferences {
             return .wifi
         }
         set { self[.autoplayVideos] = newValue.rawValue }
+    }
+
+    var shouldReduceMotion: Bool {
+        systemReduceMotion() && useSystemReduceMotionForMedia
     }
 }
 

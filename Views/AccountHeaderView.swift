@@ -5,23 +5,16 @@ import UIKit
 import ViewModels
 
 class AccountHeaderView: UIView {
-    let headerImageView = UIImageView()
+    let headerImageView = AnimatedImageView()
+    let headerButton = UIButton()
     let noteTextView = TouchFallthroughTextView()
     let segmentedControl = UISegmentedControl()
 
     var viewModel: ProfileViewModel? {
         didSet {
             if let accountViewModel = viewModel?.accountViewModel {
-                let appPreferences = accountViewModel.identification.appPreferences
-                let headerURL: URL
-
-                if !appPreferences.shouldReduceMotion, appPreferences.animateHeaders {
-                    headerURL = accountViewModel.headerURL
-                } else {
-                    headerURL = accountViewModel.headerStaticURL
-                }
-
-                headerImageView.kf.setImage(with: headerURL)
+                headerImageView.kf.setImage(with: accountViewModel.headerURL)
+                headerImageView.tag = accountViewModel.headerURL.hashValue
 
                 let noteFont = UIFont.preferredFont(forTextStyle: .callout)
                 let mutableNote = NSMutableAttributedString(attributedString: accountViewModel.note)
@@ -71,14 +64,25 @@ extension AccountHeaderView: UITextViewDelegate {
 }
 
 private extension AccountHeaderView {
+    // swiftlint:disable:next function_body_length
     func initialSetup() {
         let baseStackView = UIStackView()
 
         addSubview(headerImageView)
-        addSubview(baseStackView)
         headerImageView.translatesAutoresizingMaskIntoConstraints = false
         headerImageView.contentMode = .scaleAspectFill
         headerImageView.clipsToBounds = true
+        headerImageView.isUserInteractionEnabled = true
+
+        headerImageView.addSubview(headerButton)
+        headerButton.translatesAutoresizingMaskIntoConstraints = false
+        headerButton.setBackgroundImage(.highlightedButtonBackground, for: .highlighted)
+
+        headerButton.addAction(
+            UIAction { [weak self] _ in self?.viewModel?.presentHeader() },
+            for: .touchUpInside)
+
+        addSubview(baseStackView)
         baseStackView.translatesAutoresizingMaskIntoConstraints = false
         baseStackView.axis = .vertical
 
@@ -111,6 +115,10 @@ private extension AccountHeaderView {
             headerImageView.topAnchor.constraint(equalTo: topAnchor),
             headerImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
             headerImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            headerButton.leadingAnchor.constraint(equalTo: headerImageView.leadingAnchor),
+            headerButton.topAnchor.constraint(equalTo: headerImageView.topAnchor),
+            headerButton.bottomAnchor.constraint(equalTo: headerImageView.bottomAnchor),
+            headerButton.trailingAnchor.constraint(equalTo: headerImageView.trailingAnchor),
             baseStackView.topAnchor.constraint(equalTo: headerImageView.bottomAnchor),
             baseStackView.leadingAnchor.constraint(equalTo: readableContentGuide.leadingAnchor),
             baseStackView.trailingAnchor.constraint(equalTo: readableContentGuide.trailingAnchor),

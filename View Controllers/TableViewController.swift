@@ -7,13 +7,14 @@ import SwiftUI
 import ViewModels
 
 class TableViewController: UITableViewController {
+    var transitionViewTag = -1
+
     private let viewModel: CollectionViewModel
     private let identification: Identification
     private let loadingTableFooterView = LoadingTableFooterView()
     private let webfingerIndicatorView = WebfingerIndicatorView()
     private var cancellables = Set<AnyCancellable>()
     private var cellHeightCaches = [CGFloat: [CollectionItem: CGFloat]]()
-    private var transitionViewTag = -1
 
     private lazy var dataSource: TableViewDataSource = {
         .init(tableView: tableView, viewModelProvider: viewModel.viewModel(indexPath:))
@@ -201,7 +202,7 @@ extension TableViewController: ZoomAnimatorDelegate {
     }
 
     func referenceView(for zoomAnimator: ZoomAnimator) -> UIView? {
-        tableView.visibleCells.compactMap { $0.viewWithTag(transitionViewTag) }.first
+        view.viewWithTag(transitionViewTag)
     }
 
     func referenceViewFrameInTransitioningView(for zoomAnimator: ZoomAnimator) -> CGRect? {

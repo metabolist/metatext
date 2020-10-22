@@ -9,13 +9,15 @@ class ImageViewController: UIViewController {
     let imageView = AnimatedImageView()
     let playerView = PlayerView()
 
-    private let viewModel: AttachmentViewModel
+    private let viewModel: AttachmentViewModel?
+    private let imageURL: URL?
     private let contentView = UIView()
     private let descriptionBackgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterial))
     private let descriptionTextView = UITextView()
 
-    init(viewModel: AttachmentViewModel) {
+    init(viewModel: AttachmentViewModel? = nil, imageURL: URL? = nil) {
         self.viewModel = viewModel
+        self.imageURL = imageURL
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -51,21 +53,22 @@ class ImageViewController: UIViewController {
         contentView.addSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
+        imageView.kf.indicatorType = .activity
 
         contentView.addSubview(playerView)
         playerView.translatesAutoresizingMaskIntoConstraints = false
 
         view.addSubview(descriptionBackgroundView)
         descriptionBackgroundView.translatesAutoresizingMaskIntoConstraints = false
-        descriptionBackgroundView.isHidden = viewModel.attachment.description == nil
-            || viewModel.attachment.description == ""
+        descriptionBackgroundView.isHidden = viewModel?.attachment.description == nil
+            || viewModel?.attachment.description == ""
 
         descriptionBackgroundView.contentView.addSubview(descriptionTextView)
         descriptionTextView.translatesAutoresizingMaskIntoConstraints = false
         descriptionTextView.backgroundColor = .clear
         descriptionTextView.font = .preferredFont(forTextStyle: .caption1)
         descriptionTextView.adjustsFontForContentSizeCategory = true
-        descriptionTextView.text = viewModel.attachment.description
+        descriptionTextView.text = viewModel?.attachment.description
         descriptionTextView.isScrollEnabled = false
         descriptionTextView.isEditable = false
 
@@ -99,37 +102,40 @@ class ImageViewController: UIViewController {
             descriptionTextView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
 
-        switch viewModel.attachment.type {
-        case .image:
-            imageView.tag = viewModel.tag
+        if let viewModel = viewModel {
+            switch viewModel.attachment.type {
+            case .image:
+                imageView.tag = viewModel.tag
+                playerView.isHidden = true
+                imageView.kf.setImage(
+                    with: viewModel.attachment.previewUrl,
+                    options: [.onlyFromCache],
+                    completionHandler: { [weak self] in
+                        guard let self = self else { return }
+
+                        if case .success = $0 {
+                            self.imageView.kf.indicatorType = .none
+                        }
+
+                        self.imageView.kf.setImage(
+                            with: viewModel.attachment.url,
+                            options: [.keepCurrentImageWhileLoading])
+                    })
+            case .gifv:
+                playerView.tag = viewModel.tag
+                imageView.isHidden = true
+                let player = PlayerCache.shared.player(url: viewModel.attachment.url)
+
+                player.isMuted = true
+
+                playerView.player = player
+                player.play()
+            default: break
+            }
+        } else if let imageURL = imageURL {
+            imageView.tag = imageURL.hashValue
             playerView.isHidden = true
-            imageView.isHidden = false
-            imageView.kf.indicatorType = .activity
-            imageView.kf.setImage(
-                with: viewModel.attachment.previewUrl,
-                options: [.onlyFromCache],
-                completionHandler: { [weak self] in
-                guard let self = self else { return }
-
-                if case .success = $0 {
-                    self.imageView.kf.indicatorType = .none
-                }
-
-                self.imageView.kf.setImage(
-                    with: self.viewModel.attachment.url,
-                    options: [.keepCurrentImageWhileLoading])
-            })
-        case .gifv:
-            playerView.tag = viewModel.tag
-            playerView.isHidden = false
-            imageView.isHidden = true
-            let player = PlayerCache.shared.player(url: viewModel.attachment.url)
-
-            player.isMuted = true
-
-            playerView.player = player
-            player.play()
-        default: break
+            imageView.kf.setImage(with: imageURL)
         }
     }
 }

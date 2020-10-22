@@ -13,6 +13,7 @@ public struct AppEnvironment {
     let keychain: Keychain.Type
     let userDefaults: UserDefaults
     let userNotificationClient: UserNotificationClient
+    let reduceMotion: () -> Bool
     let uuid: () -> UUID
     let inMemoryContent: Bool
     let fixtureDatabase: IdentityDatabase?
@@ -22,6 +23,7 @@ public struct AppEnvironment {
                 keychain: Keychain.Type,
                 userDefaults: UserDefaults,
                 userNotificationClient: UserNotificationClient,
+                reduceMotion: @escaping () -> Bool,
                 uuid: @escaping () -> UUID,
                 inMemoryContent: Bool,
                 fixtureDatabase: IdentityDatabase?) {
@@ -30,6 +32,7 @@ public struct AppEnvironment {
         self.keychain = keychain
         self.userDefaults = userDefaults
         self.userNotificationClient = userNotificationClient
+        self.reduceMotion = reduceMotion
         self.uuid = uuid
         self.inMemoryContent = inMemoryContent
         self.fixtureDatabase = fixtureDatabase
@@ -37,13 +40,14 @@ public struct AppEnvironment {
 }
 
 public extension AppEnvironment {
-    static func live(userNotificationCenter: UNUserNotificationCenter) -> Self {
+    static func live(userNotificationCenter: UNUserNotificationCenter, reduceMotion: @escaping () -> Bool) -> Self {
         Self(
             session: URLSession.shared,
             webAuthSessionType: LiveWebAuthSession.self,
             keychain: LiveKeychain.self,
             userDefaults: .standard,
             userNotificationClient: .live(userNotificationCenter),
+            reduceMotion: reduceMotion,
             uuid: UUID.init,
             inMemoryContent: false,
             fixtureDatabase: nil)

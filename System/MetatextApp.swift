@@ -14,7 +14,9 @@ struct MetatextApp: App {
             RootView(
                 // swiftlint:disable force_try
                 viewModel: try! RootViewModel(
-                    environment: .live(userNotificationCenter: .current()),
+                    environment: .live(
+                        userNotificationCenter: .current(),
+                        reduceMotion: { UIAccessibility.isReduceMotionEnabled }),
                     registerForRemoteNotifications: appDelegate.registerForRemoteNotifications))
                 // swiftlint:enable force_try
         }

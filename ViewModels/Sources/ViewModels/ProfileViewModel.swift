@@ -9,13 +9,16 @@ final public class ProfileViewModel {
     @Published public private(set) var accountViewModel: AccountViewModel?
     @Published public var collection = ProfileCollection.statuses
     @Published public var alertItem: AlertItem?
+    public let imagePresentations: AnyPublisher<URL, Never>
 
     private let profileService: ProfileService
     private let collectionViewModel: CurrentValueSubject<CollectionItemsViewModel, Never>
+    private let imagePresentationsSubject = PassthroughSubject<URL, Never>()
     private var cancellables = Set<AnyCancellable>()
 
     public init(profileService: ProfileService, identification: Identification) {
         self.profileService = profileService
+        imagePresentations = imagePresentationsSubject.eraseToAnyPublisher()
 
         collectionViewModel = CurrentValueSubject(
             CollectionItemsViewModel(
@@ -37,6 +40,14 @@ final public class ProfileViewModel {
                 $0.$alertItem.assign(to: &self.$alertItem)
             }
             .store(in: &cancellables)
+    }
+}
+
+public extension ProfileViewModel {
+    func presentHeader() {
+        guard let accountViewModel = accountViewModel else { return }
+
+        imagePresentationsSubject.send(accountViewModel.headerURL)
     }
 }
 

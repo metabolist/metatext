@@ -292,22 +292,14 @@ private extension StatusView {
 
     func applyStatusConfiguration() {
         let viewModel = statusConfiguration.viewModel
-        let appPreferences = viewModel.identification.appPreferences
         let isContextParent = viewModel.configuration.isContextParent
         let mutableContent = NSMutableAttributedString(attributedString: viewModel.content)
         let mutableDisplayName = NSMutableAttributedString(string: viewModel.displayName)
         let mutableSpoilerText = NSMutableAttributedString(string: viewModel.spoilerText)
         let contentFont = UIFont.preferredFont(forTextStyle: isContextParent ? .title3 : .callout)
         let contentRange = NSRange(location: 0, length: mutableContent.length)
-        let avatarURL: URL
 
-        if !appPreferences.shouldReduceMotion && appPreferences.animateAvatars == .everywhere {
-            avatarURL = viewModel.avatarURL
-        } else {
-            avatarURL = viewModel.avatarStaticURL
-        }
-
-        avatarImageView.kf.setImage(with: avatarURL)
+        avatarImageView.kf.setImage(with: viewModel.avatarURL)
 
         contentTextView.shouldFallthrough = !isContextParent
         sideStackView.isHidden = isContextParent

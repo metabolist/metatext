@@ -7,9 +7,9 @@ import ServiceLayer
 
 public struct AccountViewModel: CollectionItemViewModel {
     public let events: AnyPublisher<AnyPublisher<CollectionItemEvent, Error>, Never>
-    public let identification: Identification
 
     private let accountService: AccountService
+    private let identification: Identification
     private let eventsSubject = PassthroughSubject<AnyPublisher<CollectionItemEvent, Error>, Never>()
 
     init(accountService: AccountService, identification: Identification) {
@@ -20,13 +20,13 @@ public struct AccountViewModel: CollectionItemViewModel {
 }
 
 public extension AccountViewModel {
-    var avatarURL: URL { accountService.account.avatar }
-
-    var avatarStaticURL: URL { accountService.account.avatarStatic }
-
-    var headerURL: URL { accountService.account.header }
-
-    var headerStaticURL: URL { accountService.account.headerStatic }
+    var headerURL: URL {
+        if !identification.appPreferences.shouldReduceMotion, identification.appPreferences.animateHeaders {
+            return accountService.account.header
+        } else {
+            return accountService.account.headerStatic
+        }
+    }
 
     var displayName: String { accountService.account.displayName }
 
@@ -35,6 +35,16 @@ public extension AccountViewModel {
     var note: NSAttributedString { accountService.account.note.attributed }
 
     var emoji: [Emoji] { accountService.account.emojis }
+
+    func avatarURL(profile: Bool = false) -> URL {
+        if !identification.appPreferences.shouldReduceMotion,
+           (identification.appPreferences.animateAvatars == .everywhere
+                || identification.appPreferences.animateAvatars == .profiles && profile) {
+            return accountService.account.avatar
+        } else {
+            return accountService.account.avatarStatic
+        }
+    }
 
     func urlSelected(_ url: URL) {
         eventsSubject.send(

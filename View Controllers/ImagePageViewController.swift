@@ -7,7 +7,7 @@ class ImagePageViewController: UIPageViewController {
     let imageViewControllers: [ImageViewController]
 
     init(initiallyVisible: AttachmentViewModel, statusViewModel: StatusViewModel) {
-        imageViewControllers = statusViewModel.attachmentViewModels.map(ImageViewController.init(viewModel:))
+        imageViewControllers = statusViewModel.attachmentViewModels.map { ImageViewController(viewModel: $0) }
 
         super.init(
             transitionStyle: .scroll,
@@ -19,6 +19,17 @@ class ImagePageViewController: UIPageViewController {
         }
 
         setViewControllers([imageViewControllers[index ?? 0]], direction: .forward, animated: false)
+    }
+
+    init(imageURL: URL) {
+        imageViewControllers = [ImageViewController(imageURL: imageURL)]
+
+        super.init(
+            transitionStyle: .scroll,
+            navigationOrientation: .horizontal,
+            options: [.interPageSpacing: CGFloat.defaultSpacing])
+
+        setViewControllers(imageViewControllers, direction: .forward, animated: false)
     }
 
     @available(*, unavailable)

@@ -18,10 +18,10 @@ public struct StatusViewModel: CollectionItemViewModel {
     public let pollOptionTitles: [String]
     public let pollEmoji: [Emoji]
     public var configuration = CollectionItem.StatusConfiguration.default
-    public let identification: Identification
     public let events: AnyPublisher<AnyPublisher<CollectionItemEvent, Error>, Never>
 
     private let statusService: StatusService
+    private let identification: Identification
     private let eventsSubject = PassthroughSubject<AnyPublisher<CollectionItemEvent, Error>, Never>()
 
     init(statusService: StatusService, identification: Identification) {
@@ -40,7 +40,7 @@ public struct StatusViewModel: CollectionItemViewModel {
             : statusService.status.account.displayName
         rebloggedByDisplayNameEmoji = statusService.status.account.emojis
         attachmentViewModels = statusService.status.displayStatus.mediaAttachments
-            .map { AttachmentViewModel(attachment: $0, status: statusService.status) }
+            .map { AttachmentViewModel(attachment: $0, status: statusService.status, identification: identification) }
         pollOptionTitles = statusService.status.displayStatus.poll?.options.map { $0.title } ?? []
         pollEmoji = statusService.status.displayStatus.poll?.emojis ?? []
         events = eventsSubject.eraseToAnyPublisher()
@@ -75,9 +75,14 @@ public extension StatusViewModel {
 
     var accountName: String { "@" + statusService.status.displayStatus.account.acct }
 
-    var avatarURL: URL { statusService.status.displayStatus.account.avatar }
-
-    var avatarStaticURL: URL { statusService.status.displayStatus.account.avatarStatic }
+    var avatarURL: URL {
+        if !identification.appPreferences.shouldReduceMotion,
+           identification.appPreferences.animateAvatars == .everywhere {
+            return statusService.status.displayStatus.account.avatar
+        } else {
+            return statusService.status.displayStatus.account.avatarStatic
+        }
+    }
 
     var time: String? { statusService.status.displayStatus.createdAt.timeAgo }
 

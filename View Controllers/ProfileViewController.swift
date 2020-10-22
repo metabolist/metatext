@@ -30,6 +30,19 @@ final class ProfileViewController: TableViewController {
             }
             .store(in: &cancellables)
 
+        viewModel.imagePresentations.sink { [weak self] in
+            guard let self = self else { return }
+
+            let imagePageViewController = ImagePageViewController(imageURL: $0)
+            let imageNavigationController = ImageNavigationController(imagePageViewController: imagePageViewController)
+
+            imageNavigationController.transitionController.fromDelegate = self
+            self.transitionViewTag = $0.hashValue
+
+            self.present(imageNavigationController, animated: true)
+        }
+        .store(in: &cancellables)
+
         tableView.tableHeaderView = accountHeaderView
     }
 }

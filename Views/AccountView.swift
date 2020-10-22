@@ -96,16 +96,7 @@ private extension AccountView {
     }
 
     func applyAccountConfiguration() {
-        let appPreferences = accountConfiguration.viewModel.identification.appPreferences
-        let avatarURL: URL
-
-        if !appPreferences.shouldReduceMotion && appPreferences.animateAvatars == .everywhere {
-            avatarURL = accountConfiguration.viewModel.avatarURL
-        } else {
-            avatarURL = accountConfiguration.viewModel.avatarStaticURL
-        }
-
-        avatarImageView.kf.setImage(with: avatarURL)
+        avatarImageView.kf.setImage(with: accountConfiguration.viewModel.avatarURL(profile: false))
 
         if accountConfiguration.viewModel.displayName == "" {
             displayNameLabel.isHidden = true

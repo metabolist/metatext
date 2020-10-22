@@ -1,7 +1,6 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import Combine
-import Network
 import UIKit
 import ViewModels
 
@@ -86,20 +85,7 @@ extension StatusAttachmentsView {
     var shouldAutoplay: Bool {
         guard !isHidden, let viewModel = viewModel, viewModel.shouldShowAttachments else { return false }
 
-        let appPreferences = viewModel.identification.appPreferences
-        let onWifi = NWPathMonitor(requiredInterfaceType: .wifi).currentPath.status == .satisfied
-        let hasVideoAttachment = viewModel.attachmentViewModels.contains { $0.attachment.type == .video }
-        let shouldAutoplayVideo = appPreferences.autoplayVideos == .always
-            || appPreferences.autoplayVideos == .wifi && onWifi
-
-        if hasVideoAttachment && shouldAutoplayVideo {
-            return true
-        }
-
-        let hasGIFAttachment = viewModel.attachmentViewModels.contains { $0.attachment.type == .gifv }
-        let shouldAutoplayGIF = appPreferences.autoplayGIFs == .always || appPreferences.autoplayGIFs == .wifi && onWifi
-
-        return hasGIFAttachment && shouldAutoplayGIF
+        return viewModel.attachmentViewModels.allSatisfy(\.shouldAutoplay)
     }
 }
 

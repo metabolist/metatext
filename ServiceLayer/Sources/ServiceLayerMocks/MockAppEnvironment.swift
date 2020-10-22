@@ -23,6 +23,7 @@ public extension AppEnvironment {
             keychain: keychain,
             userDefaults: userDefaults,
             userNotificationClient: userNotificationClient,
+            reduceMotion: { false },
             uuid: uuid,
             inMemoryContent: inMemoryContent,
             fixtureDatabase: fixtureDatabase)
