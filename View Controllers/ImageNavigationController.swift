@@ -111,4 +111,10 @@ extension ImageNavigationController: UIGestureRecognizerDelegate {
 
         return false
     }
+
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+                           shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        gestureRecognizer === barHideOnTapGestureRecognizer
+            && (otherGestureRecognizer as? UITapGestureRecognizer)?.numberOfTapsRequired == 2
+    }
 }

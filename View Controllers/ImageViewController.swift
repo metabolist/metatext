@@ -38,6 +38,13 @@ class ImageViewController: UIViewController {
         scrollView.showsVerticalScrollIndicator = false
         scrollView.maximumZoomScale = Self.maximumZoomScale
 
+        let doubleTapGestureRecognizer = UITapGestureRecognizer(
+            target: self,
+            action: #selector(handleDoubleTap(gestureRecognizer:)))
+
+        doubleTapGestureRecognizer.numberOfTapsRequired = 2
+        scrollView.addGestureRecognizer(doubleTapGestureRecognizer)
+
         contentView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.addSubview(contentView)
 
@@ -168,5 +175,19 @@ extension ImageViewController: UIScrollViewDelegate {
 }
 
 private extension ImageViewController {
-    static let maximumZoomScale: CGFloat = 5
+    static let maximumZoomScale: CGFloat = 4
+
+    @objc func handleDoubleTap(gestureRecognizer: UITapGestureRecognizer) {
+        if scrollView.zoomScale == scrollView.minimumZoomScale {
+            let width = contentView.frame.size.width / scrollView.maximumZoomScale
+            let height = contentView.frame.size.height / scrollView.maximumZoomScale
+            let center = scrollView.convert(gestureRecognizer.location(in: gestureRecognizer.view), from: contentView)
+
+            scrollView.zoom(
+                to: CGRect(x: center.x - (width / 2), y: center.y - (height / 2), width: width, height: height),
+                animated: true)
+            } else {
+                scrollView.setZoomScale(scrollView.minimumZoomScale, animated: true)
+            }
+    }
 }
