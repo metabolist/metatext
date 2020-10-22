@@ -41,6 +41,10 @@ class ImagePageViewController: UIPageViewController {
             self,
             action: #selector(toggleDescriptionVisibility))
     }
+
+    override var prefersStatusBarHidden: Bool { true }
+
+    override var prefersHomeIndicatorAutoHidden: Bool { navigationController?.isNavigationBarHidden ?? false }
 }
 
 extension ImagePageViewController {
