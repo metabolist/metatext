@@ -53,4 +53,20 @@ public extension StatusService {
             mastodonAPIClient: mastodonAPIClient,
             contentDatabase: contentDatabase)
     }
+
+    func vote(selectedOptions: Set<Int>) -> AnyPublisher<Never, Error> {
+        guard let poll = status.displayStatus.poll else { return Empty().eraseToAnyPublisher() }
+
+        return mastodonAPIClient.request(PollEndpoint.votes(id: poll.id, choices: Array(selectedOptions)))
+            .flatMap { contentDatabase.update(id: status.displayStatus.id, poll: $0) }
+            .eraseToAnyPublisher()
+    }
+
+    func refreshPoll() -> AnyPublisher<Never, Error> {
+        guard let poll = status.displayStatus.poll else { return Empty().eraseToAnyPublisher() }
+
+        return mastodonAPIClient.request(PollEndpoint.poll(id: poll.id))
+            .flatMap { contentDatabase.update(id: status.displayStatus.id, poll: $0) }
+            .eraseToAnyPublisher()
+    }
 }

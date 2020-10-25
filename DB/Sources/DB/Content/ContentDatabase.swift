@@ -201,6 +201,17 @@ public extension ContentDatabase {
         .eraseToAnyPublisher()
     }
 
+    func update(id: Status.Id, poll: Poll) -> AnyPublisher<Never, Error> {
+        databaseWriter.writePublisher {
+            let data = try StatusRecord.databaseJSONEncoder(for: StatusRecord.Columns.poll.name).encode(poll)
+
+            try StatusRecord.filter(StatusRecord.Columns.id == id)
+                .updateAll($0, StatusRecord.Columns.poll.set(to: data))
+        }
+        .ignoreOutput()
+        .eraseToAnyPublisher()
+    }
+
     func append(accounts: [Account], toList list: AccountList) -> AnyPublisher<Never, Error> {
         databaseWriter.writePublisher {
             try list.save($0)

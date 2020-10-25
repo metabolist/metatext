@@ -91,7 +91,6 @@
 "status.show-more" = "Show More";
 "status.show-less" = "Show Less";
 "status.poll.vote" = "Vote";
-"status.poll.participation-count" = "%ld people";
 "status.poll.time-left" = "%@ left";
 "status.poll.refresh" = "Refresh";
 "status.poll.closed" = "Closed";

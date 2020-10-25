@@ -5,7 +5,7 @@ import Foundation
 import Mastodon
 import ServiceLayer
 
-public struct StatusViewModel: CollectionItemViewModel {
+public final class StatusViewModel: CollectionItemViewModel, ObservableObject {
     public let content: NSAttributedString
     public let contentEmoji: [Emoji]
     public let displayName: String
@@ -15,8 +15,8 @@ public struct StatusViewModel: CollectionItemViewModel {
     public let rebloggedByDisplayName: String
     public let rebloggedByDisplayNameEmoji: [Emoji]
     public let attachmentViewModels: [AttachmentViewModel]
-    public let pollOptionTitles: [String]
     public let pollEmoji: [Emoji]
+    @Published public var pollOptionSelections = Set<Int>()
     public var configuration = CollectionItem.StatusConfiguration.default
     public let events: AnyPublisher<AnyPublisher<CollectionItemEvent, Error>, Never>
 
@@ -41,7 +41,6 @@ public struct StatusViewModel: CollectionItemViewModel {
         rebloggedByDisplayNameEmoji = statusService.status.account.emojis
         attachmentViewModels = statusService.status.displayStatus.mediaAttachments
             .map { AttachmentViewModel(attachment: $0, status: statusService.status, identification: identification) }
-        pollOptionTitles = statusService.status.displayStatus.poll?.options.map { $0.title } ?? []
         pollEmoji = statusService.status.displayStatus.poll?.emojis ?? []
         events = eventsSubject.eraseToAnyPublisher()
     }
@@ -111,6 +110,30 @@ public extension StatusViewModel {
     var sensitive: Bool { statusService.status.displayStatus.sensitive }
 
     var sharingURL: URL? { statusService.status.displayStatus.url }
+
+    var isPollExpired: Bool { statusService.status.displayStatus.poll?.expired ?? true }
+
+    var hasVotedInPoll: Bool { statusService.status.displayStatus.poll?.voted ?? false }
+
+    var isPollMultipleSelection: Bool { statusService.status.displayStatus.poll?.multiple ?? false }
+
+    var pollOptions: [Poll.Option] { statusService.status.displayStatus.poll?.options ?? [] }
+
+    var pollVotersCount: Int {
+        guard let poll = statusService.status.displayStatus.poll else { return 0 }
+
+        return poll.votersCount ?? poll.votesCount
+    }
+
+    var pollOwnVotes: Set<Int> { Set(statusService.status.displayStatus.poll?.ownVotes ?? []) }
+
+    var pollTimeLeft: String? {
+        guard let expiresAt = statusService.status.displayStatus.poll?.expiresAt,
+              expiresAt > Date()
+        else { return nil }
+
+        return expiresAt.fullUnitTimeUntil
+    }
 
     var cardViewModel: CardViewModel? {
         if let card = statusService.status.displayStatus.card {
@@ -190,6 +213,20 @@ public extension StatusViewModel {
         guard let url = statusService.status.displayStatus.url else { return }
 
         eventsSubject.send(Just(.share(url)).setFailureType(to: Error.self).eraseToAnyPublisher())
+    }
+
+    func vote() {
+        eventsSubject.send(
+            statusService.vote(selectedOptions: pollOptionSelections)
+                .map { _ in .ignorableOutput }
+                .eraseToAnyPublisher())
+    }
+
+    func refreshPoll() {
+        eventsSubject.send(
+            statusService.refreshPoll()
+                .map { _ in .ignorableOutput }
+                .eraseToAnyPublisher())
     }
 }
 

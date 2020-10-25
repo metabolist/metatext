@@ -114,7 +114,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
 
         switch item {
         case let .status(status, configuration):
-            var viewModel: StatusViewModel
+            let viewModel: StatusViewModel
 
             if let cachedViewModel = cachedViewModel as? StatusViewModel {
                 viewModel = cachedViewModel

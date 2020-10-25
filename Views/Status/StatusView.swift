@@ -16,6 +16,7 @@ final class StatusView: UIView {
     let toggleShowContentButton = UIButton(type: .system)
     let contentTextView = TouchFallthroughTextView()
     let attachmentsView = StatusAttachmentsView()
+    let pollView = PollView()
     let cardView = CardView()
     let contextParentTimeLabel = UILabel()
     let timeApplicationDividerLabel = UILabel()
@@ -162,6 +163,8 @@ private extension StatusView {
         mainStackView.addArrangedSubview(contentTextView)
 
         mainStackView.addArrangedSubview(attachmentsView)
+
+        mainStackView.addArrangedSubview(pollView)
 
         cardView.button.addAction(
             UIAction { [weak self] _ in
@@ -406,6 +409,9 @@ private extension StatusView {
 
         attachmentsView.isHidden = viewModel.attachmentViewModels.count == 0
         attachmentsView.viewModel = viewModel
+
+        pollView.isHidden = viewModel.pollOptions.count == 0
+        pollView.viewModel = viewModel
 
         cardView.viewModel = viewModel.cardViewModel
         cardView.isHidden = viewModel.cardViewModel == nil
