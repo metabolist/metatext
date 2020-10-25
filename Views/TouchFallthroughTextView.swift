@@ -12,6 +12,7 @@ final class TouchFallthroughTextView: UITextView {
 
         clipsToBounds = false
         textDragInteraction?.isEnabled = false
+        isEditable = false
         textContainerInset = .zero
         self.textContainer.lineFragmentPadding = 0
         linkTextAttributes = [.foregroundColor: tintColor as Any, .underlineColor: UIColor.clear]
