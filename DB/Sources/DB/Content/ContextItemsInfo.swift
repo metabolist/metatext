@@ -28,16 +28,26 @@ extension ContextItemsInfo {
             section.filtered(regularExpression: regularExpression)
                 .enumerated()
                 .map { index, statusInfo in
-                    let isReplyInContext = index > 0
-                        && section[index - 1].record.id == statusInfo.record.inReplyToId
-                    let hasReplyFollowing = section.count > index + 1
-                        && section[index + 1].record.inReplyToId == statusInfo.record.id
+                    let isContextParent = statusInfo.record.id == parent.record.id
+                    let isReplyInContext: Bool
+
+                    if isContextParent {
+                        isReplyInContext = !ancestors.isEmpty
+                            && statusInfo.record.inReplyToId == ancestors.last?.record.id
+                    } else {
+                        isReplyInContext = index > 0
+                            && section[index - 1].record.id == statusInfo.record.inReplyToId
+                    }
+
+                    let hasReplyFollowing = (section.count > index + 1
+                                                && section[index + 1].record.inReplyToId == statusInfo.record.id)
+                        || (statusInfo == ancestors.last && parent.record.inReplyToId == statusInfo.record.id)
 
                     return .status(
                         .init(info: statusInfo),
                         .init(showContentToggled: statusInfo.showContentToggled,
                               showAttachmentsToggled: statusInfo.showAttachmentsToggled,
-                              isContextParent: statusInfo.record.id == parent.record.id,
+                              isContextParent: isContextParent,
                               isReplyInContext: isReplyInContext,
                               hasReplyFollowing: hasReplyFollowing))
                 }
