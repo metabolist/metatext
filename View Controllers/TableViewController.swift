@@ -272,6 +272,13 @@ private extension TableViewController {
             if
                 let item = update.maintainScrollPosition,
                 let indexPath = self.dataSource.indexPath(for: item) {
+                self.tableView.contentInset.bottom = max(
+                    0,
+                    self.tableView.frame.height
+                        - self.tableView.contentSize.height
+                        - self.tableView.safeAreaInsets.top
+                        - self.tableView.safeAreaInsets.bottom)
+                    + self.tableView.rectForRow(at: indexPath).minY
                 self.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
 
                 if let offsetFromNavigationBar = offsetFromNavigationBar {
