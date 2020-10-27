@@ -22,7 +22,7 @@ extension MastodonAPITarget: DecodableTarget {
 
     public var method: HTTPMethod { endpoint.method }
 
-    public var queryParameters: [String: String]? { endpoint.queryParameters }
+    public var queryParameters: [URLQueryItem] { endpoint.queryParameters }
 
     public var jsonBody: [String: Any]? { endpoint.jsonBody }
 

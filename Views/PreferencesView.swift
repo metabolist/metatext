@@ -26,6 +26,8 @@ struct PreferencesView: View {
                 NavigationLink("preferences.media",
                                destination: MediaPreferencesView(
                                 viewModel: .init(identification: identification)))
+                NavigationLink("preferences.startup-and-syncing",
+                               destination: StartupAndSyncingPreferencesView())
             }
         }
         .navigationTitle("preferences")

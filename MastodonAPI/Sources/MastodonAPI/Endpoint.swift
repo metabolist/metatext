@@ -9,7 +9,7 @@ public protocol Endpoint {
     var context: [String] { get }
     var pathComponentsInContext: [String] { get }
     var method: HTTPMethod { get }
-    var queryParameters: [String: String]? { get }
+    var queryParameters: [URLQueryItem] { get }
     var jsonBody: [String: Any]? { get }
     var headers: [String: String]? { get }
 }
@@ -29,7 +29,7 @@ public extension Endpoint {
         context + pathComponentsInContext
     }
 
-    var queryParameters: [String: String]? { nil }
+    var queryParameters: [URLQueryItem] { [] }
 
     var jsonBody: [String: Any]? { nil }
 

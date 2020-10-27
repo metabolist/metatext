@@ -81,6 +81,10 @@ extension ProfileViewModel: CollectionViewModel {
             .eraseToAnyPublisher()
     }
 
+    public var shouldAdjustContentInset: Bool {
+        collectionViewModel.value.shouldAdjustContentInset
+    }
+
     public var nextPageMaxId: String? {
         collectionViewModel.value.nextPageMaxId
     }

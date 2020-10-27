@@ -6,7 +6,7 @@ public protocol Target {
     var baseURL: URL { get }
     var pathComponents: [String] { get }
     var method: HTTPMethod { get }
-    var queryParameters: [String: String]? { get }
+    var queryParameters: [URLQueryItem] { get }
     var jsonBody: [String: Any]? { get }
     var headers: [String: String]? { get }
 }
@@ -19,9 +19,8 @@ public extension Target {
             url.appendPathComponent(pathComponent)
         }
 
-        if var components = URLComponents(url: url, resolvingAgainstBaseURL: true),
-           let queryItems = queryParameters?.map(URLQueryItem.init(name:value:)) {
-            components.queryItems = queryItems
+        if var components = URLComponents(url: url, resolvingAgainstBaseURL: true), !queryParameters.isEmpty {
+            components.queryItems = queryParameters
 
             if let queryComponentURL = components.url {
                 url = queryComponentURL

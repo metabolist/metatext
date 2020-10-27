@@ -73,7 +73,7 @@ private struct UpdatedFilterTarget: DecodableTarget {
     let baseURL = URL(string: "https://filter.metabolist.com")!
     let pathComponents = ["filter"]
     let method = HTTPMethod.get
-    let queryParameters: [String: String]? = nil
+    let queryParameters: [URLQueryItem] = []
     let jsonBody: [String: Any]? = nil
     let headers: [String: String]? = nil
 }

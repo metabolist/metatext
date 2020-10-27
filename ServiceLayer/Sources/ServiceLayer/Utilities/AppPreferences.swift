@@ -2,6 +2,7 @@
 
 import CodableBloomFilter
 import Foundation
+import Mastodon
 
 public struct AppPreferences {
     private let userDefaults: UserDefaults
@@ -26,6 +27,14 @@ public extension AppPreferences {
         case always
         case wifi
         case never
+
+        public var id: String { rawValue }
+    }
+
+    enum PositionBehavior: String, CaseIterable, Identifiable {
+        case rememberPosition
+        case syncPosition
+        case newest
 
         public var id: String { rawValue }
     }
@@ -76,8 +85,41 @@ public extension AppPreferences {
         set { self[.autoplayVideos] = newValue.rawValue }
     }
 
+    var homeTimelineBehavior: PositionBehavior {
+        get {
+            if let rawValue = self[.homeTimelineBehavior] as String?,
+               let value = PositionBehavior(rawValue: rawValue) {
+                return value
+            }
+
+            return .rememberPosition
+        }
+        set { self[.homeTimelineBehavior] = newValue.rawValue }
+    }
+
+    var notificationsTabBehavior: PositionBehavior {
+        get {
+            if let rawValue = self[.notificationsTabBehavior] as String?,
+               let value = PositionBehavior(rawValue: rawValue) {
+                return value
+            }
+
+            return .newest
+        }
+        set { self[.notificationsTabBehavior] = newValue.rawValue }
+    }
+
     var shouldReduceMotion: Bool {
         systemReduceMotion() && useSystemReduceMotionForMedia
+    }
+
+    func positionBehavior(markerTimeline: Marker.Timeline) -> PositionBehavior {
+        switch markerTimeline {
+        case .home:
+            return homeTimelineBehavior
+        case .notifications:
+            return notificationsTabBehavior
+        }
     }
 }
 
@@ -103,6 +145,8 @@ private extension AppPreferences {
         case animateHeaders
         case autoplayGIFs
         case autoplayVideos
+        case homeTimelineBehavior
+        case notificationsTabBehavior
     }
 
     subscript<T>(index: Item) -> T? {

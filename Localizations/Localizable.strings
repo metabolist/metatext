@@ -67,6 +67,13 @@
 "preferences.notification-types.reblog" = "Reblog";
 "preferences.notification-types.mention" = "Mention";
 "preferences.notification-types.poll" = "Poll";
+"preferences.startup-and-syncing" = "Startup and Syncing";
+"preferences.startup-and-syncing.home-timeline" = "Home timeline";
+"preferences.startup-and-syncing.notifications-tab" = "Notifications tab";
+"preferences.startup-and-syncing.position-on-startup" = "Position on startup";
+"preferences.startup-and-syncing.remember-position" = "Remember position";
+"preferences.startup-and-syncing.sync-position" = "Sync position with web and other devices";
+"preferences.startup-and-syncing.newest" = "Load newest";
 "filters.active" = "Active";
 "filters.expired" = "Expired";
 "filter.add-new" = "Add New Filter";

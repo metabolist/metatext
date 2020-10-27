@@ -32,13 +32,13 @@ extension ResultsEndpoint: Endpoint {
         }
     }
 
-    public var queryParameters: [String: String]? {
+    public var queryParameters: [URLQueryItem] {
         switch self {
         case let .search(query, resolve):
-            var params = ["q": query]
+            var params = [URLQueryItem(name: "q", value: query)]
 
             if resolve {
-                params["resolve"] = String(true)
+                params.append(.init(name: "resolve", value: "true"))
             }
 
             return params

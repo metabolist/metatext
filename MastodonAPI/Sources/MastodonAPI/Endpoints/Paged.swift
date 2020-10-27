@@ -31,15 +31,23 @@ extension Paged: Endpoint {
 
     public var method: HTTPMethod { endpoint.method }
 
-    public var queryParameters: [String: String]? {
-        var queryParameters = endpoint.queryParameters ?? [String: String]()
+    public var queryParameters: [URLQueryItem] {
+        var queryParameters = endpoint.queryParameters
 
-        queryParameters["max_id"] = maxId
-        queryParameters["min_id"] = minId
-        queryParameters["since_id"] = sinceId
+        if let maxId = maxId {
+            queryParameters.append(.init(name: "max_id", value: maxId))
+        }
+
+        if let minId = minId {
+            queryParameters.append(.init(name: "min_id", value: minId))
+        }
+
+        if let sinceId = sinceId {
+            queryParameters.append(.init(name: "since_id", value: sinceId))
+        }
 
         if let limit = limit {
-            queryParameters["limit"] = String(limit)
+            queryParameters.append(.init(name: "limit", value: String(limit)))
         }
 
         return queryParameters

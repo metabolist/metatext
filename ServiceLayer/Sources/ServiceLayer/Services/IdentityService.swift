@@ -27,9 +27,14 @@ public struct IdentityService {
                                               instanceURL: try secrets.getInstanceURL())
         mastodonAPIClient.accessToken = try? secrets.getAccessToken()
 
-        contentDatabase = try ContentDatabase(id: id,
-                                              inMemory: environment.inMemoryContent,
-                                              keychain: environment.keychain)
+        let appPreferences = AppPreferences(environment: environment)
+
+        contentDatabase = try ContentDatabase(
+            id: id,
+            useHomeTimelineLastReadId: appPreferences.homeTimelineBehavior == .rememberPosition,
+            useNotificationsLastReadId: appPreferences.notificationsTabBehavior == .rememberPosition,
+            inMemory: environment.inMemoryContent,
+            keychain: environment.keychain)
     }
 }
 
@@ -85,6 +90,29 @@ public extension IdentityService {
             .map { _ in id }
             .flatMap(contentDatabase.deleteList(id:))
             .eraseToAnyPublisher()
+    }
+
+    func getMarker(_ markerTimeline: Marker.Timeline) -> AnyPublisher<Marker, Error> {
+        mastodonAPIClient.request(MarkersEndpoint.get([markerTimeline]))
+            .compactMap { $0[markerTimeline.rawValue] }
+            .eraseToAnyPublisher()
+    }
+
+    func getLocalLastReadId(_ markerTimeline: Marker.Timeline) -> String? {
+        contentDatabase.lastReadId(markerTimeline)
+    }
+
+    func setLastReadId(_ id: String, forMarker markerTimeline: Marker.Timeline) -> AnyPublisher<Never, Error> {
+        switch AppPreferences(environment: environment).positionBehavior(markerTimeline: markerTimeline) {
+        case .rememberPosition:
+            return contentDatabase.setLastReadId(id, markerTimeline: markerTimeline)
+        case .syncPosition:
+            return mastodonAPIClient.request(MarkersEndpoint.post([markerTimeline: id]))
+                .ignoreOutput()
+                .eraseToAnyPublisher()
+        case .newest:
+            return Empty().eraseToAnyPublisher()
+        }
     }
 
     func identityPublisher(immediate: Bool) -> AnyPublisher<Identity, Error> {

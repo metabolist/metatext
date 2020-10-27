@@ -10,6 +10,7 @@ public protocol CollectionViewModel {
     var alertItems: AnyPublisher<AlertItem, Never> { get }
     var loading: AnyPublisher<Bool, Never> { get }
     var events: AnyPublisher<CollectionItemEvent, Never> { get }
+    var shouldAdjustContentInset: Bool { get }
     var nextPageMaxId: String? { get }
     func request(maxId: String?, minId: String?)
     func viewedAtTop(indexPath: IndexPath)

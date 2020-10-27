@@ -105,6 +105,11 @@ extension ContentDatabase {
                 t.column("wholeWord", .boolean).notNull()
             }
 
+            try db.create(table: "lastReadIdRecord") { t in
+                t.column("markerTimeline", .text).primaryKey(onConflict: .replace)
+                t.column("id", .text).notNull()
+            }
+
             try db.create(table: "statusAncestorJoin") { t in
                 t.column("parentId", .text).indexed().notNull()
                     .references("statusRecord", onDelete: .cascade)

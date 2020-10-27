@@ -39,16 +39,16 @@ extension StatusesEndpoint: Endpoint {
         }
     }
 
-    public var queryParameters: [String: String]? {
+    public var queryParameters: [URLQueryItem] {
         switch self {
         case let .timelinesPublic(local):
-            return ["local": String(local)]
+            return [URLQueryItem(name: "local", value: String(local))]
         case let .accountsStatuses(_, excludeReplies, onlyMedia, pinned):
-            return ["exclude_replies": String(excludeReplies),
-                    "only_media": String(onlyMedia),
-                    "pinned": String(pinned)]
+            return [URLQueryItem(name: "exclude_replies", value: String(excludeReplies)),
+                    URLQueryItem(name: "only_media", value: String(onlyMedia)),
+                    URLQueryItem(name: "pinned", value: String(pinned))]
         default:
-            return nil
+            return []
         }
     }
 

@@ -7,12 +7,17 @@ import Keychain
 import Mastodon
 import Secrets
 
+// swiftlint:disable file_length
 public struct ContentDatabase {
     public let activeFiltersPublisher: AnyPublisher<[Filter], Error>
 
     private let databaseWriter: DatabaseWriter
 
-    public init(id: Identity.Id, inMemory: Bool, keychain: Keychain.Type) throws {
+    public init(id: Identity.Id,
+                useHomeTimelineLastReadId: Bool,
+                useNotificationsLastReadId: Bool,
+                inMemory: Bool,
+                keychain: Keychain.Type) throws {
         if inMemory {
             databaseWriter = DatabaseQueue()
         } else {
@@ -27,7 +32,10 @@ public struct ContentDatabase {
         }
 
         try Self.migrator.migrate(databaseWriter)
-        try Self.clean(databaseWriter)
+        try Self.clean(
+            databaseWriter,
+            useHomeTimelineLastReadId: useHomeTimelineLastReadId,
+            useNotificationsLastReadId: useNotificationsLastReadId)
 
         activeFiltersPublisher = ValueObservation.tracking {
             try Filter.filter(Filter.Columns.expiresAt == nil || Filter.Columns.expiresAt > Date()).fetchAll($0)
@@ -278,6 +286,12 @@ public extension ContentDatabase {
             .eraseToAnyPublisher()
     }
 
+    func setLastReadId(_ id: String, markerTimeline: Marker.Timeline) -> AnyPublisher<Never, Error> {
+        databaseWriter.writePublisher(updates: LastReadIdRecord(markerTimeline: markerTimeline, id: id).save)
+            .ignoreOutput()
+            .eraseToAnyPublisher()
+    }
+
     func timelinePublisher(_ timeline: Timeline) -> AnyPublisher<[[CollectionItem]], Error> {
         ValueObservation.tracking(
             TimelineItemsInfo.request(TimelineRecord.filter(TimelineRecord.Columns.id == timeline.id)).fetchOne)
@@ -331,19 +345,64 @@ public extension ContentDatabase {
             .publisher(in: databaseWriter)
             .eraseToAnyPublisher()
     }
+
+    func lastReadId(_ markerTimeline: Marker.Timeline) -> String? {
+        try? databaseWriter.read {
+            try String.fetchOne(
+                $0,
+                LastReadIdRecord.filter(LastReadIdRecord.Columns.markerTimeline == markerTimeline.rawValue)
+                    .select(LastReadIdRecord.Columns.id))
+        }
+    }
 }
 
 private extension ContentDatabase {
+    static let cleanAfterLastReadIdCount = 40
     static func fileURL(id: Identity.Id) throws -> URL {
         try FileManager.default.databaseDirectoryURL(name: id.uuidString)
     }
 
-    static func clean(_ databaseWriter: DatabaseWriter) throws {
+    static func clean(_ databaseWriter: DatabaseWriter,
+                      useHomeTimelineLastReadId: Bool,
+                      useNotificationsLastReadId: Bool) throws {
         try databaseWriter.write {
-            try TimelineRecord.deleteAll($0)
-            try StatusRecord.deleteAll($0)
-            try AccountRecord.deleteAll($0)
+            if useHomeTimelineLastReadId {
+                try TimelineRecord.filter(TimelineRecord.Columns.id != Timeline.home.id).deleteAll($0)
+                var statusIds = try Status.Id.fetchAll(
+                    $0,
+                    TimelineStatusJoin.select(TimelineStatusJoin.Columns.statusId)
+                        .order(TimelineStatusJoin.Columns.statusId.desc))
+
+                if let lastReadId = try Status.Id.fetchOne(
+                    $0,
+                    LastReadIdRecord.filter(LastReadIdRecord.Columns.markerTimeline == Marker.Timeline.home.rawValue)
+                        .select(LastReadIdRecord.Columns.id))
+                    ?? statusIds.first,
+                   let index = statusIds.firstIndex(of: lastReadId) {
+                    statusIds = Array(statusIds.prefix(index + Self.cleanAfterLastReadIdCount))
+                }
+
+                statusIds += try Status.Id.fetchAll(
+                    $0,
+                    StatusRecord.filter(statusIds.contains(StatusRecord.Columns.id)
+                                            && StatusRecord.Columns.reblogId != nil)
+                        .select(StatusRecord.Columns.reblogId))
+                try StatusRecord.filter(!statusIds.contains(StatusRecord.Columns.id) ).deleteAll($0)
+                var accountIds = try Account.Id.fetchAll($0, StatusRecord.select(StatusRecord.Columns.accountId))
+                accountIds += try Account.Id.fetchAll(
+                    $0,
+                    AccountRecord.filter(accountIds.contains(AccountRecord.Columns.id)
+                                            && AccountRecord.Columns.movedId != nil)
+                        .select(AccountRecord.Columns.movedId))
+                try AccountRecord.filter(!accountIds.contains(AccountRecord.Columns.id)).deleteAll($0)
+            } else {
+                try TimelineRecord.deleteAll($0)
+                try StatusRecord.deleteAll($0)
+                try AccountRecord.deleteAll($0)
+            }
+
             try AccountList.deleteAll($0)
         }
     }
 }
+// swiftlint:enable file_length
