@@ -5,6 +5,7 @@ import SwiftUI
 extension CGFloat {
     static let defaultSpacing: Self = 8
     static let compactSpacing: Self = 4
+    static let ultraCompactSpacing: Self = 1
     static let defaultCornerRadius: Self = 8
     static let avatarDimension: Self = 50
     static let hairline = 1 / UIScreen.main.scale

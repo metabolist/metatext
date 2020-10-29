@@ -105,6 +105,21 @@ extension ContentDatabase {
                 t.column("wholeWord", .boolean).notNull()
             }
 
+            try db.create(table: "conversationRecord") { t in
+                t.column("id", .text).primaryKey(onConflict: .replace)
+                t.column("unread", .boolean).notNull()
+                t.column("lastStatusId", .text).references("statusRecord")
+            }
+
+            try db.create(table: "conversationAccountJoin") { t in
+                t.column("conversationId", .text).indexed().notNull()
+                    .references("conversationRecord", onDelete: .cascade)
+                t.column("accountId", .text).indexed().notNull()
+                    .references("accountRecord", onDelete: .cascade)
+
+                t.primaryKey(["conversationId", "accountId"], onConflict: .replace)
+            }
+
             try db.create(table: "lastReadIdRecord") { t in
                 t.column("markerTimeline", .text).primaryKey(onConflict: .replace)
                 t.column("id", .text).notNull()

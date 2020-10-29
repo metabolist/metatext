@@ -140,6 +140,13 @@ extension CollectionItemsViewModel: CollectionViewModel {
                                             .navigationService
                                             .profileService(account: notification.account))))
             }
+        case let .conversation(conversation):
+            guard let status = conversation.lastStatus else { break }
+
+            eventsSubject.send(
+                .navigation(.collection(collectionService
+                                            .navigationService
+                                            .contextService(id: status.displayStatus.id))))
         }
     }
 
@@ -164,7 +171,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
         }
     }
 
-    // swiftlint:disable:next function_body_length
+    // swiftlint:disable:next function_body_length cyclomatic_complexity
     public func viewModel(indexPath: IndexPath) -> CollectionItemViewModel {
         let item = items.value[indexPath.section][indexPath.item]
         let cachedViewModel = viewModelCache[item]?.viewModel
@@ -227,6 +234,19 @@ extension CollectionItemsViewModel: CollectionViewModel {
                     identification: identification)
                 cache(viewModel: viewModel, forItem: item)
             }
+
+            return viewModel
+        case let .conversation(conversation):
+            if let cachedViewModel = cachedViewModel {
+                return cachedViewModel
+            }
+
+            let viewModel = ConversationViewModel(
+                conversationService: collectionService.navigationService.conversationService(
+                    conversation: conversation),
+                identification: identification)
+
+            cache(viewModel: viewModel, forItem: item)
 
             return viewModel
         }

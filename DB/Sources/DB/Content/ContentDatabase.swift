@@ -302,6 +302,16 @@ public extension ContentDatabase {
         .eraseToAnyPublisher()
     }
 
+    func insert(conversations: [Conversation]) -> AnyPublisher<Never, Error> {
+        databaseWriter.writePublisher {
+            for conversation in conversations {
+                try conversation.save($0)
+            }
+        }
+        .ignoreOutput()
+        .eraseToAnyPublisher()
+    }
+
     func timelinePublisher(_ timeline: Timeline) -> AnyPublisher<[[CollectionItem]], Error> {
         ValueObservation.tracking(
             TimelineItemsInfo.request(TimelineRecord.filter(TimelineRecord.Columns.id == timeline.id)).fetchOne)
@@ -378,6 +388,17 @@ public extension ContentDatabase {
             .eraseToAnyPublisher()
     }
 
+    func conversationsPublisher() -> AnyPublisher<[Conversation], Error> {
+        ValueObservation.tracking(ConversationInfo.request(ConversationRecord.all()).fetchAll)
+            .removeDuplicates()
+            .publisher(in: databaseWriter)
+            .map {
+                $0.sorted { $0.lastStatusInfo.record.createdAt > $1.lastStatusInfo.record.createdAt }
+                    .map(Conversation.init(info:))
+            }
+            .eraseToAnyPublisher()
+    }
+
     func lastReadId(_ markerTimeline: Marker.Timeline) -> String? {
         try? databaseWriter.read {
             try String.fetchOne(
@@ -401,6 +422,8 @@ private extension ContentDatabase {
         try databaseWriter.write {
             let notificationAccountIds: [Account.Id]
             let notificationStatusIds: [Status.Id]
+
+            try ConversationRecord.deleteAll($0)
 
             if useNotificationsLastReadId {
                 var notificationIds = try MastodonNotification.Id.fetchAll(

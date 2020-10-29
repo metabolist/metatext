@@ -34,7 +34,22 @@ public final class NavigationViewModel: ObservableObject {
         }
     }
 
+    public var conversationsViewModel: CollectionViewModel? {
+        if identification.identity.authenticated {
+            if _conversationsViewModel == nil {
+                _conversationsViewModel = CollectionItemsViewModel(
+                    collectionService: identification.service.conversationsService(),
+                    identification: identification)
+            }
+
+            return _conversationsViewModel
+        } else {
+            return nil
+        }
+    }
+
     private var _notificationsViewModel: CollectionViewModel?
+    private var _conversationsViewModel: CollectionViewModel?
     private var cancellables = Set<AnyCancellable>()
 
     public init(identification: Identification) {

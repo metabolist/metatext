@@ -212,6 +212,10 @@ public extension IdentityService {
     func notificationsService() -> NotificationsService {
         NotificationsService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }
+
+    func conversationsService() -> ConversationsService {
+        ConversationsService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+    }
 }
 
 private extension IdentityService {

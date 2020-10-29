@@ -79,6 +79,13 @@ public extension NavigationService {
             mastodonAPIClient: mastodonAPIClient,
             contentDatabase: contentDatabase)
     }
+
+    func conversationService(conversation: Conversation) -> ConversationService {
+        ConversationService(
+            conversation: conversation,
+            mastodonAPIClient: mastodonAPIClient,
+            contentDatabase: contentDatabase)
+    }
 }
 
 private extension NavigationService {

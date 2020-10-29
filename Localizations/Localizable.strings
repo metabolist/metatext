@@ -31,6 +31,7 @@
 "identities.pending" = "Pending";
 "lists.new-list-title" = "New List Title";
 "load-more" = "Load More";
+"messages" = "Messages";
 "pending.pending-confirmation" = "Your account is pending confirmation";
 "preferences" = "Preferences";
 "preferences.app" = "App Preferences";

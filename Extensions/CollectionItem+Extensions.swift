@@ -8,7 +8,8 @@ extension CollectionItem {
         StatusListCell.self,
         AccountListCell.self,
         LoadMoreCell.self,
-        NotificationListCell.self]
+        NotificationListCell.self,
+        ConversationListCell.self]
 
     var cellClass: AnyClass {
         switch self {
@@ -20,6 +21,8 @@ extension CollectionItem {
             return LoadMoreCell.self
         case let .notification(_, statusConfiguration):
             return statusConfiguration == nil ? NotificationListCell.self : StatusListCell.self
+        case .conversation:
+            return ConversationListCell.self
         }
     }
 }

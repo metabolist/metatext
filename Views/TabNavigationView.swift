@@ -58,6 +58,7 @@ private extension TabNavigationView {
     }
 
     @ViewBuilder
+    // swiftlint:disable:next function_body_length
     func view(tab: NavigationViewModel.Tab) -> some View {
         switch tab {
         case .timelines:
@@ -98,6 +99,15 @@ private extension TabNavigationView {
                     .id(tab)
                     .edgesIgnoringSafeArea(.all)
                     .navigationTitle("notifications")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .navigationBarItems(leading: secondaryNavigationButton)
+            }
+        case .messages:
+            if let conversationsViewModel = viewModel.conversationsViewModel {
+                TableView(viewModel: conversationsViewModel)
+                    .id(tab)
+                    .edgesIgnoringSafeArea(.all)
+                    .navigationTitle("messages")
                     .navigationBarTitleDisplayMode(.inline)
                     .navigationBarItems(leading: secondaryNavigationButton)
             }

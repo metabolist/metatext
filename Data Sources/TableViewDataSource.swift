@@ -26,6 +26,8 @@ final class TableViewDataSource: UITableViewDiffableDataSource<Int, CollectionIt
                 loadMoreCell.viewModel = loadMoreViewModel
             case let (notificationListCell as NotificationListCell, notificationViewModel as NotificationViewModel):
                 notificationListCell.viewModel = notificationViewModel
+            case let (conversationListCell as ConversationListCell, conversationViewModel as ConversationViewModel):
+                conversationListCell.viewModel = conversationViewModel
             default:
                 break
             }
