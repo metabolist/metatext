@@ -60,7 +60,7 @@ private extension TabNavigationView {
     func view(tab: NavigationViewModel.Tab) -> some View {
         switch tab {
         case .timelines:
-            TableView(viewModel: viewModel.viewModel(timeline: viewModel.timeline))
+            TableView(viewModel: viewModel.timelineViewModel)
                 .id(viewModel.timeline.id)
                 .edgesIgnoringSafeArea(.all)
                 .navigationTitle(viewModel.timeline.title)

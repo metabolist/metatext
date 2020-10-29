@@ -8,17 +8,28 @@ import ServiceLayer
 public final class NavigationViewModel: ObservableObject {
     public let identification: Identification
     @Published public private(set) var recentIdentities = [Identity]()
-    @Published public var timeline: Timeline
+    @Published public var timeline: Timeline {
+        didSet {
+            timelineViewModel = CollectionItemsViewModel(
+                collectionService: identification.service.service(timeline: timeline),
+                identification: identification)
+        }
+    }
     @Published public private(set) var timelinesAndLists: [Timeline]
     @Published public var presentingSecondaryNavigation = false
     @Published public var alertItem: AlertItem?
     public var selectedTab: Tab? = .timelines
+    public private(set) var timelineViewModel: CollectionItemsViewModel
 
     private var cancellables = Set<AnyCancellable>()
 
     public init(identification: Identification) {
         self.identification = identification
-        timeline = identification.identity.authenticated ? .home : .local
+        let timeline: Timeline = identification.identity.authenticated ? .home : .local
+        self.timeline = timeline
+        timelineViewModel = CollectionItemsViewModel(
+            collectionService: identification.service.service(timeline: timeline),
+            identification: identification)
         timelinesAndLists = identification.identity.authenticated
             ? Timeline.authenticatedDefaults
             : Timeline.unauthenticatedDefaults
@@ -88,12 +99,6 @@ public extension NavigationViewModel {
         identification.service.refreshInstance()
             .sink { _ in } receiveValue: { _ in }
             .store(in: &cancellables)
-    }
-
-    func viewModel(timeline: Timeline) -> CollectionItemsViewModel {
-        CollectionItemsViewModel(
-            collectionService: identification.service.service(timeline: timeline),
-            identification: identification)
     }
 }
 

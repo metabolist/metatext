@@ -21,7 +21,7 @@ import PreviewViewModels
 
 struct StatusListView_Previews: PreviewProvider {
     static var previews: some View {
-        TableView(viewModel: NavigationViewModel(identification: .preview).viewModel(timeline: .home))
+        TableView(viewModel: NavigationViewModel(identification: .preview).timelineViewModel)
     }
 }
 #endif
