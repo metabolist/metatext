@@ -6,6 +6,7 @@ public enum CollectionItem: Hashable {
     case status(Status, StatusConfiguration)
     case loadMore(LoadMore)
     case account(Account)
+    case notification(MastodonNotification, StatusConfiguration?)
 }
 
 public extension CollectionItem {

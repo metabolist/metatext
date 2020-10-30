@@ -8,13 +8,14 @@ struct TabNavigationView: View {
     @ObservedObject var viewModel: NavigationViewModel
     @EnvironmentObject var rootViewModel: RootViewModel
     @Environment(\.displayScale) var displayScale: CGFloat
+    @State var selectedTab = NavigationViewModel.Tab.timelines
 
     var body: some View {
         Group {
             if viewModel.identification.identity.pending {
                 pendingView
             } else {
-                TabView(selection: $viewModel.selectedTab) {
+                TabView(selection: $selectedTab) {
                     ForEach(viewModel.tabs) { tab in
                         NavigationView {
                             view(tab: tab)
@@ -91,6 +92,15 @@ private extension TabNavigationView {
                         Image(systemName: viewModel.timeline.systemImageName)
                             .padding([.leading, .top, .bottom])
                     })
+        case .notifications:
+            if let notificationsViewModel = viewModel.notificationsViewModel {
+                TableView(viewModel: notificationsViewModel)
+                    .id(tab)
+                    .edgesIgnoringSafeArea(.all)
+                    .navigationTitle("notifications")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .navigationBarItems(leading: secondaryNavigationButton)
+            }
         default: Text(tab.title)
         }
     }

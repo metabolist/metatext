@@ -1,9 +1,14 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
+import UIKit
 import ViewModels
 
 extension CollectionItem {
-    static let cellClasses = [StatusListCell.self, AccountListCell.self, LoadMoreCell.self]
+    static let cellClasses = [
+        StatusListCell.self,
+        AccountListCell.self,
+        LoadMoreCell.self,
+        NotificationListCell.self]
 
     var cellClass: AnyClass {
         switch self {
@@ -13,6 +18,8 @@ extension CollectionItem {
             return AccountListCell.self
         case .loadMore:
             return LoadMoreCell.self
+        case let .notification(_, statusConfiguration):
+            return statusConfiguration == nil ? NotificationListCell.self : StatusListCell.self
         }
     }
 }

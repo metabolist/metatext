@@ -126,6 +126,18 @@ extension CollectionItemsViewModel: CollectionViewModel {
                 .navigation(.profile(collectionService
                                         .navigationService
                                         .profileService(account: account))))
+        case let .notification(notification, _):
+            if let status = notification.status {
+                eventsSubject.send(
+                    .navigation(.collection(collectionService
+                                                .navigationService
+                                                .contextService(id: status.displayStatus.id))))
+            } else {
+                eventsSubject.send(
+                    .navigation(.profile(collectionService
+                                            .navigationService
+                                            .profileService(account: notification.account))))
+            }
         }
     }
 
@@ -194,6 +206,27 @@ extension CollectionItemsViewModel: CollectionViewModel {
                 identification: identification)
 
             cache(viewModel: viewModel, forItem: item)
+
+            return viewModel
+        case let .notification(notification, statusConfiguration):
+            let viewModel: CollectionItemViewModel
+
+            if let cachedViewModel = cachedViewModel {
+                viewModel = cachedViewModel
+            } else if let status = notification.status, let statusConfiguration = statusConfiguration {
+                let statusViewModel = StatusViewModel(
+                    statusService: collectionService.navigationService.statusService(status: status),
+                    identification: identification)
+                statusViewModel.configuration = statusConfiguration
+                viewModel = statusViewModel
+                cache(viewModel: viewModel, forItem: item)
+            } else {
+                viewModel = NotificationViewModel(
+                    notificationService: collectionService.navigationService.notificationService(
+                        notification: notification),
+                    identification: identification)
+                cache(viewModel: viewModel, forItem: item)
+            }
 
             return viewModel
         }

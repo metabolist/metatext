@@ -208,6 +208,10 @@ public extension IdentityService {
     func service(timeline: Timeline) -> TimelineService {
         TimelineService(timeline: timeline, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }
+
+    func notificationsService() -> NotificationsService {
+        NotificationsService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+    }
 }
 
 private extension IdentityService {

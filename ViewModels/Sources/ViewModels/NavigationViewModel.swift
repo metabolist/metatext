@@ -18,9 +18,23 @@ public final class NavigationViewModel: ObservableObject {
     @Published public private(set) var timelinesAndLists: [Timeline]
     @Published public var presentingSecondaryNavigation = false
     @Published public var alertItem: AlertItem?
-    public var selectedTab: Tab? = .timelines
     public private(set) var timelineViewModel: CollectionItemsViewModel
 
+    public var notificationsViewModel: CollectionViewModel? {
+        if identification.identity.authenticated {
+            if _notificationsViewModel == nil {
+                _notificationsViewModel = CollectionItemsViewModel(
+                    collectionService: identification.service.notificationsService(),
+                    identification: identification)
+            }
+
+            return _notificationsViewModel
+        } else {
+            return nil
+        }
+    }
+
+    private var _notificationsViewModel: CollectionViewModel?
     private var cancellables = Set<AnyCancellable>()
 
     public init(identification: Identification) {

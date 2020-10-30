@@ -110,6 +110,13 @@ extension ContentDatabase {
                 t.column("id", .text).notNull()
             }
 
+            try db.create(table: "notificationRecord") { t in
+                t.column("id", .text).primaryKey(onConflict: .replace)
+                t.column("type", .text).notNull()
+                t.column("accountId", .text).notNull().references("accountRecord")
+                t.column("statusId").references("statusRecord")
+            }
+
             try db.create(table: "statusAncestorJoin") { t in
                 t.column("parentId", .text).indexed().notNull()
                     .references("statusRecord", onDelete: .cascade)

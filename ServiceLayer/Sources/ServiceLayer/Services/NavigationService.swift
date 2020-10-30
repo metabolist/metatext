@@ -72,6 +72,13 @@ public extension NavigationService {
     func loadMoreService(loadMore: LoadMore) -> LoadMoreService {
         LoadMoreService(loadMore: loadMore, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }
+
+    func notificationService(notification: MastodonNotification) -> NotificationService {
+        NotificationService(
+            notification: notification,
+            mastodonAPIClient: mastodonAPIClient,
+            contentDatabase: contentDatabase)
+    }
 }
 
 private extension NavigationService {

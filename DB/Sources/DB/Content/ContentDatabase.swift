@@ -292,6 +292,16 @@ public extension ContentDatabase {
             .eraseToAnyPublisher()
     }
 
+    func insert(notifications: [MastodonNotification]) -> AnyPublisher<Never, Error> {
+        databaseWriter.writePublisher {
+            for notification in notifications {
+                try notification.save($0)
+            }
+        }
+        .ignoreOutput()
+        .eraseToAnyPublisher()
+    }
+
     func timelinePublisher(_ timeline: Timeline) -> AnyPublisher<[[CollectionItem]], Error> {
         ValueObservation.tracking(
             TimelineItemsInfo.request(TimelineRecord.filter(TimelineRecord.Columns.id == timeline.id)).fetchOne)
@@ -346,6 +356,28 @@ public extension ContentDatabase {
             .eraseToAnyPublisher()
     }
 
+    func notificationsPublisher() -> AnyPublisher<[[CollectionItem]], Error> {
+        ValueObservation.tracking(
+            NotificationInfo.request(
+                NotificationRecord.order(NotificationRecord.Columns.id.desc)).fetchAll)
+            .removeDuplicates()
+            .publisher(in: databaseWriter)
+            .map { [$0.map {
+                let configuration: CollectionItem.StatusConfiguration?
+
+                if $0.record.type == .mention, let statusInfo = $0.statusInfo {
+                    configuration = CollectionItem.StatusConfiguration(
+                        showContentToggled: statusInfo.showContentToggled,
+                        showAttachmentsToggled: statusInfo.showAttachmentsToggled)
+                } else {
+                    configuration = nil
+                }
+
+                return .notification(MastodonNotification(info: $0), configuration)
+            }] }
+            .eraseToAnyPublisher()
+    }
+
     func lastReadId(_ markerTimeline: Marker.Timeline) -> String? {
         try? databaseWriter.read {
             try String.fetchOne(
@@ -366,6 +398,8 @@ private extension ContentDatabase {
                       useHomeTimelineLastReadId: Bool,
                       useNotificationsLastReadId: Bool) throws {
         try databaseWriter.write {
+            try NotificationRecord.deleteAll($0)
+
             if useHomeTimelineLastReadId {
                 try TimelineRecord.filter(TimelineRecord.Columns.id != Timeline.home.id).deleteAll($0)
                 var statusIds = try Status.Id.fetchAll(

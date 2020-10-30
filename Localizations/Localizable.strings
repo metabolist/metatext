@@ -93,6 +93,13 @@
 "filter.context.thread" = "Conversations";
 "filter.context.account" = "Profiles";
 "filter.context.unknown" = "Unknown context";
+"notifications" = "Notifications";
+"notifications.reblogged-your-status" = "%@ boosted your status";
+"notifications.favourited-your-status" = "%@ favorited your status";
+"notifications.followed-you" = "%@ followed you";
+"notifications.poll-ended" = "A poll you have voted in has ended";
+"notifications.your-poll-ended" = "Your poll has ended";
+"notifications.unknown" = "Notification from %@";
 "status.reblogged-by" = "%@ boosted";
 "status.pinned-post" = "Pinned post";
 "status.show-more" = "Show More";

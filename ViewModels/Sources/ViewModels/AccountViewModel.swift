@@ -28,13 +28,17 @@ public extension AccountViewModel {
         }
     }
 
-    var displayName: String { accountService.account.displayName }
+    var displayName: String {
+        accountService.account.displayName.isEmpty ? accountService.account.acct : accountService.account.displayName
+    }
 
     var accountName: String { "@".appending(accountService.account.acct) }
 
     var note: NSAttributedString { accountService.account.note.attributed }
 
     var emoji: [Emoji] { accountService.account.emojis }
+
+    var isSelf: Bool { accountService.account.id == identification.identity.account?.id }
 
     func avatarURL(profile: Bool = false) -> URL {
         if !identification.appPreferences.shouldReduceMotion,
