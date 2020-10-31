@@ -12,12 +12,7 @@ final class StatusView: UIView {
     let displayNameLabel = UILabel()
     let accountLabel = UILabel()
     let timeLabel = UILabel()
-    let spoilerTextLabel = UILabel()
-    let toggleShowContentButton = UIButton(type: .system)
-    let contentTextView = TouchFallthroughTextView()
-    let attachmentsView = StatusAttachmentsView()
-    let pollView = PollView()
-    let cardView = CardView()
+    let bodyView = StatusBodyView()
     let contextParentTimeLabel = UILabel()
     let timeApplicationDividerLabel = UILabel()
     let applicationButton = UIButton(type: .system)
@@ -145,38 +140,7 @@ private extension StatusView {
         nameAccountContainerStackView.addArrangedSubview(nameAccountTimeStackView)
         mainStackView.addArrangedSubview(nameAccountContainerStackView)
 
-        spoilerTextLabel.numberOfLines = 0
-        spoilerTextLabel.adjustsFontForContentSizeCategory = true
-        mainStackView.addArrangedSubview(spoilerTextLabel)
-
-        toggleShowContentButton.titleLabel?.font = .preferredFont(forTextStyle: .headline)
-        toggleShowContentButton.titleLabel?.adjustsFontForContentSizeCategory = true
-        toggleShowContentButton.addAction(
-            UIAction { [weak self] _ in self?.statusConfiguration.viewModel.toggleShowContent() },
-            for: .touchUpInside)
-        mainStackView.addArrangedSubview(toggleShowContentButton)
-
-        contentTextView.adjustsFontForContentSizeCategory = true
-        contentTextView.isScrollEnabled = false
-        contentTextView.backgroundColor = .clear
-        contentTextView.delegate = self
-        mainStackView.addArrangedSubview(contentTextView)
-
-        mainStackView.addArrangedSubview(attachmentsView)
-
-        mainStackView.addArrangedSubview(pollView)
-
-        cardView.button.addAction(
-            UIAction { [weak self] _ in
-                guard
-                    let viewModel = self?.statusConfiguration.viewModel,
-                    let url = viewModel.cardViewModel?.url
-                else { return }
-
-                viewModel.urlSelected(url)
-            },
-            for: .touchUpInside)
-        mainStackView.addArrangedSubview(cardView)
+        mainStackView.addArrangedSubview(bodyView)
 
         contextParentTimeLabel.font = .preferredFont(forTextStyle: .footnote)
         contextParentTimeLabel.adjustsFontForContentSizeCategory = true
@@ -296,15 +260,10 @@ private extension StatusView {
     func applyStatusConfiguration() {
         let viewModel = statusConfiguration.viewModel
         let isContextParent = viewModel.configuration.isContextParent
-        let mutableContent = NSMutableAttributedString(attributedString: viewModel.content)
         let mutableDisplayName = NSMutableAttributedString(string: viewModel.displayName)
-        let mutableSpoilerText = NSMutableAttributedString(string: viewModel.spoilerText)
-        let contentFont = UIFont.preferredFont(forTextStyle: isContextParent ? .title3 : .callout)
-        let contentRange = NSRange(location: 0, length: mutableContent.length)
 
         avatarImageView.kf.setImage(with: viewModel.avatarURL)
 
-        contentTextView.shouldFallthrough = !isContextParent
         sideStackView.isHidden = isContextParent
         avatarImageView.removeFromSuperview()
 
@@ -326,25 +285,11 @@ private extension StatusView {
         inReplyToView.isHidden = !viewModel.configuration.isReplyInContext
         hasReplyFollowingView.isHidden = !viewModel.configuration.hasReplyFollowing
 
-        if
-            viewModel.isReblog {
-            let metaText = String.localizedStringWithFormat(
-                NSLocalizedString("status.reblogged-by", comment: ""),
-                viewModel.rebloggedByDisplayName)
-            let mutableInfoText = NSMutableAttributedString(string: metaText)
-
-            let range = (mutableInfoText.string as NSString).range(of: viewModel.rebloggedByDisplayName)
-
-            if range.location != NSNotFound,
-               let boldFontDescriptor = infoLabel.font.fontDescriptor.withSymbolicTraits([.traitBold]) {
-                let boldFont = UIFont(descriptor: boldFontDescriptor, size: infoLabel.font.pointSize)
-
-                mutableInfoText.setAttributes([NSAttributedString.Key.font: boldFont], range: range)
-            }
-
-            mutableInfoText.insert(emoji: viewModel.rebloggedByDisplayNameEmoji, view: infoLabel)
-            mutableInfoText.resizeAttachments(toLineHeight: infoLabel.font.lineHeight)
-            infoLabel.attributedText = mutableInfoText
+        if viewModel.isReblog {
+            infoLabel.attributedText = "status.reblogged-by".localizedBolding(
+                displayName: viewModel.rebloggedByDisplayName,
+                emoji: viewModel.rebloggedByDisplayNameEmoji,
+                label: infoLabel)
             infoIcon.image = UIImage(
                 systemName: "arrow.2.squarepath",
                 withConfiguration: UIImage.SymbolConfiguration(scale: .small))
@@ -362,32 +307,9 @@ private extension StatusView {
             infoIcon.isHidden = true
         }
 
-        mutableContent.removeAttribute(.font, range: contentRange)
-        mutableContent.addAttributes(
-            [.font: contentFont, .foregroundColor: UIColor.label],
-            range: contentRange)
-        mutableContent.insert(emoji: viewModel.contentEmoji, view: contentTextView)
-        mutableContent.resizeAttachments(toLineHeight: contentFont.lineHeight)
-        contentTextView.attributedText = mutableContent
-        contentTextView.isHidden = contentTextView.text == ""
-
         mutableDisplayName.insert(emoji: viewModel.displayNameEmoji, view: displayNameLabel)
         mutableDisplayName.resizeAttachments(toLineHeight: displayNameLabel.font.lineHeight)
         displayNameLabel.attributedText = mutableDisplayName
-
-        mutableSpoilerText.insert(emoji: viewModel.contentEmoji, view: spoilerTextLabel)
-        mutableSpoilerText.resizeAttachments(toLineHeight: spoilerTextLabel.font.lineHeight)
-        spoilerTextLabel.font = contentFont
-        spoilerTextLabel.attributedText = mutableSpoilerText
-        spoilerTextLabel.isHidden = spoilerTextLabel.text == ""
-        toggleShowContentButton.setTitle(
-            viewModel.shouldShowContent
-                ? NSLocalizedString("status.show-less", comment: "")
-                : NSLocalizedString("status.show-more", comment: ""),
-            for: .normal)
-        toggleShowContentButton.isHidden = viewModel.spoilerText == ""
-
-        contentTextView.isHidden = !viewModel.shouldShowContent
 
         nameAccountTimeStackView.axis = isContextParent ? .vertical : .horizontal
         nameAccountTimeStackView.alignment = isContextParent ? .leading : .fill
@@ -407,14 +329,7 @@ private extension StatusView {
         timeLabel.text = viewModel.time
         timeLabel.isHidden = isContextParent
 
-        attachmentsView.isHidden = viewModel.attachmentViewModels.count == 0
-        attachmentsView.viewModel = viewModel
-
-        pollView.isHidden = viewModel.pollOptions.count == 0
-        pollView.viewModel = viewModel
-
-        cardView.viewModel = viewModel.cardViewModel
-        cardView.isHidden = viewModel.cardViewModel == nil
+        bodyView.viewModel = viewModel
 
         contextParentTimeLabel.text = viewModel.contextParentTime
         timeApplicationDividerLabel.isHidden = viewModel.applicationName == nil

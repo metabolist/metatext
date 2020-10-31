@@ -165,6 +165,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
         }
     }
 
+    // swiftlint:disable:next function_body_length
     public func viewModel(indexPath: IndexPath) -> CollectionItemViewModel {
         let item = items.value[indexPath.section][indexPath.item]
         let cachedViewModel = viewModelCache[item]?.viewModel

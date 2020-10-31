@@ -391,7 +391,7 @@ private extension TableViewController {
            view.isDescendant(of: visibleView),
            let superview = view.superview,
            let attachmentsViewClosestToCenter = tableView.visibleCells
-            .compactMap({ ($0.contentView as? StatusView)?.attachmentsView })
+            .compactMap({ ($0.contentView as? StatusView)?.bodyView.attachmentsView })
             .filter(\.shouldAutoplay)
             .min(by: {
                 abs(superview.convert($0.frame, from: $0.superview).midY - view.frame.midY)

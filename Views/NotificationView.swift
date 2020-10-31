@@ -1,11 +1,17 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
+import Kingfisher
 import Mastodon
 import UIKit
 
-class NotificationView: UIView {
+final class NotificationView: UIView {
     private let iconImageView = UIImageView()
+    private let avatarImageView = AnimatedImageView()
+    private let avatarButton = UIButton()
     private let typeLabel = UILabel()
+    private let displayNameLabel = UILabel()
+    private let accountLabel = UILabel()
+    private let statusBodyView = StatusBodyView()
     private var notificationConfiguration: NotificationContentConfiguration
 
     init(configuration: NotificationContentConfiguration) {
@@ -37,30 +43,88 @@ extension NotificationView: UIContentView {
 }
 
 private extension NotificationView {
+    // swiftlint:disable function_body_length
     func initialSetup() {
-        let stackView = UIStackView()
+        let containerStackView = UIStackView()
+        let sideStackView = UIStackView()
+        let mainStackView = UIStackView()
 
-        addSubview(stackView)
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.spacing = .compactSpacing
+        addSubview(containerStackView)
+        containerStackView.translatesAutoresizingMaskIntoConstraints = false
+        containerStackView.spacing = .defaultSpacing
 
-        stackView.addArrangedSubview(iconImageView)
+        sideStackView.axis = .vertical
+        sideStackView.alignment = .trailing
+        sideStackView.spacing = .compactSpacing
+        sideStackView.addArrangedSubview(iconImageView)
+        sideStackView.addArrangedSubview(avatarImageView)
+        sideStackView.addArrangedSubview(UIView())
+        containerStackView.addArrangedSubview(sideStackView)
+
+        mainStackView.axis = .vertical
+        mainStackView.spacing = .compactSpacing
+        mainStackView.addArrangedSubview(typeLabel)
+        mainStackView.addSubview(UIView())
+        mainStackView.addArrangedSubview(statusBodyView)
+        mainStackView.addArrangedSubview(displayNameLabel)
+        mainStackView.addArrangedSubview(accountLabel)
+        containerStackView.addArrangedSubview(mainStackView)
+
+        iconImageView.contentMode = .scaleAspectFit
         iconImageView.setContentHuggingPriority(.required, for: .horizontal)
 
-        stackView.addArrangedSubview(typeLabel)
-        typeLabel.font = .preferredFont(forTextStyle: .body)
+        avatarImageView.layer.cornerRadius = .avatarDimension / 2
+        avatarImageView.clipsToBounds = true
+
+        let avatarHeightConstraint = avatarImageView.heightAnchor.constraint(equalToConstant: .avatarDimension)
+
+        avatarHeightConstraint.priority = .justBelowMax
+
+        avatarButton.translatesAutoresizingMaskIntoConstraints = false
+        avatarImageView.addSubview(avatarButton)
+        avatarImageView.isUserInteractionEnabled = true
+        avatarButton.setBackgroundImage(.highlightedButtonBackground, for: .highlighted)
+
+        avatarButton.addAction(
+            UIAction { [weak self] _ in self?.notificationConfiguration.viewModel.accountSelected() },
+            for: .touchUpInside)
+
+        typeLabel.font = .preferredFont(forTextStyle: .headline)
         typeLabel.adjustsFontForContentSizeCategory = true
+        typeLabel.numberOfLines = 0
+
+        statusBodyView.alpha = 0.5
+        statusBodyView.isUserInteractionEnabled = false
+
+        displayNameLabel.font = .preferredFont(forTextStyle: .headline)
+        displayNameLabel.adjustsFontForContentSizeCategory = true
+        displayNameLabel.numberOfLines = 0
+
+        accountLabel.font = .preferredFont(forTextStyle: .subheadline)
+        accountLabel.adjustsFontForContentSizeCategory = true
+        accountLabel.textColor = .secondaryLabel
+        accountLabel.numberOfLines = 0
 
         NSLayoutConstraint.activate([
-            stackView.leadingAnchor.constraint(equalTo: readableContentGuide.leadingAnchor),
-            stackView.topAnchor.constraint(equalTo: readableContentGuide.topAnchor),
-            stackView.trailingAnchor.constraint(equalTo: readableContentGuide.trailingAnchor),
-            stackView.bottomAnchor.constraint(equalTo: readableContentGuide.bottomAnchor)
+            containerStackView.leadingAnchor.constraint(equalTo: readableContentGuide.leadingAnchor),
+            containerStackView.topAnchor.constraint(equalTo: readableContentGuide.topAnchor),
+            containerStackView.trailingAnchor.constraint(equalTo: readableContentGuide.trailingAnchor),
+            containerStackView.bottomAnchor.constraint(equalTo: readableContentGuide.bottomAnchor),
+            avatarImageView.widthAnchor.constraint(equalToConstant: .avatarDimension),
+            avatarHeightConstraint,
+            sideStackView.widthAnchor.constraint(equalToConstant: .avatarDimension),
+            iconImageView.centerYAnchor.constraint(equalTo: typeLabel.centerYAnchor),
+            avatarButton.leadingAnchor.constraint(equalTo: avatarImageView.leadingAnchor),
+            avatarButton.topAnchor.constraint(equalTo: avatarImageView.topAnchor),
+            avatarButton.bottomAnchor.constraint(equalTo: avatarImageView.bottomAnchor),
+            avatarButton.trailingAnchor.constraint(equalTo: avatarImageView.trailingAnchor)
         ])
     }
 
     func applyNotificationConfiguration() {
         let viewModel = notificationConfiguration.viewModel
+
+        avatarImageView.kf.setImage(with: viewModel.accountViewModel.avatarURL())
 
         switch viewModel.type {
         case .follow:
@@ -96,10 +160,28 @@ private extension NotificationView {
             iconImageView.tintColor = nil
         }
 
+        if viewModel.statusViewModel == nil {
+            let mutableDisplayName = NSMutableAttributedString(string: viewModel.accountViewModel.displayName)
+
+            mutableDisplayName.insert(emoji: viewModel.accountViewModel.emoji, view: displayNameLabel)
+            mutableDisplayName.resizeAttachments(toLineHeight: displayNameLabel.font.lineHeight)
+            displayNameLabel.attributedText = mutableDisplayName
+            accountLabel.text = viewModel.accountViewModel.accountName
+            statusBodyView.isHidden = true
+            displayNameLabel.isHidden = false
+            accountLabel.isHidden = false
+        } else {
+            statusBodyView.viewModel = viewModel.statusViewModel
+            statusBodyView.isHidden = false
+            displayNameLabel.isHidden = true
+            accountLabel.isHidden = true
+        }
+
         iconImageView.image = UIImage(
             systemName: viewModel.type.systemImageName,
             withConfiguration: UIImage.SymbolConfiguration(scale: .medium))
     }
+    // swiftlint:enable function_body_length
 }
 
 extension MastodonNotification.NotificationType {
