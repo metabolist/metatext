@@ -42,3 +42,11 @@ final class TableViewDataSource: UITableViewDiffableDataSource<Int, CollectionIt
         }
     }
 }
+
+extension TableViewDataSource {
+    func indexPath(itemId: CollectionItem.Id) -> IndexPath? {
+        guard let item = snapshot().itemIdentifiers.first(where: { $0.itemId == itemId }) else { return nil }
+
+        return indexPath(for: item)
+    }
+}

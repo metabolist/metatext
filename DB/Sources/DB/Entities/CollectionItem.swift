@@ -10,6 +10,8 @@ public enum CollectionItem: Hashable {
 }
 
 public extension CollectionItem {
+    typealias Id = String
+
     struct StatusConfiguration: Hashable {
         public let showContentToggled: Bool
         public let showAttachmentsToggled: Bool
@@ -30,6 +32,19 @@ public extension CollectionItem {
             self.isPinned = isPinned
             self.isReplyInContext = isReplyInContext
             self.hasReplyFollowing = hasReplyFollowing
+        }
+    }
+
+    var itemId: Id? {
+        switch  self {
+        case let .status(status, _):
+            return status.id
+        case .loadMore:
+            return nil
+        case let .account(account):
+            return account.id
+        case let .notification(notification, _):
+            return notification.id
         }
     }
 }

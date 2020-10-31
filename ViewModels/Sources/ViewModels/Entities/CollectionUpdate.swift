@@ -2,5 +2,5 @@
 
 public struct CollectionUpdate: Hashable {
     public let items: [[CollectionItem]]
-    public let maintainScrollPosition: CollectionItem?
+    public let maintainScrollPositionItemId: String?
 }

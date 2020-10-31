@@ -260,8 +260,8 @@ private extension TableViewController {
         var offsetFromNavigationBar: CGFloat?
 
         if
-            let item = update.maintainScrollPosition,
-            let indexPath = dataSource.indexPath(for: item),
+            let itemId = update.maintainScrollPositionItemId,
+            let indexPath = dataSource.indexPath(itemId: itemId),
             let navigationBar = navigationController?.navigationBar {
             let navigationBarMaxY = tableView.convert(navigationBar.bounds, from: navigationBar).maxY
             offsetFromNavigationBar = tableView.rectForRow(at: indexPath).origin.y - navigationBarMaxY
@@ -271,8 +271,8 @@ private extension TableViewController {
             guard let self = self else { return }
 
             if
-                let item = update.maintainScrollPosition,
-                let indexPath = self.dataSource.indexPath(for: item) {
+                let itemId = update.maintainScrollPositionItemId,
+                let indexPath = self.dataSource.indexPath(itemId: itemId) {
                 if self.viewModel.shouldAdjustContentInset {
                     self.tableView.contentInset.bottom = max(
                         0,

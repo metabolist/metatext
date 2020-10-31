@@ -16,7 +16,7 @@ final public class CollectionItemsViewModel: ObservableObject {
     private let eventsSubject = PassthroughSubject<CollectionItemEvent, Never>()
     private let loadingSubject = PassthroughSubject<Bool, Never>()
     private let expandAllSubject: CurrentValueSubject<ExpandAllState, Never>
-    private var maintainScrollPosition: CollectionItem?
+    private var maintainScrollPositionItemId: CollectionItem.Id?
     private var topVisibleIndexPath = IndexPath(item: 0, section: 0)
     private let lastReadId = CurrentValueSubject<String?, Never>(nil)
     private var lastSelectedLoadMore: LoadMore?
@@ -57,7 +57,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
     public var updates: AnyPublisher<CollectionUpdate, Never> {
         items.map { [weak self] in
             CollectionUpdate(items: $0,
-                             maintainScrollPosition: self?.maintainScrollPosition)
+                             maintainScrollPositionItemId: self?.maintainScrollPositionItemId)
         }
         .eraseToAnyPublisher()
     }
@@ -267,7 +267,7 @@ private extension CollectionItemsViewModel {
     }
 
     func process(items: [[CollectionItem]]) {
-        maintainScrollPosition = itemForScrollPositionMaintenance(newItems: items)
+        maintainScrollPositionItemId = itemForScrollPositionMaintenance(newItems: items)?.itemId
         self.items.send(items)
 
         let itemsSet = Set(items.reduce([], +))
