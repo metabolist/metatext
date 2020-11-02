@@ -267,7 +267,7 @@ private extension CollectionItemsViewModel {
     }
 
     func process(items: [[CollectionItem]]) {
-        maintainScrollPositionItemId = itemForScrollPositionMaintenance(newItems: items)?.itemId
+        maintainScrollPositionItemId = idForScrollPositionMaintenance(newItems: items)
         self.items.send(items)
 
         let itemsSet = Set(items.reduce([], +))
@@ -275,25 +275,18 @@ private extension CollectionItemsViewModel {
         viewModelCache = viewModelCache.filter { itemsSet.contains($0.key) }
     }
 
-    // swiftlint:disable:next cyclomatic_complexity function_body_length
-    func itemForScrollPositionMaintenance(newItems: [[CollectionItem]]) -> CollectionItem? {
+    func idForScrollPositionMaintenance(newItems: [[CollectionItem]]) -> CollectionItem.Id? {
+        let flatItems = items.value.reduce([], +)
         let flatNewItems = newItems.reduce([], +)
 
         if let markerTimeline = collectionService.markerTimeline,
            identification.appPreferences.positionBehavior(markerTimeline: markerTimeline) == .rememberPosition,
            let localLastReadId = identification.service.getLocalLastReadId(markerTimeline),
-           !hasRememberedPosition,
-           let lastReadItem = flatNewItems.first(where: {
-            switch $0 {
-            case let .status(status, _):
-                return status.id == localLastReadId
-            default:
-                return false
-            }
-           }) {
+           flatItems.contains(where: { $0.itemId == localLastReadId }),
+           !hasRememberedPosition {
             hasRememberedPosition = true
 
-            return lastReadItem
+            return localLastReadId
         }
 
         if collectionService is ContextService,
@@ -303,9 +296,8 @@ private extension CollectionItemsViewModel {
 
             return configuration.isContextParent // Maintain scroll position of parent after initial load of context
            }) {
-            return contextParent
+            return contextParent.itemId
         } else if collectionService is TimelineService {
-            let flatItems = items.value.reduce([], +)
             let difference = flatNewItems.difference(from: flatItems)
 
             if let lastSelectedLoadMore = lastSelectedLoadMore {
@@ -320,7 +312,7 @@ private extension CollectionItemsViewModel {
 
                         return status.id == loadMore.beforeStatusId
                        }) {
-                        return statusAfterLoadMore
+                        return statusAfterLoadMore.itemId
                     }
                 }
             }
@@ -330,9 +322,10 @@ private extension CollectionItemsViewModel {
                 let topVisibleItem = items.value[topVisibleIndexPath.section][topVisibleIndexPath.item]
 
                 if newItems.count > topVisibleIndexPath.section,
-                   let newIndex = newItems[topVisibleIndexPath.section].firstIndex(of: topVisibleItem),
+                   let newIndex = newItems[topVisibleIndexPath.section]
+                    .firstIndex(where: { $0.itemId == topVisibleItem.itemId }),
                    newIndex > topVisibleIndexPath.item {
-                    return topVisibleItem
+                    return topVisibleItem.itemId
                 }
             }
         }
