@@ -394,11 +394,44 @@ private extension ContentDatabase {
         try FileManager.default.databaseDirectoryURL(name: id.uuidString)
     }
 
+    // swiftlint:disable:next function_body_length
     static func clean(_ databaseWriter: DatabaseWriter,
                       useHomeTimelineLastReadId: Bool,
                       useNotificationsLastReadId: Bool) throws {
         try databaseWriter.write {
-            try NotificationRecord.deleteAll($0)
+            let notificationAccountIds: [Account.Id]
+            let notificationStatusIds: [Status.Id]
+
+            if useNotificationsLastReadId {
+                var notificationIds = try MastodonNotification.Id.fetchAll(
+                    $0,
+                    NotificationRecord.select(NotificationRecord.Columns.id)
+                        .order(NotificationRecord.Columns.id.desc))
+
+                if let lastReadId = try MastodonNotification.Id.fetchOne(
+                    $0,
+                    LastReadIdRecord.filter(
+                        LastReadIdRecord.Columns.markerTimeline == Marker.Timeline.notifications.rawValue)
+                        .select(LastReadIdRecord.Columns.id))
+                    ?? notificationIds.first,
+                   let index = notificationIds.firstIndex(of: lastReadId) {
+                    notificationIds = Array(notificationIds.prefix(index + Self.cleanAfterLastReadIdCount))
+                }
+
+                try NotificationRecord.filter(!notificationIds.contains(NotificationRecord.Columns.id)).deleteAll($0)
+                notificationAccountIds = try Account.Id.fetchAll(
+                    $0,
+                    NotificationRecord.select(NotificationRecord.Columns.accountId))
+                notificationStatusIds = try Status.Id.fetchAll(
+                    $0,
+                    NotificationRecord.filter(
+                        NotificationRecord.Columns.statusId != nil)
+                        .select(NotificationRecord.Columns.statusId))
+            } else {
+                try NotificationRecord.deleteAll($0)
+                notificationAccountIds = []
+                notificationStatusIds = []
+            }
 
             if useHomeTimelineLastReadId {
                 try TimelineRecord.filter(TimelineRecord.Columns.id != Timeline.home.id).deleteAll($0)
@@ -416,13 +449,15 @@ private extension ContentDatabase {
                     statusIds = Array(statusIds.prefix(index + Self.cleanAfterLastReadIdCount))
                 }
 
+                statusIds += notificationStatusIds
                 statusIds += try Status.Id.fetchAll(
                     $0,
                     StatusRecord.filter(statusIds.contains(StatusRecord.Columns.id)
                                             && StatusRecord.Columns.reblogId != nil)
                         .select(StatusRecord.Columns.reblogId))
-                try StatusRecord.filter(!statusIds.contains(StatusRecord.Columns.id) ).deleteAll($0)
+                try StatusRecord.filter(!statusIds.contains(StatusRecord.Columns.id)).deleteAll($0)
                 var accountIds = try Account.Id.fetchAll($0, StatusRecord.select(StatusRecord.Columns.accountId))
+                accountIds += notificationAccountIds
                 accountIds += try Account.Id.fetchAll(
                     $0,
                     AccountRecord.filter(accountIds.contains(AccountRecord.Columns.id)
@@ -431,8 +466,8 @@ private extension ContentDatabase {
                 try AccountRecord.filter(!accountIds.contains(AccountRecord.Columns.id)).deleteAll($0)
             } else {
                 try TimelineRecord.deleteAll($0)
-                try StatusRecord.deleteAll($0)
-                try AccountRecord.deleteAll($0)
+                try StatusRecord.filter(!notificationStatusIds.contains(StatusRecord.Columns.id)).deleteAll($0)
+                try AccountRecord.filter(!notificationAccountIds.contains(AccountRecord.Columns.id)).deleteAll($0)
             }
 
             try AccountList.deleteAll($0)

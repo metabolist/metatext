@@ -3,7 +3,7 @@
 import Foundation
 
 public struct MastodonNotification: Codable, Hashable {
-    public let id: String
+    public let id: Id
     public let type: NotificationType
     public let account: Account
     public let status: Status?
@@ -16,8 +16,10 @@ public struct MastodonNotification: Codable, Hashable {
     }
 }
 
-extension MastodonNotification {
-    public enum NotificationType: String, Codable, Unknowable {
+public extension MastodonNotification {
+    typealias Id = String
+
+    enum NotificationType: String, Codable, Unknowable {
         case follow
         case mention
         case reblog

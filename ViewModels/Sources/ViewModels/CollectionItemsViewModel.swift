@@ -21,7 +21,7 @@ final public class CollectionItemsViewModel: ObservableObject {
     private let lastReadId = CurrentValueSubject<String?, Never>(nil)
     private var lastSelectedLoadMore: LoadMore?
     private var hasRequestedUsingMarker = false
-    private var hasRememberedPosition = false
+    private var shouldRestorePositionOfLocalLastReadId = false
     private var cancellables = Set<AnyCancellable>()
 
     public init(collectionService: CollectionService, identification: Identification) {
@@ -43,6 +43,8 @@ final public class CollectionItemsViewModel: ObservableObject {
             .store(in: &cancellables)
 
         if let markerTimeline = collectionService.markerTimeline {
+            shouldRestorePositionOfLocalLastReadId =
+                identification.appPreferences.positionBehavior(markerTimeline: markerTimeline) == .rememberPosition
             lastReadId.compactMap { $0 }
                 .removeDuplicates()
                 .debounce(for: 0.5, scheduler: DispatchQueue.global())
@@ -144,13 +146,10 @@ extension CollectionItemsViewModel: CollectionViewModel {
     public func viewedAtTop(indexPath: IndexPath) {
         topVisibleIndexPath = indexPath
 
-        if items.value.count > indexPath.section, items.value[indexPath.section].count > indexPath.item {
-            switch items.value[indexPath.section][indexPath.item] {
-            case let .status(status, _):
-                lastReadId.send(status.id)
-            default:
-                break
-            }
+        if !shouldRestorePositionOfLocalLastReadId,
+           items.value.count > indexPath.section,
+           items.value[indexPath.section].count > indexPath.item {
+            lastReadId.send(items.value[indexPath.section][indexPath.item].itemId)
         }
     }
 
@@ -279,12 +278,11 @@ private extension CollectionItemsViewModel {
         let flatItems = items.value.reduce([], +)
         let flatNewItems = newItems.reduce([], +)
 
-        if let markerTimeline = collectionService.markerTimeline,
-           identification.appPreferences.positionBehavior(markerTimeline: markerTimeline) == .rememberPosition,
+        if shouldRestorePositionOfLocalLastReadId,
+           let markerTimeline = collectionService.markerTimeline,
            let localLastReadId = identification.service.getLocalLastReadId(markerTimeline),
-           flatItems.contains(where: { $0.itemId == localLastReadId }),
-           !hasRememberedPosition {
-            hasRememberedPosition = true
+           flatNewItems.contains(where: { $0.itemId == localLastReadId }) {
+            shouldRestorePositionOfLocalLastReadId = false
 
             return localLastReadId
         }
