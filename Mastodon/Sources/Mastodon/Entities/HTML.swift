@@ -39,7 +39,7 @@ private extension HTML {
 
 // https://docs.joinmastodon.org/spec/activitypub/#sanitization
 
-private class HTMLParser: NSObject {
+private final class HTMLParser: NSObject {
     private struct Link: Hashable {
         let href: URL
         let location: Int

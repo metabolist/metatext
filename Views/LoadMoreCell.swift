@@ -3,7 +3,7 @@
 import UIKit
 import ViewModels
 
-class LoadMoreCell: UITableViewCell {
+final class LoadMoreCell: UITableViewCell {
     var viewModel: LoadMoreViewModel?
 
     override func updateConfiguration(using state: UICellConfigurationState) {

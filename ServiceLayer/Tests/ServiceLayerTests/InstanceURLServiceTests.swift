@@ -8,7 +8,7 @@ import CombineExpectations
 import Stubbing
 import XCTest
 
-class InstanceURLServiceTests: XCTestCase {
+final class InstanceURLServiceTests: XCTestCase {
     func testFiltering() throws {
         let sut = InstanceURLService(environment: .mock())
 

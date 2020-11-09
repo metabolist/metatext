@@ -3,7 +3,7 @@
 import Mastodon
 import UIKit
 
-class PollResultView: UIView {
+final class PollResultView: UIView {
     private let verticalStackView = UIStackView()
     private let horizontalStackView = UIStackView()
     private let titleLabel = UILabel()

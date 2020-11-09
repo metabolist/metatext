@@ -3,7 +3,7 @@
 import Mastodon
 import UIKit
 
-class PollOptionButton: UIButton {
+final class PollOptionButton: UIButton {
     init(title: String, emoji: [Emoji], multipleSelection: Bool) {
         super.init(frame: .zero)
 

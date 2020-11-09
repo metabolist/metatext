@@ -2,7 +2,7 @@
 
 import Foundation
 
-public class MockUserDefaults: UserDefaults {
+public final class MockUserDefaults: UserDefaults {
     public convenience init() {
         self.init(suiteName: Self.suiteName)!
     }

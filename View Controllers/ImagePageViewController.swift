@@ -3,7 +3,7 @@
 import UIKit
 import ViewModels
 
-class ImagePageViewController: UIPageViewController {
+final class ImagePageViewController: UIPageViewController {
     let imageViewControllers: [ImageViewController]
 
     init(initiallyVisible: AttachmentViewModel, statusViewModel: StatusViewModel) {

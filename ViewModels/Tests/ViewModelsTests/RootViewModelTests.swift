@@ -7,7 +7,7 @@ import ServiceLayerMocks
 @testable import ViewModels
 import XCTest
 
-class RootViewModelTests: XCTestCase {
+final class RootViewModelTests: XCTestCase {
     var cancellables = Set<AnyCancellable>()
 
     func testAddIdentity() throws {

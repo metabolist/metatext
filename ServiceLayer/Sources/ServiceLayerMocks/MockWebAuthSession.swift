@@ -33,7 +33,7 @@ public class MockWebAuthSession: WebAuthSession {
     }
 }
 
-public class SuccessfulMockWebAuthSession: MockWebAuthSession {
+public final class SuccessfulMockWebAuthSession: MockWebAuthSession {
     private let redirectURL: URL
 
     required init(
@@ -60,7 +60,7 @@ public class SuccessfulMockWebAuthSession: MockWebAuthSession {
     }
 }
 
-public class CanceledLoginMockWebAuthSession: MockWebAuthSession {
+public final class CanceledLoginMockWebAuthSession: MockWebAuthSession {
     override var completionHandlerError: Error? {
         WebAuthSessionError(.canceledLogin)
     }

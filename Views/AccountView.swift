@@ -3,7 +3,7 @@
 import Kingfisher
 import UIKit
 
-class AccountView: UIView {
+final class AccountView: UIView {
     let avatarImageView = AnimatedImageView()
     let displayNameLabel = UILabel()
     let accountLabel = UILabel()

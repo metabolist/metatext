@@ -2,7 +2,7 @@
 
 import UIKit
 
-class WebfingerIndicatorView: UIVisualEffectView {
+final class WebfingerIndicatorView: UIVisualEffectView {
     private let activityIndicatorView = UIActivityIndicatorView()
 
     init() {

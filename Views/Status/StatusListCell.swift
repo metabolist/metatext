@@ -3,7 +3,7 @@
 import UIKit
 import ViewModels
 
-class StatusListCell: UITableViewCell {
+final class StatusListCell: UITableViewCell {
     var viewModel: StatusViewModel?
 
     override func updateConfiguration(using state: UICellConfigurationState) {

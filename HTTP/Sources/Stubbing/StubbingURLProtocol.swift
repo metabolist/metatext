@@ -3,7 +3,7 @@
 import Foundation
 import HTTP
 
-public class StubbingURLProtocol: URLProtocol {
+public final class StubbingURLProtocol: URLProtocol {
     private static var targetsForURLs = [URL: Target]()
     private static var stubsForURLs = [URL: HTTPStub]()
 

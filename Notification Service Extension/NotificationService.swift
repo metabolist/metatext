@@ -6,7 +6,7 @@ import Mastodon
 import Secrets
 import UserNotifications
 
-class NotificationService: UNNotificationServiceExtension {
+final class NotificationService: UNNotificationServiceExtension {
 
     var contentHandler: ((UNNotificationContent) -> Void)?
     var bestAttemptContent: UNMutableNotificationContent?

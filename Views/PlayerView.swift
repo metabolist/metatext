@@ -3,7 +3,7 @@
 import AVKit
 import UIKit
 
-class PlayerView: UIView {
+final class PlayerView: UIView {
     override class var layerClass: AnyClass {
         AVPlayerLayer.self
     }

@@ -4,7 +4,7 @@ import Kingfisher
 import UIKit
 import ViewModels
 
-class ImageViewController: UIViewController {
+final class ImageViewController: UIViewController {
     let scrollView = UIScrollView()
     let imageView = AnimatedImageView()
     let playerView = PlayerView()

@@ -42,7 +42,7 @@ extension WebAuthSession {
     }
 }
 
-class WebAuthSessionContextProvider: NSObject, ASWebAuthenticationPresentationContextProviding {
+final class WebAuthSessionContextProvider: NSObject, ASWebAuthenticationPresentationContextProviding {
     func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
         ASPresentationAnchor()
     }

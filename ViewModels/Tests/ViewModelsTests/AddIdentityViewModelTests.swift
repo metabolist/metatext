@@ -10,7 +10,7 @@ import ServiceLayerMocks
 @testable import ViewModels
 import XCTest
 
-class AddIdentityViewModelTests: XCTestCase {
+final class AddIdentityViewModelTests: XCTestCase {
     func testAddIdentity() throws {
         let uuid = UUID(uuidString: "E621E1F8-C36C-495A-93FC-0C247A3E6E5F")!
         let environment = AppEnvironment.mock(uuid: { uuid })

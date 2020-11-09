@@ -6,7 +6,7 @@ import CombineExpectations
 @testable import ServiceLayerMocks
 import XCTest
 
-class AuthenticationServiceTests: XCTestCase {
+final class AuthenticationServiceTests: XCTestCase {
     func testAuthentication() throws {
         let sut = AuthenticationService(url: URL(string: "https://mastodon.social")!, environment: .mock())
         let authenticationRecorder = sut.authenticate().record()

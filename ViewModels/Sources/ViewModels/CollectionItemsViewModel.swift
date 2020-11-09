@@ -5,7 +5,7 @@ import Foundation
 import Mastodon
 import ServiceLayer
 
-final public class CollectionItemsViewModel: ObservableObject {
+public final class CollectionItemsViewModel: ObservableObject {
     @Published public var alertItem: AlertItem?
     public private(set) var nextPageMaxId: String?
 

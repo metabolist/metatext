@@ -4,7 +4,7 @@ import Kingfisher
 import UIKit
 import ViewModels
 
-class AccountHeaderView: UIView {
+final class AccountHeaderView: UIView {
     let headerImageView = AnimatedImageView()
     let headerButton = UIButton()
     let noteTextView = TouchFallthroughTextView()

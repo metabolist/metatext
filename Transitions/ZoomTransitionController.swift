@@ -2,7 +2,7 @@
 
 import UIKit
 
-class ZoomTransitionController: NSObject {
+final class ZoomTransitionController: NSObject {
     var isInteractive = false
 
     weak var fromDelegate: ZoomAnimatorDelegate?

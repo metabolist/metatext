@@ -3,7 +3,7 @@
 import UIKit
 import ViewModels
 
-class AccountListCell: UITableViewCell {
+final class AccountListCell: UITableViewCell {
     var viewModel: AccountViewModel?
 
     override func updateConfiguration(using state: UICellConfigurationState) {

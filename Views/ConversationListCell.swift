@@ -3,7 +3,7 @@
 import UIKit
 import ViewModels
 
-class ConversationListCell: UITableViewCell {
+final class ConversationListCell: UITableViewCell {
     var viewModel: ConversationViewModel?
 
     override func updateConfiguration(using state: UICellConfigurationState) {

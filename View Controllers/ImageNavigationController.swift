@@ -3,7 +3,7 @@
 import AVFoundation
 import UIKit
 
-class ImageNavigationController: UINavigationController {
+final class ImageNavigationController: UINavigationController {
     let transitionController = ZoomTransitionController()
 
     private let imagePageViewController: ImagePageViewController
