@@ -17,21 +17,19 @@ public struct ContentDatabase {
                 useHomeTimelineLastReadId: Bool,
                 useNotificationsLastReadId: Bool,
                 inMemory: Bool,
+                appGroup: String,
                 keychain: Keychain.Type) throws {
         if inMemory {
             databaseWriter = DatabaseQueue()
+            try Self.migrator.migrate(databaseWriter)
         } else {
-            let path = try Self.fileURL(id: id).path
-            var configuration = Configuration()
-
-            configuration.prepareDatabase {
-                try $0.usePassphrase(Secrets.databaseKey(identityId: id, keychain: keychain))
+            databaseWriter = try DatabasePool.withFileCoordinator(
+                url: Self.fileURL(id: id, appGroup: appGroup),
+                migrator: Self.migrator) {
+                try Secrets.databaseKey(identityId: id, keychain: keychain)
             }
-
-            databaseWriter = try DatabasePool(path: path, configuration: configuration)
         }
 
-        try Self.migrator.migrate(databaseWriter)
         try Self.clean(
             databaseWriter,
             useHomeTimelineLastReadId: useHomeTimelineLastReadId,
@@ -47,8 +45,8 @@ public struct ContentDatabase {
 }
 
 public extension ContentDatabase {
-    static func delete(id: Identity.Id) throws {
-        try FileManager.default.removeItem(at: fileURL(id: id))
+    static func delete(id: Identity.Id, appGroup: String) throws {
+        try FileManager.default.removeItem(at: fileURL(id: id, appGroup: appGroup))
     }
 
     func insert(status: Status) -> AnyPublisher<Never, Error> {
@@ -411,8 +409,8 @@ public extension ContentDatabase {
 
 private extension ContentDatabase {
     static let cleanAfterLastReadIdCount = 40
-    static func fileURL(id: Identity.Id) throws -> URL {
-        try FileManager.default.databaseDirectoryURL(name: id.uuidString)
+    static func fileURL(id: Identity.Id, appGroup: String) throws -> URL {
+        try FileManager.default.databaseDirectoryURL(name: id.uuidString, appGroup: appGroup)
     }
 
     // swiftlint:disable:next function_body_length

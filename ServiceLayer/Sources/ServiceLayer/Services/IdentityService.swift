@@ -34,6 +34,7 @@ public struct IdentityService {
             useHomeTimelineLastReadId: appPreferences.homeTimelineBehavior == .rememberPosition,
             useNotificationsLastReadId: appPreferences.notificationsTabBehavior == .rememberPosition,
             inMemory: environment.inMemoryContent,
+            appGroup: AppEnvironment.appGroup,
             keychain: environment.keychain)
     }
 }

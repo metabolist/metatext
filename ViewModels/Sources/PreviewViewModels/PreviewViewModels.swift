@@ -15,7 +15,7 @@ import ViewModels
 
 let db: IdentityDatabase = {
     let id = Identity.Id()
-    let db = try! IdentityDatabase(inMemory: true, keychain: MockKeychain.self)
+    let db = try! IdentityDatabase(inMemory: true, appGroup: "", keychain: MockKeychain.self)
     let secrets = Secrets(identityId: id, keychain: MockKeychain.self)
 
     try! secrets.setInstanceURL(.previewInstanceURL)

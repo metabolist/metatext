@@ -40,12 +40,14 @@ public struct AppEnvironment {
 }
 
 public extension AppEnvironment {
+    static let appGroup = "group.metabolist.metatext"
+
     static func live(userNotificationCenter: UNUserNotificationCenter, reduceMotion: @escaping () -> Bool) -> Self {
         Self(
             session: URLSession.shared,
             webAuthSessionType: LiveWebAuthSession.self,
             keychain: LiveKeychain.self,
-            userDefaults: .standard,
+            userDefaults: UserDefaults(suiteName: appGroup)!,
             userNotificationClient: .live(userNotificationCenter),
             reduceMotion: reduceMotion,
             uuid: UUID.init,

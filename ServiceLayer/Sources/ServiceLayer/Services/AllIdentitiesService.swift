@@ -18,6 +18,7 @@ public struct AllIdentitiesService {
         self.environment = environment
         self.database =  try environment.fixtureDatabase ?? IdentityDatabase(
             inMemory: environment.inMemoryContent,
+            appGroup: AppEnvironment.appGroup,
             keychain: environment.keychain)
         identitiesCreated = identitiesCreatedSubject.eraseToAnyPublisher()
     }
@@ -88,7 +89,7 @@ public extension AllIdentitiesService {
         database.deleteIdentity(id: id)
             .collect()
             .tryMap { _ -> AnyPublisher<Never, Error> in
-                try ContentDatabase.delete(id: id)
+                try ContentDatabase.delete(id: id, appGroup: AppEnvironment.appGroup)
 
                 let secrets = Secrets(identityId: id, keychain: environment.keychain)
 

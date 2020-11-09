@@ -14,21 +14,17 @@ public enum IdentityDatabaseError: Error {
 public struct IdentityDatabase {
     private let databaseWriter: DatabaseWriter
 
-    public init(inMemory: Bool, keychain: Keychain.Type) throws {
+    public init(inMemory: Bool, appGroup: String, keychain: Keychain.Type) throws {
         if inMemory {
             databaseWriter = DatabaseQueue()
+            try Self.migrator.migrate(databaseWriter)
         } else {
-            let path = try FileManager.default.databaseDirectoryURL(name: Self.name).path
-            var configuration = Configuration()
+            let url = try FileManager.default.databaseDirectoryURL(name: Self.name, appGroup: appGroup)
 
-            configuration.prepareDatabase {
-                try $0.usePassphrase(Secrets.databaseKey(identityId: nil, keychain: keychain))
+            databaseWriter = try DatabasePool.withFileCoordinator(url: url, migrator: Self.migrator) {
+                try Secrets.databaseKey(identityId: nil, keychain: keychain)
             }
-
-            databaseWriter = try DatabasePool(path: path, configuration: configuration)
         }
-
-        try migrator.migrate(databaseWriter)
     }
 }
 

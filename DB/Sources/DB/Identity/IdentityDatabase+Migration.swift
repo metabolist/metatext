@@ -3,7 +3,7 @@
 import GRDB
 
 extension IdentityDatabase {
-    var migrator: DatabaseMigrator {
+    static var migrator: DatabaseMigrator {
         var migrator = DatabaseMigrator()
 
         migrator.registerMigration("0.1.0") { db in
