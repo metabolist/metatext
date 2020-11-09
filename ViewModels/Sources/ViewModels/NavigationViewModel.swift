@@ -26,6 +26,7 @@ public final class NavigationViewModel: ObservableObject {
                 _notificationsViewModel = CollectionItemsViewModel(
                     collectionService: identification.service.notificationsService(),
                     identification: identification)
+                _notificationsViewModel?.request(maxId: nil, minId: nil)
             }
 
             return _notificationsViewModel
@@ -40,6 +41,7 @@ public final class NavigationViewModel: ObservableObject {
                 _conversationsViewModel = CollectionItemsViewModel(
                     collectionService: identification.service.conversationsService(),
                     identification: identification)
+                _conversationsViewModel?.request(maxId: nil, minId: nil)
             }
 
             return _conversationsViewModel
