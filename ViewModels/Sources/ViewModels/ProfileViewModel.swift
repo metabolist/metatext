@@ -49,6 +49,12 @@ public extension ProfileViewModel {
 
         imagePresentationsSubject.send(accountViewModel.headerURL)
     }
+
+    func presentAvatar() {
+        guard let accountViewModel = accountViewModel else { return }
+
+        imagePresentationsSubject.send(accountViewModel.avatarURL(profile: true))
+    }
 }
 
 extension ProfileViewModel: CollectionViewModel {

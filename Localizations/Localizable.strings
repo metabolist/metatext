@@ -1,5 +1,6 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
+"account.field.verified" = "Verified %@";
 "account.statuses" = "Posts";
 "account.statuses-and-replies" = "Posts & Replies";
 "account.media" = "Media";
@@ -32,6 +33,7 @@
 "lists.new-list-title" = "New List Title";
 "load-more" = "Load More";
 "messages" = "Messages";
+"ok" = "OK";
 "pending.pending-confirmation" = "Your account is pending confirmation";
 "preferences" = "Preferences";
 "preferences.app" = "App Preferences";

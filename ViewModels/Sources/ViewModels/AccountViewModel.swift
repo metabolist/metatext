@@ -34,6 +34,8 @@ public extension AccountViewModel {
 
     var accountName: String { "@".appending(accountService.account.acct) }
 
+    var fields: [Account.Field] { accountService.account.fields }
+
     var note: NSAttributedString { accountService.account.note.attributed }
 
     var emoji: [Emoji] { accountService.account.emojis }

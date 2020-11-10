@@ -7,6 +7,11 @@ import ViewModels
 final class AccountHeaderView: UIView {
     let headerImageView = AnimatedImageView()
     let headerButton = UIButton()
+    let avatarImageView = UIImageView()
+    let avatarButton = UIButton()
+    let displayNameLabel = UILabel()
+    let accountLabel = UILabel()
+    let fieldsStackView = UIStackView()
     let noteTextView = TouchFallthroughTextView()
     let segmentedControl = UISegmentedControl()
 
@@ -15,6 +20,35 @@ final class AccountHeaderView: UIView {
             if let accountViewModel = viewModel?.accountViewModel {
                 headerImageView.kf.setImage(with: accountViewModel.headerURL)
                 headerImageView.tag = accountViewModel.headerURL.hashValue
+                avatarImageView.kf.setImage(with: accountViewModel.avatarURL(profile: true))
+                avatarImageView.tag = accountViewModel.avatarURL(profile: true).hashValue
+
+                if accountViewModel.displayName.isEmpty {
+                    displayNameLabel.isHidden = true
+                } else {
+                    let mutableDisplayName = NSMutableAttributedString(string: accountViewModel.displayName)
+
+                    mutableDisplayName.insert(emoji: accountViewModel.emoji, view: displayNameLabel)
+                    mutableDisplayName.resizeAttachments(toLineHeight: displayNameLabel.font.lineHeight)
+                    displayNameLabel.attributedText = mutableDisplayName
+                }
+
+                accountLabel.text = accountViewModel.accountName
+
+                for view in fieldsStackView.arrangedSubviews {
+                    fieldsStackView.removeArrangedSubview(view)
+                    view.removeFromSuperview()
+                }
+
+                for field in accountViewModel.fields {
+                    let fieldView = AccountFieldView(field: field, emoji: accountViewModel.emoji)
+
+                    fieldView.valueTextView.delegate = self
+
+                    fieldsStackView.addArrangedSubview(fieldView)
+                }
+
+                fieldsStackView.isHidden = accountViewModel.fields.isEmpty
 
                 let noteFont = UIFont.preferredFont(forTextStyle: .callout)
                 let mutableNote = NSMutableAttributedString(attributedString: accountViewModel.note)
@@ -64,6 +98,8 @@ extension AccountHeaderView: UITextViewDelegate {
 }
 
 private extension AccountHeaderView {
+    static let avatarDimension = CGFloat.avatarDimension * 2
+
     // swiftlint:disable:next function_body_length
     func initialSetup() {
         let baseStackView = UIStackView()
@@ -78,17 +114,51 @@ private extension AccountHeaderView {
         headerButton.translatesAutoresizingMaskIntoConstraints = false
         headerButton.setBackgroundImage(.highlightedButtonBackground, for: .highlighted)
 
-        headerButton.addAction(
-            UIAction { [weak self] _ in self?.viewModel?.presentHeader() },
-            for: .touchUpInside)
+        headerButton.addAction(UIAction { [weak self] _ in self?.viewModel?.presentHeader() }, for: .touchUpInside)
+
+        addSubview(avatarImageView)
+        avatarImageView.translatesAutoresizingMaskIntoConstraints = false
+        avatarImageView.contentMode = .scaleAspectFill
+        avatarImageView.clipsToBounds = true
+        avatarImageView.isUserInteractionEnabled = true
+        avatarImageView.layer.cornerRadius = Self.avatarDimension / 2
+        avatarImageView.layer.borderWidth = .compactSpacing
+        avatarImageView.layer.borderColor = UIColor.systemBackground.cgColor
+
+        avatarImageView.addSubview(avatarButton)
+        avatarButton.translatesAutoresizingMaskIntoConstraints = false
+        avatarButton.setBackgroundImage(.highlightedButtonBackground, for: .highlighted)
+
+        avatarButton.addAction(UIAction { [weak self] _ in self?.viewModel?.presentAvatar() }, for: .touchUpInside)
 
         addSubview(baseStackView)
         baseStackView.translatesAutoresizingMaskIntoConstraints = false
         baseStackView.axis = .vertical
+        baseStackView.spacing = .defaultSpacing
 
+        baseStackView.addArrangedSubview(displayNameLabel)
+        displayNameLabel.numberOfLines = 0
+        displayNameLabel.font = .preferredFont(forTextStyle: .headline)
+        displayNameLabel.adjustsFontForContentSizeCategory = true
+
+        baseStackView.addArrangedSubview(accountLabel)
+        accountLabel.numberOfLines = 0
+        accountLabel.font = .preferredFont(forTextStyle: .subheadline)
+        accountLabel.adjustsFontForContentSizeCategory = true
+        accountLabel.textColor = .secondaryLabel
+
+        baseStackView.addArrangedSubview(fieldsStackView)
+        fieldsStackView.axis = .vertical
+        fieldsStackView.spacing = .hairline
+        fieldsStackView.backgroundColor = .separator
+        fieldsStackView.clipsToBounds = true
+        fieldsStackView.layer.borderColor = UIColor.separator.cgColor
+        fieldsStackView.layer.borderWidth = .hairline
+        fieldsStackView.layer.cornerRadius = .defaultCornerRadius
+
+        baseStackView.addArrangedSubview(noteTextView)
         noteTextView.isScrollEnabled = false
         noteTextView.delegate = self
-        baseStackView.addArrangedSubview(noteTextView)
 
         for (index, collection) in ProfileCollection.allCases.enumerated() {
             segmentedControl.insertSegment(
@@ -119,10 +189,18 @@ private extension AccountHeaderView {
             headerButton.topAnchor.constraint(equalTo: headerImageView.topAnchor),
             headerButton.bottomAnchor.constraint(equalTo: headerImageView.bottomAnchor),
             headerButton.trailingAnchor.constraint(equalTo: headerImageView.trailingAnchor),
-            baseStackView.topAnchor.constraint(equalTo: headerImageView.bottomAnchor),
+            avatarImageView.heightAnchor.constraint(equalToConstant: Self.avatarDimension),
+            avatarImageView.widthAnchor.constraint(equalToConstant: Self.avatarDimension),
+            avatarImageView.leadingAnchor.constraint(equalTo: readableContentGuide.leadingAnchor),
+            avatarImageView.centerYAnchor.constraint(equalTo: headerImageView.bottomAnchor),
+            avatarButton.leadingAnchor.constraint(equalTo: avatarImageView.leadingAnchor),
+            avatarButton.topAnchor.constraint(equalTo: avatarImageView.topAnchor),
+            avatarButton.bottomAnchor.constraint(equalTo: avatarImageView.bottomAnchor),
+            avatarButton.trailingAnchor.constraint(equalTo: avatarImageView.trailingAnchor),
+            baseStackView.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: .defaultSpacing),
             baseStackView.leadingAnchor.constraint(equalTo: readableContentGuide.leadingAnchor),
             baseStackView.trailingAnchor.constraint(equalTo: readableContentGuide.trailingAnchor),
-            baseStackView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            baseStackView.bottomAnchor.constraint(equalTo: readableContentGuide.bottomAnchor)
         ])
     }
 }
