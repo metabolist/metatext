@@ -233,6 +233,39 @@ public extension ContentDatabase {
         .eraseToAnyPublisher()
     }
 
+    func insert(account: Account) -> AnyPublisher<Never, Error> {
+        databaseWriter.writePublisher(updates: account.save)
+            .ignoreOutput()
+            .eraseToAnyPublisher()
+    }
+
+    func insert(identityProofs: [IdentityProof], id: Account.Id) -> AnyPublisher<Never, Error> {
+        databaseWriter.writePublisher {
+            for identityProof in identityProofs {
+                try IdentityProofRecord(
+                    accountId: id,
+                    provider: identityProof.provider,
+                    providerUsername: identityProof.providerUsername,
+                    profileUrl: identityProof.profileUrl,
+                    proofUrl: identityProof.proofUrl,
+                    updatedAt: identityProof.updatedAt)
+                    .save($0)
+            }
+        }
+        .ignoreOutput()
+        .eraseToAnyPublisher()
+    }
+
+    func insert(relationships: [Relationship]) -> AnyPublisher<Never, Error> {
+        databaseWriter.writePublisher {
+            for relationship in relationships {
+                try relationship.save($0)
+            }
+        }
+        .ignoreOutput()
+        .eraseToAnyPublisher()
+    }
+
     func setLists(_ lists: [List]) -> AnyPublisher<Never, Error> {
         databaseWriter.writePublisher {
             for list in lists {
@@ -347,12 +380,20 @@ public extension ContentDatabase {
             .eraseToAnyPublisher()
     }
 
-    func accountPublisher(id: Account.Id) -> AnyPublisher<Account, Error> {
-        ValueObservation.tracking(AccountInfo.request(AccountRecord.filter(AccountRecord.Columns.id == id)).fetchOne)
+    func profilePublisher(id: Account.Id) -> AnyPublisher<Profile, Error> {
+        ValueObservation.tracking(ProfileInfo.request(AccountRecord.filter(AccountRecord.Columns.id == id)).fetchOne)
             .removeDuplicates()
             .publisher(in: databaseWriter)
             .compactMap { $0 }
-            .map(Account.init(info:))
+            .map(Profile.init(info:))
+            .eraseToAnyPublisher()
+    }
+
+    func relationshipPublisher(id: Account.Id) -> AnyPublisher<Relationship, Error> {
+        ValueObservation.tracking(Relationship.filter(Relationship.Columns.id == id).fetchOne)
+            .removeDuplicates()
+            .publisher(in: databaseWriter)
+            .compactMap { $0 }
             .eraseToAnyPublisher()
     }
 

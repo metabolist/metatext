@@ -55,6 +55,10 @@ public extension ProfileViewModel {
 
         imagePresentationsSubject.send(accountViewModel.avatarURL(profile: true))
     }
+
+    func fetchProfile() -> AnyPublisher<Never, Never> {
+        profileService.fetchProfile().assignErrorsToAlertItem(to: \.alertItem, on: self)
+    }
 }
 
 extension ProfileViewModel: CollectionViewModel {

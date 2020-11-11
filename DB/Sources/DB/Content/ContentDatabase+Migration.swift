@@ -30,6 +30,33 @@ extension ContentDatabase {
                 t.column("movedId", .text).references("accountRecord")
             }
 
+            try db.create(table: "relationship") { t in
+                t.column("id", .text).primaryKey(onConflict: .replace)
+                    .references("accountRecord", onDelete: .cascade)
+                t.column("following", .boolean).notNull()
+                t.column("requested", .boolean).notNull()
+                t.column("endorsed", .boolean).notNull()
+                t.column("followedBy", .boolean).notNull()
+                t.column("muting", .boolean).notNull()
+                t.column("mutingNotifications", .boolean).notNull()
+                t.column("showingReblogs", .boolean).notNull()
+                t.column("blocking", .boolean).notNull()
+                t.column("domainBlocking", .boolean).notNull()
+                t.column("blockedBy", .boolean).notNull()
+                t.column("note", .text).notNull()
+            }
+
+            try db.create(table: "identityProofRecord") { t in
+                t.column("accountId", .text).notNull().references("accountRecord", onDelete: .cascade)
+                t.column("provider", .text).notNull()
+                t.column("providerUsername", .text).notNull()
+                t.column("profileUrl", .text).notNull()
+                t.column("proofUrl", .text).notNull()
+                t.column("updatedAt", .date).notNull()
+
+                t.primaryKey(["accountId", "provider"], onConflict: .replace)
+            }
+
             try db.create(table: "statusRecord") { t in
                 t.column("id", .text).primaryKey(onConflict: .replace)
                 t.column("uri", .text).notNull()

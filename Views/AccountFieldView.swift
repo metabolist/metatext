@@ -8,10 +8,8 @@ final class AccountFieldView: UIView {
     let valueTextView = TouchFallthroughTextView()
 
     // swiftlint:disable:next function_body_length
-    init(field: Account.Field, emoji: [Emoji]) {
+    init(name: String, value: NSAttributedString, verifiedAt: Date?, emoji: [Emoji]) {
         super.init(frame: .zero)
-
-        let verified = field.verifiedAt != nil
 
         backgroundColor = .systemBackground
 
@@ -25,9 +23,9 @@ final class AccountFieldView: UIView {
 
         addSubview(valueBackgroundView)
         valueBackgroundView.translatesAutoresizingMaskIntoConstraints = false
-        valueBackgroundView.backgroundColor = verified
-            ? UIColor.systemGreen.withAlphaComponent(0.25)
-            : .systemBackground
+        valueBackgroundView.backgroundColor = verifiedAt == nil
+            ? .systemBackground
+            : UIColor.systemGreen.withAlphaComponent(0.25)
 
         addSubview(nameLabel)
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -36,7 +34,7 @@ final class AccountFieldView: UIView {
         nameLabel.textAlignment = .center
         nameLabel.textColor = .secondaryLabel
 
-        let mutableName = NSMutableAttributedString(string: field.name)
+        let mutableName = NSMutableAttributedString(string: name)
 
         mutableName.insert(emoji: emoji, view: nameLabel)
         mutableName.resizeAttachments(toLineHeight: nameLabel.font.lineHeight)
@@ -53,14 +51,14 @@ final class AccountFieldView: UIView {
         valueTextView.isScrollEnabled = false
         valueTextView.backgroundColor = .clear
 
-        if verified {
+        if verifiedAt != nil {
             valueTextView.linkTextAttributes = [
                 .foregroundColor: UIColor.systemGreen as Any,
                 .underlineColor: UIColor.clear]
         }
 
-        let valueFont = UIFont.preferredFont(forTextStyle: verified ? .headline : .body)
-        let mutableValue = NSMutableAttributedString(attributedString: field.value.attributed)
+        let valueFont = UIFont.preferredFont(forTextStyle: verifiedAt == nil ? .body : .headline)
+        let mutableValue = NSMutableAttributedString(attributedString: value)
         let valueRange = NSRange(location: 0, length: mutableValue.length)
 
         mutableValue.removeAttribute(.font, range: valueRange)
@@ -85,10 +83,10 @@ final class AccountFieldView: UIView {
         addSubview(checkButton)
         checkButton.translatesAutoresizingMaskIntoConstraints = false
         checkButton.tintColor = .systemGreen
-        checkButton.isHidden = !verified
+        checkButton.isHidden = verifiedAt == nil
         checkButton.showsMenuAsPrimaryAction = true
 
-        if let verifiedAt = field.verifiedAt {
+        if let verifiedAt = verifiedAt {
             checkButton.menu = UIMenu(
                 title: String.localizedStringWithFormat(
                     NSLocalizedString("account.field.verified", comment: ""),
@@ -118,7 +116,7 @@ final class AccountFieldView: UIView {
             dividerView.widthAnchor.constraint(equalToConstant: .hairline),
             checkButton.leadingAnchor.constraint(equalTo: dividerView.trailingAnchor, constant: .defaultSpacing),
             valueTextView.leadingAnchor.constraint(
-                equalTo: verified ? checkButton.trailingAnchor : dividerView.trailingAnchor,
+                equalTo: verifiedAt == nil ? dividerView.trailingAnchor : checkButton.trailingAnchor,
                 constant: .defaultSpacing),
             valueTextView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: .defaultSpacing),
             valueTextView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -.defaultSpacing),

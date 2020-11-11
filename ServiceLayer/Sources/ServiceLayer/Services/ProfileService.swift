@@ -34,17 +34,24 @@ public struct ProfileService {
         self.mastodonAPIClient = mastodonAPIClient
         self.contentDatabase = contentDatabase
 
-        var accountPublisher = contentDatabase.accountPublisher(id: id)
+        var accountPublisher = contentDatabase.profilePublisher(id: id)
 
         if let account = account {
             accountPublisher = accountPublisher
-                .merge(with: Just(account).setFailureType(to: Error.self))
+                .merge(with: Just(Profile(account: account)).setFailureType(to: Error.self))
                 .removeDuplicates()
                 .eraseToAnyPublisher()
         }
 
         accountServicePublisher = accountPublisher
-            .map { AccountService(account: $0, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase) }
+            .map {
+                AccountService(
+                    account: $0.account,
+                    relationship: $0.relationship,
+                    identityProofs: $0.identityProofs,
+                    mastodonAPIClient: mastodonAPIClient,
+                    contentDatabase: contentDatabase)
+            }
             .eraseToAnyPublisher()
     }
 }
@@ -55,6 +62,18 @@ public extension ProfileService {
             timeline: .profile(accountId: id, profileCollection: profileCollection),
             mastodonAPIClient: mastodonAPIClient,
             contentDatabase: contentDatabase)
+    }
+
+    func fetchProfile() -> AnyPublisher<Never, Error> {
+        Publishers.Merge3(
+            mastodonAPIClient.request(AccountEndpoint.accounts(id: id))
+                .flatMap { contentDatabase.insert(account: $0) },
+            mastodonAPIClient.request(RelationshipsEndpoint.relationships(ids: [id]))
+                .flatMap { contentDatabase.insert(relationships: $0) },
+            mastodonAPIClient.request(IdentityProofsEndpoint.identityProofs(id: id))
+                .catch { _ in Empty() }
+                .flatMap { contentDatabase.insert(identityProofs: $0, id: id) })
+            .eraseToAnyPublisher()
     }
 
     func fetchPinnedStatuses() -> AnyPublisher<Never, Error> {

@@ -43,8 +43,26 @@ final class AccountHeaderView: UIView {
                     view.removeFromSuperview()
                 }
 
+                for identityProof in accountViewModel.identityProofs {
+                    let fieldView = AccountFieldView(
+                        name: identityProof.provider,
+                        value: NSAttributedString(
+                            string: identityProof.providerUsername,
+                            attributes: [.link: identityProof.profileUrl]),
+                        verifiedAt: identityProof.updatedAt,
+                        emoji: [])
+
+                    fieldView.valueTextView.delegate = self
+
+                    fieldsStackView.addArrangedSubview(fieldView)
+                }
+
                 for field in accountViewModel.fields {
-                    let fieldView = AccountFieldView(field: field, emoji: accountViewModel.emoji)
+                    let fieldView = AccountFieldView(
+                        name: field.name,
+                        value: field.value.attributed,
+                        verifiedAt: field.verifiedAt,
+                        emoji: accountViewModel.emoji)
 
                     fieldView.valueTextView.delegate = self
 

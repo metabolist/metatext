@@ -36,6 +36,8 @@ public extension AccountViewModel {
 
     var isLocked: Bool { accountService.account.locked }
 
+    var identityProofs: [IdentityProof] { accountService.identityProofs }
+
     var fields: [Account.Field] { accountService.account.fields }
 
     var note: NSAttributedString { accountService.account.note.attributed }

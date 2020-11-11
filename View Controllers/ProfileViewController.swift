@@ -45,4 +45,12 @@ final class ProfileViewController: TableViewController {
 
         tableView.tableHeaderView = accountHeaderView
     }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        viewModel.fetchProfile()
+            .sink { _ in }
+            .store(in: &cancellables)
+    }
 }
