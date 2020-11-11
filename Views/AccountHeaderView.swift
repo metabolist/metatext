@@ -10,7 +10,9 @@ final class AccountHeaderView: UIView {
     let avatarImageView = UIImageView()
     let avatarButton = UIButton()
     let displayNameLabel = UILabel()
+    let accountStackView = UIStackView()
     let accountLabel = UILabel()
+    let lockedImageView = UIImageView()
     let fieldsStackView = UIStackView()
     let noteTextView = TouchFallthroughTextView()
     let segmentedControl = UISegmentedControl()
@@ -34,6 +36,7 @@ final class AccountHeaderView: UIView {
                 }
 
                 accountLabel.text = accountViewModel.accountName
+                lockedImageView.isHidden = !accountViewModel.isLocked
 
                 for view in fieldsStackView.arrangedSubviews {
                     fieldsStackView.removeArrangedSubview(view)
@@ -141,11 +144,24 @@ private extension AccountHeaderView {
         displayNameLabel.font = .preferredFont(forTextStyle: .headline)
         displayNameLabel.adjustsFontForContentSizeCategory = true
 
-        baseStackView.addArrangedSubview(accountLabel)
+        baseStackView.addArrangedSubview(accountStackView)
+
+        accountStackView.addArrangedSubview(accountLabel)
         accountLabel.numberOfLines = 0
         accountLabel.font = .preferredFont(forTextStyle: .subheadline)
         accountLabel.adjustsFontForContentSizeCategory = true
         accountLabel.textColor = .secondaryLabel
+        accountLabel.setContentHuggingPriority(.required, for: .horizontal)
+        accountLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+
+        accountStackView.addArrangedSubview(lockedImageView)
+        lockedImageView.image = UIImage(
+            systemName: "lock.fill",
+            withConfiguration: UIImage.SymbolConfiguration(scale: .small))
+        lockedImageView.tintColor = .secondaryLabel
+        lockedImageView.contentMode = .scaleAspectFit
+
+        accountStackView.addArrangedSubview(UIView())
 
         baseStackView.addArrangedSubview(fieldsStackView)
         fieldsStackView.axis = .vertical
