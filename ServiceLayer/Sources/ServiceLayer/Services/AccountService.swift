@@ -28,3 +28,20 @@ public struct AccountService {
         self.contentDatabase = contentDatabase
     }
 }
+
+public extension AccountService {
+    func follow() -> AnyPublisher<Never, Error> {
+        mastodonAPIClient.request(RelationshipEndpoint.accountsFollow(id: account.id))
+            .flatMap { contentDatabase.insert(relationships: [$0]) }
+            .eraseToAnyPublisher()
+    }
+
+    func unfollow() -> AnyPublisher<Never, Error> {
+        mastodonAPIClient.request(RelationshipEndpoint.accountsUnfollow(id: account.id))
+            .flatMap {
+                contentDatabase.insert(relationships: [$0])
+                    .merge(with: contentDatabase.unfollow(id: account.id))
+            }
+            .eraseToAnyPublisher()
+    }
+}

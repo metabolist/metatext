@@ -1,9 +1,13 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 "account.field.verified" = "Verified %@";
+"account.follow" = "Follow";
+"account.following" = "Following";
+"account.request" = "Request";
 "account.statuses" = "Posts";
 "account.statuses-and-replies" = "Posts & Replies";
 "account.media" = "Media";
+"account.unfollow-account" = "Unfollow %@";
 "add" = "Add";
 "apns-default-message" = "New notification";
 "add-identity.instance-url" = "Instance URL";
@@ -14,6 +18,7 @@
 "add-identity.unable-to-connect-to-instance" = "Unable to connect to instance";
 "attachment.sensitive-content" = "Sensitive content";
 "attachment.media-hidden" = "Media hidden";
+"cancel" = "Cancel";
 "registration.review-terms-of-use-and-privacy-policy-%@" = "Please review %@'s Terms of Use and Privacy Policy to continue";
 "registration.username" = "Username";
 "registration.email" = "Email";

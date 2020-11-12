@@ -36,6 +36,8 @@ public extension AccountViewModel {
 
     var isLocked: Bool { accountService.account.locked }
 
+    var relationship: Relationship? { accountService.relationship }
+
     var identityProofs: [IdentityProof] { accountService.identityProofs }
 
     var fields: [Account.Field] { accountService.account.fields }
@@ -62,5 +64,13 @@ public extension AccountViewModel {
                 .map { CollectionItemEvent.navigation($0) }
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher())
+    }
+
+    func follow() {
+        eventsSubject.send(accountService.follow().map { _ in .ignorableOutput }.eraseToAnyPublisher())
+    }
+
+    func unfollow() {
+        eventsSubject.send(accountService.unfollow().map { _ in .ignorableOutput }.eraseToAnyPublisher())
     }
 }

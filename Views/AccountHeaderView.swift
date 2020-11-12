@@ -9,6 +9,9 @@ final class AccountHeaderView: UIView {
     let headerButton = UIButton()
     let avatarImageView = UIImageView()
     let avatarButton = UIButton()
+    let relationshipButtonsStackView = UIStackView()
+    let followButton = UIButton(type: .system)
+    let unfollowButton = UIButton(type: .system)
     let displayNameLabel = UILabel()
     let accountStackView = UIStackView()
     let accountLabel = UILabel()
@@ -24,6 +27,20 @@ final class AccountHeaderView: UIView {
                 headerImageView.tag = accountViewModel.headerURL.hashValue
                 avatarImageView.kf.setImage(with: accountViewModel.avatarURL(profile: true))
                 avatarImageView.tag = accountViewModel.avatarURL(profile: true).hashValue
+
+                if !accountViewModel.isSelf, let relationship = accountViewModel.relationship {
+                    followButton.setTitle(
+                        NSLocalizedString(
+                            accountViewModel.isLocked ? "account.request" : "account.follow",
+                            comment: ""),
+                        for: .normal)
+                    followButton.isHidden = relationship.following
+                    unfollowButton.isHidden = !relationship.following
+
+                    relationshipButtonsStackView.isHidden = false
+                } else {
+                    relationshipButtonsStackView.isHidden = true
+                }
 
                 if accountViewModel.displayName.isEmpty {
                     displayNameLabel.isHidden = true
@@ -99,6 +116,17 @@ final class AccountHeaderView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        for button in [followButton, unfollowButton] {
+            let inset = (followButton.bounds.height - (button.titleLabel?.bounds.height ?? 0)) / 2
+
+            button.contentEdgeInsets = .init(top: 0, left: inset, bottom: 0, right: inset)
+            button.layer.cornerRadius = button.bounds.height / 2
+        }
+    }
 }
 
 extension AccountHeaderView: UITextViewDelegate {
@@ -151,6 +179,50 @@ private extension AccountHeaderView {
         avatarButton.setBackgroundImage(.highlightedButtonBackground, for: .highlighted)
 
         avatarButton.addAction(UIAction { [weak self] _ in self?.viewModel?.presentAvatar() }, for: .touchUpInside)
+
+        addSubview(relationshipButtonsStackView)
+        relationshipButtonsStackView.translatesAutoresizingMaskIntoConstraints = false
+        relationshipButtonsStackView.spacing = .defaultSpacing
+        relationshipButtonsStackView.addArrangedSubview(UIView())
+
+        for button in [followButton, unfollowButton] {
+            relationshipButtonsStackView.addArrangedSubview(button)
+            button.titleLabel?.font = .preferredFont(forTextStyle: .headline)
+            button.titleLabel?.adjustsFontForContentSizeCategory = true
+            button.backgroundColor = .secondarySystemBackground
+        }
+
+        followButton.setImage(
+            UIImage(
+                systemName: "person.badge.plus",
+                withConfiguration: UIImage.SymbolConfiguration(scale: .small)),
+            for: .normal)
+        followButton.addAction(
+            UIAction { [weak self] _ in self?.viewModel?.accountViewModel?.follow() },
+            for: .touchUpInside)
+
+        unfollowButton.setImage(
+            UIImage(
+                systemName: "checkmark",
+                withConfiguration: UIImage.SymbolConfiguration(scale: .small)),
+            for: .normal)
+        unfollowButton.setTitle(NSLocalizedString("account.following", comment: ""), for: .normal)
+        unfollowButton.showsMenuAsPrimaryAction = true
+        unfollowButton.menu = UIMenu(children: [UIDeferredMenuElement { [weak self] completion in
+            guard let accountViewModel = self?.viewModel?.accountViewModel else { return }
+
+            let unfollowAction = UIAction(
+                title: String.localizedStringWithFormat(
+                    NSLocalizedString("account.unfollow-account", comment: ""),
+                    accountViewModel.accountName),
+                image: UIImage(systemName: "person.badge.minus"),
+                attributes: .destructive) { _ in
+                accountViewModel.unfollow()
+            }
+
+            completion([unfollowAction])
+        },
+        UIAction(title: NSLocalizedString("cancel", comment: "")) { _ in }])
 
         addSubview(baseStackView)
         baseStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -231,6 +303,12 @@ private extension AccountHeaderView {
             avatarButton.topAnchor.constraint(equalTo: avatarImageView.topAnchor),
             avatarButton.bottomAnchor.constraint(equalTo: avatarImageView.bottomAnchor),
             avatarButton.trailingAnchor.constraint(equalTo: avatarImageView.trailingAnchor),
+            relationshipButtonsStackView.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor),
+            relationshipButtonsStackView.topAnchor.constraint(
+                equalTo: headerImageView.bottomAnchor,
+                constant: .defaultSpacing),
+            relationshipButtonsStackView.trailingAnchor.constraint(equalTo: readableContentGuide.trailingAnchor),
+            relationshipButtonsStackView.bottomAnchor.constraint(equalTo: avatarImageView.bottomAnchor),
             baseStackView.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: .defaultSpacing),
             baseStackView.leadingAnchor.constraint(equalTo: readableContentGuide.leadingAnchor),
             baseStackView.trailingAnchor.constraint(equalTo: readableContentGuide.trailingAnchor),

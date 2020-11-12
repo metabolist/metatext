@@ -218,6 +218,21 @@ public extension ContentDatabase {
         .eraseToAnyPublisher()
     }
 
+    func unfollow(id: Account.Id) -> AnyPublisher<Never, Error> {
+        databaseWriter.writePublisher {
+            let statusIds = try Status.Id.fetchAll(
+                $0,
+                StatusRecord.filter(StatusRecord.Columns.accountId == id).select(StatusRecord.Columns.id))
+
+            try TimelineStatusJoin.filter(
+                TimelineStatusJoin.Columns.timelineId == Timeline.home.id
+                    && statusIds.contains(TimelineStatusJoin.Columns.statusId))
+                .deleteAll($0)
+        }
+        .ignoreOutput()
+        .eraseToAnyPublisher()
+    }
+
     func append(accounts: [Account], toList list: AccountList) -> AnyPublisher<Never, Error> {
         databaseWriter.writePublisher {
             try list.save($0)
