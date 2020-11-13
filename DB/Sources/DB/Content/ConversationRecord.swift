@@ -12,9 +12,9 @@ struct ConversationRecord: ContentDatabaseRecord, Hashable {
 
 extension ConversationRecord {
     enum Columns {
-        static let id = Column(ConversationRecord.CodingKeys.id)
-        static let unread = Column(ConversationRecord.CodingKeys.unread)
-        static let lastStatusId = Column(ConversationRecord.CodingKeys.lastStatusId)
+        static let id = Column(CodingKeys.id)
+        static let unread = Column(CodingKeys.unread)
+        static let lastStatusId = Column(CodingKeys.lastStatusId)
     }
 
     static let lastStatus = belongsTo(StatusRecord.self)

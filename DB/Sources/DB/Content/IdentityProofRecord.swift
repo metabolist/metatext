@@ -15,11 +15,11 @@ struct IdentityProofRecord: ContentDatabaseRecord, Hashable {
 
 extension IdentityProofRecord {
     enum Columns {
-        static let accountId = Column(IdentityProofRecord.CodingKeys.accountId)
-        static let provider = Column(IdentityProofRecord.CodingKeys.provider)
-        static let providerUsername = Column(IdentityProofRecord.CodingKeys.providerUsername)
-        static let profileUrl = Column(IdentityProofRecord.CodingKeys.profileUrl)
-        static let proofUrl = Column(IdentityProofRecord.CodingKeys.proofUrl)
-        static let updatedAt = Column(IdentityProofRecord.CodingKeys.updatedAt)
+        static let accountId = Column(CodingKeys.accountId)
+        static let provider = Column(CodingKeys.provider)
+        static let providerUsername = Column(CodingKeys.providerUsername)
+        static let profileUrl = Column(CodingKeys.profileUrl)
+        static let proofUrl = Column(CodingKeys.proofUrl)
+        static let updatedAt = Column(CodingKeys.updatedAt)
     }
 }

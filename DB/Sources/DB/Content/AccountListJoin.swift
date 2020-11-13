@@ -14,8 +14,8 @@ struct AccountListJoin: ContentDatabaseRecord {
 
 extension AccountListJoin {
     enum Columns {
-        static let accountId = Column(AccountListJoin.CodingKeys.accountId)
-        static let listId = Column(AccountListJoin.CodingKeys.listId)
-        static let index = Column(AccountListJoin.CodingKeys.index)
+        static let accountId = Column(CodingKeys.accountId)
+        static let listId = Column(CodingKeys.listId)
+        static let index = Column(CodingKeys.index)
     }
 }

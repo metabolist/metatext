@@ -12,8 +12,8 @@ struct LoadMoreRecord: ContentDatabaseRecord, Hashable {
 
 extension LoadMoreRecord {
     enum Columns {
-        static let timelineId = Column(LoadMoreRecord.CodingKeys.timelineId)
-        static let afterStatusId = Column(LoadMoreRecord.CodingKeys.afterStatusId)
-        static let beforeStatusId = Column(LoadMoreRecord.CodingKeys.beforeStatusId)
+        static let timelineId = Column(CodingKeys.timelineId)
+        static let afterStatusId = Column(CodingKeys.afterStatusId)
+        static let beforeStatusId = Column(CodingKeys.beforeStatusId)
     }
 }

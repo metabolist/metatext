@@ -11,7 +11,7 @@ struct LastReadIdRecord: ContentDatabaseRecord, Hashable {
 
 extension LastReadIdRecord {
     enum Columns {
-        static let markerTimeline = Column(LastReadIdRecord.CodingKeys.markerTimeline)
-        static let id = Column(LastReadIdRecord.CodingKeys.id)
+        static let markerTimeline = Column(CodingKeys.markerTimeline)
+        static let id = Column(CodingKeys.id)
     }
 }

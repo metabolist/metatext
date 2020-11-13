@@ -10,6 +10,6 @@ struct StatusShowContentToggle: ContentDatabaseRecord, Hashable {
 
 extension StatusShowContentToggle {
     enum Columns {
-        static let statusId = Column(StatusShowContentToggle.CodingKeys.statusId)
+        static let statusId = Column(CodingKeys.statusId)
     }
 }

@@ -12,9 +12,9 @@ struct AccountPinnedStatusJoin: ContentDatabaseRecord {
 
 extension AccountPinnedStatusJoin {
     enum Columns {
-        static let accountId = Column(AccountPinnedStatusJoin.CodingKeys.accountId)
-        static let statusId = Column(AccountPinnedStatusJoin.CodingKeys.statusId)
-        static let index = Column(AccountPinnedStatusJoin.CodingKeys.index)
+        static let accountId = Column(CodingKeys.accountId)
+        static let statusId = Column(CodingKeys.statusId)
+        static let index = Column(CodingKeys.index)
     }
 
     static let status = belongsTo(StatusRecord.self)

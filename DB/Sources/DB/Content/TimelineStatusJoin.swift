@@ -13,7 +13,7 @@ struct TimelineStatusJoin: ContentDatabaseRecord {
 
 extension TimelineStatusJoin {
     enum Columns {
-        static let timelineId = Column(TimelineStatusJoin.CodingKeys.timelineId)
-        static let statusId = Column(TimelineStatusJoin.CodingKeys.statusId)
+        static let timelineId = Column(CodingKeys.timelineId)
+        static let statusId = Column(CodingKeys.statusId)
     }
 }

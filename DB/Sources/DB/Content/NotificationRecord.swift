@@ -13,10 +13,10 @@ struct NotificationRecord: ContentDatabaseRecord, Hashable {
 
 extension NotificationRecord {
     enum Columns {
-        static let id = Column(NotificationRecord.CodingKeys.id)
-        static let type = Column(NotificationRecord.CodingKeys.type)
-        static let accountId = Column(NotificationRecord.CodingKeys.accountId)
-        static let statusId = Column(NotificationRecord.CodingKeys.statusId)
+        static let id = Column(CodingKeys.id)
+        static let type = Column(CodingKeys.type)
+        static let accountId = Column(CodingKeys.accountId)
+        static let statusId = Column(CodingKeys.statusId)
     }
 
     static let account = belongsTo(AccountRecord.self)

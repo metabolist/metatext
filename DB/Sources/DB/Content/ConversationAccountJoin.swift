@@ -11,8 +11,8 @@ struct ConversationAccountJoin: ContentDatabaseRecord {
 
 extension ConversationAccountJoin {
     enum Columns {
-        static let conversationId = Column(ConversationAccountJoin.CodingKeys.conversationId)
-        static let accountId = Column(ConversationAccountJoin.CodingKeys.accountId)
+        static let conversationId = Column(CodingKeys.conversationId)
+        static let accountId = Column(CodingKeys.accountId)
     }
 
     static let account = belongsTo(AccountRecord.self)

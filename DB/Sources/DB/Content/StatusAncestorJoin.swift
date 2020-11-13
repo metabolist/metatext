@@ -12,9 +12,9 @@ struct StatusAncestorJoin: ContentDatabaseRecord {
 
 extension StatusAncestorJoin {
     enum Columns {
-        static let parentId = Column(StatusAncestorJoin.CodingKeys.parentId)
-        static let statusId = Column(StatusAncestorJoin.CodingKeys.statusId)
-        static let index = Column(StatusAncestorJoin.CodingKeys.index)
+        static let parentId = Column(CodingKeys.parentId)
+        static let statusId = Column(CodingKeys.statusId)
+        static let index = Column(CodingKeys.index)
     }
 
     static let status = belongsTo(StatusRecord.self, using: ForeignKey([Columns.statusId]))

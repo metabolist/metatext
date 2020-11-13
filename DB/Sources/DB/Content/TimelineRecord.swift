@@ -15,12 +15,12 @@ struct TimelineRecord: ContentDatabaseRecord, Hashable {
 
 extension TimelineRecord {
     enum Columns {
-        static let id = Column(TimelineRecord.CodingKeys.id)
-        static let listId = Column(TimelineRecord.CodingKeys.listId)
-        static let listTitle = Column(TimelineRecord.CodingKeys.listTitle)
-        static let tag = Column(TimelineRecord.CodingKeys.tag)
-        static let accountId = Column(TimelineRecord.CodingKeys.accountId)
-        static let profileCollection = Column(TimelineRecord.CodingKeys.profileCollection)
+        static let id = Column(CodingKeys.id)
+        static let listId = Column(CodingKeys.listId)
+        static let listTitle = Column(CodingKeys.listTitle)
+        static let tag = Column(CodingKeys.tag)
+        static let accountId = Column(CodingKeys.accountId)
+        static let profileCollection = Column(CodingKeys.profileCollection)
     }
 
     static let statusJoins = hasMany(TimelineStatusJoin.self)
