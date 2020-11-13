@@ -18,6 +18,8 @@ extension DatabasePool {
             do {
                 var configuration = Configuration()
 
+                configuration.busyMode = .timeout(5)
+                configuration.defaultTransactionKind = .immediate
                 configuration.prepareDatabase { db in
                     try db.usePassphrase(passphrase())
                     try db.execute(sql: "PRAGMA cipher_plaintext_header_size = 32")
