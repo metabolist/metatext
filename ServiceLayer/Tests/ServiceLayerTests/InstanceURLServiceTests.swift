@@ -37,7 +37,7 @@ final class InstanceURLServiceTests: XCTestCase {
             XCTFail("Expected success")
         }
 
-        var updatedFilter = try BloomFilter<String>(hashes: [.djb232, .sdbm32], byteCount: 16)
+        var updatedFilter = BloomFilter<String>(hashes: [.djb232, .sdbm32], byteCount: 16)
 
         updatedFilter.insert("instance.filtered")
 
