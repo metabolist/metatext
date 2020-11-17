@@ -31,17 +31,63 @@ public struct AccountService {
 
 public extension AccountService {
     func follow() -> AnyPublisher<Never, Error> {
-        mastodonAPIClient.request(RelationshipEndpoint.accountsFollow(id: account.id))
-            .flatMap { contentDatabase.insert(relationships: [$0]) }
-            .eraseToAnyPublisher()
+        relationshipAction(.accountsFollow(id: account.id))
     }
 
     func unfollow() -> AnyPublisher<Never, Error> {
-        mastodonAPIClient.request(RelationshipEndpoint.accountsUnfollow(id: account.id))
-            .flatMap {
-                contentDatabase.insert(relationships: [$0])
-                    .merge(with: contentDatabase.unfollow(id: account.id))
-            }
+        relationshipAction(.accountsUnfollow(id: account.id))
+            .collect()
+            .flatMap { _ in contentDatabase.unfollow(id: account.id) }
+            .eraseToAnyPublisher()
+    }
+
+    func hideReblogs() -> AnyPublisher<Never, Error> {
+        relationshipAction(.accountsFollow(id: account.id, showReblogs: false))
+    }
+
+    func showReblogs() -> AnyPublisher<Never, Error> {
+        relationshipAction(.accountsFollow(id: account.id, showReblogs: true))
+    }
+
+    func block() -> AnyPublisher<Never, Error> {
+        relationshipAction(.accountsBlock(id: account.id))
+            .collect()
+            .flatMap { _ in contentDatabase.block(id: account.id) }
+            .eraseToAnyPublisher()
+    }
+
+    func unblock() -> AnyPublisher<Never, Error> {
+        relationshipAction(.accountsUnblock(id: account.id))
+    }
+
+    func mute() -> AnyPublisher<Never, Error> {
+        relationshipAction(.accountsMute(id: account.id))
+            .collect()
+            .flatMap { _ in contentDatabase.mute(id: account.id) }
+            .eraseToAnyPublisher()
+    }
+
+    func unmute() -> AnyPublisher<Never, Error> {
+        relationshipAction(.accountsUnmute(id: account.id))
+    }
+
+    func pin() -> AnyPublisher<Never, Error> {
+        relationshipAction(.accountsPin(id: account.id))
+    }
+
+    func unpin() -> AnyPublisher<Never, Error> {
+        relationshipAction(.accountsUnpin(id: account.id))
+    }
+
+    func set(note: String) -> AnyPublisher<Never, Error> {
+        relationshipAction(.note(note, id: account.id))
+    }
+}
+
+private extension AccountService {
+    func relationshipAction(_ endpoint: RelationshipEndpoint) -> AnyPublisher<Never, Error> {
+        mastodonAPIClient.request(endpoint)
+            .flatMap { contentDatabase.insert(relationships: [$0]) }
             .eraseToAnyPublisher()
     }
 }

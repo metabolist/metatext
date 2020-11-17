@@ -1,6 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import Combine
+import Mastodon
 import UIKit
 import ViewModels
 
@@ -24,9 +25,18 @@ final class ProfileViewController: TableViewController {
 
         viewModel.$accountViewModel
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                accountHeaderView.viewModel = self?.viewModel
-                self?.sizeTableHeaderFooterViews()
+            .sink { [weak self] in
+                guard let self = self else { return }
+
+                accountHeaderView.viewModel = self.viewModel
+                self.sizeTableHeaderFooterViews()
+
+                if let accountViewModel = $0,
+                   let relationship = accountViewModel.relationship {
+                    self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+                        image: UIImage(systemName: "ellipsis.circle"),
+                        menu: self.menu(accountViewModel: accountViewModel, relationship: relationship))
+                }
             }
             .store(in: &cancellables)
 
@@ -52,5 +62,70 @@ final class ProfileViewController: TableViewController {
         viewModel.fetchProfile()
             .sink { _ in }
             .store(in: &cancellables)
+    }
+}
+
+private extension ProfileViewController {
+    // swiftlint:disable:next function_body_length
+    func menu(accountViewModel: AccountViewModel, relationship: Relationship) -> UIMenu {
+        var actions = [UIAction]()
+
+        if relationship.following {
+            if relationship.showingReblogs {
+                actions.append(UIAction(
+                    title: String.localizedStringWithFormat(
+                        NSLocalizedString("account.hide-reblogs-account", comment: ""),
+                        accountViewModel.accountName),
+                    image: UIImage(systemName: "arrow.2.squarepath")) { _ in
+                    accountViewModel.hideReblogs()
+                })
+            } else {
+                actions.append(UIAction(
+                    title: String.localizedStringWithFormat(
+                        NSLocalizedString("account.show-reblogs-account", comment: ""),
+                        accountViewModel.accountName),
+                    image: UIImage(systemName: "arrow.2.squarepath")) { _ in
+                    accountViewModel.showReblogs()
+                })
+            }
+        }
+
+        if relationship.muting {
+            actions.append(UIAction(
+                title: String.localizedStringWithFormat(
+                    NSLocalizedString("account.unmute-account", comment: ""),
+                    accountViewModel.accountName),
+                image: UIImage(systemName: "speaker")) { _ in
+                accountViewModel.unmute()
+            })
+        } else {
+            actions.append(UIAction(
+                title: String.localizedStringWithFormat(
+                    NSLocalizedString("account.mute-account", comment: ""),
+                    accountViewModel.accountName),
+                image: UIImage(systemName: "speaker.slash")) { _ in
+                accountViewModel.mute()
+            })
+        }
+
+        if relationship.blocking {
+            actions.append(UIAction(
+                title: String.localizedStringWithFormat(
+                    NSLocalizedString("account.unblock-account", comment: ""),
+                    accountViewModel.accountName),
+                image: UIImage(systemName: "slash.circle")) { _ in
+                accountViewModel.unblock()
+            })
+        } else {
+            actions.append(UIAction(
+                title: String.localizedStringWithFormat(
+                    NSLocalizedString("account.block-account", comment: ""),
+                    accountViewModel.accountName),
+                image: UIImage(systemName: "slash.circle")) { _ in
+                accountViewModel.block()
+            })
+        }
+
+        return UIMenu(children: actions)
     }
 }

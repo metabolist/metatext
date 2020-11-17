@@ -27,7 +27,7 @@ extension ContentDatabase {
                 t.column("emojis", .blob).notNull()
                 t.column("bot", .boolean).notNull()
                 t.column("discoverable", .boolean)
-                t.column("movedId", .text).references("accountRecord")
+                t.column("movedId", .text).references("accountRecord", onDelete: .cascade)
             }
 
             try db.create(table: "relationship") { t in
@@ -61,7 +61,7 @@ extension ContentDatabase {
                 t.column("id", .text).primaryKey(onConflict: .replace)
                 t.column("uri", .text).notNull()
                 t.column("createdAt", .datetime).notNull()
-                t.column("accountId", .text).notNull().references("accountRecord")
+                t.column("accountId", .text).notNull().references("accountRecord", onDelete: .cascade)
                 t.column("content", .text).notNull()
                 t.column("visibility", .text).notNull()
                 t.column("sensitive", .boolean).notNull()
@@ -77,7 +77,7 @@ extension ContentDatabase {
                 t.column("url", .text)
                 t.column("inReplyToId", .text)
                 t.column("inReplyToAccountId", .text)
-                t.column("reblogId", .text).references("statusRecord")
+                t.column("reblogId", .text).references("statusRecord", onDelete: .cascade)
                 t.column("poll", .blob)
                 t.column("card", .blob)
                 t.column("language", .text)
@@ -135,7 +135,7 @@ extension ContentDatabase {
             try db.create(table: "conversationRecord") { t in
                 t.column("id", .text).primaryKey(onConflict: .replace)
                 t.column("unread", .boolean).notNull()
-                t.column("lastStatusId", .text).references("statusRecord")
+                t.column("lastStatusId", .text).references("statusRecord", onDelete: .cascade)
             }
 
             try db.create(table: "conversationAccountJoin") { t in
@@ -155,8 +155,8 @@ extension ContentDatabase {
             try db.create(table: "notificationRecord") { t in
                 t.column("id", .text).primaryKey(onConflict: .replace)
                 t.column("type", .text).notNull()
-                t.column("accountId", .text).notNull().references("accountRecord")
-                t.column("statusId").references("statusRecord")
+                t.column("accountId", .text).notNull().references("accountRecord", onDelete: .cascade)
+                t.column("statusId").references("statusRecord", onDelete: .cascade)
             }
 
             try db.create(table: "statusAncestorJoin") { t in

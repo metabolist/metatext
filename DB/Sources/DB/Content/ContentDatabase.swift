@@ -233,6 +233,21 @@ public extension ContentDatabase {
         .eraseToAnyPublisher()
     }
 
+    func mute(id: Account.Id) -> AnyPublisher<Never, Error> {
+        databaseWriter.writePublisher {
+            try StatusRecord.filter(StatusRecord.Columns.accountId == id).deleteAll($0)
+            try NotificationRecord.filter(NotificationRecord.Columns.accountId == id).deleteAll($0)
+        }
+        .ignoreOutput()
+        .eraseToAnyPublisher()
+    }
+
+    func block(id: Account.Id) -> AnyPublisher<Never, Error> {
+        databaseWriter.writePublisher(updates: AccountRecord.filter(AccountRecord.Columns.id == id).deleteAll)
+            .ignoreOutput()
+            .eraseToAnyPublisher()
+    }
+
     func append(accounts: [Account], toList list: AccountList) -> AnyPublisher<Never, Error> {
         databaseWriter.writePublisher {
             try list.save($0)

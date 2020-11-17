@@ -67,10 +67,52 @@ public extension AccountViewModel {
     }
 
     func follow() {
-        eventsSubject.send(accountService.follow().map { _ in .ignorableOutput }.eraseToAnyPublisher())
+        ignorableOutputEvent(accountService.follow())
     }
 
     func unfollow() {
-        eventsSubject.send(accountService.unfollow().map { _ in .ignorableOutput }.eraseToAnyPublisher())
+        ignorableOutputEvent(accountService.unfollow())
+    }
+
+    func hideReblogs() {
+        ignorableOutputEvent(accountService.hideReblogs())
+    }
+
+    func showReblogs() {
+        ignorableOutputEvent(accountService.showReblogs())
+    }
+
+    func block() {
+        ignorableOutputEvent(accountService.block())
+    }
+
+    func unblock() {
+        ignorableOutputEvent(accountService.unblock())
+    }
+
+    func mute() {
+        ignorableOutputEvent(accountService.mute())
+    }
+
+    func unmute() {
+        ignorableOutputEvent(accountService.unmute())
+    }
+
+    func pin() {
+        ignorableOutputEvent(accountService.pin())
+    }
+
+    func unpin() {
+        ignorableOutputEvent(accountService.unpin())
+    }
+
+    func set(note: String) {
+        ignorableOutputEvent(accountService.set(note: note))
+    }
+}
+
+private extension AccountViewModel {
+    func ignorableOutputEvent(_ action: AnyPublisher<Never, Error>) {
+        eventsSubject.send(action.map { _ in .ignorableOutput }.eraseToAnyPublisher())
     }
 }

@@ -71,7 +71,7 @@ extension ProfileViewModel: CollectionViewModel {
     }
 
     public var expandAll: AnyPublisher<ExpandAllState, Never> {
-        collectionViewModel.flatMap(\.expandAll).eraseToAnyPublisher()
+        Empty().eraseToAnyPublisher()
     }
 
     public var alertItems: AnyPublisher<AlertItem, Never> {
