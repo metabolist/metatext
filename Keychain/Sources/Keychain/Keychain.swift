@@ -19,7 +19,13 @@ extension LiveKeychain: Keychain {
 
         query[kSecValueData as String] = data
 
-        let status = SecItemAdd(query as CFDictionary, nil)
+        var status = SecItemAdd(query as CFDictionary, nil)
+
+        if status == errSecDuplicateItem {
+            status = SecItemUpdate(
+                genericPasswordQueryDictionary(account: account, service: service) as CFDictionary,
+                [kSecValueData as String: data] as CFDictionary)
+        }
 
         if status != errSecSuccess {
             throw NSError(status: status)
@@ -54,6 +60,8 @@ extension LiveKeychain: Keychain {
     }
 
     public static func generateKeyAndReturnPublicKey(applicationTag: String, attributes: [String: Any]) throws -> Data {
+        try? deleteKey(applicationTag: applicationTag)
+
         var attributes = attributes
         var error: Unmanaged<CFError>?
 

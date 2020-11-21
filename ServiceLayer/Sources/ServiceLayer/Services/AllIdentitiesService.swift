@@ -124,6 +124,7 @@ public extension AllIdentitiesService {
                 }
             }
             .map(Publishers.MergeMany.init)
+            .flatMap { $0 }
             .ignoreOutput()
             .eraseToAnyPublisher()
     }
