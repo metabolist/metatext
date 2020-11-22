@@ -212,9 +212,7 @@ private extension AccountHeaderView {
             guard let accountViewModel = self?.viewModel?.accountViewModel else { return }
 
             let unfollowAction = UIAction(
-                title: String.localizedStringWithFormat(
-                    NSLocalizedString("account.unfollow-account", comment: ""),
-                    accountViewModel.accountName),
+                title: NSLocalizedString("account.unfollow", comment: ""),
                 image: UIImage(systemName: "person.badge.minus"),
                 attributes: .destructive) { _ in
                 accountViewModel.unfollow()

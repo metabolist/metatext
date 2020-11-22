@@ -1,19 +1,19 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
-"account.block-account" = "Block %@";
+"account.block" = "Block";
 "account.field.verified" = "Verified %@";
 "account.follow" = "Follow";
 "account.following" = "Following";
-"account.hide-reblogs-account" = "Hide reblogs from %@";
-"account.mute-account" = "Mute %@";
+"account.hide-reblogs" = "Hide boosts";
+"account.mute" = "Mute";
 "account.request" = "Request";
 "account.statuses" = "Posts";
 "account.statuses-and-replies" = "Posts & Replies";
 "account.media" = "Media";
-"account.show-reblogs-account" = "Show reblogs from %@";
-"account.unblock-account" = "Unblock %@";
-"account.unfollow-account" = "Unfollow %@";
-"account.unmute-account" = "Unmute %@";
+"account.show-reblogs" = "Show boosts";
+"account.unblock" = "Unblock";
+"account.unfollow" = "Unfollow";
+"account.unmute" = "Unmute";
 "add" = "Add";
 "apns-default-message" = "New notification";
 "add-identity.instance-url" = "Instance URL";

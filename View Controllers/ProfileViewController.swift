@@ -66,24 +66,19 @@ final class ProfileViewController: TableViewController {
 }
 
 private extension ProfileViewController {
-    // swiftlint:disable:next function_body_length
     func menu(accountViewModel: AccountViewModel, relationship: Relationship) -> UIMenu {
         var actions = [UIAction]()
 
         if relationship.following {
             if relationship.showingReblogs {
                 actions.append(UIAction(
-                    title: String.localizedStringWithFormat(
-                        NSLocalizedString("account.hide-reblogs-account", comment: ""),
-                        accountViewModel.accountName),
+                    title: NSLocalizedString("account.hide-reblogs", comment: ""),
                     image: UIImage(systemName: "arrow.2.squarepath")) { _ in
                     accountViewModel.hideReblogs()
                 })
             } else {
                 actions.append(UIAction(
-                    title: String.localizedStringWithFormat(
-                        NSLocalizedString("account.show-reblogs-account", comment: ""),
-                        accountViewModel.accountName),
+                    title: NSLocalizedString("account.show-reblogs", comment: ""),
                     image: UIImage(systemName: "arrow.2.squarepath")) { _ in
                     accountViewModel.showReblogs()
                 })
@@ -92,17 +87,13 @@ private extension ProfileViewController {
 
         if relationship.muting {
             actions.append(UIAction(
-                title: String.localizedStringWithFormat(
-                    NSLocalizedString("account.unmute-account", comment: ""),
-                    accountViewModel.accountName),
+                title: NSLocalizedString("account.unmute", comment: ""),
                 image: UIImage(systemName: "speaker")) { _ in
                 accountViewModel.unmute()
             })
         } else {
             actions.append(UIAction(
-                title: String.localizedStringWithFormat(
-                    NSLocalizedString("account.mute-account", comment: ""),
-                    accountViewModel.accountName),
+                title: NSLocalizedString("account.mute", comment: ""),
                 image: UIImage(systemName: "speaker.slash")) { _ in
                 accountViewModel.mute()
             })
@@ -110,18 +101,15 @@ private extension ProfileViewController {
 
         if relationship.blocking {
             actions.append(UIAction(
-                title: String.localizedStringWithFormat(
-                    NSLocalizedString("account.unblock-account", comment: ""),
-                    accountViewModel.accountName),
+                title: NSLocalizedString("account.unblock", comment: ""),
                 image: UIImage(systemName: "slash.circle")) { _ in
                 accountViewModel.unblock()
             })
         } else {
             actions.append(UIAction(
-                title: String.localizedStringWithFormat(
-                    NSLocalizedString("account.block-account", comment: ""),
-                    accountViewModel.accountName),
-                image: UIImage(systemName: "slash.circle")) { _ in
+                title: NSLocalizedString("account.block", comment: ""),
+                image: UIImage(systemName: "slash.circle"),
+                attributes: .destructive) { _ in
                 accountViewModel.block()
             })
         }
