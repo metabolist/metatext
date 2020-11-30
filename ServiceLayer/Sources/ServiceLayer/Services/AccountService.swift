@@ -15,11 +15,11 @@ public struct AccountService {
     private let mastodonAPIClient: MastodonAPIClient
     private let contentDatabase: ContentDatabase
 
-    init(account: Account,
-         relationship: Relationship? = nil,
-         identityProofs: [IdentityProof] = [],
-         mastodonAPIClient: MastodonAPIClient,
-         contentDatabase: ContentDatabase) {
+    public init(account: Account,
+                relationship: Relationship? = nil,
+                identityProofs: [IdentityProof] = [],
+                mastodonAPIClient: MastodonAPIClient,
+                contentDatabase: ContentDatabase) {
         self.account = account
         self.relationship = relationship
         self.identityProofs = identityProofs
@@ -30,6 +30,10 @@ public struct AccountService {
 }
 
 public extension AccountService {
+    var isLocal: Bool {
+        account.url.host == mastodonAPIClient.instanceURL.host
+    }
+
     func follow() -> AnyPublisher<Never, Error> {
         relationshipAction(.accountsFollow(id: account.id))
     }
@@ -81,6 +85,10 @@ public extension AccountService {
 
     func set(note: String) -> AnyPublisher<Never, Error> {
         relationshipAction(.note(note, id: account.id))
+    }
+
+    func report(_ elements: ReportElements) -> AnyPublisher<Never, Error> {
+        mastodonAPIClient.request(ReportEndpoint.create(elements)).ignoreOutput().eraseToAnyPublisher()
     }
 }
 

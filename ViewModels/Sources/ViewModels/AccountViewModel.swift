@@ -66,6 +66,10 @@ public extension AccountViewModel {
                 .eraseToAnyPublisher())
     }
 
+    func reportViewModel() -> ReportViewModel {
+        ReportViewModel(accountService: accountService, identification: identification)
+    }
+
     func follow() {
         ignorableOutputEvent(accountService.follow())
     }

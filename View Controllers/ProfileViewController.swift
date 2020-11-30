@@ -2,7 +2,7 @@
 
 import Combine
 import Mastodon
-import UIKit
+import SwiftUI
 import ViewModels
 
 final class ProfileViewController: TableViewController {
@@ -66,6 +66,7 @@ final class ProfileViewController: TableViewController {
 }
 
 private extension ProfileViewController {
+    // swiftlint:disable:next function_body_length
     func menu(accountViewModel: AccountViewModel, relationship: Relationship) -> UIMenu {
         var actions = [UIAction]()
 
@@ -98,6 +99,17 @@ private extension ProfileViewController {
                 accountViewModel.mute()
             })
         }
+
+        actions.append(UIAction(
+            title: NSLocalizedString("report", comment: ""),
+            image: UIImage(systemName: "flag"),
+            attributes: .destructive) { [weak self] _ in
+            guard let self = self,
+                  let reportViewModel = self.viewModel.accountViewModel?.reportViewModel()
+            else { return }
+
+            self.report(viewModel: reportViewModel)
+        })
 
         if relationship.blocking {
             actions.append(UIAction(

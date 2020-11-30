@@ -114,6 +114,12 @@
 "notifications.poll-ended" = "A poll you have voted in has ended";
 "notifications.your-poll-ended" = "Your poll has ended";
 "notifications.unknown" = "Notification from %@";
+"report" = "Report";
+"report.hint" = "The report will be sent to your server moderators. You can provide an explanation of why you are reporting this account below:";
+"report.placeholder" = "Additional comments";
+"report.target-%@" = "Reporting %@";
+"report.forward.hint" = "The account is from another server. Send an anonymized copy of the report there as well?";
+"report.forward-%@" = "Forward report to %@";
 "status.reblogged-by" = "%@ boosted";
 "status.pinned-post" = "Pinned post";
 "status.show-more" = "Show More";
@@ -125,6 +131,7 @@
 "status.visibility.public" = "Public";
 "status.visibility.unlisted" = "Unlisted";
 "status.visibility.private" = "Private";
+"submit" = "Submit";
 "timelines.home" = "Home";
 "timelines.local" = "Local";
 "timelines.federated" = "Federated";

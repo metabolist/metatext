@@ -23,6 +23,7 @@ final class StatusView: UIView {
     let favoriteButton = UIButton()
     let shareButton = UIButton()
     let menuButton = UIButton()
+    let buttonsStackView = UIStackView()
 
     private let containerStackView = UIStackView()
     private let sideStackView = UIStackView()
@@ -35,7 +36,6 @@ final class StatusView: UIView {
     private let interactionsDividerView = UIView()
     private let interactionsStackView = UIStackView()
     private let buttonsDividerView = UIView()
-    private let buttonsStackView = UIStackView()
     private let inReplyToView = UIView()
     private let hasReplyFollowingView = UIView()
     private var statusConfiguration: StatusContentConfiguration
@@ -204,6 +204,16 @@ private extension StatusView {
         shareButton.addAction(
             UIAction { [weak self] _ in self?.statusConfiguration.viewModel.shareStatus() },
             for: .touchUpInside)
+
+        menuButton.showsMenuAsPrimaryAction = true
+        menuButton.menu = UIMenu(children: [
+            UIAction(
+                title: NSLocalizedString("report", comment: ""),
+                image: UIImage(systemName: "flag"),
+                attributes: .destructive) { [weak self] _ in
+                self?.statusConfiguration.viewModel.reportStatus()
+            }
+        ])
 
         for button in actionButtons {
             button.titleLabel?.font = .preferredFont(forTextStyle: .footnote)

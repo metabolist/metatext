@@ -215,6 +215,17 @@ public extension StatusViewModel {
         eventsSubject.send(Just(.share(url)).setFailureType(to: Error.self).eraseToAnyPublisher())
     }
 
+    func reportStatus() {
+        eventsSubject.send(
+            Just(.report(ReportViewModel(
+                            accountService: statusService.navigationService.accountService(
+                                account: statusService.status.displayStatus.account),
+                            statusService: statusService,
+                            identification: identification)))
+                .setFailureType(to: Error.self)
+                .eraseToAnyPublisher())
+    }
+
     func vote() {
         eventsSubject.send(
             statusService.vote(selectedOptions: pollOptionSelections)

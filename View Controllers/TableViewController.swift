@@ -126,6 +126,13 @@ extension TableViewController {
     static let autoplayableAttachmentsView = PassthroughSubject<StatusAttachmentsView?, Never>()
     static let autoplayableAttachmentsViewNotification =
         Notification.Name("com.metabolist.metatext.attachment-view-became-autoplayable")
+
+    func report(viewModel: ReportViewModel) {
+        let reportViewController = ReportViewController(viewModel: viewModel)
+        let navigationController = UINavigationController(rootViewController: reportViewController)
+
+        present(navigationController, animated: true)
+    }
 }
 
 extension TableViewController: UITableViewDataSourcePrefetching {
@@ -325,6 +332,8 @@ private extension TableViewController {
             }
         case let .attachment(attachmentViewModel, statusViewModel):
             present(attachmentViewModel: attachmentViewModel, statusViewModel: statusViewModel)
+        case let .report(reportViewModel):
+            report(viewModel: reportViewModel)
         }
     }
 
