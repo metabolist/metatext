@@ -98,7 +98,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
                 .eraseToAnyPublisher()
             self.hasRequestedUsingMarker = true
         } else {
-            publisher = collectionService.request(maxId: maxId, minId: minId)
+            publisher = collectionService.request(maxId: realMaxId(maxId: maxId), minId: minId)
         }
 
         publisher
@@ -292,6 +292,17 @@ private extension CollectionItemsViewModel {
         let itemsSet = Set(items.reduce([], +))
 
         viewModelCache = viewModelCache.filter { itemsSet.contains($0.key) }
+    }
+
+    func realMaxId(maxId: String?) -> String? {
+        guard let maxId = maxId else { return nil }
+
+        guard let markerTimeline = collectionService.markerTimeline,
+              identification.appPreferences.positionBehavior(markerTimeline: markerTimeline) == .rememberPosition,
+              let lastItemId = items.value.last?.last?.itemId
+        else { return maxId }
+
+        return min(maxId, lastItemId)
     }
 
     func idForScrollPositionMaintenance(newItems: [[CollectionItem]]) -> CollectionItem.Id? {

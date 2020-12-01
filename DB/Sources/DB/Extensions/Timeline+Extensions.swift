@@ -24,6 +24,8 @@ extension Timeline {
             self = .tag(tag)
         case (_, _, _, _, .some(let accountId), .some(let profileCollection)):
             self = .profile(accountId: accountId, profileCollection: profileCollection)
+        case (Timeline.favorites.id, _, _, _, _, _):
+            self = .favorites
         default:
             return nil
         }

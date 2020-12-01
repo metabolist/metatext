@@ -56,6 +56,10 @@ struct SecondaryNavigationView: View {
                     NavigationLink(destination: ListsView(viewModel: .init(identification: viewModel.identification))) {
                         Label("secondary-navigation.lists", systemImage: "scroll")
                     }
+                    NavigationLink(destination: TableView(viewModel: viewModel.favoritesViewModel())
+                                    .navigationTitle(Text("favorites"))) {
+                        Label("favorites", systemImage: "star.fill")
+                    }
                 }
                 Section {
                     NavigationLink(

@@ -39,6 +39,8 @@ extension Timeline {
                 excludeReplies: excludeReplies,
                 onlyMedia: onlyMedia,
                 pinned: false)
+        case .favorites:
+            return .favourites
         }
     }
 }

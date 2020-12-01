@@ -15,27 +15,15 @@ public struct TimelineService {
     private let timeline: Timeline
     private let mastodonAPIClient: MastodonAPIClient
     private let contentDatabase: ContentDatabase
-    private let nextPageMaxIdSubject: CurrentValueSubject<String, Never>
+    private let nextPageMaxIdSubject = PassthroughSubject<String, Never>()
 
     init(timeline: Timeline, mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
         self.timeline = timeline
         self.mastodonAPIClient = mastodonAPIClient
         self.contentDatabase = contentDatabase
-
-        let nextPageMaxIdSubject = CurrentValueSubject<String, Never>(String(Int.max))
-
-        self.nextPageMaxIdSubject = nextPageMaxIdSubject
         sections = contentDatabase.timelinePublisher(timeline)
-            .handleEvents(receiveOutput: {
-                guard case let .status(status, _) = $0.last?.last,
-                      status.id < nextPageMaxIdSubject.value
-                else { return }
-
-                nextPageMaxIdSubject.send(status.id)
-            })
-            .eraseToAnyPublisher()
         navigationService = NavigationService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
-        nextPageMaxId = nextPageMaxIdSubject.dropFirst().eraseToAnyPublisher()
+        nextPageMaxId = nextPageMaxIdSubject.eraseToAnyPublisher()
 
         if case let .tag(tag) = timeline {
             title = Just("#".appending(tag)).eraseToAnyPublisher()
@@ -58,9 +46,9 @@ extension TimelineService: CollectionService {
     public func request(maxId: String?, minId: String?) -> AnyPublisher<Never, Error> {
         mastodonAPIClient.pagedRequest(timeline.endpoint, maxId: maxId, minId: minId)
             .handleEvents(receiveOutput: {
-                guard let maxId = $0.info.maxId, maxId < nextPageMaxIdSubject.value else { return }
-
-                nextPageMaxIdSubject.send(maxId)
+                if let maxId = $0.info.maxId {
+                    nextPageMaxIdSubject.send(maxId)
+                }
             })
             .flatMap { contentDatabase.insert(statuses: $0.result, timeline: timeline) }
             .eraseToAnyPublisher()

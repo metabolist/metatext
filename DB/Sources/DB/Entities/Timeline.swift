@@ -10,6 +10,7 @@ public enum Timeline: Hashable {
     case list(List)
     case tag(String)
     case profile(accountId: Account.Id, profileCollection: ProfileCollection)
+    case favorites
 }
 
 public extension Timeline {
@@ -18,7 +19,7 @@ public extension Timeline {
     static let unauthenticatedDefaults: [Timeline] = [.local, .federated]
     static let authenticatedDefaults: [Timeline] = [.home, .local, .federated]
 
-    var filterContext: Filter.Context {
+    var filterContext: Filter.Context? {
         switch self {
         case .home, .list:
             return .home
@@ -26,6 +27,8 @@ public extension Timeline {
             return .public
         case .profile:
             return .account
+        default:
+            return nil
         }
     }
 }
@@ -45,6 +48,8 @@ extension Timeline: Identifiable {
             return "tag-".appending(tag).lowercased()
         case let .profile(accountId, profileCollection):
             return "profile-\(accountId)-\(profileCollection)"
+        case .favorites:
+            return "favorites"
         }
     }
 }

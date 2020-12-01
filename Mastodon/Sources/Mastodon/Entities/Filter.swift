@@ -38,7 +38,9 @@ extension Array where Element == Filter {
     // swiftlint:disable line_length
     // Adapted from https://github.com/tootsuite/mastodon/blob/bf477cee9f31036ebf3d164ddec1cebef5375513/app/javascript/mastodon/selectors/index.js#L43
     // swiftlint:enable line_length
-    public func regularExpression(context: Filter.Context) -> String? {
+    public func regularExpression(context: Filter.Context?) -> String? {
+        guard let context = context else { return nil }
+
         let inContext = filter { $0.context.contains(context) }
 
         guard !inContext.isEmpty else { return nil }
