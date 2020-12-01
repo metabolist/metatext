@@ -11,6 +11,7 @@ public enum StatusesEndpoint {
     case timelinesList(id: List.Id)
     case accountsStatuses(id: Account.Id, excludeReplies: Bool, onlyMedia: Bool, pinned: Bool)
     case favourites
+    case bookmarks
 }
 
 extension StatusesEndpoint: Endpoint {
@@ -22,7 +23,7 @@ extension StatusesEndpoint: Endpoint {
             return defaultContext + ["timelines"]
         case .accountsStatuses:
             return defaultContext + ["accounts"]
-        case .favourites:
+        case .favourites, .bookmarks:
             return defaultContext
         }
     }
@@ -41,6 +42,8 @@ extension StatusesEndpoint: Endpoint {
             return [id, "statuses"]
         case .favourites:
             return ["favourites"]
+        case .bookmarks:
+            return ["bookmarks"]
         }
     }
 

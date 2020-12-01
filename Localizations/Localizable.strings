@@ -24,6 +24,7 @@
 "add-identity.unable-to-connect-to-instance" = "Unable to connect to instance";
 "attachment.sensitive-content" = "Sensitive content";
 "attachment.media-hidden" = "Media hidden";
+"bookmarks" = "Bookmarks";
 "cancel" = "Cancel";
 "favorites" = "Favorites";
 "registration.review-terms-of-use-and-privacy-policy-%@" = "Please review %@'s Terms of Use and Privacy Policy to continue";

@@ -11,6 +11,7 @@ public enum Timeline: Hashable {
     case tag(String)
     case profile(accountId: Account.Id, profileCollection: ProfileCollection)
     case favorites
+    case bookmarks
 }
 
 public extension Timeline {
@@ -50,6 +51,8 @@ extension Timeline: Identifiable {
             return "profile-\(accountId)-\(profileCollection)"
         case .favorites:
             return "favorites"
+        case .bookmarks:
+            return "bookmarks"
         }
     }
 }

@@ -41,6 +41,8 @@ extension Timeline {
                 pinned: false)
         case .favorites:
             return .favourites
+        case .bookmarks:
+            return .bookmarks
         }
     }
 }

@@ -26,6 +26,8 @@ extension Timeline {
             self = .profile(accountId: accountId, profileCollection: profileCollection)
         case (Timeline.favorites.id, _, _, _, _, _):
             self = .favorites
+        case (Timeline.bookmarks.id, _, _, _, _, _):
+            self = .bookmarks
         default:
             return nil
         }

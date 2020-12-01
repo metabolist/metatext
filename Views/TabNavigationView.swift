@@ -161,6 +161,8 @@ private extension Timeline {
             return ""
         case .favorites:
             return NSLocalizedString("favorites", comment: "")
+        case .bookmarks:
+            return NSLocalizedString("bookmarks", comment: "")
         }
     }
 
@@ -172,7 +174,8 @@ private extension Timeline {
         case .list: return "scroll"
         case .tag: return "number"
         case .profile: return "person"
-        case .favorites: return "star.fill"
+        case .favorites: return "star"
+        case .bookmarks: return "bookmark"
         }
     }
 }

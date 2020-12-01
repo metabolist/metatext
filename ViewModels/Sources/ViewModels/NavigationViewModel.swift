@@ -95,7 +95,7 @@ public extension NavigationViewModel {
         switch timeline {
         case .home, .list:
             return identification.identity.handle
-        case .local, .federated, .tag, .profile, .favorites:
+        case .local, .federated, .tag, .profile, .favorites, .bookmarks:
             return identification.identity.instance?.uri ?? ""
         }
     }
@@ -144,6 +144,12 @@ public extension NavigationViewModel {
     func favoritesViewModel() -> CollectionViewModel {
         CollectionItemsViewModel(
             collectionService: identification.service.service(timeline: .favorites),
+            identification: identification)
+    }
+
+    func bookmarksViewModel() -> CollectionViewModel {
+        CollectionItemsViewModel(
+            collectionService: identification.service.service(timeline: .bookmarks),
             identification: identification)
     }
 }

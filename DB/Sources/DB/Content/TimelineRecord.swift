@@ -44,7 +44,7 @@ extension TimelineRecord {
         id = timeline.id
 
         switch timeline {
-        case .home, .local, .federated, .favorites:
+        case .home, .local, .federated, .favorites, .bookmarks:
             listId = nil
             listTitle = nil
             tag = nil
