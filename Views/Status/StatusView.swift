@@ -3,6 +3,7 @@
 // swiftlint:disable file_length
 import Kingfisher
 import UIKit
+import ViewModels
 
 final class StatusView: UIView {
     let avatarImageView = AnimatedImageView()
@@ -206,14 +207,6 @@ private extension StatusView {
             for: .touchUpInside)
 
         menuButton.showsMenuAsPrimaryAction = true
-        menuButton.menu = UIMenu(children: [
-            UIAction(
-                title: NSLocalizedString("report", comment: ""),
-                image: UIImage(systemName: "flag"),
-                attributes: .destructive) { [weak self] _ in
-                self?.statusConfiguration.viewModel.reportStatus()
-            }
-        ])
 
         for button in actionButtons {
             button.titleLabel?.font = .preferredFont(forTextStyle: .footnote)
@@ -271,6 +264,8 @@ private extension StatusView {
         let viewModel = statusConfiguration.viewModel
         let isContextParent = viewModel.configuration.isContextParent
         let mutableDisplayName = NSMutableAttributedString(string: viewModel.displayName)
+
+        menuButton.menu = menu(viewModel: viewModel)
 
         avatarImageView.kf.setImage(with: viewModel.avatarURL)
 
@@ -395,6 +390,24 @@ private extension StatusView {
         favoriteButton.setTitleColor(favoriteColor, for: .normal)
     }
     // swiftlint:enable function_body_length
+
+    func menu(viewModel: StatusViewModel) -> UIMenu {
+        UIMenu(children: [
+            UIAction(
+                title: viewModel.bookmarked
+                    ? NSLocalizedString("status.unbookmark", comment: "")
+                    : NSLocalizedString("status.bookmark", comment: ""),
+                image: UIImage(systemName: "bookmark")) { _ in
+                viewModel.toggleBookmarked()
+            },
+            UIAction(
+                title: NSLocalizedString("report", comment: ""),
+                image: UIImage(systemName: "flag"),
+                attributes: .destructive) { _ in
+                viewModel.reportStatus()
+            }
+        ])
+    }
 
     func setButtonImages(scale: UIImage.SymbolScale) {
         replyButton.setImage(UIImage(systemName: "bubble.right",

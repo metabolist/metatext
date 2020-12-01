@@ -40,6 +40,14 @@ public extension StatusService {
             .eraseToAnyPublisher()
     }
 
+    func toggleBookmarked() -> AnyPublisher<Never, Error> {
+        mastodonAPIClient.request(status.displayStatus.bookmarked
+                                    ? StatusEndpoint.unbookmark(id: status.displayStatus.id)
+                                    : StatusEndpoint.bookmark(id: status.displayStatus.id))
+            .flatMap(contentDatabase.insert(status:))
+            .eraseToAnyPublisher()
+    }
+
     func rebloggedByService() -> AccountListService {
         AccountListService(
             endpoint: .rebloggedBy(id: status.id),

@@ -8,6 +8,8 @@ public enum StatusEndpoint {
     case status(id: Status.Id)
     case favourite(id: Status.Id)
     case unfavourite(id: Status.Id)
+    case bookmark(id: Status.Id)
+    case unbookmark(id: Status.Id)
 }
 
 extension StatusEndpoint: Endpoint {
@@ -25,6 +27,10 @@ extension StatusEndpoint: Endpoint {
             return [id, "favourite"]
         case let .unfavourite(id):
             return [id, "unfavourite"]
+        case let .bookmark(id):
+            return [id, "bookmark"]
+        case let .unbookmark(id):
+            return [id, "unbookmark"]
         }
     }
 
@@ -32,7 +38,7 @@ extension StatusEndpoint: Endpoint {
         switch self {
         case .status:
             return .get
-        case .favourite, .unfavourite:
+        case .favourite, .unfavourite, .bookmark, .unbookmark:
             return .post
         }
     }

@@ -107,6 +107,8 @@ public extension StatusViewModel {
 
     var favorited: Bool { statusService.status.displayStatus.favourited }
 
+    var bookmarked: Bool { statusService.status.displayStatus.bookmarked }
+
     var sensitive: Bool { statusService.status.displayStatus.sensitive }
 
     var sharingURL: URL? { statusService.status.displayStatus.url }
@@ -201,6 +203,13 @@ public extension StatusViewModel {
     func toggleFavorited() {
         eventsSubject.send(
             statusService.toggleFavorited()
+                .map { _ in .ignorableOutput }
+                .eraseToAnyPublisher())
+    }
+
+    func toggleBookmarked() {
+        eventsSubject.send(
+            statusService.toggleBookmarked()
                 .map { _ in .ignorableOutput }
                 .eraseToAnyPublisher())
     }

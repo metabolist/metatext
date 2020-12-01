@@ -124,6 +124,7 @@
 "report.target-%@" = "Reporting %@";
 "report.forward.hint" = "The account is from another server. Send an anonymized copy of the report there as well?";
 "report.forward-%@" = "Forward report to %@";
+"status.bookmark" = "Bookmark";
 "status.reblogged-by" = "%@ boosted";
 "status.pinned-post" = "Pinned post";
 "status.show-more" = "Show More";
@@ -132,6 +133,7 @@
 "status.poll.time-left" = "%@ left";
 "status.poll.refresh" = "Refresh";
 "status.poll.closed" = "Closed";
+"status.unbookmark" = "Unbookmark";
 "status.visibility.public" = "Public";
 "status.visibility.unlisted" = "Unlisted";
 "status.visibility.private" = "Private";
