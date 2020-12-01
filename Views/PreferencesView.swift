@@ -21,6 +21,12 @@ struct PreferencesView: View {
                                    destination: NotificationTypesPreferencesView(
                                     viewModel: .init(identification: identification)))
                 }
+                NavigationLink("preferences.muted-users",
+                               destination: TableView(viewModel: viewModel.mutedUsersViewModel())
+                                .navigationTitle(Text("preferences.muted-users")))
+                NavigationLink("preferences.blocked-users",
+                               destination: TableView(viewModel: viewModel.blockedUsersViewModel())
+                                .navigationTitle(Text("preferences.blocked-users")))
             }
             Section(header: Text("preferences.app")) {
                 NavigationLink("preferences.media",

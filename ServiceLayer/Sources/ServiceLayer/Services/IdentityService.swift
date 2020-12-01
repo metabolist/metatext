@@ -210,6 +210,13 @@ public extension IdentityService {
         TimelineService(timeline: timeline, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }
 
+    func service(accountList: AccountsEndpoint) -> AccountListService {
+        AccountListService(
+            endpoint: accountList,
+            mastodonAPIClient: mastodonAPIClient,
+            contentDatabase: contentDatabase)
+    }
+
     func notificationsService() -> NotificationsService {
         NotificationsService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }

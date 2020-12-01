@@ -16,3 +16,17 @@ public final class PreferencesViewModel: ObservableObject {
         shouldShowNotificationTypePreferences = identification.identity.lastRegisteredDeviceToken != nil
     }
 }
+
+public extension PreferencesViewModel {
+    func mutedUsersViewModel() -> CollectionViewModel {
+        CollectionItemsViewModel(
+            collectionService: identification.service.service(accountList: .mutes),
+            identification: identification)
+    }
+
+    func blockedUsersViewModel() -> CollectionViewModel {
+        CollectionItemsViewModel(
+            collectionService: identification.service.service(accountList: .blocks),
+            identification: identification)
+    }
+}

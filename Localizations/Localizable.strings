@@ -50,6 +50,7 @@
 "pending.pending-confirmation" = "Your account is pending confirmation";
 "preferences" = "Preferences";
 "preferences.app" = "App Preferences";
+"preferences.blocked-users" = "Blocked Users";
 "preferences.media" = "Media";
 "preferences.media.use-system-reduce-motion" = "Use system reduce motion setting";
 "preferences.media.avatars" = "Avatars";
@@ -83,6 +84,7 @@
 "preferences.notification-types.reblog" = "Reblog";
 "preferences.notification-types.mention" = "Mention";
 "preferences.notification-types.poll" = "Poll";
+"preferences.muted-users" = "Muted Users";
 "preferences.startup-and-syncing" = "Startup and Syncing";
 "preferences.startup-and-syncing.home-timeline" = "Home timeline";
 "preferences.startup-and-syncing.notifications-tab" = "Notifications tab";

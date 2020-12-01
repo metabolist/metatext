@@ -7,6 +7,8 @@ import Mastodon
 public enum AccountsEndpoint {
     case rebloggedBy(id: Status.Id)
     case favouritedBy(id: Status.Id)
+    case mutes
+    case blocks
 }
 
 extension AccountsEndpoint: Endpoint {
@@ -16,6 +18,8 @@ extension AccountsEndpoint: Endpoint {
         switch self {
         case .rebloggedBy, .favouritedBy:
             return defaultContext + ["statuses"]
+        case .mutes, .blocks:
+            return defaultContext
         }
     }
 
@@ -25,13 +29,14 @@ extension AccountsEndpoint: Endpoint {
             return [id, "reblogged_by"]
         case let .favouritedBy(id):
             return [id, "favourited_by"]
+        case .mutes:
+            return ["mutes"]
+        case .blocks:
+            return ["blocks"]
         }
     }
 
     public var method: HTTPMethod {
-        switch self {
-        case .rebloggedBy, .favouritedBy:
-            return .get
-        }
+        .get
     }
 }
