@@ -22,10 +22,10 @@ struct PreferencesView: View {
                                     viewModel: .init(identification: identification)))
                 }
                 NavigationLink("preferences.muted-users",
-                               destination: TableView(viewModel: viewModel.mutedUsersViewModel())
+                               destination: TableView(viewModelClosure: viewModel.mutedUsersViewModel)
                                 .navigationTitle(Text("preferences.muted-users")))
                 NavigationLink("preferences.blocked-users",
-                               destination: TableView(viewModel: viewModel.blockedUsersViewModel())
+                               destination: TableView(viewModelClosure: viewModel.blockedUsersViewModel)
                                 .navigationTitle(Text("preferences.blocked-users")))
             }
             Section(header: Text("preferences.app")) {

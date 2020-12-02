@@ -5,10 +5,10 @@ import ViewModels
 
 struct TableView: UIViewControllerRepresentable {
     @EnvironmentObject var identification: Identification
-    let viewModel: CollectionViewModel
+    let viewModelClosure: () -> CollectionViewModel
 
     func makeUIViewController(context: Context) -> TableViewController {
-        TableViewController(viewModel: viewModel, identification: identification)
+        TableViewController(viewModel: viewModelClosure(), identification: identification)
     }
 
     func updateUIViewController(_ uiViewController: TableViewController, context: Context) {
@@ -21,7 +21,7 @@ import PreviewViewModels
 
 struct StatusListView_Previews: PreviewProvider {
     static var previews: some View {
-        TableView(viewModel: NavigationViewModel(identification: .preview).timelineViewModel)
+        TableView { NavigationViewModel(identification: .preview).timelineViewModel }
     }
 }
 #endif

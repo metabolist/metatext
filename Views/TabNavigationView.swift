@@ -62,7 +62,7 @@ private extension TabNavigationView {
     func view(tab: NavigationViewModel.Tab) -> some View {
         switch tab {
         case .timelines:
-            TableView(viewModel: viewModel.timelineViewModel)
+            TableView { viewModel.timelineViewModel }
                 .id(viewModel.timeline.id)
                 .edgesIgnoringSafeArea(.all)
                 .navigationTitle(viewModel.timeline.title)
@@ -95,7 +95,7 @@ private extension TabNavigationView {
                     })
         case .notifications:
             if let notificationsViewModel = viewModel.notificationsViewModel {
-                TableView(viewModel: notificationsViewModel)
+                TableView { notificationsViewModel }
                     .id(tab)
                     .edgesIgnoringSafeArea(.all)
                     .navigationTitle("notifications")
@@ -104,7 +104,7 @@ private extension TabNavigationView {
             }
         case .messages:
             if let conversationsViewModel = viewModel.conversationsViewModel {
-                TableView(viewModel: conversationsViewModel)
+                TableView { conversationsViewModel }
                     .id(tab)
                     .edgesIgnoringSafeArea(.all)
                     .navigationTitle("messages")
