@@ -11,6 +11,7 @@ import Secrets
 public struct ContentDatabase {
     public let activeFiltersPublisher: AnyPublisher<[Filter], Error>
 
+    private let id: Identity.Id
     private let databaseWriter: DatabaseWriter
 
     public init(id: Identity.Id,
@@ -19,6 +20,8 @@ public struct ContentDatabase {
                 inMemory: Bool,
                 appGroup: String,
                 keychain: Keychain.Type) throws {
+        self.id = id
+
         if inMemory {
             databaseWriter = DatabaseQueue()
             try Self.migrator.migrate(databaseWriter)
@@ -378,6 +381,21 @@ public extension ContentDatabase {
             TimelineItemsInfo.request(TimelineRecord.filter(TimelineRecord.Columns.id == timeline.id)).fetchOne)
             .removeDuplicates()
             .publisher(in: databaseWriter)
+            .handleEvents(
+                receiveSubscription: { _ in
+                    if let ephemeralityId = timeline.ephemeralityId(id: id) {
+                        Self.ephemeralTimelines.add(ephemeralityId)
+                    }
+                },
+                receiveCancel: {
+                    guard let ephemeralityId = timeline.ephemeralityId(id: id) else { return }
+
+                    Self.ephemeralTimelines.remove(ephemeralityId)
+
+                    if Self.ephemeralTimelines.count(for: ephemeralityId) == 0 {
+                        databaseWriter.asyncWrite(TimelineRecord(timeline: timeline).delete) { _, _ in }
+                    }
+                })
             .combineLatest(activeFiltersPublisher)
             .compactMap { $0?.items(filters: $1) }
             .eraseToAnyPublisher()
@@ -480,6 +498,9 @@ public extension ContentDatabase {
 
 private extension ContentDatabase {
     static let cleanAfterLastReadIdCount = 40
+
+    static let ephemeralTimelines = NSCountedSet()
+
     static func fileURL(id: Identity.Id, appGroup: String) throws -> URL {
         try FileManager.default.databaseDirectoryURL(name: id.uuidString, appGroup: appGroup)
     }
