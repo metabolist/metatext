@@ -216,7 +216,7 @@ extension TableViewController: ZoomAnimatorDelegate {
     func referenceViewFrameInTransitioningView(for zoomAnimator: ZoomAnimator) -> CGRect? {
         guard let referenceView = referenceView(for: zoomAnimator) else { return nil }
 
-        return tabBarController?.view.convert(referenceView.frame, from: referenceView.superview)
+        return parent?.view.convert(referenceView.frame, from: referenceView.superview)
     }
 }
 

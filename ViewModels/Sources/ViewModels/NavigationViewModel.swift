@@ -93,9 +93,9 @@ public extension NavigationViewModel {
 
     var timelineSubtitle: String {
         switch timeline {
-        case .home, .list:
+        case .home, .favorites, .bookmarks, .list:
             return identification.identity.handle
-        case .local, .federated, .tag, .profile, .favorites, .bookmarks:
+        case .local, .federated, .tag, .profile:
             return identification.identity.instance?.uri ?? ""
         }
     }
