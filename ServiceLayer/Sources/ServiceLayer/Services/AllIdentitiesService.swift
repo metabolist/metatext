@@ -99,7 +99,7 @@ public extension AllIdentitiesService {
                     return MastodonAPIClient(
                         session: environment.session,
                         instanceURL: try secrets.getInstanceURL())
-                        .request(DeletionEndpoint.oauthRevoke(
+                        .request(EmptyEndpoint.oauthRevoke(
                                     token: try secrets.getAccessToken(),
                                     clientId: try secrets.getClientId(),
                                     clientSecret: try secrets.getClientSecret()))

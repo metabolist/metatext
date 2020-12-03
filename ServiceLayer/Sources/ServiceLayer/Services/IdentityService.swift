@@ -87,7 +87,7 @@ public extension IdentityService {
     }
 
     func deleteList(id: List.Id) -> AnyPublisher<Never, Error> {
-        mastodonAPIClient.request(DeletionEndpoint.list(id: id))
+        mastodonAPIClient.request(EmptyEndpoint.deleteList(id: id))
             .map { _ in id }
             .flatMap(contentDatabase.deleteList(id:))
             .eraseToAnyPublisher()
@@ -152,7 +152,7 @@ public extension IdentityService {
     }
 
     func deleteFilter(id: Filter.Id) -> AnyPublisher<Never, Error> {
-        mastodonAPIClient.request(DeletionEndpoint.filter(id: id))
+        mastodonAPIClient.request(EmptyEndpoint.deleteFilter(id: id))
             .flatMap { _ in contentDatabase.deleteFilter(id: id) }
             .eraseToAnyPublisher()
     }
