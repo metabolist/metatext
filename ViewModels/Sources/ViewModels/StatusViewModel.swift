@@ -72,7 +72,7 @@ public extension StatusViewModel {
         sensitive || identification.identity.preferences.readingExpandMedia == .hideAll
     }
 
-    var accountName: String { "@" + statusService.status.displayStatus.account.acct }
+    var accountName: String { "@".appending(statusService.status.displayStatus.account.acct) }
 
     var avatarURL: URL {
         if !identification.appPreferences.shouldReduceMotion,

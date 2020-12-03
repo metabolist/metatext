@@ -27,7 +27,7 @@ public extension InstanceURLService {
 
         if text.hasPrefix(Self.httpsPrefix), let prefixedURL = URL(string: text) {
             url = prefixedURL
-        } else if let unprefixedURL = URL(string: Self.httpsPrefix + text) {
+        } else if let unprefixedURL = URL(string: Self.httpsPrefix.appending(text)) {
             url = unprefixedURL
         } else {
             return .failure(URLError(.badURL))

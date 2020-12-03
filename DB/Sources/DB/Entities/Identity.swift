@@ -50,7 +50,7 @@ public extension Identity {
 
     var handle: String {
         if let account = account, let host = account.url.host {
-            return account.url.lastPathComponent + "@" + host
+            return account.url.lastPathComponent.appending("@").appending(host)
         }
 
         return instance?.title ?? url.host ?? url.absoluteString

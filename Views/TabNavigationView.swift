@@ -156,7 +156,7 @@ private extension Timeline {
         case let .list(list):
             return list.title
         case let .tag(tag):
-            return "#" + tag
+            return "#".appending(tag)
         case .profile:
             return ""
         case .favorites:

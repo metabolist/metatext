@@ -50,11 +50,11 @@ extension Array where Element == Filter {
 
             if $0.wholeWord {
                 if expression.range(of: #"^[\w]"#, options: .regularExpression) != nil {
-                    expression = #"\b"# + expression
+                    expression = #"\b"#.appending(expression)
                 }
 
                 if expression.range(of: #"[\w]$"#, options: .regularExpression) != nil {
-                    expression += #"\b"#
+                    expression.append(#"\b"#)
                 }
             }
 

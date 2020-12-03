@@ -200,7 +200,7 @@ private extension Secrets {
     }
 
     func scopedKey(item: Item) -> String {
-        identityId.uuidString + "." + item.rawValue
+        identityId.uuidString.appending(".").appending(item.rawValue)
     }
 
     func set(_ data: SecretsStorable, forItem item: Item) throws {
