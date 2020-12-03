@@ -29,13 +29,13 @@ public final class StatusViewModel: CollectionItemViewModel, ObservableObject {
         self.identification = identification
         content = statusService.status.displayStatus.content.attributed
         contentEmoji = statusService.status.displayStatus.emojis
-        displayName = statusService.status.displayStatus.account.displayName == ""
+        displayName = statusService.status.displayStatus.account.displayName.isEmpty
             ? statusService.status.displayStatus.account.username
             : statusService.status.displayStatus.account.displayName
         displayNameEmoji = statusService.status.displayStatus.account.emojis
         spoilerText = statusService.status.displayStatus.spoilerText
         isReblog = statusService.status.reblog != nil
-        rebloggedByDisplayName = statusService.status.account.displayName == ""
+        rebloggedByDisplayName = statusService.status.account.displayName.isEmpty
             ? statusService.status.account.username
             : statusService.status.account.displayName
         rebloggedByDisplayNameEmoji = statusService.status.account.emojis

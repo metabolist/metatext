@@ -30,7 +30,7 @@ final class StatusBodyView: UIView {
             mutableContent.insert(emoji: viewModel.contentEmoji, view: contentTextView)
             mutableContent.resizeAttachments(toLineHeight: contentFont.lineHeight)
             contentTextView.attributedText = mutableContent
-            contentTextView.isHidden = contentTextView.text == ""
+            contentTextView.isHidden = contentTextView.text.isEmpty
 
             mutableSpoilerText.insert(emoji: viewModel.contentEmoji, view: spoilerTextLabel)
             mutableSpoilerText.resizeAttachments(toLineHeight: spoilerTextLabel.font.lineHeight)
@@ -42,14 +42,14 @@ final class StatusBodyView: UIView {
                     ? NSLocalizedString("status.show-less", comment: "")
                     : NSLocalizedString("status.show-more", comment: ""),
                 for: .normal)
-            toggleShowContentButton.isHidden = viewModel.spoilerText == ""
+            toggleShowContentButton.isHidden = viewModel.spoilerText.isEmpty
 
             contentTextView.isHidden = !viewModel.shouldShowContent
 
-            attachmentsView.isHidden = viewModel.attachmentViewModels.count == 0
+            attachmentsView.isHidden = viewModel.attachmentViewModels.isEmpty
             attachmentsView.viewModel = viewModel
 
-            pollView.isHidden = viewModel.pollOptions.count == 0
+            pollView.isHidden = viewModel.pollOptions.isEmpty
             pollView.viewModel = viewModel
 
             cardView.viewModel = viewModel.cardViewModel

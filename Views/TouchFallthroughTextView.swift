@@ -66,7 +66,7 @@ final class TouchFallthroughTextView: UITextView {
     }
 
     override var intrinsicContentSize: CGSize {
-        return text == "" ? .zero : super.intrinsicContentSize
+        return text.isEmpty ? .zero : super.intrinsicContentSize
     }
 
     func urlAndRect(at point: CGPoint) -> (URL, CGRect)? {

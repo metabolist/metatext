@@ -30,7 +30,7 @@ public final class EditFilterViewModel: ObservableObject {
 public extension EditFilterViewModel {
     var isNew: Bool { filter.id == Filter.newFilterId }
 
-    var isSaveDisabled: Bool { filter.phrase == "" || filter.context.isEmpty }
+    var isSaveDisabled: Bool { filter.phrase.isEmpty || filter.context.isEmpty }
 
     func toggleSelection(context: Filter.Context) {
         if filter.context.contains(context) {

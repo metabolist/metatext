@@ -22,7 +22,7 @@ struct ListsView: View {
                     } label: {
                         Label("add", systemImage: "plus.circle")
                     }
-                    .disabled(newListTitle == "")
+                    .disabled(newListTitle.isEmpty)
                 }
             }
             Section {

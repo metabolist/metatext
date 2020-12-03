@@ -98,7 +98,7 @@ private extension AccountView {
     func applyAccountConfiguration() {
         avatarImageView.kf.setImage(with: accountConfiguration.viewModel.avatarURL(profile: false))
 
-        if accountConfiguration.viewModel.displayName == "" {
+        if accountConfiguration.viewModel.displayName.isEmpty {
             displayNameLabel.isHidden = true
         } else {
             let mutableDisplayName = NSMutableAttributedString(string: accountConfiguration.viewModel.displayName)
