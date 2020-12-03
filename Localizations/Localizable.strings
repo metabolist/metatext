@@ -1,10 +1,12 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
+"account.%@-followers" = "%@'s Followers";
 "account.block" = "Block";
 "account.field.verified" = "Verified %@";
 "account.follow" = "Follow";
 "account.following" = "Following";
 "account.following-count" = "%ld Following";
+"account.followed-by-%@" = "Followed by %@";
 "account.hide-reblogs" = "Hide boosts";
 "account.mute" = "Mute";
 "account.request" = "Request";

@@ -15,13 +15,18 @@ public struct AccountListService {
     private let endpoint: AccountsEndpoint
     private let mastodonAPIClient: MastodonAPIClient
     private let contentDatabase: ContentDatabase
+    private let titleComponents: [String]?
     private let nextPageMaxIdSubject = PassthroughSubject<String, Never>()
 
-    init(endpoint: AccountsEndpoint, mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
+    init(endpoint: AccountsEndpoint,
+         mastodonAPIClient: MastodonAPIClient,
+         contentDatabase: ContentDatabase,
+         titleComponents: [String]? = nil) {
         list = AccountList()
         self.endpoint = endpoint
         self.mastodonAPIClient = mastodonAPIClient
         self.contentDatabase = contentDatabase
+        self.titleComponents = titleComponents
         sections = contentDatabase.accountListPublisher(list)
             .map { [$0.map(CollectionItem.account)] }
             .eraseToAnyPublisher()
@@ -40,5 +45,13 @@ extension AccountListService: CollectionService {
             })
             .flatMap { contentDatabase.append(accounts: $0.result, toList: list) }
             .eraseToAnyPublisher()
+    }
+
+    public var titleLocalizationComponents: AnyPublisher<[String], Never> {
+        if let titleComponents = titleComponents {
+            return Just(titleComponents).eraseToAnyPublisher()
+        } else {
+            return Empty().eraseToAnyPublisher()
+        }
     }
 }

@@ -70,6 +70,10 @@ extension ProfileViewModel: CollectionViewModel {
         $accountViewModel.compactMap { $0?.accountName }.eraseToAnyPublisher()
     }
 
+    public var titleLocalizationComponents: AnyPublisher<[String], Never> {
+        collectionViewModel.flatMap(\.titleLocalizationComponents).eraseToAnyPublisher()
+    }
+
     public var expandAll: AnyPublisher<ExpandAllState, Never> {
         Empty().eraseToAnyPublisher()
     }

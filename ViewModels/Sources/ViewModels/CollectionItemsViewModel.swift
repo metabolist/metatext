@@ -66,6 +66,10 @@ extension CollectionItemsViewModel: CollectionViewModel {
 
     public var title: AnyPublisher<String, Never> { collectionService.title }
 
+    public var titleLocalizationComponents: AnyPublisher<[String], Never> {
+        collectionService.titleLocalizationComponents
+    }
+
     public var expandAll: AnyPublisher<ExpandAllState, Never> {
         expandAllSubject.eraseToAnyPublisher()
     }

@@ -228,6 +228,15 @@ private extension TableViewController {
     func setupViewModelBindings() {
         viewModel.title.sink { [weak self] in self?.navigationItem.title = $0 }.store(in: &cancellables)
 
+        viewModel.titleLocalizationComponents.sink { [weak self] in
+            guard let key = $0.first else { return }
+
+            self?.navigationItem.title = String(
+                format: NSLocalizedString(key, comment: ""),
+                arguments: Array($0.suffix(from: 1)))
+        }
+        .store(in: &cancellables)
+
         viewModel.updates.sink { [weak self] in self?.update($0) }.store(in: &cancellables)
 
         viewModel.events.receive(on: DispatchQueue.main)

@@ -95,14 +95,16 @@ public extension AccountService {
         AccountListService(
             endpoint: .accountsFollowing(id: account.id),
             mastodonAPIClient: mastodonAPIClient,
-            contentDatabase: contentDatabase)
+            contentDatabase: contentDatabase,
+            titleComponents: ["account.followed-by-%@", "@".appending(account.acct)])
     }
 
     func followersService() -> AccountListService {
         AccountListService(
             endpoint: .accountsFollowers(id: account.id),
             mastodonAPIClient: mastodonAPIClient,
-            contentDatabase: contentDatabase)
+            contentDatabase: contentDatabase,
+            titleComponents: ["account.%@-followers", "@".appending(account.acct)])
     }
 }
 
