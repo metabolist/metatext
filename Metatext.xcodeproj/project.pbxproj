@@ -39,6 +39,7 @@
 		D08B8D72254246E200B1EBEF /* PollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08B8D71254246E200B1EBEF /* PollView.swift */; };
 		D08B8D822544D80000B1EBEF /* PollOptionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08B8D812544D80000B1EBEF /* PollOptionButton.swift */; };
 		D08B8D8D2544E6EC00B1EBEF /* PollResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08B8D8C2544E6EC00B1EBEF /* PollResultView.swift */; };
+		D08E512125786A6600FA2C5F /* UIButton+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08E512025786A6600FA2C5F /* UIButton+Extensions.swift */; };
 		D0A1F4F7252E7D4B004435BF /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A1F4F6252E7D4B004435BF /* TableViewDataSource.swift */; };
 		D0A7AC7325748BFF00E4E8AB /* ReportStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A7AC7225748BFF00E4E8AB /* ReportStatusView.swift */; };
 		D0B32F50250B373600311912 /* RegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B32F4F250B373600311912 /* RegistrationView.swift */; };
@@ -157,6 +158,7 @@
 		D08B8D71254246E200B1EBEF /* PollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollView.swift; sourceTree = "<group>"; };
 		D08B8D812544D80000B1EBEF /* PollOptionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollOptionButton.swift; sourceTree = "<group>"; };
 		D08B8D8C2544E6EC00B1EBEF /* PollResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollResultView.swift; sourceTree = "<group>"; };
+		D08E512025786A6600FA2C5F /* UIButton+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extensions.swift"; sourceTree = "<group>"; };
 		D0A1F4F6252E7D4B004435BF /* TableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewDataSource.swift; sourceTree = "<group>"; };
 		D0A7AC7225748BFF00E4E8AB /* ReportStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportStatusView.swift; sourceTree = "<group>"; };
 		D0AD03552505814D0085A466 /* Base16 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Base16; sourceTree = "<group>"; };
@@ -433,6 +435,7 @@
 				D0C7D46B24F76169001EBDBB /* NSMutableAttributedString+Extensions.swift */,
 				D0B5FE9A251583DB00478838 /* ProfileCollection+Extensions.swift */,
 				D0C7D46A24F76169001EBDBB /* String+Extensions.swift */,
+				D08E512025786A6600FA2C5F /* UIButton+Extensions.swift */,
 				D0C7D46C24F76169001EBDBB /* UIColor+Extensions.swift */,
 				D0030981250C6C8500EACB32 /* URL+Extensions.swift */,
 				D0C7D46F24F76169001EBDBB /* View+Extensions.swift */,
@@ -674,6 +677,7 @@
 				D0C7D49724F7616A001EBDBB /* IdentitiesView.swift in Sources */,
 				D01EF22425182B1F00650C6B /* AccountHeaderView.swift in Sources */,
 				D036AA17254CA824009094DF /* StatusBodyView.swift in Sources */,
+				D08E512125786A6600FA2C5F /* UIButton+Extensions.swift in Sources */,
 				D0EA59482522B8B600804347 /* ViewConstants.swift in Sources */,
 				D04226FD2546AC0B000980A3 /* StartupAndSyncingPreferencesView.swift in Sources */,
 				D036AA0C254B612B009094DF /* NotificationContentConfiguration.swift in Sources */,

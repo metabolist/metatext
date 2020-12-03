@@ -90,6 +90,20 @@ public extension AccountService {
     func report(_ elements: ReportElements) -> AnyPublisher<Never, Error> {
         mastodonAPIClient.request(ReportEndpoint.create(elements)).ignoreOutput().eraseToAnyPublisher()
     }
+
+    func followingService() -> AccountListService {
+        AccountListService(
+            endpoint: .accountsFollowing(id: account.id),
+            mastodonAPIClient: mastodonAPIClient,
+            contentDatabase: contentDatabase)
+    }
+
+    func followersService() -> AccountListService {
+        AccountListService(
+            endpoint: .accountsFollowers(id: account.id),
+            mastodonAPIClient: mastodonAPIClient,
+            contentDatabase: contentDatabase)
+    }
 }
 
 private extension AccountService {

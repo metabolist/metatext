@@ -347,13 +347,11 @@ private extension StatusView {
         let noFavorites = viewModel.favoritesCount == 0
         let noInteractions = !isContextParent || (noReblogs && noFavorites)
 
-        setAttributedLocalizedTitle(
-            button: rebloggedByButton,
+        rebloggedByButton.setAttributedLocalizedTitle(
             localizationKey: "status.reblogs-count",
             count: viewModel.reblogsCount)
         rebloggedByButton.isHidden = noReblogs
-        setAttributedLocalizedTitle(
-            button: favoritedByButton,
+        favoritedByButton.setAttributedLocalizedTitle(
             localizationKey: "status.favorites-count",
             count: viewModel.favoritesCount)
         favoritedByButton.isHidden = noFavorites
@@ -420,15 +418,6 @@ private extension StatusView {
                                      withConfiguration: UIImage.SymbolConfiguration(scale: scale)), for: .normal)
         menuButton.setImage(UIImage(systemName: "ellipsis",
                                     withConfiguration: UIImage.SymbolConfiguration(scale: scale)), for: .normal)
-    }
-
-    func setAttributedLocalizedTitle(button: UIButton, localizationKey: String, count: Int) {
-        let localizedTitle = String.localizedStringWithFormat(NSLocalizedString(localizationKey, comment: ""), count)
-
-        button.setAttributedTitle(localizedTitle.countEmphasizedAttributedString(count: count), for: .normal)
-        button.setAttributedTitle(
-            localizedTitle.countEmphasizedAttributedString(count: count, highlighted: true),
-            for: .highlighted)
     }
 }
 

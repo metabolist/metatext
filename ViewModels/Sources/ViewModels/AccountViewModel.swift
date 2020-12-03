@@ -46,6 +46,10 @@ public extension AccountViewModel {
 
     var emoji: [Emoji] { accountService.account.emojis }
 
+    var followingCount: Int { accountService.account.followingCount }
+
+    var followersCount: Int { accountService.account.followersCount }
+
     var isSelf: Bool { accountService.account.id == identification.identity.account?.id }
 
     func avatarURL(profile: Bool = false) -> URL {
@@ -62,6 +66,20 @@ public extension AccountViewModel {
         eventsSubject.send(
             accountService.navigationService.item(url: url)
                 .map { CollectionItemEvent.navigation($0) }
+                .setFailureType(to: Error.self)
+                .eraseToAnyPublisher())
+    }
+
+    func followingSelected() {
+        eventsSubject.send(
+            Just(.navigation(.collection(accountService.followingService())))
+                .setFailureType(to: Error.self)
+                .eraseToAnyPublisher())
+    }
+
+    func followersSelected() {
+        eventsSubject.send(
+            Just(.navigation(.collection(accountService.followersService())))
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher())
     }

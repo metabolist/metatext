@@ -9,6 +9,8 @@ public enum AccountsEndpoint {
     case favouritedBy(id: Status.Id)
     case mutes
     case blocks
+    case accountsFollowers(id: Account.Id)
+    case accountsFollowing(id: Account.Id)
 }
 
 extension AccountsEndpoint: Endpoint {
@@ -20,6 +22,8 @@ extension AccountsEndpoint: Endpoint {
             return defaultContext + ["statuses"]
         case .mutes, .blocks:
             return defaultContext
+        case .accountsFollowers, .accountsFollowing:
+            return defaultContext + ["accounts"]
         }
     }
 
@@ -33,6 +37,10 @@ extension AccountsEndpoint: Endpoint {
             return ["mutes"]
         case .blocks:
             return ["blocks"]
+        case let .accountsFollowers(id):
+            return [id, "followers"]
+        case let .accountsFollowing(id):
+            return [id, "following"]
         }
     }
 

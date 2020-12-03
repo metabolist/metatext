@@ -18,6 +18,9 @@ final class AccountHeaderView: UIView {
     let lockedImageView = UIImageView()
     let fieldsStackView = UIStackView()
     let noteTextView = TouchFallthroughTextView()
+    let followStackView = UIStackView()
+    let followingButton = UIButton()
+    let followersButton = UIButton()
     let segmentedControl = UISegmentedControl()
 
     var viewModel: ProfileViewModel? {
@@ -100,8 +103,17 @@ final class AccountHeaderView: UIView {
                 mutableNote.resizeAttachments(toLineHeight: noteFont.lineHeight)
                 noteTextView.attributedText = mutableNote
                 noteTextView.isHidden = false
+
+                followingButton.setAttributedLocalizedTitle(
+                    localizationKey: "account.following-count",
+                    count: accountViewModel.followingCount)
+                followersButton.setAttributedLocalizedTitle(
+                    localizationKey: "account.followers-count",
+                    count: accountViewModel.followersCount)
+                followStackView.isHidden = false
             } else {
                 noteTextView.isHidden = true
+                followStackView.isHidden = true
             }
         }
     }
@@ -263,6 +275,19 @@ private extension AccountHeaderView {
         baseStackView.addArrangedSubview(noteTextView)
         noteTextView.isScrollEnabled = false
         noteTextView.delegate = self
+
+        baseStackView.addArrangedSubview(followStackView)
+        followStackView.distribution = .fillEqually
+
+        followingButton.addAction(
+            UIAction { [weak self] _ in self?.viewModel?.accountViewModel?.followingSelected() },
+            for: .touchUpInside)
+        followStackView.addArrangedSubview(followingButton)
+
+        followersButton.addAction(
+            UIAction { [weak self] _ in self?.viewModel?.accountViewModel?.followersSelected() },
+            for: .touchUpInside)
+        followStackView.addArrangedSubview(followersButton)
 
         for (index, collection) in ProfileCollection.allCases.enumerated() {
             segmentedControl.insertSegment(

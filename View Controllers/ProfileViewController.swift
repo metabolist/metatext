@@ -19,7 +19,7 @@ final class ProfileViewController: TableViewController {
         super.viewDidLoad()
 
         // Initial size is to avoid unsatisfiable constraint warning
-        let accountHeaderView = AccountHeaderView(frame: .init(origin: .zero, size: .init(width: 100, height: 100)))
+        let accountHeaderView = AccountHeaderView(frame: .init(origin: .zero, size: .init(width: 300, height: 300)))
 
         accountHeaderView.viewModel = viewModel
 
