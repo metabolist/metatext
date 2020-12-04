@@ -224,6 +224,10 @@ public extension IdentityService {
     func conversationsService() -> ConversationsService {
         ConversationsService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }
+
+    func domainBlocksService() -> DomainBlocksService {
+        DomainBlocksService(mastodonAPIClient: mastodonAPIClient)
+    }
 }
 
 private extension IdentityService {

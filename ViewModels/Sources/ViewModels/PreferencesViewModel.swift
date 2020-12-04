@@ -29,4 +29,8 @@ public extension PreferencesViewModel {
             collectionService: identification.service.service(accountList: .blocks),
             identification: identification)
     }
+
+    func domainBlocksViewModel() -> DomainBlocksViewModel {
+        DomainBlocksViewModel(service: identification.service.domainBlocksService())
+    }
 }

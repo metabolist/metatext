@@ -8,6 +8,8 @@ public enum EmptyEndpoint {
     case oauthRevoke(token: String, clientId: String, clientSecret: String)
     case deleteList(id: List.Id)
     case deleteFilter(id: Filter.Id)
+    case blockDomain(String)
+    case unblockDomain(String)
 }
 
 extension EmptyEndpoint: Endpoint {
@@ -21,6 +23,8 @@ extension EmptyEndpoint: Endpoint {
             return defaultContext + ["lists"]
         case .deleteFilter:
             return defaultContext + ["filters"]
+        case .blockDomain, .unblockDomain:
+            return defaultContext + ["domain_blocks"]
         }
     }
 
@@ -30,14 +34,16 @@ extension EmptyEndpoint: Endpoint {
             return ["revoke"]
         case let .deleteList(id), let .deleteFilter(id):
             return [id]
+        case .blockDomain, .unblockDomain:
+            return []
         }
     }
 
     public var method: HTTPMethod {
         switch self {
-        case .oauthRevoke:
+        case .oauthRevoke, .blockDomain:
             return .post
-        case .deleteList, .deleteFilter:
+        case .deleteList, .deleteFilter, .unblockDomain:
             return .delete
         }
     }
@@ -46,6 +52,8 @@ extension EmptyEndpoint: Endpoint {
         switch self {
         case let .oauthRevoke(token, clientId, clientSecret):
             return ["token": token, "client_id": clientId, "client_secret": clientSecret]
+        case let .blockDomain(domain), let .unblockDomain(domain):
+            return ["domain": domain]
         case .deleteList, .deleteFilter:
             return nil
         }

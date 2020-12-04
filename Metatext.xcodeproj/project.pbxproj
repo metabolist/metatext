@@ -40,6 +40,7 @@
 		D08B8D822544D80000B1EBEF /* PollOptionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08B8D812544D80000B1EBEF /* PollOptionButton.swift */; };
 		D08B8D8D2544E6EC00B1EBEF /* PollResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08B8D8C2544E6EC00B1EBEF /* PollResultView.swift */; };
 		D08E512125786A6600FA2C5F /* UIButton+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08E512025786A6600FA2C5F /* UIButton+Extensions.swift */; };
+		D08E52612579D2E100FA2C5F /* DomainBlocksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08E52602579D2E100FA2C5F /* DomainBlocksView.swift */; };
 		D0A1F4F7252E7D4B004435BF /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A1F4F6252E7D4B004435BF /* TableViewDataSource.swift */; };
 		D0A7AC7325748BFF00E4E8AB /* ReportStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A7AC7225748BFF00E4E8AB /* ReportStatusView.swift */; };
 		D0B32F50250B373600311912 /* RegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B32F4F250B373600311912 /* RegistrationView.swift */; };
@@ -159,6 +160,7 @@
 		D08B8D812544D80000B1EBEF /* PollOptionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollOptionButton.swift; sourceTree = "<group>"; };
 		D08B8D8C2544E6EC00B1EBEF /* PollResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollResultView.swift; sourceTree = "<group>"; };
 		D08E512025786A6600FA2C5F /* UIButton+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extensions.swift"; sourceTree = "<group>"; };
+		D08E52602579D2E100FA2C5F /* DomainBlocksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DomainBlocksView.swift; sourceTree = "<group>"; };
 		D0A1F4F6252E7D4B004435BF /* TableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewDataSource.swift; sourceTree = "<group>"; };
 		D0A7AC7225748BFF00E4E8AB /* ReportStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportStatusView.swift; sourceTree = "<group>"; };
 		D0AD03552505814D0085A466 /* Base16 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Base16; sourceTree = "<group>"; };
@@ -361,6 +363,7 @@
 				D00702282555E51200F38136 /* ConversationListCell.swift */,
 				D00702302555F4AE00F38136 /* ConversationView.swift */,
 				D0C7D42324F76169001EBDBB /* CustomEmojiText.swift */,
+				D08E52602579D2E100FA2C5F /* DomainBlocksView.swift */,
 				D0BEB21024FA2A90001B0F04 /* EditFilterView.swift */,
 				D0BEB20424FA1107001B0F04 /* FiltersView.swift */,
 				D0C7D42224F76169001EBDBB /* IdentitiesView.swift */,
@@ -684,6 +687,7 @@
 				D0C7D49824F7616A001EBDBB /* CustomEmojiText.swift in Sources */,
 				D08B8D3D253F929E00B1EBEF /* ImageViewController.swift in Sources */,
 				D0B8510C25259E56004E0744 /* LoadMoreCell.swift in Sources */,
+				D08E52612579D2E100FA2C5F /* DomainBlocksView.swift in Sources */,
 				D01F41E424F8889700D55A2D /* StatusAttachmentsView.swift in Sources */,
 				D00702312555F4AE00F38136 /* ConversationView.swift in Sources */,
 				D0BEB21124FA2A91001B0F04 /* EditFilterView.swift in Sources */,

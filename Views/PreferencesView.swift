@@ -27,6 +27,8 @@ struct PreferencesView: View {
                 NavigationLink("preferences.blocked-users",
                                destination: TableView(viewModelClosure: viewModel.blockedUsersViewModel)
                                 .navigationTitle(Text("preferences.blocked-users")))
+                NavigationLink("preferences.blocked-domains",
+                               destination: DomainBlocksView(viewModel: viewModel.domainBlocksViewModel()))
             }
             Section(header: Text("preferences.app")) {
                 NavigationLink("preferences.media",

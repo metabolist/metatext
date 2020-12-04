@@ -2,6 +2,11 @@
 
 "account.%@-followers" = "%@'s Followers";
 "account.block" = "Block";
+"account.block.confirm-%@" = "Block %@?";
+"account.domain-block-%@" = "Block domain %@";
+"account.domain-block.confirm-%@" = "Block domain %@?";
+"account.domain-unblock-%@" = "Unblock domain %@";
+"account.domain-unblock.confirm-%@" = "Unblock domain %@?";
 "account.field.verified" = "Verified %@";
 "account.follow" = "Follow";
 "account.following" = "Following";
@@ -15,6 +20,7 @@
 "account.media" = "Media";
 "account.show-reblogs" = "Show boosts";
 "account.unblock" = "Unblock";
+"account.unblock.confirm-%@" = "Unblock %@?";
 "account.unfollow" = "Unfollow";
 "account.unmute" = "Unmute";
 "add" = "Add";
@@ -53,6 +59,7 @@
 "pending.pending-confirmation" = "Your account is pending confirmation";
 "preferences" = "Preferences";
 "preferences.app" = "App Preferences";
+"preferences.blocked-domains" = "Blocked Domains";
 "preferences.blocked-users" = "Blocked Users";
 "preferences.media" = "Media";
 "preferences.media.use-system-reduce-motion" = "Use system reduce motion setting";

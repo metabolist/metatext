@@ -28,6 +28,10 @@ public extension AccountViewModel {
         }
     }
 
+    var isLocal: Bool { accountService.isLocal }
+
+    var domain: String? { accountService.domain }
+
     var displayName: String {
         accountService.account.displayName.isEmpty ? accountService.account.acct : accountService.account.displayName
     }
@@ -130,6 +134,14 @@ public extension AccountViewModel {
 
     func set(note: String) {
         ignorableOutputEvent(accountService.set(note: note))
+    }
+
+    func domainBlock() {
+        ignorableOutputEvent(accountService.domainBlock())
+    }
+
+    func domainUnblock() {
+        ignorableOutputEvent(accountService.domainUnblock())
     }
 }
 

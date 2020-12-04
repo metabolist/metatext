@@ -86,4 +86,8 @@ public extension ReportViewModel {
         identification: .preview)
 }
 
+public extension DomainBlocksViewModel {
+    static let preview = DomainBlocksViewModel(service: .init(mastodonAPIClient: .preview))
+}
+
 // swiftlint:enable force_try
