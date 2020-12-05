@@ -26,6 +26,7 @@ struct TabNavigationView: View {
                                 .accessibility(label: Text(tab.title))
                         }
                         .tag(tab)
+                        .overlay(newStatusButton, alignment: .bottomTrailing)
                     }
                 }
             }
@@ -46,6 +47,9 @@ struct TabNavigationView: View {
 }
 
 private extension TabNavigationView {
+    static let newStatusButtonDimension: CGFloat = 54
+    static let newStatusButtonShadowRadius: CGFloat = 2
+
     @ViewBuilder
     var pendingView: some View {
         NavigationView {
@@ -140,6 +144,29 @@ private extension TabNavigationView {
                     }
                 })
                 .padding([.trailing, .top, .bottom])
+        }
+    }
+
+    @ViewBuilder
+    var newStatusButton: some View {
+        if viewModel.identification.identity.authenticated
+            && !viewModel.identification.identity.pending {
+            Button {
+
+            } label: {
+                ZStack {
+                    Circle()
+                    Image(systemName: "pencil")
+                        .resizable()
+                        .frame(
+                            width: Self.newStatusButtonDimension / 2,
+                            height: Self.newStatusButtonDimension / 2)
+                        .accentColor(.white)
+                }
+                .frame(width: Self.newStatusButtonDimension, height: Self.newStatusButtonDimension)
+                .shadow(radius: Self.newStatusButtonShadowRadius)
+                .padding()
+            }
         }
     }
 }
