@@ -37,6 +37,18 @@ struct TabNavigationView: View {
                 .environmentObject(viewModel)
                 .environmentObject(rootViewModel)
         }
+        .background(
+            EmptyView()
+                .fullScreenCover(isPresented: $viewModel.presentingNewStatus) {
+                    NavigationView {
+                        NewStatusView(viewModelClosure: viewModel.newStatusViewModel)
+                            .edgesIgnoringSafeArea(.all)
+                            .navigationBarTitleDisplayMode(.inline)
+                    }
+                    .navigationViewStyle(StackNavigationViewStyle())
+                    .environmentObject(viewModel)
+                    .environmentObject(rootViewModel)
+                })
         .alertItem($viewModel.alertItem)
         .onAppear(perform: viewModel.refreshIdentity)
         .onReceive(NotificationCenter.default
@@ -152,7 +164,7 @@ private extension TabNavigationView {
         if viewModel.identification.identity.authenticated
             && !viewModel.identification.identity.pending {
             Button {
-
+                viewModel.presentingNewStatus = true
             } label: {
                 ZStack {
                     Circle()

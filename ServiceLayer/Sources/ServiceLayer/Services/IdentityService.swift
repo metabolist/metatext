@@ -228,6 +228,10 @@ public extension IdentityService {
     func domainBlocksService() -> DomainBlocksService {
         DomainBlocksService(mastodonAPIClient: mastodonAPIClient)
     }
+
+    func newStatusService() -> NewStatusService {
+        NewStatusService(id: id, identityDatabase: identityDatabase, environment: environment)
+    }
 }
 
 private extension IdentityService {

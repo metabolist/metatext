@@ -41,6 +41,15 @@
 		D08B8D8D2544E6EC00B1EBEF /* PollResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08B8D8C2544E6EC00B1EBEF /* PollResultView.swift */; };
 		D08E512125786A6600FA2C5F /* UIButton+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08E512025786A6600FA2C5F /* UIButton+Extensions.swift */; };
 		D08E52612579D2E100FA2C5F /* DomainBlocksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08E52602579D2E100FA2C5F /* DomainBlocksView.swift */; };
+		D08E5276257C36CA00FA2C5F /* Share Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D08E526C257C36CA00FA2C5F /* Share Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D08E5292257C53B600FA2C5F /* NewStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08E5291257C53B600FA2C5F /* NewStatusViewController.swift */; };
+		D08E529C257C58D600FA2C5F /* NewStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08E529B257C58D600FA2C5F /* NewStatusView.swift */; };
+		D08E52A6257C61C000FA2C5F /* ShareExtensionNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08E52A5257C61C000FA2C5F /* ShareExtensionNavigationViewController.swift */; };
+		D08E52B8257C62D500FA2C5F /* ViewModels in Frameworks */ = {isa = PBXBuildFile; productRef = D08E52B7257C62D500FA2C5F /* ViewModels */; };
+		D08E52BD257C635800FA2C5F /* NewStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08E5291257C53B600FA2C5F /* NewStatusViewController.swift */; };
+		D08E52C7257C7AEE00FA2C5F /* ShareErrorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08E52C6257C7AEE00FA2C5F /* ShareErrorViewController.swift */; };
+		D08E52CC257C80E300FA2C5F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D0C7D45724F76169001EBDBB /* Localizable.strings */; };
+		D08E52D2257C811200FA2C5F /* ShareExtensionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08E52D1257C811200FA2C5F /* ShareExtensionError.swift */; };
 		D0A1F4F7252E7D4B004435BF /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A1F4F6252E7D4B004435BF /* TableViewDataSource.swift */; };
 		D0A7AC7325748BFF00E4E8AB /* ReportStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A7AC7225748BFF00E4E8AB /* ReportStatusView.swift */; };
 		D0B32F50250B373600311912 /* RegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B32F4F250B373600311912 /* RegistrationView.swift */; };
@@ -100,6 +109,13 @@
 			remoteGlobalIDString = D047FA8B24C3E21200AF17C5;
 			remoteInfo = "Metatext (iOS)";
 		};
+		D08E5274257C36CA00FA2C5F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D047FA8024C3E21000AF17C5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D08E526B257C36CA00FA2C5F;
+			remoteInfo = "Share Extension";
+		};
 		D0E5361E24E3EB4D00FB1CE1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D047FA8024C3E21000AF17C5 /* Project object */;
@@ -117,6 +133,7 @@
 			dstSubfolderSpec = 13;
 			files = (
 				D0E5362024E3EB4D00FB1CE1 /* Notification Service Extension.appex in Embed App Extensions */,
+				D08E5276257C36CA00FA2C5F /* Share Extension.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -161,6 +178,14 @@
 		D08B8D8C2544E6EC00B1EBEF /* PollResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollResultView.swift; sourceTree = "<group>"; };
 		D08E512025786A6600FA2C5F /* UIButton+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extensions.swift"; sourceTree = "<group>"; };
 		D08E52602579D2E100FA2C5F /* DomainBlocksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DomainBlocksView.swift; sourceTree = "<group>"; };
+		D08E526C257C36CA00FA2C5F /* Share Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Share Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D08E5273257C36CA00FA2C5F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D08E5277257C36CB00FA2C5F /* Share Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Share Extension.entitlements"; sourceTree = "<group>"; };
+		D08E5291257C53B600FA2C5F /* NewStatusViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewStatusViewController.swift; sourceTree = "<group>"; };
+		D08E529B257C58D600FA2C5F /* NewStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewStatusView.swift; sourceTree = "<group>"; };
+		D08E52A5257C61C000FA2C5F /* ShareExtensionNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareExtensionNavigationViewController.swift; sourceTree = "<group>"; };
+		D08E52C6257C7AEE00FA2C5F /* ShareErrorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareErrorViewController.swift; sourceTree = "<group>"; };
+		D08E52D1257C811200FA2C5F /* ShareExtensionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareExtensionError.swift; sourceTree = "<group>"; };
 		D0A1F4F6252E7D4B004435BF /* TableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewDataSource.swift; sourceTree = "<group>"; };
 		D0A7AC7225748BFF00E4E8AB /* ReportStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportStatusView.swift; sourceTree = "<group>"; };
 		D0AD03552505814D0085A466 /* Base16 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Base16; sourceTree = "<group>"; };
@@ -239,6 +264,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D08E5269257C36CA00FA2C5F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D08E52B8257C62D500FA2C5F /* ViewModels in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D0E5361624E3EB4D00FB1CE1 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -271,6 +304,7 @@
 				D047FA8D24C3E21200AF17C5 /* Products */,
 				D0BECB962501BCE0002C1B13 /* Secrets */,
 				D0BDF66524FD7A6400C7FA1C /* ServiceLayer */,
+				D08E526D257C36CA00FA2C5F /* Share Extension */,
 				D0C7D41D24F76169001EBDBB /* Supporting Files */,
 				D0C7D45324F76169001EBDBB /* System */,
 				D0666A2224C677B400F3F04B /* Tests */,
@@ -287,6 +321,7 @@
 				D047FA8C24C3E21200AF17C5 /* Metatext.app */,
 				D0666A2124C677B400F3F04B /* Tests.xctest */,
 				D0E5361924E3EB4D00FB1CE1 /* Notification Service Extension.appex */,
+				D08E526C257C36CA00FA2C5F /* Share Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -332,6 +367,18 @@
 			path = Transitions;
 			sourceTree = "<group>";
 		};
+		D08E526D257C36CA00FA2C5F /* Share Extension */ = {
+			isa = PBXGroup;
+			children = (
+				D08E5273257C36CA00FA2C5F /* Info.plist */,
+				D08E5277257C36CB00FA2C5F /* Share Extension.entitlements */,
+				D08E52C6257C7AEE00FA2C5F /* ShareErrorViewController.swift */,
+				D08E52D1257C811200FA2C5F /* ShareExtensionError.swift */,
+				D08E52A5257C61C000FA2C5F /* ShareExtensionNavigationViewController.swift */,
+			);
+			path = "Share Extension";
+			sourceTree = "<group>";
+		};
 		D0A1F4F5252E7D2A004435BF /* Data Sources */ = {
 			isa = PBXGroup;
 			children = (
@@ -373,6 +420,7 @@
 				D0E569DF252931B100FA1D72 /* LoadMoreContentConfiguration.swift */,
 				D0E569DA2529319100FA1D72 /* LoadMoreView.swift */,
 				D03B1B29253818F3008F964B /* MediaPreferencesView.swift */,
+				D08E529B257C58D600FA2C5F /* NewStatusView.swift */,
 				D036AA0B254B612B009094DF /* NotificationContentConfiguration.swift */,
 				D036AA01254B6101009094DF /* NotificationListCell.swift */,
 				D0C7D42D24F76169001EBDBB /* NotificationTypesPreferencesView.swift */,
@@ -402,9 +450,10 @@
 		D0C7D43024F76169001EBDBB /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				D08B8D41253F92B600B1EBEF /* ImagePageViewController.swift */,
 				D08B8D49253FC36500B1EBEF /* ImageNavigationController.swift */,
+				D08B8D41253F92B600B1EBEF /* ImagePageViewController.swift */,
 				D08B8D3C253F929E00B1EBEF /* ImageViewController.swift */,
+				D08E5291257C53B600FA2C5F /* NewStatusViewController.swift */,
 				D06BC5E525202AD90079541D /* ProfileViewController.swift */,
 				D0F0B12D251A97E400942152 /* TableViewController.swift */,
 			);
@@ -481,6 +530,7 @@
 			);
 			dependencies = (
 				D0E5361F24E3EB4D00FB1CE1 /* PBXTargetDependency */,
+				D08E5275257C36CA00FA2C5F /* PBXTargetDependency */,
 			);
 			name = Metatext;
 			packageProductDependencies = (
@@ -512,6 +562,26 @@
 			productReference = D0666A2124C677B400F3F04B /* Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		D08E526B257C36CA00FA2C5F /* Share Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D08E5278257C36CB00FA2C5F /* Build configuration list for PBXNativeTarget "Share Extension" */;
+			buildPhases = (
+				D08E5268257C36CA00FA2C5F /* Sources */,
+				D08E5269257C36CA00FA2C5F /* Frameworks */,
+				D08E526A257C36CA00FA2C5F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Share Extension";
+			packageProductDependencies = (
+				D08E52B7257C62D500FA2C5F /* ViewModels */,
+			);
+			productName = "Share Extension";
+			productReference = D08E526C257C36CA00FA2C5F /* Share Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		D0E5361824E3EB4D00FB1CE1 /* Notification Service Extension */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D0E5362124E3EB4D00FB1CE1 /* Build configuration list for PBXNativeTarget "Notification Service Extension" */;
@@ -539,7 +609,7 @@
 		D047FA8024C3E21000AF17C5 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1200;
+				LastSwiftUpdateCheck = 1220;
 				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = Metabolist;
 				TargetAttributes = {
@@ -550,6 +620,9 @@
 						CreatedOnToolsVersion = 12.0;
 						LastSwiftMigration = 1200;
 						TestTargetID = D047FA8B24C3E21200AF17C5;
+					};
+					D08E526B257C36CA00FA2C5F = {
+						CreatedOnToolsVersion = 12.2;
 					};
 					D0E5361824E3EB4D00FB1CE1 = {
 						CreatedOnToolsVersion = 12.0;
@@ -575,6 +648,7 @@
 				D047FA8B24C3E21200AF17C5 /* Metatext */,
 				D0666A2024C677B400F3F04B /* Tests */,
 				D0E5361824E3EB4D00FB1CE1 /* Notification Service Extension */,
+				D08E526B257C36CA00FA2C5F /* Share Extension */,
 			);
 		};
 /* End PBXProject section */
@@ -594,6 +668,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D08E526A257C36CA00FA2C5F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D08E52CC257C80E300FA2C5F /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -648,6 +730,7 @@
 				D0BEB1F324F8EE8C001B0F04 /* StatusAttachmentView.swift in Sources */,
 				D0C7D49A24F7616A001EBDBB /* TableView.swift in Sources */,
 				D08B8D622540DE3B00B1EBEF /* ZoomTransitionController.swift in Sources */,
+				D08E529C257C58D600FA2C5F /* NewStatusView.swift in Sources */,
 				D0F0B12E251A97E400942152 /* TableViewController.swift in Sources */,
 				D0DD50CB256B1F24004A04F7 /* ReportView.swift in Sources */,
 				D0FE1C8F253686F9003EF1EB /* PlayerView.swift in Sources */,
@@ -662,6 +745,7 @@
 				D0B5FE9B251583DB00478838 /* ProfileCollection+Extensions.swift in Sources */,
 				D0C7D49E24F7616A001EBDBB /* SecondaryNavigationView.swift in Sources */,
 				D08B8D602540DE3B00B1EBEF /* ZoomAnimator.swift in Sources */,
+				D08E5292257C53B600FA2C5F /* NewStatusViewController.swift in Sources */,
 				D08B8D672540DEB200B1EBEF /* ZoomAnimatableView.swift in Sources */,
 				D08B8D822544D80000B1EBEF /* PollOptionButton.swift in Sources */,
 				D0C7D4DA24F7616A001EBDBB /* View+Extensions.swift in Sources */,
@@ -714,6 +798,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D08E5268257C36CA00FA2C5F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D08E52A6257C61C000FA2C5F /* ShareExtensionNavigationViewController.swift in Sources */,
+				D08E52BD257C635800FA2C5F /* NewStatusViewController.swift in Sources */,
+				D08E52D2257C811200FA2C5F /* ShareExtensionError.swift in Sources */,
+				D08E52C7257C7AEE00FA2C5F /* ShareErrorViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D0E5361524E3EB4D00FB1CE1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -729,6 +824,11 @@
 			isa = PBXTargetDependency;
 			target = D047FA8B24C3E21200AF17C5 /* Metatext */;
 			targetProxy = D0666A2624C677B400F3F04B /* PBXContainerItemProxy */;
+		};
+		D08E5275257C36CA00FA2C5F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D08E526B257C36CA00FA2C5F /* Share Extension */;
+			targetProxy = D08E5274257C36CA00FA2C5F /* PBXContainerItemProxy */;
 		};
 		D0E5361F24E3EB4D00FB1CE1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -952,6 +1052,55 @@
 			};
 			name = Release;
 		};
+		D08E5279257C36CB00FA2C5F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "Share Extension/Share Extension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 82HL67AXQ2;
+				INFOPLIST_FILE = "Share Extension/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.metabolist.metatext.share-extension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D08E527A257C36CB00FA2C5F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "Share Extension/Share Extension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 82HL67AXQ2;
+				INFOPLIST_FILE = "Share Extension/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.metabolist.metatext.share-extension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		D0E5362224E3EB4D00FB1CE1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1031,6 +1180,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		D08E5278257C36CB00FA2C5F /* Build configuration list for PBXNativeTarget "Share Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D08E5279257C36CB00FA2C5F /* Debug */,
+				D08E527A257C36CB00FA2C5F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		D0E5362124E3EB4D00FB1CE1 /* Build configuration list for PBXNativeTarget "Notification Service Extension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1058,6 +1216,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D06B492124D4611300642749 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = KingfisherSwiftUI;
+		};
+		D08E52B7257C62D500FA2C5F /* ViewModels */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ViewModels;
 		};
 		D0BECB972501C0FC002C1B13 /* Secrets */ = {
 			isa = XCSwiftPackageProductDependency;

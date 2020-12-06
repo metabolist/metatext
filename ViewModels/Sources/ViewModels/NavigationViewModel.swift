@@ -17,6 +17,7 @@ public final class NavigationViewModel: ObservableObject {
     }
     @Published public private(set) var timelinesAndLists: [Timeline]
     @Published public var presentingSecondaryNavigation = false
+    @Published public var presentingNewStatus = false
     @Published public var alertItem: AlertItem?
     public private(set) var timelineViewModel: CollectionItemsViewModel
 
@@ -151,6 +152,10 @@ public extension NavigationViewModel {
         CollectionItemsViewModel(
             collectionService: identification.service.service(timeline: .bookmarks),
             identification: identification)
+    }
+
+    func newStatusViewModel() -> NewStatusViewModel {
+        NewStatusViewModel(service: identification.service.newStatusService())
     }
 }
 
