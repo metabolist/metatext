@@ -10,17 +10,17 @@ class ShareExtensionNavigationViewController: UINavigationController {
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
 
-        let vm: NewStatusViewModel
+        let viewModel: NewStatusViewModel
 
         do {
-            vm = try newStatusViewModel()
+            viewModel = try newStatusViewModel()
         } catch {
             setViewControllers([ShareErrorViewController(error: error)], animated: false)
 
             return
         }
 
-        setViewControllers([NewStatusViewController(viewModel: vm)], animated: false)
+        setViewControllers([NewStatusViewController(viewModel: viewModel)], animated: false)
     }
 
     @available(*, unavailable)
@@ -36,14 +36,14 @@ private extension ShareExtensionNavigationViewController {
             reduceMotion: { UIAccessibility.isReduceMotionEnabled })
         let allIdentitiesService = try AllIdentitiesService(environment: environment)
 
-        var id: Identity.Id?
+        var recentId: Identity.Id?
 
         _ = allIdentitiesService.immediateMostRecentlyUsedIdentityIdPublisher()
-            .sink { _ in } receiveValue: { id = $0 }
+            .sink { _ in } receiveValue: { recentId = $0 }
 
-        guard let idd = id else { throw ShareExtensionError.noAccountFound }
+        guard let id = recentId else { throw ShareExtensionError.noAccountFound }
 
-        let newStatusService = try allIdentitiesService.identityService(id: idd).newStatusService()
+        let newStatusService = try allIdentitiesService.identityService(id: id).newStatusService()
 
         return NewStatusViewModel(service: newStatusService)
     }
