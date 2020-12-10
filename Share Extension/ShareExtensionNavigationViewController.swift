@@ -7,44 +7,30 @@ import ViewModels
 
 @objc(ShareExtensionNavigationViewController)
 class ShareExtensionNavigationViewController: UINavigationController {
+    private let viewModel = ShareExtensionNavigationViewModel(
+        environment: .live(
+            userNotificationCenter: .current(),
+            reduceMotion: { UIAccessibility.isReduceMotionEnabled }))
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
 
-        let viewModel: NewStatusViewModel
+        let newStatusViewModel: NewStatusViewModel
 
         do {
-            viewModel = try newStatusViewModel()
+            newStatusViewModel = try viewModel.newStatusViewModel()
         } catch {
             setViewControllers([ShareErrorViewController(error: error)], animated: false)
 
             return
         }
 
-        setViewControllers([NewStatusViewController(viewModel: viewModel)], animated: false)
+        setViewControllers(
+            [NewStatusViewController(viewModel: newStatusViewModel, isShareExtension: true)],
+            animated: false)
     }
 
     @available(*, unavailable)
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-}
-
-private extension ShareExtensionNavigationViewController {
-    func newStatusViewModel() throws -> NewStatusViewModel {
-        let environment = AppEnvironment.live(
-            userNotificationCenter: .current(),
-            reduceMotion: { UIAccessibility.isReduceMotionEnabled })
-        let allIdentitiesService = try AllIdentitiesService(environment: environment)
-
-        var recentId: Identity.Id?
-
-        _ = allIdentitiesService.immediateMostRecentlyUsedIdentityIdPublisher()
-            .sink { _ in } receiveValue: { recentId = $0 }
-
-        guard let id = recentId else { throw ShareExtensionError.noAccountFound }
-
-        let newStatusService = try allIdentitiesService.identityService(id: id).newStatusService()
-
-        return NewStatusViewModel(service: newStatusService)
     }
 }

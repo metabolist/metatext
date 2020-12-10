@@ -41,9 +41,11 @@ struct TabNavigationView: View {
             EmptyView()
                 .fullScreenCover(isPresented: $viewModel.presentingNewStatus) {
                     NavigationView {
-                        NewStatusView(viewModelClosure: viewModel.newStatusViewModel)
-                            .edgesIgnoringSafeArea(.all)
-                            .navigationBarTitleDisplayMode(.inline)
+                        NewStatusView {
+                            rootViewModel.newStatusViewModel(identification: viewModel.identification)
+                        }
+                        .edgesIgnoringSafeArea(.all)
+                        .navigationBarTitleDisplayMode(.inline)
                     }
                     .navigationViewStyle(StackNavigationViewStyle())
                     .environmentObject(viewModel)
@@ -137,7 +139,9 @@ private extension TabNavigationView {
             viewModel.presentingSecondaryNavigation.toggle()
         } label: {
             KFImage(viewModel.identification.identity.image,
-                    options: .downsampled(dimension: 28, scaleFactor: displayScale))
+                    options: .downsampled(
+                        dimension: .barButtonItemDimension,
+                        scaleFactor: displayScale))
                 .placeholder { Image(systemName: "gear") }
                 .renderingMode(.original)
                 .contextMenu(ContextMenu {
@@ -149,7 +153,9 @@ private extension TabNavigationView {
                                 title: { Text(recentIdentity.handle) },
                                 icon: {
                                     KFImage(recentIdentity.image,
-                                            options: .downsampled(dimension: 28, scaleFactor: displayScale))
+                                            options: .downsampled(
+                                                dimension: .barButtonItemDimension,
+                                                scaleFactor: displayScale))
                                         .renderingMode(.original)
                                 })
                         }

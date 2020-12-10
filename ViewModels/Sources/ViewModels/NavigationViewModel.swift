@@ -153,10 +153,6 @@ public extension NavigationViewModel {
             collectionService: identification.service.service(timeline: .bookmarks),
             identification: identification)
     }
-
-    func newStatusViewModel() -> NewStatusViewModel {
-        NewStatusViewModel(service: identification.service.newStatusService())
-    }
 }
 
 extension NavigationViewModel.Tab: Identifiable {

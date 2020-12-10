@@ -10,6 +10,7 @@ extension CGFloat {
     static let avatarDimension: Self = 50
     static let hairline = 1 / UIScreen.main.scale
     static let minimumButtonDimension: Self = 44
+    static let barButtonItemDimension: Self = 28
 }
 
 extension TimeInterval {

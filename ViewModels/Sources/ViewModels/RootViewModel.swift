@@ -57,6 +57,13 @@ public extension RootViewModel {
             allIdentitiesService: allIdentitiesService,
             instanceURLService: InstanceURLService(environment: environment))
     }
+
+    func newStatusViewModel(identification: Identification) -> NewStatusViewModel {
+        NewStatusViewModel(
+            allIdentitiesService: allIdentitiesService,
+            identification: identification,
+            environment: environment)
+    }
 }
 
 private extension RootViewModel {

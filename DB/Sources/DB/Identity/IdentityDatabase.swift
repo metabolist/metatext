@@ -182,6 +182,17 @@ public extension IdentityDatabase {
             .eraseToAnyPublisher()
     }
 
+    func authenticatedIdentitiesPublisher() -> AnyPublisher<[Identity], Error> {
+        ValueObservation.tracking(
+            IdentityInfo.request(IdentityRecord.order(IdentityRecord.Columns.lastUsedAt.desc))
+                .filter(IdentityRecord.Columns.authenticated == true && IdentityRecord.Columns.pending == false)
+                .fetchAll)
+            .removeDuplicates()
+            .publisher(in: databaseWriter)
+            .map { $0.map(Identity.init(info:)) }
+            .eraseToAnyPublisher()
+    }
+
     func immediateMostRecentlyUsedIdentityIdPublisher() -> AnyPublisher<Identity.Id?, Error> {
         ValueObservation.tracking(
             IdentityRecord.select(IdentityRecord.Columns.id)
@@ -198,6 +209,17 @@ public extension IdentityDatabase {
                 .fetchAll)
             .map { $0.map(Identity.init(info:)) }
             .eraseToAnyPublisher()
+    }
+
+    func mostRecentAuthenticatedIdentity() throws -> Identity? {
+        guard let info = try databaseWriter.read(
+                IdentityInfo.request(IdentityRecord.order(IdentityRecord.Columns.lastUsedAt.desc))
+                    .filter(IdentityRecord.Columns.authenticated == true
+                                && IdentityRecord.Columns.pending == false)
+                    .fetchOne)
+        else { return nil }
+
+        return Identity(info: info)
     }
 }
 

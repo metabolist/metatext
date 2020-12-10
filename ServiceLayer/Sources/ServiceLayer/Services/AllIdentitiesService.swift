@@ -39,6 +39,14 @@ public extension AllIdentitiesService {
         database.immediateMostRecentlyUsedIdentityIdPublisher()
     }
 
+    func authenticatedIdentitiesPublisher() -> AnyPublisher<[Identity], Error> {
+        database.authenticatedIdentitiesPublisher()
+    }
+
+    func mostRecentAuthenticatedIdentity() throws -> Identity? {
+        try database.mostRecentAuthenticatedIdentity()
+    }
+
     func createIdentity(url: URL, kind: IdentityCreation) -> AnyPublisher<Never, Error> {
         let id = environment.uuid()
         let secrets = Secrets(identityId: id, keychain: environment.keychain)

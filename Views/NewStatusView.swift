@@ -7,7 +7,7 @@ struct NewStatusView: UIViewControllerRepresentable {
     let viewModelClosure: () -> NewStatusViewModel
 
     func makeUIViewController(context: Context) -> NewStatusViewController {
-        NewStatusViewController(viewModel: viewModelClosure())
+        NewStatusViewController(viewModel: viewModelClosure(), isShareExtension: false)
     }
 
     func updateUIViewController(_ uiViewController: NewStatusViewController, context: Context) {

@@ -91,11 +91,7 @@ public extension DomainBlocksViewModel {
 }
 
 public extension NewStatusViewModel {
-    static let preview = NewStatusViewModel(
-        service: .init(
-            id: identityId,
-            identityDatabase: db,
-            environment: environment))
+    static let preview = RootViewModel.preview.newStatusViewModel(identification: .preview)
 }
 
 // swiftlint:enable force_try
