@@ -40,6 +40,7 @@ class TableViewController: UITableViewController {
         tableView.prefetchDataSource = self
         tableView.cellLayoutMarginsFollowReadableWidth = true
         tableView.tableFooterView = UIView()
+        tableView.contentInset.bottom = Self.bottomInset
 
         view.addSubview(webfingerIndicatorView)
         webfingerIndicatorView.translatesAutoresizingMaskIntoConstraints = false
@@ -221,6 +222,8 @@ extension TableViewController: ZoomAnimatorDelegate {
 }
 
 private extension TableViewController {
+    static let bottomInset: CGFloat = .newStatusButtonDimension + .defaultSpacing * 4
+
     var visibleLoadMoreViews: [LoadMoreView] {
         tableView.visibleCells.compactMap { $0.contentView as? LoadMoreView }
     }
@@ -291,7 +294,7 @@ private extension TableViewController {
                 let indexPath = self.dataSource.indexPath(itemId: itemId) {
                 if self.viewModel.shouldAdjustContentInset {
                     self.tableView.contentInset.bottom = max(
-                        0,
+                        Self.bottomInset,
                         self.tableView.frame.height
                             - self.tableView.contentSize.height
                             - self.tableView.safeAreaInsets.top

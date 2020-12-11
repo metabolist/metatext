@@ -11,6 +11,8 @@ extension CGFloat {
     static let hairline = 1 / UIScreen.main.scale
     static let minimumButtonDimension: Self = 44
     static let barButtonItemDimension: Self = 28
+    static let newStatusButtonDimension: CGFloat = 54
+    static let newStatusButtonShadowRadius: CGFloat = 2
 }
 
 extension TimeInterval {

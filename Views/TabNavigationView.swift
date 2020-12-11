@@ -61,9 +61,6 @@ struct TabNavigationView: View {
 }
 
 private extension TabNavigationView {
-    static let newStatusButtonDimension: CGFloat = 54
-    static let newStatusButtonShadowRadius: CGFloat = 2
-
     @ViewBuilder
     var pendingView: some View {
         NavigationView {
@@ -172,17 +169,16 @@ private extension TabNavigationView {
             Button {
                 viewModel.presentingNewStatus = true
             } label: {
-                ZStack {
-                    Circle()
+                VisualEffectBlur(vibrancyStyle: .label) {
                     Image(systemName: "pencil")
                         .resizable()
-                        .frame(
-                            width: Self.newStatusButtonDimension / 2,
-                            height: Self.newStatusButtonDimension / 2)
-                        .accentColor(.white)
+                        .frame(width: .newStatusButtonDimension / 2,
+                               height: .newStatusButtonDimension / 2)
                 }
-                .frame(width: Self.newStatusButtonDimension, height: Self.newStatusButtonDimension)
-                .shadow(radius: Self.newStatusButtonShadowRadius)
+                .clipShape(Circle())
+                .frame(width: .newStatusButtonDimension,
+                       height: .newStatusButtonDimension)
+                .shadow(radius: .newStatusButtonShadowRadius)
                 .padding()
             }
         }
