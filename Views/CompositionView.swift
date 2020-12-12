@@ -58,9 +58,9 @@ private extension CompositionView {
         textView.font = .preferredFont(forTextStyle: .body)
         textView.textContainer.lineFragmentPadding = 0
 
-        NSLayoutConstraint.activate([
-            avatarImageView.widthAnchor.constraint(equalToConstant: .avatarDimension),
+        let constraints = [
             avatarImageView.heightAnchor.constraint(equalToConstant: .avatarDimension),
+            avatarImageView.widthAnchor.constraint(equalToConstant: .avatarDimension),
             avatarImageView.topAnchor.constraint(equalTo: readableContentGuide.topAnchor),
             avatarImageView.leadingAnchor.constraint(equalTo: readableContentGuide.leadingAnchor),
             avatarImageView.bottomAnchor.constraint(lessThanOrEqualTo: readableContentGuide.bottomAnchor),
@@ -68,7 +68,13 @@ private extension CompositionView {
             stackView.topAnchor.constraint(equalTo: readableContentGuide.topAnchor),
             stackView.trailingAnchor.constraint(equalTo: readableContentGuide.trailingAnchor),
             stackView.bottomAnchor.constraint(equalTo: readableContentGuide.bottomAnchor)
-        ])
+        ]
+
+        for constraint in constraints {
+            constraint.priority = .justBelowMax
+        }
+
+        NSLayoutConstraint.activate(constraints)
 
         compositionConfiguration.viewModel.$identification.map(\.identity.image)
             .sink { [weak self] in self?.avatarImageView.kf.setImage(with: $0) }

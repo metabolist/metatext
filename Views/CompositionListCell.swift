@@ -20,4 +20,10 @@ class CompositionListCell: UICollectionViewListCell {
             }
         }
     }
+
+    override func updateConstraints() {
+        super.updateConstraints()
+
+        separatorLayoutGuide.trailingAnchor.constraint(equalTo: separatorLayoutGuide.leadingAnchor).isActive = true
+    }
 }
