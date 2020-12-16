@@ -58,6 +58,7 @@
 "messages" = "Messages";
 "ok" = "OK";
 "pending.pending-confirmation" = "Your account is pending confirmation";
+"post" = "Post";
 "preferences" = "Preferences";
 "preferences.app" = "App Preferences";
 "preferences.blocked-domains" = "Blocked Domains";

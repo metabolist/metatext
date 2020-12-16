@@ -26,6 +26,8 @@ extension MastodonAPITarget: DecodableTarget {
 
     public var jsonBody: [String: Any]? { endpoint.jsonBody }
 
+    public var multipartFormData: [String: MultipartFormValue]? { endpoint.multipartFormData }
+
     public var headers: [String: String]? {
         var headers = endpoint.headers
 

@@ -39,6 +39,12 @@ extension CompositionView: UIContentView {
     }
 }
 
+extension CompositionView: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        compositionConfiguration.viewModel.composition.text = textView.text
+    }
+}
+
 private extension CompositionView {
     func initialSetup() {
         addSubview(avatarImageView)
@@ -57,6 +63,9 @@ private extension CompositionView {
         textView.adjustsFontForContentSizeCategory = true
         textView.font = .preferredFont(forTextStyle: .body)
         textView.textContainer.lineFragmentPadding = 0
+        textView.inputAccessoryView = CompositionInputAccessoryView(viewModel: compositionConfiguration.viewModel)
+        textView.inputAccessoryView?.sizeToFit()
+        textView.delegate = self
 
         let constraints = [
             avatarImageView.heightAnchor.constraint(equalToConstant: .avatarDimension),

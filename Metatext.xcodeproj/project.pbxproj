@@ -98,6 +98,10 @@
 		D0E5362024E3EB4D00FB1CE1 /* Notification Service Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D0E5361924E3EB4D00FB1CE1 /* Notification Service Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D0E569DB2529319100FA1D72 /* LoadMoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E569DA2529319100FA1D72 /* LoadMoreView.swift */; };
 		D0E569E0252931B100FA1D72 /* LoadMoreContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E569DF252931B100FA1D72 /* LoadMoreContentConfiguration.swift */; };
+		D0E7AD3925870B13005F5E2D /* UIVIewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E7AD3825870B13005F5E2D /* UIVIewController+Extensions.swift */; };
+		D0E7AD4225870C79005F5E2D /* UIVIewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E7AD3825870B13005F5E2D /* UIVIewController+Extensions.swift */; };
+		D0E9F9AA258450B300EF503D /* CompositionInputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E9F9A9258450B300EF503D /* CompositionInputAccessoryView.swift */; };
+		D0E9F9AB258450B300EF503D /* CompositionInputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E9F9A9258450B300EF503D /* CompositionInputAccessoryView.swift */; };
 		D0EA59402522AC8700804347 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EA593F2522AC8700804347 /* CardView.swift */; };
 		D0EA59482522B8B600804347 /* ViewConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EA59472522B8B600804347 /* ViewConstants.swift */; };
 		D0F0B10E251A868200942152 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F0B10D251A868200942152 /* AccountView.swift */; };
@@ -252,6 +256,8 @@
 		D0E5362824E4A06B00FB1CE1 /* Notification Service Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Notification Service Extension.entitlements"; sourceTree = "<group>"; };
 		D0E569DA2529319100FA1D72 /* LoadMoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreView.swift; sourceTree = "<group>"; };
 		D0E569DF252931B100FA1D72 /* LoadMoreContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreContentConfiguration.swift; sourceTree = "<group>"; };
+		D0E7AD3825870B13005F5E2D /* UIVIewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIVIewController+Extensions.swift"; sourceTree = "<group>"; };
+		D0E9F9A9258450B300EF503D /* CompositionInputAccessoryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompositionInputAccessoryView.swift; sourceTree = "<group>"; };
 		D0EA593F2522AC8700804347 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		D0EA59472522B8B600804347 /* ViewConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewConstants.swift; sourceTree = "<group>"; };
 		D0F0B10D251A868200942152 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
@@ -427,6 +433,7 @@
 				D0F0B10D251A868200942152 /* AccountView.swift */,
 				D0C7D42424F76169001EBDBB /* AddIdentityView.swift */,
 				D08E52E2257D747400FA2C5F /* CompositionContentConfiguration.swift */,
+				D0E9F9A9258450B300EF503D /* CompositionInputAccessoryView.swift */,
 				D08E52DB257D742B00FA2C5F /* CompositionListCell.swift */,
 				D08E52ED257D757100FA2C5F /* CompositionView.swift */,
 				D007023D25562A2800F38136 /* ConversationAvatarsView.swift */,
@@ -514,6 +521,7 @@
 				D0C7D46A24F76169001EBDBB /* String+Extensions.swift */,
 				D08E512025786A6600FA2C5F /* UIButton+Extensions.swift */,
 				D0C7D46C24F76169001EBDBB /* UIColor+Extensions.swift */,
+				D0E7AD3825870B13005F5E2D /* UIVIewController+Extensions.swift */,
 				D0030981250C6C8500EACB32 /* URL+Extensions.swift */,
 				D0C7D46F24F76169001EBDBB /* View+Extensions.swift */,
 			);
@@ -755,6 +763,7 @@
 				D08E52E3257D747400FA2C5F /* CompositionContentConfiguration.swift in Sources */,
 				D0F0B136251AA12700942152 /* CollectionItem+Extensions.swift in Sources */,
 				D007023E25562A2800F38136 /* ConversationAvatarsView.swift in Sources */,
+				D0E7AD3925870B13005F5E2D /* UIVIewController+Extensions.swift in Sources */,
 				D0625E5D250F0B5C00502611 /* StatusContentConfiguration.swift in Sources */,
 				D0BEB1F324F8EE8C001B0F04 /* StatusAttachmentView.swift in Sources */,
 				D0C7D49A24F7616A001EBDBB /* TableView.swift in Sources */,
@@ -768,6 +777,7 @@
 				D08B8D42253F92B600B1EBEF /* ImagePageViewController.swift in Sources */,
 				D01F41D924F880C400D55A2D /* TouchFallthroughTextView.swift in Sources */,
 				D0C7D4D624F7616A001EBDBB /* NSMutableAttributedString+Extensions.swift in Sources */,
+				D0E9F9AA258450B300EF503D /* CompositionInputAccessoryView.swift in Sources */,
 				D0625E59250F092900502611 /* StatusListCell.swift in Sources */,
 				D0E569DB2529319100FA1D72 /* LoadMoreView.swift in Sources */,
 				D0C7D49D24F7616A001EBDBB /* PostingReadingPreferencesView.swift in Sources */,
@@ -836,8 +846,10 @@
 				D08E52A6257C61C000FA2C5F /* ShareExtensionNavigationViewController.swift in Sources */,
 				D08E52BD257C635800FA2C5F /* NewStatusViewController.swift in Sources */,
 				D08E52D2257C811200FA2C5F /* ShareExtensionError+Extensions.swift in Sources */,
+				D0E9F9AB258450B300EF503D /* CompositionInputAccessoryView.swift in Sources */,
 				D0F2D4DB257F018300986197 /* Array+Extensions.swift in Sources */,
 				D08E52DD257D742B00FA2C5F /* CompositionListCell.swift in Sources */,
+				D0E7AD4225870C79005F5E2D /* UIVIewController+Extensions.swift in Sources */,
 				D08E52EF257D757100FA2C5F /* CompositionView.swift in Sources */,
 				D0F2D5452581ABAB00986197 /* KingfisherOptionsInfo+Extensions.swift in Sources */,
 				D08E52C7257C7AEE00FA2C5F /* ShareErrorViewController.swift in Sources */,

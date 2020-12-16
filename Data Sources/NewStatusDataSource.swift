@@ -4,6 +4,9 @@ import UIKit
 import ViewModels
 
 final class NewStatusDataSource: UICollectionViewDiffableDataSource<Int, Composition.Id> {
+    private let updateQueue =
+        DispatchQueue(label: "com.metabolist.metatext.new-status-data-source.update-queue")
+
     init(collectionView: UICollectionView, viewModelProvider: @escaping (IndexPath) -> CompositionViewModel) {
         let registration = UICollectionView.CellRegistration<CompositionListCell, CompositionViewModel> {
             $0.viewModel = $2
@@ -14,6 +17,14 @@ final class NewStatusDataSource: UICollectionViewDiffableDataSource<Int, Composi
                 using: registration,
                 for: indexPath,
                 item: viewModelProvider(indexPath))
+        }
+    }
+
+    override func apply(_ snapshot: NSDiffableDataSourceSnapshot<Int, Composition.Id>,
+                        animatingDifferences: Bool = true,
+                        completion: (() -> Void)? = nil) {
+        updateQueue.async {
+            super.apply(snapshot, animatingDifferences: animatingDifferences, completion: completion)
         }
     }
 }

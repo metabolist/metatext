@@ -75,6 +75,7 @@ private struct UpdatedFilterTarget: DecodableTarget {
     let method = HTTPMethod.get
     let queryParameters: [URLQueryItem] = []
     let jsonBody: [String: Any]? = nil
+    let multipartFormData: [String: MultipartFormValue]? = nil
     let headers: [String: String]? = nil
 }
 

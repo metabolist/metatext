@@ -10,6 +10,25 @@ public enum StatusEndpoint {
     case unfavourite(id: Status.Id)
     case bookmark(id: Status.Id)
     case unbookmark(id: Status.Id)
+    case post(Components)
+}
+
+public extension StatusEndpoint {
+    struct Components {
+        public var text: String?
+
+        public init() {}
+    }
+}
+
+extension StatusEndpoint.Components {
+    var jsonBody: [String: Any]? {
+        var params = [String: Any]()
+
+        params["status"] = text
+
+        return params
+    }
 }
 
 extension StatusEndpoint: Endpoint {
@@ -31,6 +50,17 @@ extension StatusEndpoint: Endpoint {
             return [id, "bookmark"]
         case let .unbookmark(id):
             return [id, "unbookmark"]
+        case .post:
+            return []
+        }
+    }
+
+    public var jsonBody: [String: Any]? {
+        switch self {
+        case let .post(components):
+            return components.jsonBody
+        default:
+            return nil
         }
     }
 
@@ -38,7 +68,7 @@ extension StatusEndpoint: Endpoint {
         switch self {
         case .status:
             return .get
-        case .favourite, .unfavourite, .bookmark, .unbookmark:
+        case .favourite, .unfavourite, .bookmark, .unbookmark, .post:
             return .post
         }
     }

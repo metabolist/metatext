@@ -11,6 +11,7 @@ public protocol Endpoint {
     var method: HTTPMethod { get }
     var queryParameters: [URLQueryItem] { get }
     var jsonBody: [String: Any]? { get }
+    var multipartFormData: [String: MultipartFormValue]? { get }
     var headers: [String: String]? { get }
 }
 
@@ -32,6 +33,8 @@ public extension Endpoint {
     var queryParameters: [URLQueryItem] { [] }
 
     var jsonBody: [String: Any]? { nil }
+
+    var multipartFormData: [String: MultipartFormValue]? { nil }
 
     var headers: [String: String]? { nil }
 }
