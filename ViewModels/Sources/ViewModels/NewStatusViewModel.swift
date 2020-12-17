@@ -99,11 +99,8 @@ private extension NewStatusViewModel {
             } else {
                 compositionViewModels.insert(newViewModel, at: index + 1)
             }
-        case let .attach(itemProvider, viewModel):
-            MediaProcessingService.attachment(itemProvider: itemProvider)
-                .assignErrorsToAlertItem(to: \.alertItem, on: self)
-                .sink { viewModel.composition.attachments.append($0) }
-                .store(in: &cancellables)
+        case let .error(error):
+            alertItem = AlertItem(error: error)
         default:
             eventsSubject.send(event)
         }

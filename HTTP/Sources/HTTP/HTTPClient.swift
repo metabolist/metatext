@@ -19,14 +19,14 @@ open class HTTPClient {
     }
 
     open func dataTaskPublisher<T: DecodableTarget>(
-        _ target: T) -> AnyPublisher<(data: Data, response: HTTPURLResponse), Error> {
+        _ target: T, progress: Progress? = nil) -> AnyPublisher<(data: Data, response: HTTPURLResponse), Error> {
         if let protocolClasses = session.configuration.protocolClasses {
             for protocolClass in protocolClasses {
                 (protocolClass as? TargetProcessing.Type)?.process(target: target)
             }
         }
 
-        return session.dataTaskPublisher(for: target.urlRequest())
+        return session.dataTaskPublisher(for: target.urlRequest(), progress: progress)
             .tryMap { data, response in
                 guard let httpResponse = response as? HTTPURLResponse else {
                     throw HTTPError.nonHTTPURLResponse(data: data, response: response)
@@ -41,8 +41,8 @@ open class HTTPClient {
             .eraseToAnyPublisher()
     }
 
-    open func request<T: DecodableTarget>(_ target: T) -> AnyPublisher<T.ResultType, Error> {
-        dataTaskPublisher(target)
+    open func request<T: DecodableTarget>(_ target: T, progress: Progress? = nil) -> AnyPublisher<T.ResultType, Error> {
+        dataTaskPublisher(target, progress: progress)
             .map(\.data)
             .decode(type: T.ResultType.self, decoder: decoder)
             .eraseToAnyPublisher()

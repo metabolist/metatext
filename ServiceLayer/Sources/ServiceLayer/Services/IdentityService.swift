@@ -206,17 +206,26 @@ public extension IdentityService {
             .eraseToAnyPublisher()
     }
 
+    func uploadAttachment(data: Data, mimeType: String, progress: Progress) -> AnyPublisher<Attachment, Error> {
+        mastodonAPIClient.request(
+            AttachmentEndpoint.create(data: data, mimeType: mimeType, description: nil, focus: nil),
+            progress: progress)
+    }
+
     func post(compositions: [Composition]) -> AnyPublisher<Never, Error> {
-        guard let composition = compositions.first else { fatalError() }
-        guard let attachment = composition.attachments.first else { fatalError() }
-        return mastodonAPIClient.request(AttachmentEndpoint.create(
-                                            data: attachment.data,
-                                            mimeType: attachment.mimeType,
-                                            description: attachment.description,
-                                            focus: attachment.focus))
-            .print()
-            .ignoreOutput()
-            .eraseToAnyPublisher()
+        fatalError()
+//        guard let composition = compositions.first else { fatalError() }
+
+//        guard let attachment = composition.attachments.first else { fatalError() }
+//        return mastodonAPIClient.request(AttachmentEndpoint.create(
+//                                            data: attachment.data,
+//                                            mimeType: attachment.mimeType,
+//                                            description: attachment.description,
+//                                            focus: attachment.focus))
+//            .print()
+//            .ignoreOutput()
+//            .eraseToAnyPublisher()
+
 //        var components = StatusEndpoint.Components()
 //
 //        if !composition.text.isEmpty {

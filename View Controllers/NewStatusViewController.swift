@@ -73,9 +73,14 @@ class NewStatusViewController: UICollectionViewController {
         }
         .store(in: &cancellables)
 
+        // Invalidate the collection view layout on anything that could change the height of a cell
         viewModel.$compositionViewModels
             .flatMap { Publishers.MergeMany($0.map(\.composition.$text)) }
-            .sink { [weak self] _ in self?.collectionView.collectionViewLayout.invalidateLayout() }
+            .map { _ in () }
+            .merge(with: viewModel.$compositionViewModels
+                    .flatMap { Publishers.MergeMany($0.map(\.objectWillChange)) }
+                    .map { _ in () })
+            .sink { [weak self] in self?.collectionView.collectionViewLayout.invalidateLayout() }
             .store(in: &cancellables)
 
         viewModel.$canPost.sink { [weak self] in self?.postButton.isEnabled = $0 }.store(in: &cancellables)

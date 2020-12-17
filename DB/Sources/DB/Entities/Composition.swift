@@ -19,20 +19,6 @@ public class Composition {
 
 public extension Composition {
     typealias Id = UUID
-
-    struct Attachment {
-        public let data: Data
-        public let type: Mastodon.Attachment.AttachmentType
-        public let mimeType: String
-        public var description: String?
-        public var focus: Mastodon.Attachment.Meta.Focus?
-
-        public init(data: Data, type: Mastodon.Attachment.AttachmentType, mimeType: String) {
-            self.data = data
-            self.type = type
-            self.mimeType = mimeType
-        }
-    }
 }
 
 extension Composition {

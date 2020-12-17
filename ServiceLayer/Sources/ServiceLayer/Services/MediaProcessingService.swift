@@ -3,7 +3,6 @@
 import Combine
 import Foundation
 import ImageIO
-import Mastodon
 import UniformTypeIdentifiers
 
 enum MediaProcessingError: Error {
@@ -18,30 +17,16 @@ enum MediaProcessingError: Error {
 public struct MediaProcessingService {}
 
 public extension MediaProcessingService {
-    static func attachment(itemProvider: NSItemProvider) -> AnyPublisher<Composition.Attachment, Error> {
+    static func dataAndMimeType(itemProvider: NSItemProvider) -> AnyPublisher<(data: Data, mimeType: String), Error> {
         let registeredTypes = itemProvider.registeredTypeIdentifiers.compactMap(UTType.init)
 
         guard let uniformType = registeredTypes.first(where: {
             guard let mimeType = $0.preferredMIMEType else { return false }
 
-            return !Self.unuploadableMimeTypes.contains(mimeType)
+            return Self.uploadableMimeTypes.contains(mimeType)
         }),
               let mimeType = uniformType.preferredMIMEType else {
             return Fail(error: MediaProcessingError.invalidMimeType).eraseToAnyPublisher()
-        }
-
-        let type: Attachment.AttachmentType
-
-        if uniformType.conforms(to: .image) {
-            type = .image
-        } else if uniformType.conforms(to: .movie) {
-            type = .video
-        } else if uniformType.conforms(to: .audio) {
-            type = .audio
-        } else if uniformType.conforms(to: .video), uniformType == .mpeg4Movie {
-            type = .gifv
-        } else {
-            type = .unknown
         }
 
         return Future<Data, Error> { promise in
@@ -63,13 +48,23 @@ public extension MediaProcessingService {
                 }
             }
         }
-        .map { Composition.Attachment(data: $0, type: type, mimeType: mimeType) }
+        .map { (data: $0, mimeType: mimeType) }
         .eraseToAnyPublisher()
     }
 }
 
 private extension MediaProcessingService {
-    static let unuploadableMimeTypes: Set<String> = [UTType.heic.preferredMIMEType!]
+
+    static let uploadableMimeTypes = Set(
+        [UTType.png,
+         UTType.jpeg,
+         UTType.gif,
+         UTType.webP,
+         UTType.mpeg4Movie,
+         UTType.quickTimeMovie,
+         UTType.mp3,
+         UTType.wav]
+            .compactMap(\.preferredMIMEType))
     static let imageSourceOptions =  [kCGImageSourceShouldCache: false] as CFDictionary
     static let thumbnailOptions = [
         kCGImageSourceCreateThumbnailFromImageAlways: true,

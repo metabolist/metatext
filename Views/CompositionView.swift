@@ -7,6 +7,8 @@ import UIKit
 class CompositionView: UIView {
     let avatarImageView = UIImageView()
     let textView = UITextView()
+    let attachmentUploadView = AttachmentUploadView()
+//    let attachmentsCollectionView = UICollectionView()
 
     private var compositionConfiguration: CompositionContentConfiguration
     private var cancellables = Set<AnyCancellable>()
@@ -46,6 +48,8 @@ extension CompositionView: UITextViewDelegate {
 }
 
 private extension CompositionView {
+    static let attachmentsCollectionViewHeight: CGFloat = 100
+
     func initialSetup() {
         addSubview(avatarImageView)
         avatarImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -67,6 +71,10 @@ private extension CompositionView {
         textView.inputAccessoryView?.sizeToFit()
         textView.delegate = self
 
+//        stackView.addArrangedSubview(attachmentsCollectionView)
+
+        stackView.addArrangedSubview(attachmentUploadView)
+
         let constraints = [
             avatarImageView.heightAnchor.constraint(equalToConstant: .avatarDimension),
             avatarImageView.widthAnchor.constraint(equalToConstant: .avatarDimension),
@@ -76,7 +84,9 @@ private extension CompositionView {
             stackView.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: .defaultSpacing),
             stackView.topAnchor.constraint(equalTo: readableContentGuide.topAnchor),
             stackView.trailingAnchor.constraint(equalTo: readableContentGuide.trailingAnchor),
-            stackView.bottomAnchor.constraint(equalTo: readableContentGuide.bottomAnchor)
+            stackView.bottomAnchor.constraint(equalTo: readableContentGuide.bottomAnchor),
+//            attachmentsCollectionView.heightAnchor.constraint(equalToConstant: Self.attachmentsCollectionViewHeight)
+            attachmentUploadView.heightAnchor.constraint(equalToConstant: Self.attachmentsCollectionViewHeight)
         ]
 
         for constraint in constraints {
@@ -87,6 +97,10 @@ private extension CompositionView {
 
         compositionConfiguration.viewModel.$identification.map(\.identity.image)
             .sink { [weak self] in self?.avatarImageView.kf.setImage(with: $0) }
+            .store(in: &cancellables)
+
+        compositionConfiguration.viewModel.$attachmentUpload
+            .sink { [weak self] in self?.attachmentUploadView.attachmentUpload = $0 }
             .store(in: &cancellables)
     }
 

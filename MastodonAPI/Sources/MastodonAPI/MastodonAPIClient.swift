@@ -15,8 +15,8 @@ public final class MastodonAPIClient: HTTPClient {
     }
 
     public override func dataTaskPublisher<T: DecodableTarget>(
-        _ target: T) -> AnyPublisher<(data: Data, response: HTTPURLResponse), Error> {
-        super.dataTaskPublisher(target)
+        _ target: T, progress: Progress? = nil) -> AnyPublisher<(data: Data, response: HTTPURLResponse), Error> {
+        super.dataTaskPublisher(target, progress: progress)
             .mapError { [weak self] error -> Error in
                 if case let HTTPError.invalidStatusCode(data, _) = error,
                    let apiError = try? self?.decoder.decode(APIError.self, from: data) {
@@ -30,8 +30,8 @@ public final class MastodonAPIClient: HTTPClient {
 }
 
 extension MastodonAPIClient {
-    public func request<E: Endpoint>(_ endpoint: E) -> AnyPublisher<E.ResultType, Error> {
-        dataTaskPublisher(target(endpoint: endpoint))
+    public func request<E: Endpoint>(_ endpoint: E, progress: Progress? = nil) -> AnyPublisher<E.ResultType, Error> {
+        dataTaskPublisher(target(endpoint: endpoint), progress: progress)
             .map(\.data)
             .decode(type: E.ResultType.self, decoder: decoder)
             .eraseToAnyPublisher()
@@ -42,9 +42,10 @@ extension MastodonAPIClient {
         maxId: String? = nil,
         minId: String? = nil,
         sinceId: String? = nil,
-        limit: Int? = nil) -> AnyPublisher<PagedResult<E.ResultType>, Error> {
+        limit: Int? = nil,
+        progress: Progress? = nil) -> AnyPublisher<PagedResult<E.ResultType>, Error> {
         let pagedTarget = target(endpoint: Paged(endpoint, maxId: maxId, minId: minId, sinceId: sinceId, limit: limit))
-        let dataTask = dataTaskPublisher(pagedTarget).share()
+        let dataTask = dataTaskPublisher(pagedTarget, progress: progress).share()
         let decoded = dataTask.map(\.data).decode(type: E.ResultType.self, decoder: decoder)
         let info = dataTask.map { _, response -> PagedResult<E.ResultType>.Info in
             var maxId: String?
