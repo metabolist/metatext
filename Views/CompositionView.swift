@@ -43,7 +43,7 @@ extension CompositionView: UIContentView {
 
 extension CompositionView: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
-        compositionConfiguration.viewModel.composition.text = textView.text
+        compositionConfiguration.viewModel.text = textView.text
     }
 }
 

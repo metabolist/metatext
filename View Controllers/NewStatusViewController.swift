@@ -61,7 +61,7 @@ class NewStatusViewController: UICollectionViewController {
             guard let self = self else { return }
 
             let oldSnapshot = self.dataSource.snapshot()
-            let newSnapshot = [$0.map(\.composition.id)].snapshot()
+            let newSnapshot = [$0.map(\.id)].snapshot()
             let diff = newSnapshot.itemIdentifiers.difference(from: oldSnapshot.itemIdentifiers)
 
             self.dataSource.apply(newSnapshot) {
@@ -75,11 +75,8 @@ class NewStatusViewController: UICollectionViewController {
 
         // Invalidate the collection view layout on anything that could change the height of a cell
         viewModel.$compositionViewModels
-            .flatMap { Publishers.MergeMany($0.map(\.composition.$text)) }
-            .map { _ in () }
-            .merge(with: viewModel.$compositionViewModels
-                    .flatMap { Publishers.MergeMany($0.map(\.objectWillChange)) }
-                    .map { _ in () })
+            .flatMap { Publishers.MergeMany($0.map(\.objectWillChange)) }
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.collectionView.collectionViewLayout.invalidateLayout() }
             .store(in: &cancellables)
 
@@ -89,6 +86,7 @@ class NewStatusViewController: UICollectionViewController {
 
         viewModel.$alertItem
             .compactMap { $0 }
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.present(alertItem: $0) }
             .store(in: &cancellables)
     }

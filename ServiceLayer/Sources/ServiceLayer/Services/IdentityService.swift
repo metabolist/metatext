@@ -212,8 +212,8 @@ public extension IdentityService {
             progress: progress)
     }
 
-    func post(compositions: [Composition]) -> AnyPublisher<Never, Error> {
-        fatalError()
+//    func post(compositions: [Composition]) -> AnyPublisher<Never, Error> {
+//        fatalError()
 //        guard let composition = compositions.first else { fatalError() }
 
 //        guard let attachment = composition.attachments.first else { fatalError() }
@@ -235,7 +235,7 @@ public extension IdentityService {
 //        return mastodonAPIClient.request(StatusEndpoint.post(components))
 //            .ignoreOutput()
 //            .eraseToAnyPublisher()
-    }
+//    }
 
     func service(timeline: Timeline) -> TimelineService {
         TimelineService(timeline: timeline, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)

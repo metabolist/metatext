@@ -67,21 +67,20 @@ public extension NewStatusViewModel {
     }
 
     func post() {
-        identification.service.post(compositions: compositionViewModels.map(\.composition))
-            .receive(on: DispatchQueue.main)
-            .handleEvents(
-                receiveSubscription: { [weak self] _ in self?.loading = true },
-                receiveCompletion: { [weak self] _ in self?.loading = false })
-            .assignErrorsToAlertItem(to: \.alertItem, on: self)
-            .sink { _ in }
-            .store(in: &cancellables)
+//        identification.service.post(compositions: compositionViewModels.map(\.composition))
+//            .receive(on: DispatchQueue.main)
+//            .handleEvents(
+//                receiveSubscription: { [weak self] _ in self?.loading = true },
+//                receiveCompletion: { [weak self] _ in self?.loading = false })
+//            .assignErrorsToAlertItem(to: \.alertItem, on: self)
+//            .sink { _ in }
+//            .store(in: &cancellables)
     }
 }
 
 private extension NewStatusViewModel {
     func newCompositionViewModel() -> CompositionViewModel {
         CompositionViewModel(
-            composition: .init(id: environment.uuid(), text: ""),
             identification: identification,
             identificationPublisher: $identification.eraseToAnyPublisher(),
             eventsSubject: itemEventsSubject)

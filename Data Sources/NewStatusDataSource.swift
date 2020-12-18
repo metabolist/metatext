@@ -3,7 +3,7 @@
 import UIKit
 import ViewModels
 
-final class NewStatusDataSource: UICollectionViewDiffableDataSource<Int, Composition.Id> {
+final class NewStatusDataSource: UICollectionViewDiffableDataSource<Int, CompositionViewModel.Id> {
     private let updateQueue =
         DispatchQueue(label: "com.metabolist.metatext.new-status-data-source.update-queue")
 
@@ -20,7 +20,7 @@ final class NewStatusDataSource: UICollectionViewDiffableDataSource<Int, Composi
         }
     }
 
-    override func apply(_ snapshot: NSDiffableDataSourceSnapshot<Int, Composition.Id>,
+    override func apply(_ snapshot: NSDiffableDataSourceSnapshot<Int, CompositionViewModel.Id>,
                         animatingDifferences: Bool = true,
                         completion: (() -> Void)? = nil) {
         updateQueue.async {

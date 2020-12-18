@@ -6,7 +6,9 @@ import Mastodon
 import ServiceLayer
 
 public final class CompositionViewModel: ObservableObject {
-    public let composition: Composition
+    public let id = Id()
+    @Published public var text = ""
+    @Published public private(set) var attachments = [Attachment]()
     @Published public private(set) var isPostable = false
     @Published public private(set) var identification: Identification
     @Published public private(set) var attachmentUpload: AttachmentUpload?
@@ -14,19 +16,19 @@ public final class CompositionViewModel: ObservableObject {
     private let eventsSubject: PassthroughSubject<Event, Never>
     private var cancellables = Set<AnyCancellable>()
 
-    init(composition: Composition,
-         identification: Identification,
+    init(identification: Identification,
          identificationPublisher: AnyPublisher<Identification, Never>,
          eventsSubject: PassthroughSubject<Event, Never>) {
-        self.composition = composition
         self.identification = identification
         self.eventsSubject = eventsSubject
         identificationPublisher.assign(to: &$identification)
-        composition.$text.map { !$0.isEmpty }.removeDuplicates().assign(to: &$isPostable)
+        $text.map { !$0.isEmpty }.removeDuplicates().assign(to: &$isPostable)
     }
 }
 
 public extension CompositionViewModel {
+    typealias Id = UUID
+
     enum Event {
         case insertAfter(CompositionViewModel)
         case presentMediaPicker(CompositionViewModel)
@@ -70,7 +72,7 @@ public extension CompositionViewModel {
                     self?.eventsSubject.send(.error(error))
                 }
             } receiveValue: { [weak self] in
-                self?.composition.attachments.append($0)
+                self?.attachments.append($0)
             }
             .store(in: &cancellables)
     }

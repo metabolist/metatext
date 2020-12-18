@@ -8,14 +8,13 @@ import Mastodon
 import UserNotifications
 
 public struct AppEnvironment {
-    public let uuid: () -> UUID
-
     let session: URLSession
     let webAuthSessionType: WebAuthSession.Type
     let keychain: Keychain.Type
     let userDefaults: UserDefaults
     let userNotificationClient: UserNotificationClient
     let reduceMotion: () -> Bool
+    let uuid: () -> UUID
     let inMemoryContent: Bool
     let fixtureDatabase: IdentityDatabase?
 
