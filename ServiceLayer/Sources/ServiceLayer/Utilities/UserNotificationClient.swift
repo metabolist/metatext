@@ -26,7 +26,6 @@ public struct UserNotificationClient {
 
 extension UserNotificationClient {
     public static func live(_ userNotificationCenter: UNUserNotificationCenter) -> Self {
-        // swiftlint:disable nesting
         final class Delegate: NSObject, UNUserNotificationCenterDelegate {
             let subject: PassthroughSubject<DelegateEvent, Never>
 
@@ -52,7 +51,6 @@ extension UserNotificationClient {
                 subject.send(.openSettingsForNotification(notification))
             }
         }
-        // swiftlint:enable nesting
 
         let subject = PassthroughSubject<DelegateEvent, Never>()
         var delegate: Delegate? = Delegate(subject: subject)
