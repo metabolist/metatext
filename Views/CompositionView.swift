@@ -120,6 +120,10 @@ private extension CompositionView {
         }
 
         NSLayoutConstraint.activate(constraints)
+    }
+
+    func applyCompositionConfiguration() {
+        cancellables.removeAll()
 
         compositionConfiguration.viewModel.$identification.map(\.identity.image)
             .sink { [weak self] in self?.avatarImageView.kf.setImage(with: $0) }
@@ -135,9 +139,5 @@ private extension CompositionView {
         compositionConfiguration.viewModel.$attachmentUpload
             .sink { [weak self] in self?.attachmentUploadView.attachmentUpload = $0 }
             .store(in: &cancellables)
-    }
-
-    func applyCompositionConfiguration() {
-
     }
 }
