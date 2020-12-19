@@ -4,17 +4,40 @@ import Combine
 import Kingfisher
 import UIKit
 
-class CompositionView: UIView {
+final class CompositionView: UIView {
     let avatarImageView = UIImageView()
     let textView = UITextView()
     let attachmentUploadView = AttachmentUploadView()
-//    let attachmentsCollectionView = UICollectionView()
+    let attachmentsCollectionView: UICollectionView
 
     private var compositionConfiguration: CompositionContentConfiguration
     private var cancellables = Set<AnyCancellable>()
 
+    private lazy var attachmentsDataSource: CompositionAttachmentsDataSource = {
+        CompositionAttachmentsDataSource(
+            collectionView: attachmentsCollectionView,
+            viewModelProvider: compositionConfiguration.viewModel.attachmentViewModel(indexPath:))
+    }()
+
     init(configuration: CompositionContentConfiguration) {
         self.compositionConfiguration = configuration
+
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(0.2),
+            heightDimension: .fractionalHeight(1.0))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalWidth(0.2))
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: groupSize,
+            subitems: [item])
+
+        group.interItemSpacing = .fixed(.defaultSpacing)
+
+        let section = NSCollectionLayoutSection(group: group)
+        let attachmentsLayout = UICollectionViewCompositionalLayout(section: section)
+        attachmentsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: attachmentsLayout)
 
         super.init(frame: .zero)
 
@@ -48,7 +71,7 @@ extension CompositionView: UITextViewDelegate {
 }
 
 private extension CompositionView {
-    static let attachmentsCollectionViewHeight: CGFloat = 100
+    static let attachmentUploadViewHeight: CGFloat = 100
 
     func initialSetup() {
         addSubview(avatarImageView)
@@ -71,7 +94,8 @@ private extension CompositionView {
         textView.inputAccessoryView?.sizeToFit()
         textView.delegate = self
 
-//        stackView.addArrangedSubview(attachmentsCollectionView)
+        stackView.addArrangedSubview(attachmentsCollectionView)
+        attachmentsCollectionView.dataSource = attachmentsDataSource
 
         stackView.addArrangedSubview(attachmentUploadView)
 
@@ -85,8 +109,10 @@ private extension CompositionView {
             stackView.topAnchor.constraint(equalTo: readableContentGuide.topAnchor),
             stackView.trailingAnchor.constraint(equalTo: readableContentGuide.trailingAnchor),
             stackView.bottomAnchor.constraint(equalTo: readableContentGuide.bottomAnchor),
-//            attachmentsCollectionView.heightAnchor.constraint(equalToConstant: Self.attachmentsCollectionViewHeight)
-            attachmentUploadView.heightAnchor.constraint(equalToConstant: Self.attachmentsCollectionViewHeight)
+            attachmentsCollectionView.heightAnchor.constraint(
+                equalTo: attachmentsCollectionView.widthAnchor,
+                multiplier: 1 / 4),
+            attachmentUploadView.heightAnchor.constraint(equalToConstant: Self.attachmentUploadViewHeight)
         ]
 
         for constraint in constraints {
@@ -97,6 +123,13 @@ private extension CompositionView {
 
         compositionConfiguration.viewModel.$identification.map(\.identity.image)
             .sink { [weak self] in self?.avatarImageView.kf.setImage(with: $0) }
+            .store(in: &cancellables)
+
+        compositionConfiguration.viewModel.$attachmentViewModels
+            .sink { [weak self] in
+                self?.attachmentsDataSource.apply([$0.map(\.attachment)].snapshot())
+                self?.attachmentsCollectionView.isHidden = $0.isEmpty
+            }
             .store(in: &cancellables)
 
         compositionConfiguration.viewModel.$attachmentUpload

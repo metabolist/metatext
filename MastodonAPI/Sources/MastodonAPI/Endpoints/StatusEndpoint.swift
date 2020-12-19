@@ -15,9 +15,15 @@ public enum StatusEndpoint {
 
 public extension StatusEndpoint {
     struct Components {
-        public var text: String?
+        public let inReplyToId: Status.Id?
+        public let text: String
+        public let mediaIds: [Attachment.Id]
 
-        public init() {}
+        public init(inReplyToId: Status.Id?, text: String, mediaIds: [Attachment.Id]) {
+            self.inReplyToId = inReplyToId
+            self.text = text
+            self.mediaIds = mediaIds
+        }
     }
 }
 
@@ -25,7 +31,15 @@ extension StatusEndpoint.Components {
     var jsonBody: [String: Any]? {
         var params = [String: Any]()
 
-        params["status"] = text
+        if !text.isEmpty {
+            params["status"] = text
+        }
+
+        if !mediaIds.isEmpty {
+            params["media_ids"] = mediaIds
+        }
+
+        params["in_reply_to_id"] = inReplyToId
 
         return params
     }

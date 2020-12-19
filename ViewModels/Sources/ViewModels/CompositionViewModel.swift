@@ -7,8 +7,9 @@ import ServiceLayer
 
 public final class CompositionViewModel: ObservableObject {
     public let id = Id()
+    public var isPosted = false
     @Published public var text = ""
-    @Published public private(set) var attachments = [Attachment]()
+    @Published public private(set) var attachmentViewModels = [CompositionAttachmentViewModel]()
     @Published public private(set) var isPostable = false
     @Published public private(set) var identification: Identification
     @Published public private(set) var attachmentUpload: AttachmentUpload?
@@ -35,10 +36,11 @@ public extension CompositionViewModel {
         case error(Error)
     }
 
-    struct AttachmentUpload {
-        public let progress: Progress
-        public let data: Data
-        public let mimeType: String
+    func components(inReplyToId: Status.Id?) -> StatusComponents {
+        StatusComponents(
+            inReplyToId: inReplyToId,
+            text: text,
+            mediaIds: attachmentViewModels.map(\.attachment.id))
     }
 
     func presentMediaPicker() {
@@ -63,17 +65,20 @@ public extension CompositionViewModel {
                 return self.identification.service.uploadAttachment(data: data, mimeType: mimeType, progress: progress)
             }
             .print()
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] in
-                DispatchQueue.main.async {
-                    self?.attachmentUpload = nil
-                }
+                self?.attachmentUpload = nil
 
                 if case let .failure(error) = $0 {
                     self?.eventsSubject.send(.error(error))
                 }
             } receiveValue: { [weak self] in
-                self?.attachments.append($0)
+                self?.attachmentViewModels.append(CompositionAttachmentViewModel(attachment: $0))
             }
             .store(in: &cancellables)
+    }
+
+    func attachmentViewModel(indexPath: IndexPath) -> CompositionAttachmentViewModel {
+        attachmentViewModels[indexPath.item]
     }
 }

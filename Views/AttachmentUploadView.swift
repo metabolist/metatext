@@ -8,7 +8,7 @@ final class AttachmentUploadView: UIView {
     let progressView = UIProgressView(progressViewStyle: .default)
     private var progressCancellable: AnyCancellable?
 
-    var attachmentUpload: CompositionViewModel.AttachmentUpload? {
+    var attachmentUpload: AttachmentUpload? {
         didSet {
             if let attachmentUpload = attachmentUpload {
                 progressCancellable = attachmentUpload.progress.publisher(for: \.fractionCompleted)

@@ -67,14 +67,9 @@ public extension NewStatusViewModel {
     }
 
     func post() {
-//        identification.service.post(compositions: compositionViewModels.map(\.composition))
-//            .receive(on: DispatchQueue.main)
-//            .handleEvents(
-//                receiveSubscription: { [weak self] _ in self?.loading = true },
-//                receiveCompletion: { [weak self] _ in self?.loading = false })
-//            .assignErrorsToAlertItem(to: \.alertItem, on: self)
-//            .sink { _ in }
-//            .store(in: &cancellables)
+        guard let unposted = compositionViewModels.first(where: { !$0.isPosted }) else { return }
+
+        post(viewModel: unposted, inReplyToId: nil)
     }
 }
 
@@ -103,5 +98,31 @@ private extension NewStatusViewModel {
         default:
             eventsSubject.send(event)
         }
+    }
+
+    func post(viewModel: CompositionViewModel, inReplyToId: Status.Id?) {
+        loading = true
+        identification.service.post(statusComponents: viewModel.components(inReplyToId: inReplyToId))
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                guard let self = self else { return }
+
+                switch $0 {
+                case .finished:
+                    self.loading = self.compositionViewModels.allSatisfy(\.isPosted)
+                case let .failure(error):
+                    self.alertItem = AlertItem(error: error)
+                    self.loading = false
+                }
+            } receiveValue: { [weak self] in
+                guard let self = self else { return }
+
+                viewModel.isPosted = true
+
+                if let unposted = self.compositionViewModels.first(where: { !$0.isPosted }) {
+                    self.post(viewModel: unposted, inReplyToId: $0)
+                }
+            }
+            .store(in: &cancellables)
     }
 }

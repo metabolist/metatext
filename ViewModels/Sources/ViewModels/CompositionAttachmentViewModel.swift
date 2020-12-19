@@ -6,7 +6,7 @@ import Mastodon
 import ServiceLayer
 
 public final class CompositionAttachmentViewModel: ObservableObject {
-    public var attachment: Attachment
+    public let attachment: Attachment
 
     init(attachment: Attachment) {
         self.attachment = attachment
