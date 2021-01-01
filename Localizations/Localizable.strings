@@ -138,6 +138,7 @@
 "report.forward-%@" = "Forward report to %@";
 "share-extension-error.no-account-found" = "No account found";
 "status.bookmark" = "Bookmark";
+"status.content-warning-abbreviation" = "CW";
 "status.reblogged-by" = "%@ boosted";
 "status.pinned-post" = "Pinned post";
 "status.show-more" = "Show More";
@@ -146,10 +147,16 @@
 "status.poll.time-left" = "%@ left";
 "status.poll.refresh" = "Refresh";
 "status.poll.closed" = "Closed";
+"status.spoiler-text-placeholder" = "Write your warning here";
 "status.unbookmark" = "Unbookmark";
 "status.visibility.public" = "Public";
 "status.visibility.unlisted" = "Unlisted";
-"status.visibility.private" = "Private";
+"status.visibility.private" = "Followers-only";
+"status.visibility.direct" = "Direct";
+"status.visibility.public.description" = "Visible for all, shown in public timelines";
+"status.visibility.unlisted.description" = "Visible for all, but not in public timelines";
+"status.visibility.private.description" = "Visible for followers only";
+"status.visibility.direct.description" = "Visible for mentioned users only";
 "submit" = "Submit";
 "timelines.home" = "Home";
 "timelines.local" = "Local";

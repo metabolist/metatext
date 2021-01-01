@@ -41,10 +41,7 @@ struct TabNavigationView: View {
             EmptyView()
                 .fullScreenCover(isPresented: $viewModel.presentingNewStatus) {
                     NavigationView {
-                        NewStatusView {
-                            rootViewModel.newStatusViewModel(identification: viewModel.identification)
-                        }
-                        .edgesIgnoringSafeArea(.all)
+                        NewStatusView { rootViewModel.newStatusViewModel(identification: viewModel.identification) }
                         .navigationBarTitleDisplayMode(.inline)
                     }
                     .navigationViewStyle(StackNavigationViewStyle())

@@ -17,12 +17,21 @@ public extension StatusEndpoint {
     struct Components {
         public let inReplyToId: Status.Id?
         public let text: String
+        public let spoilerText: String
         public let mediaIds: [Attachment.Id]
+        public let visibility: Status.Visibility
 
-        public init(inReplyToId: Status.Id?, text: String, mediaIds: [Attachment.Id]) {
+        public init(
+            inReplyToId: Status.Id?,
+            text: String,
+            spoilerText: String,
+            mediaIds: [Attachment.Id],
+            visibility: Status.Visibility) {
             self.inReplyToId = inReplyToId
             self.text = text
+            self.spoilerText = spoilerText
             self.mediaIds = mediaIds
+            self.visibility = visibility
         }
     }
 }
@@ -35,11 +44,16 @@ extension StatusEndpoint.Components {
             params["status"] = text
         }
 
+        if !spoilerText.isEmpty {
+            params["spoiler_text"] = spoilerText
+        }
+
         if !mediaIds.isEmpty {
             params["media_ids"] = mediaIds
         }
 
         params["in_reply_to_id"] = inReplyToId
+        params["visibility"] = visibility.rawValue
 
         return params
     }

@@ -6,29 +6,22 @@ import PhotosUI
 import UIKit
 import ViewModels
 
-class NewStatusViewController: UICollectionViewController {
+final class NewStatusViewController: UIViewController {
     private let viewModel: NewStatusViewModel
-    private let isShareExtension: Bool
+    private let scrollView = UIScrollView()
+    private let stackView = UIStackView()
     private let postButton = UIBarButtonItem(
         title: NSLocalizedString("post", comment: ""),
         style: .done,
         target: nil,
         action: nil)
-    private var attachMediaTo: CompositionViewModel?
+    private let mediaSelections = PassthroughSubject<[PHPickerResult], Never>()
     private var cancellables = Set<AnyCancellable>()
 
-    private lazy var dataSource: NewStatusDataSource = {
-        .init(collectionView: collectionView, viewModelProvider: viewModel.viewModel(indexPath:))
-    }()
-
-    init(viewModel: NewStatusViewModel, isShareExtension: Bool) {
+    init(viewModel: NewStatusViewModel) {
         self.viewModel = viewModel
-        self.isShareExtension = isShareExtension
 
-        let configuration = UICollectionLayoutListConfiguration(appearance: .plain)
-        let layout = UICollectionViewCompositionalLayout.list(using: configuration)
-
-        super.init(collectionViewLayout: layout)
+        super.init(nibName: nil, bundle: nil)
     }
 
     @available(*, unavailable)
@@ -39,15 +32,101 @@ class NewStatusViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        collectionView.dataSource = dataSource
-
         view.backgroundColor = .systemBackground
+
+        view.addSubview(scrollView)
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+
+        scrollView.addSubview(stackView)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.distribution = .equalSpacing
+
+        NSLayoutConstraint.activate([
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            stackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+        ])
 
         postButton.primaryAction = UIAction(title: NSLocalizedString("post", comment: "")) { [weak self] _ in
             self?.viewModel.post()
         }
 
+        setupViewModelBindings()
+    }
+
+    override func didMove(toParent parent: UIViewController?) {
+        super.didMove(toParent: parent)
+
         setupBarButtonItems(identification: viewModel.identification)
+    }
+}
+
+extension NewStatusViewController: PHPickerViewControllerDelegate {
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        mediaSelections.send(results)
+        dismiss(animated: true)
+    }
+}
+
+private extension NewStatusViewController {
+    func handle(event: NewStatusViewModel.Event) {
+        switch event {
+        case let .presentMediaPicker(compositionViewModel):
+            presentMediaPicker(compositionViewModel: compositionViewModel)
+        }
+    }
+
+    func dismiss() {
+        if let extensionContext = extensionContext {
+            extensionContext.completeRequest(returningItems: nil)
+        } else {
+            presentingViewController?.dismiss(animated: true)
+        }
+    }
+
+    func setupViewModelBindings() {
+        viewModel.events.sink { [weak self] in self?.handle(event: $0) }.store(in: &cancellables)
+
+        viewModel.$canPost.sink { [weak self] in self?.postButton.isEnabled = $0 }.store(in: &cancellables)
+
+        viewModel.$compositionViewModels.sink { [weak self] in
+            guard let self = self else { return }
+
+            let diff = [$0.map(\.id)].snapshot().itemIdentifiers.difference(
+                from: [self.stackView.arrangedSubviews.compactMap { ($0 as? CompositionView)?.id }]
+                    .snapshot().itemIdentifiers)
+
+            for insertion in diff.insertions {
+                guard case let .insert(index, id, _) = insertion,
+                      let compositionViewModel = $0.first(where: { $0.id == id })
+                      else { continue }
+
+                let compositionView = CompositionView(
+                    viewModel: compositionViewModel,
+                    parentViewModel: self.viewModel)
+                self.stackView.insertArrangedSubview(compositionView, at: index)
+                compositionView.textView.becomeFirstResponder()
+                DispatchQueue.main.async {
+                    self.scrollView.scrollRectToVisible(
+                        self.scrollView.convert(compositionView.frame, from: self.stackView),
+                        animated: true)
+                }
+            }
+
+            for removal in diff.removals {
+                guard case let .remove(_, id, _) = removal else { continue }
+
+                self.stackView.arrangedSubviews.first { ($0 as? CompositionView)?.id == id }?.removeFromSuperview()
+            }
+        }
+        .store(in: &cancellables)
 
         viewModel.$identification
             .sink { [weak self] in
@@ -57,33 +136,6 @@ class NewStatusViewController: UICollectionViewController {
             }
             .store(in: &cancellables)
 
-        viewModel.$compositionViewModels.sink { [weak self] in
-            guard let self = self else { return }
-
-            let oldSnapshot = self.dataSource.snapshot()
-            let newSnapshot = [$0.map(\.id)].snapshot()
-            let diff = newSnapshot.itemIdentifiers.difference(from: oldSnapshot.itemIdentifiers)
-
-            self.dataSource.apply(newSnapshot) {
-                if case let .insert(_, id, _) = diff.insertions.first,
-                   let indexPath = self.dataSource.indexPath(for: id) {
-                    self.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: .top)
-                }
-            }
-        }
-        .store(in: &cancellables)
-
-        // Invalidate the collection view layout on anything that could change the height of a cell
-        viewModel.$compositionViewModels
-            .flatMap { Publishers.MergeMany($0.map(\.objectWillChange)) }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] in self?.collectionView.collectionViewLayout.invalidateLayout() }
-            .store(in: &cancellables)
-
-        viewModel.$canPost.sink { [weak self] in self?.postButton.isEnabled = $0 }.store(in: &cancellables)
-
-        viewModel.events.sink { [weak self] in self?.handle(event: $0) }.store(in: &cancellables)
-
         viewModel.$alertItem
             .compactMap { $0 }
             .receive(on: DispatchQueue.main)
@@ -91,46 +143,37 @@ class NewStatusViewController: UICollectionViewController {
             .store(in: &cancellables)
     }
 
-    override func didMove(toParent parent: UIViewController?) {
-        super.didMove(toParent: parent)
-
-        setupBarButtonItems(identification: viewModel.identification)
-    }
-
     func setupBarButtonItems(identification: Identification) {
-        let target = isShareExtension ? self : parent
         let closeButton = UIBarButtonItem(
             systemItem: .close,
             primaryAction: UIAction { [weak self] _ in self?.dismiss() })
 
-        target?.navigationItem.leftBarButtonItem = closeButton
-        target?.navigationItem.titleView = viewModel.canChangeIdentity
+        parent?.navigationItem.leftBarButtonItem = closeButton
+        parent?.navigationItem.titleView = viewModel.canChangeIdentity
             ? changeIdentityButton(identification: identification)
             : nil
-        target?.navigationItem.rightBarButtonItem = postButton
+        parent?.navigationItem.rightBarButtonItem = postButton
     }
 
-    func dismiss() {
-        if isShareExtension {
-            extensionContext?.completeRequest(returningItems: nil)
-        } else {
-            presentingViewController?.dismiss(animated: true)
+    func presentMediaPicker(compositionViewModel: CompositionViewModel) {
+        mediaSelections.first().sink { [weak self] results in
+            guard let self = self, let result = results.first else { return }
+
+            self.viewModel.attach(itemProvider: result.itemProvider, to: compositionViewModel)
         }
+        .store(in: &cancellables)
+
+        var configuration = PHPickerConfiguration()
+
+        configuration.preferredAssetRepresentationMode = .current
+
+        let picker = PHPickerViewController(configuration: configuration)
+
+        picker.modalPresentationStyle = .overFullScreen
+        picker.delegate = self
+        present(picker, animated: true)
     }
-}
 
-extension NewStatusViewController: PHPickerViewControllerDelegate {
-    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        dismiss(animated: true)
-
-        guard let result = results.first else { return }
-
-        attachMediaTo?.attach(itemProvider: result.itemProvider)
-        attachMediaTo = nil
-    }
-}
-
-private extension NewStatusViewController {
     func changeIdentityButton(identification: Identification) -> UIButton {
         let changeIdentityButton = UIButton()
         let downsampled = KingfisherOptionsInfo.downsampled(
@@ -167,23 +210,5 @@ private extension NewStatusViewController {
         changeIdentityButton.menu = UIMenu(children: menuItems)
 
         return changeIdentityButton
-    }
-
-    func handle(event: CompositionViewModel.Event) {
-        switch event {
-        case let .presentMediaPicker(compositionViewModel):
-            attachMediaTo = compositionViewModel
-
-            var configuration = PHPickerConfiguration()
-
-            configuration.preferredAssetRepresentationMode = .current
-
-            let picker = PHPickerViewController(configuration: configuration)
-
-            picker.delegate = self
-            present(picker, animated: true)
-        default:
-            break
-        }
     }
 }

@@ -90,8 +90,4 @@ public extension DomainBlocksViewModel {
     static let preview = DomainBlocksViewModel(service: .init(mastodonAPIClient: .preview))
 }
 
-public extension NewStatusViewModel {
-    static let preview = RootViewModel.preview.newStatusViewModel(identification: .preview)
-}
-
 // swiftlint:enable force_try

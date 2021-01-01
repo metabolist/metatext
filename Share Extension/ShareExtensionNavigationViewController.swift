@@ -2,7 +2,7 @@
 
 import Combine
 import ServiceLayer
-import UIKit
+import SwiftUI
 import ViewModels
 
 @objc(ShareExtensionNavigationViewController)
@@ -25,7 +25,7 @@ class ShareExtensionNavigationViewController: UINavigationController {
         }
 
         setViewControllers(
-            [NewStatusViewController(viewModel: newStatusViewModel, isShareExtension: true)],
+            [UIHostingController(rootView: NewStatusView { newStatusViewModel })],
             animated: false)
     }
 

@@ -5,25 +5,26 @@ import Foundation
 import Mastodon
 import ServiceLayer
 
-public final class CompositionViewModel: ObservableObject {
+public final class CompositionViewModel: ObservableObject, Identifiable {
     public let id = Id()
     public var isPosted = false
     @Published public var text = ""
+    @Published public var contentWarning = ""
+    @Published public var displayContentWarning = false
     @Published public private(set) var attachmentViewModels = [CompositionAttachmentViewModel]()
     @Published public private(set) var isPostable = false
-    @Published public private(set) var identification: Identification
     @Published public private(set) var attachmentUpload: AttachmentUpload?
 
-    private let eventsSubject: PassthroughSubject<Event, Never>
     private var cancellables = Set<AnyCancellable>()
 
-    init(identification: Identification,
-         identificationPublisher: AnyPublisher<Identification, Never>,
-         eventsSubject: PassthroughSubject<Event, Never>) {
-        self.identification = identification
-        self.eventsSubject = eventsSubject
-        identificationPublisher.assign(to: &$identification)
-        $text.map { !$0.isEmpty }.removeDuplicates().assign(to: &$isPostable)
+    init() {
+        $text.map { !$0.isEmpty }
+            .removeDuplicates()
+            .combineLatest($attachmentViewModels.map { !$0.isEmpty })
+            .map { textPresent, attachmentPresent in
+                textPresent || attachmentPresent
+            }
+            .assign(to: &$isPostable)
     }
 }
 
@@ -36,49 +37,41 @@ public extension CompositionViewModel {
         case error(Error)
     }
 
-    func components(inReplyToId: Status.Id?) -> StatusComponents {
+    func components(inReplyToId: Status.Id?, visibility: Status.Visibility) -> StatusComponents {
         StatusComponents(
             inReplyToId: inReplyToId,
             text: text,
-            mediaIds: attachmentViewModels.map(\.attachment.id))
+            spoilerText: displayContentWarning ? contentWarning : "",
+            mediaIds: attachmentViewModels.map(\.attachment.id),
+            visibility: visibility)
     }
 
-    func presentMediaPicker() {
-        eventsSubject.send(.presentMediaPicker(self))
+    func attachmentViewModel(indexPath: IndexPath) -> CompositionAttachmentViewModel {
+        attachmentViewModels[indexPath.item]
     }
+}
 
-    func insert() {
-        eventsSubject.send(.insertAfter(self))
-    }
-
-    func attach(itemProvider: NSItemProvider) {
-        let progress = Progress(totalUnitCount: 1)
-
+extension CompositionViewModel {
+    func attach(itemProvider: NSItemProvider, service: IdentityService) -> AnyPublisher<Never, Error> {
         MediaProcessingService.dataAndMimeType(itemProvider: itemProvider)
             .flatMap { [weak self] data, mimeType -> AnyPublisher<Attachment, Error> in
                 guard let self = self else { return Empty().eraseToAnyPublisher() }
+
+                let progress = Progress(totalUnitCount: 1)
 
                 DispatchQueue.main.async {
                     self.attachmentUpload = AttachmentUpload(progress: progress, data: data, mimeType: mimeType)
                 }
 
-                return self.identification.service.uploadAttachment(data: data, mimeType: mimeType, progress: progress)
+                return service.uploadAttachment(data: data, mimeType: mimeType, progress: progress)
             }
-            .print()
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] in
-                self?.attachmentUpload = nil
-
-                if case let .failure(error) = $0 {
-                    self?.eventsSubject.send(.error(error))
-                }
-            } receiveValue: { [weak self] in
-                self?.attachmentViewModels.append(CompositionAttachmentViewModel(attachment: $0))
-            }
-            .store(in: &cancellables)
-    }
-
-    func attachmentViewModel(indexPath: IndexPath) -> CompositionAttachmentViewModel {
-        attachmentViewModels[indexPath.item]
+            .handleEvents(
+                receiveOutput: { [weak self] in
+                    self?.attachmentViewModels.append(CompositionAttachmentViewModel(attachment: $0))
+                },
+                receiveCompletion: { [weak self] _ in self?.attachmentUpload = nil })
+            .ignoreOutput()
+            .eraseToAnyPublisher()
     }
 }

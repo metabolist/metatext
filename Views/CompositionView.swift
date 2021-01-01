@@ -3,24 +3,29 @@
 import Combine
 import Kingfisher
 import UIKit
+import ViewModels
 
 final class CompositionView: UIView {
     let avatarImageView = UIImageView()
+    let spoilerTextField = UITextField()
     let textView = UITextView()
     let attachmentUploadView = AttachmentUploadView()
     let attachmentsCollectionView: UICollectionView
 
-    private var compositionConfiguration: CompositionContentConfiguration
+    private let viewModel: CompositionViewModel
+    private let parentViewModel: NewStatusViewModel
     private var cancellables = Set<AnyCancellable>()
 
     private lazy var attachmentsDataSource: CompositionAttachmentsDataSource = {
         CompositionAttachmentsDataSource(
-            collectionView: attachmentsCollectionView,
-            viewModelProvider: compositionConfiguration.viewModel.attachmentViewModel(indexPath:))
+            collectionView: attachmentsCollectionView) { [weak self] in
+            self?.viewModel.attachmentViewModel(indexPath: $0)
+        }
     }()
 
-    init(configuration: CompositionContentConfiguration) {
-        self.compositionConfiguration = configuration
+    init(viewModel: CompositionViewModel, parentViewModel: NewStatusViewModel) {
+        self.viewModel = viewModel
+        self.parentViewModel = parentViewModel
 
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(0.2),
@@ -42,7 +47,6 @@ final class CompositionView: UIView {
         super.init(frame: .zero)
 
         initialSetup()
-        applyCompositionConfiguration()
     }
 
     @available(*, unavailable)
@@ -51,93 +55,124 @@ final class CompositionView: UIView {
     }
 }
 
-extension CompositionView: UIContentView {
-    var configuration: UIContentConfiguration {
-        get { compositionConfiguration }
-        set {
-            guard let compositionConfiguration = newValue as? CompositionContentConfiguration else { return }
-
-            self.compositionConfiguration = compositionConfiguration
-
-            applyCompositionConfiguration()
-        }
-    }
+extension CompositionView {
+    var id: CompositionViewModel.Id { viewModel.id }
 }
 
 extension CompositionView: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
-        compositionConfiguration.viewModel.text = textView.text
+        viewModel.text = textView.text
     }
 }
 
 private extension CompositionView {
     static let attachmentUploadViewHeight: CGFloat = 100
 
+    // swiftlint:disable:next function_body_length
     func initialSetup() {
+        tag = viewModel.id.hashValue
+
         addSubview(avatarImageView)
         avatarImageView.translatesAutoresizingMaskIntoConstraints = false
         avatarImageView.layer.cornerRadius = .avatarDimension / 2
         avatarImageView.clipsToBounds = true
 
         let stackView = UIStackView()
+        let inputAccessoryView = CompositionInputAccessoryView(viewModel: viewModel, parentViewModel: parentViewModel)
 
         addSubview(stackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
+        stackView.spacing = .defaultSpacing
+
+        stackView.addArrangedSubview(spoilerTextField)
+        spoilerTextField.backgroundColor = .secondarySystemBackground
+        spoilerTextField.layer.cornerRadius = .defaultCornerRadius
+        spoilerTextField.adjustsFontForContentSizeCategory = true
+        spoilerTextField.font = .preferredFont(forTextStyle: .body)
+        spoilerTextField.placeholder = NSLocalizedString("status.spoiler-text-placeholder", comment: "")
+        spoilerTextField.inputAccessoryView = inputAccessoryView
+        spoilerTextField.addAction(
+            UIAction { [weak self] _ in
+                guard let self = self, let text = self.spoilerTextField.text else { return }
+
+                self.viewModel.contentWarning = text
+            },
+            for: .editingChanged)
 
         stackView.addArrangedSubview(textView)
+        textView.backgroundColor = .secondarySystemBackground
+        textView.layer.cornerRadius = .defaultCornerRadius
         textView.isScrollEnabled = false
         textView.adjustsFontForContentSizeCategory = true
         textView.font = .preferredFont(forTextStyle: .body)
-        textView.textContainer.lineFragmentPadding = 0
-        textView.inputAccessoryView = CompositionInputAccessoryView(viewModel: compositionConfiguration.viewModel)
+//        textView.textContainer.lineFragmentPadding = 0
+        textView.inputAccessoryView = inputAccessoryView
         textView.inputAccessoryView?.sizeToFit()
         textView.delegate = self
+        textView.setContentHuggingPriority(.required, for: .vertical)
 
         stackView.addArrangedSubview(attachmentsCollectionView)
         attachmentsCollectionView.dataSource = attachmentsDataSource
 
         stackView.addArrangedSubview(attachmentUploadView)
 
-        let constraints = [
-            avatarImageView.heightAnchor.constraint(equalToConstant: .avatarDimension),
-            avatarImageView.widthAnchor.constraint(equalToConstant: .avatarDimension),
-            avatarImageView.topAnchor.constraint(equalTo: readableContentGuide.topAnchor),
-            avatarImageView.leadingAnchor.constraint(equalTo: readableContentGuide.leadingAnchor),
-            avatarImageView.bottomAnchor.constraint(lessThanOrEqualTo: readableContentGuide.bottomAnchor),
-            stackView.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: .defaultSpacing),
-            stackView.topAnchor.constraint(equalTo: readableContentGuide.topAnchor),
-            stackView.trailingAnchor.constraint(equalTo: readableContentGuide.trailingAnchor),
-            stackView.bottomAnchor.constraint(equalTo: readableContentGuide.bottomAnchor),
-            attachmentsCollectionView.heightAnchor.constraint(
-                equalTo: attachmentsCollectionView.widthAnchor,
-                multiplier: 1 / 4),
-            attachmentUploadView.heightAnchor.constraint(equalToConstant: Self.attachmentUploadViewHeight)
-        ]
+        textView.text = viewModel.text
+        spoilerTextField.text = viewModel.contentWarning
 
-        for constraint in constraints {
-            constraint.priority = .justBelowMax
-        }
+        viewModel.$displayContentWarning
+            .sink { [weak self] in
+                guard let self = self else { return }
 
-        NSLayoutConstraint.activate(constraints)
-    }
+                if self.spoilerTextField.isHidden && self.textView.isFirstResponder && $0 {
+                    self.spoilerTextField.becomeFirstResponder()
+                } else if !self.spoilerTextField.isHidden && self.spoilerTextField.isFirstResponder && !$0 {
+                    self.textView.becomeFirstResponder()
+                }
 
-    func applyCompositionConfiguration() {
-        cancellables.removeAll()
+                self.spoilerTextField.isHidden = !$0
+            }
+            .store(in: &cancellables)
 
-        compositionConfiguration.viewModel.$identification.map(\.identity.image)
+        parentViewModel.$identification.map(\.identity.image)
             .sink { [weak self] in self?.avatarImageView.kf.setImage(with: $0) }
             .store(in: &cancellables)
 
-        compositionConfiguration.viewModel.$attachmentViewModels
+        viewModel.$attachmentViewModels
+            .receive(on: DispatchQueue.main) // hack to punt to next run loop, consider refactoring
             .sink { [weak self] in
                 self?.attachmentsDataSource.apply([$0.map(\.attachment)].snapshot())
                 self?.attachmentsCollectionView.isHidden = $0.isEmpty
             }
             .store(in: &cancellables)
 
-        compositionConfiguration.viewModel.$attachmentUpload
+        viewModel.$attachmentUpload
             .sink { [weak self] in self?.attachmentUploadView.attachmentUpload = $0 }
             .store(in: &cancellables)
+
+        let guide = UIDevice.current.userInterfaceIdiom == .pad ? readableContentGuide : layoutMarginsGuide
+        let constraints = [
+            avatarImageView.heightAnchor.constraint(equalToConstant: .avatarDimension),
+            avatarImageView.widthAnchor.constraint(equalToConstant: .avatarDimension),
+            avatarImageView.topAnchor.constraint(equalTo: guide.topAnchor),
+            avatarImageView.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
+            avatarImageView.bottomAnchor.constraint(lessThanOrEqualTo: guide.bottomAnchor),
+            stackView.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: .defaultSpacing),
+            stackView.topAnchor.constraint(equalTo: guide.topAnchor),
+            stackView.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
+            stackView.bottomAnchor.constraint(lessThanOrEqualTo: guide.bottomAnchor),
+            attachmentsCollectionView.heightAnchor.constraint(
+                equalTo: attachmentsCollectionView.widthAnchor,
+                multiplier: 1 / 4),
+            attachmentUploadView.heightAnchor.constraint(equalToConstant: Self.attachmentUploadViewHeight)
+        ]
+
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            for constraint in constraints {
+                constraint.priority = .justBelowMax
+            }
+        }
+
+        NSLayoutConstraint.activate(constraints)
     }
 }

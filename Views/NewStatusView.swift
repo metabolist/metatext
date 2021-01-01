@@ -7,16 +7,10 @@ struct NewStatusView: UIViewControllerRepresentable {
     let viewModelClosure: () -> NewStatusViewModel
 
     func makeUIViewController(context: Context) -> NewStatusViewController {
-        NewStatusViewController(viewModel: viewModelClosure(), isShareExtension: false)
+        NewStatusViewController(viewModel: viewModelClosure())
     }
 
     func updateUIViewController(_ uiViewController: NewStatusViewController, context: Context) {
 
-    }
-}
-
-struct NewStatusView_Previews: PreviewProvider {
-    static var previews: some View {
-        NewStatusView { .preview }
     }
 }

@@ -6,18 +6,19 @@ import Mastodon
 import ServiceLayer
 
 public final class NewStatusViewModel: ObservableObject {
-    @Published public private(set) var compositionViewModels = [CompositionViewModel]()
+    @Published public var visibility: Status.Visibility
+    @Published public private(set) var compositionViewModels = [CompositionViewModel()]
     @Published public private(set) var identification: Identification
     @Published public private(set) var authenticatedIdentities = [Identity]()
     @Published public var canPost = false
     @Published public var canChangeIdentity = true
     @Published public var alertItem: AlertItem?
     @Published public private(set) var loading = false
-    public let events: AnyPublisher<CompositionViewModel.Event, Never>
+    public let events: AnyPublisher<Event, Never>
 
     private let allIdentitiesService: AllIdentitiesService
     private let environment: AppEnvironment
-    private let eventsSubject = PassthroughSubject<CompositionViewModel.Event, Never>()
+    private let eventsSubject = PassthroughSubject<Event, Never>()
     private let itemEventsSubject = PassthroughSubject<CompositionViewModel.Event, Never>()
     private var cancellables = Set<AnyCancellable>()
 
@@ -28,8 +29,7 @@ public final class NewStatusViewModel: ObservableObject {
         self.identification = identification
         self.environment = environment
         events = eventsSubject.eraseToAnyPublisher()
-        compositionViewModels = [newCompositionViewModel()]
-        itemEventsSubject.sink { [weak self] in self?.handle(event: $0) }.store(in: &cancellables)
+        visibility = identification.identity.preferences.postingDefaultVisibility
         allIdentitiesService.authenticatedIdentitiesPublisher()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$authenticatedIdentities)
@@ -43,8 +43,8 @@ public final class NewStatusViewModel: ObservableObject {
 }
 
 public extension NewStatusViewModel {
-    func viewModel(indexPath: IndexPath) -> CompositionViewModel {
-        compositionViewModels[indexPath.row]
+    enum Event {
+        case presentMediaPicker(CompositionViewModel)
     }
 
     func setIdentity(_ identity: Identity) {
@@ -66,6 +66,34 @@ public extension NewStatusViewModel {
             environment: environment)
     }
 
+    func presentMediaPicker(viewModel: CompositionViewModel) {
+        eventsSubject.send(.presentMediaPicker(viewModel))
+    }
+
+    func insert(after: CompositionViewModel) {
+        guard let index = compositionViewModels.firstIndex(where: { $0 === after })
+        else { return }
+
+        let newViewModel = CompositionViewModel()
+
+        newViewModel.contentWarning = after.contentWarning
+        newViewModel.displayContentWarning = after.displayContentWarning
+
+        if index >= compositionViewModels.count - 1 {
+            compositionViewModels.append(newViewModel)
+        } else {
+            compositionViewModels.insert(newViewModel, at: index + 1)
+        }
+    }
+
+    func attach(itemProvider: NSItemProvider, to compositionViewModel: CompositionViewModel) {
+        compositionViewModel.attach(itemProvider: itemProvider, service: identification.service)
+            .receive(on: DispatchQueue.main)
+            .assignErrorsToAlertItem(to: \.alertItem, on: self)
+            .sink { _ in }
+            .store(in: &cancellables)
+    }
+
     func post() {
         guard let unposted = compositionViewModels.first(where: { !$0.isPosted }) else { return }
 
@@ -74,35 +102,11 @@ public extension NewStatusViewModel {
 }
 
 private extension NewStatusViewModel {
-    func newCompositionViewModel() -> CompositionViewModel {
-        CompositionViewModel(
-            identification: identification,
-            identificationPublisher: $identification.eraseToAnyPublisher(),
-            eventsSubject: itemEventsSubject)
-    }
-
-    func handle(event: CompositionViewModel.Event) {
-        switch event {
-        case let .insertAfter(viewModel):
-            guard let index = compositionViewModels.firstIndex(where: { $0 === viewModel }) else { return }
-
-            let newViewModel = newCompositionViewModel()
-
-            if index >= compositionViewModels.count - 1 {
-                compositionViewModels.append(newViewModel)
-            } else {
-                compositionViewModels.insert(newViewModel, at: index + 1)
-            }
-        case let .error(error):
-            alertItem = AlertItem(error: error)
-        default:
-            eventsSubject.send(event)
-        }
-    }
-
     func post(viewModel: CompositionViewModel, inReplyToId: Status.Id?) {
         loading = true
-        identification.service.post(statusComponents: viewModel.components(inReplyToId: inReplyToId))
+        identification.service.post(statusComponents: viewModel.components(
+                                        inReplyToId: inReplyToId,
+                                        visibility: visibility))
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in
                 guard let self = self else { return }
