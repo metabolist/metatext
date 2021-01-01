@@ -34,6 +34,9 @@
 "attachment.sensitive-content" = "Sensitive content";
 "attachment.media-hidden" = "Media hidden";
 "bookmarks" = "Bookmarks";
+"camera-access.title" = "Camera access needed";
+"camera-access.description" = "Open system settings to allow camera access";
+"camera-access.open-system-settings" = "Open system settings";
 "cancel" = "Cancel";
 "error" = "Error";
 "favorites" = "Favorites";

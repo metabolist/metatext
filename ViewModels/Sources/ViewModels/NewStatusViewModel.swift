@@ -45,6 +45,7 @@ public final class NewStatusViewModel: ObservableObject {
 public extension NewStatusViewModel {
     enum Event {
         case presentMediaPicker(CompositionViewModel)
+        case presentCamera(CompositionViewModel)
     }
 
     enum PostingState {
@@ -74,6 +75,10 @@ public extension NewStatusViewModel {
 
     func presentMediaPicker(viewModel: CompositionViewModel) {
         eventsSubject.send(.presentMediaPicker(viewModel))
+    }
+
+    func presentCamera(viewModel: CompositionViewModel) {
+        eventsSubject.send(.presentCamera(viewModel))
     }
 
     func insert(after: CompositionViewModel) {

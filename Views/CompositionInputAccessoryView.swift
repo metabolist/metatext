@@ -1,5 +1,6 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
+import AVFoundation
 import Combine
 import Mastodon
 import UIKit
@@ -58,6 +59,25 @@ private extension CompositionInputAccessoryView {
             self.parentViewModel.presentMediaPicker(viewModel: self.viewModel)
         },
         for: .touchUpInside)
+
+        #if !IS_SHARE_EXTENSION
+        if AVCaptureDevice.authorizationStatus(for: .video) != .restricted {
+            let cameraButton = UIButton()
+
+            stackView.addArrangedSubview(cameraButton)
+            cameraButton.setImage(
+                UIImage(
+                    systemName: "camera",
+                    withConfiguration: UIImage.SymbolConfiguration(scale: .medium)),
+                for: .normal)
+            cameraButton.addAction(UIAction { [weak self] _ in
+                guard let self = self else { return }
+
+                self.parentViewModel.presentCamera(viewModel: self.viewModel)
+            },
+            for: .touchUpInside)
+        }
+        #endif
 
         let pollButton = UIButton()
 

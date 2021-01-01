@@ -1,9 +1,11 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
+import AVFoundation
 import Combine
 import Kingfisher
 import PhotosUI
 import UIKit
+import UniformTypeIdentifiers
 import ViewModels
 
 final class NewStatusViewController: UIViewController {
@@ -17,6 +19,7 @@ final class NewStatusViewController: UIViewController {
         target: nil,
         action: nil)
     private let mediaSelections = PassthroughSubject<[PHPickerResult], Never>()
+    private let imagePickerResults = PassthroughSubject<[UIImagePickerController.InfoKey: Any]?, Never>()
     private var cancellables = Set<AnyCancellable>()
 
     init(viewModel: NewStatusViewModel) {
@@ -82,11 +85,31 @@ extension NewStatusViewController: PHPickerViewControllerDelegate {
     }
 }
 
+extension NewStatusViewController: UIImagePickerControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController,
+                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+        imagePickerResults.send(info)
+        dismiss(animated: true)
+    }
+
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        imagePickerResults.send(nil)
+        dismiss(animated: true)
+    }
+}
+
+// Required by UIImagePickerController
+extension NewStatusViewController: UINavigationControllerDelegate {}
+
 private extension NewStatusViewController {
     func handle(event: NewStatusViewModel.Event) {
         switch event {
         case let .presentMediaPicker(compositionViewModel):
             presentMediaPicker(compositionViewModel: compositionViewModel)
+        case let .presentCamera(compositionViewModel):
+            #if !IS_SHARE_EXTENSION
+            presentCamera(compositionViewModel: compositionViewModel)
+            #endif
         }
     }
 
@@ -195,6 +218,53 @@ private extension NewStatusViewController {
         picker.delegate = self
         present(picker, animated: true)
     }
+
+    #if !IS_SHARE_EXTENSION
+    func presentCamera(compositionViewModel: CompositionViewModel) {
+        if AVCaptureDevice.authorizationStatus(for: .video) == .denied {
+            let alertController = UIAlertController(
+                title: NSLocalizedString("camera-access.title", comment: ""),
+                message: NSLocalizedString("camera-access.description", comment: ""),
+                preferredStyle: .alert)
+
+            let openSystemSettingsAction = UIAlertAction(
+                title: NSLocalizedString("camera-access.open-system-settings", comment: ""),
+                style: .default) { _ in
+                guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else { return }
+
+                UIApplication.shared.open(settingsUrl)
+            }
+            let cancelAction = UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel) { _ in }
+
+            alertController.addAction(openSystemSettingsAction)
+            alertController.addAction(cancelAction)
+
+            present(alertController, animated: true)
+
+            return
+        }
+
+        imagePickerResults.first().sink { [weak self] in
+            guard let self = self, let info = $0 else { return }
+
+            if let url = info[.mediaURL] as? URL, let itemProvider = NSItemProvider(contentsOf: url) {
+                self.viewModel.attach(itemProvider: itemProvider, to: compositionViewModel)
+            } else if let image = info[.editedImage] as? UIImage ?? info[.originalImage] as? UIImage {
+                self.viewModel.attach(itemProvider: NSItemProvider(object: image), to: compositionViewModel)
+            }
+        }
+        .store(in: &cancellables)
+
+        let picker = UIImagePickerController()
+
+        picker.sourceType = .camera
+        picker.allowsEditing = true
+        picker.mediaTypes = [UTType.image.description, UTType.movie.description]
+        picker.modalPresentationStyle = .overFullScreen
+        picker.delegate = self
+        present(picker, animated: true)
+    }
+    #endif
 
     func changeIdentityButton(identification: Identification) -> UIButton {
         let changeIdentityButton = UIButton()
