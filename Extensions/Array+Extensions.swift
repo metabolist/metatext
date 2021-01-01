@@ -17,3 +17,9 @@ extension Array where Element: Sequence, Element.Element: Hashable {
         return snapshot
     }
 }
+
+extension Array where Element: Hashable {
+    func snapshot() -> NSDiffableDataSourceSnapshot<Int, Element> {
+        [self].snapshot()
+    }
+}

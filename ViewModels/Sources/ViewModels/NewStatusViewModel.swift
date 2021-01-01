@@ -13,7 +13,7 @@ public final class NewStatusViewModel: ObservableObject {
     @Published public var canPost = false
     @Published public var canChangeIdentity = true
     @Published public var alertItem: AlertItem?
-    @Published public private(set) var loading = false
+    @Published public private(set) var postingState = PostingState.composing
     public let events: AnyPublisher<Event, Never>
 
     private let allIdentitiesService: AllIdentitiesService
@@ -36,8 +36,8 @@ public final class NewStatusViewModel: ObservableObject {
         $compositionViewModels.flatMap { Publishers.MergeMany($0.map(\.$isPostable)) }
             .receive(on: DispatchQueue.main) // hack to punt to next run loop, consider refactoring
             .compactMap { [weak self] _ in self?.compositionViewModels.allSatisfy(\.isPostable) }
-            .combineLatest($loading)
-            .map { $0 && !$1 }
+            .combineLatest($postingState)
+            .map { $0 && $1 == .composing }
             .assign(to: &$canPost)
     }
 }
@@ -45,6 +45,12 @@ public final class NewStatusViewModel: ObservableObject {
 public extension NewStatusViewModel {
     enum Event {
         case presentMediaPicker(CompositionViewModel)
+    }
+
+    enum PostingState {
+        case composing
+        case posting
+        case done
     }
 
     func setIdentity(_ identity: Identity) {
@@ -103,7 +109,7 @@ public extension NewStatusViewModel {
 
 private extension NewStatusViewModel {
     func post(viewModel: CompositionViewModel, inReplyToId: Status.Id?) {
-        loading = true
+        postingState = .posting
         identification.service.post(statusComponents: viewModel.components(
                                         inReplyToId: inReplyToId,
                                         visibility: visibility))
@@ -113,10 +119,12 @@ private extension NewStatusViewModel {
 
                 switch $0 {
                 case .finished:
-                    self.loading = self.compositionViewModels.allSatisfy(\.isPosted)
+                    if self.compositionViewModels.allSatisfy(\.isPosted) {
+                        self.postingState = .done
+                    }
                 case let .failure(error):
                     self.alertItem = AlertItem(error: error)
-                    self.loading = false
+                    self.postingState = .composing
                 }
             } receiveValue: { [weak self] in
                 guard let self = self else { return }

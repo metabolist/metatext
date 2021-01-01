@@ -10,6 +10,7 @@ final class NewStatusViewController: UIViewController {
     private let viewModel: NewStatusViewModel
     private let scrollView = UIScrollView()
     private let stackView = UIStackView()
+    private let activityIndicatorView = UIActivityIndicatorView(style: .large)
     private let postButton = UIBarButtonItem(
         title: NSLocalizedString("post", comment: ""),
         style: .done,
@@ -42,6 +43,10 @@ final class NewStatusViewController: UIViewController {
         stackView.axis = .vertical
         stackView.distribution = .equalSpacing
 
+        scrollView.addSubview(activityIndicatorView)
+        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicatorView.hidesWhenStopped = true
+
         NSLayoutConstraint.activate([
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -51,7 +56,9 @@ final class NewStatusViewController: UIViewController {
             stackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+            stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            activityIndicatorView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+            activityIndicatorView.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor)
         ])
 
         postButton.primaryAction = UIAction(title: NSLocalizedString("post", comment: "")) { [weak self] _ in
@@ -83,6 +90,51 @@ private extension NewStatusViewController {
         }
     }
 
+    func apply(postingState: NewStatusViewModel.PostingState) {
+        switch postingState {
+        case .composing:
+            activityIndicatorView.stopAnimating()
+            stackView.isUserInteractionEnabled = true
+            stackView.alpha = 1
+        case .posting:
+            activityIndicatorView.startAnimating()
+            stackView.isUserInteractionEnabled = false
+            stackView.alpha = 0.5
+        case .done:
+            dismiss()
+        }
+    }
+
+    func set(compositionViewModels: [CompositionViewModel]) {
+        let diff = compositionViewModels.map(\.id).snapshot().itemIdentifiers.difference(
+            from: stackView.arrangedSubviews.compactMap { ($0 as? CompositionView)?.id }
+                .snapshot().itemIdentifiers)
+
+        for insertion in diff.insertions {
+            guard case let .insert(index, id, _) = insertion,
+                  let compositionViewModel = compositionViewModels.first(where: { $0.id == id })
+                  else { continue }
+
+            let compositionView = CompositionView(
+                viewModel: compositionViewModel,
+                parentViewModel: viewModel)
+            stackView.insertArrangedSubview(compositionView, at: index)
+            compositionView.textView.becomeFirstResponder()
+
+            DispatchQueue.main.async {
+                self.scrollView.scrollRectToVisible(
+                    self.scrollView.convert(compositionView.frame, from: self.stackView),
+                    animated: true)
+            }
+        }
+
+        for removal in diff.removals {
+            guard case let .remove(_, id, _) = removal else { continue }
+
+            stackView.arrangedSubviews.first { ($0 as? CompositionView)?.id == id }?.removeFromSuperview()
+        }
+    }
+
     func dismiss() {
         if let extensionContext = extensionContext {
             extensionContext.completeRequest(returningItems: nil)
@@ -92,53 +144,23 @@ private extension NewStatusViewController {
     }
 
     func setupViewModelBindings() {
-        viewModel.events.sink { [weak self] in self?.handle(event: $0) }.store(in: &cancellables)
-
-        viewModel.$canPost.sink { [weak self] in self?.postButton.isEnabled = $0 }.store(in: &cancellables)
-
-        viewModel.$compositionViewModels.sink { [weak self] in
-            guard let self = self else { return }
-
-            let diff = [$0.map(\.id)].snapshot().itemIdentifiers.difference(
-                from: [self.stackView.arrangedSubviews.compactMap { ($0 as? CompositionView)?.id }]
-                    .snapshot().itemIdentifiers)
-
-            for insertion in diff.insertions {
-                guard case let .insert(index, id, _) = insertion,
-                      let compositionViewModel = $0.first(where: { $0.id == id })
-                      else { continue }
-
-                let compositionView = CompositionView(
-                    viewModel: compositionViewModel,
-                    parentViewModel: self.viewModel)
-                self.stackView.insertArrangedSubview(compositionView, at: index)
-                compositionView.textView.becomeFirstResponder()
-                DispatchQueue.main.async {
-                    self.scrollView.scrollRectToVisible(
-                        self.scrollView.convert(compositionView.frame, from: self.stackView),
-                        animated: true)
-                }
-            }
-
-            for removal in diff.removals {
-                guard case let .remove(_, id, _) = removal else { continue }
-
-                self.stackView.arrangedSubviews.first { ($0 as? CompositionView)?.id == id }?.removeFromSuperview()
-            }
-        }
-        .store(in: &cancellables)
-
-        viewModel.$identification
-            .sink { [weak self] in
-                guard let self = self else { return }
-
-                self.setupBarButtonItems(identification: $0)
-            }
+        viewModel.events
+            .sink { [weak self] in self?.handle(event: $0) }
             .store(in: &cancellables)
-
+        viewModel.$canPost
+            .sink { [weak self] in self?.postButton.isEnabled = $0 }
+            .store(in: &cancellables)
+        viewModel.$compositionViewModels
+            .sink { [weak self] in self?.set(compositionViewModels: $0) }
+            .store(in: &cancellables)
+        viewModel.$identification
+            .sink { [weak self] in self?.setupBarButtonItems(identification: $0) }
+            .store(in: &cancellables)
+        viewModel.$postingState
+            .sink { [weak self] in self?.apply(postingState: $0) }
+            .store(in: &cancellables)
         viewModel.$alertItem
             .compactMap { $0 }
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.present(alertItem: $0) }
             .store(in: &cancellables)
     }

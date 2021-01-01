@@ -141,7 +141,7 @@ private extension CompositionView {
         viewModel.$attachmentViewModels
             .receive(on: DispatchQueue.main) // hack to punt to next run loop, consider refactoring
             .sink { [weak self] in
-                self?.attachmentsDataSource.apply([$0.map(\.attachment)].snapshot())
+                self?.attachmentsDataSource.apply($0.map(\.attachment).snapshot())
                 self?.attachmentsCollectionView.isHidden = $0.isEmpty
             }
             .store(in: &cancellables)
