@@ -10,8 +10,8 @@ final class CompositionView: UIView {
     let spoilerTextField = UITextField()
     let textView = UITextView()
     let textViewPlaceholder = UILabel()
-    let attachmentUploadView = AttachmentUploadView()
     let attachmentsCollectionView: UICollectionView
+    let attachmentUploadView: AttachmentUploadView
 
     private let viewModel: CompositionViewModel
     private let parentViewModel: NewStatusViewModel
@@ -50,6 +50,7 @@ final class CompositionView: UIView {
         let attachmentsLayout = UICollectionViewCompositionalLayout(section: section, configuration: configuration)
 
         attachmentsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: attachmentsLayout)
+        attachmentUploadView = AttachmentUploadView(viewModel: viewModel)
 
         super.init(frame: .zero)
 
@@ -166,10 +167,6 @@ private extension CompositionView {
                 self?.attachmentsDataSource.apply($0.map(\.attachment).snapshot())
                 self?.attachmentsCollectionView.isHidden = $0.isEmpty
             }
-            .store(in: &cancellables)
-
-        viewModel.$attachmentUpload
-            .sink { [weak self] in self?.attachmentUploadView.attachmentUpload = $0 }
             .store(in: &cancellables)
 
         let guide = UIDevice.current.userInterfaceIdiom == .pad ? readableContentGuide : layoutMarginsGuide

@@ -17,7 +17,7 @@ public final class CompositionViewModel: ObservableObject, Identifiable {
     @Published public private(set) var canAddAttachment = true
     @Published public private(set) var canAddNonImageAttachment = true
 
-    private var cancellables = Set<AnyCancellable>()
+    private var attachmentUploadCancellable: AnyCancellable?
 
     init() {
         $text.map { !$0.isEmpty }
@@ -56,11 +56,15 @@ public extension CompositionViewModel {
     func remove(attachmentViewModel: CompositionAttachmentViewModel) {
         attachmentViewModels.removeAll { $0 === attachmentViewModel }
     }
+
+    func cancelUpload() {
+        attachmentUploadCancellable?.cancel()
+    }
 }
 
 extension CompositionViewModel {
-    func attach(itemProvider: NSItemProvider, service: IdentityService) -> AnyPublisher<Never, Error> {
-        MediaProcessingService.dataAndMimeType(itemProvider: itemProvider)
+    func attach(itemProvider: NSItemProvider, parentViewModel: NewStatusViewModel) {
+        attachmentUploadCancellable = MediaProcessingService.dataAndMimeType(itemProvider: itemProvider)
             .flatMap { [weak self] data, mimeType -> AnyPublisher<Attachment, Error> in
                 guard let self = self else { return Empty().eraseToAnyPublisher() }
 
@@ -70,16 +74,19 @@ extension CompositionViewModel {
                     self.attachmentUpload = AttachmentUpload(progress: progress, data: data, mimeType: mimeType)
                 }
 
-                return service.uploadAttachment(data: data, mimeType: mimeType, progress: progress)
+                return parentViewModel.identification.service.uploadAttachment(
+                    data: data,
+                    mimeType: mimeType,
+                    progress: progress)
             }
             .receive(on: DispatchQueue.main)
-            .handleEvents(
-                receiveOutput: { [weak self] in
-                    self?.attachmentViewModels.append(CompositionAttachmentViewModel(attachment: $0))
-                },
-                receiveCompletion: { [weak self] _ in self?.attachmentUpload = nil })
-            .ignoreOutput()
-            .eraseToAnyPublisher()
+            .assignErrorsToAlertItem(to: \.alertItem, on: parentViewModel)
+            .handleEvents(receiveCancel: { [weak self] in self?.attachmentUpload = nil })
+            .sink { [weak self] _ in
+                self?.attachmentUpload = nil
+            } receiveValue: { [weak self] in
+                self?.attachmentViewModels.append(CompositionAttachmentViewModel(attachment: $0))
+            }
     }
 }
 

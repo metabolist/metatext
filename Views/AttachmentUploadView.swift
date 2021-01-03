@@ -6,23 +6,16 @@ import ViewModels
 
 final class AttachmentUploadView: UIView {
     let label = UILabel()
+    let cancelButton = UIButton(type: .system)
     let progressView = UIProgressView(progressViewStyle: .default)
+
+    private let viewModel: CompositionViewModel
     private var progressCancellable: AnyCancellable?
+    private var cancellables = Set<AnyCancellable>()
 
-    var attachmentUpload: AttachmentUpload? {
-        didSet {
-            if let attachmentUpload = attachmentUpload {
-                progressCancellable = attachmentUpload.progress.publisher(for: \.fractionCompleted)
-                    .receive(on: DispatchQueue.main)
-                    .sink { [weak self] in self?.progressView.progress = Float($0) }
-                isHidden = false
-            } else {
-                isHidden = true
-            }
-        }
-    }
+    init(viewModel: CompositionViewModel) {
+        self.viewModel = viewModel
 
-    init() {
         super.init(frame: .zero)
 
         addSubview(label)
@@ -34,18 +27,42 @@ final class AttachmentUploadView: UIView {
         label.textColor = .secondaryLabel
         label.numberOfLines = 0
 
+        addSubview(cancelButton)
+        cancelButton.translatesAutoresizingMaskIntoConstraints = false
+        cancelButton.titleLabel?.adjustsFontForContentSizeCategory = true
+        cancelButton.titleLabel?.font = .preferredFont(forTextStyle: .callout)
+        cancelButton.setTitle(NSLocalizedString("cancel", comment: ""), for: .normal)
+        cancelButton.addAction(UIAction { _ in viewModel.cancelUpload() }, for: .touchUpInside)
+
         addSubview(progressView)
         progressView.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
             label.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
             label.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-            label.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+            label.trailingAnchor.constraint(equalTo: cancelButton.leadingAnchor, constant: .defaultSpacing),
+            cancelButton.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+            cancelButton.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+            cancelButton.bottomAnchor.constraint(equalTo: label.bottomAnchor),
             progressView.topAnchor.constraint(equalTo: label.bottomAnchor, constant: .defaultSpacing),
             progressView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
             progressView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
             progressView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
         ])
+
+        viewModel.$attachmentUpload.sink { [weak self] in
+            guard let self = self else { return }
+
+            if let attachmentUpload = $0 {
+                self.progressCancellable = attachmentUpload.progress.publisher(for: \.fractionCompleted)
+                    .receive(on: DispatchQueue.main)
+                    .sink { self.progressView.progress = Float($0) }
+                self.isHidden = false
+            } else {
+                self.isHidden = true
+            }
+        }
+        .store(in: &cancellables)
     }
 
     @available(*, unavailable)

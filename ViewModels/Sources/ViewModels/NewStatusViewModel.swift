@@ -98,11 +98,7 @@ public extension NewStatusViewModel {
     }
 
     func attach(itemProvider: NSItemProvider, to compositionViewModel: CompositionViewModel) {
-        compositionViewModel.attach(itemProvider: itemProvider, service: identification.service)
-            .receive(on: DispatchQueue.main)
-            .assignErrorsToAlertItem(to: \.alertItem, on: self)
-            .sink { _ in }
-            .store(in: &cancellables)
+        compositionViewModel.attach(itemProvider: itemProvider, parentViewModel: self)
     }
 
     func post() {
