@@ -65,8 +65,8 @@ private extension CompositionAttachmentView {
         removeButton.menu = UIMenu(
             children: [
                 UIAction(
-                    title: NSLocalizedString("compose.attachment.remove", comment: ""),
-                    image: UIImage(systemName: "xmark.circle.fill"),
+                    title: NSLocalizedString("remove", comment: ""),
+                    image: UIImage(systemName: "trash"),
                     attributes: .destructive, handler: { [weak self] _ in
                         guard let self = self else { return }
 

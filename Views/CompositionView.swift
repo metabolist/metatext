@@ -9,6 +9,7 @@ final class CompositionView: UIView {
     let avatarImageView = UIImageView()
     let spoilerTextField = UITextField()
     let textView = UITextView()
+    let textViewPlaceholder = UILabel()
     let attachmentUploadView = AttachmentUploadView()
     let attachmentsCollectionView: UICollectionView
 
@@ -92,8 +93,7 @@ private extension CompositionView {
         stackView.spacing = .defaultSpacing
 
         stackView.addArrangedSubview(spoilerTextField)
-        spoilerTextField.backgroundColor = .secondarySystemBackground
-        spoilerTextField.layer.cornerRadius = .defaultCornerRadius
+        spoilerTextField.borderStyle = .roundedRect
         spoilerTextField.adjustsFontForContentSizeCategory = true
         spoilerTextField.font = .preferredFont(forTextStyle: .body)
         spoilerTextField.placeholder = NSLocalizedString("status.spoiler-text-placeholder", comment: "")
@@ -106,17 +106,24 @@ private extension CompositionView {
             },
             for: .editingChanged)
 
+        let textViewFont = UIFont.preferredFont(forTextStyle: .body)
+
         stackView.addArrangedSubview(textView)
-        textView.backgroundColor = .secondarySystemBackground
-        textView.layer.cornerRadius = .defaultCornerRadius
         textView.isScrollEnabled = false
         textView.adjustsFontForContentSizeCategory = true
-        textView.font = .preferredFont(forTextStyle: .body)
-//        textView.textContainer.lineFragmentPadding = 0
+        textView.font = textViewFont
+        textView.textContainerInset = .zero
+        textView.textContainer.lineFragmentPadding = 0
         textView.inputAccessoryView = inputAccessoryView
         textView.inputAccessoryView?.sizeToFit()
         textView.delegate = self
-        textView.setContentHuggingPriority(.required, for: .vertical)
+
+        textView.addSubview(textViewPlaceholder)
+        textViewPlaceholder.translatesAutoresizingMaskIntoConstraints = false
+        textViewPlaceholder.adjustsFontForContentSizeCategory = true
+        textViewPlaceholder.font = .preferredFont(forTextStyle: .body)
+        textViewPlaceholder.textColor = .secondaryLabel
+        textViewPlaceholder.text = NSLocalizedString("compose.prompt", comment: "")
 
         stackView.addArrangedSubview(attachmentsCollectionView)
         attachmentsCollectionView.dataSource = attachmentsDataSource
@@ -126,6 +133,14 @@ private extension CompositionView {
 
         textView.text = viewModel.text
         spoilerTextField.text = viewModel.contentWarning
+
+        let textViewBaselineConstraint = textView.topAnchor.constraint(
+            lessThanOrEqualTo: avatarImageView.centerYAnchor,
+            constant: -textViewFont.lineHeight / 2)
+
+        viewModel.$text.map(\.isEmpty)
+            .sink { [weak self] in self?.textViewPlaceholder.isHidden = !$0 }
+            .store(in: &cancellables)
 
         viewModel.$displayContentWarning
             .sink { [weak self] in
@@ -138,6 +153,7 @@ private extension CompositionView {
                 }
 
                 self.spoilerTextField.isHidden = !$0
+                textViewBaselineConstraint.isActive = !$0
             }
             .store(in: &cancellables)
 
@@ -164,9 +180,12 @@ private extension CompositionView {
             avatarImageView.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
             avatarImageView.bottomAnchor.constraint(lessThanOrEqualTo: guide.bottomAnchor),
             stackView.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: .defaultSpacing),
-            stackView.topAnchor.constraint(equalTo: guide.topAnchor),
+            stackView.topAnchor.constraint(greaterThanOrEqualTo: guide.topAnchor),
             stackView.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
             stackView.bottomAnchor.constraint(lessThanOrEqualTo: guide.bottomAnchor),
+            textViewPlaceholder.leadingAnchor.constraint(equalTo: textView.leadingAnchor),
+            textViewPlaceholder.topAnchor.constraint(equalTo: textView.topAnchor),
+            textViewPlaceholder.trailingAnchor.constraint(equalTo: textView.trailingAnchor),
             attachmentsCollectionView.heightAnchor.constraint(equalToConstant: Self.attachmentCollectionViewHeight)
         ]
 

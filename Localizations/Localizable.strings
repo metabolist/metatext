@@ -39,7 +39,7 @@
 "camera-access.open-system-settings" = "Open system settings";
 "cancel" = "Cancel";
 "compose.attachment.uploading" = "Uploading";
-"compose.attachment.remove" = "Remove";
+"compose.prompt" = "What's on your mind?";
 "error" = "Error";
 "favorites" = "Favorites";
 "registration.review-terms-of-use-and-privacy-policy-%@" = "Please review %@'s Terms of Use and Privacy Policy to continue";
@@ -135,6 +135,7 @@
 "notifications.poll-ended" = "A poll you have voted in has ended";
 "notifications.your-poll-ended" = "Your poll has ended";
 "notifications.unknown" = "Notification from %@";
+"remove" = "Remove";
 "report" = "Report";
 "report.hint" = "The report will be sent to your server moderators. You can provide an explanation of why you are reporting this account below:";
 "report.placeholder" = "Additional comments";
