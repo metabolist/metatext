@@ -9,10 +9,11 @@ final class CompositionAttachmentsDataSource: UICollectionViewDiffableDataSource
         DispatchQueue(label: "com.metabolist.metatext.composition-attachments-data-source.update-queue")
 
     init(collectionView: UICollectionView,
-         viewModelProvider: @escaping (IndexPath) -> CompositionAttachmentViewModel?) {
+         viewModelProvider: @escaping (IndexPath) -> (CompositionAttachmentViewModel, CompositionViewModel)) {
         let registration = UICollectionView.CellRegistration
-        <CompositionAttachmentCollectionViewCell, CompositionAttachmentViewModel> {
-            $0.viewModel = $2
+        <CompositionAttachmentCollectionViewCell, (CompositionAttachmentViewModel, CompositionViewModel)> {
+            $0.viewModel = $2.0
+            $0.parentViewModel = $2.1
         }
 
         super.init(collectionView: collectionView) { collectionView, indexPath, _ in

@@ -17,9 +17,10 @@ final class CompositionView: UIView {
     private var cancellables = Set<AnyCancellable>()
 
     private lazy var attachmentsDataSource: CompositionAttachmentsDataSource = {
-        CompositionAttachmentsDataSource(
-            collectionView: attachmentsCollectionView) { [weak self] in
-            self?.viewModel.attachmentViewModel(indexPath: $0)
+        let vm = viewModel
+
+        return .init(collectionView: attachmentsCollectionView) {
+            (vm.attachmentViewModels[$0.item], vm)
         }
     }()
 
@@ -28,20 +29,25 @@ final class CompositionView: UIView {
         self.parentViewModel = parentViewModel
 
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(0.2),
-            heightDimension: .fractionalHeight(1.0))
+            widthDimension: .estimated(Self.attachmentCollectionViewHeight),
+            heightDimension: .fractionalHeight(1))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .fractionalWidth(0.2))
+            widthDimension: .estimated(Self.attachmentCollectionViewHeight),
+            heightDimension: .fractionalHeight(1))
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: groupSize,
             subitems: [item])
-
-        group.interItemSpacing = .fixed(.defaultSpacing)
-
         let section = NSCollectionLayoutSection(group: group)
-        let attachmentsLayout = UICollectionViewCompositionalLayout(section: section)
+
+        section.interGroupSpacing = .defaultSpacing
+
+        let configuration = UICollectionViewCompositionalLayoutConfiguration()
+
+        configuration.scrollDirection = .horizontal
+
+        let attachmentsLayout = UICollectionViewCompositionalLayout(section: section, configuration: configuration)
+
         attachmentsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: attachmentsLayout)
 
         super.init(frame: .zero)
@@ -66,7 +72,7 @@ extension CompositionView: UITextViewDelegate {
 }
 
 private extension CompositionView {
-    static let attachmentUploadViewHeight: CGFloat = 100
+    static let attachmentCollectionViewHeight: CGFloat = 200
 
     // swiftlint:disable:next function_body_length
     func initialSetup() {
@@ -114,6 +120,7 @@ private extension CompositionView {
 
         stackView.addArrangedSubview(attachmentsCollectionView)
         attachmentsCollectionView.dataSource = attachmentsDataSource
+        attachmentsCollectionView.backgroundColor = .clear
 
         stackView.addArrangedSubview(attachmentUploadView)
 
@@ -139,7 +146,6 @@ private extension CompositionView {
             .store(in: &cancellables)
 
         viewModel.$attachmentViewModels
-            .receive(on: DispatchQueue.main) // hack to punt to next run loop, consider refactoring
             .sink { [weak self] in
                 self?.attachmentsDataSource.apply($0.map(\.attachment).snapshot())
                 self?.attachmentsCollectionView.isHidden = $0.isEmpty
@@ -161,10 +167,7 @@ private extension CompositionView {
             stackView.topAnchor.constraint(equalTo: guide.topAnchor),
             stackView.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
             stackView.bottomAnchor.constraint(lessThanOrEqualTo: guide.bottomAnchor),
-            attachmentsCollectionView.heightAnchor.constraint(
-                equalTo: attachmentsCollectionView.widthAnchor,
-                multiplier: 1 / 4),
-            attachmentUploadView.heightAnchor.constraint(equalToConstant: Self.attachmentUploadViewHeight)
+            attachmentsCollectionView.heightAnchor.constraint(equalToConstant: Self.attachmentCollectionViewHeight)
         ]
 
         if UIDevice.current.userInterfaceIdiom == .pad {

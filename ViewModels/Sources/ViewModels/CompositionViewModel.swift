@@ -46,8 +46,8 @@ public extension CompositionViewModel {
             visibility: visibility)
     }
 
-    func attachmentViewModel(indexPath: IndexPath) -> CompositionAttachmentViewModel {
-        attachmentViewModels[indexPath.item]
+    func remove(attachmentViewModel: CompositionAttachmentViewModel) {
+        attachmentViewModels.removeAll { $0 === attachmentViewModel }
     }
 }
 

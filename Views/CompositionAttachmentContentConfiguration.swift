@@ -5,6 +5,7 @@ import ViewModels
 
 struct CompositionAttachmentContentConfiguration {
     let viewModel: CompositionAttachmentViewModel
+    let parentViewModel: CompositionViewModel
 }
 
 extension CompositionAttachmentContentConfiguration: UIContentConfiguration {

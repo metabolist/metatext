@@ -44,4 +44,19 @@ public struct Attachment: Codable, Hashable {
 
 public extension Attachment {
     typealias Id = String
+
+    var aspectRatio: Double? {
+        if
+            let info = meta?.original,
+            let width = info.width,
+            let height = info.height,
+            width != 0,
+            height != 0 {
+            let aspectRatio = Double(width) / Double(height)
+
+            return aspectRatio.isNaN ? nil : aspectRatio
+        }
+
+        return nil
+    }
 }

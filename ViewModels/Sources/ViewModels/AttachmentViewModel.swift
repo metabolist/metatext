@@ -22,21 +22,6 @@ public extension AttachmentViewModel {
         attachment.id.appending(status.id).hashValue
     }
 
-    var aspectRatio: Double? {
-        if
-            let info = attachment.meta?.original,
-            let width = info.width,
-            let height = info.height,
-            width != 0,
-            height != 0 {
-            let aspectRatio = Double(width) / Double(height)
-
-            return aspectRatio.isNaN ? nil : aspectRatio
-        }
-
-        return nil
-    }
-
     var shouldAutoplay: Bool {
         switch attachment.type {
         case .video:

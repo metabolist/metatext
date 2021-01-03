@@ -47,7 +47,7 @@ final class StatusAttachmentsView: UIView {
 
             let newAspectRatio: CGFloat
 
-            if attachmentCount == 1, let aspectRatio = attachmentViewModels.first?.aspectRatio {
+            if attachmentCount == 1, let aspectRatio = attachmentViewModels.first?.attachment.aspectRatio {
                 newAspectRatio = max(CGFloat(aspectRatio), 16 / 9)
             } else {
                 newAspectRatio = 16 / 9

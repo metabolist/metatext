@@ -38,6 +38,8 @@
 "camera-access.description" = "Open system settings to allow camera access";
 "camera-access.open-system-settings" = "Open system settings";
 "cancel" = "Cancel";
+"compose.attachment.uploading" = "Uploading";
+"compose.attachment.remove" = "Remove";
 "error" = "Error";
 "favorites" = "Favorites";
 "registration.review-terms-of-use-and-privacy-policy-%@" = "Please review %@'s Terms of Use and Privacy Policy to continue";
