@@ -212,6 +212,10 @@ private extension NewStatusViewController {
 
         configuration.preferredAssetRepresentationMode = .current
 
+        if !compositionViewModel.canAddNonImageAttachment {
+            configuration.filter = .images
+        }
+
         let picker = PHPickerViewController(configuration: configuration)
 
         picker.modalPresentationStyle = .overFullScreen
@@ -259,9 +263,15 @@ private extension NewStatusViewController {
 
         picker.sourceType = .camera
         picker.allowsEditing = true
-        picker.mediaTypes = [UTType.image.description, UTType.movie.description]
         picker.modalPresentationStyle = .overFullScreen
         picker.delegate = self
+
+        if compositionViewModel.canAddNonImageAttachment {
+            picker.mediaTypes = [UTType.image.description, UTType.movie.description]
+        } else {
+            picker.mediaTypes = [UTType.image.description]
+        }
+
         present(picker, animated: true)
     }
     #endif

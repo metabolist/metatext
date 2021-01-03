@@ -12,8 +12,10 @@ public final class CompositionViewModel: ObservableObject, Identifiable {
     @Published public var contentWarning = ""
     @Published public var displayContentWarning = false
     @Published public private(set) var attachmentViewModels = [CompositionAttachmentViewModel]()
-    @Published public private(set) var isPostable = false
     @Published public private(set) var attachmentUpload: AttachmentUpload?
+    @Published public private(set) var isPostable = false
+    @Published public private(set) var canAddAttachment = true
+    @Published public private(set) var canAddNonImageAttachment = true
 
     private var cancellables = Set<AnyCancellable>()
 
@@ -25,6 +27,11 @@ public final class CompositionViewModel: ObservableObject, Identifiable {
                 textPresent || attachmentPresent
             }
             .assign(to: &$isPostable)
+        $attachmentViewModels
+            .combineLatest($attachmentUpload)
+            .map { $0.count < Self.maxAttachmentCount && $1 == nil }
+            .assign(to: &$canAddAttachment)
+        $attachmentViewModels.map(\.isEmpty).assign(to: &$canAddNonImageAttachment)
     }
 }
 
@@ -74,4 +81,8 @@ extension CompositionViewModel {
             .ignoreOutput()
             .eraseToAnyPublisher()
     }
+}
+
+private extension CompositionViewModel {
+    static let maxAttachmentCount = 4
 }

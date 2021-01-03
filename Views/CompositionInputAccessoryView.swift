@@ -60,10 +60,10 @@ private extension CompositionInputAccessoryView {
         },
         for: .touchUpInside)
 
+        let cameraButton = UIButton()
+
         #if !IS_SHARE_EXTENSION
         if AVCaptureDevice.authorizationStatus(for: .video) != .restricted {
-            let cameraButton = UIButton()
-
             stackView.addArrangedSubview(cameraButton)
             cameraButton.setImage(
                 UIImage(
@@ -120,6 +120,13 @@ private extension CompositionInputAccessoryView {
 
             self.parentViewModel.insert(after: self.viewModel)
         }, for: .touchUpInside)
+
+        viewModel.$canAddAttachment
+            .sink {
+                mediaButton.isEnabled = $0
+                cameraButton.isEnabled = $0
+            }
+            .store(in: &cancellables)
 
         viewModel.$isPostable
             .sink { [weak self] in self?.addButton.isEnabled = $0 }
