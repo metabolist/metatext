@@ -284,8 +284,13 @@ extension CollectionItemsViewModel: CollectionViewModel {
 
 private extension CollectionItemsViewModel {
     func cache(viewModel: CollectionItemViewModel, forItem item: CollectionItem) {
-        viewModelCache[item] = (viewModel, viewModel.events.flatMap { $0 }
-                                    .assignErrorsToAlertItem(to: \.alertItem, on: self)
+        viewModelCache[item] = (viewModel, viewModel.events
+                                    .flatMap { [weak self] events -> AnyPublisher<CollectionItemEvent, Never> in
+                                        guard let self = self else { return Empty().eraseToAnyPublisher() }
+
+                                        return events.assignErrorsToAlertItem(to: \.alertItem, on: self)
+                                            .eraseToAnyPublisher()
+                                    }
                                     .sink { [weak self] in self?.eventsSubject.send($0) })
     }
 
