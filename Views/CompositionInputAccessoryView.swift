@@ -109,6 +109,12 @@ private extension CompositionInputAccessoryView {
 
         stackView.addArrangedSubview(UIView())
 
+        let charactersLabel = UILabel()
+
+        stackView.addArrangedSubview(charactersLabel)
+        charactersLabel.font = .preferredFont(forTextStyle: .callout)
+
+
         stackView.addArrangedSubview(addButton)
         addButton.setImage(
             UIImage(
@@ -121,12 +127,17 @@ private extension CompositionInputAccessoryView {
             self.parentViewModel.insert(after: self.viewModel)
         }, for: .touchUpInside)
 
-        viewModel.$canAddAttachment
-            .sink {
-                mediaButton.isEnabled = $0
-                cameraButton.isEnabled = $0
-            }
-            .store(in: &cancellables)
+        viewModel.$canAddAttachment.sink {
+            mediaButton.isEnabled = $0
+            cameraButton.isEnabled = $0
+        }
+        .store(in: &cancellables)
+
+        viewModel.$remainingCharacters.sink {
+            charactersLabel.text = String($0)
+            charactersLabel.textColor = $0 < 0 ? .systemRed : .label
+        }
+        .store(in: &cancellables)
 
         viewModel.$isPostable
             .sink { [weak self] in self?.addButton.isEnabled = $0 }

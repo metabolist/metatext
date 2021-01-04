@@ -16,6 +16,7 @@ public final class CompositionViewModel: ObservableObject, Identifiable {
     @Published public private(set) var isPostable = false
     @Published public private(set) var canAddAttachment = true
     @Published public private(set) var canAddNonImageAttachment = true
+    @Published public private(set) var remainingCharacters = CompositionViewModel.maxCharacters
 
     private var attachmentUploadCancellable: AnyCancellable?
 
@@ -32,10 +33,20 @@ public final class CompositionViewModel: ObservableObject, Identifiable {
             .map { $0.count < Self.maxAttachmentCount && $1 == nil }
             .assign(to: &$canAddAttachment)
         $attachmentViewModels.map(\.isEmpty).assign(to: &$canAddNonImageAttachment)
+        $text.map {
+            let tokens = $0.components(separatedBy: " ")
+
+            return tokens.map(\.countShorteningIfURL).reduce(tokens.count - 1, +)
+        }
+        .combineLatest($displayContentWarning, $contentWarning)
+        .map { Self.maxCharacters - ($0 + ($1 ? $2.count : 0)) }
+        .assign(to: &$remainingCharacters)
     }
 }
 
 public extension CompositionViewModel {
+    static let maxCharacters = 500
+
     typealias Id = UUID
 
     enum Event {
@@ -92,4 +103,10 @@ extension CompositionViewModel {
 
 private extension CompositionViewModel {
     static let maxAttachmentCount = 4
+}
+
+private extension String {
+    static let urlCharacterCount = 23
+
+    var countShorteningIfURL: Int { starts(with: "http://") || starts(with: "https://") ? Self.urlCharacterCount : count }
 }
