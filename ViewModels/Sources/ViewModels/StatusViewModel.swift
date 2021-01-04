@@ -200,6 +200,13 @@ public extension StatusViewModel {
                 .eraseToAnyPublisher())
     }
 
+    func toggleReblogged() {
+        eventsSubject.send(
+            statusService.toggleReblogged()
+                .map { _ in .ignorableOutput }
+                .eraseToAnyPublisher())
+    }
+
     func toggleFavorited() {
         eventsSubject.send(
             statusService.toggleFavorited()

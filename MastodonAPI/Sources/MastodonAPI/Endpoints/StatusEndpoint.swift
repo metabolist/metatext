@@ -6,6 +6,8 @@ import Mastodon
 
 public enum StatusEndpoint {
     case status(id: Status.Id)
+    case reblog(id: Status.Id)
+    case unreblog(id: Status.Id)
     case favourite(id: Status.Id)
     case unfavourite(id: Status.Id)
     case bookmark(id: Status.Id)
@@ -70,6 +72,10 @@ extension StatusEndpoint: Endpoint {
         switch self {
         case let .status(id):
             return [id]
+        case let .reblog(id):
+            return [id, "reblog"]
+        case let .unreblog(id):
+            return [id, "unreblog"]
         case let .favourite(id):
             return [id, "favourite"]
         case let .unfavourite(id):
@@ -96,7 +102,7 @@ extension StatusEndpoint: Endpoint {
         switch self {
         case .status:
             return .get
-        case .favourite, .unfavourite, .bookmark, .unbookmark, .post:
+        case .reblog, .unreblog, .favourite, .unfavourite, .bookmark, .unbookmark, .post:
             return .post
         }
     }

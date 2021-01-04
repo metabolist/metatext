@@ -32,6 +32,14 @@ public extension StatusService {
         contentDatabase.toggleShowAttachments(id: status.displayStatus.id)
     }
 
+    func toggleReblogged() -> AnyPublisher<Never, Error> {
+        mastodonAPIClient.request(status.displayStatus.reblogged
+                                    ? StatusEndpoint.unreblog(id: status.displayStatus.id)
+                                    : StatusEndpoint.reblog(id: status.displayStatus.id))
+            .flatMap(contentDatabase.insert(status:))
+            .eraseToAnyPublisher()
+    }
+
     func toggleFavorited() -> AnyPublisher<Never, Error> {
         mastodonAPIClient.request(status.displayStatus.favourited
                                     ? StatusEndpoint.unfavourite(id: status.displayStatus.id)

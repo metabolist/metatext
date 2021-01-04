@@ -198,6 +198,10 @@ private extension StatusView {
         interactionsStackView.addArrangedSubview(favoritedByButton)
         interactionsStackView.distribution = .fillEqually
 
+        reblogButton.addAction(
+            UIAction { [weak self] _ in self?.statusConfiguration.viewModel.toggleReblogged() },
+            for: .touchUpInside)
+
         favoriteButton.addAction(
             UIAction { [weak self] _ in self?.statusConfiguration.viewModel.toggleFavorited() },
             for: .touchUpInside)
