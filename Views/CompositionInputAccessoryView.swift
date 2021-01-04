@@ -114,7 +114,6 @@ private extension CompositionInputAccessoryView {
         stackView.addArrangedSubview(charactersLabel)
         charactersLabel.font = .preferredFont(forTextStyle: .callout)
 
-
         stackView.addArrangedSubview(addButton)
         addButton.setImage(
             UIImage(

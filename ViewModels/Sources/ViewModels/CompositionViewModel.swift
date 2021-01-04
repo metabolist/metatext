@@ -108,5 +108,7 @@ private extension CompositionViewModel {
 private extension String {
     static let urlCharacterCount = 23
 
-    var countShorteningIfURL: Int { starts(with: "http://") || starts(with: "https://") ? Self.urlCharacterCount : count }
+    var countShorteningIfURL: Int {
+        starts(with: "http://") || starts(with: "https://") ? Self.urlCharacterCount : count
+    }
 }
