@@ -15,6 +15,10 @@ extension CGFloat {
     static let newStatusButtonShadowRadius: CGFloat = 2
 }
 
+extension CGRect {
+    static let defaultContentsRect = Self(origin: .zero, size: .init(width: 1, height: 1))
+}
+
 extension TimeInterval {
     static let defaultAnimationDuration: Self = 0.5
     static let shortAnimationDuration = defaultAnimationDuration / 2

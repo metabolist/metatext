@@ -39,6 +39,37 @@ final class StatusAttachmentView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        if let focus = viewModel.attachment.meta?.focus {
+            let viewsAndSizes: [(UIView, CGSize?)] = [
+                (imageView, imageView.image?.size),
+                (playerView, playerView.player?.currentItem?.presentationSize)]
+            for (view, size) in viewsAndSizes {
+                guard let size = size else { continue }
+
+                let aspectRatio = size.width / size.height
+                let viewAspectRatio = view.frame.width / view.frame.height
+                var origin = CGPoint.zero
+
+                if viewAspectRatio > aspectRatio {
+                    let mediaProportionalHeight = size.height * view.frame.width / size.width
+                    let maxPan = (mediaProportionalHeight - view.frame.height) / (2 * mediaProportionalHeight)
+
+                    origin.y = CGFloat(-focus.y) * maxPan
+                } else {
+                    let mediaProportionalWidth = size.width * view.frame.height / size.height
+                    let maxPan = (mediaProportionalWidth - view.frame.width) / (2 * mediaProportionalWidth)
+
+                    origin.x = CGFloat(focus.x) * maxPan
+                }
+
+                view.layer.contentsRect = .init(origin: origin, size: CGRect.defaultContentsRect.size)
+            }
+        }
+    }
 }
 
 extension StatusAttachmentView {
@@ -114,7 +145,11 @@ private extension StatusAttachmentView {
 
         switch viewModel.attachment.type {
         case .image, .video, .gifv:
-            imageView.kf.setImage(with: viewModel.attachment.previewUrl)
+            imageView.kf.setImage(
+                with: viewModel.attachment.previewUrl,
+                completionHandler: { [weak self] _ in
+                    self?.layoutSubviews()
+                })
         case .audio:
             playImageView.image = UIImage(systemName: "waveform.circle",
                                           withConfiguration: UIImage.SymbolConfiguration(textStyle: .largeTitle))

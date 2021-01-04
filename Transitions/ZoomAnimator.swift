@@ -50,6 +50,7 @@ private extension ZoomAnimator {
 
         if transitionView == nil, let transitionView = (fromReferenceView as? ZoomAnimatableView)?.transitionView() {
             transitionView.frame = fromReferenceViewFrame
+            transitionView.layer.contentsRect = fromReferenceView.layer.contentsRect
             self.transitionView = transitionView
             transitionContext.containerView.addSubview(transitionView)
         }
@@ -65,6 +66,7 @@ private extension ZoomAnimator {
             initialSpringVelocity: 0,
             options: [.transitionCrossDissolve]) {
             self.transitionView?.frame = finalTransitionSize
+            self.transitionView?.layer.contentsRect = .defaultContentsRect
             toVC.view.alpha = 1.0
             fromVC.tabBarController?.tabBar.alpha = 0
         } completion: { _ in
@@ -113,6 +115,8 @@ private extension ZoomAnimator {
             } else {
                 self.transitionView?.alpha = 0
             }
+
+            self.transitionView?.layer.contentsRect = toReferenceView?.layer.contentsRect ?? .defaultContentsRect
 
             toVC.tabBarController?.tabBar.alpha = 1
         } completion: { _ in
