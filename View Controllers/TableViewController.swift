@@ -258,6 +258,11 @@ private extension TableViewController {
         }
         .store(in: &cancellables)
 
+        viewModel.alertItems
+            .compactMap { $0 }
+            .sink { [weak self] in self?.present(alertItem: $0) }
+            .store(in: &cancellables)
+
         tableView.publisher(for: \.contentOffset)
             .compactMap { [weak self] _ in self?.tableView.indexPathsForVisibleRows?.first }
             .sink { [weak self] in self?.viewModel.viewedAtTop(indexPath: $0) }
