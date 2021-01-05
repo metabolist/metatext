@@ -9,8 +9,6 @@ struct AddIdentityView: View {
     @Environment(\.accessibilityReduceMotion) var accessibilityReduceMotion
     @EnvironmentObject var rootViewModel: RootViewModel
 
-    @State private var navigateToRegister = false
-
     var body: some View {
         Form {
             Section {
@@ -45,27 +43,20 @@ struct AddIdentityView: View {
                     } else {
                         Button("add-identity.log-in",
                                action: viewModel.logInTapped)
-                        if let instance = viewModel.instance, let url = viewModel.url,
-                           instance.registrations {
-                            ZStack {
-                                NavigationLink(
-                                    destination: RegistrationView(
-                                        viewModel: viewModel.registrationViewModel(
-                                            instance: instance,
-                                            url: url)),
-                                    isActive: $navigateToRegister) {
-                                        EmptyView()
-                                    }
-                                .hidden()
-                                Button(instance.approvalRequired
-                                        ? "add-identity.request-invite"
-                                        : "add-identity.join") {
-                                    navigateToRegister.toggle()
-                                }
-                            }
-                        }
                         if viewModel.isPublicTimelineAvailable {
                             Button("add-identity.browse", action: viewModel.browseTapped)
+                        }
+                        if let instance = viewModel.instance,
+                           let url = viewModel.url,
+                           instance.registrations {
+                            NavigationLink(
+                                instance.approvalRequired
+                                    ? "add-identity.request-invite"
+                                    : "add-identity.join",
+                                destination: RegistrationView(
+                                    viewModel: viewModel.registrationViewModel(
+                                        instance: instance,
+                                        url: url)))
                         }
                     }
                 }
