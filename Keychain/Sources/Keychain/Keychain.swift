@@ -18,6 +18,7 @@ extension LiveKeychain: Keychain {
         var query = genericPasswordQueryDictionary(account: account, service: service)
 
         query[kSecValueData as String] = data
+        query[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlock
 
         var status = SecItemAdd(query as CFDictionary, nil)
 
