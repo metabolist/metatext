@@ -22,14 +22,12 @@ extension WebAuthSession {
                 url: url,
                 callbackURLScheme: callbackURLScheme) { oauthCallbackURL, error in
                 if let error = error {
-                    return promise(.failure(error))
+                    promise(.failure(error))
+                } else if let oauthCallbackURL = oauthCallbackURL {
+                    promise(.success(oauthCallbackURL))
+                } else {
+                    promise(.failure(URLError(.unknown)))
                 }
-
-                guard let oauthCallbackURL = oauthCallbackURL else {
-                    return promise(.failure(URLError(.unknown)))
-                }
-
-                return promise(.success(oauthCallbackURL))
             }
 
             webAuthSession.presentationContextProvider = presentationContextProvider

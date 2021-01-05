@@ -32,19 +32,15 @@ public extension MediaProcessingService {
         return Future<Data, Error> { promise in
             itemProvider.loadFileRepresentation(forTypeIdentifier: uniformType.identifier) { url, error in
                 if let error = error {
-                    return promise(.failure(error))
-                }
-
-                guard let url = url else { return promise(.failure(MediaProcessingError.fileURLNotFound)) }
-
-                if uniformType.conforms(to: .image) {
-                    return promise(imageData(url: url, type: uniformType))
-                } else {
-                    do {
-                        return try promise(.success(Data(contentsOf: url)))
-                    } catch {
-                        return promise(.failure(error))
+                    promise(.failure(error))
+                } else if let url = url {
+                    if uniformType.conforms(to: .image) {
+                        promise(imageData(url: url, type: uniformType))
+                    } else {
+                        promise(Result { try Data(contentsOf: url) })
                     }
+                } else {
+                    promise(.failure(MediaProcessingError.fileURLNotFound))
                 }
             }
         }

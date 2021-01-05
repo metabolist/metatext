@@ -44,10 +44,10 @@ private extension UserNotificationService {
         Future<Bool, Error> { promise in
             userNotificationClient.requestAuthorization([.alert, .sound, .badge, .provisional]) { granted, error in
                 if let error = error {
-                    return promise(.failure(error))
+                    promise(.failure(error))
+                } else {
+                    promise(.success(granted))
                 }
-
-                return promise(.success(granted))
             }
         }
         .eraseToAnyPublisher()
