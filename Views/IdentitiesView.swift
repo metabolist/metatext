@@ -1,6 +1,6 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
-import KingfisherSwiftUI
+import Kingfisher
 import struct ServiceLayer.Identity
 import SwiftUI
 import ViewModels
@@ -63,8 +63,8 @@ private extension IdentitiesView {
     @ViewBuilder
     func row(identity: Identity) -> some View {
         HStack {
-            KFImage(identity.image,
-                    options: .downsampled(dimension: 40, scaleFactor: displayScale))
+            KFImage(identity.image)
+                .downsampled(dimension: 40, scaleFactor: displayScale)
             VStack(alignment: .leading, spacing: 0) {
                 Spacer()
                 if identity.authenticated {

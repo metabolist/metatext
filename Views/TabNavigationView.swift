@@ -1,6 +1,6 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
-import KingfisherSwiftUI
+import Kingfisher
 import SwiftUI
 import ViewModels
 
@@ -9,6 +9,8 @@ struct TabNavigationView: View {
     @EnvironmentObject var rootViewModel: RootViewModel
     @Environment(\.displayScale) var displayScale: CGFloat
     @State var selectedTab = NavigationViewModel.Tab.timelines
+
+    @State private var contextMenuImages = [UUID: KFImage]()
 
     var body: some View {
         Group {
@@ -50,6 +52,16 @@ struct TabNavigationView: View {
                 })
         .alertItem($viewModel.alertItem)
         .onAppear(perform: viewModel.refreshIdentity)
+        // Have to preload these, otherwise the context menu won't display them when first expanded
+        .onReceive(viewModel.$recentIdentities) {
+            contextMenuImages = Dictionary(uniqueKeysWithValues: $0.map {
+                ($0.id, KFImage($0.image)
+                    .downsampled(
+                        dimension: .barButtonItemDimension,
+                        scaleFactor: displayScale)
+                    .renderingMode(.original))
+            })
+        }
         .onReceive(NotificationCenter.default
                     .publisher(for: UIScene.willEnterForegroundNotification)
                     .map { _ in () },
@@ -132,10 +144,10 @@ private extension TabNavigationView {
         Button {
             viewModel.presentingSecondaryNavigation.toggle()
         } label: {
-            KFImage(viewModel.identification.identity.image,
-                    options: .downsampled(
-                        dimension: .barButtonItemDimension,
-                        scaleFactor: displayScale))
+            KFImage(viewModel.identification.identity.image)
+                .downsampled(
+                    dimension: .barButtonItemDimension,
+                    scaleFactor: displayScale)
                 .placeholder { Image(systemName: "gear") }
                 .renderingMode(.original)
                 .contextMenu(ContextMenu {
@@ -145,13 +157,7 @@ private extension TabNavigationView {
                         } label: {
                             Label(
                                 title: { Text(recentIdentity.handle) },
-                                icon: {
-                                    KFImage(recentIdentity.image,
-                                            options: .downsampled(
-                                                dimension: .barButtonItemDimension,
-                                                scaleFactor: displayScale))
-                                        .renderingMode(.original)
-                                })
+                                icon: { contextMenuImages[recentIdentity.id] })
                         }
                     }
                 })

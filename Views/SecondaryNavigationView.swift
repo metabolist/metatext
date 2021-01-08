@@ -1,6 +1,6 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
-import KingfisherSwiftUI
+import Kingfisher
 import SwiftUI
 import ViewModels
 
@@ -17,8 +17,8 @@ struct SecondaryNavigationView: View {
                         destination: IdentitiesView(viewModel: .init(identification: viewModel.identification)),
                         label: {
                             HStack {
-                                KFImage(viewModel.identification.identity.image,
-                                        options: .downsampled(dimension: .avatarDimension, scaleFactor: displayScale))
+                                KFImage(viewModel.identification.identity.image)
+                                    .downsampled(dimension: .avatarDimension, scaleFactor: displayScale)
                                 VStack(alignment: .leading) {
                                     if viewModel.identification.identity.authenticated {
                                         if let account = viewModel.identification.identity.account {
