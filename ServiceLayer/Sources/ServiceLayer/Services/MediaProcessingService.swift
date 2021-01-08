@@ -14,7 +14,7 @@ enum MediaProcessingError: Error {
     case unableToCreateImageDataDestination
 }
 
-public struct MediaProcessingService {}
+public enum MediaProcessingService {}
 
 public extension MediaProcessingService {
     static func dataAndMimeType(itemProvider: NSItemProvider) -> AnyPublisher<(data: Data, mimeType: String), Error> {
@@ -34,7 +34,7 @@ public extension MediaProcessingService {
                 if let error = error {
                     promise(.failure(error))
                 } else if let url = url {
-                    if uniformType.conforms(to: .image) {
+                    if uniformType.conforms(to: .image) && uniformType != .gif {
                         promise(imageData(url: url, type: uniformType))
                     } else {
                         promise(Result { try Data(contentsOf: url) })
@@ -50,7 +50,6 @@ public extension MediaProcessingService {
 }
 
 private extension MediaProcessingService {
-
     static let uploadableMimeTypes = Set(
         [UTType.png,
          UTType.jpeg,
