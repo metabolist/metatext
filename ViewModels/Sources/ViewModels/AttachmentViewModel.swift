@@ -4,22 +4,22 @@ import Foundation
 import Mastodon
 import Network
 
-public struct AttachmentViewModel {
+public final class AttachmentViewModel: ObservableObject {
     public let attachment: Attachment
 
-    private let status: Status
     private let identification: Identification
+    private let status: Status?
 
-    init(attachment: Attachment, status: Status, identification: Identification) {
+    init(attachment: Attachment, identification: Identification, status: Status? = nil) {
         self.attachment = attachment
-        self.status = status
         self.identification = identification
+        self.status = status
     }
 }
 
 public extension AttachmentViewModel {
     var tag: Int {
-        attachment.id.appending(status.id).hashValue
+        attachment.id.appending(status?.id ?? "").hashValue
     }
 
     var shouldAutoplay: Bool {
@@ -38,5 +38,11 @@ public extension AttachmentViewModel {
 }
 
 private extension AttachmentViewModel {
-    static let wifiMonitor = NWPathMonitor(requiredInterfaceType: .wifi)
+    static var wifiMonitor: NWPathMonitor = {
+        let monitor = NWPathMonitor(requiredInterfaceType: .wifi)
+
+        monitor.start(queue: .main)
+
+        return monitor
+    }()
 }

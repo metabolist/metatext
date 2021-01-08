@@ -7,7 +7,7 @@ final class StatusBodyView: UIView {
     let spoilerTextLabel = UILabel()
     let toggleShowContentButton = UIButton(type: .system)
     let contentTextView = TouchFallthroughTextView()
-    let attachmentsView = StatusAttachmentsView()
+    let attachmentsView = AttachmentsView()
     let pollView = PollView()
     let cardView = CardView()
 

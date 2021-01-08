@@ -5,7 +5,7 @@ import Foundation
 import Mastodon
 import ServiceLayer
 
-public final class StatusViewModel: CollectionItemViewModel, ObservableObject {
+public final class StatusViewModel: CollectionItemViewModel, AttachmentsRenderingViewModel, ObservableObject {
     public let content: NSAttributedString
     public let contentEmoji: [Emoji]
     public let displayName: String
@@ -40,7 +40,7 @@ public final class StatusViewModel: CollectionItemViewModel, ObservableObject {
             : statusService.status.account.displayName
         rebloggedByDisplayNameEmoji = statusService.status.account.emojis
         attachmentViewModels = statusService.status.displayStatus.mediaAttachments
-            .map { AttachmentViewModel(attachment: $0, status: statusService.status, identification: identification) }
+            .map { AttachmentViewModel(attachment: $0, identification: identification, status: statusService.status) }
         pollEmoji = statusService.status.displayStatus.poll?.emojis ?? []
         events = eventsSubject.eraseToAnyPublisher()
     }

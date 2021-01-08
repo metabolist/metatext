@@ -4,7 +4,7 @@ import Combine
 import UIKit
 import ViewModels
 
-final class StatusAttachmentsView: UIView {
+final class AttachmentsView: UIView {
     private let containerStackView = UIStackView()
     private let leftStackView = UIStackView()
     private let rightStackView = UIStackView()
@@ -15,7 +15,7 @@ final class StatusAttachmentsView: UIView {
     private var aspectRatioConstraint: NSLayoutConstraint?
     private var cancellables = Set<AnyCancellable>()
 
-    var viewModel: StatusViewModel? {
+    var viewModel: AttachmentsRenderingViewModel? {
         didSet {
             for stackView in [leftStackView, rightStackView] {
                 for view in stackView.arrangedSubviews {
@@ -24,21 +24,18 @@ final class StatusAttachmentsView: UIView {
                 }
             }
 
-            let attachmentViewModels = viewModel?.attachmentViewModels ?? []
-            let attachmentCount = attachmentViewModels.count
+            guard let viewModel = viewModel else { return }
 
-            rightStackView.isHidden = attachmentCount == 1
+            rightStackView.isHidden = viewModel.attachmentViewModels.count == 1
 
-            for (index, attachmentViewModel) in attachmentViewModels.enumerated() {
-                let attachmentView = StatusAttachmentView(viewModel: attachmentViewModel)
+            for (index, attachmentViewModel) in viewModel.attachmentViewModels.enumerated() {
+                let attachmentView = AttachmentView(viewModel: attachmentViewModel, parentViewModel: viewModel)
+                attachmentView.playing = viewModel.shouldShowAttachments && attachmentViewModel.shouldAutoplay
+                attachmentView.removeButton.isHidden = !viewModel.canRemoveAttachments
 
-                attachmentView.button.addAction(
-                    UIAction { [weak self] _ in self?.viewModel?.attachmentSelected(viewModel: attachmentViewModel) },
-                    for: .touchUpInside)
-
-                if attachmentCount == 2 && index == 1
-                    || attachmentCount == 3 && index != 0
-                    || attachmentCount > 3 && index % 2 != 0 {
+                if viewModel.attachmentViewModels.count == 2 && index == 1
+                    || viewModel.attachmentViewModels.count == 3 && index != 0
+                    || viewModel.attachmentViewModels.count > 3 && index % 2 != 0 {
                     rightStackView.addArrangedSubview(attachmentView)
                 } else {
                     leftStackView.addArrangedSubview(attachmentView)
@@ -47,7 +44,8 @@ final class StatusAttachmentsView: UIView {
 
             let newAspectRatio: CGFloat
 
-            if attachmentCount == 1, let aspectRatio = attachmentViewModels.first?.attachment.aspectRatio {
+            if viewModel.attachmentViewModels.count == 1,
+               let aspectRatio = viewModel.attachmentViewModels.first?.attachment.aspectRatio {
                 newAspectRatio = max(CGFloat(aspectRatio), 16 / 9)
             } else {
                 newAspectRatio = 16 / 9
@@ -58,14 +56,14 @@ final class StatusAttachmentsView: UIView {
             aspectRatioConstraint?.priority = .justBelowMax
             aspectRatioConstraint?.isActive = true
 
-            curtain.isHidden = viewModel?.shouldShowAttachments ?? false
+            curtain.isHidden = viewModel.shouldShowAttachments
             curtainButton.setTitle(
-                NSLocalizedString((viewModel?.sensitive ?? false)
+                NSLocalizedString((viewModel.sensitive)
                                     ? "attachment.sensitive-content"
                                     : "attachment.media-hidden",
                                   comment: ""),
                                    for: .normal)
-            hideButtonBackground.isHidden = !(viewModel?.shouldShowHideAttachmentsButton ?? false)
+            hideButtonBackground.isHidden = !viewModel.shouldShowHideAttachmentsButton
         }
     }
 
@@ -81,7 +79,7 @@ final class StatusAttachmentsView: UIView {
     }
 }
 
-extension StatusAttachmentsView {
+extension AttachmentsView {
     var shouldAutoplay: Bool {
         guard !isHidden, let viewModel = viewModel, viewModel.shouldShowAttachments else { return false }
 
@@ -89,7 +87,7 @@ extension StatusAttachmentsView {
     }
 }
 
-private extension StatusAttachmentsView {
+private extension AttachmentsView {
     // swiftlint:disable:next function_body_length
     func initialSetup() {
         backgroundColor = .clear
@@ -161,20 +159,10 @@ private extension StatusAttachmentsView {
             curtainButton.trailingAnchor.constraint(equalTo: curtain.contentView.trailingAnchor),
             curtainButton.bottomAnchor.constraint(equalTo: curtain.contentView.bottomAnchor)
         ])
-
-        NotificationCenter.default.publisher(for: TableViewController.autoplayableAttachmentsViewNotification)
-            .sink { [weak self] in
-                guard let self = self else { return }
-
-                for attachmentView in self.attachmentViews {
-                    attachmentView.playing = $0.object as? Self === self
-                }
-            }
-            .store(in: &cancellables)
     }
 
-    var attachmentViews: [StatusAttachmentView] {
+    var attachmentViews: [AttachmentView] {
         (leftStackView.arrangedSubviews + rightStackView.arrangedSubviews)
-            .compactMap { $0 as? StatusAttachmentView }
+            .compactMap { $0 as? AttachmentView }
     }
 }

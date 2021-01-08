@@ -10,46 +10,17 @@ final class CompositionView: UIView {
     let spoilerTextField = UITextField()
     let textView = UITextView()
     let textViewPlaceholder = UILabel()
-    let attachmentsCollectionView: UICollectionView
+    let attachmentsView = AttachmentsView()
     let attachmentUploadView: AttachmentUploadView
 
     private let viewModel: CompositionViewModel
     private let parentViewModel: NewStatusViewModel
     private var cancellables = Set<AnyCancellable>()
 
-    private lazy var attachmentsDataSource: CompositionAttachmentsDataSource = {
-        let vm = viewModel
-
-        return .init(collectionView: attachmentsCollectionView) {
-            (vm.attachmentViewModels[$0.item], vm)
-        }
-    }()
-
     init(viewModel: CompositionViewModel, parentViewModel: NewStatusViewModel) {
         self.viewModel = viewModel
         self.parentViewModel = parentViewModel
 
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .estimated(Self.attachmentCollectionViewHeight),
-            heightDimension: .fractionalHeight(1))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .estimated(Self.attachmentCollectionViewHeight),
-            heightDimension: .fractionalHeight(1))
-        let group = NSCollectionLayoutGroup.horizontal(
-            layoutSize: groupSize,
-            subitems: [item])
-        let section = NSCollectionLayoutSection(group: group)
-
-        section.interGroupSpacing = .defaultSpacing
-
-        let configuration = UICollectionViewCompositionalLayoutConfiguration()
-
-        configuration.scrollDirection = .horizontal
-
-        let attachmentsLayout = UICollectionViewCompositionalLayout(section: section, configuration: configuration)
-
-        attachmentsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: attachmentsLayout)
         attachmentUploadView = AttachmentUploadView(viewModel: viewModel)
 
         super.init(frame: .zero)
@@ -126,10 +97,7 @@ private extension CompositionView {
         textViewPlaceholder.textColor = .secondaryLabel
         textViewPlaceholder.text = NSLocalizedString("compose.prompt", comment: "")
 
-        stackView.addArrangedSubview(attachmentsCollectionView)
-        attachmentsCollectionView.dataSource = attachmentsDataSource
-        attachmentsCollectionView.backgroundColor = .clear
-
+        stackView.addArrangedSubview(attachmentsView)
         stackView.addArrangedSubview(attachmentUploadView)
 
         textView.text = viewModel.text
@@ -163,9 +131,10 @@ private extension CompositionView {
             .store(in: &cancellables)
 
         viewModel.$attachmentViewModels
+            .receive(on: RunLoop.main)
             .sink { [weak self] in
-                self?.attachmentsDataSource.apply($0.map(\.attachment).snapshot())
-                self?.attachmentsCollectionView.isHidden = $0.isEmpty
+                self?.attachmentsView.viewModel = self?.viewModel
+                self?.attachmentsView.isHidden = $0.isEmpty
             }
             .store(in: &cancellables)
 
@@ -182,8 +151,7 @@ private extension CompositionView {
             stackView.bottomAnchor.constraint(lessThanOrEqualTo: guide.bottomAnchor),
             textViewPlaceholder.leadingAnchor.constraint(equalTo: textView.leadingAnchor),
             textViewPlaceholder.topAnchor.constraint(equalTo: textView.topAnchor),
-            textViewPlaceholder.trailingAnchor.constraint(equalTo: textView.trailingAnchor),
-            attachmentsCollectionView.heightAnchor.constraint(equalToConstant: Self.attachmentCollectionViewHeight)
+            textViewPlaceholder.trailingAnchor.constraint(equalTo: textView.trailingAnchor)
         ]
 
         if UIDevice.current.userInterfaceIdiom == .pad {

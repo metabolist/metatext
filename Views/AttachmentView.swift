@@ -5,10 +5,11 @@ import Kingfisher
 import UIKit
 import ViewModels
 
-final class StatusAttachmentView: UIView {
+final class AttachmentView: UIView {
     let playerView = PlayerView()
     let imageView = AnimatedImageView()
-    let button = UIButton()
+    let removeButton = UIButton(type: .close)
+    let selectionButton = UIButton()
 
     var playing: Bool = false {
         didSet {
@@ -25,10 +26,12 @@ final class StatusAttachmentView: UIView {
     }
 
     private let viewModel: AttachmentViewModel
+    private let parentViewModel: AttachmentsRenderingViewModel
     private var playerLooper: AVPlayerLooper?
 
-    init(viewModel: AttachmentViewModel) {
+    init(viewModel: AttachmentViewModel, parentViewModel: AttachmentsRenderingViewModel) {
         self.viewModel = viewModel
+        self.parentViewModel = parentViewModel
 
         super.init(frame: .zero)
 
@@ -72,7 +75,7 @@ final class StatusAttachmentView: UIView {
     }
 }
 
-extension StatusAttachmentView {
+extension AttachmentView {
     func play() {
         let player = PlayerCache.shared.player(url: viewModel.attachment.url)
 
@@ -105,7 +108,7 @@ extension StatusAttachmentView {
     }
 }
 
-private extension StatusAttachmentView {
+private extension AttachmentView {
     static var playerLooperCache = [AVQueuePlayer: AVPlayerLooper]()
 
     // swiftlint:disable:next function_body_length
@@ -139,9 +142,30 @@ private extension StatusAttachmentView {
         playerView.videoGravity = .resizeAspectFill
         playerView.isHidden = true
 
-        addSubview(button)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setBackgroundImage(.highlightedButtonBackground, for: .highlighted)
+        addSubview(selectionButton)
+        selectionButton.translatesAutoresizingMaskIntoConstraints = false
+        selectionButton.setBackgroundImage(.highlightedButtonBackground, for: .highlighted)
+        selectionButton.addAction(
+            UIAction { [weak self] _ in
+                guard let self = self else { return }
+
+                self.parentViewModel.attachmentSelected(viewModel: self.viewModel)
+            },
+            for: .touchUpInside)
+
+        addSubview(removeButton)
+        removeButton.translatesAutoresizingMaskIntoConstraints = false
+        removeButton.showsMenuAsPrimaryAction = true
+        removeButton.menu = UIMenu(
+            children: [
+                UIAction(
+                    title: NSLocalizedString("remove", comment: ""),
+                    image: UIImage(systemName: "trash"),
+                    attributes: .destructive) { [weak self] _ in
+                    guard let self = self else { return }
+
+                    self.parentViewModel.removeAttachment(viewModel: self.viewModel)
+                }])
 
         switch viewModel.attachment.type {
         case .image, .video, .gifv:
@@ -183,10 +207,12 @@ private extension StatusAttachmentView {
                 equalTo: playView.topAnchor, constant: .compactSpacing),
             playImageView.leadingAnchor.constraint(
                 equalTo: playView.leadingAnchor, constant: .compactSpacing),
-            button.leadingAnchor.constraint(equalTo: leadingAnchor),
-            button.trailingAnchor.constraint(equalTo: trailingAnchor),
-            button.topAnchor.constraint(equalTo: topAnchor),
-            button.bottomAnchor.constraint(equalTo: bottomAnchor)
+            selectionButton.leadingAnchor.constraint(equalTo: leadingAnchor),
+            selectionButton.trailingAnchor.constraint(equalTo: trailingAnchor),
+            selectionButton.topAnchor.constraint(equalTo: topAnchor),
+            selectionButton.bottomAnchor.constraint(equalTo: bottomAnchor),
+            removeButton.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+            removeButton.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor)
         ])
     }
 }

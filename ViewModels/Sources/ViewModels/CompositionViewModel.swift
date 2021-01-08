@@ -5,18 +5,19 @@ import Foundation
 import Mastodon
 import ServiceLayer
 
-public final class CompositionViewModel: ObservableObject, Identifiable {
+public final class CompositionViewModel: AttachmentsRenderingViewModel, ObservableObject, Identifiable {
     public let id = Id()
     public var isPosted = false
     @Published public var text = ""
     @Published public var contentWarning = ""
     @Published public var displayContentWarning = false
-    @Published public private(set) var attachmentViewModels = [CompositionAttachmentViewModel]()
+    @Published public private(set) var attachmentViewModels = [AttachmentViewModel]()
     @Published public private(set) var attachmentUpload: AttachmentUpload?
     @Published public private(set) var isPostable = false
     @Published public private(set) var canAddAttachment = true
     @Published public private(set) var canAddNonImageAttachment = true
     @Published public private(set) var remainingCharacters = CompositionViewModel.maxCharacters
+    public let canRemoveAttachments = true
 
     private var attachmentUploadCancellable: AnyCancellable?
 
@@ -42,6 +43,14 @@ public final class CompositionViewModel: ObservableObject, Identifiable {
         .map { Self.maxCharacters - ($0 + ($1 ? $2.count : 0)) }
         .assign(to: &$remainingCharacters)
     }
+
+    public func attachmentSelected(viewModel: AttachmentViewModel) {
+        
+    }
+
+    public func removeAttachment(viewModel: AttachmentViewModel) {
+        attachmentViewModels.removeAll { $0 === viewModel }
+    }
 }
 
 public extension CompositionViewModel {
@@ -62,10 +71,6 @@ public extension CompositionViewModel {
             spoilerText: displayContentWarning ? contentWarning : "",
             mediaIds: attachmentViewModels.map(\.attachment.id),
             visibility: visibility)
-    }
-
-    func remove(attachmentViewModel: CompositionAttachmentViewModel) {
-        attachmentViewModels.removeAll { $0 === attachmentViewModel }
     }
 
     func cancelUpload() {
@@ -96,7 +101,10 @@ extension CompositionViewModel {
             .sink { [weak self] _ in
                 self?.attachmentUpload = nil
             } receiveValue: { [weak self] in
-                self?.attachmentViewModels.append(CompositionAttachmentViewModel(attachment: $0))
+                self?.attachmentViewModels.append(
+                    AttachmentViewModel(
+                        attachment: $0,
+                        identification: parentViewModel.identification))
             }
     }
 }
