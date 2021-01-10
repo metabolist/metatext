@@ -45,6 +45,7 @@
 "cancel" = "Cancel";
 "compose.attachment.uploading" = "Uploading";
 "compose.prompt" = "What's on your mind?";
+"compose.mark-media-sensitive" = "Mark media as sensitive";
 "error" = "Error";
 "favorites" = "Favorites";
 "registration.review-terms-of-use-and-privacy-policy-%@" = "Please review %@'s Terms of Use and Privacy Policy to continue";

@@ -12,6 +12,7 @@ final class CompositionView: UIView {
     let textViewPlaceholder = UILabel()
     let attachmentsView = AttachmentsView()
     let attachmentUploadView: AttachmentUploadView
+    let markAttachmentsSensitiveView: MarkAttachmentsSensitiveView
 
     private let viewModel: CompositionViewModel
     private let parentViewModel: NewStatusViewModel
@@ -22,6 +23,7 @@ final class CompositionView: UIView {
         self.parentViewModel = parentViewModel
 
         attachmentUploadView = AttachmentUploadView(viewModel: viewModel)
+        markAttachmentsSensitiveView = MarkAttachmentsSensitiveView(viewModel: viewModel)
 
         super.init(frame: .zero)
 
@@ -99,6 +101,7 @@ private extension CompositionView {
 
         stackView.addArrangedSubview(attachmentsView)
         stackView.addArrangedSubview(attachmentUploadView)
+        stackView.addArrangedSubview(markAttachmentsSensitiveView)
 
         textView.text = viewModel.text
         spoilerTextField.text = viewModel.contentWarning
@@ -135,6 +138,7 @@ private extension CompositionView {
             .sink { [weak self] in
                 self?.attachmentsView.viewModel = self?.viewModel
                 self?.attachmentsView.isHidden = $0.isEmpty
+                self?.markAttachmentsSensitiveView.isHidden = $0.isEmpty
             }
             .store(in: &cancellables)
 

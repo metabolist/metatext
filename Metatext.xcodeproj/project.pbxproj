@@ -44,6 +44,8 @@
 		D05936EA25AA3F3D00754FDF /* EditAttachmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05936E825AA3F3D00754FDF /* EditAttachmentView.swift */; };
 		D05936F425AA66A600754FDF /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05936F325AA66A600754FDF /* UIView+Extensions.swift */; };
 		D05936F525AA66A600754FDF /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05936F325AA66A600754FDF /* UIView+Extensions.swift */; };
+		D05936FF25AA94EA00754FDF /* MarkAttachmentsSensitiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05936FE25AA94EA00754FDF /* MarkAttachmentsSensitiveView.swift */; };
+		D059370025AA94EA00754FDF /* MarkAttachmentsSensitiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05936FE25AA94EA00754FDF /* MarkAttachmentsSensitiveView.swift */; };
 		D0625E59250F092900502611 /* StatusListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0625E58250F092900502611 /* StatusListCell.swift */; };
 		D0625E5D250F0B5C00502611 /* StatusContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0625E5C250F0B5C00502611 /* StatusContentConfiguration.swift */; };
 		D06BC5E625202AD90079541D /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06BC5E525202AD90079541D /* ProfileViewController.swift */; };
@@ -193,6 +195,7 @@
 		D05936DD25A937EC00754FDF /* EditThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditThumbnailView.swift; sourceTree = "<group>"; };
 		D05936E825AA3F3D00754FDF /* EditAttachmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAttachmentView.swift; sourceTree = "<group>"; };
 		D05936F325AA66A600754FDF /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
+		D05936FE25AA94EA00754FDF /* MarkAttachmentsSensitiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkAttachmentsSensitiveView.swift; sourceTree = "<group>"; };
 		D0625E58250F092900502611 /* StatusListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusListCell.swift; sourceTree = "<group>"; };
 		D0625E5C250F0B5C00502611 /* StatusContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusContentConfiguration.swift; sourceTree = "<group>"; };
 		D0666A2124C677B400F3F04B /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -464,6 +467,7 @@
 				D0B8510B25259E56004E0744 /* LoadMoreCell.swift */,
 				D0E569DF252931B100FA1D72 /* LoadMoreContentConfiguration.swift */,
 				D0E569DA2529319100FA1D72 /* LoadMoreView.swift */,
+				D05936FE25AA94EA00754FDF /* MarkAttachmentsSensitiveView.swift */,
 				D03B1B29253818F3008F964B /* MediaPreferencesView.swift */,
 				D0FCC10F259C4F20000B67DF /* NewStatusView.swift */,
 				D036AA0B254B612B009094DF /* NotificationContentConfiguration.swift */,
@@ -797,6 +801,7 @@
 				D0849C7F25903C4900A5EBCC /* Status+Extensions.swift in Sources */,
 				D0625E59250F092900502611 /* StatusListCell.swift in Sources */,
 				D0E569DB2529319100FA1D72 /* LoadMoreView.swift in Sources */,
+				D05936FF25AA94EA00754FDF /* MarkAttachmentsSensitiveView.swift in Sources */,
 				D0C7D49D24F7616A001EBDBB /* PostingReadingPreferencesView.swift in Sources */,
 				D0B5FE9B251583DB00478838 /* ProfileCollection+Extensions.swift in Sources */,
 				D0C7D49E24F7616A001EBDBB /* SecondaryNavigationView.swift in Sources */,
@@ -872,6 +877,7 @@
 				D08E52EF257D757100FA2C5F /* CompositionView.swift in Sources */,
 				D0CE9F88258B076900E3A6B6 /* AttachmentUploadView.swift in Sources */,
 				D08E52C7257C7AEE00FA2C5F /* ShareErrorViewController.swift in Sources */,
+				D059370025AA94EA00754FDF /* MarkAttachmentsSensitiveView.swift in Sources */,
 				D015B14425A812F6006D88A8 /* PlayerCache.swift in Sources */,
 				D05936F525AA66A600754FDF /* UIView+Extensions.swift in Sources */,
 				D015B13F25A812EC006D88A8 /* PlayerView.swift in Sources */,

@@ -22,18 +22,21 @@ public extension StatusEndpoint {
         public let spoilerText: String
         public let mediaIds: [Attachment.Id]
         public let visibility: Status.Visibility
+        public let sensitive: Bool
 
         public init(
             inReplyToId: Status.Id?,
             text: String,
             spoilerText: String,
             mediaIds: [Attachment.Id],
-            visibility: Status.Visibility) {
+            visibility: Status.Visibility,
+            sensitive: Bool) {
             self.inReplyToId = inReplyToId
             self.text = text
             self.spoilerText = spoilerText
             self.mediaIds = mediaIds
             self.visibility = visibility
+            self.sensitive = sensitive
         }
     }
 }
@@ -56,6 +59,10 @@ extension StatusEndpoint.Components {
 
         params["in_reply_to_id"] = inReplyToId
         params["visibility"] = visibility.rawValue
+
+        if sensitive {
+            params["sensitive"] = true
+        }
 
         return params
     }

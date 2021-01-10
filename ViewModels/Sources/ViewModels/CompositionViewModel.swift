@@ -11,6 +11,7 @@ public final class CompositionViewModel: AttachmentsRenderingViewModel, Observab
     @Published public var text = ""
     @Published public var contentWarning = ""
     @Published public var displayContentWarning = false
+    @Published public var sensitive = false
     @Published public private(set) var attachmentViewModels = [AttachmentViewModel]()
     @Published public private(set) var attachmentUpload: AttachmentUpload?
     @Published public private(set) var isPostable = false
@@ -45,6 +46,7 @@ public final class CompositionViewModel: AttachmentsRenderingViewModel, Observab
         .combineLatest($displayContentWarning, $contentWarning)
         .map { Self.maxCharacters - ($0 + ($1 ? $2.count : 0)) }
         .assign(to: &$remainingCharacters)
+        $displayContentWarning.filter { $0 }.assign(to: &$sensitive)
     }
 
     public func attachmentSelected(viewModel: AttachmentViewModel) {
@@ -72,7 +74,8 @@ public extension CompositionViewModel {
             text: text,
             spoilerText: displayContentWarning ? contentWarning : "",
             mediaIds: attachmentViewModels.map(\.attachment.id),
-            visibility: visibility)
+            visibility: visibility,
+            sensitive: sensitive)
     }
 
     func cancelUpload() {
