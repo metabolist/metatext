@@ -45,39 +45,43 @@ private extension CompositionInputAccessoryView {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.spacing = .defaultSpacing
 
-        let mediaButton = UIButton()
-
-        stackView.addArrangedSubview(mediaButton)
-        mediaButton.setImage(
-            UIImage(
-                systemName: "photo",
-                withConfiguration: UIImage.SymbolConfiguration(scale: .medium)),
-            for: .normal)
-        mediaButton.addAction(UIAction { [weak self] _ in
-            guard let self = self else { return }
-
-            self.parentViewModel.presentMediaPicker(viewModel: self.viewModel)
-        },
-        for: .touchUpInside)
-
-        let cameraButton = UIButton()
-
-        #if !IS_SHARE_EXTENSION
-        if AVCaptureDevice.authorizationStatus(for: .video) != .restricted {
-            stackView.addArrangedSubview(cameraButton)
-            cameraButton.setImage(
-                UIImage(
-                    systemName: "camera",
-                    withConfiguration: UIImage.SymbolConfiguration(scale: .medium)),
-                for: .normal)
-            cameraButton.addAction(UIAction { [weak self] _ in
+        var attachmentActions = [
+            UIAction(
+                title: NSLocalizedString("compose.browse", comment: ""),
+                image: UIImage(systemName: "ellipsis")) { [weak self] _ in
                 guard let self = self else { return }
 
-                self.parentViewModel.presentCamera(viewModel: self.viewModel)
+                self.parentViewModel.presentDocumentPicker(viewModel: self.viewModel)
             },
-            for: .touchUpInside)
-        }
+            UIAction(
+                title: NSLocalizedString("compose.photo-library", comment: ""),
+                image: UIImage(systemName: "rectangle.on.rectangle")) { [weak self] _ in
+                guard let self = self else { return }
+
+                self.parentViewModel.presentMediaPicker(viewModel: self.viewModel)
+            }
+        ]
+
+        #if !IS_SHARE_EXTENSION
+        attachmentActions.insert(UIAction(
+            title: NSLocalizedString("compose.take-photo-or-video", comment: ""),
+            image: UIImage(systemName: "camera.fill")) { [weak self] _ in
+            guard let self = self else { return }
+
+            self.parentViewModel.presentCamera(viewModel: self.viewModel)
+        },
+        at: 1)
         #endif
+
+        let attachmentButton = UIButton()
+        stackView.addArrangedSubview(attachmentButton)
+        attachmentButton.setImage(
+            UIImage(
+                systemName: "paperclip",
+                withConfiguration: UIImage.SymbolConfiguration(scale: .medium)),
+            for: .normal)
+        attachmentButton.showsMenuAsPrimaryAction = true
+        attachmentButton.menu = UIMenu(children: attachmentActions)
 
         let pollButton = UIButton()
 
@@ -126,11 +130,9 @@ private extension CompositionInputAccessoryView {
             self.parentViewModel.insert(after: self.viewModel)
         }, for: .touchUpInside)
 
-        viewModel.$canAddAttachment.sink {
-            mediaButton.isEnabled = $0
-            cameraButton.isEnabled = $0
-        }
-        .store(in: &cancellables)
+        viewModel.$canAddAttachment
+            .sink { attachmentButton.isEnabled = $0 }
+            .store(in: &cancellables)
 
         viewModel.$remainingCharacters.sink {
             charactersLabel.text = String($0)
@@ -148,7 +150,7 @@ private extension CompositionInputAccessoryView {
             }
             .store(in: &cancellables)
 
-        for button in [mediaButton, pollButton, visibilityButton, contentWarningButton, addButton] {
+        for button in [attachmentButton, pollButton, visibilityButton, contentWarningButton, addButton] {
             button.heightAnchor.constraint(greaterThanOrEqualToConstant: .minimumButtonDimension).isActive = true
             button.widthAnchor.constraint(greaterThanOrEqualToConstant: .minimumButtonDimension).isActive = true
         }

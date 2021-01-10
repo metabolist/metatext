@@ -20,6 +20,7 @@ final class NewStatusViewController: UIViewController {
         action: nil)
     private let mediaSelections = PassthroughSubject<[PHPickerResult], Never>()
     private let imagePickerResults = PassthroughSubject<[UIImagePickerController.InfoKey: Any]?, Never>()
+    private let documentPickerResuls = PassthroughSubject<[URL]?, Never>()
     private var cancellables = Set<AnyCancellable>()
 
     init(viewModel: NewStatusViewModel) {
@@ -110,6 +111,16 @@ extension NewStatusViewController: UIImagePickerControllerDelegate {
     }
 }
 
+extension NewStatusViewController: UIDocumentPickerDelegate {
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        documentPickerResuls.send(urls)
+    }
+
+    func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+        documentPickerResuls.send(nil)
+    }
+}
+
 // Required by UIImagePickerController
 extension NewStatusViewController: UINavigationControllerDelegate {}
 
@@ -122,6 +133,8 @@ private extension NewStatusViewController {
             #if !IS_SHARE_EXTENSION
             presentCamera(compositionViewModel: compositionViewModel)
             #endif
+        case let .presentDocumentPicker(compositionViewModel):
+            presentDocumentPicker(compositionViewModel: compositionViewModel)
         case let .editAttachment(attachmentViewModel, compositionViewModel):
             presentAttachmentEditor(
                 attachmentViewModel: attachmentViewModel,
@@ -300,6 +313,28 @@ private extension NewStatusViewController {
         present(picker, animated: true)
     }
     #endif
+
+    func presentDocumentPicker(compositionViewModel: CompositionViewModel) {
+        documentPickerResuls.first().sink { [weak self] in
+            guard let self = self,
+                  let result = $0?.first,
+                  result.startAccessingSecurityScopedResource(),
+                  let itemProvider = NSItemProvider(contentsOf: result)
+            else { return }
+
+            self.viewModel.attach(itemProvider: itemProvider, to: compositionViewModel)
+            result.stopAccessingSecurityScopedResource()
+        }
+        .store(in: &cancellables)
+
+        let documentPickerController = UIDocumentPickerViewController(forOpeningContentTypes: [.image, .movie, .audio])
+
+        documentPickerController.delegate = self
+        documentPickerController.allowsMultipleSelection = false
+        documentPickerController.modalPresentationStyle = .overFullScreen
+
+        present(documentPickerController, animated: true)
+    }
 
     func presentAttachmentEditor(attachmentViewModel: AttachmentViewModel, compositionViewModel: CompositionViewModel) {
         let editAttachmentsView = EditAttachmentView { (attachmentViewModel, compositionViewModel) }

@@ -53,6 +53,7 @@ public extension NewStatusViewModel {
     enum Event {
         case presentMediaPicker(CompositionViewModel)
         case presentCamera(CompositionViewModel)
+        case presentDocumentPicker(CompositionViewModel)
         case editAttachment(AttachmentViewModel, CompositionViewModel)
     }
 
@@ -87,6 +88,10 @@ public extension NewStatusViewModel {
 
     func presentCamera(viewModel: CompositionViewModel) {
         eventsSubject.send(.presentCamera(viewModel))
+    }
+
+    func presentDocumentPicker(viewModel: CompositionViewModel) {
+        eventsSubject.send(.presentDocumentPicker(viewModel))
     }
 
     func remove(viewModel: CompositionViewModel) {
