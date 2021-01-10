@@ -10,6 +10,9 @@ final class CompositionView: UIView {
     let spoilerTextField = UITextField()
     let textView = UITextView()
     let textViewPlaceholder = UILabel()
+    let removeButton = UIButton(type: .close)
+    let inReplyToView = UIView()
+    let hasReplyFollowingView = UIView()
     let attachmentsView = AttachmentsView()
     let attachmentUploadView: AttachmentUploadView
     let markAttachmentsSensitiveView: MarkAttachmentsSensitiveView
@@ -57,6 +60,7 @@ private extension CompositionView {
         avatarImageView.translatesAutoresizingMaskIntoConstraints = false
         avatarImageView.layer.cornerRadius = .avatarDimension / 2
         avatarImageView.clipsToBounds = true
+        avatarImageView.setContentHuggingPriority(.required, for: .horizontal)
 
         let stackView = UIStackView()
         let inputAccessoryView = CompositionInputAccessoryView(viewModel: viewModel, parentViewModel: parentViewModel)
@@ -100,8 +104,34 @@ private extension CompositionView {
         textViewPlaceholder.text = NSLocalizedString("compose.prompt", comment: "")
 
         stackView.addArrangedSubview(attachmentsView)
+        attachmentsView.isHidden = true
         stackView.addArrangedSubview(attachmentUploadView)
+        attachmentUploadView.isHidden = true
         stackView.addArrangedSubview(markAttachmentsSensitiveView)
+        markAttachmentsSensitiveView.isHidden = true
+
+        addSubview(removeButton)
+        removeButton.translatesAutoresizingMaskIntoConstraints = false
+        removeButton.showsMenuAsPrimaryAction = true
+        removeButton.menu = UIMenu(
+            children: [
+                UIAction(
+                    title: NSLocalizedString("remove", comment: ""),
+                    image: UIImage(systemName: "trash"),
+                    attributes: .destructive) { [weak self] _ in
+                    guard let self = self else { return }
+
+                    self.parentViewModel.remove(viewModel: self.viewModel)
+                }])
+        removeButton.setContentHuggingPriority(.required, for: .horizontal)
+        removeButton.setContentCompressionResistancePriority(.required, for: .horizontal)
+
+        for view in [inReplyToView, hasReplyFollowingView] {
+            addSubview(view)
+            view.translatesAutoresizingMaskIntoConstraints = false
+            view.backgroundColor = .opaqueSeparator
+            view.widthAnchor.constraint(equalToConstant: .hairline).isActive = true
+        }
 
         textView.text = viewModel.text
         spoilerTextField.text = viewModel.contentWarning
@@ -151,18 +181,20 @@ private extension CompositionView {
             avatarImageView.bottomAnchor.constraint(lessThanOrEqualTo: guide.bottomAnchor),
             stackView.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: .defaultSpacing),
             stackView.topAnchor.constraint(greaterThanOrEqualTo: guide.topAnchor),
-            stackView.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
             stackView.bottomAnchor.constraint(lessThanOrEqualTo: guide.bottomAnchor),
             textViewPlaceholder.leadingAnchor.constraint(equalTo: textView.leadingAnchor),
             textViewPlaceholder.topAnchor.constraint(equalTo: textView.topAnchor),
-            textViewPlaceholder.trailingAnchor.constraint(equalTo: textView.trailingAnchor)
+            textViewPlaceholder.trailingAnchor.constraint(equalTo: textView.trailingAnchor),
+            removeButton.leadingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: .defaultSpacing),
+            removeButton.topAnchor.constraint(equalTo: guide.topAnchor),
+            removeButton.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
+            inReplyToView.centerXAnchor.constraint(equalTo: avatarImageView.centerXAnchor),
+            inReplyToView.topAnchor.constraint(equalTo: topAnchor),
+            inReplyToView.bottomAnchor.constraint(equalTo: avatarImageView.topAnchor),
+            hasReplyFollowingView.centerXAnchor.constraint(equalTo: avatarImageView.centerXAnchor),
+            hasReplyFollowingView.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor),
+            hasReplyFollowingView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ]
-
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            for constraint in constraints {
-                constraint.priority = .justBelowMax
-            }
-        }
 
         NSLayoutConstraint.activate(constraints)
     }

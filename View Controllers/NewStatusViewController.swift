@@ -174,6 +174,13 @@ private extension NewStatusViewController {
 
             stackView.arrangedSubviews.first { ($0 as? CompositionView)?.id == id }?.removeFromSuperview()
         }
+
+        for compositionView in stackView.arrangedSubviews.compactMap({ $0 as? CompositionView }) {
+            compositionView.removeButton.isHidden = compositionViewModels.count == 1
+            compositionView.inReplyToView.isHidden = compositionView === stackView.arrangedSubviews.first
+                && viewModel.inReplyToViewModel == nil
+            compositionView.hasReplyFollowingView.isHidden = compositionView === stackView.arrangedSubviews.last
+        }
     }
 
     func dismiss() {

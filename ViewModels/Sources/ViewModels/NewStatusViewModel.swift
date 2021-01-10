@@ -89,6 +89,10 @@ public extension NewStatusViewModel {
         eventsSubject.send(.presentCamera(viewModel))
     }
 
+    func remove(viewModel: CompositionViewModel) {
+        compositionViewModels.removeAll { $0 === viewModel }
+    }
+
     func insert(after: CompositionViewModel) {
         guard let index = compositionViewModels.firstIndex(where: { $0 === after })
         else { return }
