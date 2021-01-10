@@ -7,7 +7,7 @@ import ServiceLayer
 
 public final class NewStatusViewModel: ObservableObject {
     @Published public var visibility: Status.Visibility
-    @Published public private(set) var compositionViewModels = [CompositionViewModel()]
+    @Published public private(set) var compositionViewModels: [CompositionViewModel]
     @Published public private(set) var identification: Identification
     @Published public private(set) var authenticatedIdentities = [Identity]()
     @Published public var canPost = false
@@ -19,7 +19,7 @@ public final class NewStatusViewModel: ObservableObject {
     private let allIdentitiesService: AllIdentitiesService
     private let environment: AppEnvironment
     private let eventsSubject = PassthroughSubject<Event, Never>()
-    private let itemEventsSubject = PassthroughSubject<CompositionViewModel.Event, Never>()
+    private let compositionEventsSubject = PassthroughSubject<CompositionViewModel.Event, Never>()
     private var cancellables = Set<AnyCancellable>()
 
     public init(allIdentitiesService: AllIdentitiesService,
@@ -28,6 +28,7 @@ public final class NewStatusViewModel: ObservableObject {
         self.allIdentitiesService = allIdentitiesService
         self.identification = identification
         self.environment = environment
+        compositionViewModels = [CompositionViewModel(eventsSubject: compositionEventsSubject)]
         events = eventsSubject.eraseToAnyPublisher()
         visibility = identification.identity.preferences.postingDefaultVisibility
         allIdentitiesService.authenticatedIdentitiesPublisher()
@@ -39,6 +40,9 @@ public final class NewStatusViewModel: ObservableObject {
             .combineLatest($postingState)
             .map { $0 && $1 == .composing }
             .assign(to: &$canPost)
+        compositionEventsSubject
+            .sink { [weak self] in self?.handle(event: $0) }
+            .store(in: &cancellables)
     }
 }
 
@@ -46,6 +50,7 @@ public extension NewStatusViewModel {
     enum Event {
         case presentMediaPicker(CompositionViewModel)
         case presentCamera(CompositionViewModel)
+        case editAttachment(AttachmentViewModel, CompositionViewModel)
     }
 
     enum PostingState {
@@ -85,7 +90,7 @@ public extension NewStatusViewModel {
         guard let index = compositionViewModels.firstIndex(where: { $0 === after })
         else { return }
 
-        let newViewModel = CompositionViewModel()
+        let newViewModel = CompositionViewModel(eventsSubject: compositionEventsSubject)
 
         newViewModel.contentWarning = after.contentWarning
         newViewModel.displayContentWarning = after.displayContentWarning
@@ -109,6 +114,14 @@ public extension NewStatusViewModel {
 }
 
 private extension NewStatusViewModel {
+    func handle(event: CompositionViewModel.Event) {
+        switch event {
+        case let .editAttachment(attachmentViewModel, compositionViewModel):
+            eventsSubject.send(.editAttachment(attachmentViewModel, compositionViewModel))
+        case let .updateAttachment(publisher):
+            publisher.assignErrorsToAlertItem(to: \.alertItem, on: self).sink { _ in }.store(in: &cancellables)
+        }
+    }
     func post(viewModel: CompositionViewModel, inReplyToId: Status.Id?) {
         postingState = .posting
         identification.service.post(statusComponents: viewModel.components(

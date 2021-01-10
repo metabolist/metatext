@@ -181,7 +181,7 @@ private extension TabNavigationView {
                 .clipShape(Circle())
                 .frame(width: .newStatusButtonDimension,
                        height: .newStatusButtonDimension)
-                .shadow(radius: .newStatusButtonShadowRadius)
+                .shadow(radius: .defaultShadowRadius)
                 .padding()
             }
         }

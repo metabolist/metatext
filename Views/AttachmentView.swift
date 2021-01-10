@@ -47,29 +47,13 @@ final class AttachmentView: UIView {
         super.layoutSubviews()
 
         if let focus = viewModel.attachment.meta?.focus {
-            let viewsAndSizes: [(UIView, CGSize?)] = [
+            let viewsAndMediaSizes: [(UIView, CGSize?)] = [
                 (imageView, imageView.image?.size),
                 (playerView, playerView.player?.currentItem?.presentationSize)]
-            for (view, size) in viewsAndSizes {
-                guard let size = size else { continue }
+            for (view, mediaSize) in viewsAndMediaSizes {
+                guard let size = mediaSize else { continue }
 
-                let aspectRatio = size.width / size.height
-                let viewAspectRatio = view.frame.width / view.frame.height
-                var origin = CGPoint.zero
-
-                if viewAspectRatio > aspectRatio {
-                    let mediaProportionalHeight = size.height * view.frame.width / size.width
-                    let maxPan = (mediaProportionalHeight - view.frame.height) / (2 * mediaProportionalHeight)
-
-                    origin.y = CGFloat(-focus.y) * maxPan
-                } else {
-                    let mediaProportionalWidth = size.width * view.frame.height / size.height
-                    let maxPan = (mediaProportionalWidth - view.frame.width) / (2 * mediaProportionalWidth)
-
-                    origin.x = CGFloat(focus.x) * maxPan
-                }
-
-                view.layer.contentsRect = .init(origin: origin, size: CGRect.defaultContentsRect.size)
+                view.setContentsRect(focus: focus, mediaSize: size)
             }
         }
     }

@@ -12,7 +12,7 @@ extension CGFloat {
     static let minimumButtonDimension: Self = 44
     static let barButtonItemDimension: Self = 28
     static let newStatusButtonDimension: CGFloat = 54
-    static let newStatusButtonShadowRadius: CGFloat = 2
+    static let defaultShadowRadius: CGFloat = 2
 }
 
 extension CGRect {

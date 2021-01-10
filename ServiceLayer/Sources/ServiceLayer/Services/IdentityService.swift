@@ -212,6 +212,12 @@ public extension IdentityService {
             progress: progress)
     }
 
+    func updateAttachment(id: Attachment.Id,
+                          description: String,
+                          focus: Attachment.Meta.Focus) -> AnyPublisher<Attachment, Error> {
+        mastodonAPIClient.request(AttachmentEndpoint.update(id: id, description: description, focus: focus))
+    }
+
     func post(statusComponents: StatusComponents) -> AnyPublisher<Status.Id, Error> {
         mastodonAPIClient.request(StatusEndpoint.post(statusComponents)).map(\.id).eraseToAnyPublisher()
     }

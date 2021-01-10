@@ -19,9 +19,12 @@ public final class CompositionViewModel: AttachmentsRenderingViewModel, Observab
     @Published public private(set) var remainingCharacters = CompositionViewModel.maxCharacters
     public let canRemoveAttachments = true
 
+    private let eventsSubject: PassthroughSubject<Event, Never>
     private var attachmentUploadCancellable: AnyCancellable?
 
-    init() {
+    init(eventsSubject: PassthroughSubject<Event, Never>) {
+        self.eventsSubject = eventsSubject
+
         $text.map { !$0.isEmpty }
             .removeDuplicates()
             .combineLatest($attachmentViewModels.map { !$0.isEmpty })
@@ -45,7 +48,7 @@ public final class CompositionViewModel: AttachmentsRenderingViewModel, Observab
     }
 
     public func attachmentSelected(viewModel: AttachmentViewModel) {
-        
+        eventsSubject.send(.editAttachment(viewModel, self))
     }
 
     public func removeAttachment(viewModel: AttachmentViewModel) {
@@ -56,13 +59,12 @@ public final class CompositionViewModel: AttachmentsRenderingViewModel, Observab
 public extension CompositionViewModel {
     static let maxCharacters = 500
 
-    typealias Id = UUID
-
     enum Event {
-        case insertAfter(CompositionViewModel)
-        case presentMediaPicker(CompositionViewModel)
-        case error(Error)
+        case editAttachment(AttachmentViewModel, CompositionViewModel)
+        case updateAttachment(AnyPublisher<Never, Error>)
     }
+
+    typealias Id = UUID
 
     func components(inReplyToId: Status.Id?, visibility: Status.Visibility) -> StatusComponents {
         StatusComponents(
@@ -75,6 +77,23 @@ public extension CompositionViewModel {
 
     func cancelUpload() {
         attachmentUploadCancellable?.cancel()
+    }
+
+    func update(attachmentViewModel: AttachmentViewModel) {
+        let publisher = attachmentViewModel.updated()
+            .receive(on: DispatchQueue.main)
+            .handleEvents(receiveOutput: { [weak self] updatedAttachmentViewModel in
+                guard let self = self,
+                      let index = self.attachmentViewModels.firstIndex(
+                        where: { $0.attachment.id == updatedAttachmentViewModel.attachment.id })
+                else { return }
+
+                self.attachmentViewModels[index] = updatedAttachmentViewModel
+            })
+            .ignoreOutput()
+            .eraseToAnyPublisher()
+
+        eventsSubject.send(.updateAttachment(publisher))
     }
 }
 

@@ -31,6 +31,11 @@
 "add-identity.join" = "Join";
 "add-identity.request-invite" = "Request an invite";
 "add-identity.unable-to-connect-to-instance" = "Unable to connect to instance";
+"attachment.edit.description" = "Describe for the visually impaired";
+"attachment.edit.description.audio" = "Describe for people with hearing loss";
+"attachment.edit.description.video" = "Describe for people with hearing loss or visual impairment";
+"attachment.edit.title" = "Edit media";
+"attachment.edit.thumbnail.prompt" = "Drag the circle on the preview to choose the focal point which will always be in view on all thumbnails";
 "attachment.sensitive-content" = "Sensitive content";
 "attachment.media-hidden" = "Media hidden";
 "bookmarks" = "Bookmarks";

@@ -22,8 +22,8 @@ public struct Attachment: Codable, Hashable {
         }
 
         public struct Focus: Codable, Hashable {
-            public let x: Double
-            public let y: Double
+            public var x: Double
+            public var y: Double
         }
 
         public let original: Info?
@@ -59,4 +59,8 @@ public extension Attachment {
 
         return nil
     }
+}
+
+public extension Attachment.Meta.Focus {
+    static let `default` = Self(x: 0, y: 0)
 }

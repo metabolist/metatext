@@ -4,7 +4,7 @@ import AVFoundation
 import Combine
 import Kingfisher
 import PhotosUI
-import UIKit
+import SwiftUI
 import UniformTypeIdentifiers
 import ViewModels
 
@@ -110,6 +110,10 @@ private extension NewStatusViewController {
             #if !IS_SHARE_EXTENSION
             presentCamera(compositionViewModel: compositionViewModel)
             #endif
+        case let .editAttachment(attachmentViewModel, compositionViewModel):
+            presentAttachmentEditor(
+                attachmentViewModel: attachmentViewModel,
+                compositionViewModel: compositionViewModel)
         }
     }
 
@@ -275,6 +279,15 @@ private extension NewStatusViewController {
         present(picker, animated: true)
     }
     #endif
+
+    func presentAttachmentEditor(attachmentViewModel: AttachmentViewModel, compositionViewModel: CompositionViewModel) {
+        let editAttachmentsView = EditAttachmentView { (attachmentViewModel, compositionViewModel) }
+        let editAttachmentViewController = UIHostingController(rootView: editAttachmentsView)
+        let navigationController = UINavigationController(rootViewController: editAttachmentViewController)
+
+        navigationController.modalPresentationStyle = .overFullScreen
+        present(navigationController, animated: true)
+    }
 
     func changeIdentityButton(identification: Identification) -> UIButton {
         let changeIdentityButton = UIButton()
