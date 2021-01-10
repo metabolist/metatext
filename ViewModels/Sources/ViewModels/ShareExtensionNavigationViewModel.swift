@@ -36,6 +36,7 @@ public extension ShareExtensionNavigationViewModel {
         return NewStatusViewModel(
             allIdentitiesService: allIdentitiesService,
             identification: identification,
-            environment: environment)
+            environment: environment,
+            inReplyTo: nil)
     }
 }

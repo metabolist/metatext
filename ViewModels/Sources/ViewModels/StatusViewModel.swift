@@ -72,6 +72,8 @@ public extension StatusViewModel {
         sensitive || identification.identity.preferences.readingExpandMedia == .hideAll
     }
 
+    var id: Status.Id { statusService.status.displayStatus.id }
+
     var accountName: String { "@".appending(statusService.status.displayStatus.account.acct) }
 
     var avatarURL: URL {
@@ -198,6 +200,14 @@ public extension StatusViewModel {
             Just(.navigation(.collection(statusService.favoritedByService())))
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher())
+    }
+
+    func reply() {
+        let replyViewModel = Self(statusService: statusService, identification: identification)
+
+        replyViewModel.configuration = configuration.reply()
+
+        eventsSubject.send(Just(.reply(replyViewModel)).setFailureType(to: Error.self).eraseToAnyPublisher())
     }
 
     func toggleReblogged() {

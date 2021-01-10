@@ -14,6 +14,7 @@ public final class NewStatusViewModel: ObservableObject {
     @Published public var canChangeIdentity = true
     @Published public var alertItem: AlertItem?
     @Published public private(set) var postingState = PostingState.composing
+    public let inReplyToViewModel: StatusViewModel?
     public let events: AnyPublisher<Event, Never>
 
     private let allIdentitiesService: AllIdentitiesService
@@ -24,10 +25,12 @@ public final class NewStatusViewModel: ObservableObject {
 
     public init(allIdentitiesService: AllIdentitiesService,
                 identification: Identification,
-                environment: AppEnvironment) {
+                environment: AppEnvironment,
+                inReplyTo: StatusViewModel?) {
         self.allIdentitiesService = allIdentitiesService
         self.identification = identification
         self.environment = environment
+        inReplyToViewModel = inReplyTo
         compositionViewModels = [CompositionViewModel(eventsSubject: compositionEventsSubject)]
         events = eventsSubject.eraseToAnyPublisher()
         visibility = identification.identity.preferences.postingDefaultVisibility
@@ -109,7 +112,7 @@ public extension NewStatusViewModel {
     func post() {
         guard let unposted = compositionViewModels.first(where: { !$0.isPosted }) else { return }
 
-        post(viewModel: unposted, inReplyToId: nil)
+        post(viewModel: unposted, inReplyToId: inReplyToViewModel?.id)
     }
 }
 

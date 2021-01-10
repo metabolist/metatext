@@ -6,10 +6,12 @@ import SafariServices
 import SwiftUI
 import ViewModels
 
+// swiftlint:disable file_length
 class TableViewController: UITableViewController {
     var transitionViewTag = -1
 
     private let viewModel: CollectionViewModel
+    private let rootViewModel: RootViewModel
     private let identification: Identification
     private let loadingTableFooterView = LoadingTableFooterView()
     private let webfingerIndicatorView = WebfingerIndicatorView()
@@ -21,8 +23,9 @@ class TableViewController: UITableViewController {
         .init(tableView: tableView, viewModelProvider: viewModel.viewModel(indexPath:))
     }()
 
-    init(viewModel: CollectionViewModel, identification: Identification) {
+    init(viewModel: CollectionViewModel, rootViewModel: RootViewModel, identification: Identification) {
         self.viewModel = viewModel
+        self.rootViewModel = rootViewModel
         self.identification = identification
 
         super.init(style: .plain)
@@ -109,15 +112,6 @@ class TableViewController: UITableViewController {
     }
 }
 
-extension TableViewController {
-    func report(viewModel: ReportViewModel) {
-        let reportViewController = ReportViewController(viewModel: viewModel)
-        let navigationController = UINavigationController(rootViewController: reportViewController)
-
-        present(navigationController, animated: true)
-    }
-}
-
 extension TableViewController: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         guard
@@ -132,6 +126,13 @@ extension TableViewController: UITableViewDataSourcePrefetching {
 }
 
 extension TableViewController {
+    func report(reportViewModel: ReportViewModel) {
+        let reportViewController = ReportViewController(viewModel: reportViewModel)
+        let navigationController = UINavigationController(rootViewController: reportViewController)
+
+        present(navigationController, animated: true)
+    }
+
     func sizeTableHeaderFooterViews() {
         // https://useyourloaf.com/blog/variable-height-table-view-header/
         if let headerView = tableView.tableHeaderView {
@@ -299,32 +300,40 @@ private extension TableViewController {
         case let .share(url):
             share(url: url)
         case let .navigation(navigation):
-            switch navigation {
-            case let .collection(collectionService):
-                show(TableViewController(
-                        viewModel: CollectionItemsViewModel(
-                            collectionService: collectionService,
-                            identification: identification),
-                        identification: identification),
-                     sender: self)
-            case let .profile(profileService):
-                show(ProfileViewController(
-                        viewModel: ProfileViewModel(
-                            profileService: profileService,
-                            identification: identification),
-                        identification: identification),
-                     sender: self)
-            case let .url(url):
-                present(SFSafariViewController(url: url), animated: true)
-            case .webfingerStart:
-                webfingerIndicatorView.startAnimating()
-            case .webfingerEnd:
-                webfingerIndicatorView.stopAnimating()
-            }
+            handle(navigation: navigation)
         case let .attachment(attachmentViewModel, statusViewModel):
             present(attachmentViewModel: attachmentViewModel, statusViewModel: statusViewModel)
+        case let .reply(statusViewModel):
+            reply(statusViewModel: statusViewModel)
         case let .report(reportViewModel):
-            report(viewModel: reportViewModel)
+            report(reportViewModel: reportViewModel)
+        }
+    }
+
+    func handle(navigation: Navigation) {
+        switch navigation {
+        case let .collection(collectionService):
+            show(TableViewController(
+                    viewModel: CollectionItemsViewModel(
+                        collectionService: collectionService,
+                        identification: identification),
+                    rootViewModel: rootViewModel,
+                    identification: identification),
+                 sender: self)
+        case let .profile(profileService):
+            show(ProfileViewController(
+                    viewModel: ProfileViewModel(
+                        profileService: profileService,
+                        identification: identification),
+                    rootViewModel: rootViewModel,
+                    identification: identification),
+                 sender: self)
+        case let .url(url):
+            present(SFSafariViewController(url: url), animated: true)
+        case .webfingerStart:
+            webfingerIndicatorView.startAnimating()
+        case .webfingerEnd:
+            webfingerIndicatorView.stopAnimating()
         }
     }
 
@@ -365,6 +374,18 @@ private extension TableViewController {
         }
     }
 
+    func reply(statusViewModel: StatusViewModel) {
+        let newStatusViewModel = rootViewModel.newStatusViewModel(
+            identification: identification,
+            inReplyTo: statusViewModel)
+        let newStatusViewController = UIHostingController(rootView: NewStatusView { newStatusViewModel })
+        let navigationController = UINavigationController(rootViewController: newStatusViewController)
+
+        navigationController.modalPresentationStyle = .overFullScreen
+
+        present(navigationController, animated: true)
+    }
+
     func set(expandAllState: ExpandAllState) {
         switch expandAllState {
         case .hidden:
@@ -388,3 +409,4 @@ private extension TableViewController {
         present(activityViewController, animated: true, completion: nil)
     }
 }
+// swiftlint:enable file_length

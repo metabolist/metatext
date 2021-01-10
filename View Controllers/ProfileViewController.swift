@@ -9,10 +9,10 @@ final class ProfileViewController: TableViewController {
     private let viewModel: ProfileViewModel
     private var cancellables = Set<AnyCancellable>()
 
-    required init(viewModel: ProfileViewModel, identification: Identification) {
+    required init(viewModel: ProfileViewModel, rootViewModel: RootViewModel, identification: Identification) {
         self.viewModel = viewModel
 
-        super.init(viewModel: viewModel, identification: identification)
+        super.init(viewModel: viewModel, rootViewModel: rootViewModel, identification: identification)
     }
 
     override func viewDidLoad() {
@@ -108,7 +108,7 @@ private extension ProfileViewController {
                   let reportViewModel = self.viewModel.accountViewModel?.reportViewModel()
             else { return }
 
-            self.report(viewModel: reportViewModel)
+            self.report(reportViewModel: reportViewModel)
         })
 
         if relationship.blocking {

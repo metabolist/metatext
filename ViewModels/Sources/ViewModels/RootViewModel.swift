@@ -58,11 +58,12 @@ public extension RootViewModel {
             instanceURLService: InstanceURLService(environment: environment))
     }
 
-    func newStatusViewModel(identification: Identification) -> NewStatusViewModel {
+    func newStatusViewModel(identification: Identification, inReplyTo: StatusViewModel? = nil) -> NewStatusViewModel {
         NewStatusViewModel(
             allIdentitiesService: allIdentitiesService,
             identification: identification,
-            environment: environment)
+            environment: environment,
+            inReplyTo: inReplyTo)
     }
 }
 

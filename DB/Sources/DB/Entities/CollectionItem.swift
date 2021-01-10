@@ -54,4 +54,13 @@ public extension CollectionItem {
 
 public extension CollectionItem.StatusConfiguration {
     static let `default` = Self(showContentToggled: false, showAttachmentsToggled: false)
+
+    func reply() -> Self {
+        Self(showContentToggled: showContentToggled,
+             showAttachmentsToggled: showAttachmentsToggled,
+             isContextParent: false,
+             isPinned: false,
+             isReplyInContext: false,
+             hasReplyFollowing: true)
+    }
 }

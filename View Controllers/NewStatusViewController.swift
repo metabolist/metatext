@@ -68,6 +68,18 @@ final class NewStatusViewController: UIViewController {
             self?.viewModel.post()
         }
 
+        #if !IS_SHARE_EXTENSION
+        if let inReplyToViewModel = viewModel.inReplyToViewModel {
+            let statusView = StatusView(configuration: .init(viewModel: inReplyToViewModel))
+
+            statusView.isUserInteractionEnabled = false
+            statusView.bodyView.alpha = 0.5
+            statusView.buttonsStackView.isHidden = true
+
+            stackView.addArrangedSubview(statusView)
+        }
+        #endif
+
         setupViewModelBindings()
     }
 
@@ -145,7 +157,9 @@ private extension NewStatusViewController {
             let compositionView = CompositionView(
                 viewModel: compositionViewModel,
                 parentViewModel: viewModel)
-            stackView.insertArrangedSubview(compositionView, at: index)
+            let adjustedIndex = viewModel.inReplyToViewModel == nil ? index : index + 1
+
+            stackView.insertArrangedSubview(compositionView, at: adjustedIndex)
             compositionView.textView.becomeFirstResponder()
 
             DispatchQueue.main.async {
