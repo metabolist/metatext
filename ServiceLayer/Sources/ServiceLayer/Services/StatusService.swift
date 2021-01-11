@@ -72,6 +72,34 @@ public extension StatusService {
             .eraseToAnyPublisher()
     }
 
+    func delete() -> AnyPublisher<Status, Error> {
+        mastodonAPIClient.request(StatusEndpoint.delete(id: status.displayStatus.id))
+            .flatMap { status in contentDatabase.delete(id: status.id).collect().map { _ in status } }
+            .eraseToAnyPublisher()
+    }
+
+    func deleteAndRedraft() -> AnyPublisher<(Status, Self?), Error> {
+        let inReplyToPublisher: AnyPublisher<Self?, Never>
+
+        if let inReplyToId = status.displayStatus.inReplyToId {
+            inReplyToPublisher = mastodonAPIClient.request(StatusEndpoint.status(id: inReplyToId))
+                .map {
+                    Self(status: $0,
+                         mastodonAPIClient: mastodonAPIClient,
+                         contentDatabase: contentDatabase) as Self?
+                }
+                .replaceError(with: nil)
+                .eraseToAnyPublisher()
+        } else {
+            inReplyToPublisher = Just(nil).eraseToAnyPublisher()
+        }
+
+        return mastodonAPIClient.request(StatusEndpoint.delete(id: status.displayStatus.id))
+            .flatMap { status in contentDatabase.delete(id: status.id).collect().map { _ in status } }
+            .zip(inReplyToPublisher.setFailureType(to: Error.self))
+            .eraseToAnyPublisher()
+    }
+
     func rebloggedByService() -> AccountListService {
         AccountListService(
             endpoint: .rebloggedBy(id: status.id),

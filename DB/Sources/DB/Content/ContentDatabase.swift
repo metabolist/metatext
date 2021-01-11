@@ -221,6 +221,12 @@ public extension ContentDatabase {
         .eraseToAnyPublisher()
     }
 
+    func delete(id: Status.Id) -> AnyPublisher<Never, Error> {
+        databaseWriter.writePublisher(updates: StatusRecord.filter(StatusRecord.Columns.id == id).deleteAll)
+            .ignoreOutput()
+            .eraseToAnyPublisher()
+    }
+
     func unfollow(id: Account.Id) -> AnyPublisher<Never, Error> {
         databaseWriter.writePublisher {
             let statusIds = try Status.Id.fetchAll(

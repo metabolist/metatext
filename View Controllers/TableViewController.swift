@@ -2,6 +2,7 @@
 
 import AVKit
 import Combine
+import Mastodon
 import SafariServices
 import SwiftUI
 import ViewModels
@@ -248,6 +249,7 @@ private extension TableViewController {
 
         viewModel.alertItems
             .compactMap { $0 }
+            .handleEvents(receiveOutput: { print($0.error) })
             .sink { [weak self] in self?.present(alertItem: $0) }
             .store(in: &cancellables)
 
@@ -303,8 +305,8 @@ private extension TableViewController {
             handle(navigation: navigation)
         case let .attachment(attachmentViewModel, statusViewModel):
             present(attachmentViewModel: attachmentViewModel, statusViewModel: statusViewModel)
-        case let .reply(statusViewModel):
-            reply(statusViewModel: statusViewModel)
+        case let .compose(inReplyToViewModel, redraft):
+            compose(inReplyToViewModel: inReplyToViewModel, redraft: redraft)
         case let .report(reportViewModel):
             report(reportViewModel: reportViewModel)
         }
@@ -374,10 +376,11 @@ private extension TableViewController {
         }
     }
 
-    func reply(statusViewModel: StatusViewModel) {
+    func compose(inReplyToViewModel: StatusViewModel?, redraft: Status?) {
         let newStatusViewModel = rootViewModel.newStatusViewModel(
             identification: identification,
-            inReplyTo: statusViewModel)
+            inReplyTo: inReplyToViewModel,
+            redraft: redraft)
         let newStatusViewController = UIHostingController(rootView: NewStatusView { newStatusViewModel })
         let navigationController = UINavigationController(rootViewController: newStatusViewController)
 

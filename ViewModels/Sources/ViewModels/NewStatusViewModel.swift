@@ -26,12 +26,24 @@ public final class NewStatusViewModel: ObservableObject {
     public init(allIdentitiesService: AllIdentitiesService,
                 identification: Identification,
                 environment: AppEnvironment,
-                inReplyTo: StatusViewModel?) {
+                inReplyTo: StatusViewModel?,
+                redraft: Status?) {
         self.allIdentitiesService = allIdentitiesService
         self.identification = identification
         self.environment = environment
         inReplyToViewModel = inReplyTo
-        compositionViewModels = [CompositionViewModel(eventsSubject: compositionEventsSubject)]
+
+        let redraftAndIdentification: (status: Status, identification: Identification)?
+
+        if let redraft = redraft {
+            redraftAndIdentification = (status: redraft, identification: identification)
+        } else {
+            redraftAndIdentification = nil
+        }
+
+        compositionViewModels = [CompositionViewModel(
+                                    eventsSubject: compositionEventsSubject,
+                                    redraft: redraftAndIdentification)]
         events = eventsSubject.eraseToAnyPublisher()
         visibility = identification.identity.preferences.postingDefaultVisibility
         allIdentitiesService.authenticatedIdentitiesPublisher()

@@ -213,7 +213,10 @@ public extension StatusViewModel {
 
         replyViewModel.configuration = configuration.reply()
 
-        eventsSubject.send(Just(.reply(replyViewModel)).setFailureType(to: Error.self).eraseToAnyPublisher())
+        eventsSubject.send(
+            Just(.compose(inReplyTo: replyViewModel, redraft: nil))
+                .setFailureType(to: Error.self)
+                .eraseToAnyPublisher())
     }
 
     func toggleReblogged() {
@@ -248,6 +251,35 @@ public extension StatusViewModel {
         eventsSubject.send(
             statusService.toggleMuted()
                 .map { _ in .ignorableOutput }
+                .eraseToAnyPublisher())
+    }
+
+    func delete() {
+        eventsSubject.send(
+            statusService.delete()
+                .map { _ in .ignorableOutput }
+                .eraseToAnyPublisher())
+    }
+
+    func deleteAndRedraft() {
+        let identification = self.identification
+
+        eventsSubject.send(
+            statusService.deleteAndRedraft()
+                .map { redraft, inReplyToStatusService in
+                    let inReplyToViewModel: StatusViewModel?
+
+                    if let inReplyToStatusService = inReplyToStatusService {
+                        inReplyToViewModel = Self(
+                            statusService: inReplyToStatusService,
+                            identification: identification)
+                        inReplyToViewModel?.configuration = CollectionItem.StatusConfiguration.default.reply()
+                    } else {
+                        inReplyToViewModel = nil
+                    }
+
+                    return .compose(inReplyTo: inReplyToViewModel, redraft: redraft)
+                }
                 .eraseToAnyPublisher())
     }
 

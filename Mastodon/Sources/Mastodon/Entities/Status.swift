@@ -17,7 +17,7 @@ public final class Status: Codable, Identifiable {
     public let uri: String
     public let createdAt: Date
     public let account: Account
-    public let content: HTML
+    @DecodableDefault.EmptyHTML public private(set) var content: HTML
     public let visibility: Visibility
     public let sensitive: Bool
     public let spoilerText: String
@@ -77,7 +77,6 @@ public final class Status: Codable, Identifiable {
         self.uri = uri
         self.createdAt = createdAt
         self.account = account
-        self.content = content
         self.visibility = visibility
         self.sensitive = sensitive
         self.spoilerText = spoilerText
@@ -98,6 +97,7 @@ public final class Status: Codable, Identifiable {
         self.text = text
         self.pinned = pinned
         self.repliesCount = repliesCount
+        self.content = content
         self.favourited = favourited
         self.reblogged = reblogged
         self.muted = muted

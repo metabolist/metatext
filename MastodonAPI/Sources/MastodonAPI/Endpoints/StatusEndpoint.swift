@@ -16,6 +16,7 @@ public enum StatusEndpoint {
     case unpin(id: Status.Id)
     case mute(id: Status.Id)
     case unmute(id: Status.Id)
+    case delete(id: Status.Id)
     case post(Components)
 }
 
@@ -100,7 +101,7 @@ extension StatusEndpoint: Endpoint {
 
     public var pathComponentsInContext: [String] {
         switch self {
-        case let .status(id):
+        case let .status(id), let .delete(id):
             return [id]
         case let .reblog(id):
             return [id, "reblog"]
@@ -140,6 +141,8 @@ extension StatusEndpoint: Endpoint {
         switch self {
         case .status:
             return .get
+        case .delete:
+            return .delete
         default:
             return .post
         }

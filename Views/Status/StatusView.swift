@@ -419,13 +419,27 @@ private extension StatusView {
         }
 
         if viewModel.isMine {
-            menuItems.append(UIAction(
-                title: viewModel.muted
-                    ? NSLocalizedString("status.unmute", comment: "")
-                    : NSLocalizedString("status.mute", comment: ""),
-                image: UIImage(systemName: viewModel.muted ? "speaker" : "speaker.slash")) { _ in
-                viewModel.toggleMuted()
-            })
+            menuItems += [
+                UIAction(
+                    title: viewModel.muted
+                        ? NSLocalizedString("status.unmute", comment: "")
+                        : NSLocalizedString("status.mute", comment: ""),
+                    image: UIImage(systemName: viewModel.muted ? "speaker" : "speaker.slash")) { _ in
+                    viewModel.toggleMuted()
+                },
+                UIAction(
+                    title: NSLocalizedString("status.delete", comment: ""),
+                    image: UIImage(systemName: "trash"),
+                    attributes: .destructive) { _ in
+                    viewModel.delete()
+                },
+                UIAction(
+                    title: NSLocalizedString("status.delete-and-redraft", comment: ""),
+                    image: UIImage(systemName: "trash.circle"),
+                    attributes: .destructive) { _ in
+                    viewModel.deleteAndRedraft()
+                }
+            ]
         } else {
             menuItems.append(UIAction(
                 title: NSLocalizedString("report", comment: ""),

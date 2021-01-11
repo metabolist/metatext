@@ -49,6 +49,7 @@ private extension CompositionPollOptionView {
             UIAction { [weak self] _ in
                 self?.option.text = textField.text ?? "" },
             for: .editingChanged)
+        textField.text = option.text
 
         stackView.addArrangedSubview(remainingCharactersLabel)
         remainingCharactersLabel.adjustsFontForContentSizeCategory = true

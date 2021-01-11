@@ -2,6 +2,7 @@
 
 import Combine
 import Foundation
+import Mastodon
 import ServiceLayer
 
 public final class RootViewModel: ObservableObject {
@@ -58,12 +59,16 @@ public extension RootViewModel {
             instanceURLService: InstanceURLService(environment: environment))
     }
 
-    func newStatusViewModel(identification: Identification, inReplyTo: StatusViewModel? = nil) -> NewStatusViewModel {
+    func newStatusViewModel(
+        identification: Identification,
+        inReplyTo: StatusViewModel? = nil,
+        redraft: Status? = nil) -> NewStatusViewModel {
         NewStatusViewModel(
             allIdentitiesService: allIdentitiesService,
             identification: identification,
             environment: environment,
-            inReplyTo: inReplyTo)
+            inReplyTo: inReplyTo,
+            redraft: redraft)
     }
 }
 

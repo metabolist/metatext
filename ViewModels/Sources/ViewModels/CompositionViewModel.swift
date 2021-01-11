@@ -8,16 +8,15 @@ import ServiceLayer
 public final class CompositionViewModel: AttachmentsRenderingViewModel, ObservableObject, Identifiable {
     public let id = Id()
     public var isPosted = false
-    @Published public var text = ""
-    @Published public var contentWarning = ""
-    @Published public var displayContentWarning = false
-    @Published public var sensitive = false
-    @Published public var displayPoll = false
-    @Published public var pollMultipleChoice = false
-    @Published public var pollHideTotals = false
+    @Published public var text: String
+    @Published public var contentWarning: String
+    @Published public var displayContentWarning: Bool
+    @Published public var sensitive: Bool
+    @Published public var displayPoll: Bool
+    @Published public var pollMultipleChoice: Bool
     @Published public var pollExpiresIn = PollExpiry.oneDay
-    @Published public private(set) var pollOptions = [PollOption(text: ""), PollOption(text: "")]
-    @Published public private(set) var attachmentViewModels = [AttachmentViewModel]()
+    @Published public private(set) var pollOptions: [PollOption]
+    @Published public private(set) var attachmentViewModels: [AttachmentViewModel]
     @Published public private(set) var attachmentUpload: AttachmentUpload?
     @Published public private(set) var isPostable = false
     @Published public private(set) var canAddAttachment = true
@@ -28,8 +27,24 @@ public final class CompositionViewModel: AttachmentsRenderingViewModel, Observab
     private let eventsSubject: PassthroughSubject<Event, Never>
     private var attachmentUploadCancellable: AnyCancellable?
 
-    init(eventsSubject: PassthroughSubject<Event, Never>) {
+    init(eventsSubject: PassthroughSubject<Event, Never>,
+         redraft: (status: Status, identification: Identification)? = nil) {
         self.eventsSubject = eventsSubject
+        text = redraft?.status.text ?? ""
+        contentWarning = redraft?.status.spoilerText ?? ""
+        displayContentWarning = !(redraft?.status.spoilerText.isEmpty ?? true)
+        sensitive = redraft?.status.sensitive ?? false
+        displayPoll = redraft?.status.poll != nil
+        pollMultipleChoice = redraft?.status.poll?.multiple ?? false
+        pollOptions = redraft?.status.poll?.options.map { PollOption(text: $0.title) }
+            ?? [PollOption(text: ""), PollOption(text: "")]
+        if let redraft = redraft {
+            attachmentViewModels = redraft.status.mediaAttachments.map {
+                AttachmentViewModel(attachment: $0, identification: redraft.identification)
+            }
+        } else {
+            attachmentViewModels = [AttachmentViewModel]()
+        }
 
         $text.map { !$0.isEmpty }
             .removeDuplicates()

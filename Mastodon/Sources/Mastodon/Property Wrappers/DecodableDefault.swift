@@ -2,8 +2,6 @@
 
 import Foundation
 
-// Thank you https://www.swiftbysundell.com/tips/default-decoding-values/
-
 public protocol DecodableDefaultSource {
     associatedtype Value: Decodable
     static var defaultValue: Value { get }
@@ -40,6 +38,10 @@ public extension DecodableDefault {
             public static var defaultValue: String { "" }
         }
 
+        public enum EmptyHTML: Source {
+            public static var defaultValue: HTML { HTML(raw: "", attributed: NSAttributedString(string: "")) }
+        }
+
         public enum EmptyList<T: List>: Source {
             public static var defaultValue: T { [] }
         }
@@ -67,6 +69,7 @@ public extension DecodableDefault {
     typealias True = Wrapper<Sources.True>
     typealias False = Wrapper<Sources.False>
     typealias EmptyString = Wrapper<Sources.EmptyString>
+    typealias EmptyHTML = Wrapper<Sources.EmptyHTML>
     typealias EmptyList<T: List> = Wrapper<Sources.EmptyList<T>>
     typealias EmptyMap<T: Map> = Wrapper<Sources.EmptyMap<T>>
     typealias Zero = Wrapper<Sources.Zero>
