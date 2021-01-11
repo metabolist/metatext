@@ -32,7 +32,7 @@ final class NotificationService: UNNotificationServiceExtension {
         }
 
         bestAttemptContent.title = pushNotification.title
-        bestAttemptContent.body = pushNotification.body
+        bestAttemptContent.body = XMLUnescaper(string: pushNotification.body).unescape()
 
         let fileName = pushNotification.icon.lastPathComponent
         let fileURL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true).appendingPathComponent(fileName)
