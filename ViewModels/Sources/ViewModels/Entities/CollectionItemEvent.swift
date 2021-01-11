@@ -9,6 +9,7 @@ public enum CollectionItemEvent {
     case navigation(Navigation)
     case attachment(AttachmentViewModel, StatusViewModel)
     case compose(inReplyTo: StatusViewModel?, redraft: Status?)
+    case confirmDelete(StatusViewModel, redraft: Bool)
     case report(ReportViewModel)
     case share(URL)
 }

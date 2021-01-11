@@ -254,6 +254,13 @@ public extension StatusViewModel {
                 .eraseToAnyPublisher())
     }
 
+    func confirmDelete(redraft: Bool) {
+        eventsSubject.send(
+            Just(.confirmDelete(self, redraft: redraft))
+                .setFailureType(to: Error.self)
+                .eraseToAnyPublisher())
+    }
+
     func delete() {
         eventsSubject.send(
             statusService.delete()

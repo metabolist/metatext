@@ -307,6 +307,8 @@ private extension TableViewController {
             present(attachmentViewModel: attachmentViewModel, statusViewModel: statusViewModel)
         case let .compose(inReplyToViewModel, redraft):
             compose(inReplyToViewModel: inReplyToViewModel, redraft: redraft)
+        case let .confirmDelete(statusViewModel, redraft):
+            confirmDelete(statusViewModel: statusViewModel, redraft: redraft)
         case let .report(reportViewModel):
             report(reportViewModel: reportViewModel)
         }
@@ -387,6 +389,29 @@ private extension TableViewController {
         navigationController.modalPresentationStyle = .overFullScreen
 
         present(navigationController, animated: true)
+    }
+
+    func confirmDelete(statusViewModel: StatusViewModel, redraft: Bool) {
+        let alertController = UIAlertController(
+            title: nil,
+            message: redraft
+                ? NSLocalizedString("status.delete-and-redraft.confirm", comment: "")
+                : NSLocalizedString("status.delete.confirm", comment: ""),
+            preferredStyle: .alert)
+
+        let deleteAction = UIAlertAction(
+            title: redraft
+                ? NSLocalizedString("status.delete-and-redraft", comment: "")
+                : NSLocalizedString("status.delete", comment: ""),
+            style: .destructive) { _ in
+            redraft ? statusViewModel.deleteAndRedraft() : statusViewModel.delete()
+        }
+        let cancelAction = UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel) { _ in }
+
+        alertController.addAction(deleteAction)
+        alertController.addAction(cancelAction)
+
+        present(alertController, animated: true)
     }
 
     func set(expandAllState: ExpandAllState) {

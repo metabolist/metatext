@@ -431,13 +431,13 @@ private extension StatusView {
                     title: NSLocalizedString("status.delete", comment: ""),
                     image: UIImage(systemName: "trash"),
                     attributes: .destructive) { _ in
-                    viewModel.delete()
+                    viewModel.confirmDelete(redraft: false)
                 },
                 UIAction(
                     title: NSLocalizedString("status.delete-and-redraft", comment: ""),
                     image: UIImage(systemName: "trash.circle"),
                     attributes: .destructive) { _ in
-                    viewModel.deleteAndRedraft()
+                    viewModel.confirmDelete(redraft: true)
                 }
             ]
         } else {
