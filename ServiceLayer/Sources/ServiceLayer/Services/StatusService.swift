@@ -56,6 +56,22 @@ public extension StatusService {
             .eraseToAnyPublisher()
     }
 
+    func togglePinned() -> AnyPublisher<Never, Error> {
+        mastodonAPIClient.request(status.displayStatus.pinned ?? false
+                                    ? StatusEndpoint.unpin(id: status.displayStatus.id)
+                                    : StatusEndpoint.pin(id: status.displayStatus.id))
+            .flatMap(contentDatabase.insert(status:))
+            .eraseToAnyPublisher()
+    }
+
+    func toggleMuted() -> AnyPublisher<Never, Error> {
+        mastodonAPIClient.request(status.displayStatus.muted
+                                    ? StatusEndpoint.unmute(id: status.displayStatus.id)
+                                    : StatusEndpoint.mute(id: status.displayStatus.id))
+            .flatMap(contentDatabase.insert(status:))
+            .eraseToAnyPublisher()
+    }
+
     func rebloggedByService() -> AccountListService {
         AccountListService(
             endpoint: .rebloggedBy(id: status.id),

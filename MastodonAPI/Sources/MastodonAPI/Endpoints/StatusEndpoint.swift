@@ -12,6 +12,10 @@ public enum StatusEndpoint {
     case unfavourite(id: Status.Id)
     case bookmark(id: Status.Id)
     case unbookmark(id: Status.Id)
+    case pin(id: Status.Id)
+    case unpin(id: Status.Id)
+    case mute(id: Status.Id)
+    case unmute(id: Status.Id)
     case post(Components)
 }
 
@@ -110,6 +114,14 @@ extension StatusEndpoint: Endpoint {
             return [id, "bookmark"]
         case let .unbookmark(id):
             return [id, "unbookmark"]
+        case let .pin(id):
+            return [id, "pin"]
+        case let .unpin(id):
+            return [id, "unpin"]
+        case let .mute(id):
+            return [id, "mute"]
+        case let .unmute(id):
+            return [id, "unmute"]
         case .post:
             return []
         }
@@ -128,7 +140,7 @@ extension StatusEndpoint: Endpoint {
         switch self {
         case .status:
             return .get
-        case .reblog, .unreblog, .favourite, .unfavourite, .bookmark, .unbookmark, .post:
+        default:
             return .post
         }
     }

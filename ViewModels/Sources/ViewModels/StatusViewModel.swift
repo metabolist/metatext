@@ -47,6 +47,8 @@ public final class StatusViewModel: CollectionItemViewModel, AttachmentsRenderin
 }
 
 public extension StatusViewModel {
+    var isMine: Bool { statusService.status.displayStatus.account.id == identification.identity.account?.id }
+
     var shouldShowContent: Bool {
         guard spoilerText != "" else { return true }
 
@@ -112,6 +114,10 @@ public extension StatusViewModel {
     var bookmarked: Bool { statusService.status.displayStatus.bookmarked }
 
     var sensitive: Bool { statusService.status.displayStatus.sensitive }
+
+    var pinned: Bool? { statusService.status.displayStatus.pinned }
+
+    var muted: Bool { statusService.status.displayStatus.muted }
 
     var sharingURL: URL? { statusService.status.displayStatus.url }
 
@@ -227,6 +233,20 @@ public extension StatusViewModel {
     func toggleBookmarked() {
         eventsSubject.send(
             statusService.toggleBookmarked()
+                .map { _ in .ignorableOutput }
+                .eraseToAnyPublisher())
+    }
+
+    func togglePinned() {
+        eventsSubject.send(
+            statusService.togglePinned()
+                .map { _ in .ignorableOutput }
+                .eraseToAnyPublisher())
+    }
+
+    func toggleMuted() {
+        eventsSubject.send(
+            statusService.toggleMuted()
                 .map { _ in .ignorableOutput }
                 .eraseToAnyPublisher())
     }

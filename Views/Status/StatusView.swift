@@ -398,21 +398,44 @@ private extension StatusView {
     // swiftlint:enable function_body_length
 
     func menu(viewModel: StatusViewModel) -> UIMenu {
-        UIMenu(children: [
+        var menuItems = [
             UIAction(
                 title: viewModel.bookmarked
                     ? NSLocalizedString("status.unbookmark", comment: "")
                     : NSLocalizedString("status.bookmark", comment: ""),
                 image: UIImage(systemName: "bookmark")) { _ in
                 viewModel.toggleBookmarked()
-            },
-            UIAction(
+            }
+        ]
+
+        if let pinned = viewModel.pinned {
+            menuItems.append(UIAction(
+                title: pinned
+                    ? NSLocalizedString("status.unpin", comment: "")
+                    : NSLocalizedString("status.pin", comment: ""),
+                image: UIImage(systemName: "pin")) { _ in
+                viewModel.togglePinned()
+            })
+        }
+
+        if viewModel.isMine {
+            menuItems.append(UIAction(
+                title: viewModel.muted
+                    ? NSLocalizedString("status.unmute", comment: "")
+                    : NSLocalizedString("status.mute", comment: ""),
+                image: UIImage(systemName: viewModel.muted ? "speaker" : "speaker.slash")) { _ in
+                viewModel.toggleMuted()
+            })
+        } else {
+            menuItems.append(UIAction(
                 title: NSLocalizedString("report", comment: ""),
                 image: UIImage(systemName: "flag"),
                 attributes: .destructive) { _ in
                 viewModel.reportStatus()
-            }
-        ])
+            })
+        }
+
+        return UIMenu(children: menuItems)
     }
 
     func setButtonImages(scale: UIImage.SymbolScale) {
