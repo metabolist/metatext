@@ -72,7 +72,6 @@ final class EditAttachmentViewController: UIViewController {
         stackView.addArrangedSubview(remainingCharactersLabel)
         remainingCharactersLabel.adjustsFontForContentSizeCategory = true
         remainingCharactersLabel.font = .preferredFont(forTextStyle: .subheadline)
-        remainingCharactersLabel.text = "1500"
 
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),

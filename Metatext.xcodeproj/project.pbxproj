@@ -46,6 +46,10 @@
 		D05936F525AA66A600754FDF /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05936F325AA66A600754FDF /* UIView+Extensions.swift */; };
 		D05936FF25AA94EA00754FDF /* MarkAttachmentsSensitiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05936FE25AA94EA00754FDF /* MarkAttachmentsSensitiveView.swift */; };
 		D059370025AA94EA00754FDF /* MarkAttachmentsSensitiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05936FE25AA94EA00754FDF /* MarkAttachmentsSensitiveView.swift */; };
+		D059373325AAEA7000754FDF /* CompositionPollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D059373225AAEA7000754FDF /* CompositionPollView.swift */; };
+		D059373425AAEA7000754FDF /* CompositionPollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D059373225AAEA7000754FDF /* CompositionPollView.swift */; };
+		D059373E25AB8D5200754FDF /* CompositionPollOptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D059373D25AB8D5200754FDF /* CompositionPollOptionView.swift */; };
+		D059373F25AB8D5200754FDF /* CompositionPollOptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D059373D25AB8D5200754FDF /* CompositionPollOptionView.swift */; };
 		D0625E59250F092900502611 /* StatusListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0625E58250F092900502611 /* StatusListCell.swift */; };
 		D0625E5D250F0B5C00502611 /* StatusContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0625E5C250F0B5C00502611 /* StatusContentConfiguration.swift */; };
 		D06BC5E625202AD90079541D /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06BC5E525202AD90079541D /* ProfileViewController.swift */; };
@@ -196,6 +200,8 @@
 		D05936E825AA3F3D00754FDF /* EditAttachmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAttachmentView.swift; sourceTree = "<group>"; };
 		D05936F325AA66A600754FDF /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
 		D05936FE25AA94EA00754FDF /* MarkAttachmentsSensitiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkAttachmentsSensitiveView.swift; sourceTree = "<group>"; };
+		D059373225AAEA7000754FDF /* CompositionPollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionPollView.swift; sourceTree = "<group>"; };
+		D059373D25AB8D5200754FDF /* CompositionPollOptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionPollOptionView.swift; sourceTree = "<group>"; };
 		D0625E58250F092900502611 /* StatusListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusListCell.swift; sourceTree = "<group>"; };
 		D0625E5C250F0B5C00502611 /* StatusContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusContentConfiguration.swift; sourceTree = "<group>"; };
 		D0666A2124C677B400F3F04B /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -450,6 +456,8 @@
 				D0CE9F86258B076900E3A6B6 /* AttachmentUploadView.swift */,
 				D0BEB1F224F8EE8C001B0F04 /* AttachmentView.swift */,
 				D0E9F9A9258450B300EF503D /* CompositionInputAccessoryView.swift */,
+				D059373D25AB8D5200754FDF /* CompositionPollOptionView.swift */,
+				D059373225AAEA7000754FDF /* CompositionPollView.swift */,
 				D08E52ED257D757100FA2C5F /* CompositionView.swift */,
 				D007023D25562A2800F38136 /* ConversationAvatarsView.swift */,
 				D00702352555F4C500F38136 /* ConversationContentConfiguration.swift */,
@@ -809,6 +817,7 @@
 				D08B8D672540DEB200B1EBEF /* ZoomAnimatableView.swift in Sources */,
 				D08B8D822544D80000B1EBEF /* PollOptionButton.swift in Sources */,
 				D0C7D4DA24F7616A001EBDBB /* View+Extensions.swift in Sources */,
+				D059373325AAEA7000754FDF /* CompositionPollView.swift in Sources */,
 				D08B8D8D2544E6EC00B1EBEF /* PollResultView.swift in Sources */,
 				D0C7D4D524F7616A001EBDBB /* String+Extensions.swift in Sources */,
 				D05936CF25A8D79800754FDF /* EditAttachmentViewController.swift in Sources */,
@@ -824,6 +833,7 @@
 				D0BEB1FF24F9E5BB001B0F04 /* ListsView.swift in Sources */,
 				D0C7D49724F7616A001EBDBB /* IdentitiesView.swift in Sources */,
 				D01EF22425182B1F00650C6B /* AccountHeaderView.swift in Sources */,
+				D059373E25AB8D5200754FDF /* CompositionPollOptionView.swift in Sources */,
 				D036AA17254CA824009094DF /* StatusBodyView.swift in Sources */,
 				D08E512125786A6600FA2C5F /* UIButton+Extensions.swift in Sources */,
 				D05936F425AA66A600754FDF /* UIView+Extensions.swift in Sources */,
@@ -870,6 +880,7 @@
 			files = (
 				D036EBC7259FE2B700EC1CFC /* KingfisherOptionsInfo+Extensions.swift in Sources */,
 				D08E52A6257C61C000FA2C5F /* ShareExtensionNavigationViewController.swift in Sources */,
+				D059373425AAEA7000754FDF /* CompositionPollView.swift in Sources */,
 				D08E52D2257C811200FA2C5F /* ShareExtensionError+Extensions.swift in Sources */,
 				D0E9F9AB258450B300EF503D /* CompositionInputAccessoryView.swift in Sources */,
 				D05936D025A8D79800754FDF /* EditAttachmentViewController.swift in Sources */,
@@ -881,6 +892,7 @@
 				D015B14425A812F6006D88A8 /* PlayerCache.swift in Sources */,
 				D05936F525AA66A600754FDF /* UIView+Extensions.swift in Sources */,
 				D015B13F25A812EC006D88A8 /* PlayerView.swift in Sources */,
+				D059373F25AB8D5200754FDF /* CompositionPollOptionView.swift in Sources */,
 				D015B13A25A812E6006D88A8 /* AttachmentView.swift in Sources */,
 				D08E52F8257D78BE00FA2C5F /* ViewConstants.swift in Sources */,
 				D036EBC2259FE2AD00EC1CFC /* UIVIewController+Extensions.swift in Sources */,

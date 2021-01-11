@@ -83,7 +83,7 @@ private extension CompositionInputAccessoryView {
         attachmentButton.showsMenuAsPrimaryAction = true
         attachmentButton.menu = UIMenu(children: attachmentActions)
 
-        let pollButton = UIButton()
+        let pollButton = UIButton(primaryAction: UIAction { [weak self] _ in self?.viewModel.displayPoll.toggle() })
 
         stackView.addArrangedSubview(pollButton)
         pollButton.setImage(
@@ -132,6 +132,11 @@ private extension CompositionInputAccessoryView {
 
         viewModel.$canAddAttachment
             .sink { attachmentButton.isEnabled = $0 }
+            .store(in: &cancellables)
+
+        viewModel.$attachmentViewModels
+            .combineLatest(viewModel.$attachmentUpload)
+            .sink { pollButton.isEnabled = $0.isEmpty && $1 == nil }
             .store(in: &cancellables)
 
         viewModel.$remainingCharacters.sink {

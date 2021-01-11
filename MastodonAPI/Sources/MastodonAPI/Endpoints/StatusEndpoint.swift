@@ -23,6 +23,9 @@ public extension StatusEndpoint {
         public let mediaIds: [Attachment.Id]
         public let visibility: Status.Visibility
         public let sensitive: Bool
+        public let pollOptions: [String]
+        public let pollExpiresIn: Int
+        public let pollMultipleChoice: Bool
 
         public init(
             inReplyToId: Status.Id?,
@@ -30,13 +33,19 @@ public extension StatusEndpoint {
             spoilerText: String,
             mediaIds: [Attachment.Id],
             visibility: Status.Visibility,
-            sensitive: Bool) {
+            sensitive: Bool,
+            pollOptions: [String],
+            pollExpiresIn: Int,
+            pollMultipleChoice: Bool) {
             self.inReplyToId = inReplyToId
             self.text = text
             self.spoilerText = spoilerText
             self.mediaIds = mediaIds
             self.visibility = visibility
             self.sensitive = sensitive
+            self.pollOptions = pollOptions
+            self.pollExpiresIn = pollExpiresIn
+            self.pollMultipleChoice = pollMultipleChoice
         }
     }
 }
@@ -62,6 +71,16 @@ extension StatusEndpoint.Components {
 
         if sensitive {
             params["sensitive"] = true
+        }
+
+        if !pollOptions.isEmpty {
+            var poll = [String: Any]()
+
+            poll["options"] = pollOptions
+            poll["expires_in"] = pollExpiresIn
+            poll["multiple"] = pollMultipleChoice
+
+            params["poll"] = poll
         }
 
         return params

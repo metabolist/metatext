@@ -13,8 +13,10 @@ final class CompositionView: UIView {
     let removeButton = UIButton(type: .close)
     let inReplyToView = UIView()
     let hasReplyFollowingView = UIView()
+    let compositionInputAccessoryView: CompositionInputAccessoryView
     let attachmentsView = AttachmentsView()
     let attachmentUploadView: AttachmentUploadView
+    let pollView: CompositionPollView
     let markAttachmentsSensitiveView: MarkAttachmentsSensitiveView
 
     private let viewModel: CompositionViewModel
@@ -25,8 +27,12 @@ final class CompositionView: UIView {
         self.viewModel = viewModel
         self.parentViewModel = parentViewModel
 
+        compositionInputAccessoryView = CompositionInputAccessoryView(
+            viewModel: viewModel,
+            parentViewModel: parentViewModel)
         attachmentUploadView = AttachmentUploadView(viewModel: viewModel)
         markAttachmentsSensitiveView = MarkAttachmentsSensitiveView(viewModel: viewModel)
+        pollView = CompositionPollView(viewModel: viewModel, inputAccessoryView: compositionInputAccessoryView)
 
         super.init(frame: .zero)
 
@@ -63,7 +69,6 @@ private extension CompositionView {
         avatarImageView.setContentHuggingPriority(.required, for: .horizontal)
 
         let stackView = UIStackView()
-        let inputAccessoryView = CompositionInputAccessoryView(viewModel: viewModel, parentViewModel: parentViewModel)
 
         addSubview(stackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -75,7 +80,7 @@ private extension CompositionView {
         spoilerTextField.adjustsFontForContentSizeCategory = true
         spoilerTextField.font = .preferredFont(forTextStyle: .body)
         spoilerTextField.placeholder = NSLocalizedString("status.spoiler-text-placeholder", comment: "")
-        spoilerTextField.inputAccessoryView = inputAccessoryView
+        spoilerTextField.inputAccessoryView = compositionInputAccessoryView
         spoilerTextField.addAction(
             UIAction { [weak self] _ in
                 guard let self = self, let text = self.spoilerTextField.text else { return }
@@ -92,7 +97,7 @@ private extension CompositionView {
         textView.font = textViewFont
         textView.textContainerInset = .zero
         textView.textContainer.lineFragmentPadding = 0
-        textView.inputAccessoryView = inputAccessoryView
+        textView.inputAccessoryView = compositionInputAccessoryView
         textView.inputAccessoryView?.sizeToFit()
         textView.delegate = self
 
@@ -109,6 +114,8 @@ private extension CompositionView {
         attachmentUploadView.isHidden = true
         stackView.addArrangedSubview(markAttachmentsSensitiveView)
         markAttachmentsSensitiveView.isHidden = true
+        stackView.addArrangedSubview(pollView)
+        pollView.isHidden = true
 
         addSubview(removeButton)
         removeButton.translatesAutoresizingMaskIntoConstraints = false
@@ -169,6 +176,16 @@ private extension CompositionView {
                 self?.attachmentsView.viewModel = self?.viewModel
                 self?.attachmentsView.isHidden = $0.isEmpty
                 self?.markAttachmentsSensitiveView.isHidden = $0.isEmpty
+            }
+            .store(in: &cancellables)
+
+        viewModel.$displayPoll
+            .sink { [weak self] in
+                if !$0 {
+                    self?.textView.becomeFirstResponder()
+                }
+
+                self?.pollView.isHidden = !$0
             }
             .store(in: &cancellables)
 

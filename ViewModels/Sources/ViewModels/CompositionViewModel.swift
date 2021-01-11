@@ -12,6 +12,11 @@ public final class CompositionViewModel: AttachmentsRenderingViewModel, Observab
     @Published public var contentWarning = ""
     @Published public var displayContentWarning = false
     @Published public var sensitive = false
+    @Published public var displayPoll = false
+    @Published public var pollMultipleChoice = false
+    @Published public var pollHideTotals = false
+    @Published public var pollExpiresIn = PollExpiry.oneDay
+    @Published public private(set) var pollOptions = [PollOption(text: ""), PollOption(text: "")]
     @Published public private(set) var attachmentViewModels = [AttachmentViewModel]()
     @Published public private(set) var attachmentUpload: AttachmentUpload?
     @Published public private(set) var isPostable = false
@@ -34,8 +39,8 @@ public final class CompositionViewModel: AttachmentsRenderingViewModel, Observab
             }
             .assign(to: &$isPostable)
         $attachmentViewModels
-            .combineLatest($attachmentUpload)
-            .map { $0.count < Self.maxAttachmentCount && $1 == nil }
+            .combineLatest($attachmentUpload, $displayPoll)
+            .map { $0.count < Self.maxAttachmentCount && $1 == nil && !$2 }
             .assign(to: &$canAddAttachment)
         $attachmentViewModels.map(\.isEmpty).assign(to: &$canAddNonImageAttachment)
         $text.map {
@@ -60,10 +65,33 @@ public final class CompositionViewModel: AttachmentsRenderingViewModel, Observab
 
 public extension CompositionViewModel {
     static let maxCharacters = 500
+    static let minPollOptionCount = 2
+    static let maxPollOptionCount = 4
 
     enum Event {
         case editAttachment(AttachmentViewModel, CompositionViewModel)
         case updateAttachment(AnyPublisher<Never, Error>)
+    }
+
+    enum PollExpiry: Int, CaseIterable {
+        case fiveMinutes = 300
+        case thirtyMinutes = 1800
+        case oneHour = 3600
+        case sixHours = 21600
+        case oneDay = 86400
+        case threeDays = 259200
+        case sevenDays = 604800
+    }
+
+    class PollOption: ObservableObject {
+        public let id = Id()
+        @Published public var text: String
+        @Published public private(set) var remainingCharacters = CompositionViewModel.maxCharacters
+
+        public init(text: String) {
+            self.text = text
+            $text.map { Self.maxCharacters - $0.count }.assign(to: &$remainingCharacters)
+        }
     }
 
     typealias Id = UUID
@@ -75,7 +103,18 @@ public extension CompositionViewModel {
             spoilerText: displayContentWarning ? contentWarning : "",
             mediaIds: attachmentViewModels.map(\.attachment.id),
             visibility: visibility,
-            sensitive: sensitive)
+            sensitive: sensitive,
+            pollOptions: displayPoll ? pollOptions.map(\.text) : [],
+            pollExpiresIn: pollExpiresIn.rawValue,
+            pollMultipleChoice: pollMultipleChoice)
+    }
+
+    func addPollOption() {
+        pollOptions.append(PollOption(text: ""))
+    }
+
+    func remove(pollOption: PollOption) {
+        pollOptions.removeAll { $0 === pollOption }
     }
 
     func cancelUpload() {
@@ -98,6 +137,12 @@ public extension CompositionViewModel {
 
         eventsSubject.send(.updateAttachment(publisher))
     }
+}
+
+public extension CompositionViewModel.PollOption {
+    static let maxCharacters = 25
+
+    typealias Id = UUID
 }
 
 extension CompositionViewModel {

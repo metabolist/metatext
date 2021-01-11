@@ -44,11 +44,13 @@
 "camera-access.open-system-settings" = "Open system settings";
 "cancel" = "Cancel";
 "compose.attachment.uploading" = "Uploading";
-"compose.prompt" = "What's on your mind?";
+"compose.browse" = "Browse";
 "compose.mark-media-sensitive" = "Mark media as sensitive";
 "compose.photo-library" = "Photo Library";
+"compose.poll.add-choice" = "Add a choice";
+"compose.poll.allow-multiple-choices" = "Allow multiple choices";
+"compose.prompt" = "What's on your mind?";
 "compose.take-photo-or-video" = "Take Photo or Video";
-"compose.browse" = "Browse";
 "error" = "Error";
 "favorites" = "Favorites";
 "registration.review-terms-of-use-and-privacy-policy-%@" = "Please review %@'s Terms of Use and Privacy Policy to continue";
