@@ -7,15 +7,15 @@ import ServiceLayer
 
 public final class StatusViewModel: CollectionItemViewModel, AttachmentsRenderingViewModel, ObservableObject {
     public let content: NSAttributedString
-    public let contentEmoji: [Emoji]
+    public let contentEmojis: [Emoji]
     public let displayName: String
-    public let displayNameEmoji: [Emoji]
+    public let displayNameEmojis: [Emoji]
     public let spoilerText: String
     public let isReblog: Bool
     public let rebloggedByDisplayName: String
-    public let rebloggedByDisplayNameEmoji: [Emoji]
+    public let rebloggedByDisplayNameEmojis: [Emoji]
     public let attachmentViewModels: [AttachmentViewModel]
-    public let pollEmoji: [Emoji]
+    public let pollEmojis: [Emoji]
     @Published public var pollOptionSelections = Set<Int>()
     public var configuration = CollectionItem.StatusConfiguration.default
     public let events: AnyPublisher<AnyPublisher<CollectionItemEvent, Error>, Never>
@@ -28,20 +28,20 @@ public final class StatusViewModel: CollectionItemViewModel, AttachmentsRenderin
         self.statusService = statusService
         self.identification = identification
         content = statusService.status.displayStatus.content.attributed
-        contentEmoji = statusService.status.displayStatus.emojis
+        contentEmojis = statusService.status.displayStatus.emojis
         displayName = statusService.status.displayStatus.account.displayName.isEmpty
             ? statusService.status.displayStatus.account.username
             : statusService.status.displayStatus.account.displayName
-        displayNameEmoji = statusService.status.displayStatus.account.emojis
+        displayNameEmojis = statusService.status.displayStatus.account.emojis
         spoilerText = statusService.status.displayStatus.spoilerText
         isReblog = statusService.status.reblog != nil
         rebloggedByDisplayName = statusService.status.account.displayName.isEmpty
             ? statusService.status.account.username
             : statusService.status.account.displayName
-        rebloggedByDisplayNameEmoji = statusService.status.account.emojis
+        rebloggedByDisplayNameEmojis = statusService.status.account.emojis
         attachmentViewModels = statusService.status.displayStatus.mediaAttachments
             .map { AttachmentViewModel(attachment: $0, identification: identification, status: statusService.status) }
-        pollEmoji = statusService.status.displayStatus.poll?.emojis ?? []
+        pollEmojis = statusService.status.displayStatus.poll?.emojis ?? []
         events = eventsSubject.eraseToAnyPublisher()
     }
 }

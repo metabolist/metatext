@@ -88,7 +88,7 @@ private extension ConversationView {
         let mutableDisplayNames = NSMutableAttributedString(string: displayNames)
 
         mutableDisplayNames.insert(
-            emoji: viewModel.accountViewModels.map(\.emoji).reduce([], +),
+            emojis: viewModel.accountViewModels.map(\.emojis).reduce([], +),
             view: displayNamesLabel)
         mutableDisplayNames.resizeAttachments(toLineHeight: displayNamesLabel.font.lineHeight)
 

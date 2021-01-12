@@ -301,7 +301,7 @@ private extension StatusView {
         if viewModel.isReblog {
             infoLabel.attributedText = "status.reblogged-by".localizedBolding(
                 displayName: viewModel.rebloggedByDisplayName,
-                emoji: viewModel.rebloggedByDisplayNameEmoji,
+                emojis: viewModel.rebloggedByDisplayNameEmojis,
                 label: infoLabel)
             infoIcon.image = UIImage(
                 systemName: "arrow.2.squarepath",
@@ -320,7 +320,7 @@ private extension StatusView {
             infoIcon.isHidden = true
         }
 
-        mutableDisplayName.insert(emoji: viewModel.displayNameEmoji, view: displayNameLabel)
+        mutableDisplayName.insert(emojis: viewModel.displayNameEmojis, view: displayNameLabel)
         mutableDisplayName.resizeAttachments(toLineHeight: displayNameLabel.font.lineHeight)
         displayNameLabel.attributedText = mutableDisplayName
 

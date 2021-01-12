@@ -4,7 +4,7 @@ import Mastodon
 import UIKit
 
 final class PollOptionButton: UIButton {
-    init(title: String, emoji: [Emoji], multipleSelection: Bool) {
+    init(title: String, emojis: [Emoji], multipleSelection: Bool) {
         super.init(frame: .zero)
 
         titleLabel?.font = .preferredFont(forTextStyle: .callout)
@@ -16,7 +16,7 @@ final class PollOptionButton: UIButton {
 
         let attributedTitle = NSMutableAttributedString(string: title)
 
-        attributedTitle.insert(emoji: emoji, view: titleLabel!)
+        attributedTitle.insert(emojis: emojis, view: titleLabel!)
         attributedTitle.resizeAttachments(toLineHeight: titleLabel!.font.lineHeight)
         setAttributedTitle(attributedTitle, for: .normal)
         setImage(

@@ -103,7 +103,7 @@ private extension AccountView {
         } else {
             let mutableDisplayName = NSMutableAttributedString(string: accountConfiguration.viewModel.displayName)
 
-            mutableDisplayName.insert(emoji: accountConfiguration.viewModel.emoji, view: displayNameLabel)
+            mutableDisplayName.insert(emojis: accountConfiguration.viewModel.emojis, view: displayNameLabel)
             mutableDisplayName.resizeAttachments(toLineHeight: displayNameLabel.font.lineHeight)
             displayNameLabel.attributedText = mutableDisplayName
         }
@@ -119,7 +119,7 @@ private extension AccountView {
             [.font: noteFont as Any,
              .foregroundColor: UIColor.label],
             range: noteRange)
-        mutableNote.insert(emoji: accountConfiguration.viewModel.emoji, view: noteTextView)
+        mutableNote.insert(emojis: accountConfiguration.viewModel.emojis, view: noteTextView)
         mutableNote.resizeAttachments(toLineHeight: noteFont.lineHeight)
 
         noteTextView.attributedText = mutableNote

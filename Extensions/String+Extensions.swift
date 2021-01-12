@@ -23,7 +23,7 @@ extension String {
         return attributed
     }
 
-    func localizedBolding(displayName: String, emoji: [Emoji], label: UILabel) -> NSAttributedString {
+    func localizedBolding(displayName: String, emojis: [Emoji], label: UILabel) -> NSAttributedString {
         let mutableString = NSMutableAttributedString(
             string: String.localizedStringWithFormat(
                 NSLocalizedString(self, comment: ""),
@@ -38,7 +38,7 @@ extension String {
             mutableString.setAttributes([NSAttributedString.Key.font: boldFont], range: range)
         }
 
-        mutableString.insert(emoji: emoji, view: label)
+        mutableString.insert(emojis: emojis, view: label)
         mutableString.resizeAttachments(toLineHeight: label.font.lineHeight)
 
         return mutableString

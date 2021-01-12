@@ -33,7 +33,7 @@ final class PollView: UIView {
                 for (index, option) in viewModel.pollOptions.enumerated() {
                     let button = PollOptionButton(
                         title: option.title,
-                        emoji: viewModel.pollEmoji,
+                        emojis: viewModel.pollEmojis,
                         multipleSelection: viewModel.isPollMultipleSelection)
 
                     button.addAction(
@@ -54,7 +54,7 @@ final class PollView: UIView {
                 for (index, option) in viewModel.pollOptions.enumerated() {
                     let resultView = PollResultView(
                         option: option,
-                        emoji: viewModel.pollEmoji,
+                        emojis: viewModel.pollEmojis,
                         selected: viewModel.pollOwnVotes.contains(index),
                         multipleSelection: viewModel.isPollMultipleSelection,
                         votersCount: viewModel.pollVotersCount)

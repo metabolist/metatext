@@ -130,19 +130,19 @@ private extension NotificationView {
         case .follow:
             typeLabel.attributedText = "notifications.followed-you".localizedBolding(
                 displayName: viewModel.accountViewModel.displayName,
-                emoji: viewModel.accountViewModel.emoji,
+                emojis: viewModel.accountViewModel.emojis,
                 label: typeLabel)
             iconImageView.tintColor = nil
         case .reblog:
             typeLabel.attributedText = "notifications.reblogged-your-status".localizedBolding(
                 displayName: viewModel.accountViewModel.displayName,
-                emoji: viewModel.accountViewModel.emoji,
+                emojis: viewModel.accountViewModel.emojis,
                 label: typeLabel)
             iconImageView.tintColor = .systemGreen
         case .favourite:
             typeLabel.attributedText = "notifications.favourited-your-status".localizedBolding(
                 displayName: viewModel.accountViewModel.displayName,
-                emoji: viewModel.accountViewModel.emoji,
+                emojis: viewModel.accountViewModel.emojis,
                 label: typeLabel)
             iconImageView.tintColor = .systemYellow
         case .poll:
@@ -155,7 +155,7 @@ private extension NotificationView {
         default:
             typeLabel.attributedText = "notifications.unknown".localizedBolding(
                 displayName: viewModel.accountViewModel.displayName,
-                emoji: viewModel.accountViewModel.emoji,
+                emojis: viewModel.accountViewModel.emojis,
                 label: typeLabel)
             iconImageView.tintColor = nil
         }
@@ -163,7 +163,7 @@ private extension NotificationView {
         if viewModel.statusViewModel == nil {
             let mutableDisplayName = NSMutableAttributedString(string: viewModel.accountViewModel.displayName)
 
-            mutableDisplayName.insert(emoji: viewModel.accountViewModel.emoji, view: displayNameLabel)
+            mutableDisplayName.insert(emojis: viewModel.accountViewModel.emojis, view: displayNameLabel)
             mutableDisplayName.resizeAttachments(toLineHeight: displayNameLabel.font.lineHeight)
             displayNameLabel.attributedText = mutableDisplayName
             accountLabel.text = viewModel.accountViewModel.accountName

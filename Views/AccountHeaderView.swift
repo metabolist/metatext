@@ -50,7 +50,7 @@ final class AccountHeaderView: UIView {
                 } else {
                     let mutableDisplayName = NSMutableAttributedString(string: accountViewModel.displayName)
 
-                    mutableDisplayName.insert(emoji: accountViewModel.emoji, view: displayNameLabel)
+                    mutableDisplayName.insert(emojis: accountViewModel.emojis, view: displayNameLabel)
                     mutableDisplayName.resizeAttachments(toLineHeight: displayNameLabel.font.lineHeight)
                     displayNameLabel.attributedText = mutableDisplayName
                 }
@@ -70,7 +70,7 @@ final class AccountHeaderView: UIView {
                             string: identityProof.providerUsername,
                             attributes: [.link: identityProof.profileUrl]),
                         verifiedAt: identityProof.updatedAt,
-                        emoji: [])
+                        emojis: [])
 
                     fieldView.valueTextView.delegate = self
 
@@ -82,7 +82,7 @@ final class AccountHeaderView: UIView {
                         name: field.name,
                         value: field.value.attributed,
                         verifiedAt: field.verifiedAt,
-                        emoji: accountViewModel.emoji)
+                        emojis: accountViewModel.emojis)
 
                     fieldView.valueTextView.delegate = self
 
@@ -99,7 +99,7 @@ final class AccountHeaderView: UIView {
                     [.font: noteFont as Any,
                      .foregroundColor: UIColor.label],
                     range: noteRange)
-                mutableNote.insert(emoji: accountViewModel.emoji, view: noteTextView)
+                mutableNote.insert(emojis: accountViewModel.emojis, view: noteTextView)
                 mutableNote.resizeAttachments(toLineHeight: noteFont.lineHeight)
                 noteTextView.attributedText = mutableNote
                 noteTextView.isHidden = false

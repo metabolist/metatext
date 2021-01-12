@@ -5,12 +5,12 @@ import struct Mastodon.Emoji
 
 struct CustomEmojiText: UIViewRepresentable {
     private let attributedText: NSMutableAttributedString
-    private let emoji: [Emoji]
+    private let emojis: [Emoji]
     private let textStyle: UIFont.TextStyle
 
-    init(text: String, emoji: [Emoji], textStyle: UIFont.TextStyle) {
+    init(text: String, emojis: [Emoji], textStyle: UIFont.TextStyle) {
         attributedText = NSMutableAttributedString(string: text)
-        self.emoji = emoji
+        self.emojis = emojis
         self.textStyle = textStyle
     }
 
@@ -18,7 +18,7 @@ struct CustomEmojiText: UIViewRepresentable {
         let label = UILabel()
 
         label.font = UIFont.preferredFont(forTextStyle: textStyle)
-        attributedText.insert(emoji: emoji, view: label)
+        attributedText.insert(emojis: emojis, view: label)
         attributedText.resizeAttachments(toLineHeight: label.font.lineHeight)
         label.attributedText = attributedText
 

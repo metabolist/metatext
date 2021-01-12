@@ -24,7 +24,7 @@ struct SecondaryNavigationView: View {
                                         if let account = viewModel.identification.identity.account {
                                             CustomEmojiText(
                                                 text: account.displayName,
-                                                emoji: account.emojis,
+                                                emojis: account.emojis,
                                                 textStyle: .headline)
                                         }
                                         Text(viewModel.identification.identity.handle)

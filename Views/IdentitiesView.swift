@@ -71,7 +71,7 @@ private extension IdentitiesView {
                     if let account = identity.account {
                         CustomEmojiText(
                             text: account.displayName,
-                            emoji: account.emojis,
+                            emojis: account.emojis,
                             textStyle: .headline)
                     }
                     Text(identity.handle)
@@ -81,7 +81,7 @@ private extension IdentitiesView {
                     if let instance = identity.instance {
                         CustomEmojiText(
                             text: instance.title,
-                            emoji: [],
+                            emojis: [],
                             textStyle: .headline)
                         Text(instance.uri)
                             .font(.subheadline)

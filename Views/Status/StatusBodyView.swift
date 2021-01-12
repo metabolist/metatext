@@ -27,12 +27,12 @@ final class StatusBodyView: UIView {
             mutableContent.addAttributes(
                 [.font: contentFont, .foregroundColor: UIColor.label],
                 range: contentRange)
-            mutableContent.insert(emoji: viewModel.contentEmoji, view: contentTextView)
+            mutableContent.insert(emojis: viewModel.contentEmojis, view: contentTextView)
             mutableContent.resizeAttachments(toLineHeight: contentFont.lineHeight)
             contentTextView.attributedText = mutableContent
             contentTextView.isHidden = contentTextView.text.isEmpty
 
-            mutableSpoilerText.insert(emoji: viewModel.contentEmoji, view: spoilerTextLabel)
+            mutableSpoilerText.insert(emojis: viewModel.contentEmojis, view: spoilerTextLabel)
             mutableSpoilerText.resizeAttachments(toLineHeight: spoilerTextLabel.font.lineHeight)
             spoilerTextLabel.font = contentFont
             spoilerTextLabel.attributedText = mutableSpoilerText

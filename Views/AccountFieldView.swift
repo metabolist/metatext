@@ -8,7 +8,7 @@ final class AccountFieldView: UIView {
     let valueTextView = TouchFallthroughTextView()
 
     // swiftlint:disable:next function_body_length
-    init(name: String, value: NSAttributedString, verifiedAt: Date?, emoji: [Emoji]) {
+    init(name: String, value: NSAttributedString, verifiedAt: Date?, emojis: [Emoji]) {
         super.init(frame: .zero)
 
         backgroundColor = .systemBackground
@@ -36,7 +36,7 @@ final class AccountFieldView: UIView {
 
         let mutableName = NSMutableAttributedString(string: name)
 
-        mutableName.insert(emoji: emoji, view: nameLabel)
+        mutableName.insert(emojis: emojis, view: nameLabel)
         mutableName.resizeAttachments(toLineHeight: nameLabel.font.lineHeight)
         nameLabel.attributedText = mutableName
 
@@ -66,7 +66,7 @@ final class AccountFieldView: UIView {
             [.font: valueFont as Any,
              .foregroundColor: UIColor.label],
             range: valueRange)
-        mutableValue.insert(emoji: emoji, view: valueTextView)
+        mutableValue.insert(emojis: emojis, view: valueTextView)
         mutableValue.resizeAttachments(toLineHeight: valueFont.lineHeight)
 
         valueTextView.attributedText = mutableValue

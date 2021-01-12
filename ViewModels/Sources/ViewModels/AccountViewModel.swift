@@ -48,7 +48,7 @@ public extension AccountViewModel {
 
     var note: NSAttributedString { accountService.account.note.attributed }
 
-    var emoji: [Emoji] { accountService.account.emojis }
+    var emojis: [Emoji] { accountService.account.emojis }
 
     var followingCount: Int { accountService.account.followingCount }
 

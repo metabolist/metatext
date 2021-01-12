@@ -10,7 +10,7 @@ final class PollResultView: UIView {
     private let percentLabel = UILabel()
     private let percentView = UIProgressView()
 
-    init(option: Poll.Option, emoji: [Emoji], selected: Bool, multipleSelection: Bool, votersCount: Int) {
+    init(option: Poll.Option, emojis: [Emoji], selected: Bool, multipleSelection: Bool, votersCount: Int) {
         super.init(frame: .zero)
 
         addSubview(verticalStackView)
@@ -45,7 +45,7 @@ final class PollResultView: UIView {
 
         let attributedTitle = NSMutableAttributedString(string: option.title)
 
-        attributedTitle.insert(emoji: emoji, view: titleLabel)
+        attributedTitle.insert(emojis: emojis, view: titleLabel)
         attributedTitle.resizeAttachments(toLineHeight: titleLabel.font.lineHeight)
         titleLabel.attributedText = attributedTitle
 

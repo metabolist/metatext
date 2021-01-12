@@ -5,8 +5,8 @@ import Mastodon
 import UIKit
 
 extension NSMutableAttributedString {
-    func insert(emoji: [Emoji], view: UIView) {
-        for emoji in emoji {
+    func insert(emojis: [Emoji], view: UIView) {
+        for emoji in emojis {
             let token = ":\(emoji.shortcode):"
 
             while let tokenRange = string.range(of: token) {
