@@ -7,4 +7,5 @@ public struct Emoji: Codable, Hashable {
     public let staticUrl: URL
     public let url: URL
     public let visibleInPicker: Bool
+    public let category: String?
 }

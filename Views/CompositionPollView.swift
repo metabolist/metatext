@@ -6,13 +6,13 @@ import ViewModels
 
 final class CompositionPollView: UIView {
     private let viewModel: CompositionViewModel
-    private let compositionInputAccessoryView: CompositionInputAccessoryView
+    private let parentViewModel: NewStatusViewModel
     private let stackView = UIStackView()
     private var cancellables = Set<AnyCancellable>()
 
-    init(viewModel: CompositionViewModel, inputAccessoryView: CompositionInputAccessoryView) {
+    init(viewModel: CompositionViewModel, parentViewModel: NewStatusViewModel) {
         self.viewModel = viewModel
-        self.compositionInputAccessoryView = inputAccessoryView
+        self.parentViewModel = parentViewModel
 
         super.init(frame: .zero)
 
@@ -118,8 +118,8 @@ private extension CompositionPollView {
                 if !self.pollOptionViews.contains(where: { $0.option === option }) {
                     let optionView = CompositionPollOptionView(
                         viewModel: self.viewModel,
-                        option: option,
-                        inputAccessoryView: self.compositionInputAccessoryView)
+                        parentViewModel: self.parentViewModel,
+                        option: option)
 
                     self.stackView.insertArrangedSubview(optionView, at: index)
                 }

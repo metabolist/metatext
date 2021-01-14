@@ -66,6 +66,7 @@ public extension NewStatusViewModel {
         case presentMediaPicker(CompositionViewModel)
         case presentCamera(CompositionViewModel)
         case presentDocumentPicker(CompositionViewModel)
+        case presentEmojiPicker(Int)
         case editAttachment(AttachmentViewModel, CompositionViewModel)
     }
 
@@ -104,6 +105,10 @@ public extension NewStatusViewModel {
 
     func presentDocumentPicker(viewModel: CompositionViewModel) {
         eventsSubject.send(.presentDocumentPicker(viewModel))
+    }
+
+    func presentEmojiPicker(tag: Int) {
+        eventsSubject.send(.presentEmojiPicker(tag))
     }
 
     func remove(viewModel: CompositionViewModel) {

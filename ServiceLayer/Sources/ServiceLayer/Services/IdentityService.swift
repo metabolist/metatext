@@ -62,6 +62,12 @@ public extension IdentityService {
             .eraseToAnyPublisher()
     }
 
+    func refreshEmojis() -> AnyPublisher<Never, Error> {
+        mastodonAPIClient.request(EmojisEndpoint.customEmojis)
+            .flatMap(contentDatabase.update(emojis:))
+            .eraseToAnyPublisher()
+    }
+
     func confirmIdentity() -> AnyPublisher<Never, Error> {
         identityDatabase.confirmIdentity(id: id)
     }
@@ -163,6 +169,10 @@ public extension IdentityService {
 
     func expiredFiltersPublisher() -> AnyPublisher<[Filter], Error> {
         contentDatabase.expiredFiltersPublisher()
+    }
+
+    func pickerEmojisPublisher() -> AnyPublisher<[Emoji], Error> {
+        contentDatabase.pickerEmojisPublisher()
     }
 
     func updatePreferences(_ preferences: Identity.Preferences) -> AnyPublisher<Never, Error> {

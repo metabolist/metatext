@@ -382,6 +382,18 @@ public extension ContentDatabase {
         .eraseToAnyPublisher()
     }
 
+    func update(emojis: [Emoji]) -> AnyPublisher<Never, Error> {
+        databaseWriter.writePublisher {
+            for emoji in emojis {
+                try emoji.save($0)
+            }
+
+            try Emoji.filter(!emojis.map(\.shortcode).contains(Emoji.Columns.shortcode)).deleteAll($0)
+        }
+        .ignoreOutput()
+        .eraseToAnyPublisher()
+    }
+
     func timelinePublisher(_ timeline: Timeline) -> AnyPublisher<[[CollectionItem]], Error> {
         ValueObservation.tracking(
             TimelineItemsInfo.request(TimelineRecord.filter(TimelineRecord.Columns.id == timeline.id)).fetchOne)
@@ -489,6 +501,13 @@ public extension ContentDatabase {
                 $0.sorted { $0.lastStatusInfo.record.createdAt > $1.lastStatusInfo.record.createdAt }
                     .map(Conversation.init(info:))
             }
+            .eraseToAnyPublisher()
+    }
+
+    func pickerEmojisPublisher() -> AnyPublisher<[Emoji], Error> {
+        ValueObservation.tracking(Emoji.filter(Emoji.Columns.visibleInPicker == true).fetchAll)
+            .removeDuplicates()
+            .publisher(in: databaseWriter)
             .eraseToAnyPublisher()
     }
 

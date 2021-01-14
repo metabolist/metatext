@@ -8,15 +8,15 @@ final class CompositionPollOptionView: UIView {
     let option: CompositionViewModel.PollOption
     let removeButton = UIButton(type: .close)
     private let viewModel: CompositionViewModel
-    private let compositionInputAccessoryView: CompositionInputAccessoryView
+    private let parentViewModel: NewStatusViewModel
     private var cancellables = Set<AnyCancellable>()
 
     init(viewModel: CompositionViewModel,
-         option: CompositionViewModel.PollOption,
-         inputAccessoryView: CompositionInputAccessoryView) {
+         parentViewModel: NewStatusViewModel,
+         option: CompositionViewModel.PollOption) {
         self.viewModel = viewModel
+        self.parentViewModel = parentViewModel
         self.option = option
-        self.compositionInputAccessoryView = inputAccessoryView
 
         super.init(frame: .zero)
 
@@ -44,7 +44,11 @@ private extension CompositionPollOptionView {
         textField.borderStyle = .roundedRect
         textField.adjustsFontForContentSizeCategory = true
         textField.font = .preferredFont(forTextStyle: .body)
-        textField.inputAccessoryView = compositionInputAccessoryView
+        let textInputAccessoryView = CompositionInputAccessoryView(
+            viewModel: viewModel,
+            parentViewModel: parentViewModel)
+        textField.inputAccessoryView = textInputAccessoryView
+        textField.tag = textInputAccessoryView.tagForInputView
         textField.addAction(
             UIAction { [weak self] _ in
                 self?.option.text = textField.text ?? "" },

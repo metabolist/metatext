@@ -13,7 +13,6 @@ final class CompositionView: UIView {
     let removeButton = UIButton(type: .close)
     let inReplyToView = UIView()
     let hasReplyFollowingView = UIView()
-    let compositionInputAccessoryView: CompositionInputAccessoryView
     let attachmentsView = AttachmentsView()
     let attachmentUploadView: AttachmentUploadView
     let pollView: CompositionPollView
@@ -27,12 +26,9 @@ final class CompositionView: UIView {
         self.viewModel = viewModel
         self.parentViewModel = parentViewModel
 
-        compositionInputAccessoryView = CompositionInputAccessoryView(
-            viewModel: viewModel,
-            parentViewModel: parentViewModel)
         attachmentUploadView = AttachmentUploadView(viewModel: viewModel)
         markAttachmentsSensitiveView = MarkAttachmentsSensitiveView(viewModel: viewModel)
-        pollView = CompositionPollView(viewModel: viewModel, inputAccessoryView: compositionInputAccessoryView)
+        pollView = CompositionPollView(viewModel: viewModel, parentViewModel: parentViewModel)
 
         super.init(frame: .zero)
 
@@ -75,12 +71,17 @@ private extension CompositionView {
         stackView.axis = .vertical
         stackView.spacing = .defaultSpacing
 
+        let spoilerTextinputAccessoryView = CompositionInputAccessoryView(
+            viewModel: viewModel,
+            parentViewModel: parentViewModel)
+
         stackView.addArrangedSubview(spoilerTextField)
         spoilerTextField.borderStyle = .roundedRect
         spoilerTextField.adjustsFontForContentSizeCategory = true
         spoilerTextField.font = .preferredFont(forTextStyle: .body)
         spoilerTextField.placeholder = NSLocalizedString("status.spoiler-text-placeholder", comment: "")
-        spoilerTextField.inputAccessoryView = compositionInputAccessoryView
+        spoilerTextField.inputAccessoryView = spoilerTextinputAccessoryView
+        spoilerTextField.tag = spoilerTextinputAccessoryView.tagForInputView
         spoilerTextField.addAction(
             UIAction { [weak self] _ in
                 guard let self = self, let text = self.spoilerTextField.text else { return }
@@ -90,6 +91,9 @@ private extension CompositionView {
             for: .editingChanged)
 
         let textViewFont = UIFont.preferredFont(forTextStyle: .body)
+        let textInputAccessoryView = CompositionInputAccessoryView(
+            viewModel: viewModel,
+            parentViewModel: parentViewModel)
 
         stackView.addArrangedSubview(textView)
         textView.isScrollEnabled = false
@@ -97,7 +101,8 @@ private extension CompositionView {
         textView.font = textViewFont
         textView.textContainerInset = .zero
         textView.textContainer.lineFragmentPadding = 0
-        textView.inputAccessoryView = compositionInputAccessoryView
+        textView.inputAccessoryView = textInputAccessoryView
+        textView.tag = textInputAccessoryView.tagForInputView
         textView.inputAccessoryView?.sizeToFit()
         textView.delegate = self
 

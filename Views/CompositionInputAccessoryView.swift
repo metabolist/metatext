@@ -10,6 +10,7 @@ final class CompositionInputAccessoryView: UIView {
     let visibilityButton = UIButton()
     let addButton = UIButton()
     let contentWarningButton = UIButton(type: .system)
+    let tagForInputView = UUID().hashValue
 
     private let viewModel: CompositionViewModel
     private let parentViewModel: NewStatusViewModel
@@ -111,6 +112,19 @@ private extension CompositionInputAccessoryView {
             UIAction { [weak self] _ in self?.viewModel.displayContentWarning.toggle() },
             for: .touchUpInside)
 
+        let emojiButton = UIButton(primaryAction: UIAction { [weak self] _ in
+            guard let self = self else { return }
+
+            self.parentViewModel.presentEmojiPicker(tag: self.tagForInputView)
+        })
+
+        stackView.addArrangedSubview(emojiButton)
+        emojiButton.setImage(
+            UIImage(
+                systemName: "face.smiling",
+                withConfiguration: UIImage.SymbolConfiguration(scale: .medium)),
+            for: .normal)
+
         stackView.addArrangedSubview(UIView())
 
         let charactersLabel = UILabel()
@@ -155,7 +169,7 @@ private extension CompositionInputAccessoryView {
             }
             .store(in: &cancellables)
 
-        for button in [attachmentButton, pollButton, visibilityButton, contentWarningButton, addButton] {
+        for button in [attachmentButton, pollButton, visibilityButton, contentWarningButton, emojiButton, addButton] {
             button.heightAnchor.constraint(greaterThanOrEqualToConstant: .minimumButtonDimension).isActive = true
             button.widthAnchor.constraint(greaterThanOrEqualToConstant: .minimumButtonDimension).isActive = true
         }

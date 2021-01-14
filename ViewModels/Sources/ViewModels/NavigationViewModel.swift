@@ -120,6 +120,9 @@ public extension NavigationViewModel {
             identification.service.refreshFilters()
                 .sink { _ in } receiveValue: { _ in }
                 .store(in: &cancellables)
+            identification.service.refreshEmojis()
+                .sink { _ in } receiveValue: { _ in }
+                .store(in: &cancellables)
 
             if identification.identity.preferences.useServerPostingReadingPreferences {
                 identification.service.refreshServerPreferences()

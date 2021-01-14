@@ -55,6 +55,8 @@
 		D0625E5D250F0B5C00502611 /* StatusContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0625E5C250F0B5C00502611 /* StatusContentConfiguration.swift */; };
 		D06BC5E625202AD90079541D /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06BC5E525202AD90079541D /* ProfileViewController.swift */; };
 		D0849C7F25903C4900A5EBCC /* Status+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0849C7E25903C4900A5EBCC /* Status+Extensions.swift */; };
+		D088406D25AFBBE200BB749B /* EmojiPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D088406C25AFBBE200BB749B /* EmojiPickerViewController.swift */; };
+		D088406E25AFBBE200BB749B /* EmojiPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D088406C25AFBBE200BB749B /* EmojiPickerViewController.swift */; };
 		D08B8D3D253F929E00B1EBEF /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08B8D3C253F929E00B1EBEF /* ImageViewController.swift */; };
 		D08B8D42253F92B600B1EBEF /* ImagePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08B8D41253F92B600B1EBEF /* ImagePageViewController.swift */; };
 		D08B8D4A253FC36500B1EBEF /* ImageNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08B8D49253FC36500B1EBEF /* ImageNavigationController.swift */; };
@@ -211,6 +213,7 @@
 		D06BC5E525202AD90079541D /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		D0849C7E25903C4900A5EBCC /* Status+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Status+Extensions.swift"; sourceTree = "<group>"; };
 		D085C3BB25008DEC008A6C5E /* DB */ = {isa = PBXFileReference; lastKnownFileType = folder; path = DB; sourceTree = "<group>"; };
+		D088406C25AFBBE200BB749B /* EmojiPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiPickerViewController.swift; sourceTree = "<group>"; };
 		D08B8D3C253F929E00B1EBEF /* ImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
 		D08B8D41253F92B600B1EBEF /* ImagePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePageViewController.swift; sourceTree = "<group>"; };
 		D08B8D49253FC36500B1EBEF /* ImageNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageNavigationController.swift; sourceTree = "<group>"; };
@@ -511,6 +514,7 @@
 			isa = PBXGroup;
 			children = (
 				D05936CE25A8D79800754FDF /* EditAttachmentViewController.swift */,
+				D088406C25AFBBE200BB749B /* EmojiPickerViewController.swift */,
 				D08B8D49253FC36500B1EBEF /* ImageNavigationController.swift */,
 				D08B8D41253F92B600B1EBEF /* ImagePageViewController.swift */,
 				D08B8D3C253F929E00B1EBEF /* ImageViewController.swift */,
@@ -866,6 +870,7 @@
 				D0BEB20524FA1107001B0F04 /* FiltersView.swift in Sources */,
 				D0FCC110259C4F20000B67DF /* NewStatusView.swift in Sources */,
 				D0C7D49B24F7616A001EBDBB /* PreferencesView.swift in Sources */,
+				D088406D25AFBBE200BB749B /* EmojiPickerViewController.swift in Sources */,
 				D0C7D4D724F7616A001EBDBB /* UIColor+Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -904,6 +909,7 @@
 				D0FCC106259C4E62000B67DF /* NewStatusViewController.swift in Sources */,
 				D036EBBD259FE2A100EC1CFC /* Array+Extensions.swift in Sources */,
 				D036EBB3259FE28800EC1CFC /* UIColor+Extensions.swift in Sources */,
+				D088406E25AFBBE200BB749B /* EmojiPickerViewController.swift in Sources */,
 				D036EBB8259FE29800EC1CFC /* Status+Extensions.swift in Sources */,
 				D05936DF25A937EC00754FDF /* EditThumbnailView.swift in Sources */,
 			);

@@ -8,6 +8,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 import ViewModels
 
+// swiftlint:disable file_length
 final class NewStatusViewController: UIViewController {
     private let viewModel: NewStatusViewModel
     private let scrollView = UIScrollView()
@@ -121,6 +122,13 @@ extension NewStatusViewController: UIDocumentPickerDelegate {
     }
 }
 
+extension NewStatusViewController: UIPopoverPresentationControllerDelegate {
+    func adaptivePresentationStyle(for controller: UIPresentationController,
+                                   traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+        .none
+    }
+}
+
 // Required by UIImagePickerController
 extension NewStatusViewController: UINavigationControllerDelegate {}
 
@@ -135,6 +143,8 @@ private extension NewStatusViewController {
             #endif
         case let .presentDocumentPicker(compositionViewModel):
             presentDocumentPicker(compositionViewModel: compositionViewModel)
+        case let .presentEmojiPicker(tag):
+            presentEmojiPicker(tag: tag)
         case let .editAttachment(attachmentViewModel, compositionViewModel):
             presentAttachmentEditor(
                 attachmentViewModel: attachmentViewModel,
@@ -222,7 +232,10 @@ private extension NewStatusViewController {
             .store(in: &cancellables)
         viewModel.$alertItem
             .compactMap { $0 }
-            .sink { [weak self] in self?.present(alertItem: $0) }
+            .sink { [weak self] in
+                self?.dismissEmojiPickerIfPresented()
+                self?.present(alertItem: $0)
+            }
             .store(in: &cancellables)
     }
 
@@ -258,6 +271,7 @@ private extension NewStatusViewController {
 
         picker.modalPresentationStyle = .overFullScreen
         picker.delegate = self
+        dismissEmojiPickerIfPresented()
         present(picker, animated: true)
     }
 
@@ -280,7 +294,6 @@ private extension NewStatusViewController {
 
             alertController.addAction(openSystemSettingsAction)
             alertController.addAction(cancelAction)
-
             present(alertController, animated: true)
 
             return
@@ -310,6 +323,7 @@ private extension NewStatusViewController {
             picker.mediaTypes = [UTType.image.description]
         }
 
+        dismissEmojiPickerIfPresented()
         present(picker, animated: true)
     }
     #endif
@@ -332,8 +346,40 @@ private extension NewStatusViewController {
         documentPickerController.delegate = self
         documentPickerController.allowsMultipleSelection = false
         documentPickerController.modalPresentationStyle = .overFullScreen
-
+        dismissEmojiPickerIfPresented()
         present(documentPickerController, animated: true)
+    }
+
+    func presentEmojiPicker(tag: Int) {
+        if dismissEmojiPickerIfPresented() {
+            return
+        }
+
+        guard let fromView = view.viewWithTag(tag) else { return }
+
+        let emojiPickerController = EmojiPickerViewController(
+            viewModel: .init(identification: viewModel.identification))
+
+        emojiPickerController.searchBar.inputAccessoryView = fromView.inputAccessoryView
+        emojiPickerController.preferredContentSize = view.frame.size
+        emojiPickerController.modalPresentationStyle = .popover
+        emojiPickerController.popoverPresentationController?.delegate = self
+        emojiPickerController.popoverPresentationController?.sourceView = fromView
+        emojiPickerController.popoverPresentationController?.sourceRect = fromView.bounds
+        emojiPickerController.popoverPresentationController?.backgroundColor = .clear
+
+        present(emojiPickerController, animated: true)
+    }
+
+    @discardableResult
+    func dismissEmojiPickerIfPresented() -> Bool {
+        let emojiPickerPresented = presentedViewController is EmojiPickerViewController
+
+        if emojiPickerPresented {
+            dismiss(animated: true)
+        }
+
+        return emojiPickerPresented
     }
 
     func presentAttachmentEditor(attachmentViewModel: AttachmentViewModel, compositionViewModel: CompositionViewModel) {
@@ -342,6 +388,7 @@ private extension NewStatusViewController {
         let navigationController = UINavigationController(rootViewController: editAttachmentViewController)
 
         navigationController.modalPresentationStyle = .overFullScreen
+        dismissEmojiPickerIfPresented()
         present(navigationController, animated: true)
     }
 
@@ -383,3 +430,4 @@ private extension NewStatusViewController {
         return changeIdentityButton
     }
 }
+// swiftlint:enable file_length
