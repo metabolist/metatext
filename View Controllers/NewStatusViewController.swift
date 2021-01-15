@@ -232,9 +232,10 @@ private extension NewStatusViewController {
             .store(in: &cancellables)
         viewModel.$alertItem
             .compactMap { $0 }
-            .sink { [weak self] in
-                self?.dismissEmojiPickerIfPresented()
-                self?.present(alertItem: $0)
+            .sink { [weak self] alertItem in
+                self?.dismissEmojiPickerIfPresented {
+                    self?.present(alertItem: alertItem)
+                }
             }
             .store(in: &cancellables)
     }
@@ -271,8 +272,9 @@ private extension NewStatusViewController {
 
         picker.modalPresentationStyle = .overFullScreen
         picker.delegate = self
-        dismissEmojiPickerIfPresented()
-        present(picker, animated: true)
+        dismissEmojiPickerIfPresented {
+            self.present(picker, animated: true)
+        }
     }
 
     #if !IS_SHARE_EXTENSION
@@ -323,8 +325,9 @@ private extension NewStatusViewController {
             picker.mediaTypes = [UTType.image.description]
         }
 
-        dismissEmojiPickerIfPresented()
-        present(picker, animated: true)
+        dismissEmojiPickerIfPresented {
+            self.present(picker, animated: true)
+        }
     }
     #endif
 
@@ -346,8 +349,9 @@ private extension NewStatusViewController {
         documentPickerController.delegate = self
         documentPickerController.allowsMultipleSelection = false
         documentPickerController.modalPresentationStyle = .overFullScreen
-        dismissEmojiPickerIfPresented()
-        present(documentPickerController, animated: true)
+        dismissEmojiPickerIfPresented {
+            self.present(documentPickerController, animated: true)
+        }
     }
 
     func presentEmojiPicker(tag: Int) {
@@ -357,11 +361,33 @@ private extension NewStatusViewController {
 
         guard let fromView = view.viewWithTag(tag) else { return }
 
-        let emojiPickerController = EmojiPickerViewController(
-            viewModel: .init(identification: viewModel.identification))
+        let emojiPickerViewModel = EmojiPickerViewModel(identification: viewModel.identification)
+
+        emojiPickerViewModel.$alertItem.assign(to: \.alertItem, on: viewModel).store(in: &cancellables)
+
+        let emojiPickerController = EmojiPickerViewController(viewModel: emojiPickerViewModel) {
+            guard let textInput = fromView as? UITextInput else { return }
+
+            let emojiString: String
+
+            switch $0 {
+            case let .custom(emoji):
+                emojiString = ":\(emoji.shortcode):"
+            case let .system(emoji):
+                emojiString = emoji.emoji
+            }
+
+            if let selectedTextRange = textInput.selectedTextRange {
+                textInput.replace(selectedTextRange, withText: emojiString.appending(" "))
+            }
+        } dismissAction: {
+            fromView.becomeFirstResponder()
+        }
 
         emojiPickerController.searchBar.inputAccessoryView = fromView.inputAccessoryView
-        emojiPickerController.preferredContentSize = view.frame.size
+        emojiPickerController.preferredContentSize = .init(
+            width: view.readableContentGuide.layoutFrame.width,
+            height: view.frame.height)
         emojiPickerController.modalPresentationStyle = .popover
         emojiPickerController.popoverPresentationController?.delegate = self
         emojiPickerController.popoverPresentationController?.sourceView = fromView
@@ -372,11 +398,11 @@ private extension NewStatusViewController {
     }
 
     @discardableResult
-    func dismissEmojiPickerIfPresented() -> Bool {
+    func dismissEmojiPickerIfPresented(completion: (() -> Void)? = nil) -> Bool {
         let emojiPickerPresented = presentedViewController is EmojiPickerViewController
 
         if emojiPickerPresented {
-            dismiss(animated: true)
+            dismiss(animated: true, completion: completion)
         }
 
         return emojiPickerPresented
@@ -388,8 +414,9 @@ private extension NewStatusViewController {
         let navigationController = UINavigationController(rootViewController: editAttachmentViewController)
 
         navigationController.modalPresentationStyle = .overFullScreen
-        dismissEmojiPickerIfPresented()
-        present(navigationController, animated: true)
+        dismissEmojiPickerIfPresented {
+            self.present(navigationController, animated: true)
+        }
     }
 
     func changeIdentityButton(identification: Identification) -> UIButton {

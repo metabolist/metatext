@@ -254,6 +254,10 @@ public extension IdentityService {
     func domainBlocksService() -> DomainBlocksService {
         DomainBlocksService(mastodonAPIClient: mastodonAPIClient)
     }
+
+    func emojiPickerService() -> EmojiPickerService {
+        EmojiPickerService(contentDatabase: contentDatabase)
+    }
 }
 
 private extension IdentityService {

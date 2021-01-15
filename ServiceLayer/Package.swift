@@ -27,7 +27,8 @@ let package = Package(
     targets: [
         .target(
             name: "ServiceLayer",
-            dependencies: ["CodableBloomFilter", "DB", "MastodonAPI", "Secrets"]),
+            dependencies: ["CodableBloomFilter", "DB", "MastodonAPI", "Secrets"],
+            resources: [.process("Resources")]),
         .target(
             name: "ServiceLayerMocks",
             dependencies: [

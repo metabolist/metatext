@@ -132,6 +132,17 @@ extension ContentDatabase {
                 t.column("wholeWord", .boolean).notNull()
             }
 
+            try db.create(table: "emoji") { t in
+                t.column("shortcode", .text)
+                    .primaryKey(onConflict: .replace)
+                    .collate(.localizedCaseInsensitiveCompare)
+                    .notNull()
+                t.column("staticUrl", .text).notNull()
+                t.column("url", .text).notNull()
+                t.column("visibleInPicker", .boolean).notNull()
+                t.column("category", .text)
+            }
+
             try db.create(table: "conversationRecord") { t in
                 t.column("id", .text).primaryKey(onConflict: .replace)
                 t.column("unread", .boolean).notNull()

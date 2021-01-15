@@ -54,6 +54,16 @@
 		D0625E59250F092900502611 /* StatusListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0625E58250F092900502611 /* StatusListCell.swift */; };
 		D0625E5D250F0B5C00502611 /* StatusContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0625E5C250F0B5C00502611 /* StatusContentConfiguration.swift */; };
 		D06BC5E625202AD90079541D /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06BC5E525202AD90079541D /* ProfileViewController.swift */; };
+		D07EC7CF25B13921006DF726 /* PickerEmoji+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07EC7CE25B13921006DF726 /* PickerEmoji+Extensions.swift */; };
+		D07EC7D025B13921006DF726 /* PickerEmoji+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07EC7CE25B13921006DF726 /* PickerEmoji+Extensions.swift */; };
+		D07EC7DC25B13DBB006DF726 /* EmojiCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07EC7DB25B13DBB006DF726 /* EmojiCollectionViewCell.swift */; };
+		D07EC7DD25B13DBB006DF726 /* EmojiCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07EC7DB25B13DBB006DF726 /* EmojiCollectionViewCell.swift */; };
+		D07EC7E325B13DD3006DF726 /* EmojiContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07EC7E225B13DD3006DF726 /* EmojiContentConfiguration.swift */; };
+		D07EC7E425B13DD3006DF726 /* EmojiContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07EC7E225B13DD3006DF726 /* EmojiContentConfiguration.swift */; };
+		D07EC7F225B13E57006DF726 /* EmojiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07EC7F125B13E57006DF726 /* EmojiView.swift */; };
+		D07EC7F325B13E57006DF726 /* EmojiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07EC7F125B13E57006DF726 /* EmojiView.swift */; };
+		D07EC7FD25B16994006DF726 /* EmojiCategoryHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07EC7FC25B16994006DF726 /* EmojiCategoryHeaderView.swift */; };
+		D07EC7FE25B16994006DF726 /* EmojiCategoryHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07EC7FC25B16994006DF726 /* EmojiCategoryHeaderView.swift */; };
 		D0849C7F25903C4900A5EBCC /* Status+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0849C7E25903C4900A5EBCC /* Status+Extensions.swift */; };
 		D088406D25AFBBE200BB749B /* EmojiPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D088406C25AFBBE200BB749B /* EmojiPickerViewController.swift */; };
 		D088406E25AFBBE200BB749B /* EmojiPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D088406C25AFBBE200BB749B /* EmojiPickerViewController.swift */; };
@@ -211,6 +221,11 @@
 		D0666A2124C677B400F3F04B /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0666A2524C677B400F3F04B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D06BC5E525202AD90079541D /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		D07EC7CE25B13921006DF726 /* PickerEmoji+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PickerEmoji+Extensions.swift"; sourceTree = "<group>"; };
+		D07EC7DB25B13DBB006DF726 /* EmojiCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCollectionViewCell.swift; sourceTree = "<group>"; };
+		D07EC7E225B13DD3006DF726 /* EmojiContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiContentConfiguration.swift; sourceTree = "<group>"; };
+		D07EC7F125B13E57006DF726 /* EmojiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiView.swift; sourceTree = "<group>"; };
+		D07EC7FC25B16994006DF726 /* EmojiCategoryHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCategoryHeaderView.swift; sourceTree = "<group>"; };
 		D0849C7E25903C4900A5EBCC /* Status+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Status+Extensions.swift"; sourceTree = "<group>"; };
 		D085C3BB25008DEC008A6C5E /* DB */ = {isa = PBXFileReference; lastKnownFileType = folder; path = DB; sourceTree = "<group>"; };
 		D088406C25AFBBE200BB749B /* EmojiPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiPickerViewController.swift; sourceTree = "<group>"; };
@@ -473,6 +488,10 @@
 				D05936E825AA3F3D00754FDF /* EditAttachmentView.swift */,
 				D0BEB21024FA2A90001B0F04 /* EditFilterView.swift */,
 				D05936DD25A937EC00754FDF /* EditThumbnailView.swift */,
+				D07EC7FC25B16994006DF726 /* EmojiCategoryHeaderView.swift */,
+				D07EC7DB25B13DBB006DF726 /* EmojiCollectionViewCell.swift */,
+				D07EC7E225B13DD3006DF726 /* EmojiContentConfiguration.swift */,
+				D07EC7F125B13E57006DF726 /* EmojiView.swift */,
 				D0BEB20424FA1107001B0F04 /* FiltersView.swift */,
 				D0C7D42224F76169001EBDBB /* IdentitiesView.swift */,
 				D0BEB1FE24F9E5BB001B0F04 /* ListsView.swift */,
@@ -550,6 +569,7 @@
 				D0F0B135251AA12700942152 /* CollectionItem+Extensions.swift */,
 				D0C7D46E24F76169001EBDBB /* KingfisherOptionsInfo+Extensions.swift */,
 				D0C7D46B24F76169001EBDBB /* NSMutableAttributedString+Extensions.swift */,
+				D07EC7CE25B13921006DF726 /* PickerEmoji+Extensions.swift */,
 				D0B5FE9A251583DB00478838 /* ProfileCollection+Extensions.swift */,
 				D0849C7E25903C4900A5EBCC /* Status+Extensions.swift */,
 				D0C7D46A24F76169001EBDBB /* String+Extensions.swift */,
@@ -785,8 +805,10 @@
 			files = (
 				D0C7D4A324F7616A001EBDBB /* TabNavigationView.swift in Sources */,
 				D02E1F95250B13210071AD56 /* SafariView.swift in Sources */,
+				D07EC7CF25B13921006DF726 /* PickerEmoji+Extensions.swift in Sources */,
 				D00702292555E51200F38136 /* ConversationListCell.swift in Sources */,
 				D03B1B2A253818F3008F964B /* MediaPreferencesView.swift in Sources */,
+				D07EC7DC25B13DBB006DF726 /* EmojiCollectionViewCell.swift in Sources */,
 				D0C7D49C24F7616A001EBDBB /* RootView.swift in Sources */,
 				D0F0B126251A90F400942152 /* AccountListCell.swift in Sources */,
 				D0B32F50250B373600311912 /* RegistrationView.swift in Sources */,
@@ -818,6 +840,7 @@
 				D0E569DB2529319100FA1D72 /* LoadMoreView.swift in Sources */,
 				D05936FF25AA94EA00754FDF /* MarkAttachmentsSensitiveView.swift in Sources */,
 				D0C7D49D24F7616A001EBDBB /* PostingReadingPreferencesView.swift in Sources */,
+				D07EC7E325B13DD3006DF726 /* EmojiContentConfiguration.swift in Sources */,
 				D0B5FE9B251583DB00478838 /* ProfileCollection+Extensions.swift in Sources */,
 				D0C7D49E24F7616A001EBDBB /* SecondaryNavigationView.swift in Sources */,
 				D08B8D602540DE3B00B1EBEF /* ZoomAnimator.swift in Sources */,
@@ -827,6 +850,7 @@
 				D059373325AAEA7000754FDF /* CompositionPollView.swift in Sources */,
 				D08B8D8D2544E6EC00B1EBEF /* PollResultView.swift in Sources */,
 				D0C7D4D524F7616A001EBDBB /* String+Extensions.swift in Sources */,
+				D07EC7F225B13E57006DF726 /* EmojiView.swift in Sources */,
 				D05936CF25A8D79800754FDF /* EditAttachmentViewController.swift in Sources */,
 				D0C7D4A224F7616A001EBDBB /* NotificationTypesPreferencesView.swift in Sources */,
 				D00702362555F4C500F38136 /* ConversationContentConfiguration.swift in Sources */,
@@ -871,6 +895,7 @@
 				D0FCC110259C4F20000B67DF /* NewStatusView.swift in Sources */,
 				D0C7D49B24F7616A001EBDBB /* PreferencesView.swift in Sources */,
 				D088406D25AFBBE200BB749B /* EmojiPickerViewController.swift in Sources */,
+				D07EC7FD25B16994006DF726 /* EmojiCategoryHeaderView.swift in Sources */,
 				D0C7D4D724F7616A001EBDBB /* UIColor+Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -894,6 +919,8 @@
 				D05936D025A8D79800754FDF /* EditAttachmentViewController.swift in Sources */,
 				D038273C259EA38F00056E0F /* NewStatusView.swift in Sources */,
 				D08E52EF257D757100FA2C5F /* CompositionView.swift in Sources */,
+				D07EC7FE25B16994006DF726 /* EmojiCategoryHeaderView.swift in Sources */,
+				D07EC7E425B13DD3006DF726 /* EmojiContentConfiguration.swift in Sources */,
 				D0CE9F88258B076900E3A6B6 /* AttachmentUploadView.swift in Sources */,
 				D08E52C7257C7AEE00FA2C5F /* ShareErrorViewController.swift in Sources */,
 				D059370025AA94EA00754FDF /* MarkAttachmentsSensitiveView.swift in Sources */,
@@ -905,13 +932,16 @@
 				D08E52F8257D78BE00FA2C5F /* ViewConstants.swift in Sources */,
 				D036EBC2259FE2AD00EC1CFC /* UIVIewController+Extensions.swift in Sources */,
 				D015B13525A812DD006D88A8 /* AttachmentsView.swift in Sources */,
+				D07EC7DD25B13DBB006DF726 /* EmojiCollectionViewCell.swift in Sources */,
 				D05936EA25AA3F3D00754FDF /* EditAttachmentView.swift in Sources */,
+				D07EC7D025B13921006DF726 /* PickerEmoji+Extensions.swift in Sources */,
 				D0FCC106259C4E62000B67DF /* NewStatusViewController.swift in Sources */,
 				D036EBBD259FE2A100EC1CFC /* Array+Extensions.swift in Sources */,
 				D036EBB3259FE28800EC1CFC /* UIColor+Extensions.swift in Sources */,
 				D088406E25AFBBE200BB749B /* EmojiPickerViewController.swift in Sources */,
 				D036EBB8259FE29800EC1CFC /* Status+Extensions.swift in Sources */,
 				D05936DF25A937EC00754FDF /* EditThumbnailView.swift in Sources */,
+				D07EC7F325B13E57006DF726 /* EmojiView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

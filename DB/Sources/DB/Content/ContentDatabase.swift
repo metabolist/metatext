@@ -505,7 +505,10 @@ public extension ContentDatabase {
     }
 
     func pickerEmojisPublisher() -> AnyPublisher<[Emoji], Error> {
-        ValueObservation.tracking(Emoji.filter(Emoji.Columns.visibleInPicker == true).fetchAll)
+        ValueObservation.tracking(
+            Emoji.filter(Emoji.Columns.visibleInPicker == true)
+                .order(Emoji.Columns.shortcode.asc)
+                .fetchAll)
             .removeDuplicates()
             .publisher(in: databaseWriter)
             .eraseToAnyPublisher()
