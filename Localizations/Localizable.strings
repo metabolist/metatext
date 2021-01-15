@@ -52,6 +52,7 @@
 "compose.prompt" = "What's on your mind?";
 "compose.take-photo-or-video" = "Take Photo or Video";
 "emoji.custom" = "Custom";
+"emoji.default-skin-tone" = "Default skin tone";
 "emoji.frequently-used" = "Frequently used";
 "emoji.search" = "Search Emoji";
 "emoji.system-group.smileys-and-emotion" = "Smileys & Emotion";

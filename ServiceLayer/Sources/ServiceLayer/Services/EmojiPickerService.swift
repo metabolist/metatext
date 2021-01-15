@@ -70,8 +70,8 @@ public extension EmojiPickerService {
                         }
 
                         typed[.systemGroup(group)] = emoji
-                            .filter { !($0.version > Self.maximumEmojiVersion) }
-                            .map(PickerEmoji.system)
+                            .filter { !($0.version > Self.maxEmojiVersion) }
+                            .map { PickerEmoji.system($0.withMaxVersionForSkinToneVariations(Self.maxEmojiVersion)) }
                     }
 
                     return promise(.success(typed))
@@ -119,7 +119,7 @@ public extension EmojiPickerService {
 }
 
 private extension EmojiPickerService {
-    static var maximumEmojiVersion: Float = {
+    static var maxEmojiVersion: Float = {
         if #available(iOS 14.2, *) {
             return 13.0
         }

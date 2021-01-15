@@ -10,8 +10,8 @@ final public class EmojiPickerViewModel: ObservableObject {
     @Published public var query = ""
     @Published public var locale = Locale.current
     @Published public private(set) var emoji = [PickerEmoji.Category: [PickerEmoji]]()
+    public let identification: Identification
 
-    private let identification: Identification
     private let emojiPickerService: EmojiPickerService
     @Published private var customEmoji = [PickerEmoji.Category: [PickerEmoji]]()
     @Published private var systemEmoji = [PickerEmoji.Category: [PickerEmoji]]()

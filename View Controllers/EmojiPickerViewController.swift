@@ -10,6 +10,7 @@ final class EmojiPickerViewController: UIViewController {
     private let viewModel: EmojiPickerViewModel
     private let selectionAction: (PickerEmoji) -> Void
     private let dismissAction: () -> Void
+    private let skinToneButton = UIButton()
     private var cancellables = Set<AnyCancellable>()
 
     private lazy var collectionView: UICollectionView = {
@@ -50,8 +51,8 @@ final class EmojiPickerViewController: UIViewController {
 
     private lazy var dataSource: UICollectionViewDiffableDataSource<PickerEmoji.Category, PickerEmoji> = {
         let cellRegistration = UICollectionView.CellRegistration
-        <EmojiCollectionViewCell, PickerEmoji> {
-            $0.emoji = $2
+        <EmojiCollectionViewCell, PickerEmoji> { [weak self] in
+            $0.emoji = self?.applyingDefaultSkinTone(emoji: $2) ?? $2
         }
 
         let headerRegistration = UICollectionView.SupplementaryRegistration
@@ -71,6 +72,26 @@ final class EmojiPickerViewController: UIViewController {
         return dataSource
     }()
 
+    private lazy var defaultSkinToneSelectionMenu: UIMenu = {
+        let clearSkinToneAction = UIAction(title: SystemEmoji.SkinTone.noneExample) { [weak self] _ in
+            self?.skinToneButton.setTitle(SystemEmoji.SkinTone.noneExample, for: .normal)
+            self?.viewModel.identification.appPreferences.defaultEmojiSkinTone = nil
+            self?.reloadVisibleItems()
+        }
+
+        let setSkinToneActions = SystemEmoji.SkinTone.allCases.map { [weak self] skinTone in
+            UIAction(title: skinTone.example) { _ in
+                self?.skinToneButton.setTitle(skinTone.example, for: .normal)
+                self?.viewModel.identification.appPreferences.defaultEmojiSkinTone = skinTone
+                self?.reloadVisibleItems()
+            }
+        }
+
+        return UIMenu(
+            title: NSLocalizedString("emoji.default-skin-tone", comment: ""),
+            children: [clearSkinToneAction] + setSkinToneActions)
+    }()
+
     init(viewModel: EmojiPickerViewModel,
          selectionAction: @escaping (PickerEmoji) -> Void,
          dismissAction: @escaping () -> Void) {
@@ -86,6 +107,7 @@ final class EmojiPickerViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // swiftlint:disable:next function_body_length
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -97,6 +119,15 @@ final class EmojiPickerViewController: UIViewController {
             UIAction { [weak self] _ in self?.viewModel.query = self?.searchBar.text ?? "" },
             for: .editingChanged)
 
+        view.addSubview(skinToneButton)
+        skinToneButton.translatesAutoresizingMaskIntoConstraints = false
+        skinToneButton.titleLabel?.adjustsFontSizeToFitWidth = true
+        skinToneButton.setTitle(
+            viewModel.identification.appPreferences.defaultEmojiSkinTone?.example ?? SystemEmoji.SkinTone.noneExample,
+            for: .normal)
+        skinToneButton.showsMenuAsPrimaryAction = true
+        skinToneButton.menu = defaultSkinToneSelectionMenu
+
         view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .clear
@@ -106,7 +137,10 @@ final class EmojiPickerViewController: UIViewController {
         NSLayoutConstraint.activate([
             searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             searchBar.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
-            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            skinToneButton.leadingAnchor.constraint(equalTo: searchBar.trailingAnchor, constant: .defaultSpacing),
+            skinToneButton.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
+            skinToneButton.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
+            skinToneButton.bottomAnchor.constraint(equalTo: searchBar.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -114,7 +148,9 @@ final class EmojiPickerViewController: UIViewController {
         ])
 
         viewModel.$emoji
-            .sink { [weak self] in self?.dataSource.apply($0.snapshot()) }
+            .sink { [weak self] in self?.dataSource.apply(
+                $0.snapshot(),
+                animatingDifferences: !UIAccessibility.isReduceMotionEnabled) }
             .store(in: &cancellables)
 
         if let currentKeyboardLanguageIdentifier = searchBar.textInputMode?.primaryLanguage {
@@ -126,11 +162,6 @@ final class EmojiPickerViewController: UIViewController {
             .compactMap(Locale.init(identifier:))
             .assign(to: \.locale, on: viewModel)
             .store(in: &cancellables)
-
-        publisher(for: \.isBeingDismissed).print().sink { (_) in
-
-        }
-        .store(in: &cancellables)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -163,14 +194,52 @@ final class EmojiPickerViewController: UIViewController {
 
 extension EmojiPickerViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let emoji = dataSource.itemIdentifier(for: indexPath) else { return }
+        guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
 
-        selectionAction(emoji)
+        select(emoji: applyingDefaultSkinTone(emoji: item))
+    }
 
-        UISelectionFeedbackGenerator().selectionChanged()
+    func collectionView(_ collectionView: UICollectionView,
+                        contextMenuConfigurationForItemAt indexPath: IndexPath,
+                        point: CGPoint) -> UIContextMenuConfiguration? {
+        guard let item = dataSource.itemIdentifier(for: indexPath),
+              case let .system(emoji) = item,
+              !emoji.skinToneVariations.isEmpty
+        else { return nil }
+
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            UIMenu(children: ([emoji] + emoji.skinToneVariations).map { skinToneVariation in
+                UIAction(title: skinToneVariation.emoji) { [weak self] _ in
+                    self?.select(emoji: .system(skinToneVariation))
+                }
+            })
+        }
     }
 }
 
 private extension EmojiPickerViewController {
     static let headerElementKind = "com.metabolist.metatext.emoji-picker.header"
+
+    func select(emoji: PickerEmoji) {
+        selectionAction(emoji)
+
+        UISelectionFeedbackGenerator().selectionChanged()
+    }
+
+    func reloadVisibleItems() {
+        var snapshot = dataSource.snapshot()
+        let visibleItems = collectionView.indexPathsForVisibleItems.compactMap(dataSource.itemIdentifier(for:))
+
+        snapshot.reloadItems(visibleItems)
+        dataSource.apply(snapshot)
+    }
+
+    func applyingDefaultSkinTone(emoji: PickerEmoji) -> PickerEmoji {
+        if case let .system(systemEmoji) = emoji,
+           let defaultEmojiSkinTone = viewModel.identification.appPreferences.defaultEmojiSkinTone {
+            return .system(systemEmoji.applying(skinTone: defaultEmojiSkinTone))
+        } else {
+            return emoji
+        }
+    }
 }

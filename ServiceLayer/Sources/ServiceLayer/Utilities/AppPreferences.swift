@@ -109,6 +109,18 @@ public extension AppPreferences {
         set { self[.notificationsTabBehavior] = newValue.rawValue }
     }
 
+    var defaultEmojiSkinTone: SystemEmoji.SkinTone? {
+        get {
+            if let rawValue = self[.defaultEmojiSkinTone] as Int?,
+               let value = SystemEmoji.SkinTone(rawValue: rawValue) {
+                return value
+            }
+
+            return nil
+        }
+        set { self[.defaultEmojiSkinTone] = newValue?.rawValue }
+    }
+
     var shouldReduceMotion: Bool {
         systemReduceMotion() && useSystemReduceMotionForMedia
     }
@@ -147,6 +159,7 @@ private extension AppPreferences {
         case autoplayVideos
         case homeTimelineBehavior
         case notificationsTabBehavior
+        case defaultEmojiSkinTone
     }
 
     subscript<T>(index: Item) -> T? {
