@@ -143,6 +143,13 @@ extension ContentDatabase {
                 t.column("category", .text)
             }
 
+            try db.create(table: "emojiUse") { t in
+                t.column("emoji", .text).primaryKey(onConflict: .replace)
+                t.column("system", .boolean).notNull()
+                t.column("lastUse", .datetime).notNull()
+                t.column("count", .integer).notNull()
+            }
+
             try db.create(table: "conversationRecord") { t in
                 t.column("id", .text).primaryKey(onConflict: .replace)
                 t.column("unread", .boolean).notNull()

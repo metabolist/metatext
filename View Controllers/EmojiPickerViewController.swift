@@ -197,20 +197,22 @@ extension EmojiPickerViewController: UICollectionViewDelegate {
         guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
 
         select(emoji: applyingDefaultSkinTone(emoji: item))
+        viewModel.updateUse(emoji: item)
     }
 
     func collectionView(_ collectionView: UICollectionView,
                         contextMenuConfigurationForItemAt indexPath: IndexPath,
                         point: CGPoint) -> UIContextMenuConfiguration? {
         guard let item = dataSource.itemIdentifier(for: indexPath),
-              case let .system(emoji) = item,
+              case let .system(emoji, inFrequentlyUsed) = item,
               !emoji.skinToneVariations.isEmpty
         else { return nil }
 
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
             UIMenu(children: ([emoji] + emoji.skinToneVariations).map { skinToneVariation in
                 UIAction(title: skinToneVariation.emoji) { [weak self] _ in
-                    self?.select(emoji: .system(skinToneVariation))
+                    self?.select(emoji: .system(skinToneVariation, inFrequentlyUsed: inFrequentlyUsed))
+                    self?.viewModel.updateUse(emoji: item)
                 }
             })
         }
@@ -235,9 +237,9 @@ private extension EmojiPickerViewController {
     }
 
     func applyingDefaultSkinTone(emoji: PickerEmoji) -> PickerEmoji {
-        if case let .system(systemEmoji) = emoji,
+        if case let .system(systemEmoji, inFrequentlyUsed) = emoji,
            let defaultEmojiSkinTone = viewModel.identification.appPreferences.defaultEmojiSkinTone {
-            return .system(systemEmoji.applying(skinTone: defaultEmojiSkinTone))
+            return .system(systemEmoji.applying(skinTone: defaultEmojiSkinTone), inFrequentlyUsed: inFrequentlyUsed)
         } else {
             return emoji
         }

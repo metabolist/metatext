@@ -15,6 +15,7 @@ final public class EmojiPickerViewModel: ObservableObject {
     private let emojiPickerService: EmojiPickerService
     @Published private var customEmoji = [PickerEmoji.Category: [PickerEmoji]]()
     @Published private var systemEmoji = [PickerEmoji.Category: [PickerEmoji]]()
+    @Published private var emojiUses = [EmojiUse]()
     @Published private var systemEmojiAnnotationsAndTags = [String: String]()
     private var cancellables = Set<AnyCancellable>()
 
@@ -32,41 +33,42 @@ final public class EmojiPickerViewModel: ObservableObject {
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$systemEmoji)
 
+        emojiPickerService.emojiUses(limit: Self.frequentlyUsedLimit)
+            .assignErrorsToAlertItem(to: \.alertItem, on: self)
+            .print()
+            .assign(to: &$emojiUses)
+
         $customEmoji.dropFirst().combineLatest(
             $systemEmoji.dropFirst(),
             $query,
-            $locale.combineLatest($systemEmojiAnnotationsAndTags)) // Combine API limits to 4 params
+            $locale.combineLatest($systemEmojiAnnotationsAndTags, $emojiUses.dropFirst()))
             .map {
-                let (customEmoji, systemEmoji, query, (locale, systemEmojiAnnotationsAndTags)) = $0
-
-                var queriedCustomEmoji = customEmoji
-                var queriedSystemEmoji = systemEmoji
+                let (customEmoji, systemEmoji, query, (locale, systemEmojiAnnotationsAndTags, emojiUses)) = $0
+                var emojis = customEmoji.merging(systemEmoji) { $1 }
 
                 if !query.isEmpty {
-                    queriedCustomEmoji = queriedCustomEmoji.mapValues {
-                        $0.filter {
-                            guard case let .custom(emoji) = $0 else { return false }
-
-                            return emoji.shortcode.matches(query: query, locale: locale)
-                        }
-                    }
-                    queriedCustomEmoji = queriedCustomEmoji.filter { !$0.value.isEmpty }
-
                     let matchingSystemEmojis = Set(systemEmojiAnnotationsAndTags.filter {
                         $0.key.matches(query: query, locale: locale)
                     }.values)
 
-                    queriedSystemEmoji = queriedSystemEmoji.mapValues {
+                    emojis = emojis.mapValues {
                         $0.filter {
-                            guard case let .system(emoji) = $0 else { return false }
-
-                            return matchingSystemEmojis.contains(emoji.emoji)
+                            if $0.system {
+                                return matchingSystemEmojis.contains($0.name)
+                            } else {
+                                return $0.name.matches(query: query, locale: locale)
+                            }
                         }
                     }
-                    queriedSystemEmoji = queriedSystemEmoji.filter { !$0.value.isEmpty }
                 }
 
-                return queriedSystemEmoji.merging(queriedCustomEmoji) { $1 }
+                emojis[.frequentlyUsed] = emojiUses.compactMap { use in
+                    emojis.values.reduce([], +)
+                        .first { use.system == $0.system && use.emoji == $0.name }
+                        .map(\.inFrequentlyUsed)
+                }
+
+                return emojis.filter { !$0.value.isEmpty }
             }
             .assign(to: &$emoji)
 
@@ -74,6 +76,19 @@ final public class EmojiPickerViewModel: ObservableObject {
             .replaceError(with: [:])
             .assign(to: &$systemEmojiAnnotationsAndTags)
     }
+}
+
+public extension EmojiPickerViewModel {
+    func updateUse(emoji: PickerEmoji) {
+        emojiPickerService.updateUse(emoji: emoji)
+            .assignErrorsToAlertItem(to: \.alertItem, on: self)
+            .sink { _ in }
+            .store(in: &cancellables)
+    }
+}
+
+private extension EmojiPickerViewModel {
+    static let frequentlyUsedLimit = 12
 }
 
 private extension String {

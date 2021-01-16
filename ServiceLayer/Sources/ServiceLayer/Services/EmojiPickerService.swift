@@ -35,9 +35,9 @@ public extension EmojiPickerService {
                 }
 
                 if typed[category] == nil {
-                    typed[category] = [.custom(emoji)]
+                    typed[category] = [.custom(emoji, inFrequentlyUsed: false)]
                 } else {
-                    typed[category]?.append(.custom(emoji))
+                    typed[category]?.append(.custom(emoji, inFrequentlyUsed: false))
                 }
             }
 
@@ -71,7 +71,11 @@ public extension EmojiPickerService {
 
                         typed[.systemGroup(group)] = emoji
                             .filter { !($0.version > Self.maxEmojiVersion) }
-                            .map { PickerEmoji.system($0.withMaxVersionForSkinToneVariations(Self.maxEmojiVersion)) }
+                            .map {
+                                PickerEmoji.system(
+                                    $0.withMaxVersionForSkinToneVariations(Self.maxEmojiVersion),
+                                    inFrequentlyUsed: false)
+                            }
                     }
 
                     return promise(.success(typed))
@@ -115,6 +119,14 @@ public extension EmojiPickerService {
             }
         }
         .eraseToAnyPublisher()
+    }
+
+    func emojiUses(limit: Int) -> AnyPublisher<[EmojiUse], Error> {
+        contentDatabase.emojiUses(limit: limit)
+    }
+
+    func updateUse(emoji: PickerEmoji) -> AnyPublisher<Never, Error> {
+        contentDatabase.updateUse(emoji: emoji.name, system: emoji.system)
     }
 }
 

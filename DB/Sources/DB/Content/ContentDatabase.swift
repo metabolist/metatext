@@ -394,6 +394,19 @@ public extension ContentDatabase {
         .eraseToAnyPublisher()
     }
 
+    func updateUse(emoji: String, system: Bool) -> AnyPublisher<Never, Error> {
+        databaseWriter.writePublisher {
+            let count = try Int.fetchOne(
+                $0,
+                EmojiUse.filter(EmojiUse.Columns.system == system && EmojiUse.Columns.emoji == emoji)
+                    .select(EmojiUse.Columns.count))
+
+            try EmojiUse(emoji: emoji, system: system, lastUse: Date(), count: (count ?? 0) + 1).save($0)
+        }
+        .ignoreOutput()
+        .eraseToAnyPublisher()
+    }
+
     func timelinePublisher(_ timeline: Timeline) -> AnyPublisher<[[CollectionItem]], Error> {
         ValueObservation.tracking(
             TimelineItemsInfo.request(TimelineRecord.filter(TimelineRecord.Columns.id == timeline.id)).fetchOne)
@@ -511,6 +524,11 @@ public extension ContentDatabase {
                 .fetchAll)
             .removeDuplicates()
             .publisher(in: databaseWriter)
+            .eraseToAnyPublisher()
+    }
+
+    func emojiUses(limit: Int) -> AnyPublisher<[EmojiUse], Error> {
+        databaseWriter.readPublisher(value: EmojiUse.all().order(EmojiUse.Columns.count.desc).limit(limit).fetchAll)
             .eraseToAnyPublisher()
     }
 

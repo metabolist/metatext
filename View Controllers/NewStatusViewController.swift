@@ -368,17 +368,8 @@ private extension NewStatusViewController {
         let emojiPickerController = EmojiPickerViewController(viewModel: emojiPickerViewModel) {
             guard let textInput = fromView as? UITextInput else { return }
 
-            let emojiString: String
-
-            switch $0 {
-            case let .custom(emoji):
-                emojiString = ":\(emoji.shortcode):"
-            case let .system(emoji):
-                emojiString = emoji.emoji
-            }
-
             if let selectedTextRange = textInput.selectedTextRange {
-                textInput.replace(selectedTextRange, withText: emojiString.appending(" "))
+                textInput.replace(selectedTextRange, withText: $0.escaped.appending(" "))
             }
         } dismissAction: {
             fromView.becomeFirstResponder()

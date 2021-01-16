@@ -67,17 +67,18 @@ private extension EmojiView {
     }
 
     func applyEmojiConfiguration() {
-        switch emojiConfiguration.emoji {
-        case let .custom(emoji):
+        imageView.isHidden = emojiConfiguration.emoji.system
+
+        if case let .custom(emoji, _) = emojiConfiguration.emoji {
             imageView.isHidden = false
             emojiLabel.isHidden = true
 
             imageView.kf.setImage(with: emoji.url)
-        case let .system(emoji):
+        } else {
             imageView.isHidden = true
             emojiLabel.isHidden = false
 
-            emojiLabel.text = emoji.emoji
+            emojiLabel.text = emojiConfiguration.emoji.name
         }
     }
 }

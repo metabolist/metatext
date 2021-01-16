@@ -3,9 +3,9 @@
 import Foundation
 import Mastodon
 
-public enum PickerEmoji: Hashable {
-    case custom(Emoji)
-    case system(SystemEmoji)
+public indirect enum PickerEmoji: Hashable {
+    case custom(Emoji, inFrequentlyUsed: Bool)
+    case system(SystemEmoji, inFrequentlyUsed: Bool)
 }
 
 public extension PickerEmoji {
@@ -14,6 +14,42 @@ public extension PickerEmoji {
         case custom
         case customNamed(String)
         case systemGroup(SystemEmoji.Group)
+    }
+
+    var name: String {
+        switch self {
+        case let .custom(emoji, _):
+            return emoji.shortcode
+        case let .system(emoji, _):
+            return emoji.emoji
+        }
+    }
+
+    var system: Bool {
+        switch self {
+        case .system:
+            return true
+        default:
+            return false
+        }
+    }
+
+    var escaped: String {
+        switch self {
+        case let .custom(emoji, _):
+            return ":\(emoji.shortcode):"
+        case let .system(emoji, _):
+            return emoji.emoji
+        }
+    }
+
+    var inFrequentlyUsed: Self {
+        switch self {
+        case let .custom(emoji, _):
+            return .custom(emoji, inFrequentlyUsed: true)
+        case let .system(emoji, _):
+            return .system(emoji, inFrequentlyUsed: true)
+        }
     }
 }
 
