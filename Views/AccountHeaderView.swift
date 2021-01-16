@@ -7,6 +7,7 @@ import ViewModels
 final class AccountHeaderView: UIView {
     let headerImageView = AnimatedImageView()
     let headerButton = UIButton()
+    let avatarBackgroundView = UIView()
     let avatarImageView = UIImageView()
     let avatarButton = UIButton()
     let relationshipButtonsStackView = UIStackView()
@@ -177,14 +178,19 @@ private extension AccountHeaderView {
 
         headerButton.addAction(UIAction { [weak self] _ in self?.viewModel?.presentHeader() }, for: .touchUpInside)
 
-        addSubview(avatarImageView)
+        let avatarBackgroundViewDimension = Self.avatarDimension + .compactSpacing * 2
+
+        addSubview(avatarBackgroundView)
+        avatarBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+        avatarBackgroundView.backgroundColor = .systemBackground
+        avatarBackgroundView.layer.cornerRadius = avatarBackgroundViewDimension / 2
+
+        avatarBackgroundView.addSubview(avatarImageView)
         avatarImageView.translatesAutoresizingMaskIntoConstraints = false
         avatarImageView.contentMode = .scaleAspectFill
         avatarImageView.clipsToBounds = true
         avatarImageView.isUserInteractionEnabled = true
         avatarImageView.layer.cornerRadius = Self.avatarDimension / 2
-        avatarImageView.layer.borderWidth = .compactSpacing
-        avatarImageView.layer.borderColor = UIColor.systemBackground.cgColor
 
         avatarImageView.addSubview(avatarButton)
         avatarButton.translatesAutoresizingMaskIntoConstraints = false
@@ -318,21 +324,25 @@ private extension AccountHeaderView {
             headerButton.topAnchor.constraint(equalTo: headerImageView.topAnchor),
             headerButton.bottomAnchor.constraint(equalTo: headerImageView.bottomAnchor),
             headerButton.trailingAnchor.constraint(equalTo: headerImageView.trailingAnchor),
+            avatarBackgroundView.heightAnchor.constraint(equalToConstant: avatarBackgroundViewDimension),
+            avatarBackgroundView.widthAnchor.constraint(equalToConstant: avatarBackgroundViewDimension),
+            avatarBackgroundView.leadingAnchor.constraint(equalTo: readableContentGuide.leadingAnchor),
+            avatarBackgroundView.centerYAnchor.constraint(equalTo: headerImageView.bottomAnchor),
             avatarImageView.heightAnchor.constraint(equalToConstant: Self.avatarDimension),
             avatarImageView.widthAnchor.constraint(equalToConstant: Self.avatarDimension),
-            avatarImageView.leadingAnchor.constraint(equalTo: readableContentGuide.leadingAnchor),
-            avatarImageView.centerYAnchor.constraint(equalTo: headerImageView.bottomAnchor),
+            avatarImageView.centerXAnchor.constraint(equalTo: avatarBackgroundView.centerXAnchor),
+            avatarImageView.centerYAnchor.constraint(equalTo: avatarBackgroundView.centerYAnchor),
             avatarButton.leadingAnchor.constraint(equalTo: avatarImageView.leadingAnchor),
             avatarButton.topAnchor.constraint(equalTo: avatarImageView.topAnchor),
             avatarButton.bottomAnchor.constraint(equalTo: avatarImageView.bottomAnchor),
             avatarButton.trailingAnchor.constraint(equalTo: avatarImageView.trailingAnchor),
-            relationshipButtonsStackView.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor),
+            relationshipButtonsStackView.leadingAnchor.constraint(equalTo: avatarBackgroundView.trailingAnchor),
             relationshipButtonsStackView.topAnchor.constraint(
                 equalTo: headerImageView.bottomAnchor,
                 constant: .defaultSpacing),
             relationshipButtonsStackView.trailingAnchor.constraint(equalTo: readableContentGuide.trailingAnchor),
-            relationshipButtonsStackView.bottomAnchor.constraint(equalTo: avatarImageView.bottomAnchor),
-            baseStackView.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: .defaultSpacing),
+            relationshipButtonsStackView.bottomAnchor.constraint(equalTo: avatarBackgroundView.bottomAnchor),
+            baseStackView.topAnchor.constraint(equalTo: avatarBackgroundView.bottomAnchor, constant: .defaultSpacing),
             baseStackView.leadingAnchor.constraint(equalTo: readableContentGuide.leadingAnchor),
             baseStackView.trailingAnchor.constraint(equalTo: readableContentGuide.trailingAnchor),
             baseStackView.bottomAnchor.constraint(equalTo: readableContentGuide.bottomAnchor)
