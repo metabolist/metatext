@@ -257,25 +257,14 @@ public extension ContentDatabase {
             .eraseToAnyPublisher()
     }
 
-    func append(accounts: [Account], toList list: AccountList) -> AnyPublisher<Never, Error> {
+    func insert(accounts: [Account]) -> AnyPublisher<Never, Error> {
         databaseWriter.writePublisher {
-            try list.save($0)
-
-            let count = try list.accounts.fetchCount($0)
-
-            for (index, account) in accounts.enumerated() {
+            for account in accounts {
                 try account.save($0)
-                try AccountListJoin(accountId: account.id, listId: list.id, index: count + index).save($0)
             }
         }
         .ignoreOutput()
         .eraseToAnyPublisher()
-    }
-
-    func insert(account: Account) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher(updates: account.save)
-            .ignoreOutput()
-            .eraseToAnyPublisher()
     }
 
     func insert(identityProofs: [IdentityProof], id: Account.Id) -> AnyPublisher<Never, Error> {
@@ -488,14 +477,6 @@ public extension ContentDatabase {
             .eraseToAnyPublisher()
     }
 
-    func accountListPublisher(_ list: AccountList) -> AnyPublisher<[Account], Error> {
-        ValueObservation.tracking(list.accounts.fetchAll)
-            .removeDuplicates()
-            .map { $0.map(Account.init(info:)) }
-            .publisher(in: databaseWriter)
-            .eraseToAnyPublisher()
-    }
-
     func notificationsPublisher() -> AnyPublisher<[[CollectionItem]], Error> {
         ValueObservation.tracking(
             NotificationInfo.request(
@@ -642,8 +623,6 @@ private extension ContentDatabase {
                 try StatusRecord.filter(!notificationStatusIds.contains(StatusRecord.Columns.id)).deleteAll($0)
                 try AccountRecord.filter(!notificationAccountIds.contains(AccountRecord.Columns.id)).deleteAll($0)
             }
-
-            try AccountList.deleteAll($0)
         }
     }
 }

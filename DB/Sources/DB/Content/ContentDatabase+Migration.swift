@@ -221,20 +221,6 @@ extension ContentDatabase {
 
                 t.primaryKey(["accountId", "statusId"], onConflict: .replace)
             }
-
-            try db.create(table: "accountList") { t in
-                t.column("id", .text).primaryKey(onConflict: .replace)
-            }
-
-            try db.create(table: "accountListJoin") { t in
-                t.column("accountId", .text).indexed().notNull()
-                    .references("accountRecord", onDelete: .cascade)
-                t.column("listId", .text).indexed().notNull()
-                    .references("accountList", onDelete: .cascade)
-                t.column("index", .integer).notNull()
-
-                t.primaryKey(["accountId", "listId"], onConflict: .replace)
-            }
         }
 
         return migrator

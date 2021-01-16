@@ -11,7 +11,7 @@ public struct AccountListService {
     public let nextPageMaxId: AnyPublisher<String, Never>
     public let navigationService: NavigationService
 
-    private let list: AccountList
+    private let accountList = CurrentValueSubject<[Account], Error>([])
     private let endpoint: AccountsEndpoint
     private let mastodonAPIClient: MastodonAPIClient
     private let contentDatabase: ContentDatabase
@@ -22,14 +22,11 @@ public struct AccountListService {
          mastodonAPIClient: MastodonAPIClient,
          contentDatabase: ContentDatabase,
          titleComponents: [String]? = nil) {
-        list = AccountList()
         self.endpoint = endpoint
         self.mastodonAPIClient = mastodonAPIClient
         self.contentDatabase = contentDatabase
         self.titleComponents = titleComponents
-        sections = contentDatabase.accountListPublisher(list)
-            .map { [$0.map(CollectionItem.account)] }
-            .eraseToAnyPublisher()
+        sections = accountList.map { [$0.map(CollectionItem.account)] }.eraseToAnyPublisher()
         nextPageMaxId = nextPageMaxIdSubject.eraseToAnyPublisher()
         navigationService = NavigationService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }
@@ -43,7 +40,16 @@ extension AccountListService: CollectionService {
 
                 nextPageMaxIdSubject.send(maxId)
             })
-            .flatMap { contentDatabase.append(accounts: $0.result, toList: list) }
+            .flatMap { response in
+                contentDatabase.insert(accounts: response.result)
+                    .collect()
+                    .map { _ in
+                        let presentIds = Set(accountList.value.map(\.id))
+
+                        accountList.value += response.result.filter { !presentIds.contains($0.id) }
+                    }
+            }
+            .ignoreOutput()
             .eraseToAnyPublisher()
     }
 
