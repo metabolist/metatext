@@ -88,6 +88,8 @@ class TableViewController: UITableViewController {
 
         heightCache[item] = cell.frame.height
         cellHeightCaches[tableView.frame.width] = heightCache
+
+        paginateIfLastIndexPathPresent(indexPaths: [indexPath])
     }
 
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -115,14 +117,7 @@ class TableViewController: UITableViewController {
 
 extension TableViewController: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-        guard
-            let maxId = viewModel.nextPageMaxId,
-            let indexPath = indexPaths.last,
-            indexPath.section == dataSource.numberOfSections(in: tableView) - 1,
-            indexPath.row == dataSource.tableView(tableView, numberOfRowsInSection: indexPath.section) - 1
-        else { return }
-
-        viewModel.request(maxId: maxId, minId: nil)
+        paginateIfLastIndexPathPresent(indexPaths: indexPaths)
     }
 }
 
@@ -435,6 +430,17 @@ private extension TableViewController {
         let activityViewController = UIActivityViewController(activityItems: [url], applicationActivities: nil)
 
         present(activityViewController, animated: true, completion: nil)
+    }
+
+    func paginateIfLastIndexPathPresent(indexPaths: [IndexPath]) {
+        guard
+            let maxId = viewModel.nextPageMaxId,
+            let indexPath = indexPaths.last,
+            indexPath.section == dataSource.numberOfSections(in: tableView) - 1,
+            indexPath.row == dataSource.tableView(tableView, numberOfRowsInSection: indexPath.section) - 1
+        else { return }
+
+        viewModel.request(maxId: maxId, minId: nil)
     }
 }
 // swiftlint:enable file_length
