@@ -9,7 +9,7 @@ public struct Poll: Codable, Hashable {
     }
 
     public let id: Id
-    public let expiresAt: Date
+    public let expiresAt: Date?
     public let expired: Bool
     public let multiple: Bool
     public let votesCount: Int

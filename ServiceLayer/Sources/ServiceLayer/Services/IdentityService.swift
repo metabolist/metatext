@@ -71,7 +71,6 @@ public extension IdentityService {
     func refreshAnnouncements() -> AnyPublisher<Never, Error> {
         mastodonAPIClient.request(AnnouncementsEndpoint.announcements)
             .flatMap(contentDatabase.update(announcements:))
-            .print()
             .eraseToAnyPublisher()
     }
 
