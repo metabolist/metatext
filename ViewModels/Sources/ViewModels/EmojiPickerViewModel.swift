@@ -34,9 +34,13 @@ final public class EmojiPickerViewModel: ObservableObject {
             .assign(to: &$systemEmoji)
 
         emojiPickerService.emojiUses(limit: Self.frequentlyUsedLimit)
+            .receive(on: DispatchQueue.main)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
-            .print()
             .assign(to: &$emojiUses)
+
+        $locale.removeDuplicates().flatMap(emojiPickerService.systemEmojiAnnotationsAndTagsPublisher(locale:))
+            .replaceError(with: [:])
+            .assign(to: &$systemEmojiAnnotationsAndTags)
 
         $customEmoji.dropFirst().combineLatest(
             $systemEmoji.dropFirst(),
@@ -71,10 +75,6 @@ final public class EmojiPickerViewModel: ObservableObject {
                 return emojis.filter { !$0.value.isEmpty }
             }
             .assign(to: &$emoji)
-
-        $locale.removeDuplicates().flatMap(emojiPickerService.systemEmojiAnnotationsAndTagsPublisher(locale:))
-            .replaceError(with: [:])
-            .assign(to: &$systemEmojiAnnotationsAndTags)
     }
 }
 

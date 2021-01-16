@@ -116,7 +116,10 @@ final class EmojiPickerViewController: UIViewController {
         searchBar.searchBarStyle = .minimal
         searchBar.placeholder = NSLocalizedString("emoji.search", comment: "")
         searchBar.searchTextField.addAction(
-            UIAction { [weak self] _ in self?.viewModel.query = self?.searchBar.text ?? "" },
+            UIAction { [weak self] _ in
+                self?.viewModel.query = self?.searchBar.text ?? ""
+                self?.collectionView.setContentOffset(.zero, animated: false)
+            },
             for: .editingChanged)
 
         view.addSubview(skinToneButton)
