@@ -13,6 +13,7 @@ public protocol CollectionViewModel {
     var events: AnyPublisher<CollectionItemEvent, Never> { get }
     var shouldAdjustContentInset: Bool { get }
     var nextPageMaxId: String? { get }
+    var preferLastPresentIdOverNextPageMaxId: Bool { get }
     func request(maxId: String?, minId: String?)
     func viewedAtTop(indexPath: IndexPath)
     func select(indexPath: IndexPath)

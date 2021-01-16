@@ -10,6 +10,7 @@ public struct TimelineService {
     public let sections: AnyPublisher<[[CollectionItem]], Error>
     public let navigationService: NavigationService
     public let nextPageMaxId: AnyPublisher<String, Never>
+    public let preferLastPresentIdOverNextPageMaxId = true
     public let title: AnyPublisher<String, Never>
 
     private let timeline: Timeline

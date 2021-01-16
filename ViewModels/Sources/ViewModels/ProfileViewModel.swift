@@ -103,6 +103,10 @@ extension ProfileViewModel: CollectionViewModel {
         collectionViewModel.value.nextPageMaxId
     }
 
+    public var preferLastPresentIdOverNextPageMaxId: Bool {
+        collectionViewModel.value.preferLastPresentIdOverNextPageMaxId
+    }
+
     public func request(maxId: String?, minId: String?) {
         if case .statuses = collection, maxId == nil {
             profileService.fetchPinnedStatuses()

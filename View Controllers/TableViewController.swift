@@ -16,6 +16,7 @@ class TableViewController: UITableViewController {
     private let identification: Identification
     private let loadingTableFooterView = LoadingTableFooterView()
     private let webfingerIndicatorView = WebfingerIndicatorView()
+    @Published private var loading = false
     private var cancellables = Set<AnyCancellable>()
     private var cellHeightCaches = [CGFloat: [CollectionItem: CGFloat]]()
     private var shouldKeepPlayingVideoAfterDismissal = false
@@ -234,7 +235,9 @@ private extension TableViewController {
             .sink { [weak self] in self?.set(expandAllState: $0) }
             .store(in: &cancellables)
 
-        viewModel.loading.receive(on: RunLoop.main).sink { [weak self] in
+        viewModel.loading.receive(on: DispatchQueue.main).assign(to: &$loading)
+
+        $loading.sink { [weak self] in
             guard let self = self else { return }
 
             self.tableView.tableFooterView = $0 ? self.loadingTableFooterView : UIView()
@@ -244,7 +247,6 @@ private extension TableViewController {
 
         viewModel.alertItems
             .compactMap { $0 }
-            .handleEvents(receiveOutput: { print($0.error) })
             .sink { [weak self] in self?.present(alertItem: $0) }
             .store(in: &cancellables)
 
@@ -433,11 +435,13 @@ private extension TableViewController {
     }
 
     func paginateIfLastIndexPathPresent(indexPaths: [IndexPath]) {
-        guard
-            let maxId = viewModel.nextPageMaxId,
-            let indexPath = indexPaths.last,
-            indexPath.section == dataSource.numberOfSections(in: tableView) - 1,
-            indexPath.row == dataSource.tableView(tableView, numberOfRowsInSection: indexPath.section) - 1
+        guard !loading,
+              let indexPath = indexPaths.last,
+              indexPath.section == dataSource.numberOfSections(in: tableView) - 1,
+              indexPath.row == dataSource.tableView(tableView, numberOfRowsInSection: indexPath.section) - 1,
+              let maxId = viewModel.preferLastPresentIdOverNextPageMaxId
+                ? dataSource.itemIdentifier(for: indexPath)?.itemId
+                : viewModel.nextPageMaxId
         else { return }
 
         viewModel.request(maxId: maxId, minId: nil)

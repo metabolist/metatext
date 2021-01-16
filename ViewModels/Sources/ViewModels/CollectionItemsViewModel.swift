@@ -82,6 +82,8 @@ extension CollectionItemsViewModel: CollectionViewModel {
 
     public var shouldAdjustContentInset: Bool { collectionService is ContextService }
 
+    public var preferLastPresentIdOverNextPageMaxId: Bool { collectionService.preferLastPresentIdOverNextPageMaxId }
+
     public func request(maxId: String? = nil, minId: String? = nil) {
         let publisher: AnyPublisher<Never, Error>
 
