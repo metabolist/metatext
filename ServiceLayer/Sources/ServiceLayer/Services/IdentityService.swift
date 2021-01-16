@@ -68,6 +68,13 @@ public extension IdentityService {
             .eraseToAnyPublisher()
     }
 
+    func refreshAnnouncements() -> AnyPublisher<Never, Error> {
+        mastodonAPIClient.request(AnnouncementsEndpoint.announcements)
+            .flatMap(contentDatabase.update(announcements:))
+            .print()
+            .eraseToAnyPublisher()
+    }
+
     func confirmIdentity() -> AnyPublisher<Never, Error> {
         identityDatabase.confirmIdentity(id: id)
     }

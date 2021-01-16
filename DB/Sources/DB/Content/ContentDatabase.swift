@@ -407,6 +407,18 @@ public extension ContentDatabase {
         .eraseToAnyPublisher()
     }
 
+    func update(announcements: [Announcement]) -> AnyPublisher<Never, Error> {
+        databaseWriter.writePublisher {
+            for announcement in announcements {
+                try announcement.save($0)
+            }
+
+            try Announcement.filter(!announcements.map(\.id).contains(Announcement.Columns.id)).deleteAll($0)
+        }
+        .ignoreOutput()
+        .eraseToAnyPublisher()
+    }
+
     func timelinePublisher(_ timeline: Timeline) -> AnyPublisher<[[CollectionItem]], Error> {
         ValueObservation.tracking(
             TimelineItemsInfo.request(TimelineRecord.filter(TimelineRecord.Columns.id == timeline.id)).fetchOne)

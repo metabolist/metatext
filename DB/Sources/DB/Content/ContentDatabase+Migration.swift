@@ -150,6 +150,21 @@ extension ContentDatabase {
                 t.column("count", .integer).notNull()
             }
 
+            try db.create(table: "announcement") { t in
+                t.column("id", .text).primaryKey(onConflict: .replace)
+                t.column("content", .text).notNull()
+                t.column("startsAt", .datetime)
+                t.column("endsAt", .datetime)
+                t.column("allDay", .boolean).notNull()
+                t.column("publishedAt", .datetime).notNull()
+                t.column("updatedAt", .datetime).notNull()
+                t.column("read", .boolean).notNull()
+                t.column("mentions", .blob).notNull()
+                t.column("tags", .blob).notNull()
+                t.column("emojis", .blob).notNull()
+                t.column("reactions", .blob).notNull()
+            }
+
             try db.create(table: "conversationRecord") { t in
                 t.column("id", .text).primaryKey(onConflict: .replace)
                 t.column("unread", .boolean).notNull()
