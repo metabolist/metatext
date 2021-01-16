@@ -19,7 +19,9 @@ public struct IdentityDatabase {
             databaseWriter = DatabaseQueue()
             try Self.migrator.migrate(databaseWriter)
         } else {
-            let url = try FileManager.default.databaseDirectoryURL(name: Self.name, appGroup: appGroup)
+            let url = try FileManager.default.databaseDirectoryURL(
+                name: Secrets.identityDatabaseName(keychain: keychain),
+                appGroup: appGroup)
 
             databaseWriter = try DatabasePool.withFileCoordinator(url: url, migrator: Self.migrator) {
                 try Secrets.databaseKey(identityId: nil, keychain: keychain)
@@ -224,8 +226,6 @@ public extension IdentityDatabase {
 }
 
 private extension IdentityDatabase {
-    static let name = "identity"
-
     static func writePreferences(_ preferences: Identity.Preferences, id: Identity.Id) -> (Database) throws -> Void {
         {
             let data = try IdentityRecord.databaseJSONEncoder(

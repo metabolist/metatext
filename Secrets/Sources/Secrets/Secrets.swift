@@ -32,6 +32,7 @@ public extension Secrets {
         case pushKey
         case pushAuth
         case databaseKey
+        case identityDatabaseName
     }
 }
 
@@ -55,6 +56,18 @@ extension Secrets.Item {
 }
 
 public extension Secrets {
+    static func identityDatabaseName(keychain: Keychain.Type) throws -> String {
+        do {
+            return try unscopedItem(.identityDatabaseName, keychain: keychain)
+        } catch SecretsError.itemAbsent {
+            let identityDatabaseName = UUID().uuidString
+
+            try setUnscoped(identityDatabaseName, forItem: .identityDatabaseName, keychain: keychain)
+
+            return identityDatabaseName
+        }
+    }
+
     // https://www.zetetic.net/sqlcipher/sqlcipher-api/#key
     static func databaseKey(identityId: UUID?, keychain: Keychain.Type) throws -> String {
         let passphraseData: Data
