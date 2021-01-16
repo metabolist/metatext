@@ -84,6 +84,8 @@ extension CollectionItemsViewModel: CollectionViewModel {
 
     public var preferLastPresentIdOverNextPageMaxId: Bool { collectionService.preferLastPresentIdOverNextPageMaxId }
 
+    public var canRefresh: Bool { collectionService.canRefresh }
+
     public func request(maxId: String? = nil, minId: String? = nil) {
         let publisher: AnyPublisher<Never, Error>
 

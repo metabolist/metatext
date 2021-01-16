@@ -14,6 +14,7 @@ public protocol CollectionViewModel {
     var shouldAdjustContentInset: Bool { get }
     var nextPageMaxId: String? { get }
     var preferLastPresentIdOverNextPageMaxId: Bool { get }
+    var canRefresh: Bool { get }
     func request(maxId: String?, minId: String?)
     func viewedAtTop(indexPath: IndexPath)
     func select(indexPath: IndexPath)

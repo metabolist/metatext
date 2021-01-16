@@ -7,6 +7,7 @@ public protocol CollectionService {
     var sections: AnyPublisher<[[CollectionItem]], Error> { get }
     var nextPageMaxId: AnyPublisher<String, Never> { get }
     var preferLastPresentIdOverNextPageMaxId: Bool { get }
+    var canRefresh: Bool { get }
     var title: AnyPublisher<String, Never> { get }
     var titleLocalizationComponents: AnyPublisher<[String], Never> { get }
     var navigationService: NavigationService { get }
@@ -18,6 +19,8 @@ extension CollectionService {
     public var nextPageMaxId: AnyPublisher<String, Never> { Empty().eraseToAnyPublisher() }
 
     public var preferLastPresentIdOverNextPageMaxId: Bool { false }
+
+    public var canRefresh: Bool { true }
 
     public var title: AnyPublisher<String, Never> { Empty().eraseToAnyPublisher() }
 

@@ -47,6 +47,14 @@ class TableViewController: UITableViewController {
         tableView.tableFooterView = UIView()
         tableView.contentInset.bottom = Self.bottomInset
 
+        if viewModel.canRefresh {
+            refreshControl = UIRefreshControl()
+            refreshControl?.addAction(
+                UIAction { [weak self] _ in
+                    self?.viewModel.request(maxId: nil, minId: nil) },
+                for: .valueChanged)
+        }
+
         view.addSubview(webfingerIndicatorView)
         webfingerIndicatorView.translatesAutoresizingMaskIntoConstraints = false
 
@@ -208,6 +216,7 @@ extension TableViewController: ZoomAnimatorDelegate {
 
 private extension TableViewController {
     static let bottomInset: CGFloat = .newStatusButtonDimension + .defaultSpacing * 4
+    static let loadingFooterDebounceInterval: TimeInterval = 0.5
 
     var visibleLoadMoreViews: [LoadMoreView] {
         tableView.visibleCells.compactMap { $0.contentView as? LoadMoreView }
@@ -237,13 +246,22 @@ private extension TableViewController {
 
         viewModel.loading.receive(on: DispatchQueue.main).assign(to: &$loading)
 
-        $loading.sink { [weak self] in
-            guard let self = self else { return }
+        $loading.debounce(
+            for: .seconds(Self.loadingFooterDebounceInterval),
+            scheduler: DispatchQueue.main)
+            .sink { [weak self] in
+                guard let self = self else { return }
 
-            self.tableView.tableFooterView = $0 ? self.loadingTableFooterView : UIView()
-            self.sizeTableHeaderFooterViews()
-        }
-        .store(in: &cancellables)
+                if !$0 {
+                    self.refreshControl?.endRefreshing()
+                }
+
+                let refreshControlVisibile = self.refreshControl?.isRefreshing ?? false
+
+                self.tableView.tableFooterView = $0 && !refreshControlVisibile ? self.loadingTableFooterView : UIView()
+                self.sizeTableHeaderFooterViews()
+            }
+            .store(in: &cancellables)
 
         viewModel.alertItems
             .compactMap { $0 }

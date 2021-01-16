@@ -10,6 +10,7 @@ final class LoadingTableFooterView: UIView {
 
         addSubview(activityIndicatorView)
         activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicatorView.style = .large
 
         NSLayoutConstraint.activate([
             activityIndicatorView.centerXAnchor.constraint(equalTo: centerXAnchor),

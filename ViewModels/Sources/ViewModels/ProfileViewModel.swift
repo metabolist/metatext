@@ -107,6 +107,8 @@ extension ProfileViewModel: CollectionViewModel {
         collectionViewModel.value.preferLastPresentIdOverNextPageMaxId
     }
 
+    public var canRefresh: Bool { collectionViewModel.value.canRefresh }
+
     public func request(maxId: String?, minId: String?) {
         if case .statuses = collection, maxId == nil {
             profileService.fetchPinnedStatuses()

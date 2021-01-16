@@ -10,6 +10,7 @@ public struct AccountListService {
     public let sections: AnyPublisher<[[CollectionItem]], Error>
     public let nextPageMaxId: AnyPublisher<String, Never>
     public let navigationService: NavigationService
+    public let canRefresh = false
 
     private let accountList = CurrentValueSubject<[Account], Error>([])
     private let endpoint: AccountsEndpoint
