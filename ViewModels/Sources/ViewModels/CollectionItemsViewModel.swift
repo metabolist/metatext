@@ -49,7 +49,7 @@ public final class CollectionItemsViewModel: ObservableObject {
                 identification.appPreferences.positionBehavior(markerTimeline: markerTimeline) == .rememberPosition
             lastReadId.compactMap { $0 }
                 .removeDuplicates()
-                .debounce(for: 0.5, scheduler: DispatchQueue.global())
+                .debounce(for: .seconds(Self.lastReadIdDebounceInterval), scheduler: DispatchQueue.global())
                 .flatMap { identification.service.setLastReadId($0, forMarker: markerTimeline) }
                 .sink { _ in } receiveValue: { _ in }
                 .store(in: &cancellables)
@@ -283,6 +283,8 @@ extension CollectionItemsViewModel: CollectionViewModel {
 }
 
 private extension CollectionItemsViewModel {
+    private static let lastReadIdDebounceInterval: TimeInterval = 0.5
+
     var lastUpdateWasContextParentOnly: Bool {
         collectionService is ContextService && lastUpdate.items.map(\.count) == [0, 1, 0]
     }
