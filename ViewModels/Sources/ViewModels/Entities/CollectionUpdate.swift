@@ -3,4 +3,5 @@
 public struct CollectionUpdate: Hashable {
     public let items: [[CollectionItem]]
     public let maintainScrollPositionItemId: String?
+    public let shouldAdjustContentInset: Bool
 }

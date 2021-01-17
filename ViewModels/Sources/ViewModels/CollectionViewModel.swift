@@ -11,7 +11,6 @@ public protocol CollectionViewModel {
     var alertItems: AnyPublisher<AlertItem, Never> { get }
     var loading: AnyPublisher<Bool, Never> { get }
     var events: AnyPublisher<CollectionItemEvent, Never> { get }
-    var shouldAdjustContentInset: Bool { get }
     var nextPageMaxId: String? { get }
     var preferLastPresentIdOverNextPageMaxId: Bool { get }
     var canRefresh: Bool { get }

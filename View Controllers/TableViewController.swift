@@ -291,14 +291,11 @@ private extension TableViewController {
             if
                 let itemId = update.maintainScrollPositionItemId,
                 let indexPath = self.dataSource.indexPath(itemId: itemId) {
-                if self.viewModel.shouldAdjustContentInset {
+                if update.shouldAdjustContentInset {
                     self.tableView.contentInset.bottom = max(
-                        Self.bottomInset,
-                        self.tableView.frame.height
-                            - self.tableView.contentSize.height
-                            - self.tableView.safeAreaInsets.top
-                            - self.tableView.safeAreaInsets.bottom)
-                        + self.tableView.rectForRow(at: indexPath).minY
+                        self.tableView.safeAreaLayoutGuide.layoutFrame.height
+                            - self.tableView.rectForRow(at: indexPath).height,
+                        Self.bottomInset)
                 }
 
                 self.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
