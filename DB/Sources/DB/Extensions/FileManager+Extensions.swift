@@ -19,7 +19,7 @@ extension FileManager {
         if !fileExists(atPath: databaseDirectoryURL.path, isDirectory: &isDirectory) {
             try createDirectory(at: databaseDirectoryURL,
                                 withIntermediateDirectories: false,
-                                attributes: [.protectionKey: FileProtectionType.complete])
+                                attributes: [.protectionKey: FileProtectionType.completeUnlessOpen])
         } else if !isDirectory.boolValue {
             throw DatabaseDirectoryError.unexpectedFileExistsWithDBDirectoryName
         }
