@@ -275,22 +275,21 @@ private extension TableViewController {
     }
 
     func update(_ update: CollectionUpdate) {
-        var offsetFromNavigationBar: CGFloat?
+        let positionMaintenanceOffset: CGFloat
 
-        if
-            let itemId = update.maintainScrollPositionItemId,
-            let indexPath = dataSource.indexPath(itemId: itemId),
-            let navigationBar = navigationController?.navigationBar {
-            let navigationBarMaxY = tableView.convert(navigationBar.bounds, from: navigationBar).maxY
-            offsetFromNavigationBar = tableView.rectForRow(at: indexPath).origin.y - navigationBarMaxY
+        if let itemId = update.maintainScrollPositionItemId,
+           let indexPath = dataSource.indexPath(itemId: itemId) {
+            positionMaintenanceOffset = tableView.rectForRow(at: indexPath).origin.y
+                - tableView.safeAreaInsets.top - tableView.contentOffset.y
+        } else {
+            positionMaintenanceOffset = 0
         }
 
         self.dataSource.apply(update.items.snapshot(), animatingDifferences: false) { [weak self] in
             guard let self = self else { return }
 
-            if
-                let itemId = update.maintainScrollPositionItemId,
-                let indexPath = self.dataSource.indexPath(itemId: itemId) {
+            if let itemId = update.maintainScrollPositionItemId,
+               let indexPath = self.dataSource.indexPath(itemId: itemId) {
                 if update.shouldAdjustContentInset {
                     self.tableView.contentInset.bottom = max(
                         self.tableView.safeAreaLayoutGuide.layoutFrame.height
@@ -299,10 +298,7 @@ private extension TableViewController {
                 }
 
                 self.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
-
-                if let offsetFromNavigationBar = offsetFromNavigationBar {
-                    self.tableView.contentOffset.y -= offsetFromNavigationBar
-                }
+                self.tableView.contentOffset.y -= positionMaintenanceOffset
             }
         }
     }
