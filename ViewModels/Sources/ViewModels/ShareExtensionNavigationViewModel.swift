@@ -19,7 +19,7 @@ public final class ShareExtensionNavigationViewModel: ObservableObject {
 }
 
 public extension ShareExtensionNavigationViewModel {
-    func newStatusViewModel() throws -> NewStatusViewModel {
+    func newStatusViewModel(extensionContext: NSExtensionContext?) throws -> NewStatusViewModel {
         let allIdentitiesService = try AllIdentitiesService(environment: environment)
 
         guard let identity = try allIdentitiesService.mostRecentAuthenticatedIdentity()
@@ -38,6 +38,7 @@ public extension ShareExtensionNavigationViewModel {
             identification: identification,
             environment: environment,
             inReplyTo: nil,
-            redraft: nil)
+            redraft: nil,
+            extensionContext: extensionContext)
     }
 }

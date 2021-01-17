@@ -68,7 +68,8 @@ public extension RootViewModel {
             identification: identification,
             environment: environment,
             inReplyTo: inReplyTo,
-            redraft: redraft)
+            redraft: redraft,
+            extensionContext: nil)
     }
 }
 

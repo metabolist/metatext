@@ -4,19 +4,20 @@ import Combine
 import Foundation
 import Mastodon
 import ServiceLayer
+import UniformTypeIdentifiers
 
 public final class CompositionViewModel: AttachmentsRenderingViewModel, ObservableObject, Identifiable {
     public let id = Id()
     public var isPosted = false
-    @Published public var text: String
-    @Published public var contentWarning: String
-    @Published public var displayContentWarning: Bool
-    @Published public var sensitive: Bool
-    @Published public var displayPoll: Bool
-    @Published public var pollMultipleChoice: Bool
+    @Published public var text = ""
+    @Published public var contentWarning = ""
+    @Published public var displayContentWarning = false
+    @Published public var sensitive = false
+    @Published public var displayPoll = false
+    @Published public var pollMultipleChoice = false
     @Published public var pollExpiresIn = PollExpiry.oneDay
-    @Published public private(set) var pollOptions: [PollOption]
-    @Published public private(set) var attachmentViewModels: [AttachmentViewModel]
+    @Published public private(set) var pollOptions = [PollOption(text: ""), PollOption(text: "")]
+    @Published public private(set) var attachmentViewModels = [AttachmentViewModel]()
     @Published public private(set) var attachmentUpload: AttachmentUpload?
     @Published public private(set) var isPostable = false
     @Published public private(set) var canAddAttachment = true
@@ -27,24 +28,8 @@ public final class CompositionViewModel: AttachmentsRenderingViewModel, Observab
     private let eventsSubject: PassthroughSubject<Event, Never>
     private var attachmentUploadCancellable: AnyCancellable?
 
-    init(eventsSubject: PassthroughSubject<Event, Never>,
-         redraft: (status: Status, identification: Identification)? = nil) {
+    init(eventsSubject: PassthroughSubject<Event, Never>) {
         self.eventsSubject = eventsSubject
-        text = redraft?.status.text ?? ""
-        contentWarning = redraft?.status.spoilerText ?? ""
-        displayContentWarning = !(redraft?.status.spoilerText.isEmpty ?? true)
-        sensitive = redraft?.status.sensitive ?? false
-        displayPoll = redraft?.status.poll != nil
-        pollMultipleChoice = redraft?.status.poll?.multiple ?? false
-        pollOptions = redraft?.status.poll?.options.map { PollOption(text: $0.title) }
-            ?? [PollOption(text: ""), PollOption(text: "")]
-        if let redraft = redraft {
-            attachmentViewModels = redraft.status.mediaAttachments.map {
-                AttachmentViewModel(attachment: $0, identification: redraft.identification)
-            }
-        } else {
-            attachmentViewModels = [AttachmentViewModel]()
-        }
 
         $text.map { !$0.isEmpty }
             .removeDuplicates()
@@ -110,6 +95,58 @@ public extension CompositionViewModel {
     }
 
     typealias Id = UUID
+
+    convenience init(eventsSubject: PassthroughSubject<Event, Never>, redraft: Status, identification: Identification) {
+        self.init(eventsSubject: eventsSubject)
+
+        if let text = redraft.text {
+            self.text = text
+        }
+
+        contentWarning = redraft.spoilerText
+        displayContentWarning = redraft.spoilerText.isEmpty
+        sensitive = redraft.sensitive
+        displayPoll = redraft.poll != nil
+        attachmentViewModels = redraft.mediaAttachments.map {
+            AttachmentViewModel(attachment: $0, identification: identification)
+        }
+
+        if let poll = redraft.poll {
+            pollMultipleChoice = poll.multiple
+            pollOptions = poll.options.map { PollOption(text: $0.title) }
+        }
+    }
+
+    convenience init(eventsSubject: PassthroughSubject<Event, Never>,
+                     extensionContext: NSExtensionContext,
+                     parentViewModel: NewStatusViewModel) {
+        self.init(eventsSubject: eventsSubject)
+
+        guard let inputItem = extensionContext.inputItems.first as? NSExtensionItem,
+              let itemProvider = inputItem.attachments?.first
+        else { return }
+
+        if itemProvider.hasItemConformingToTypeIdentifier(UTType.plainText.identifier) {
+            itemProvider.loadItem(forTypeIdentifier: UTType.plainText.identifier, options: nil) { result, _ in
+                guard let text = result as? String else { return }
+
+                self.text = text
+            }
+        } else if itemProvider.hasItemConformingToTypeIdentifier(UTType.url.identifier) {
+            itemProvider.loadItem(forTypeIdentifier: UTType.url.identifier, options: nil) { result, _ in
+                guard let url = result as? URL else { return }
+
+                if let contentText = inputItem.attributedContentText?.string {
+                    self.text.append(contentText)
+                    self.text.append("\n\n")
+                }
+
+                self.text.append(url.absoluteString)
+            }
+        } else {
+            attach(itemProvider: itemProvider, parentViewModel: parentViewModel)
+        }
+    }
 
     func components(inReplyToId: Status.Id?, visibility: Status.Visibility) -> StatusComponents {
         StatusComponents(

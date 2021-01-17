@@ -11,13 +11,14 @@ class ShareExtensionNavigationViewController: UINavigationController {
         environment: .live(
             userNotificationCenter: .current(),
             reduceMotion: { UIAccessibility.isReduceMotionEnabled }))
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
         let newStatusViewModel: NewStatusViewModel
 
         do {
-            newStatusViewModel = try viewModel.newStatusViewModel()
+            newStatusViewModel = try viewModel.newStatusViewModel(extensionContext: extensionContext)
         } catch {
             setViewControllers([ShareErrorViewController(error: error)], animated: false)
 
@@ -27,10 +28,5 @@ class ShareExtensionNavigationViewController: UINavigationController {
         setViewControllers(
             [UIHostingController(rootView: NewStatusView { newStatusViewModel })],
             animated: false)
-    }
-
-    @available(*, unavailable)
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }

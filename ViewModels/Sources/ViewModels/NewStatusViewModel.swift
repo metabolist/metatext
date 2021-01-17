@@ -7,7 +7,7 @@ import ServiceLayer
 
 public final class NewStatusViewModel: ObservableObject {
     @Published public var visibility: Status.Visibility
-    @Published public private(set) var compositionViewModels: [CompositionViewModel]
+    @Published public private(set) var compositionViewModels = [CompositionViewModel]()
     @Published public private(set) var identification: Identification
     @Published public private(set) var authenticatedIdentities = [Identity]()
     @Published public var canPost = false
@@ -27,25 +27,33 @@ public final class NewStatusViewModel: ObservableObject {
                 identification: Identification,
                 environment: AppEnvironment,
                 inReplyTo: StatusViewModel?,
-                redraft: Status?) {
+                redraft: Status?,
+                extensionContext: NSExtensionContext?) {
         self.allIdentitiesService = allIdentitiesService
         self.identification = identification
         self.environment = environment
         inReplyToViewModel = inReplyTo
-
-        let redraftAndIdentification: (status: Status, identification: Identification)?
-
-        if let redraft = redraft {
-            redraftAndIdentification = (status: redraft, identification: identification)
-        } else {
-            redraftAndIdentification = nil
-        }
-
-        compositionViewModels = [CompositionViewModel(
-                                    eventsSubject: compositionEventsSubject,
-                                    redraft: redraftAndIdentification)]
         events = eventsSubject.eraseToAnyPublisher()
         visibility = identification.identity.preferences.postingDefaultVisibility
+
+        let compositionViewModel: CompositionViewModel
+
+        if let redraft = redraft {
+            compositionViewModel = CompositionViewModel(
+                eventsSubject: compositionEventsSubject,
+                redraft: redraft,
+                identification: identification)
+        } else if let extensionContext = extensionContext {
+            compositionViewModel = CompositionViewModel(
+                eventsSubject: compositionEventsSubject,
+                extensionContext: extensionContext,
+                parentViewModel: self)
+        } else {
+            compositionViewModel = CompositionViewModel(eventsSubject: compositionEventsSubject)
+        }
+
+        compositionViewModels = [compositionViewModel]
+
         allIdentitiesService.authenticatedIdentitiesPublisher()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$authenticatedIdentities)
