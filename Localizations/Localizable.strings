@@ -28,6 +28,7 @@
 "add-identity.instance-url" = "Instance URL";
 "add-identity.log-in" = "Log in";
 "add-identity.browse" = "Browse";
+"add-identity.instance-not-supported" = "In order to provide a safe experience to all users and comply with the App Store Review Guidelines, this instance is not supported.";
 "add-identity.join" = "Join";
 "add-identity.request-invite" = "Request an invite";
 "add-identity.unable-to-connect-to-instance" = "Unable to connect to instance";

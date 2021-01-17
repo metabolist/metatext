@@ -7,6 +7,7 @@ import ServiceLayer
 
 public enum AddIdentityError: Error {
     case unableToConnectToInstance
+    case instanceNotSupported
 }
 
 public final class AddIdentityViewModel: ObservableObject {
@@ -101,7 +102,15 @@ private extension AddIdentityViewModel {
                         return
                     }
 
-                    let displayedError = error is URLError ? AddIdentityError.unableToConnectToInstance : error
+                    let displayedError: Error
+
+                    if case InstanceURLError.instanceNotSupported = error {
+                        displayedError = AddIdentityError.instanceNotSupported
+                    } else if error is URLError {
+                        displayedError = AddIdentityError.unableToConnectToInstance
+                    } else {
+                        displayedError = error
+                    }
 
                     self.alertItem = AlertItem(error: displayedError)
                 }

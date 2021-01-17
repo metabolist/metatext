@@ -71,7 +71,13 @@ struct AddIdentityView: View {
 
 extension AddIdentityError: LocalizedError {
     public var errorDescription: String? {
-        NSLocalizedString("add-identity.unable-to-connect-to-instance", comment: "")
+        switch self {
+        case .unableToConnectToInstance:
+            return NSLocalizedString("add-identity.unable-to-connect-to-instance", comment: "")
+        case .instanceNotSupported:
+            return NSLocalizedString("add-identity.instance-not-supported", comment: "")
+        }
+
     }
 }
 
