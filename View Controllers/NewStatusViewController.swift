@@ -394,6 +394,8 @@ private extension NewStatusViewController {
 
         if emojiPickerPresented {
             dismiss(animated: true, completion: completion)
+        } else {
+            completion?()
         }
 
         return emojiPickerPresented
