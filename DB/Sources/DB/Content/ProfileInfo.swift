@@ -8,6 +8,7 @@ struct ProfileInfo: Codable, Hashable, FetchableRecord {
     let accountInfo: AccountInfo
     let relationship: Relationship?
     let identityProofRecords: [IdentityProofRecord]
+    let featuredTagRecords: [FeaturedTagRecord]
 }
 
 extension ProfileInfo {
@@ -15,6 +16,7 @@ extension ProfileInfo {
         AccountInfo.addingIncludes(request)
             .including(optional: AccountRecord.relationship.forKey(CodingKeys.relationship))
             .including(all: AccountRecord.identityProofs.forKey(CodingKeys.identityProofRecords))
+            .including(all: AccountRecord.featuredTags.forKey(CodingKeys.featuredTagRecords))
     }
 
     static func request(_ request: QueryInterfaceRequest<AccountRecord>) -> QueryInterfaceRequest<Self> {

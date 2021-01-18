@@ -49,6 +49,7 @@ public struct ProfileService {
                     account: $0.account,
                     relationship: $0.relationship,
                     identityProofs: $0.identityProofs,
+                    featuredTags: $0.featuredTags,
                     mastodonAPIClient: mastodonAPIClient,
                     contentDatabase: contentDatabase)
             }
@@ -65,14 +66,17 @@ public extension ProfileService {
     }
 
     func fetchProfile() -> AnyPublisher<Never, Error> {
-        Publishers.Merge3(
+        Publishers.Merge4(
             mastodonAPIClient.request(AccountEndpoint.accounts(id: id))
                 .flatMap { contentDatabase.insert(accounts: [$0]) },
             mastodonAPIClient.request(RelationshipsEndpoint.relationships(ids: [id]))
                 .flatMap { contentDatabase.insert(relationships: $0) },
             mastodonAPIClient.request(IdentityProofsEndpoint.identityProofs(id: id))
                 .catch { _ in Empty() }
-                .flatMap { contentDatabase.insert(identityProofs: $0, id: id) })
+                .flatMap { contentDatabase.insert(identityProofs: $0, id: id) },
+            mastodonAPIClient.request(FeaturedTagsEndpoint.featuredTags(id: id))
+                .catch { _ in Empty() }
+                .flatMap { contentDatabase.insert(featuredTags: $0, id: id) })
             .eraseToAnyPublisher()
     }
 

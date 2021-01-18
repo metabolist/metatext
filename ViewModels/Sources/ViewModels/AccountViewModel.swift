@@ -44,6 +44,8 @@ public extension AccountViewModel {
 
     var identityProofs: [IdentityProof] { accountService.identityProofs }
 
+    var featuredTags: [FeaturedTag] { accountService.featuredTags }
+
     var fields: [Account.Field] { accountService.account.fields }
 
     var note: NSAttributedString { accountService.account.note.attributed }

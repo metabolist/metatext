@@ -284,6 +284,23 @@ public extension ContentDatabase {
         .eraseToAnyPublisher()
     }
 
+    func insert(featuredTags: [FeaturedTag], id: Account.Id) -> AnyPublisher<Never, Error> {
+        databaseWriter.writePublisher {
+            for featuredTag in featuredTags {
+                try FeaturedTagRecord(
+                    id: featuredTag.id,
+                    name: featuredTag.name,
+                    url: featuredTag.url,
+                    statusesCount: featuredTag.statusesCount,
+                    lastStatusAt: featuredTag.lastStatusAt,
+                    accountId: id)
+                    .save($0)
+            }
+        }
+        .ignoreOutput()
+        .eraseToAnyPublisher()
+    }
+
     func insert(relationships: [Relationship]) -> AnyPublisher<Never, Error> {
         databaseWriter.writePublisher {
             for relationship in relationships {

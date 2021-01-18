@@ -10,6 +10,7 @@ public struct AccountService {
     public let account: Account
     public let relationship: Relationship?
     public let identityProofs: [IdentityProof]
+    public let featuredTags: [FeaturedTag]
     public let navigationService: NavigationService
 
     private let mastodonAPIClient: MastodonAPIClient
@@ -18,11 +19,13 @@ public struct AccountService {
     public init(account: Account,
                 relationship: Relationship? = nil,
                 identityProofs: [IdentityProof] = [],
+                featuredTags: [FeaturedTag] = [],
                 mastodonAPIClient: MastodonAPIClient,
                 contentDatabase: ContentDatabase) {
         self.account = account
         self.relationship = relationship
         self.identityProofs = identityProofs
+        self.featuredTags = featuredTags
         navigationService = NavigationService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
         self.mastodonAPIClient = mastodonAPIClient
         self.contentDatabase = contentDatabase

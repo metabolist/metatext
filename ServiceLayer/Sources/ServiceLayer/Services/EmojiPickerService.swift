@@ -103,7 +103,6 @@ public extension EmojiPickerService {
                 promise(.failure(error))
             }
         }
-        .print()
         .eraseToAnyPublisher()
     }
 

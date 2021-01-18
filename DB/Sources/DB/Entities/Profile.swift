@@ -7,11 +7,13 @@ public struct Profile: Codable, Hashable {
     public let account: Account
     public let relationship: Relationship?
     public let identityProofs: [IdentityProof]
+    public let featuredTags: [FeaturedTag]
 
     public init(account: Account) {
         self.account = account
         self.relationship = nil
         self.identityProofs = []
+        self.featuredTags = []
     }
 }
 
@@ -20,5 +22,6 @@ extension Profile {
         account = Account(info: info.accountInfo)
         relationship = info.relationship
         identityProofs = info.identityProofRecords.map(IdentityProof.init(record:))
+        featuredTags = info.featuredTagRecords.map(FeaturedTag.init(record:))
     }
 }

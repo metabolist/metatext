@@ -57,6 +57,15 @@ extension ContentDatabase {
                 t.primaryKey(["accountId", "provider"], onConflict: .replace)
             }
 
+            try db.create(table: "featuredTagRecord") { t in
+                t.column("id", .text).primaryKey(onConflict: .replace)
+                t.column("name", .text).notNull()
+                t.column("url", .text).notNull()
+                t.column("statusesCount", .integer).notNull()
+                t.column("lastStatusAt", .date).notNull()
+                t.column("accountId", .text).notNull().references("accountRecord", onDelete: .cascade)
+            }
+
             try db.create(table: "statusRecord") { t in
                 t.column("id", .text).primaryKey(onConflict: .replace)
                 t.column("uri", .text).notNull()
