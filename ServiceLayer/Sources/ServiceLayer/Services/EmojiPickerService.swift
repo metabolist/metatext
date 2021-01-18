@@ -6,7 +6,6 @@ import Foundation
 import Mastodon
 
 public enum EmojiPickerError: Error {
-    case invalidLocaleLanguageCode
     case emojisFileMissing
     case invalidSystemEmojiGroup
     case annotationsAndTagsFileMissing
@@ -87,23 +86,9 @@ public extension EmojiPickerService {
         .eraseToAnyPublisher()
     }
 
-    func systemEmojiAnnotationsAndTagsPublisher(locale: Locale) -> AnyPublisher<[String: String], Error> {
+    func systemEmojiAnnotationsAndTagsPublisher(languageCode: String) -> AnyPublisher<[String: String], Error> {
         Future { promise in
-            guard let languageCode = locale.languageCode else {
-                promise(.failure(EmojiPickerError.invalidLocaleLanguageCode))
-
-                return
-            }
-
-            let language: String
-
-            if languageCode == "zh" && locale.scriptCode == "Hant" {
-                language = "zh_Hant"
-            } else {
-                language = languageCode
-            }
-
-            guard let url = Bundle.module.url(forResource: language, withExtension: "json") else {
+            guard let url = Bundle.module.url(forResource: languageCode, withExtension: "json") else {
                 promise(.failure(EmojiPickerError.annotationsAndTagsFileMissing))
 
                 return
@@ -118,6 +103,7 @@ public extension EmojiPickerService {
                 promise(.failure(error))
             }
         }
+        .print()
         .eraseToAnyPublisher()
     }
 

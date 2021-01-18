@@ -21,11 +21,13 @@ public extension AccessTokenEndpoint {
         public var username = ""
         public var email = ""
         public var password = ""
-        public var locale = "en"
+        public var locale: String
         public var reason = ""
         public var agreement = false
 
-        public init() {}
+        public init(locale: String) {
+            self.locale = locale
+        }
     }
 }
 

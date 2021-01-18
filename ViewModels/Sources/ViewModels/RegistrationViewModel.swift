@@ -14,7 +14,9 @@ public final class RegistrationViewModel: ObservableObject {
     public let serverRulesURL: URL
     public let termsOfServiceURL: URL
     @Published public var alertItem: AlertItem?
-    @Published public var registration = Registration()
+    @Published public var registration = Registration(
+        locale: (Locale.preferred ?? Locale.current).languageCodeWithCoercedRegionCodeIfNecessary
+            ?? Locale.fallbackLanguageCode)
     @Published public var passwordConfirmation = ""
     @Published public private(set) var registerDisabled = true
     @Published public private(set) var registering = false

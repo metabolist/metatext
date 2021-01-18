@@ -19,6 +19,7 @@ final public class EmojiPickerViewModel: ObservableObject {
     @Published private var systemEmojiAnnotationsAndTags = [String: String]()
     private var cancellables = Set<AnyCancellable>()
 
+    // swiftlint:disable:next function_body_length
     public init(identification: Identification) {
         self.identification = identification
         emojiPickerService = identification.service.emojiPickerService()
@@ -38,7 +39,9 @@ final public class EmojiPickerViewModel: ObservableObject {
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$emojiUses)
 
-        $locale.removeDuplicates().flatMap(emojiPickerService.systemEmojiAnnotationsAndTagsPublisher(locale:))
+        $locale.map { $0.languageCodeWithScriptIfNecessary ?? Locale.fallbackLanguageCode }
+            .removeDuplicates()
+            .flatMap(emojiPickerService.systemEmojiAnnotationsAndTagsPublisher(languageCode:))
             .replaceError(with: [:])
             .assign(to: &$systemEmojiAnnotationsAndTags)
 
