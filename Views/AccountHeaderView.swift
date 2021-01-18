@@ -90,7 +90,7 @@ final class AccountHeaderView: UIView {
                     fieldsStackView.addArrangedSubview(fieldView)
                 }
 
-                fieldsStackView.isHidden = accountViewModel.fields.isEmpty
+                fieldsStackView.isHidden = accountViewModel.fields.isEmpty && accountViewModel.identityProofs.isEmpty
 
                 let noteFont = UIFont.preferredFont(forTextStyle: .callout)
                 let mutableNote = NSMutableAttributedString(attributedString: accountViewModel.note)
