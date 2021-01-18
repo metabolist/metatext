@@ -6,15 +6,11 @@ import Mastodon
 import UIKit
 import ViewModels
 
-final class CompositionInputAccessoryView: UIView {
-    let visibilityButton = UIButton()
-    let addButton = UIButton()
-    let contentWarningButton = UIButton(type: .system)
+final class CompositionInputAccessoryView: UIToolbar {
     let tagForInputView = UUID().hashValue
 
     private let viewModel: CompositionViewModel
     private let parentViewModel: NewStatusViewModel
-    private let stackView = UIStackView()
     private var cancellables = Set<AnyCancellable>()
 
     init(viewModel: CompositionViewModel, parentViewModel: NewStatusViewModel) {
@@ -30,22 +26,11 @@ final class CompositionInputAccessoryView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    override var intrinsicContentSize: CGSize {
-        stackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-    }
 }
 
 private extension CompositionInputAccessoryView {
     // swiftlint:disable:next function_body_length
     func initialSetup() {
-        autoresizingMask = .flexibleHeight
-        backgroundColor = .secondarySystemFill
-
-        addSubview(stackView)
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.spacing = .defaultSpacing
-
         var attachmentActions = [
             UIAction(
                 title: NSLocalizedString("compose.browse", comment: ""),
@@ -74,75 +59,63 @@ private extension CompositionInputAccessoryView {
         at: 1)
         #endif
 
-        let attachmentButton = UIButton()
-        stackView.addArrangedSubview(attachmentButton)
-        attachmentButton.setImage(
-            UIImage(
-                systemName: "paperclip",
-                withConfiguration: UIImage.SymbolConfiguration(scale: .medium)),
-            for: .normal)
-        attachmentButton.showsMenuAsPrimaryAction = true
-        attachmentButton.menu = UIMenu(children: attachmentActions)
+        let attachmentButton = UIBarButtonItem(
+            title: "hm",
+            image: UIImage(systemName: "paperclip"),
+            menu: UIMenu(children: attachmentActions))
+        let pollButton = UIBarButtonItem(
+            image: UIImage(systemName: "chart.bar.xaxis"),
+            primaryAction: UIAction { [weak self] _ in self?.viewModel.displayPoll.toggle() })
+        let visibilityButton = UIBarButtonItem(
+            image: UIImage(systemName: parentViewModel.visibility.systemImageName),
+            menu: UIMenu(children: Status.Visibility.allCasesExceptUnknown.reversed().map { visibility in
+                UIAction(
+                    title: visibility.title ?? "",
+                    image: UIImage(systemName: visibility.systemImageName),
+                    discoverabilityTitle: visibility.description) { [weak self] _ in
+                    self?.parentViewModel.visibility = visibility
+                }
+            }))
+        let contentWarningButton = UIBarButtonItem(
+            title: NSLocalizedString("status.content-warning-abbreviation", comment: ""),
+            primaryAction: UIAction { [weak self] _ in self?.viewModel.displayContentWarning.toggle() })
+        let emojiButton = UIBarButtonItem(
+            image: UIImage(systemName: "face.smiling"),
+            primaryAction: UIAction { [weak self] _ in
+                guard let self = self else { return }
 
-        let pollButton = UIButton(primaryAction: UIAction { [weak self] _ in self?.viewModel.displayPoll.toggle() })
+                self.parentViewModel.presentEmojiPicker(tag: self.tagForInputView)
+            })
+        let addButton = UIBarButtonItem(
+            image: UIImage(systemName: "plus.circle.fill"),
+            primaryAction: UIAction { [weak self] _ in
+                guard let self = self else { return }
 
-        stackView.addArrangedSubview(pollButton)
-        pollButton.setImage(
-            UIImage(
-                systemName: "chart.bar.xaxis",
-                withConfiguration: UIImage.SymbolConfiguration(scale: .medium)),
-            for: .normal)
-
-        stackView.addArrangedSubview(visibilityButton)
-        visibilityButton.showsMenuAsPrimaryAction = true
-        visibilityButton.menu = UIMenu(children: Status.Visibility.allCasesExceptUnknown.reversed().map { visibility in
-            UIAction(
-                title: visibility.title ?? "",
-                image: UIImage(systemName: visibility.systemImageName),
-                discoverabilityTitle: visibility.description) { [weak self] _ in
-                self?.parentViewModel.visibility = visibility
-            }
-        })
-
-        stackView.addArrangedSubview(contentWarningButton)
-        contentWarningButton.setTitle(
-            NSLocalizedString("status.content-warning-abbreviation", comment: ""),
-            for: .normal)
-        contentWarningButton.addAction(
-            UIAction { [weak self] _ in self?.viewModel.displayContentWarning.toggle() },
-            for: .touchUpInside)
-
-        let emojiButton = UIButton(primaryAction: UIAction { [weak self] _ in
-            guard let self = self else { return }
-
-            self.parentViewModel.presentEmojiPicker(tag: self.tagForInputView)
-        })
-
-        stackView.addArrangedSubview(emojiButton)
-        emojiButton.setImage(
-            UIImage(
-                systemName: "face.smiling",
-                withConfiguration: UIImage.SymbolConfiguration(scale: .medium)),
-            for: .normal)
-
-        stackView.addArrangedSubview(UIView())
+                self.parentViewModel.insert(after: self.viewModel)
+            })
 
         let charactersLabel = UILabel()
 
-        stackView.addArrangedSubview(charactersLabel)
         charactersLabel.font = .preferredFont(forTextStyle: .callout)
+        charactersLabel.adjustsFontForContentSizeCategory = true
+        charactersLabel.adjustsFontSizeToFitWidth = true
 
-        stackView.addArrangedSubview(addButton)
-        addButton.setImage(
-            UIImage(
-                systemName: "plus.circle.fill",
-                withConfiguration: UIImage.SymbolConfiguration(scale: .medium)),
-            for: .normal)
-        addButton.addAction(UIAction { [weak self] _ in
-            guard let self = self else { return }
+        let charactersBarItem = UIBarButtonItem(customView: charactersLabel)
 
-            self.parentViewModel.insert(after: self.viewModel)
-        }, for: .touchUpInside)
+        items = [
+            attachmentButton,
+            UIBarButtonItem.fixedSpace(.defaultSpacing),
+            pollButton,
+            UIBarButtonItem.fixedSpace(.defaultSpacing),
+            visibilityButton,
+            UIBarButtonItem.fixedSpace(.defaultSpacing),
+            contentWarningButton,
+            UIBarButtonItem.fixedSpace(.defaultSpacing),
+            emojiButton,
+            UIBarButtonItem.flexibleSpace(),
+            charactersBarItem,
+            UIBarButtonItem.fixedSpace(.defaultSpacing),
+            addButton]
 
         viewModel.$canAddAttachment
             .sink { attachmentButton.isEnabled = $0 }
@@ -160,25 +133,11 @@ private extension CompositionInputAccessoryView {
         .store(in: &cancellables)
 
         viewModel.$isPostable
-            .sink { [weak self] in self?.addButton.isEnabled = $0 }
+            .sink { addButton.isEnabled = $0 }
             .store(in: &cancellables)
 
         parentViewModel.$visibility
-            .sink { [weak self] in
-                self?.visibilityButton.setImage(UIImage(systemName: $0.systemImageName), for: .normal)
-            }
+            .sink { visibilityButton.image = UIImage(systemName: $0.systemImageName) }
             .store(in: &cancellables)
-
-        for button in [attachmentButton, pollButton, visibilityButton, contentWarningButton, emojiButton, addButton] {
-            button.heightAnchor.constraint(greaterThanOrEqualToConstant: .minimumButtonDimension).isActive = true
-            button.widthAnchor.constraint(greaterThanOrEqualToConstant: .minimumButtonDimension).isActive = true
-        }
-
-        NSLayoutConstraint.activate([
-            stackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
-            stackView.topAnchor.constraint(equalTo: topAnchor),
-            stackView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
     }
 }
