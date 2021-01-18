@@ -48,6 +48,12 @@ final class ImagePageViewController: UIPageViewController {
             systemItem: .close,
             primaryAction: UIAction { [weak self] _ in self?.presentingViewController?.dismiss(animated: true) })
 
+        navigationItem.rightBarButtonItem = .init(
+            systemItem: .action,
+            primaryAction: UIAction { [weak self] _ in
+                (self?.viewControllers?.first as? ImageViewController)?.presentActivityViewController()
+            })
+
         navigationController?.barHideOnTapGestureRecognizer.addTarget(
             self,
             action: #selector(toggleDescriptionVisibility))

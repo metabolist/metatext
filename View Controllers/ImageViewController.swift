@@ -1,5 +1,6 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
+import AVFoundation
 import Kingfisher
 import UIKit
 import ViewModels
@@ -144,6 +145,44 @@ extension ImageViewController {
     func toggleDescriptionVisibility() {
         UIView.animate(withDuration: .shortAnimationDuration) {
             self.descriptionBackgroundView.alpha = self.descriptionBackgroundView.alpha > 0 ? 0 : 1
+        }
+    }
+
+    func presentActivityViewController() {
+        if let image = imageView.image {
+            let activityViewController = UIActivityViewController(activityItems: [image], applicationActivities: [])
+
+            present(activityViewController, animated: true)
+        } else if let asset = playerView.player?.currentItem?.asset as? AVURLAsset {
+            asset.exportWithoutAudioTrack { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case let .success(url):
+                        let activityViewController = UIActivityViewController(
+                            activityItems: [url],
+                            applicationActivities: [])
+
+                        activityViewController.completionWithItemsHandler = { _, _, _, _ in
+                            try? FileManager.default.removeItem(at: url.deletingLastPathComponent())
+                        }
+
+                        self.present(activityViewController, animated: true)
+                    case .failure:
+                        let alertController = UIAlertController(
+                            title: nil,
+                            message: NSLocalizedString("attachment.unable-to-export-media", comment: ""),
+                            preferredStyle: .alert)
+
+                        let okAction = UIAlertAction(
+                            title: NSLocalizedString("ok", comment: ""),
+                            style: .default) { _ in }
+
+                        alertController.addAction(okAction)
+
+                        self.present(alertController, animated: true)
+                    }
+                }
+            }
         }
     }
 }

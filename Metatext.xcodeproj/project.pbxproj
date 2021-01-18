@@ -51,6 +51,7 @@
 		D059373E25AB8D5200754FDF /* CompositionPollOptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D059373D25AB8D5200754FDF /* CompositionPollOptionView.swift */; };
 		D059373F25AB8D5200754FDF /* CompositionPollOptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D059373D25AB8D5200754FDF /* CompositionPollOptionView.swift */; };
 		D059376125ABE2E800754FDF /* XMLUnescaper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D059376025ABE2E800754FDF /* XMLUnescaper.swift */; };
+		D05E688525B55AE8001FB2C6 /* AVURLAsset+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05E688425B55AE8001FB2C6 /* AVURLAsset+Extensions.swift */; };
 		D0625E59250F092900502611 /* StatusListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0625E58250F092900502611 /* StatusListCell.swift */; };
 		D0625E5D250F0B5C00502611 /* StatusContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0625E5C250F0B5C00502611 /* StatusContentConfiguration.swift */; };
 		D06BC5E625202AD90079541D /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06BC5E525202AD90079541D /* ProfileViewController.swift */; };
@@ -218,6 +219,7 @@
 		D059373225AAEA7000754FDF /* CompositionPollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionPollView.swift; sourceTree = "<group>"; };
 		D059373D25AB8D5200754FDF /* CompositionPollOptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionPollOptionView.swift; sourceTree = "<group>"; };
 		D059376025ABE2E800754FDF /* XMLUnescaper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XMLUnescaper.swift; sourceTree = "<group>"; };
+		D05E688425B55AE8001FB2C6 /* AVURLAsset+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVURLAsset+Extensions.swift"; sourceTree = "<group>"; };
 		D0625E58250F092900502611 /* StatusListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusListCell.swift; sourceTree = "<group>"; };
 		D0625E5C250F0B5C00502611 /* StatusContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusContentConfiguration.swift; sourceTree = "<group>"; };
 		D0666A2124C677B400F3F04B /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -569,6 +571,7 @@
 			isa = PBXGroup;
 			children = (
 				D01C6FAB252024BD003D0300 /* Array+Extensions.swift */,
+				D05E688425B55AE8001FB2C6 /* AVURLAsset+Extensions.swift */,
 				D0F0B135251AA12700942152 /* CollectionItem+Extensions.swift */,
 				D0C7D46E24F76169001EBDBB /* KingfisherOptionsInfo+Extensions.swift */,
 				D0C7D46B24F76169001EBDBB /* NSMutableAttributedString+Extensions.swift */,
@@ -834,6 +837,7 @@
 				D0FE1C8F253686F9003EF1EB /* PlayerView.swift in Sources */,
 				D0CE9F87258B076900E3A6B6 /* AttachmentUploadView.swift in Sources */,
 				D0F0B113251A86A000942152 /* AccountContentConfiguration.swift in Sources */,
+				D05E688525B55AE8001FB2C6 /* AVURLAsset+Extensions.swift in Sources */,
 				D036AA02254B6101009094DF /* NotificationListCell.swift in Sources */,
 				D08B8D42253F92B600B1EBEF /* ImagePageViewController.swift in Sources */,
 				D01F41D924F880C400D55A2D /* TouchFallthroughTextView.swift in Sources */,

@@ -39,6 +39,7 @@
 "attachment.edit.thumbnail.prompt" = "Drag the circle on the preview to choose the focal point which will always be in view on all thumbnails";
 "attachment.sensitive-content" = "Sensitive content";
 "attachment.media-hidden" = "Media hidden";
+"attachment.unable-to-export-media" = "Unable to export media";
 "bookmarks" = "Bookmarks";
 "camera-access.title" = "Camera access needed";
 "camera-access.description" = "Open system settings to allow camera access";

@@ -2,10 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Enables Metatext to take videos and add them to your posts.</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Enables Metatext to take photos and videos and add them to your posts.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -24,6 +20,14 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Enables Metatext to take photos and videos and add them to your posts</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Enables Metatext to take videos and add them to your posts</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Enables Metatext to add items to your Photo Library</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Enables Metatext to access photos from your library and add them to your posts</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
