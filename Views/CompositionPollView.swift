@@ -62,6 +62,7 @@ private extension CompositionPollView {
                     withConfiguration: UIImage.SymbolConfiguration(scale: .medium)),
             for: .normal)
         addChoiceButton.setTitle(NSLocalizedString("compose.poll.add-choice", comment: ""), for: .normal)
+        addChoiceButton.imageEdgeInsets = .init(top: 0, left: 0, bottom: 0, right: .defaultSpacing)
 
         let expiresInButton = UIButton(type: .system)
 
@@ -76,6 +77,7 @@ private extension CompositionPollView {
                 self?.viewModel.pollExpiresIn = expiry
             }
         })
+        expiresInButton.imageEdgeInsets = .init(top: 0, left: 0, bottom: 0, right: .defaultSpacing)
 
         let switchStackView = UIStackView()
 
@@ -121,6 +123,9 @@ private extension CompositionPollView {
                         parentViewModel: self.parentViewModel,
                         option: option)
 
+                    optionView.textField.placeholder = String.localizedStringWithFormat(
+                        NSLocalizedString("compose.poll.option-%ld", comment: ""),
+                        index + 1)
                     self.stackView.insertArrangedSubview(optionView, at: index)
                 }
             }
@@ -129,6 +134,14 @@ private extension CompositionPollView {
                 optionView.removeButton.isHidden = index < CompositionViewModel.minPollOptionCount
 
                 if !$0.contains(where: { $0 === optionView.option }) {
+                    if optionView.textField.isFirstResponder {
+                        if index > 0 {
+                            self.pollOptionViews[index - 1].textField.becomeFirstResponder()
+                        } else if self.pollOptionViews.count > index {
+                            self.pollOptionViews[index + 1].textField.becomeFirstResponder()
+                        }
+                    }
+
                     optionView.removeFromSuperview()
                 }
             }

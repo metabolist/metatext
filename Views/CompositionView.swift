@@ -157,17 +157,21 @@ private extension CompositionView {
             .store(in: &cancellables)
 
         viewModel.$displayContentWarning
-            .sink { [weak self] in
+            .sink { [weak self] displayContentWarning in
                 guard let self = self else { return }
 
-                if self.spoilerTextField.isHidden && self.textView.isFirstResponder && $0 {
+                if self.spoilerTextField.isHidden && self.textView.isFirstResponder && displayContentWarning {
                     self.spoilerTextField.becomeFirstResponder()
-                } else if !self.spoilerTextField.isHidden && self.spoilerTextField.isFirstResponder && !$0 {
+                } else if !self.spoilerTextField.isHidden
+                            && self.spoilerTextField.isFirstResponder
+                            && !displayContentWarning {
                     self.textView.becomeFirstResponder()
                 }
 
-                self.spoilerTextField.isHidden = !$0
-                textViewBaselineConstraint.isActive = !$0
+                UIView.animate(withDuration: .zeroIfReduceMotion(.shortAnimationDuration)) {
+                    self.spoilerTextField.isHidden = !displayContentWarning
+                    textViewBaselineConstraint.isActive = !displayContentWarning
+                }
             }
             .store(in: &cancellables)
 
@@ -177,20 +181,24 @@ private extension CompositionView {
 
         viewModel.$attachmentViewModels
             .receive(on: RunLoop.main)
-            .sink { [weak self] in
-                self?.attachmentsView.viewModel = self?.viewModel
-                self?.attachmentsView.isHidden = $0.isEmpty
-                self?.markAttachmentsSensitiveView.isHidden = $0.isEmpty
+            .sink { [weak self] attachmentViewModels in
+                UIView.animate(withDuration: .zeroIfReduceMotion(.shortAnimationDuration)) {
+                    self?.attachmentsView.viewModel = self?.viewModel
+                    self?.attachmentsView.isHidden = attachmentViewModels.isEmpty
+                    self?.markAttachmentsSensitiveView.isHidden = attachmentViewModels.isEmpty
+                }
             }
             .store(in: &cancellables)
 
         viewModel.$displayPoll
-            .sink { [weak self] in
-                if !$0 {
+            .sink { [weak self] displayPoll in
+                if !displayPoll {
                     self?.textView.becomeFirstResponder()
                 }
 
-                self?.pollView.isHidden = !$0
+                UIView.animate(withDuration: .zeroIfReduceMotion(.shortAnimationDuration)) {
+                    self?.pollView.isHidden = !displayPoll
+                }
             }
             .store(in: &cancellables)
 

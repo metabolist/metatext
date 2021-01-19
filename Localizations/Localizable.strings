@@ -51,6 +51,7 @@
 "compose.photo-library" = "Photo Library";
 "compose.poll.add-choice" = "Add a choice";
 "compose.poll.allow-multiple-choices" = "Allow multiple choices";
+"compose.poll.option-%ld" = "Option %ld";
 "compose.prompt" = "What's on your mind?";
 "compose.take-photo-or-video" = "Take Photo or Video";
 "emoji.custom" = "Custom";

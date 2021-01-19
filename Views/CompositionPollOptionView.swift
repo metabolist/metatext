@@ -5,6 +5,7 @@ import UIKit
 import ViewModels
 
 final class CompositionPollOptionView: UIView {
+    let textField = UITextField()
     let option: CompositionViewModel.PollOption
     let removeButton = UIButton(type: .close)
     private let viewModel: CompositionViewModel
@@ -33,7 +34,6 @@ private extension CompositionPollOptionView {
     // swiftlint:disable:next function_body_length
     func initialSetup() {
         let stackView = UIStackView()
-        let textField = UITextField()
         let remainingCharactersLabel = UILabel()
 
         addSubview(stackView)
@@ -51,7 +51,7 @@ private extension CompositionPollOptionView {
         textField.tag = textInputAccessoryView.tagForInputView
         textField.addAction(
             UIAction { [weak self] _ in
-                self?.option.text = textField.text ?? "" },
+                self?.option.text = self?.textField.text ?? "" },
             for: .editingChanged)
         textField.text = option.text
 

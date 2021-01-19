@@ -50,16 +50,18 @@ final class AttachmentUploadView: UIView {
             progressView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
         ])
 
-        viewModel.$attachmentUpload.sink { [weak self] in
+        viewModel.$attachmentUpload.sink { [weak self] attachmentUpload in
             guard let self = self else { return }
 
-            if let attachmentUpload = $0 {
-                self.progressCancellable = attachmentUpload.progress.publisher(for: \.fractionCompleted)
-                    .receive(on: DispatchQueue.main)
-                    .sink { self.progressView.progress = Float($0) }
-                self.isHidden = false
-            } else {
-                self.isHidden = true
+            UIView.animate(withDuration: .zeroIfReduceMotion(.shortAnimationDuration)) {
+                if let attachmentUpload = attachmentUpload {
+                    self.progressCancellable = attachmentUpload.progress.publisher(for: \.fractionCompleted)
+                        .receive(on: DispatchQueue.main)
+                        .sink { self.progressView.progress = Float($0) }
+                    self.isHidden = false
+                } else {
+                    self.isHidden = true
+                }
             }
         }
         .store(in: &cancellables)

@@ -193,9 +193,19 @@ private extension NewStatusViewController {
         }
 
         for removal in diff.removals {
-            guard case let .remove(_, id, _) = removal else { continue }
+            guard case let .remove(_, id, _) = removal,
+                  let index = stackView.arrangedSubviews.firstIndex(where: { ($0 as? CompositionView)?.id == id })
+            else { continue }
 
-            stackView.arrangedSubviews.first { ($0 as? CompositionView)?.id == id }?.removeFromSuperview()
+            if (stackView.arrangedSubviews[index] as? CompositionView)?.textView.isFirstResponder ?? false {
+                if index > 0 {
+                    (stackView.arrangedSubviews[index - 1] as? CompositionView)?.textView.becomeFirstResponder()
+                } else if stackView.arrangedSubviews.count > index {
+                    (stackView.arrangedSubviews[index + 1] as? CompositionView)?.textView.becomeFirstResponder()
+                }
+            }
+
+            stackView.arrangedSubviews[index].removeFromSuperview()
         }
 
         for compositionView in stackView.arrangedSubviews.compactMap({ $0 as? CompositionView }) {

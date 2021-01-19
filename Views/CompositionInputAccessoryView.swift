@@ -65,7 +65,6 @@ private extension CompositionInputAccessoryView {
         #endif
 
         let attachmentButton = UIBarButtonItem(
-            title: "hm",
             image: UIImage(systemName: "paperclip"),
             menu: UIMenu(children: attachmentActions))
         let pollButton = UIBarButtonItem(
