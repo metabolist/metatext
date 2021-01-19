@@ -25,4 +25,17 @@ extension CollectionItem {
             return ConversationListCell.self
         }
     }
+
+    func estimatedHeight(width: CGFloat, identification: Identification) -> CGFloat {
+        switch self {
+        case let .status(status, configuration):
+            return StatusView.estimatedHeight(
+                width: width,
+                identification: identification,
+                status: status,
+                configuration: configuration)
+        default:
+            return UITableView.automaticDimension
+        }
+    }
 }

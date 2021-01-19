@@ -74,6 +74,14 @@ final class PollResultView: UIView {
     }
 }
 
+extension PollResultView {
+    static func estimatedHeight(width: CGFloat, title: String) -> CGFloat {
+        title.height(width: width, font: .preferredFont(forTextStyle: .callout))
+            + .compactSpacing
+            + 4 // progress view height
+    }
+}
+
 private extension PollResultView {
     private static var percentFormatter: NumberFormatter = {
         let percentageFormatter = NumberFormatter()

@@ -2,6 +2,7 @@
 
 // swiftlint:disable file_length
 import Kingfisher
+import Mastodon
 import UIKit
 import ViewModels
 
@@ -53,6 +54,36 @@ final class StatusView: UIView {
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension StatusView {
+    static func estimatedHeight(width: CGFloat,
+                                identification: Identification,
+                                status: Status,
+                                configuration: CollectionItem.StatusConfiguration) -> CGFloat {
+        var height = CGFloat.defaultSpacing * 2
+        let bodyWidth = width - .defaultSpacing - .avatarDimension
+
+        if status.reblog != nil || configuration.isPinned {
+            height += UIFont.preferredFont(forTextStyle: .caption1).lineHeight + .compactSpacing
+        }
+
+        if configuration.isContextParent {
+            height += .avatarDimension + .minimumButtonDimension * 2.5 + .hairline * 2 + .compactSpacing * 4
+        } else {
+            height += UIFont.preferredFont(forTextStyle: .headline).lineHeight
+                + .compactSpacing + .minimumButtonDimension / 2
+        }
+
+        height += StatusBodyView.estimatedHeight(
+            width: bodyWidth,
+            identification: identification,
+            status: status,
+            configuration: configuration)
+            + .compactSpacing
+
+        return height
     }
 }
 
@@ -142,6 +173,7 @@ private extension StatusView {
         mainStackView.addArrangedSubview(nameAccountContainerStackView)
 
         mainStackView.addArrangedSubview(bodyView)
+        bodyView.tag = 666
 
         contextParentTimeLabel.font = .preferredFont(forTextStyle: .footnote)
         contextParentTimeLabel.adjustsFontForContentSizeCategory = true
@@ -264,7 +296,10 @@ private extension StatusView {
             avatarButton.leadingAnchor.constraint(equalTo: avatarImageView.leadingAnchor),
             avatarButton.topAnchor.constraint(equalTo: avatarImageView.topAnchor),
             avatarButton.bottomAnchor.constraint(equalTo: avatarImageView.bottomAnchor),
-            avatarButton.trailingAnchor.constraint(equalTo: avatarImageView.trailingAnchor)
+            avatarButton.trailingAnchor.constraint(equalTo: avatarImageView.trailingAnchor),
+            contextParentTimeApplicationStackView.heightAnchor.constraint(
+                greaterThanOrEqualToConstant: .minimumButtonDimension / 2),
+            interactionsStackView.heightAnchor.constraint(greaterThanOrEqualToConstant: .minimumButtonDimension)
         ])
     }
 
@@ -374,7 +409,8 @@ private extension StatusView {
             if isContextParent {
                 button.heightAnchor.constraint(equalToConstant: .minimumButtonDimension).isActive = true
             } else {
-                button.heightAnchor.constraint(greaterThanOrEqualToConstant: 0).isActive = true
+                button.heightAnchor.constraint(
+                    greaterThanOrEqualToConstant: .minimumButtonDimension / 2).isActive = true
             }
         }
 

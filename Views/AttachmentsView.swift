@@ -1,6 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import Combine
+import Mastodon
 import UIKit
 import ViewModels
 
@@ -80,6 +81,20 @@ final class AttachmentsView: UIView {
 }
 
 extension AttachmentsView {
+    static func estimatedHeight(width: CGFloat,
+                                identification: Identification,
+                                status: Status,
+                                configuration: CollectionItem.StatusConfiguration) -> CGFloat {
+        let height: CGFloat
+        if status.displayStatus.mediaAttachments.count == 1,
+           let aspectRatio = status.mediaAttachments.first?.aspectRatio {
+            height = width / max(CGFloat(aspectRatio), 16 / 9)
+        } else {
+            height = width / (16 / 9)
+        }
+
+        return height
+    }
     var shouldAutoplay: Bool {
         guard !isHidden, let viewModel = viewModel, viewModel.shouldShowAttachments else { return false }
 

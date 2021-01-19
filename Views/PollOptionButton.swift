@@ -41,6 +41,12 @@ final class PollOptionButton: UIButton {
     }
 }
 
+extension PollOptionButton {
+    static func estimatedHeight(width: CGFloat, title: String) -> CGFloat {
+        title.height(width: width, font: .preferredFont(forTextStyle: .callout))
+    }
+}
+
 private extension PollOptionButton {
     static let titleEdgeInsets = UIEdgeInsets(top: 0, left: .compactSpacing, bottom: 0, right: .compactSpacing)
 }

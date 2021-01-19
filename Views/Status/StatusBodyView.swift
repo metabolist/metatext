@@ -1,5 +1,6 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
+import Mastodon
 import UIKit
 import ViewModels
 
@@ -49,7 +50,7 @@ final class StatusBodyView: UIView {
             attachmentsView.isHidden = viewModel.attachmentViewModels.isEmpty
             attachmentsView.viewModel = viewModel
 
-            pollView.isHidden = viewModel.pollOptions.isEmpty
+            pollView.isHidden = viewModel.pollOptions.isEmpty || !viewModel.shouldShowContent
             pollView.viewModel = viewModel
 
             cardView.viewModel = viewModel.cardViewModel
@@ -66,6 +67,64 @@ final class StatusBodyView: UIView {
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension StatusBodyView {
+    static func estimatedHeight(width: CGFloat,
+                                identification: Identification,
+                                status: Status,
+                                configuration: CollectionItem.StatusConfiguration) -> CGFloat {
+        let contentFont = UIFont.preferredFont(forTextStyle: configuration.isContextParent ? .title3 : .callout)
+        var height: CGFloat = 0
+
+        var contentHeight = status.displayStatus.content.attributed.string.height(
+            width: width,
+            font: contentFont)
+
+        if status.displayStatus.card != nil {
+            contentHeight += .compactSpacing
+            contentHeight += CardView.estimatedHeight(
+                width: width,
+                identification: identification,
+                status: status,
+                configuration: configuration)
+        }
+
+        if status.displayStatus.poll != nil {
+            contentHeight += .defaultSpacing
+            contentHeight += PollView.estimatedHeight(
+                width: width,
+                identification: identification,
+                status: status,
+                configuration: configuration)
+        }
+
+        if status.displayStatus.spoilerText.isEmpty {
+            height += contentHeight
+        } else {
+            height += status.displayStatus.spoilerText.height(width: width, font: contentFont)
+            height += .compactSpacing
+            height += NSLocalizedString("status.show-more", comment: "").height(
+                width: width,
+                font: .preferredFont(forTextStyle: .headline))
+
+            if configuration.showContentToggled && !identification.identity.preferences.readingExpandSpoilers {
+                height += .compactSpacing
+                height += contentHeight
+            }
+        }
+
+        if !status.displayStatus.mediaAttachments.isEmpty {
+            height += .compactSpacing
+            height += AttachmentsView.estimatedHeight(
+                width: width,
+                identification: identification,
+                status: status,
+                configuration: configuration)
+        }
+
+        return height
     }
 }
 

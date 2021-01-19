@@ -1,6 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import Combine
+import Mastodon
 import UIKit
 import ViewModels
 
@@ -112,6 +113,34 @@ final class PollView: UIView {
 }
 
 extension PollView {
+    static func estimatedHeight(width: CGFloat,
+                                identification: Identification,
+                                status: Status,
+                                configuration: CollectionItem.StatusConfiguration) -> CGFloat {
+        if let poll = status.displayStatus.poll {
+            var height: CGFloat = 0
+            let open = !poll.expired && !poll.voted
+
+            for option in poll.options {
+                height += open ? PollOptionButton.estimatedHeight(width: width, title: option.title)
+                    : PollResultView.estimatedHeight(width: width, title: option.title)
+                height += .defaultSpacing
+            }
+
+            if open {
+                height += .minimumButtonDimension + .defaultSpacing
+            }
+
+            height += .minimumButtonDimension / 2
+
+            return height
+        } else {
+            return 0
+        }
+    }
+}
+
+private extension PollView {
     func initialSetup() {
         addSubview(stackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -146,11 +175,20 @@ extension PollView {
 
         bottomStackView.addArrangedSubview(UIView())
 
+        let voteButtonHeightConstraint = voteButton.heightAnchor.constraint(equalToConstant: .minimumButtonDimension)
+        let refreshButtonHeightConstraint = refreshButton.heightAnchor.constraint(
+            equalToConstant: .minimumButtonDimension / 2)
+
+        refreshButtonHeightConstraint.priority = .justBelowMax
+        refreshButtonHeightConstraint.priority = .justBelowMax
+
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             stackView.topAnchor.constraint(equalTo: topAnchor),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            voteButtonHeightConstraint,
+            refreshButtonHeightConstraint
         ])
     }
 }

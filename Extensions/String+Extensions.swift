@@ -4,6 +4,15 @@ import Mastodon
 import UIKit
 
 extension String {
+    func height(width: CGFloat, font: UIFont) -> CGFloat {
+        (self as NSString).boundingRect(
+            with: CGSize(width: width, height: .greatestFiniteMagnitude),
+            options: .usesLineFragmentOrigin,
+            attributes: [.font: font],
+            context: nil)
+            .height
+    }
+
     func countEmphasizedAttributedString(count: Int, highlighted: Bool = false) -> NSAttributedString {
         let countRange = (self as NSString).range(of: String.localizedStringWithFormat("%ld", count))
 

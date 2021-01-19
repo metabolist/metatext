@@ -110,7 +110,9 @@ class TableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         guard let item = dataSource.itemIdentifier(for: indexPath) else { return UITableView.automaticDimension }
 
-        return cellHeightCaches[tableView.frame.width]?[item] ?? UITableView.automaticDimension
+        return cellHeightCaches[tableView.frame.width]?[item]
+            ?? item.estimatedHeight(width: tableView.readableContentGuide.layoutFrame.width,
+                                    identification: identification)
     }
 
     override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {

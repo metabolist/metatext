@@ -1,6 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import Kingfisher
+import Mastodon
 import UIKit
 import ViewModels
 
@@ -41,6 +42,23 @@ final class CardView: UIView {
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension CardView {
+    static func estimatedHeight(width: CGFloat,
+                                identification: Identification,
+                                status: Status,
+                                configuration: CollectionItem.StatusConfiguration) -> CGFloat {
+        if status.displayStatus.card != nil {
+            return round(UIFont.preferredFont(forTextStyle: .headline).lineHeight
+                            + UIFont.preferredFont(forTextStyle: .subheadline).lineHeight
+                            + UIFont.preferredFont(forTextStyle: .footnote).lineHeight
+                            + .defaultSpacing * 2
+                            + .compactSpacing * 2)
+        } else {
+            return 0
+        }
     }
 }
 
