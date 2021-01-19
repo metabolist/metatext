@@ -254,11 +254,11 @@ private extension TableViewController {
             .sink { [weak self] in
                 guard let self = self else { return }
 
-                if !$0 {
+                let refreshControlVisibile = self.refreshControl?.isRefreshing ?? false
+
+                if !$0, refreshControlVisibile {
                     self.refreshControl?.endRefreshing()
                 }
-
-                let refreshControlVisibile = self.refreshControl?.isRefreshing ?? false
 
                 self.tableView.tableFooterView = $0 && !refreshControlVisibile ? self.loadingTableFooterView : UIView()
                 self.sizeTableHeaderFooterViews()
