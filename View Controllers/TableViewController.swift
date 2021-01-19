@@ -17,6 +17,7 @@ class TableViewController: UITableViewController {
     private let loadingTableFooterView = LoadingTableFooterView()
     private let webfingerIndicatorView = WebfingerIndicatorView()
     @Published private var loading = false
+    private var visibleLoadMoreViews = Set<LoadMoreView>()
     private var cancellables = Set<AnyCancellable>()
     private var cellHeightCaches = [CGFloat: [CollectionItem: CGFloat]]()
     private var shouldKeepPlayingVideoAfterDismissal = false
@@ -104,6 +105,18 @@ class TableViewController: UITableViewController {
             ? dataSource.itemIdentifier(for: indexPath)?.itemId
             : viewModel.nextPageMaxId {
             viewModel.request(maxId: maxId, minId: nil)
+        }
+
+        if let loadMoreView = cell.contentView as? LoadMoreView {
+            visibleLoadMoreViews.insert(loadMoreView)
+        }
+    }
+
+    override func tableView(_ tableView: UITableView,
+                            didEndDisplaying cell: UITableViewCell,
+                            forRowAt indexPath: IndexPath) {
+        if let loadMoreView = cell.contentView as? LoadMoreView {
+            visibleLoadMoreViews.remove(loadMoreView)
         }
     }
 
@@ -219,10 +232,6 @@ extension TableViewController: ZoomAnimatorDelegate {
 private extension TableViewController {
     static let bottomInset: CGFloat = .newStatusButtonDimension + .defaultSpacing * 4
     static let loadingFooterDebounceInterval: TimeInterval = 0.5
-
-    var visibleLoadMoreViews: [LoadMoreView] {
-        tableView.visibleCells.compactMap { $0.contentView as? LoadMoreView }
-    }
 
     func setupViewModelBindings() {
         viewModel.title.sink { [weak self] in self?.navigationItem.title = $0 }.store(in: &cancellables)
