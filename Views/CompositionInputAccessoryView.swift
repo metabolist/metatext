@@ -17,7 +17,10 @@ final class CompositionInputAccessoryView: UIToolbar {
         self.viewModel = viewModel
         self.parentViewModel = parentViewModel
 
-        super.init(frame: .zero)
+        super.init(
+            frame: .init(
+                origin: .zero,
+                size: .init(width: UIScreen.main.bounds.width, height: .minimumButtonDimension)))
 
         initialSetup()
     }
@@ -31,6 +34,8 @@ final class CompositionInputAccessoryView: UIToolbar {
 private extension CompositionInputAccessoryView {
     // swiftlint:disable:next function_body_length
     func initialSetup() {
+        autoresizingMask = .flexibleHeight
+
         var attachmentActions = [
             UIAction(
                 title: NSLocalizedString("compose.browse", comment: ""),
