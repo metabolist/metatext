@@ -152,6 +152,11 @@ extension ImageViewController {
         if let image = imageView.image {
             let activityViewController = UIActivityViewController(activityItems: [image], applicationActivities: [])
 
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                activityViewController.popoverPresentationController?
+                    .barButtonItem = parent?.navigationItem.rightBarButtonItem
+            }
+
             present(activityViewController, animated: true)
         } else if let asset = playerView.player?.currentItem?.asset as? AVURLAsset {
             asset.exportWithoutAudioTrack { result in
@@ -161,6 +166,11 @@ extension ImageViewController {
                         let activityViewController = UIActivityViewController(
                             activityItems: [url],
                             applicationActivities: [])
+
+                        if UIDevice.current.userInterfaceIdiom == .pad {
+                            activityViewController.popoverPresentationController?
+                                .barButtonItem = self.parent?.navigationItem.rightBarButtonItem
+                        }
 
                         activityViewController.completionWithItemsHandler = { _, _, _, _ in
                             try? FileManager.default.removeItem(at: url.deletingLastPathComponent())

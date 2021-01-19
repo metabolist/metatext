@@ -430,6 +430,8 @@ private extension StatusView {
 
         favoriteButton.tintColor = favoriteColor
         favoriteButton.setTitleColor(favoriteColor, for: .normal)
+
+        shareButton.tag = viewModel.sharingURL?.hashValue ?? 0
     }
     // swiftlint:enable function_body_length
 
