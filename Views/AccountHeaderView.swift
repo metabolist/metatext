@@ -5,6 +5,7 @@ import UIKit
 import ViewModels
 
 final class AccountHeaderView: UIView {
+    let headerImageBackgroundView = UIView()
     let headerImageView = AnimatedImageView()
     let headerButton = UIButton()
     let avatarBackgroundView = UIView()
@@ -27,7 +28,11 @@ final class AccountHeaderView: UIView {
     var viewModel: ProfileViewModel? {
         didSet {
             if let accountViewModel = viewModel?.accountViewModel {
-                headerImageView.kf.setImage(with: accountViewModel.headerURL)
+                headerImageView.kf.setImage(with: accountViewModel.headerURL) { [weak self] in
+                    if case let .success(result) = $0, result.image.size != Self.missingHeaderImageSize {
+                        self?.headerButton.isEnabled = true
+                    }
+                }
                 headerImageView.tag = accountViewModel.headerURL.hashValue
                 avatarImageView.kf.setImage(with: accountViewModel.avatarURL(profile: true))
                 avatarImageView.tag = accountViewModel.avatarURL(profile: true).hashValue
@@ -161,10 +166,15 @@ extension AccountHeaderView: UITextViewDelegate {
 
 private extension AccountHeaderView {
     static let avatarDimension = CGFloat.avatarDimension * 2
+    static let missingHeaderImageSize = CGSize(width: 1, height: 1)
 
     // swiftlint:disable:next function_body_length
     func initialSetup() {
         let baseStackView = UIStackView()
+
+        addSubview(headerImageBackgroundView)
+        headerImageBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+        headerImageBackgroundView.backgroundColor = .secondarySystemBackground
 
         addSubview(headerImageView)
         headerImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -177,6 +187,7 @@ private extension AccountHeaderView {
         headerButton.setBackgroundImage(.highlightedButtonBackground, for: .highlighted)
 
         headerButton.addAction(UIAction { [weak self] _ in self?.viewModel?.presentHeader() }, for: .touchUpInside)
+        headerButton.isEnabled = false
 
         let avatarBackgroundViewDimension = Self.avatarDimension + .compactSpacing * 2
 
@@ -320,6 +331,10 @@ private extension AccountHeaderView {
             headerImageView.topAnchor.constraint(equalTo: topAnchor),
             headerImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
             headerImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            headerImageBackgroundView.leadingAnchor.constraint(equalTo: headerImageView.leadingAnchor),
+            headerImageBackgroundView.topAnchor.constraint(equalTo: headerImageView.topAnchor),
+            headerImageBackgroundView.trailingAnchor.constraint(equalTo: headerImageView.trailingAnchor),
+            headerImageBackgroundView.bottomAnchor.constraint(equalTo: headerImageView.bottomAnchor),
             headerButton.leadingAnchor.constraint(equalTo: headerImageView.leadingAnchor),
             headerButton.topAnchor.constraint(equalTo: headerImageView.topAnchor),
             headerButton.bottomAnchor.constraint(equalTo: headerImageView.bottomAnchor),
