@@ -3,6 +3,7 @@
 import Kingfisher
 import Mastodon
 import UIKit
+import ViewModels
 
 final class NotificationView: UIView {
     private let iconImageView = UIImageView()
@@ -26,6 +27,33 @@ final class NotificationView: UIView {
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension NotificationView {
+    static func estimatedHeight(width: CGFloat,
+                                identification: Identification,
+                                notification: MastodonNotification,
+                                configuration: CollectionItem.StatusConfiguration?) -> CGFloat {
+        let bodyWidth = width - .defaultSpacing - .avatarDimension
+
+        var height = CGFloat.defaultSpacing * 2
+            + UIFont.preferredFont(forTextStyle: .headline).lineHeight
+            + .compactSpacing
+
+        if let status = notification.status {
+            height += StatusBodyView.estimatedHeight(
+                width: bodyWidth,
+                identification: identification,
+                status: status,
+                configuration: configuration ?? .default)
+        } else {
+            height += UIFont.preferredFont(forTextStyle: .headline).lineHeight
+                + .compactSpacing
+                + UIFont.preferredFont(forTextStyle: .subheadline).lineHeight
+        }
+
+        return height
     }
 }
 

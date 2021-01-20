@@ -34,8 +34,21 @@ extension CollectionItem {
                 identification: identification,
                 status: status,
                 configuration: configuration)
-        default:
-            return UITableView.automaticDimension
+        case let .account(account):
+            return AccountView.estimatedHeight(width: width, account: account)
+        case .loadMore:
+            return LoadMoreView.estimatedHeight
+        case let .notification(notification, configuration):
+            return NotificationView.estimatedHeight(
+                width: width,
+                identification: identification,
+                notification: notification,
+                configuration: configuration)
+        case let .conversation(conversation):
+            return ConversationView.estimatedHeight(
+                width: width,
+                identification: identification,
+                conversation: conversation)
         }
     }
 }

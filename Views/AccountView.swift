@@ -1,6 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import Kingfisher
+import Mastodon
 import UIKit
 
 final class AccountView: UIView {
@@ -23,6 +24,16 @@ final class AccountView: UIView {
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension AccountView {
+    static func estimatedHeight(width: CGFloat, account: Account) -> CGFloat {
+        .defaultSpacing * 2
+            + .compactSpacing * 2
+            + account.displayName.height(width: width, font: .preferredFont(forTextStyle: .headline))
+            + account.acct.height(width: width, font: .preferredFont(forTextStyle: .subheadline))
+            + account.note.attributed.string.height(width: width, font: .preferredFont(forTextStyle: .callout))
     }
 }
 

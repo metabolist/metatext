@@ -28,6 +28,10 @@ final class LoadMoreView: UIView {
 }
 
 extension LoadMoreView {
+    static var estimatedHeight: CGFloat {
+        .defaultSpacing * 2 + UIFont.preferredFont(forTextStyle: .title2).lineHeight
+    }
+
     func directionChanged(up: Bool) {
         guard !loadMoreConfiguration.viewModel.loading else { return }
 

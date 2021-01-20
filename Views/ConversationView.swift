@@ -1,6 +1,8 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
+import Mastodon
 import UIKit
+import ViewModels
 
 final class ConversationView: UIView {
     let avatarsView = ConversationAvatarsView()
@@ -21,6 +23,24 @@ final class ConversationView: UIView {
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension ConversationView {
+    static func estimatedHeight(width: CGFloat,
+                                identification: Identification,
+                                conversation: Conversation) -> CGFloat {
+        guard let status = conversation.lastStatus else { return UITableView.automaticDimension }
+
+        let bodyWidth = width - .defaultSpacing - .avatarDimension
+
+        return .defaultSpacing * 2
+            + UIFont.preferredFont(forTextStyle: .headline).lineHeight
+            + StatusBodyView.estimatedHeight(
+                width: bodyWidth,
+                identification: identification,
+                status: status,
+                configuration: .default)
     }
 }
 
