@@ -88,6 +88,10 @@
 "identities.pending" = "Pending";
 "lists.new-list-title" = "New List Title";
 "load-more" = "Load More";
+"main-navigation.timelines" = "Timelines";
+"main-navigation.explore" = "Explore";
+"main-navigation.notifications" = "Notifications";
+"main-navigation.conversations" = "Conversations";
 "messages" = "Messages";
 "ok" = "OK";
 "pending.pending-confirmation" = "Your account is pending confirmation";
@@ -201,5 +205,8 @@
 "status.visibility.direct.description" = "Visible for mentioned users only";
 "submit" = "Submit";
 "timelines.home" = "Home";
+"timelines.home.description" = "Posts from accounts you're following";
 "timelines.local" = "Local";
+"timelines.local.description-%@" = "Public posts on %@";
 "timelines.federated" = "Federated";
+"timelines.federated.description-%@" = "Public posts on instances known by %@";

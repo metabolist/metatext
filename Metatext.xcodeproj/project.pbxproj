@@ -23,6 +23,11 @@
 		D01F41D924F880C400D55A2D /* TouchFallthroughTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01F41D624F880C400D55A2D /* TouchFallthroughTextView.swift */; };
 		D01F41E424F8889700D55A2D /* AttachmentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01F41E224F8889700D55A2D /* AttachmentsView.swift */; };
 		D02E1F95250B13210071AD56 /* SafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02E1F94250B13210071AD56 /* SafariView.swift */; };
+		D035F86925B7F2ED00DC75ED /* MainNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D035F86825B7F2ED00DC75ED /* MainNavigationViewController.swift */; };
+		D035F86F25B7F30E00DC75ED /* MainNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D035F86E25B7F30E00DC75ED /* MainNavigationView.swift */; };
+		D035F87D25B7F61600DC75ED /* TimelinesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D035F87C25B7F61600DC75ED /* TimelinesViewController.swift */; };
+		D035F88725B8016000DC75ED /* NavigationViewModel+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D035F88625B8016000DC75ED /* NavigationViewModel+Extensions.swift */; };
+		D035F89125B8067100DC75ED /* TimelinesTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D035F89025B8067100DC75ED /* TimelinesTitleView.swift */; };
 		D036AA02254B6101009094DF /* NotificationListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D036AA01254B6101009094DF /* NotificationListCell.swift */; };
 		D036AA07254B6118009094DF /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D036AA06254B6118009094DF /* NotificationView.swift */; };
 		D036AA0C254B612B009094DF /* NotificationContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D036AA0B254B612B009094DF /* NotificationContentConfiguration.swift */; };
@@ -204,6 +209,11 @@
 		D01F41D624F880C400D55A2D /* TouchFallthroughTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchFallthroughTextView.swift; sourceTree = "<group>"; };
 		D01F41E224F8889700D55A2D /* AttachmentsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttachmentsView.swift; sourceTree = "<group>"; };
 		D02E1F94250B13210071AD56 /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariView.swift; sourceTree = "<group>"; };
+		D035F86825B7F2ED00DC75ED /* MainNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationViewController.swift; sourceTree = "<group>"; };
+		D035F86E25B7F30E00DC75ED /* MainNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationView.swift; sourceTree = "<group>"; };
+		D035F87C25B7F61600DC75ED /* TimelinesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelinesViewController.swift; sourceTree = "<group>"; };
+		D035F88625B8016000DC75ED /* NavigationViewModel+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NavigationViewModel+Extensions.swift"; sourceTree = "<group>"; };
+		D035F89025B8067100DC75ED /* TimelinesTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelinesTitleView.swift; sourceTree = "<group>"; };
 		D036AA01254B6101009094DF /* NotificationListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationListCell.swift; sourceTree = "<group>"; };
 		D036AA06254B6118009094DF /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		D036AA0B254B612B009094DF /* NotificationContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationContentConfiguration.swift; sourceTree = "<group>"; };
@@ -504,6 +514,7 @@
 				D0B8510B25259E56004E0744 /* LoadMoreCell.swift */,
 				D0E569DF252931B100FA1D72 /* LoadMoreContentConfiguration.swift */,
 				D0E569DA2529319100FA1D72 /* LoadMoreView.swift */,
+				D035F86E25B7F30E00DC75ED /* MainNavigationView.swift */,
 				D05936FE25AA94EA00754FDF /* MarkAttachmentsSensitiveView.swift */,
 				D03B1B29253818F3008F964B /* MediaPreferencesView.swift */,
 				D0FCC10F259C4F20000B67DF /* NewStatusView.swift */,
@@ -526,6 +537,7 @@
 				D0625E55250F086B00502611 /* Status */,
 				D0C7D42524F76169001EBDBB /* TableView.swift */,
 				D0C7D42E24F76169001EBDBB /* TabNavigationView.swift */,
+				D035F89025B8067100DC75ED /* TimelinesTitleView.swift */,
 				D01F41D624F880C400D55A2D /* TouchFallthroughTextView.swift */,
 				D0EA59472522B8B600804347 /* ViewConstants.swift */,
 				D0F2D54A2581CF7D00986197 /* VisualEffectBlur.swift */,
@@ -542,9 +554,11 @@
 				D08B8D49253FC36500B1EBEF /* ImageNavigationController.swift */,
 				D08B8D41253F92B600B1EBEF /* ImagePageViewController.swift */,
 				D08B8D3C253F929E00B1EBEF /* ImageViewController.swift */,
+				D035F86825B7F2ED00DC75ED /* MainNavigationViewController.swift */,
 				D0FCC104259C4E61000B67DF /* NewStatusViewController.swift */,
 				D06BC5E525202AD90079541D /* ProfileViewController.swift */,
 				D0F0B12D251A97E400942152 /* TableViewController.swift */,
+				D035F87C25B7F61600DC75ED /* TimelinesViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -574,6 +588,7 @@
 				D05E688425B55AE8001FB2C6 /* AVURLAsset+Extensions.swift */,
 				D0F0B135251AA12700942152 /* CollectionItem+Extensions.swift */,
 				D0C7D46E24F76169001EBDBB /* KingfisherOptionsInfo+Extensions.swift */,
+				D035F88625B8016000DC75ED /* NavigationViewModel+Extensions.swift */,
 				D0C7D46B24F76169001EBDBB /* NSMutableAttributedString+Extensions.swift */,
 				D07EC7CE25B13921006DF726 /* PickerEmoji+Extensions.swift */,
 				D0B5FE9A251583DB00478838 /* ProfileCollection+Extensions.swift */,
@@ -856,6 +871,7 @@
 				D08B8D822544D80000B1EBEF /* PollOptionButton.swift in Sources */,
 				D0C7D4DA24F7616A001EBDBB /* View+Extensions.swift in Sources */,
 				D07EC81125B232C2006DF726 /* SystemEmoji+Extensions.swift in Sources */,
+				D035F87D25B7F61600DC75ED /* TimelinesViewController.swift in Sources */,
 				D059373325AAEA7000754FDF /* CompositionPollView.swift in Sources */,
 				D08B8D8D2544E6EC00B1EBEF /* PollResultView.swift in Sources */,
 				D0C7D4D524F7616A001EBDBB /* String+Extensions.swift in Sources */,
@@ -874,7 +890,9 @@
 				D0C7D49724F7616A001EBDBB /* IdentitiesView.swift in Sources */,
 				D01EF22425182B1F00650C6B /* AccountHeaderView.swift in Sources */,
 				D059373E25AB8D5200754FDF /* CompositionPollOptionView.swift in Sources */,
+				D035F89125B8067100DC75ED /* TimelinesTitleView.swift in Sources */,
 				D036AA17254CA824009094DF /* StatusBodyView.swift in Sources */,
+				D035F86F25B7F30E00DC75ED /* MainNavigationView.swift in Sources */,
 				D08E512125786A6600FA2C5F /* UIButton+Extensions.swift in Sources */,
 				D05936F425AA66A600754FDF /* UIView+Extensions.swift in Sources */,
 				D05936E925AA3F3D00754FDF /* EditAttachmentView.swift in Sources */,
@@ -883,6 +901,7 @@
 				D036AA0C254B612B009094DF /* NotificationContentConfiguration.swift in Sources */,
 				D0C7D49824F7616A001EBDBB /* CustomEmojiText.swift in Sources */,
 				D08B8D3D253F929E00B1EBEF /* ImageViewController.swift in Sources */,
+				D035F86925B7F2ED00DC75ED /* MainNavigationViewController.swift in Sources */,
 				D0B8510C25259E56004E0744 /* LoadMoreCell.swift in Sources */,
 				D08E52612579D2E100FA2C5F /* DomainBlocksView.swift in Sources */,
 				D01F41E424F8889700D55A2D /* AttachmentsView.swift in Sources */,
@@ -901,6 +920,7 @@
 				D0C7D4C324F7616A001EBDBB /* MetatextApp.swift in Sources */,
 				D0E1F583251F13EC00D45315 /* WebfingerIndicatorView.swift in Sources */,
 				D0BEB20524FA1107001B0F04 /* FiltersView.swift in Sources */,
+				D035F88725B8016000DC75ED /* NavigationViewModel+Extensions.swift in Sources */,
 				D0FCC110259C4F20000B67DF /* NewStatusView.swift in Sources */,
 				D0C7D49B24F7616A001EBDBB /* PreferencesView.swift in Sources */,
 				D088406D25AFBBE200BB749B /* EmojiPickerViewController.swift in Sources */,

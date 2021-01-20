@@ -188,7 +188,8 @@ private extension TabNavigationView {
     }
 }
 
-private extension Timeline {
+// TODO: move
+extension Timeline {
     var title: String {
         switch self {
         case .home:
@@ -210,36 +211,46 @@ private extension Timeline {
         }
     }
 
+    func subtitle(identification: Identification) -> String? {
+        switch self {
+        case .home:
+            return identification.identity.handle
+        default:
+            return identification.identity.instance?.uri
+        }
+    }
+
+    func description(instanceName: String?) -> String? {
+        switch self {
+        case .home:
+            return NSLocalizedString("timelines.home.description", comment: "")
+        case .local:
+            guard let instanceName = instanceName else { return nil }
+
+            return String.localizedStringWithFormat(
+                NSLocalizedString("timelines.local.description-%@", comment: ""),
+                instanceName)
+        case .federated:
+            guard let instanceName = instanceName else { return nil }
+
+            return String.localizedStringWithFormat(
+                NSLocalizedString("timelines.federated.description-%@", comment: ""),
+                instanceName)
+        default:
+            return nil
+        }
+    }
+
     var systemImageName: String {
         switch self {
         case .home: return "house"
-        case .local: return "person.3"
+        case .local: return "building.2.crop.circle"
         case .federated: return "network"
         case .list: return "scroll"
         case .tag: return "number"
         case .profile: return "person"
         case .favorites: return "star"
         case .bookmarks: return "bookmark"
-        }
-    }
-}
-
-extension NavigationViewModel.Tab {
-    var title: String {
-        switch self {
-        case .timelines: return "Timelines"
-        case .explore: return "Explore"
-        case .notifications: return "Notifications"
-        case .messages: return "Messages"
-        }
-    }
-
-    var systemImageName: String {
-        switch self {
-        case .timelines: return "newspaper"
-        case .explore: return "magnifyingglass"
-        case .notifications: return "bell"
-        case .messages: return "envelope"
         }
     }
 }

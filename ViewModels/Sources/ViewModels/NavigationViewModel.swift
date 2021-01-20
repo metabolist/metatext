@@ -21,38 +21,56 @@ public final class NavigationViewModel: ObservableObject {
     @Published public var alertItem: AlertItem?
     public private(set) var timelineViewModel: CollectionItemsViewModel
 
-    public var notificationsViewModel: CollectionViewModel? {
+    public lazy var homeTimelineViewModel: CollectionViewModel? = {
         if identification.identity.authenticated {
-            if _notificationsViewModel == nil {
-                _notificationsViewModel = CollectionItemsViewModel(
+            return CollectionItemsViewModel(
+                collectionService: identification.service.service(timeline: .home),
+                identification: identification)
+        }
+
+        return nil
+    }()
+
+    public lazy var localTimelineViewModel: CollectionViewModel = {
+        CollectionItemsViewModel(
+            collectionService: identification.service.service(timeline: .local),
+            identification: identification)
+    }()
+
+    public lazy var federatedTimelineViewModel: CollectionViewModel = {
+        CollectionItemsViewModel(
+            collectionService: identification.service.service(timeline: .federated),
+            identification: identification)
+    }()
+
+    public lazy var notificationsViewModel: CollectionViewModel? = {
+        if identification.identity.authenticated {
+                let notificationsViewModel = CollectionItemsViewModel(
                     collectionService: identification.service.notificationsService(),
                     identification: identification)
-                _notificationsViewModel?.request(maxId: nil, minId: nil)
-            }
 
-            return _notificationsViewModel
+                notificationsViewModel.request(maxId: nil, minId: nil)
+
+            return notificationsViewModel
         } else {
             return nil
         }
-    }
+    }()
 
-    public var conversationsViewModel: CollectionViewModel? {
+    public lazy var conversationsViewModel: CollectionViewModel? = {
         if identification.identity.authenticated {
-            if _conversationsViewModel == nil {
-                _conversationsViewModel = CollectionItemsViewModel(
+                let conversationsViewModel = CollectionItemsViewModel(
                     collectionService: identification.service.conversationsService(),
                     identification: identification)
-                _conversationsViewModel?.request(maxId: nil, minId: nil)
-            }
 
-            return _conversationsViewModel
+                conversationsViewModel.request(maxId: nil, minId: nil)
+
+            return conversationsViewModel
         } else {
             return nil
         }
-    }
+    }()
 
-    private var _notificationsViewModel: CollectionViewModel?
-    private var _conversationsViewModel: CollectionViewModel?
     private var cancellables = Set<AnyCancellable>()
 
     public init(identification: Identification) {

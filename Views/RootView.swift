@@ -8,10 +8,11 @@ struct RootView: View {
 
     var body: some View {
         if let navigationViewModel = viewModel.navigationViewModel {
-            TabNavigationView(viewModel: navigationViewModel)
+            MainNavigationView { navigationViewModel }
                 .id(navigationViewModel.identification.identity.id)
                 .environmentObject(viewModel)
                 .transition(.opacity)
+                .edgesIgnoringSafeArea(.all)
         } else {
             NavigationView {
                 AddIdentityView(viewModel: viewModel.addIdentityViewModel())

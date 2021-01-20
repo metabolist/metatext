@@ -11,8 +11,10 @@ extension CGFloat {
     static let hairline = 1 / UIScreen.main.scale
     static let minimumButtonDimension: Self = 44
     static let barButtonItemDimension: Self = 28
-    static let newStatusButtonDimension: CGFloat = 54
-    static let defaultShadowRadius: CGFloat = 2
+    static let newStatusButtonDimension: Self = 54
+    static let defaultShadowRadius: Self = 2
+    static let systemMenuWidth: Self = 250
+    static let systemMenuInset: Self = 15
 }
 
 extension CGRect {
