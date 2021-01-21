@@ -1,11 +1,14 @@
 // Copyright © 2021 Metabolist. All rights reserved.
 
-import UIKit
+import Combine
+import SwiftUI
 import ViewModels
 
 final class MainNavigationViewController: UITabBarController {
     private let viewModel: NavigationViewModel
     private let rootViewModel: RootViewModel
+    private var cancellables = Set<AnyCancellable>()
+    private weak var presentedSecondaryNavigation: UINavigationController?
 
     init(viewModel: NavigationViewModel, rootViewModel: RootViewModel) {
         self.viewModel = viewModel
@@ -22,13 +25,40 @@ final class MainNavigationViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let timelinesViewController = TimelinesViewController(
-            viewModel: viewModel,
-            rootViewModel: rootViewModel)
-        let timelinesNavigationController = UINavigationController(rootViewController: timelinesViewController)
+        setupViewControllers()
 
-        if let notificationsViewModel = viewModel.notificationsViewModel,
-           let conversationsViewModel = viewModel.conversationsViewModel {
+        if viewModel.identification.identity.authenticated {
+            setupNewStatusButton()
+        }
+
+        viewModel.$presentingSecondaryNavigation.sink { [weak self] in
+            if $0 {
+                self?.presentSecondaryNavigation()
+            } else {
+                self?.dismissSecondaryNavigation()
+            }
+        }
+        .store(in: &cancellables)
+
+        viewModel.timelineNavigations
+            .sink { [weak self] _ in self?.selectedIndex = 0 }
+            .store(in: &cancellables)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        viewModel.refreshIdentity()
+    }
+}
+
+private extension MainNavigationViewController {
+    func setupViewControllers() {
+        var controllers: [UIViewController] = [TimelinesViewController(
+                                                viewModel: viewModel,
+                                                rootViewModel: rootViewModel)]
+
+        if let notificationsViewModel = viewModel.notificationsViewModel {
             let notificationsViewController = TableViewController(
                 viewModel: notificationsViewModel,
                 rootViewModel: rootViewModel,
@@ -36,9 +66,10 @@ final class MainNavigationViewController: UITabBarController {
 
             notificationsViewController.tabBarItem = NavigationViewModel.Tab.notifications.tabBarItem
 
-            let notificationsNavigationViewController = UINavigationController(
-                rootViewController: notificationsViewController)
+            controllers.append(notificationsViewController)
+        }
 
+        if let conversationsViewModel = viewModel.conversationsViewModel {
             let conversationsViewController = TableViewController(
                 viewModel: conversationsViewModel,
                 rootViewModel: rootViewModel,
@@ -47,18 +78,64 @@ final class MainNavigationViewController: UITabBarController {
             conversationsViewController.tabBarItem = NavigationViewModel.Tab.messages.tabBarItem
             conversationsViewController.navigationItem.title = NavigationViewModel.Tab.messages.title
 
-            let conversationsNavigationViewController = UINavigationController(
-                rootViewController: conversationsViewController)
+            controllers.append(conversationsViewController)
+        }
 
-            viewControllers = [
-                timelinesNavigationController,
-                notificationsNavigationViewController,
-                conversationsNavigationViewController
-            ]
-        } else {
-            viewControllers = [
-                timelinesNavigationController
-            ]
+        let secondaryNavigationButton = SecondaryNavigationButton(viewModel: viewModel, rootViewModel: rootViewModel)
+
+        for controller in controllers {
+            controller.navigationItem.leftBarButtonItem = secondaryNavigationButton
+        }
+
+        viewControllers = controllers.map(UINavigationController.init(rootViewController:))
+    }
+
+    func setupNewStatusButton() {
+        let newStatusButtonView = NewStatusButtonView(primaryAction: UIAction { [weak self] _ in
+            guard let self = self else { return }
+            let newStatusViewModel = self.rootViewModel.newStatusViewModel(
+                identification: self.viewModel.identification)
+            let newStatusViewController = NewStatusViewController(viewModel: newStatusViewModel)
+            let newStatusNavigationController = UINavigationController(rootViewController: newStatusViewController)
+
+            if UIDevice.current.userInterfaceIdiom == .phone {
+                newStatusNavigationController.modalPresentationStyle = .overFullScreen
+            }
+
+            self.present(newStatusNavigationController, animated: true)
+        })
+
+        view.addSubview(newStatusButtonView)
+        newStatusButtonView.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            newStatusButtonView.widthAnchor.constraint(equalToConstant: .newStatusButtonDimension),
+            newStatusButtonView.heightAnchor.constraint(equalToConstant: .newStatusButtonDimension),
+            newStatusButtonView.trailingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+                constant: -.defaultSpacing * 2),
+            newStatusButtonView.bottomAnchor.constraint(equalTo: tabBar.topAnchor, constant: -.defaultSpacing * 2)
+        ])
+    }
+
+    func presentSecondaryNavigation() {
+        let secondaryNavigationView = SecondaryNavigationView(viewModel: viewModel)
+            .environmentObject(rootViewModel)
+        let hostingController = UIHostingController(rootView: secondaryNavigationView)
+
+        hostingController.navigationItem.leftBarButtonItem = UIBarButtonItem(
+            systemItem: .close,
+            primaryAction: UIAction { [weak self] _ in self?.viewModel.presentingSecondaryNavigation = false })
+
+        let navigationController = UINavigationController(rootViewController: hostingController)
+
+        presentedSecondaryNavigation = navigationController
+        present(navigationController, animated: true)
+    }
+
+    func dismissSecondaryNavigation() {
+        if presentedViewController == presentedSecondaryNavigation {
+            dismiss(animated: true)
         }
     }
 }

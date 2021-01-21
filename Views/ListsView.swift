@@ -1,5 +1,6 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
+import Mastodon
 import SwiftUI
 import ViewModels
 
@@ -27,9 +28,11 @@ struct ListsView: View {
             }
             Section {
                 ForEach(viewModel.lists) { list in
-                    Button(list.title) {
-                        rootViewModel.navigationViewModel?.timeline = .list(list)
-                        rootViewModel.navigationViewModel?.presentingSecondaryNavigation = false
+                    Button {
+                        rootViewModel.navigationViewModel?.navigate(timeline: .list(list))
+                    } label: {
+                        Text(list.title)
+                            .foregroundColor(.primary)
                     }
                 }
                 .onDelete {

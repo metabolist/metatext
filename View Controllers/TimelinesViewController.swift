@@ -5,7 +5,7 @@ import UIKit
 import ViewModels
 
 final class TimelinesViewController: UIPageViewController {
-    private let titleView: TimelinesTitleView
+    private let segmentedControl = UISegmentedControl()
     private let timelineViewControllers: [TableViewController]
     private let viewModel: NavigationViewModel
     private let rootViewModel: RootViewModel
@@ -15,31 +15,18 @@ final class TimelinesViewController: UIPageViewController {
         self.viewModel = viewModel
         self.rootViewModel = rootViewModel
 
-        let timelineViewModels: [CollectionViewModel]
+        var timelineViewControllers = [TableViewController]()
 
-        if let homeTimelineViewModel = viewModel.homeTimelineViewModel {
-            timelineViewModels = [
-                homeTimelineViewModel,
-                viewModel.localTimelineViewModel,
-                viewModel.federatedTimelineViewModel]
-        } else {
-            timelineViewModels = [
-                viewModel.localTimelineViewModel,
-                viewModel.federatedTimelineViewModel]
+        for (index, timeline) in viewModel.timelines.enumerated() {
+            timelineViewControllers.append(
+                TableViewController(
+                    viewModel: viewModel.viewModel(timeline: timeline),
+                    rootViewModel: rootViewModel,
+                    identification: viewModel.identification))
+            segmentedControl.insertSegment(withTitle: timeline.title, at: index, animated: false)
         }
 
-        titleView = TimelinesTitleView(
-            timelines: viewModel.identification.identity.authenticated
-                ? Timeline.authenticatedDefaults
-                : Timeline.unauthenticatedDefaults,
-            identification: viewModel.identification)
-
-        timelineViewControllers = timelineViewModels.map {
-            TableViewController(
-                viewModel: $0,
-                rootViewModel: rootViewModel,
-                identification: viewModel.identification)
-        }
+        self.timelineViewControllers = timelineViewControllers
 
         super.init(transitionStyle: .scroll,
                    navigationOrientation: .horizontal,
@@ -66,24 +53,35 @@ final class TimelinesViewController: UIPageViewController {
             image: UIImage(systemName: "newspaper"),
             selectedImage: nil)
 
-        navigationItem.titleView = titleView
-
-        navigationItem.leftBarButtonItem = UIBarButtonItem(systemItem: .close)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "megaphone"), primaryAction: nil)
-
-        titleView.$selectedTimeline
-            .compactMap { [weak self] in self?.titleView.timelines.firstIndex(of: $0) }
-            .sink { [weak self] index in
+        navigationItem.titleView = segmentedControl
+        segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.addAction(
+            UIAction { [weak self] _ in
                 guard let self = self,
                       let currentViewController = self.viewControllers?.first as? TableViewController,
                       let currentIndex = self.timelineViewControllers.firstIndex(of: currentViewController),
-                      index != currentIndex
+                      self.segmentedControl.selectedSegmentIndex != currentIndex
                 else { return }
 
                 self.setViewControllers(
-                    [self.timelineViewControllers[index]],
-                    direction: index > currentIndex ? .forward : .reverse,
+                    [self.timelineViewControllers[self.segmentedControl.selectedSegmentIndex]],
+                    direction: self.segmentedControl.selectedSegmentIndex > currentIndex ? .forward : .reverse,
                     animated: !UIAccessibility.isReduceMotionEnabled)
+            },
+            for: .valueChanged)
+
+        viewModel.timelineNavigations.sink { [weak self] in
+            guard let self = self else { return }
+
+            let vc = TableViewController(
+                viewModel: self.viewModel.viewModel(timeline: $0),
+                rootViewModel: self.rootViewModel,
+                identification: self.viewModel.identification)
+
+            vc.navigationItem.title = $0.title
+
+            self.show(vc, sender: self)
         }
         .store(in: &cancellables)
     }
@@ -122,10 +120,6 @@ extension TimelinesViewController: UIPageViewControllerDelegate {
               let index = timelineViewControllers.firstIndex(of: viewController)
         else { return }
 
-        let timeline = titleView.timelines[index]
-
-        if titleView.selectedTimeline != timeline {
-            titleView.selectedTimeline = timeline
-        }
+        segmentedControl.selectedSegmentIndex = index
     }
 }

@@ -66,6 +66,8 @@ final class NewStatusViewController: UIViewController {
             activityIndicatorView.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor)
         ])
 
+        setupBarButtonItems(identification: viewModel.identification)
+
         postButton.primaryAction = UIAction(title: NSLocalizedString("post", comment: "")) { [weak self] _ in
             self?.viewModel.post()
         }
@@ -83,12 +85,6 @@ final class NewStatusViewController: UIViewController {
         #endif
 
         setupViewModelBindings()
-    }
-
-    override func didMove(toParent parent: UIViewController?) {
-        super.didMove(toParent: parent)
-
-        setupBarButtonItems(identification: viewModel.identification)
     }
 }
 
@@ -251,15 +247,15 @@ private extension NewStatusViewController {
     }
 
     func setupBarButtonItems(identification: Identification) {
-        let closeButton = UIBarButtonItem(
-            systemItem: .close,
+        let cancelButton = UIBarButtonItem(
+            systemItem: .cancel,
             primaryAction: UIAction { [weak self] _ in self?.dismiss() })
 
-        parent?.navigationItem.leftBarButtonItem = closeButton
-        parent?.navigationItem.titleView = viewModel.canChangeIdentity
+        navigationItem.leftBarButtonItem = cancelButton
+        navigationItem.titleView = viewModel.canChangeIdentity
             ? changeIdentityButton(identification: identification)
             : nil
-        parent?.navigationItem.rightBarButtonItem = postButton
+        navigationItem.rightBarButtonItem = postButton
     }
 
     func presentMediaPicker(compositionViewModel: CompositionViewModel) {

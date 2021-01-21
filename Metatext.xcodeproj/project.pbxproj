@@ -27,7 +27,9 @@
 		D035F86F25B7F30E00DC75ED /* MainNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D035F86E25B7F30E00DC75ED /* MainNavigationView.swift */; };
 		D035F87D25B7F61600DC75ED /* TimelinesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D035F87C25B7F61600DC75ED /* TimelinesViewController.swift */; };
 		D035F88725B8016000DC75ED /* NavigationViewModel+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D035F88625B8016000DC75ED /* NavigationViewModel+Extensions.swift */; };
-		D035F89125B8067100DC75ED /* TimelinesTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D035F89025B8067100DC75ED /* TimelinesTitleView.swift */; };
+		D035F8A925B9155900DC75ED /* NewStatusButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D035F8A825B9155900DC75ED /* NewStatusButtonView.swift */; };
+		D035F8B325B9616000DC75ED /* Timeline+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D035F8B225B9616000DC75ED /* Timeline+Extensions.swift */; };
+		D035F8C725B96A4000DC75ED /* SecondaryNavigationButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D035F8C625B96A4000DC75ED /* SecondaryNavigationButton.swift */; };
 		D036AA02254B6101009094DF /* NotificationListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D036AA01254B6101009094DF /* NotificationListCell.swift */; };
 		D036AA07254B6118009094DF /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D036AA06254B6118009094DF /* NotificationView.swift */; };
 		D036AA0C254B612B009094DF /* NotificationContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D036AA0B254B612B009094DF /* NotificationContentConfiguration.swift */; };
@@ -117,7 +119,6 @@
 		D0C7D49D24F7616A001EBDBB /* PostingReadingPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42824F76169001EBDBB /* PostingReadingPreferencesView.swift */; };
 		D0C7D49E24F7616A001EBDBB /* SecondaryNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42924F76169001EBDBB /* SecondaryNavigationView.swift */; };
 		D0C7D4A224F7616A001EBDBB /* NotificationTypesPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42D24F76169001EBDBB /* NotificationTypesPreferencesView.swift */; };
-		D0C7D4A324F7616A001EBDBB /* TabNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42E24F76169001EBDBB /* TabNavigationView.swift */; };
 		D0C7D4C224F7616A001EBDBB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0C7D45224F76169001EBDBB /* Assets.xcassets */; };
 		D0C7D4C324F7616A001EBDBB /* MetatextApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D45424F76169001EBDBB /* MetatextApp.swift */; };
 		D0C7D4C424F7616A001EBDBB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D45524F76169001EBDBB /* AppDelegate.swift */; };
@@ -213,7 +214,9 @@
 		D035F86E25B7F30E00DC75ED /* MainNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationView.swift; sourceTree = "<group>"; };
 		D035F87C25B7F61600DC75ED /* TimelinesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelinesViewController.swift; sourceTree = "<group>"; };
 		D035F88625B8016000DC75ED /* NavigationViewModel+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NavigationViewModel+Extensions.swift"; sourceTree = "<group>"; };
-		D035F89025B8067100DC75ED /* TimelinesTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelinesTitleView.swift; sourceTree = "<group>"; };
+		D035F8A825B9155900DC75ED /* NewStatusButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewStatusButtonView.swift; sourceTree = "<group>"; };
+		D035F8B225B9616000DC75ED /* Timeline+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Timeline+Extensions.swift"; sourceTree = "<group>"; };
+		D035F8C625B96A4000DC75ED /* SecondaryNavigationButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondaryNavigationButton.swift; sourceTree = "<group>"; };
 		D036AA01254B6101009094DF /* NotificationListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationListCell.swift; sourceTree = "<group>"; };
 		D036AA06254B6118009094DF /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		D036AA0B254B612B009094DF /* NotificationContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationContentConfiguration.swift; sourceTree = "<group>"; };
@@ -290,7 +293,6 @@
 		D0C7D42824F76169001EBDBB /* PostingReadingPreferencesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostingReadingPreferencesView.swift; sourceTree = "<group>"; };
 		D0C7D42924F76169001EBDBB /* SecondaryNavigationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecondaryNavigationView.swift; sourceTree = "<group>"; };
 		D0C7D42D24F76169001EBDBB /* NotificationTypesPreferencesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationTypesPreferencesView.swift; sourceTree = "<group>"; };
-		D0C7D42E24F76169001EBDBB /* TabNavigationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabNavigationView.swift; sourceTree = "<group>"; };
 		D0C7D45224F76169001EBDBB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D0C7D45424F76169001EBDBB /* MetatextApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetatextApp.swift; sourceTree = "<group>"; };
 		D0C7D45524F76169001EBDBB /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -517,6 +519,7 @@
 				D035F86E25B7F30E00DC75ED /* MainNavigationView.swift */,
 				D05936FE25AA94EA00754FDF /* MarkAttachmentsSensitiveView.swift */,
 				D03B1B29253818F3008F964B /* MediaPreferencesView.swift */,
+				D035F8A825B9155900DC75ED /* NewStatusButtonView.swift */,
 				D0FCC10F259C4F20000B67DF /* NewStatusView.swift */,
 				D036AA0B254B612B009094DF /* NotificationContentConfiguration.swift */,
 				D036AA01254B6101009094DF /* NotificationListCell.swift */,
@@ -532,12 +535,11 @@
 				D0DD50CA256B1F24004A04F7 /* ReportView.swift */,
 				D0C7D42724F76169001EBDBB /* RootView.swift */,
 				D02E1F94250B13210071AD56 /* SafariView.swift */,
+				D035F8C625B96A4000DC75ED /* SecondaryNavigationButton.swift */,
 				D0C7D42924F76169001EBDBB /* SecondaryNavigationView.swift */,
 				D04226FC2546AC0B000980A3 /* StartupAndSyncingPreferencesView.swift */,
 				D0625E55250F086B00502611 /* Status */,
 				D0C7D42524F76169001EBDBB /* TableView.swift */,
-				D0C7D42E24F76169001EBDBB /* TabNavigationView.swift */,
-				D035F89025B8067100DC75ED /* TimelinesTitleView.swift */,
 				D01F41D624F880C400D55A2D /* TouchFallthroughTextView.swift */,
 				D0EA59472522B8B600804347 /* ViewConstants.swift */,
 				D0F2D54A2581CF7D00986197 /* VisualEffectBlur.swift */,
@@ -601,6 +603,7 @@
 				D0E7AD3825870B13005F5E2D /* UIVIewController+Extensions.swift */,
 				D0030981250C6C8500EACB32 /* URL+Extensions.swift */,
 				D0C7D46F24F76169001EBDBB /* View+Extensions.swift */,
+				D035F8B225B9616000DC75ED /* Timeline+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -825,7 +828,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D0C7D4A324F7616A001EBDBB /* TabNavigationView.swift in Sources */,
 				D02E1F95250B13210071AD56 /* SafariView.swift in Sources */,
 				D07EC7CF25B13921006DF726 /* PickerEmoji+Extensions.swift in Sources */,
 				D00702292555E51200F38136 /* ConversationListCell.swift in Sources */,
@@ -849,6 +851,7 @@
 				D08B8D622540DE3B00B1EBEF /* ZoomTransitionController.swift in Sources */,
 				D0F0B12E251A97E400942152 /* TableViewController.swift in Sources */,
 				D0DD50CB256B1F24004A04F7 /* ReportView.swift in Sources */,
+				D035F8B325B9616000DC75ED /* Timeline+Extensions.swift in Sources */,
 				D0FE1C8F253686F9003EF1EB /* PlayerView.swift in Sources */,
 				D0CE9F87258B076900E3A6B6 /* AttachmentUploadView.swift in Sources */,
 				D0F0B113251A86A000942152 /* AccountContentConfiguration.swift in Sources */,
@@ -884,18 +887,19 @@
 				D01C6FAC252024BD003D0300 /* Array+Extensions.swift in Sources */,
 				D0C7D4D924F7616A001EBDBB /* KingfisherOptionsInfo+Extensions.swift in Sources */,
 				D08B8D72254246E200B1EBEF /* PollView.swift in Sources */,
+				D035F8A925B9155900DC75ED /* NewStatusButtonView.swift in Sources */,
 				D0EA59402522AC8700804347 /* CardView.swift in Sources */,
 				D0F0B10E251A868200942152 /* AccountView.swift in Sources */,
 				D0BEB1FF24F9E5BB001B0F04 /* ListsView.swift in Sources */,
 				D0C7D49724F7616A001EBDBB /* IdentitiesView.swift in Sources */,
 				D01EF22425182B1F00650C6B /* AccountHeaderView.swift in Sources */,
 				D059373E25AB8D5200754FDF /* CompositionPollOptionView.swift in Sources */,
-				D035F89125B8067100DC75ED /* TimelinesTitleView.swift in Sources */,
 				D036AA17254CA824009094DF /* StatusBodyView.swift in Sources */,
 				D035F86F25B7F30E00DC75ED /* MainNavigationView.swift in Sources */,
 				D08E512125786A6600FA2C5F /* UIButton+Extensions.swift in Sources */,
 				D05936F425AA66A600754FDF /* UIView+Extensions.swift in Sources */,
 				D05936E925AA3F3D00754FDF /* EditAttachmentView.swift in Sources */,
+				D035F8C725B96A4000DC75ED /* SecondaryNavigationButton.swift in Sources */,
 				D0EA59482522B8B600804347 /* ViewConstants.swift in Sources */,
 				D04226FD2546AC0B000980A3 /* StartupAndSyncingPreferencesView.swift in Sources */,
 				D036AA0C254B612B009094DF /* NotificationContentConfiguration.swift in Sources */,

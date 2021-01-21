@@ -16,13 +16,3 @@ struct TableView: UIViewControllerRepresentable {
 
     }
 }
-
-#if DEBUG
-import PreviewViewModels
-
-struct StatusListView_Previews: PreviewProvider {
-    static var previews: some View {
-        TableView { NavigationViewModel(identification: .preview).timelineViewModel }
-    }
-}
-#endif

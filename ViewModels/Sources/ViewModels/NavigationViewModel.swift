@@ -7,41 +7,11 @@ import ServiceLayer
 
 public final class NavigationViewModel: ObservableObject {
     public let identification: Identification
+    public let timelineNavigations: AnyPublisher<Timeline, Never>
+
     @Published public private(set) var recentIdentities = [Identity]()
-    @Published public var timeline: Timeline {
-        didSet {
-            timelineViewModel = CollectionItemsViewModel(
-                collectionService: identification.service.service(timeline: timeline),
-                identification: identification)
-        }
-    }
-    @Published public private(set) var timelinesAndLists: [Timeline]
     @Published public var presentingSecondaryNavigation = false
-    @Published public var presentingNewStatus = false
     @Published public var alertItem: AlertItem?
-    public private(set) var timelineViewModel: CollectionItemsViewModel
-
-    public lazy var homeTimelineViewModel: CollectionViewModel? = {
-        if identification.identity.authenticated {
-            return CollectionItemsViewModel(
-                collectionService: identification.service.service(timeline: .home),
-                identification: identification)
-        }
-
-        return nil
-    }()
-
-    public lazy var localTimelineViewModel: CollectionViewModel = {
-        CollectionItemsViewModel(
-            collectionService: identification.service.service(timeline: .local),
-            identification: identification)
-    }()
-
-    public lazy var federatedTimelineViewModel: CollectionViewModel = {
-        CollectionItemsViewModel(
-            collectionService: identification.service.service(timeline: .federated),
-            identification: identification)
-    }()
 
     public lazy var notificationsViewModel: CollectionViewModel? = {
         if identification.identity.authenticated {
@@ -71,18 +41,12 @@ public final class NavigationViewModel: ObservableObject {
         }
     }()
 
+    private let timelineNavigationsSubject = PassthroughSubject<Timeline, Never>()
     private var cancellables = Set<AnyCancellable>()
 
     public init(identification: Identification) {
         self.identification = identification
-        let timeline: Timeline = identification.identity.authenticated ? .home : .local
-        self.timeline = timeline
-        timelineViewModel = CollectionItemsViewModel(
-            collectionService: identification.service.service(timeline: timeline),
-            identification: identification)
-        timelinesAndLists = identification.identity.authenticated
-            ? Timeline.authenticatedDefaults
-            : Timeline.unauthenticatedDefaults
+        timelineNavigations = timelineNavigationsSubject.eraseToAnyPublisher()
 
         identification.$identity
             .sink { [weak self] _ in self?.objectWillChange.send() }
@@ -91,17 +55,17 @@ public final class NavigationViewModel: ObservableObject {
         identification.service.recentIdentitiesPublisher()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$recentIdentities)
-
-        if identification.identity.authenticated {
-            identification.service.listsPublisher()
-                .map { Timeline.authenticatedDefaults + $0 }
-                .assignErrorsToAlertItem(to: \.alertItem, on: self)
-                .assign(to: &$timelinesAndLists)
-        }
     }
 }
 
 public extension NavigationViewModel {
+    enum Tab: CaseIterable {
+        case timelines
+        case explore
+        case notifications
+        case messages
+    }
+
     var tabs: [Tab] {
         if identification.identity.authenticated {
             return Tab.allCases
@@ -110,12 +74,11 @@ public extension NavigationViewModel {
         }
     }
 
-    var timelineSubtitle: String {
-        switch timeline {
-        case .home, .favorites, .bookmarks, .list:
-            return identification.identity.handle
-        case .local, .federated, .tag, .profile:
-            return identification.identity.instance?.uri ?? ""
+    var timelines: [Timeline] {
+        if identification.identity.authenticated {
+            return Timeline.authenticatedDefaults
+        } else {
+            return Timeline.unauthenticatedDefaults
         }
     }
 
@@ -156,29 +119,15 @@ public extension NavigationViewModel {
             .sink { _ in } receiveValue: { _ in }
             .store(in: &cancellables)
     }
-}
 
-public extension NavigationViewModel {
-    enum Tab: CaseIterable {
-        case timelines
-        case explore
-        case notifications
-        case messages
+    func navigate(timeline: Timeline) {
+        presentingSecondaryNavigation = false
+        timelineNavigationsSubject.send(timeline)
     }
 
-    func favoritesViewModel() -> CollectionViewModel {
+    func viewModel(timeline: Timeline) -> CollectionItemsViewModel {
         CollectionItemsViewModel(
-            collectionService: identification.service.service(timeline: .favorites),
+            collectionService: identification.service.service(timeline: timeline),
             identification: identification)
     }
-
-    func bookmarksViewModel() -> CollectionViewModel {
-        CollectionItemsViewModel(
-            collectionService: identification.service.service(timeline: .bookmarks),
-            identification: identification)
-    }
-}
-
-extension NavigationViewModel.Tab: Identifiable {
-    public var id: Self { self }
 }

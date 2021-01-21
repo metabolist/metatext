@@ -205,8 +205,5 @@
 "status.visibility.direct.description" = "Visible for mentioned users only";
 "submit" = "Submit";
 "timelines.home" = "Home";
-"timelines.home.description" = "Posts from accounts you're following";
 "timelines.local" = "Local";
-"timelines.local.description-%@" = "Public posts on %@";
 "timelines.federated" = "Federated";
-"timelines.federated.description-%@" = "Public posts on instances known by %@";
