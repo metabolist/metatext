@@ -26,7 +26,7 @@ class ShareExtensionNavigationViewController: UINavigationController {
         }
 
         setViewControllers(
-            [UIHostingController(rootView: NewStatusView { newStatusViewModel })],
+            [NewStatusViewController(viewModel: newStatusViewModel)],
             animated: false)
     }
 }

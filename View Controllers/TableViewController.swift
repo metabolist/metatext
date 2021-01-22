@@ -402,10 +402,14 @@ private extension TableViewController {
             identification: identification,
             inReplyTo: inReplyToViewModel,
             redraft: redraft)
-        let newStatusViewController = UIHostingController(rootView: NewStatusView { newStatusViewModel })
+        let newStatusViewController =  NewStatusViewController(viewModel: newStatusViewModel)
         let navigationController = UINavigationController(rootViewController: newStatusViewController)
 
-        navigationController.modalPresentationStyle = .overFullScreen
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            navigationController.modalPresentationStyle = .overFullScreen
+        } else {
+            navigationController.isModalInPresentation = true
+        }
 
         present(navigationController, animated: true)
     }

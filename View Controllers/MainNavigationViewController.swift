@@ -100,6 +100,8 @@ private extension MainNavigationViewController {
 
             if UIDevice.current.userInterfaceIdiom == .phone {
                 newStatusNavigationController.modalPresentationStyle = .overFullScreen
+            } else {
+                newStatusNavigationController.isModalInPresentation = true
             }
 
             self.present(newStatusNavigationController, animated: true)

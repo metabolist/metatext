@@ -84,6 +84,11 @@ final class NewStatusViewController: UIViewController {
         }
         #endif
 
+        NotificationCenter.default.publisher(for: UIResponder.keyboardDidChangeFrameNotification)
+            .merge(with: NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification))
+            .sink { [weak self] in self?.adjustContentInset(notification: $0) }
+            .store(in: &cancellables)
+
         setupViewModelBindings()
     }
 }
@@ -454,6 +459,23 @@ private extension NewStatusViewController {
         changeIdentityButton.menu = UIMenu(children: menuItems)
 
         return changeIdentityButton
+    }
+
+    func adjustContentInset(notification: Notification) {
+        guard let keyboardFrameEnd = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect
+        else { return }
+
+        let convertedFrame = self.view.convert(keyboardFrameEnd, from: view.window)
+        let contentInsetBottom: CGFloat
+
+        if notification.name == UIResponder.keyboardWillHideNotification {
+            contentInsetBottom = 0
+        } else {
+            contentInsetBottom = convertedFrame.height - view.safeAreaInsets.bottom
+        }
+
+        self.scrollView.contentInset.bottom = contentInsetBottom
+        self.scrollView.verticalScrollIndicatorInsets.bottom = contentInsetBottom
     }
 }
 // swiftlint:enable file_length

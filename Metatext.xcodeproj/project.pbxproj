@@ -39,7 +39,6 @@
 		D036EBBD259FE2A100EC1CFC /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01C6FAB252024BD003D0300 /* Array+Extensions.swift */; };
 		D036EBC2259FE2AD00EC1CFC /* UIVIewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E7AD3825870B13005F5E2D /* UIVIewController+Extensions.swift */; };
 		D036EBC7259FE2B700EC1CFC /* KingfisherOptionsInfo+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D46E24F76169001EBDBB /* KingfisherOptionsInfo+Extensions.swift */; };
-		D038273C259EA38F00056E0F /* NewStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FCC10F259C4F20000B67DF /* NewStatusView.swift */; };
 		D03B1B2A253818F3008F964B /* MediaPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03B1B29253818F3008F964B /* MediaPreferencesView.swift */; };
 		D04226FD2546AC0B000980A3 /* StartupAndSyncingPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04226FC2546AC0B000980A3 /* StartupAndSyncingPreferencesView.swift */; };
 		D04F9E8E259E9C950081B0C9 /* ViewModels in Frameworks */ = {isa = PBXBuildFile; productRef = D04F9E8D259E9C950081B0C9 /* ViewModels */; };
@@ -153,7 +152,6 @@
 		D0F5880F25A7E6CC00E3A49C /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = D0F5880E25A7E6CC00E3A49C /* Kingfisher */; };
 		D0FCC105259C4E61000B67DF /* NewStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FCC104259C4E61000B67DF /* NewStatusViewController.swift */; };
 		D0FCC106259C4E62000B67DF /* NewStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FCC104259C4E61000B67DF /* NewStatusViewController.swift */; };
-		D0FCC110259C4F20000B67DF /* NewStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FCC10F259C4F20000B67DF /* NewStatusView.swift */; };
 		D0FE1C8F253686F9003EF1EB /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FE1C8E253686F9003EF1EB /* PlayerView.swift */; };
 		D0FE1C9825368A9D003EF1EB /* PlayerCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FE1C9725368A9D003EF1EB /* PlayerCache.swift */; };
 /* End PBXBuildFile section */
@@ -326,7 +324,6 @@
 		D0F0B135251AA12700942152 /* CollectionItem+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CollectionItem+Extensions.swift"; sourceTree = "<group>"; };
 		D0F2D54A2581CF7D00986197 /* VisualEffectBlur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffectBlur.swift; sourceTree = "<group>"; };
 		D0FCC104259C4E61000B67DF /* NewStatusViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewStatusViewController.swift; sourceTree = "<group>"; };
-		D0FCC10F259C4F20000B67DF /* NewStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewStatusView.swift; sourceTree = "<group>"; };
 		D0FE1C8E253686F9003EF1EB /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		D0FE1C9725368A9D003EF1EB /* PlayerCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerCache.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -520,7 +517,6 @@
 				D05936FE25AA94EA00754FDF /* MarkAttachmentsSensitiveView.swift */,
 				D03B1B29253818F3008F964B /* MediaPreferencesView.swift */,
 				D035F8A825B9155900DC75ED /* NewStatusButtonView.swift */,
-				D0FCC10F259C4F20000B67DF /* NewStatusView.swift */,
 				D036AA0B254B612B009094DF /* NotificationContentConfiguration.swift */,
 				D036AA01254B6101009094DF /* NotificationListCell.swift */,
 				D0C7D42D24F76169001EBDBB /* NotificationTypesPreferencesView.swift */,
@@ -925,7 +921,6 @@
 				D0E1F583251F13EC00D45315 /* WebfingerIndicatorView.swift in Sources */,
 				D0BEB20524FA1107001B0F04 /* FiltersView.swift in Sources */,
 				D035F88725B8016000DC75ED /* NavigationViewModel+Extensions.swift in Sources */,
-				D0FCC110259C4F20000B67DF /* NewStatusView.swift in Sources */,
 				D0C7D49B24F7616A001EBDBB /* PreferencesView.swift in Sources */,
 				D088406D25AFBBE200BB749B /* EmojiPickerViewController.swift in Sources */,
 				D07EC7FD25B16994006DF726 /* EmojiCategoryHeaderView.swift in Sources */,
@@ -950,7 +945,6 @@
 				D08E52D2257C811200FA2C5F /* ShareExtensionError+Extensions.swift in Sources */,
 				D0E9F9AB258450B300EF503D /* CompositionInputAccessoryView.swift in Sources */,
 				D05936D025A8D79800754FDF /* EditAttachmentViewController.swift in Sources */,
-				D038273C259EA38F00056E0F /* NewStatusView.swift in Sources */,
 				D08E52EF257D757100FA2C5F /* CompositionView.swift in Sources */,
 				D07EC7FE25B16994006DF726 /* EmojiCategoryHeaderView.swift in Sources */,
 				D07EC7E425B13DD3006DF726 /* EmojiContentConfiguration.swift in Sources */,
