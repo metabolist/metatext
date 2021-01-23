@@ -6,35 +6,33 @@ import Foundation
 import Mastodon
 import MastodonAPI
 
-public struct ConversationsService {
+public struct SearchService {
     public let sections: AnyPublisher<[[CollectionItem]], Error>
-    public let nextPageMaxId: AnyPublisher<String, Never>
     public let navigationService: NavigationService
+    public let nextPageMaxId: AnyPublisher<String, Never>
 
     private let mastodonAPIClient: MastodonAPIClient
     private let contentDatabase: ContentDatabase
     private let nextPageMaxIdSubject = PassthroughSubject<String, Never>()
+    private let sectionsSubject = PassthroughSubject<[[CollectionItem]], Error>()
 
     init(mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
         self.mastodonAPIClient = mastodonAPIClient
         self.contentDatabase = contentDatabase
-        sections = contentDatabase.conversationsPublisher()
-            .map { [$0.map(CollectionItem.conversation)] }
-            .eraseToAnyPublisher()
         nextPageMaxId = nextPageMaxIdSubject.eraseToAnyPublisher()
         navigationService = NavigationService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+        sections = sectionsSubject.eraseToAnyPublisher()
     }
 }
 
-extension ConversationsService: CollectionService {
+extension SearchService: CollectionService {
     public func request(maxId: String?, minId: String?, search: Search?) -> AnyPublisher<Never, Error> {
-        mastodonAPIClient.pagedRequest(ConversationsEndpoint.conversations, maxId: maxId, minId: minId)
-            .handleEvents(receiveOutput: {
-                guard let maxId = $0.info.maxId else { return }
+        guard let search = search else { return Empty().eraseToAnyPublisher() }
 
-                nextPageMaxIdSubject.send(maxId)
-            })
-            .flatMap { contentDatabase.insert(conversations: $0.result) }
+        return mastodonAPIClient.request(ResultsEndpoint.search(search))
+            .flatMap(contentDatabase.process(results:))
+            .handleEvents(receiveOutput: sectionsSubject.send)
+            .ignoreOutput()
             .eraseToAnyPublisher()
     }
 }

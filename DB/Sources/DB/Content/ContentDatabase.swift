@@ -425,6 +425,38 @@ public extension ContentDatabase {
         .eraseToAnyPublisher()
     }
 
+    func process(results: Results) -> AnyPublisher<[[CollectionItem]], Error> {
+        databaseWriter.writePublisher { db -> ([StatusInfo], [Status.Id]) in
+            for account in results.accounts {
+                try account.save(db)
+            }
+
+            for status in results.statuses {
+                try status.save(db)
+            }
+
+            let ids = results.statuses.map(\.id)
+            let statusInfos = try StatusInfo.request(
+                StatusRecord.filter(ids.contains(StatusRecord.Columns.id)))
+                .fetchAll(db)
+
+            return (statusInfos, ids)
+        }
+        .map { statusInfos, ids -> [[CollectionItem]] in
+            [
+                results.accounts.map(CollectionItem.account),
+                statusInfos
+                    .sorted { ids.firstIndex(of: $0.record.id) ?? 0 < ids.firstIndex(of: $1.record.id) ?? 0 }
+                    .map {
+                    .status(.init(info: $0),
+                            .init(showContentToggled: $0.showContentToggled,
+                                  showAttachmentsToggled: $0.showAttachmentsToggled))
+                }
+            ]
+        }
+        .eraseToAnyPublisher()
+    }
+
     func timelinePublisher(_ timeline: Timeline) -> AnyPublisher<[[CollectionItem]], Error> {
         ValueObservation.tracking(
             TimelineItemsInfo.request(TimelineRecord.filter(TimelineRecord.Columns.id == timeline.id)).fetchOne)

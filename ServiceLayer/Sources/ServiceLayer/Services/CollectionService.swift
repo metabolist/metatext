@@ -12,7 +12,7 @@ public protocol CollectionService {
     var titleLocalizationComponents: AnyPublisher<[String], Never> { get }
     var navigationService: NavigationService { get }
     var markerTimeline: Marker.Timeline? { get }
-    func request(maxId: String?, minId: String?) -> AnyPublisher<Never, Error>
+    func request(maxId: String?, minId: String?, search: Search?) -> AnyPublisher<Never, Error>
 }
 
 extension CollectionService {

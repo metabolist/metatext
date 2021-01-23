@@ -24,7 +24,7 @@ public struct ContextService {
 }
 
 extension ContextService: CollectionService {
-    public func request(maxId: String?, minId: String?) -> AnyPublisher<Never, Error> {
+    public func request(maxId: String?, minId: String?, search: Search?) -> AnyPublisher<Never, Error> {
         mastodonAPIClient.request(StatusEndpoint.status(id: id))
             .flatMap(contentDatabase.insert(status:))
             .merge(with: mastodonAPIClient.request(ContextEndpoint.context(id: id))

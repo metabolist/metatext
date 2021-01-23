@@ -249,6 +249,10 @@ public extension IdentityService {
             contentDatabase: contentDatabase)
     }
 
+    func exploreService() -> ExploreService {
+        ExploreService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+    }
+
     func notificationsService() -> NotificationsService {
         NotificationsService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }

@@ -105,7 +105,7 @@ extension ProfileViewModel: CollectionViewModel {
 
     public var canRefresh: Bool { collectionViewModel.value.canRefresh }
 
-    public func request(maxId: String?, minId: String?) {
+    public func request(maxId: String?, minId: String?, search: Search?) {
         if case .statuses = collection, maxId == nil {
             profileService.fetchPinnedStatuses()
                 .assignErrorsToAlertItem(to: \.alertItem, on: self)
@@ -113,7 +113,7 @@ extension ProfileViewModel: CollectionViewModel {
                 .store(in: &cancellables)
         }
 
-        collectionViewModel.value.request(maxId: maxId, minId: minId)
+        collectionViewModel.value.request(maxId: maxId, minId: minId, search: nil)
     }
 
     public func viewedAtTop(indexPath: IndexPath) {

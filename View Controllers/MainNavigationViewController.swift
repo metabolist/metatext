@@ -54,9 +54,15 @@ final class MainNavigationViewController: UITabBarController {
 
 private extension MainNavigationViewController {
     func setupViewControllers() {
-        var controllers: [UIViewController] = [TimelinesViewController(
-                                                viewModel: viewModel,
-                                                rootViewModel: rootViewModel)]
+        var controllers: [UIViewController] = [
+            TimelinesViewController(
+                viewModel: viewModel,
+                rootViewModel: rootViewModel),
+            ExploreViewController(
+                viewModel: viewModel.exploreViewModel,
+                rootViewModel: rootViewModel,
+                identification: viewModel.identification)
+        ]
 
         if let notificationsViewModel = viewModel.notificationsViewModel {
             let notificationsViewController = TableViewController(

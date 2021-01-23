@@ -35,6 +35,11 @@ final class TimelinesViewController: UIPageViewController {
         if let firstViewController = timelineViewControllers.first {
             setViewControllers([firstViewController], direction: .forward, animated: false)
         }
+
+        tabBarItem = UITabBarItem(
+            title: NSLocalizedString("main-navigation.timelines", comment: ""),
+            image: UIImage(systemName: "newspaper"),
+            selectedImage: nil)
     }
 
     @available(*, unavailable)
@@ -47,11 +52,6 @@ final class TimelinesViewController: UIPageViewController {
 
         dataSource = self
         delegate = self
-
-        tabBarItem = UITabBarItem(
-            title: NSLocalizedString("main-navigation.timelines", comment: ""),
-            image: UIImage(systemName: "newspaper"),
-            selectedImage: nil)
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "megaphone"), primaryAction: nil)
         navigationItem.titleView = segmentedControl

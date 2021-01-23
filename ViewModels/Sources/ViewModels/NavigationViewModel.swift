@@ -13,13 +13,23 @@ public final class NavigationViewModel: ObservableObject {
     @Published public var presentingSecondaryNavigation = false
     @Published public var alertItem: AlertItem?
 
+    public lazy var exploreViewModel: ExploreViewModel = {
+        let exploreViewModel = ExploreViewModel(
+            service: identification.service.exploreService(),
+            identification: identification)
+
+        // TODO: initial request
+
+        return exploreViewModel
+    }()
+
     public lazy var notificationsViewModel: CollectionViewModel? = {
         if identification.identity.authenticated {
                 let notificationsViewModel = CollectionItemsViewModel(
                     collectionService: identification.service.notificationsService(),
                     identification: identification)
 
-                notificationsViewModel.request(maxId: nil, minId: nil)
+                notificationsViewModel.request(maxId: nil, minId: nil, search: nil)
 
             return notificationsViewModel
         } else {
@@ -33,7 +43,7 @@ public final class NavigationViewModel: ObservableObject {
                     collectionService: identification.service.conversationsService(),
                     identification: identification)
 
-                conversationsViewModel.request(maxId: nil, minId: nil)
+                conversationsViewModel.request(maxId: nil, minId: nil, search: nil)
 
             return conversationsViewModel
         } else {

@@ -44,7 +44,7 @@ extension TimelineService: CollectionService {
         }
     }
 
-    public func request(maxId: String?, minId: String?) -> AnyPublisher<Never, Error> {
+    public func request(maxId: String?, minId: String?, search: Search?) -> AnyPublisher<Never, Error> {
         mastodonAPIClient.pagedRequest(timeline.endpoint, maxId: maxId, minId: minId)
             .handleEvents(receiveOutput: {
                 if let maxId = $0.info.maxId {

@@ -34,7 +34,7 @@ public struct AccountListService {
 }
 
 extension AccountListService: CollectionService {
-    public func request(maxId: String?, minId: String?) -> AnyPublisher<Never, Error> {
+    public func request(maxId: String?, minId: String?, search: Search?) -> AnyPublisher<Never, Error> {
         mastodonAPIClient.pagedRequest(endpoint, maxId: maxId, minId: minId)
             .handleEvents(receiveOutput: {
                 guard let maxId = $0.info.maxId else { return }

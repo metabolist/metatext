@@ -39,7 +39,7 @@ public struct NotificationsService {
 extension NotificationsService: CollectionService {
     public var markerTimeline: Marker.Timeline? { .notifications }
 
-    public func request(maxId: String?, minId: String?) -> AnyPublisher<Never, Error> {
+    public func request(maxId: String?, minId: String?, search: Search?) -> AnyPublisher<Never, Error> {
         mastodonAPIClient.pagedRequest(NotificationsEndpoint.notifications, maxId: maxId, minId: minId)
             .handleEvents(receiveOutput: {
                 guard let maxId = $0.info.maxId, maxId < nextPageMaxIdSubject.value else { return }

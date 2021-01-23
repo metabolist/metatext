@@ -21,15 +21,20 @@ class TableViewController: UITableViewController {
     private var cancellables = Set<AnyCancellable>()
     private var cellHeightCaches = [CGFloat: [CollectionItem: CGFloat]]()
     private var shouldKeepPlayingVideoAfterDismissal = false
+    private weak var parentNavigationController: UINavigationController?
 
     private lazy var dataSource: TableViewDataSource = {
         .init(tableView: tableView, viewModelProvider: viewModel.viewModel(indexPath:))
     }()
 
-    init(viewModel: CollectionViewModel, rootViewModel: RootViewModel, identification: Identification) {
+    init(viewModel: CollectionViewModel,
+         rootViewModel: RootViewModel,
+         identification: Identification,
+         parentNavigationController: UINavigationController? = nil) {
         self.viewModel = viewModel
         self.rootViewModel = rootViewModel
         self.identification = identification
+        self.parentNavigationController = parentNavigationController
 
         super.init(style: .plain)
     }
@@ -51,7 +56,7 @@ class TableViewController: UITableViewController {
             refreshControl = UIRefreshControl()
             refreshControl?.addAction(
                 UIAction { [weak self] _ in
-                    self?.viewModel.request(maxId: nil, minId: nil) },
+                    self?.viewModel.request(maxId: nil, minId: nil, search: nil) },
                 for: .valueChanged)
         }
 
@@ -69,7 +74,7 @@ class TableViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        viewModel.request(maxId: nil, minId: nil)
+        viewModel.request(maxId: nil, minId: nil, search: nil)
     }
 
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -104,7 +109,8 @@ class TableViewController: UITableViewController {
            let maxId = viewModel.preferLastPresentIdOverNextPageMaxId
             ? dataSource.itemIdentifier(for: indexPath)?.itemId
             : viewModel.nextPageMaxId {
-            viewModel.request(maxId: maxId, minId: nil)
+            // TODO: search offset
+            viewModel.request(maxId: maxId, minId: nil, search: nil)
         }
 
         if let loadMoreView = cell.contentView as? LoadMoreView {
@@ -336,21 +342,33 @@ private extension TableViewController {
     func handle(navigation: Navigation) {
         switch navigation {
         case let .collection(collectionService):
-            show(TableViewController(
-                    viewModel: CollectionItemsViewModel(
-                        collectionService: collectionService,
-                        identification: identification),
-                    rootViewModel: rootViewModel,
+            let vc = TableViewController(
+                viewModel: CollectionItemsViewModel(
+                    collectionService: collectionService,
                     identification: identification),
-                 sender: self)
+                rootViewModel: rootViewModel,
+                identification: identification,
+            parentNavigationController: parentNavigationController)
+
+            if let parentNavigationController = parentNavigationController {
+                parentNavigationController.pushViewController(vc, animated: true)
+            } else {
+                show(vc, sender: self)
+            }
         case let .profile(profileService):
-            show(ProfileViewController(
-                    viewModel: ProfileViewModel(
-                        profileService: profileService,
-                        identification: identification),
-                    rootViewModel: rootViewModel,
+            let vc = ProfileViewController(
+                viewModel: ProfileViewModel(
+                    profileService: profileService,
                     identification: identification),
-                 sender: self)
+                rootViewModel: rootViewModel,
+                identification: identification,
+                parentNavigationController: parentNavigationController)
+
+            if let parentNavigationController = parentNavigationController {
+                parentNavigationController.pushViewController(vc, animated: true)
+            } else {
+                show(vc, sender: self)
+            }
         case let .url(url):
             present(SFSafariViewController(url: url), animated: true)
         case .webfingerStart:

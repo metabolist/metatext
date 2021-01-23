@@ -310,7 +310,7 @@ private extension AccountHeaderView {
             segmentedControl.insertSegment(
                 action: UIAction(title: collection.title) { [weak self] _ in
                     self?.viewModel?.collection = collection
-                    self?.viewModel?.request(maxId: nil, minId: nil)
+                    self?.viewModel?.request(maxId: nil, minId: nil, search: nil)
                 },
                 at: index,
                 animated: false)

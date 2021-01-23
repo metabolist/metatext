@@ -9,10 +9,18 @@ final class ProfileViewController: TableViewController {
     private let viewModel: ProfileViewModel
     private var cancellables = Set<AnyCancellable>()
 
-    required init(viewModel: ProfileViewModel, rootViewModel: RootViewModel, identification: Identification) {
+    required init(
+        viewModel: ProfileViewModel,
+        rootViewModel: RootViewModel,
+        identification: Identification,
+        parentNavigationController: UINavigationController?) {
         self.viewModel = viewModel
 
-        super.init(viewModel: viewModel, rootViewModel: rootViewModel, identification: identification)
+        super.init(
+            viewModel: viewModel,
+            rootViewModel: rootViewModel,
+            identification: identification,
+            parentNavigationController: parentNavigationController)
     }
 
     override func viewDidLoad() {

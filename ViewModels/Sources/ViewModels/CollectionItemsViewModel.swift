@@ -5,7 +5,7 @@ import Foundation
 import Mastodon
 import ServiceLayer
 
-public final class CollectionItemsViewModel: ObservableObject {
+public class CollectionItemsViewModel: ObservableObject {
     @Published public var alertItem: AlertItem?
     public private(set) var nextPageMaxId: String?
 
@@ -82,7 +82,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
 
     public var canRefresh: Bool { collectionService.canRefresh }
 
-    public func request(maxId: String? = nil, minId: String? = nil) {
+    public func request(maxId: String? = nil, minId: String? = nil, search: Search?) {
         let publisher: AnyPublisher<Never, Error>
 
         if let markerTimeline = collectionService.markerTimeline,
@@ -90,19 +90,22 @@ extension CollectionItemsViewModel: CollectionViewModel {
            !hasRequestedUsingMarker {
             publisher = identification.service.getMarker(markerTimeline)
                 .flatMap { [weak self] in
-                    self?.collectionService.request(maxId: $0.lastReadId, minId: nil) ?? Empty().eraseToAnyPublisher()
+                    self?.collectionService.request(maxId: $0.lastReadId, minId: nil, search: nil)
+                        ?? Empty().eraseToAnyPublisher()
                 }
                 .catch { [weak self] _ in
-                    self?.collectionService.request(maxId: nil, minId: nil) ?? Empty().eraseToAnyPublisher()
+                    self?.collectionService.request(maxId: nil, minId: nil, search: nil)
+                        ?? Empty().eraseToAnyPublisher()
                 }
                 .collect()
                 .flatMap { [weak self] _ in
-                    self?.collectionService.request(maxId: nil, minId: nil) ?? Empty().eraseToAnyPublisher()
+                    self?.collectionService.request(maxId: nil, minId: nil, search: nil)
+                        ?? Empty().eraseToAnyPublisher()
                 }
                 .eraseToAnyPublisher()
             self.hasRequestedUsingMarker = true
         } else {
-            publisher = collectionService.request(maxId: realMaxId(maxId: maxId), minId: minId)
+            publisher = collectionService.request(maxId: realMaxId(maxId: maxId), minId: minId, search: search)
         }
 
         publisher
