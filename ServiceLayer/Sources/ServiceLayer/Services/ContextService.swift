@@ -7,7 +7,7 @@ import Mastodon
 import MastodonAPI
 
 public struct ContextService {
-    public let sections: AnyPublisher<[[CollectionItem]], Error>
+    public let sections: AnyPublisher<[CollectionSection], Error>
     public let navigationService: NavigationService
 
     private let id: Status.Id

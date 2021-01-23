@@ -28,7 +28,7 @@ extension TimelineItemsInfo {
         addingIncludes(request).asRequest(of: self)
     }
 
-    func items(filters: [Filter]) -> [[CollectionItem]] {
+    func items(filters: [Filter]) -> [CollectionSection] {
         let timeline = Timeline(record: timelineRecord)!
         let filterRegularExpression = filters.regularExpression(context: timeline.filterContext)
         var timelineItems = statusInfos.filtered(regularExpression: filterRegularExpression)
@@ -55,17 +55,17 @@ extension TimelineItemsInfo {
         }
 
         if let pinnedStatusInfos = pinnedStatusesInfo?.pinnedStatusInfos {
-            return [pinnedStatusInfos.filtered(regularExpression: filterRegularExpression)
+            return [.init(items: pinnedStatusInfos.filtered(regularExpression: filterRegularExpression)
                         .map {
                             CollectionItem.status(
                                 .init(info: $0),
                                 .init(showContentToggled: $0.showContentToggled,
                                       showAttachmentsToggled: $0.showAttachmentsToggled,
                                       isPinned: true))
-                        },
-                    timelineItems]
+                        }),
+                    .init(items: timelineItems)]
         } else {
-            return [timelineItems]
+            return [.init(items: timelineItems)]
         }
     }
 }

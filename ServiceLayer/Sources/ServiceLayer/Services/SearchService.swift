@@ -7,14 +7,14 @@ import Mastodon
 import MastodonAPI
 
 public struct SearchService {
-    public let sections: AnyPublisher<[[CollectionItem]], Error>
+    public let sections: AnyPublisher<[CollectionSection], Error>
     public let navigationService: NavigationService
     public let nextPageMaxId: AnyPublisher<String, Never>
 
     private let mastodonAPIClient: MastodonAPIClient
     private let contentDatabase: ContentDatabase
     private let nextPageMaxIdSubject = PassthroughSubject<String, Never>()
-    private let sectionsSubject = PassthroughSubject<[[CollectionItem]], Error>()
+    private let sectionsSubject = PassthroughSubject<[CollectionSection], Error>()
 
     init(mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
         self.mastodonAPIClient = mastodonAPIClient

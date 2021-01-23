@@ -21,7 +21,7 @@ extension ContextItemsInfo {
         addingIncludes(request).asRequest(of: self)
     }
 
-    func items(filters: [Filter]) -> [[CollectionItem]] {
+    func items(filters: [Filter]) -> [CollectionSection] {
         let regularExpression = filters.regularExpression(context: .thread)
 
         return [ancestors, [parent], descendants].map { section in
@@ -52,5 +52,6 @@ extension ContextItemsInfo {
                               hasReplyFollowing: hasReplyFollowing))
                 }
         }
+        .map { CollectionSection(items: $0) }
     }
 }

@@ -4,7 +4,7 @@ import Combine
 import Mastodon
 
 public protocol CollectionService {
-    var sections: AnyPublisher<[[CollectionItem]], Error> { get }
+    var sections: AnyPublisher<[CollectionSection], Error> { get }
     var nextPageMaxId: AnyPublisher<String, Never> { get }
     var preferLastPresentIdOverNextPageMaxId: Bool { get }
     var canRefresh: Bool { get }

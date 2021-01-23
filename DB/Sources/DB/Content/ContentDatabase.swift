@@ -425,7 +425,7 @@ public extension ContentDatabase {
         .eraseToAnyPublisher()
     }
 
-    func process(results: Results) -> AnyPublisher<[[CollectionItem]], Error> {
+    func process(results: Results) -> AnyPublisher<[CollectionSection], Error> {
         databaseWriter.writePublisher { db -> ([StatusInfo], [Status.Id]) in
             for account in results.accounts {
                 try account.save(db)
@@ -442,22 +442,23 @@ public extension ContentDatabase {
 
             return (statusInfos, ids)
         }
-        .map { statusInfos, ids -> [[CollectionItem]] in
+        .map { statusInfos, ids -> [CollectionSection] in
             [
-                results.accounts.map(CollectionItem.account),
-                statusInfos
-                    .sorted { ids.firstIndex(of: $0.record.id) ?? 0 < ids.firstIndex(of: $1.record.id) ?? 0 }
-                    .map {
-                    .status(.init(info: $0),
-                            .init(showContentToggled: $0.showContentToggled,
-                                  showAttachmentsToggled: $0.showAttachmentsToggled))
-                }
+                .init(items: results.accounts.map(CollectionItem.account), titleLocalizedStringKey: "search.accounts"),
+                .init(items: statusInfos
+                        .sorted { ids.firstIndex(of: $0.record.id) ?? 0 < ids.firstIndex(of: $1.record.id) ?? 0 }
+                        .map {
+                            .status(.init(info: $0),
+                                    .init(showContentToggled: $0.showContentToggled,
+                                          showAttachmentsToggled: $0.showAttachmentsToggled))
+                        },
+                      titleLocalizedStringKey: "search.statuses")
             ]
         }
         .eraseToAnyPublisher()
     }
 
-    func timelinePublisher(_ timeline: Timeline) -> AnyPublisher<[[CollectionItem]], Error> {
+    func timelinePublisher(_ timeline: Timeline) -> AnyPublisher<[CollectionSection], Error> {
         ValueObservation.tracking(
             TimelineItemsInfo.request(TimelineRecord.filter(TimelineRecord.Columns.id == timeline.id)).fetchOne)
             .removeDuplicates()
@@ -482,7 +483,7 @@ public extension ContentDatabase {
             .eraseToAnyPublisher()
     }
 
-    func contextPublisher(id: Status.Id) -> AnyPublisher<[[CollectionItem]], Error> {
+    func contextPublisher(id: Status.Id) -> AnyPublisher<[CollectionSection], Error> {
         ValueObservation.tracking(
             ContextItemsInfo.request(StatusRecord.filter(StatusRecord.Columns.id == id)).fetchOne)
             .removeDuplicates()
@@ -526,13 +527,13 @@ public extension ContentDatabase {
             .eraseToAnyPublisher()
     }
 
-    func notificationsPublisher() -> AnyPublisher<[[CollectionItem]], Error> {
+    func notificationsPublisher() -> AnyPublisher<[CollectionSection], Error> {
         ValueObservation.tracking(
             NotificationInfo.request(
                 NotificationRecord.order(NotificationRecord.Columns.id.desc)).fetchAll)
             .removeDuplicates()
             .publisher(in: databaseWriter)
-            .map { [$0.map {
+            .map { [.init(items: $0.map {
                 let configuration: CollectionItem.StatusConfiguration?
 
                 if $0.record.type == .mention, let statusInfo = $0.statusInfo {
@@ -544,7 +545,7 @@ public extension ContentDatabase {
                 }
 
                 return .notification(MastodonNotification(info: $0), configuration)
-            }] }
+            })] }
             .eraseToAnyPublisher()
     }
 

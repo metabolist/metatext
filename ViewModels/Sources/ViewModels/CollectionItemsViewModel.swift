@@ -10,7 +10,7 @@ public class CollectionItemsViewModel: ObservableObject {
     public private(set) var nextPageMaxId: String?
 
     @Published private var lastUpdate = CollectionUpdate(
-        items: [],
+        sections: [],
         maintainScrollPositionItemId: nil,
         shouldAdjustContentInset: false)
     private let collectionService: CollectionService
@@ -34,7 +34,7 @@ public class CollectionItemsViewModel: ObservableObject {
                 ? .expand : .hidden)
 
         collectionService.sections
-            .handleEvents(receiveOutput: { [weak self] in self?.process(items: $0) })
+            .handleEvents(receiveOutput: { [weak self] in self?.process(sections: $0) })
             .receive(on: DispatchQueue.main)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .sink { _ in }
@@ -119,7 +119,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
     }
 
     public func select(indexPath: IndexPath) {
-        let item = lastUpdate.items[indexPath.section][indexPath.item]
+        let item = lastUpdate.sections[indexPath.section].items[indexPath.item]
 
         switch item {
         case let .status(status, _):
@@ -161,14 +161,14 @@ extension CollectionItemsViewModel: CollectionViewModel {
         topVisibleIndexPath = indexPath
 
         if !shouldRestorePositionOfLocalLastReadId,
-           lastUpdate.items.count > indexPath.section,
-           lastUpdate.items[indexPath.section].count > indexPath.item {
-            lastReadId.send(lastUpdate.items[indexPath.section][indexPath.item].itemId)
+           lastUpdate.sections.count > indexPath.section,
+           lastUpdate.sections[indexPath.section].items.count > indexPath.item {
+            lastReadId.send(lastUpdate.sections[indexPath.section].items[indexPath.item].itemId)
         }
     }
 
     public func canSelect(indexPath: IndexPath) -> Bool {
-        switch lastUpdate.items[indexPath.section][indexPath.item] {
+        switch lastUpdate.sections[indexPath.section].items[indexPath.item] {
         case let .status(_, configuration):
             return !configuration.isContextParent
         case .loadMore:
@@ -180,7 +180,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
 
     // swiftlint:disable:next function_body_length cyclomatic_complexity
     public func viewModel(indexPath: IndexPath) -> CollectionItemViewModel {
-        let item = lastUpdate.items[indexPath.section][indexPath.item]
+        let item = lastUpdate.sections[indexPath.section].items[indexPath.item]
         let cachedViewModel = viewModelCache[item]?.viewModel
 
         switch item {
@@ -260,7 +260,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
     }
 
     public func toggleExpandAll() {
-        let statusIds = Set(lastUpdate.items.reduce([], +).compactMap { item -> Status.Id? in
+        let statusIds = Set(lastUpdate.sections.map(\.items).reduce([], +).compactMap { item -> Status.Id? in
             guard case let .status(status, _) = item else { return nil }
 
             return status.id
@@ -289,7 +289,7 @@ private extension CollectionItemsViewModel {
     private static let lastReadIdDebounceInterval: TimeInterval = 0.5
 
     var lastUpdateWasContextParentOnly: Bool {
-        collectionService is ContextService && lastUpdate.items.map(\.count) == [0, 1, 0]
+        collectionService is ContextService && lastUpdate.sections.map(\.items).map(\.count) == [0, 1, 0]
     }
 
     func cache(viewModel: CollectionItemViewModel, forItem item: CollectionItem) {
@@ -303,14 +303,14 @@ private extension CollectionItemsViewModel {
                                     .sink { [weak self] in self?.eventsSubject.send($0) })
     }
 
-    func process(items: [[CollectionItem]]) {
-        let flatItems = items.reduce([], +)
-        let itemsSet = Set(flatItems)
+    func process(sections: [CollectionSection]) {
+        let items = sections.map(\.items).reduce([], +)
+        let itemsSet = Set(items)
 
         self.lastUpdate = .init(
-            items: items,
-            maintainScrollPositionItemId: idForScrollPositionMaintenance(newItems: items),
-            shouldAdjustContentInset: lastUpdateWasContextParentOnly && flatItems.count > 1)
+            sections: sections,
+            maintainScrollPositionItemId: idForScrollPositionMaintenance(newSections: sections),
+            shouldAdjustContentInset: lastUpdateWasContextParentOnly && items.count > 1)
 
         viewModelCache = viewModelCache.filter { itemsSet.contains($0.key) }
     }
@@ -320,35 +320,35 @@ private extension CollectionItemsViewModel {
 
         guard let markerTimeline = collectionService.markerTimeline,
               identification.appPreferences.positionBehavior(markerTimeline: markerTimeline) == .rememberPosition,
-              let lastItemId = lastUpdate.items.last?.last?.itemId
+              let lastItemId = lastUpdate.sections.last?.items.last?.itemId
         else { return maxId }
 
         return min(maxId, lastItemId)
     }
 
-    func idForScrollPositionMaintenance(newItems: [[CollectionItem]]) -> CollectionItem.Id? {
-        let flatItems = lastUpdate.items.reduce([], +)
-        let flatNewItems = newItems.reduce([], +)
+    func idForScrollPositionMaintenance(newSections: [CollectionSection]) -> CollectionItem.Id? {
+        let items = lastUpdate.sections.map(\.items).reduce([], +)
+        let newItems = newSections.map(\.items).reduce([], +)
 
         if shouldRestorePositionOfLocalLastReadId,
            let markerTimeline = collectionService.markerTimeline,
            let localLastReadId = identification.service.getLocalLastReadId(markerTimeline),
-           flatNewItems.contains(where: { $0.itemId == localLastReadId }) {
+           newItems.contains(where: { $0.itemId == localLastReadId }) {
             shouldRestorePositionOfLocalLastReadId = false
 
             return localLastReadId
         }
 
         if collectionService is ContextService,
-           lastUpdate.items.isEmpty || lastUpdate.items.map(\.count) == [0, 1, 0],
-           let contextParent = flatNewItems.first(where: {
+           lastUpdate.sections.isEmpty || lastUpdate.sections.map(\.items.count) == [0, 1, 0],
+           let contextParent = newItems.first(where: {
             guard case let .status(_, configuration) = $0 else { return false }
 
             return configuration.isContextParent // Maintain scroll position of parent after initial load of context
            }) {
             return contextParent.itemId
         } else if collectionService is TimelineService {
-            let difference = flatNewItems.difference(from: flatItems)
+            let difference = newItems.difference(from: items)
 
             if let lastSelectedLoadMore = lastSelectedLoadMore {
                 for removal in difference.removals {
@@ -357,7 +357,7 @@ private extension CollectionItemsViewModel {
                        loadMore == lastSelectedLoadMore,
                        let direction = (viewModelCache[item]?.viewModel as? LoadMoreViewModel)?.direction,
                        direction == .up,
-                       let statusAfterLoadMore = flatItems.first(where: {
+                       let statusAfterLoadMore = items.first(where: {
                         guard case let .status(status, _) = $0 else { return false }
 
                         return status.id == loadMore.beforeStatusId
@@ -367,13 +367,13 @@ private extension CollectionItemsViewModel {
                 }
             }
 
-            if lastUpdate.items.count > topVisibleIndexPath.section,
-               lastUpdate.items[topVisibleIndexPath.section].count > topVisibleIndexPath.item {
-                let topVisibleItem = lastUpdate.items[topVisibleIndexPath.section][topVisibleIndexPath.item]
+            if lastUpdate.sections.count > topVisibleIndexPath.section,
+               lastUpdate.sections[topVisibleIndexPath.section].items.count > topVisibleIndexPath.item {
+                let topVisibleItem = lastUpdate.sections[topVisibleIndexPath.section].items[topVisibleIndexPath.item]
 
-                if newItems.count > topVisibleIndexPath.section,
-                   let newIndex = newItems[topVisibleIndexPath.section]
-                    .firstIndex(where: { $0.itemId == topVisibleItem.itemId }),
+                if newSections.count > topVisibleIndexPath.section,
+                   let newIndex = newSections[topVisibleIndexPath.section]
+                    .items.firstIndex(where: { $0.itemId == topVisibleItem.itemId }),
                    newIndex > topVisibleIndexPath.item {
                     return topVisibleItem.itemId
                 }

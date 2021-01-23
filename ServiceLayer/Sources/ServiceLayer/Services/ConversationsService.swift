@@ -7,7 +7,7 @@ import Mastodon
 import MastodonAPI
 
 public struct ConversationsService {
-    public let sections: AnyPublisher<[[CollectionItem]], Error>
+    public let sections: AnyPublisher<[CollectionSection], Error>
     public let nextPageMaxId: AnyPublisher<String, Never>
     public let navigationService: NavigationService
 
@@ -19,7 +19,7 @@ public struct ConversationsService {
         self.mastodonAPIClient = mastodonAPIClient
         self.contentDatabase = contentDatabase
         sections = contentDatabase.conversationsPublisher()
-            .map { [$0.map(CollectionItem.conversation)] }
+            .map { [.init(items: $0.map(CollectionItem.conversation))] }
             .eraseToAnyPublisher()
         nextPageMaxId = nextPageMaxIdSubject.eraseToAnyPublisher()
         navigationService = NavigationService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)

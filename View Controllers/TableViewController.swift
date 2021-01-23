@@ -302,7 +302,7 @@ private extension TableViewController {
             positionMaintenanceOffset = 0
         }
 
-        self.dataSource.apply(update.items.snapshot(), animatingDifferences: false) { [weak self] in
+        self.dataSource.apply(update.sections.snapshot(), animatingDifferences: false) { [weak self] in
             guard let self = self else { return }
 
             if let itemId = update.maintainScrollPositionItemId,

@@ -7,7 +7,7 @@ import Mastodon
 import MastodonAPI
 
 public struct AccountListService {
-    public let sections: AnyPublisher<[[CollectionItem]], Error>
+    public let sections: AnyPublisher<[CollectionSection], Error>
     public let nextPageMaxId: AnyPublisher<String, Never>
     public let navigationService: NavigationService
     public let canRefresh = false
@@ -27,7 +27,7 @@ public struct AccountListService {
         self.mastodonAPIClient = mastodonAPIClient
         self.contentDatabase = contentDatabase
         self.titleComponents = titleComponents
-        sections = accountList.map { [$0.map(CollectionItem.account)] }.eraseToAnyPublisher()
+        sections = accountList.map { [.init(items: $0.map(CollectionItem.account))] }.eraseToAnyPublisher()
         nextPageMaxId = nextPageMaxIdSubject.eraseToAnyPublisher()
         navigationService = NavigationService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }

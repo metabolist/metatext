@@ -7,7 +7,7 @@ import Mastodon
 import MastodonAPI
 
 public struct NotificationsService {
-    public let sections: AnyPublisher<[[CollectionItem]], Error>
+    public let sections: AnyPublisher<[CollectionSection], Error>
     public let nextPageMaxId: AnyPublisher<String, Never>
     public let navigationService: NavigationService
 
@@ -24,7 +24,7 @@ public struct NotificationsService {
         self.nextPageMaxIdSubject  = nextPageMaxIdSubject
         sections = contentDatabase.notificationsPublisher()
             .handleEvents(receiveOutput: {
-                guard case let .notification(notification, _) = $0.last?.last,
+                guard case let .notification(notification, _) = $0.last?.items.last,
                       notification.id < nextPageMaxIdSubject.value
                 else { return }
 

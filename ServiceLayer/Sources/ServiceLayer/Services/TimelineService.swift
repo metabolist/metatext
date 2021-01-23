@@ -7,7 +7,7 @@ import Mastodon
 import MastodonAPI
 
 public struct TimelineService {
-    public let sections: AnyPublisher<[[CollectionItem]], Error>
+    public let sections: AnyPublisher<[CollectionSection], Error>
     public let navigationService: NavigationService
     public let nextPageMaxId: AnyPublisher<String, Never>
     public let preferLastPresentIdOverNextPageMaxId = true

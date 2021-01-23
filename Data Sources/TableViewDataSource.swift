@@ -3,7 +3,7 @@
 import UIKit
 import ViewModels
 
-final class TableViewDataSource: UITableViewDiffableDataSource<Int, CollectionItem> {
+final class TableViewDataSource: UITableViewDiffableDataSource<CollectionSection.Identifier, CollectionItem> {
     private let updateQueue =
         DispatchQueue(label: "com.metabolist.metatext.collection-data-source.update-queue")
 
@@ -36,12 +36,24 @@ final class TableViewDataSource: UITableViewDiffableDataSource<Int, CollectionIt
         }
     }
 
-    override func apply(_ snapshot: NSDiffableDataSourceSnapshot<Int, CollectionItem>,
+    override func apply(_ snapshot: NSDiffableDataSourceSnapshot<CollectionSection.Identifier, CollectionItem>,
                         animatingDifferences: Bool = true,
                         completion: (() -> Void)? = nil) {
         updateQueue.async {
             super.apply(snapshot, animatingDifferences: animatingDifferences, completion: completion)
         }
+    }
+
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        let currentSnapshot = snapshot()
+        let section = currentSnapshot.sectionIdentifiers[section]
+
+        if currentSnapshot.numberOfItems(inSection: section) > 0,
+           let localizedStringKey = section.titleLocalizedStringKey {
+            return NSLocalizedString(localizedStringKey, comment: "")
+        }
+
+        return nil
     }
 }
 

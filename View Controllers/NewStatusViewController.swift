@@ -169,9 +169,8 @@ private extension NewStatusViewController {
     }
 
     func set(compositionViewModels: [CompositionViewModel]) {
-        let diff = compositionViewModels.map(\.id).snapshot().itemIdentifiers.difference(
-            from: stackView.arrangedSubviews.compactMap { ($0 as? CompositionView)?.id }
-                .snapshot().itemIdentifiers)
+        let diff = compositionViewModels.map(\.id)
+            .difference(from: stackView.arrangedSubviews.compactMap { ($0 as? CompositionView)?.id })
 
         for insertion in diff.insertions {
             guard case let .insert(index, id, _) = insertion,
