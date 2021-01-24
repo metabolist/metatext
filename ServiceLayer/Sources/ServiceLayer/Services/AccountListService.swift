@@ -12,7 +12,7 @@ public struct AccountListService {
     public let navigationService: NavigationService
     public let canRefresh = false
 
-    private let accountList = CurrentValueSubject<[Account], Error>([])
+    private let accountsSubject = PassthroughSubject<[Account], Error>()
     private let endpoint: AccountsEndpoint
     private let mastodonAPIClient: MastodonAPIClient
     private let contentDatabase: ContentDatabase
@@ -27,7 +27,13 @@ public struct AccountListService {
         self.mastodonAPIClient = mastodonAPIClient
         self.contentDatabase = contentDatabase
         self.titleComponents = titleComponents
-        sections = accountList.map { [.init(items: $0.map(CollectionItem.account))] }.eraseToAnyPublisher()
+        sections = accountsSubject.scan([]) {
+            let presentIds = Set($0.map(\.id))
+
+            return $0 + $1.filter { !presentIds.contains($0.id) }
+        }
+        .map { [.init(items: $0.map(CollectionItem.account))] }
+        .eraseToAnyPublisher()
         nextPageMaxId = nextPageMaxIdSubject.eraseToAnyPublisher()
         navigationService = NavigationService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }
@@ -37,19 +43,13 @@ extension AccountListService: CollectionService {
     public func request(maxId: String?, minId: String?, search: Search?) -> AnyPublisher<Never, Error> {
         mastodonAPIClient.pagedRequest(endpoint, maxId: maxId, minId: minId)
             .handleEvents(receiveOutput: {
+                accountsSubject.send($0.result)
+
                 guard let maxId = $0.info.maxId else { return }
 
                 nextPageMaxIdSubject.send(maxId)
             })
-            .flatMap { response in
-                contentDatabase.insert(accounts: response.result)
-                    .collect()
-                    .map { _ in
-                        let presentIds = Set(accountList.value.map(\.id))
-
-                        accountList.value += response.result.filter { !presentIds.contains($0.id) }
-                    }
-            }
+            .flatMap { contentDatabase.insert(accounts: $0.result) }
             .ignoreOutput()
             .eraseToAnyPublisher()
     }
