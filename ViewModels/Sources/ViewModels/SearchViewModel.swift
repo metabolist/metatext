@@ -15,13 +15,20 @@ public final class SearchViewModel: CollectionItemsViewModel {
 
         super.init(collectionService: searchService, identification: identification)
 
-        $query.throttle(for: .seconds(Self.queryThrottleInterval), scheduler: DispatchQueue.global(), latest: true)
+        $query.throttle(for: .seconds(Self.throttleInterval), scheduler: DispatchQueue.global(), latest: true)
             .sink { [weak self] in self?.request(maxId: nil, minId: nil, search: .init(query: $0, limit: Self.limit)) }
             .store(in: &cancellables)
+    }
+
+    public override var updates: AnyPublisher<CollectionUpdate, Never> {
+        // Since results are processed through the DB to determine CW expansion state etc they can arrive erratically
+        super.updates
+            .throttle(for: .seconds(Self.throttleInterval), scheduler: DispatchQueue.global(), latest: true)
+            .eraseToAnyPublisher()
     }
 }
 
 private extension SearchViewModel {
-    static let queryThrottleInterval: TimeInterval = 0.5
+    static let throttleInterval: TimeInterval = 0.5
     static let limit = 5
 }

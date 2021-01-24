@@ -55,13 +55,13 @@ public class CollectionItemsViewModel: ObservableObject {
                 .store(in: &cancellables)
         }
     }
-}
 
-extension CollectionItemsViewModel: CollectionViewModel {
     public var updates: AnyPublisher<CollectionUpdate, Never> {
         $lastUpdate.eraseToAnyPublisher()
     }
+}
 
+extension CollectionItemsViewModel: CollectionViewModel {
     public var title: AnyPublisher<String, Never> { collectionService.title }
 
     public var titleLocalizationComponents: AnyPublisher<[String], Never> {
