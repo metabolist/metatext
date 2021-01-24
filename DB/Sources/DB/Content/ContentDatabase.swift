@@ -425,37 +425,17 @@ public extension ContentDatabase {
         .eraseToAnyPublisher()
     }
 
-    func process(results: Results) -> AnyPublisher<[CollectionSection], Error> {
-        databaseWriter.writePublisher { db -> ([StatusInfo], [Status.Id]) in
+    func insert(results: Results) -> AnyPublisher<Never, Error> {
+        databaseWriter.writePublisher {
             for account in results.accounts {
-                try account.save(db)
+                try account.save($0)
             }
 
             for status in results.statuses {
-                try status.save(db)
+                try status.save($0)
             }
-
-            let ids = results.statuses.map(\.id)
-            let statusInfos = try StatusInfo.request(
-                StatusRecord.filter(ids.contains(StatusRecord.Columns.id)))
-                .fetchAll(db)
-
-            return (statusInfos, ids)
         }
-        .map { statusInfos, ids -> [CollectionSection] in
-            [
-                .init(items: results.accounts.map(CollectionItem.account), titleLocalizedStringKey: "search.accounts"),
-                .init(items: statusInfos
-                        .sorted { ids.firstIndex(of: $0.record.id) ?? 0 < ids.firstIndex(of: $1.record.id) ?? 0 }
-                        .map {
-                            .status(.init(info: $0),
-                                    .init(showContentToggled: $0.showContentToggled,
-                                          showAttachmentsToggled: $0.showAttachmentsToggled))
-                        },
-                      titleLocalizedStringKey: "search.statuses"),
-                .init(items: results.hashtags.map(CollectionItem.tag), titleLocalizedStringKey: "search.tags")
-            ]
-        }
+        .ignoreOutput()
         .eraseToAnyPublisher()
     }
 
@@ -525,6 +505,52 @@ public extension ContentDatabase {
             .removeDuplicates()
             .publisher(in: databaseWriter)
             .compactMap { $0 }
+            .eraseToAnyPublisher()
+    }
+
+    func publisher(results: Results) -> AnyPublisher<[CollectionSection], Error> {
+        let accountIds = results.accounts.map(\.id)
+        let statusIds = results.statuses.map(\.id)
+
+        let accountsPublisher = ValueObservation.tracking(
+            AccountInfo.request(
+                AccountRecord.filter(accountIds.contains(AccountRecord.Columns.id)))
+                .fetchAll)
+            .removeDuplicates()
+            .publisher(in: databaseWriter)
+            .map {
+                $0.sorted {
+                    accountIds.firstIndex(of: $0.record.id) ?? 0
+                        < accountIds.firstIndex(of: $1.record.id) ?? 0
+                }
+                .map { CollectionItem.account(.init(info: $0)) }
+            }
+
+        let statusesPublisher = ValueObservation.tracking(
+            StatusInfo.request(
+                StatusRecord.filter(statusIds.contains(StatusRecord.Columns.id)))
+                .fetchAll)
+            .removeDuplicates()
+            .publisher(in: databaseWriter)
+            .map {
+                $0.sorted {
+                    statusIds.firstIndex(of: $0.record.id) ?? 0
+                        < statusIds.firstIndex(of: $1.record.id) ?? 0
+                }
+                .map {
+                    CollectionItem.status(
+                        .init(info: $0),
+                        .init(showContentToggled: $0.showContentToggled,
+                              showAttachmentsToggled: $0.showAttachmentsToggled))
+                }
+            }
+
+        return accountsPublisher.combineLatest(statusesPublisher)
+            .map { accounts, statuses in
+                [.init(items: accounts, titleLocalizedStringKey: "search.accounts"),
+                 .init(items: statuses, titleLocalizedStringKey: "search.statuses"),
+                 .init(items: results.hashtags.map(CollectionItem.tag), titleLocalizedStringKey: "search.tags")]
+            }
             .eraseToAnyPublisher()
     }
 

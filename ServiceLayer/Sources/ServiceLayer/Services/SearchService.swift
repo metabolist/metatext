@@ -14,14 +14,14 @@ public struct SearchService {
     private let mastodonAPIClient: MastodonAPIClient
     private let contentDatabase: ContentDatabase
     private let nextPageMaxIdSubject = PassthroughSubject<String, Never>()
-    private let sectionsSubject = PassthroughSubject<[CollectionSection], Error>()
+    private let resultsSubject = PassthroughSubject<Results, Error>()
 
     init(mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
         self.mastodonAPIClient = mastodonAPIClient
         self.contentDatabase = contentDatabase
         nextPageMaxId = nextPageMaxIdSubject.eraseToAnyPublisher()
         navigationService = NavigationService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
-        sections = sectionsSubject.eraseToAnyPublisher()
+        sections = resultsSubject.flatMap(contentDatabase.publisher(results:)).eraseToAnyPublisher()
     }
 }
 
@@ -30,9 +30,8 @@ extension SearchService: CollectionService {
         guard let search = search else { return Empty().eraseToAnyPublisher() }
 
         return mastodonAPIClient.request(ResultsEndpoint.search(search))
-            .flatMap(contentDatabase.process(results:))
-            .handleEvents(receiveOutput: sectionsSubject.send)
-            .ignoreOutput()
+            .handleEvents(receiveOutput: resultsSubject.send)
+            .flatMap(contentDatabase.insert(results:))
             .eraseToAnyPublisher()
     }
 }

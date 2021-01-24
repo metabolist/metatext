@@ -31,12 +31,14 @@ final class LineChartView: UIView {
 
         guard valueCount > 0, let maxValue = values.max() else { return }
 
+        let inset = Self.lineWidth / 2
+
         for (index, value) in values.enumerated() {
             let x = CGFloat(index) / CGFloat(valueCount) * rect.width
             let y = rect.height - CGFloat(value) / max(CGFloat(maxValue), CGFloat(0).nextUp) * rect.height
             let point = CGPoint(
-                x: min(max(x, Self.lineWidth / 2), rect.width - Self.lineWidth / 2),
-                y: min(max(y, Self.lineWidth / 2), rect.height - Self.lineWidth / 2))
+                x: min(max(x, inset), rect.width - inset),
+                y: min(max(y, inset), rect.height - inset))
 
             if index > 0 {
                 path.addLine(to: point)
