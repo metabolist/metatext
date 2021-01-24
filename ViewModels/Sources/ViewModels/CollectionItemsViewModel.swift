@@ -154,6 +154,11 @@ extension CollectionItemsViewModel: CollectionViewModel {
                 .navigation(.collection(collectionService
                                             .navigationService
                                             .contextService(id: status.displayStatus.id))))
+        case let .tag(tag):
+            eventsSubject.send(
+                .navigation(.collection(collectionService
+                                            .navigationService
+                                            .timelineService(timeline: .tag(tag.name)))))
         }
     }
 
@@ -252,6 +257,16 @@ extension CollectionItemsViewModel: CollectionViewModel {
                 conversationService: collectionService.navigationService.conversationService(
                     conversation: conversation),
                 identification: identification)
+
+            cache(viewModel: viewModel, forItem: item)
+
+            return viewModel
+        case let .tag(tag):
+            if let cachedViewModel = cachedViewModel {
+                return cachedViewModel
+            }
+
+            let viewModel = TagViewModel(tag: tag)
 
             cache(viewModel: viewModel, forItem: item)
 

@@ -9,7 +9,8 @@ extension CollectionItem {
         AccountListCell.self,
         LoadMoreCell.self,
         NotificationListCell.self,
-        ConversationListCell.self]
+        ConversationListCell.self,
+        TagTableViewCell.self]
 
     var cellClass: AnyClass {
         switch self {
@@ -23,6 +24,8 @@ extension CollectionItem {
             return statusConfiguration == nil ? NotificationListCell.self : StatusListCell.self
         case .conversation:
             return ConversationListCell.self
+        case .tag:
+            return TagTableViewCell.self
         }
     }
 
@@ -49,6 +52,8 @@ extension CollectionItem {
                 width: width,
                 identification: identification,
                 conversation: conversation)
+        case let .tag(tag):
+            return TagView.estimatedHeight(width: width, tag: tag)
         }
     }
 }

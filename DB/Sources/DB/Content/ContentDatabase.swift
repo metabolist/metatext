@@ -452,7 +452,8 @@ public extension ContentDatabase {
                                     .init(showContentToggled: $0.showContentToggled,
                                           showAttachmentsToggled: $0.showAttachmentsToggled))
                         },
-                      titleLocalizedStringKey: "search.statuses")
+                      titleLocalizedStringKey: "search.statuses"),
+                .init(items: results.hashtags.map(CollectionItem.tag), titleLocalizedStringKey: "search.tags")
             ]
         }
         .eraseToAnyPublisher()

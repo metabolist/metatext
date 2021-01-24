@@ -28,6 +28,8 @@ final class TableViewDataSource: UITableViewDiffableDataSource<CollectionSection
                 notificationListCell.viewModel = notificationViewModel
             case let (conversationListCell as ConversationListCell, conversationViewModel as ConversationViewModel):
                 conversationListCell.viewModel = conversationViewModel
+            case let (tagTableViewCell as TagTableViewCell, tagViewModel as TagViewModel):
+                tagTableViewCell.viewModel = tagViewModel
             default:
                 break
             }

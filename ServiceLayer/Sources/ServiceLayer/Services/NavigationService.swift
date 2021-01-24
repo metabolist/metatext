@@ -86,6 +86,10 @@ public extension NavigationService {
             mastodonAPIClient: mastodonAPIClient,
             contentDatabase: contentDatabase)
     }
+
+    func timelineService(timeline: Timeline) -> TimelineService {
+        TimelineService(timeline: timeline, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+    }
 }
 
 private extension NavigationService {

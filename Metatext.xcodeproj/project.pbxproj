@@ -130,6 +130,10 @@
 		D0CE9F87258B076900E3A6B6 /* AttachmentUploadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CE9F86258B076900E3A6B6 /* AttachmentUploadView.swift */; };
 		D0CE9F88258B076900E3A6B6 /* AttachmentUploadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CE9F86258B076900E3A6B6 /* AttachmentUploadView.swift */; };
 		D0D2AC3925BBEC0F003D5DF2 /* CollectionSection+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D2AC3825BBEC0F003D5DF2 /* CollectionSection+Extensions.swift */; };
+		D0D2AC4725BCD289003D5DF2 /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D2AC4625BCD289003D5DF2 /* TagView.swift */; };
+		D0D2AC4D25BCD2A9003D5DF2 /* TagTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D2AC4C25BCD2A9003D5DF2 /* TagTableViewCell.swift */; };
+		D0D2AC5325BCD2BA003D5DF2 /* TagContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D2AC5225BCD2BA003D5DF2 /* TagContentConfiguration.swift */; };
+		D0D2AC6725BD0484003D5DF2 /* LineChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D2AC6625BD0484003D5DF2 /* LineChartView.swift */; };
 		D0DD50CB256B1F24004A04F7 /* ReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DD50CA256B1F24004A04F7 /* ReportView.swift */; };
 		D0E1F583251F13EC00D45315 /* WebfingerIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E1F582251F13EC00D45315 /* WebfingerIndicatorView.swift */; };
 		D0E2C1D124FD97F000854680 /* ViewModels in Frameworks */ = {isa = PBXBuildFile; productRef = D0E2C1D024FD97F000854680 /* ViewModels */; };
@@ -303,6 +307,10 @@
 		D0C7D46F24F76169001EBDBB /* View+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		D0CE9F86258B076900E3A6B6 /* AttachmentUploadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentUploadView.swift; sourceTree = "<group>"; };
 		D0D2AC3825BBEC0F003D5DF2 /* CollectionSection+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CollectionSection+Extensions.swift"; sourceTree = "<group>"; };
+		D0D2AC4625BCD289003D5DF2 /* TagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagView.swift; sourceTree = "<group>"; };
+		D0D2AC4C25BCD2A9003D5DF2 /* TagTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagTableViewCell.swift; sourceTree = "<group>"; };
+		D0D2AC5225BCD2BA003D5DF2 /* TagContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagContentConfiguration.swift; sourceTree = "<group>"; };
+		D0D2AC6625BD0484003D5DF2 /* LineChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineChartView.swift; sourceTree = "<group>"; };
 		D0D7C013250440610039AD6F /* CodableBloomFilter */ = {isa = PBXFileReference; lastKnownFileType = folder; path = CodableBloomFilter; sourceTree = "<group>"; };
 		D0DD50CA256B1F24004A04F7 /* ReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportView.swift; sourceTree = "<group>"; };
 		D0E0F1E424FC49FC002C04BF /* Mastodon */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Mastodon; sourceTree = "<group>"; };
@@ -509,6 +517,7 @@
 				D07EC7F125B13E57006DF726 /* EmojiView.swift */,
 				D0BEB20424FA1107001B0F04 /* FiltersView.swift */,
 				D0C7D42224F76169001EBDBB /* IdentitiesView.swift */,
+				D0D2AC6625BD0484003D5DF2 /* LineChartView.swift */,
 				D0BEB1FE24F9E5BB001B0F04 /* ListsView.swift */,
 				D0BEB1F624F9A84B001B0F04 /* LoadingTableFooterView.swift */,
 				D0B8510B25259E56004E0744 /* LoadMoreCell.swift */,
@@ -537,6 +546,9 @@
 				D04226FC2546AC0B000980A3 /* StartupAndSyncingPreferencesView.swift */,
 				D0625E55250F086B00502611 /* Status */,
 				D0C7D42524F76169001EBDBB /* TableView.swift */,
+				D0D2AC5225BCD2BA003D5DF2 /* TagContentConfiguration.swift */,
+				D0D2AC4C25BCD2A9003D5DF2 /* TagTableViewCell.swift */,
+				D0D2AC4625BCD289003D5DF2 /* TagView.swift */,
 				D01F41D624F880C400D55A2D /* TouchFallthroughTextView.swift */,
 				D0EA59472522B8B600804347 /* ViewConstants.swift */,
 				D0F2D54A2581CF7D00986197 /* VisualEffectBlur.swift */,
@@ -882,6 +894,8 @@
 				D00702362555F4C500F38136 /* ConversationContentConfiguration.swift in Sources */,
 				D0BEB1F724F9A84B001B0F04 /* LoadingTableFooterView.swift in Sources */,
 				D06BC5E625202AD90079541D /* ProfileViewController.swift in Sources */,
+				D0D2AC4D25BCD2A9003D5DF2 /* TagTableViewCell.swift in Sources */,
+				D0D2AC5325BCD2BA003D5DF2 /* TagContentConfiguration.swift in Sources */,
 				D0C7D4D924F7616A001EBDBB /* KingfisherOptionsInfo+Extensions.swift in Sources */,
 				D08B8D72254246E200B1EBEF /* PollView.swift in Sources */,
 				D035F8A925B9155900DC75ED /* NewStatusButtonView.swift in Sources */,
@@ -894,6 +908,7 @@
 				D036AA17254CA824009094DF /* StatusBodyView.swift in Sources */,
 				D035F86F25B7F30E00DC75ED /* MainNavigationView.swift in Sources */,
 				D08E512125786A6600FA2C5F /* UIButton+Extensions.swift in Sources */,
+				D0D2AC4725BCD289003D5DF2 /* TagView.swift in Sources */,
 				D05936F425AA66A600754FDF /* UIView+Extensions.swift in Sources */,
 				D05936E925AA3F3D00754FDF /* EditAttachmentView.swift in Sources */,
 				D035F8C725B96A4000DC75ED /* SecondaryNavigationButton.swift in Sources */,
@@ -918,6 +933,7 @@
 				D0FCC105259C4E61000B67DF /* NewStatusViewController.swift in Sources */,
 				D0F2D54B2581CF7D00986197 /* VisualEffectBlur.swift in Sources */,
 				D087671625BAA8C0001FDD43 /* ExploreViewController.swift in Sources */,
+				D0D2AC6725BD0484003D5DF2 /* LineChartView.swift in Sources */,
 				D0A7AC7325748BFF00E4E8AB /* ReportStatusView.swift in Sources */,
 				D0C7D4C324F7616A001EBDBB /* MetatextApp.swift in Sources */,
 				D0E1F583251F13EC00D45315 /* WebfingerIndicatorView.swift in Sources */,
