@@ -48,7 +48,6 @@ final class AccountFieldView: UIView {
 
         addSubview(valueTextView)
         valueTextView.translatesAutoresizingMaskIntoConstraints = false
-        valueTextView.isScrollEnabled = false
         valueTextView.backgroundColor = .clear
 
         if verifiedAt != nil {

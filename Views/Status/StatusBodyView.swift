@@ -166,7 +166,6 @@ private extension StatusBodyView {
         stackView.addArrangedSubview(toggleShowContentButton)
 
         contentTextView.adjustsFontForContentSizeCategory = true
-        contentTextView.isScrollEnabled = false
         contentTextView.backgroundColor = .clear
         contentTextView.delegate = self
         stackView.addArrangedSubview(contentTextView)

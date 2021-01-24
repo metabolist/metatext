@@ -89,7 +89,6 @@ private extension AccountView {
         accountLabel.font = .preferredFont(forTextStyle: .subheadline)
         accountLabel.adjustsFontForContentSizeCategory = true
         accountLabel.textColor = .secondaryLabel
-        noteTextView.isScrollEnabled = false
         noteTextView.backgroundColor = .clear
         noteTextView.delegate = self
 

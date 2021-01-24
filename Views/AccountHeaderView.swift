@@ -290,7 +290,6 @@ private extension AccountHeaderView {
         fieldsStackView.layer.cornerRadius = .defaultCornerRadius
 
         baseStackView.addArrangedSubview(noteTextView)
-        noteTextView.isScrollEnabled = false
         noteTextView.delegate = self
 
         baseStackView.addArrangedSubview(followStackView)
