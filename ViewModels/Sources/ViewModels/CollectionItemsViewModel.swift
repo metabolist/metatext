@@ -5,6 +5,7 @@ import Foundation
 import Mastodon
 import ServiceLayer
 
+// swiftlint:disable file_length
 public class CollectionItemsViewModel: ObservableObject {
     @Published public var alertItem: AlertItem?
     public private(set) var nextPageMaxId: String?
@@ -166,6 +167,8 @@ extension CollectionItemsViewModel: CollectionViewModel {
                 .navigation(.collection(collectionService
                                             .navigationService
                                             .timelineService(timeline: .tag(tag.name)))))
+        case let .moreResults(moreResults):
+            eventsSubject.send(.navigation(.searchScope(moreResults.scope)))
         }
     }
 
@@ -274,6 +277,16 @@ extension CollectionItemsViewModel: CollectionViewModel {
             }
 
             let viewModel = TagViewModel(tag: tag)
+
+            cache(viewModel: viewModel, forItem: item)
+
+            return viewModel
+        case let .moreResults(moreResults):
+            if let cachedViewModel = cachedViewModel {
+                return cachedViewModel
+            }
+
+            let viewModel = MoreResultsViewModel(moreResults: moreResults)
 
             cache(viewModel: viewModel, forItem: item)
 
@@ -405,3 +418,4 @@ private extension CollectionItemsViewModel {
         return nil
     }
 }
+// swiftlint:enable file_length

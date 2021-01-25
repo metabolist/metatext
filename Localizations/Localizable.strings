@@ -160,6 +160,9 @@
 "filter.context.thread" = "Conversations";
 "filter.context.account" = "Profiles";
 "filter.context.unknown" = "Unknown context";
+"more-results.accounts" = "More people";
+"more-results.statuses" = "More posts";
+"more-results.tags" = "More hashtags";
 "notifications" = "Notifications";
 "notifications.reblogged-your-status" = "%@ boosted your status";
 "notifications.favourited-your-status" = "%@ favorited your status";

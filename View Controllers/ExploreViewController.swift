@@ -1,5 +1,6 @@
 // Copyright © 2021 Metabolist. All rights reserved.
 
+import Combine
 import UIKit
 import ViewModels
 
@@ -7,6 +8,7 @@ final class ExploreViewController: UICollectionViewController {
     private let viewModel: ExploreViewModel
     private let rootViewModel: RootViewModel
     private let identification: Identification
+    private var cancellables = Set<AnyCancellable>()
 
     init(viewModel: ExploreViewModel, rootViewModel: RootViewModel, identification: Identification) {
         self.viewModel = viewModel
@@ -40,15 +42,29 @@ final class ExploreViewController: UICollectionViewController {
 
         let searchController = UISearchController(searchResultsController: searchResultsController)
 
-        searchController.searchBar.scopeButtonTitles = SearchViewModel.Scope.allCases.map(\.title)
+        searchController.searchBar.scopeButtonTitles = SearchScope.allCases.map(\.title)
         searchController.searchResultsUpdater = self
         navigationItem.searchController = searchController
+
+        viewModel.searchViewModel.events.sink { [weak self] in
+            if case let .navigation(navigation) = $0,
+               case let .searchScope(scope) = navigation {
+                searchController.searchBar.selectedScopeButtonIndex = scope.rawValue
+                self?.updateSearchResults(for: searchController)
+            }
+        }
+        .store(in: &cancellables)
     }
 }
 
 extension ExploreViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-        if let scope = SearchViewModel.Scope(rawValue: searchController.searchBar.selectedScopeButtonIndex) {
+        if let scope = SearchScope(rawValue: searchController.searchBar.selectedScopeButtonIndex) {
+            if scope != viewModel.searchViewModel.scope,
+               let scrollView = searchController.searchResultsController?.view as? UIScrollView {
+                scrollView.setContentOffset(.init(x: 0, y: -scrollView.safeAreaInsets.top), animated: false)
+            }
+
             viewModel.searchViewModel.scope = scope
         }
 

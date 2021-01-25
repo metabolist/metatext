@@ -10,7 +10,8 @@ extension CollectionItem {
         LoadMoreCell.self,
         NotificationListCell.self,
         ConversationListCell.self,
-        TagTableViewCell.self]
+        TagTableViewCell.self,
+        UITableViewCell.self]
 
     var cellClass: AnyClass {
         switch self {
@@ -26,6 +27,8 @@ extension CollectionItem {
             return ConversationListCell.self
         case .tag:
             return TagTableViewCell.self
+        case .moreResults:
+            return UITableViewCell.self
         }
     }
 
@@ -54,6 +57,8 @@ extension CollectionItem {
                 conversation: conversation)
         case let .tag(tag):
             return TagView.estimatedHeight(width: width, tag: tag)
+        case .moreResults:
+            return UITableView.automaticDimension
         }
     }
 }

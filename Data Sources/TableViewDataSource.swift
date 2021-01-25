@@ -30,6 +30,13 @@ final class TableViewDataSource: UITableViewDiffableDataSource<CollectionSection
                 conversationListCell.viewModel = conversationViewModel
             case let (tagTableViewCell as TagTableViewCell, tagViewModel as TagViewModel):
                 tagTableViewCell.viewModel = tagViewModel
+            case let (_, moreResultsViewModel as MoreResultsViewModel):
+                var configuration = cell.defaultContentConfiguration()
+
+                configuration.text = moreResultsViewModel.scope.moreDescription
+
+                cell.contentConfiguration = configuration
+                cell.accessoryType = .disclosureIndicator
             default:
                 break
             }

@@ -3,7 +3,7 @@
 import Foundation
 import ViewModels
 
-extension SearchViewModel.Scope {
+extension SearchScope {
     var title: String {
         switch self {
         case .all:
@@ -14,6 +14,19 @@ extension SearchViewModel.Scope {
             return NSLocalizedString("search.scope.statuses", comment: "")
         case .tags:
             return NSLocalizedString("search.scope.tags", comment: "")
+        }
+    }
+
+    var moreDescription: String? {
+        switch self {
+        case .all:
+            return nil
+        case .accounts:
+            return NSLocalizedString("more-results.accounts", comment: "")
+        case .statuses:
+            return NSLocalizedString("more-results.statuses", comment: "")
+        case .tags:
+            return NSLocalizedString("more-results.tags", comment: "")
         }
     }
 }

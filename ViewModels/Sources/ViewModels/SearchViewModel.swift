@@ -6,7 +6,7 @@ import ServiceLayer
 
 public final class SearchViewModel: CollectionItemsViewModel {
     @Published public var query = ""
-    @Published public var scope = Scope.all
+    @Published public var scope = SearchScope.all
 
     private let searchService: SearchService
     private var cancellables = Set<AnyCancellable>()
@@ -45,20 +45,11 @@ public final class SearchViewModel: CollectionItemsViewModel {
     }
 }
 
-public extension SearchViewModel {
-    enum Scope: Int, CaseIterable {
-        case all
-        case accounts
-        case statuses
-        case tags
-    }
-}
-
 private extension SearchViewModel {
     static let throttleInterval: TimeInterval = 0.5
 }
 
-private extension SearchViewModel.Scope {
+private extension SearchScope {
     var type: Search.SearchType? {
         switch self {
         case .all:

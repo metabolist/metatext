@@ -9,6 +9,7 @@ public enum CollectionItem: Hashable {
     case notification(MastodonNotification, StatusConfiguration?)
     case conversation(Conversation)
     case tag(Tag)
+    case moreResults(MoreResults)
 }
 
 public extension CollectionItem {
@@ -51,6 +52,8 @@ public extension CollectionItem {
             return conversation.id
         case let .tag(tag):
             return tag.name
+        case .moreResults:
+            return nil
         }
     }
 }

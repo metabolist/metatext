@@ -21,12 +21,12 @@ public struct SearchService {
         self.contentDatabase = contentDatabase
         nextPageMaxId = nextPageMaxIdSubject.eraseToAnyPublisher()
         navigationService = NavigationService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
-        sections = resultsSubject.scan(.empty) {
+        sections = resultsSubject.scan((.empty, nil)) {
             let (results, search) = $1
 
-            return search.offset == nil ? results : $0.appending(results)
+            return (search.offset == nil ? results : $0.0.appending(results), search.limit)
         }
-        .flatMap(contentDatabase.publisher(results:)).eraseToAnyPublisher()
+        .flatMap(contentDatabase.publisher(results:limit:)).eraseToAnyPublisher()
     }
 }
 

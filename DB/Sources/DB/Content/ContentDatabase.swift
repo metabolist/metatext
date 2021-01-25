@@ -508,7 +508,8 @@ public extension ContentDatabase {
             .eraseToAnyPublisher()
     }
 
-    func publisher(results: Results) -> AnyPublisher<[CollectionSection], Error> {
+    // swiftlint:disable:next function_body_length
+    func publisher(results: Results, limit: Int?) -> AnyPublisher<[CollectionSection], Error> {
         let accountIds = results.accounts.map(\.id)
         let statusIds = results.statuses.map(\.id)
 
@@ -518,12 +519,18 @@ public extension ContentDatabase {
                 .fetchAll)
             .removeDuplicates()
             .publisher(in: databaseWriter)
-            .map {
-                $0.sorted {
+            .map { infos -> [CollectionItem] in
+                var accounts = infos.sorted {
                     accountIds.firstIndex(of: $0.record.id) ?? 0
                         < accountIds.firstIndex(of: $1.record.id) ?? 0
                 }
                 .map { CollectionItem.account(.init(info: $0)) }
+
+                if let limit = limit, accounts.count >= limit {
+                    accounts.append(.moreResults(.init(scope: .accounts)))
+                }
+
+                return accounts
             }
 
         let statusesPublisher = ValueObservation.tracking(
@@ -532,8 +539,8 @@ public extension ContentDatabase {
                 .fetchAll)
             .removeDuplicates()
             .publisher(in: databaseWriter)
-            .map {
-                $0.sorted {
+            .map { infos -> [CollectionItem] in
+                var statuses = infos.sorted {
                     statusIds.firstIndex(of: $0.record.id) ?? 0
                         < statusIds.firstIndex(of: $1.record.id) ?? 0
                 }
@@ -543,13 +550,25 @@ public extension ContentDatabase {
                         .init(showContentToggled: $0.showContentToggled,
                               showAttachmentsToggled: $0.showAttachmentsToggled))
                 }
+
+                if let limit = limit, statuses.count >= limit {
+                    statuses.append(.moreResults(.init(scope: .statuses)))
+                }
+
+                return statuses
             }
+
+        var hashtags = results.hashtags.map(CollectionItem.tag)
+
+        if let limit = limit, hashtags.count >= limit {
+            hashtags.append(.moreResults(.init(scope: .tags)))
+        }
 
         return accountsPublisher.combineLatest(statusesPublisher)
             .map { accounts, statuses in
                 [.init(items: accounts, titleLocalizedStringKey: "search.scope.accounts"),
                  .init(items: statuses, titleLocalizedStringKey: "search.scope.statuses"),
-                 .init(items: results.hashtags.map(CollectionItem.tag), titleLocalizedStringKey: "search.scope.tags")]
+                 .init(items: hashtags, titleLocalizedStringKey: "search.scope.tags")]
                     .filter { !$0.items.isEmpty }
             }
             .removeDuplicates()

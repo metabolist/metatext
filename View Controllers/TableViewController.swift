@@ -372,6 +372,8 @@ private extension TableViewController {
             }
         case let .url(url):
             present(SFSafariViewController(url: url), animated: true)
+        case .searchScope:
+            break
         case .webfingerStart:
             webfingerIndicatorView.startAnimating()
         case .webfingerEnd:
