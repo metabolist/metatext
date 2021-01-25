@@ -31,13 +31,16 @@ final class ExploreViewController: UICollectionViewController {
 
         navigationItem.title = NSLocalizedString("main-navigation.explore", comment: "")
 
-        let searchController = UISearchController(
-            searchResultsController: TableViewController(
-                viewModel: viewModel.searchViewModel,
-                rootViewModel: rootViewModel,
-                identification: identification,
-                parentNavigationController: navigationController))
+        let searchResultsController = TableViewController(
+            viewModel: viewModel.searchViewModel,
+            rootViewModel: rootViewModel,
+            identification: identification,
+            insetBottom: false,
+            parentNavigationController: navigationController)
 
+        let searchController = UISearchController(searchResultsController: searchResultsController)
+
+        searchController.searchBar.scopeButtonTitles = SearchViewModel.Scope.allCases.map(\.title)
         searchController.searchResultsUpdater = self
         navigationItem.searchController = searchController
     }
@@ -45,6 +48,10 @@ final class ExploreViewController: UICollectionViewController {
 
 extension ExploreViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
+        if let scope = SearchViewModel.Scope(rawValue: searchController.searchBar.selectedScopeButtonIndex) {
+            viewModel.searchViewModel.scope = scope
+        }
+
         viewModel.searchViewModel.query = searchController.searchBar.text ?? ""
     }
 }

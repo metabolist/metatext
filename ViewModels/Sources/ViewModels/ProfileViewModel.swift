@@ -99,10 +99,6 @@ extension ProfileViewModel: CollectionViewModel {
         collectionViewModel.value.nextPageMaxId
     }
 
-    public var preferLastPresentIdOverNextPageMaxId: Bool {
-        collectionViewModel.value.preferLastPresentIdOverNextPageMaxId
-    }
-
     public var canRefresh: Bool { collectionViewModel.value.canRefresh }
 
     public func request(maxId: String?, minId: String?, search: Search?) {
@@ -114,6 +110,10 @@ extension ProfileViewModel: CollectionViewModel {
         }
 
         collectionViewModel.value.request(maxId: maxId, minId: minId, search: nil)
+    }
+
+    public func requestNextPage(fromIndexPath indexPath: IndexPath) {
+        collectionViewModel.value.requestNextPage(fromIndexPath: indexPath)
     }
 
     public func viewedAtTop(indexPath: IndexPath) {

@@ -59,6 +59,15 @@ public class CollectionItemsViewModel: ObservableObject {
     public var updates: AnyPublisher<CollectionUpdate, Never> {
         $lastUpdate.eraseToAnyPublisher()
     }
+
+    public func requestNextPage(fromIndexPath indexPath: IndexPath) {
+        guard let maxId = collectionService.preferLastPresentIdOverNextPageMaxId
+                ? lastUpdate.sections[indexPath.section].items[indexPath.item].itemId
+                : nextPageMaxId
+        else { return }
+
+        request(maxId: maxId, minId: nil, search: nil)
+    }
 }
 
 extension CollectionItemsViewModel: CollectionViewModel {
@@ -77,8 +86,6 @@ extension CollectionItemsViewModel: CollectionViewModel {
     public var loading: AnyPublisher<Bool, Never> { loadingSubject.eraseToAnyPublisher() }
 
     public var events: AnyPublisher<CollectionItemEvent, Never> { eventsSubject.eraseToAnyPublisher() }
-
-    public var preferLastPresentIdOverNextPageMaxId: Bool { collectionService.preferLastPresentIdOverNextPageMaxId }
 
     public var canRefresh: Bool { collectionService.canRefresh }
 

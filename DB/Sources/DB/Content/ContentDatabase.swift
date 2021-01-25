@@ -547,10 +547,12 @@ public extension ContentDatabase {
 
         return accountsPublisher.combineLatest(statusesPublisher)
             .map { accounts, statuses in
-                [.init(items: accounts, titleLocalizedStringKey: "search.accounts"),
-                 .init(items: statuses, titleLocalizedStringKey: "search.statuses"),
-                 .init(items: results.hashtags.map(CollectionItem.tag), titleLocalizedStringKey: "search.tags")]
+                [.init(items: accounts, titleLocalizedStringKey: "search.scope.accounts"),
+                 .init(items: statuses, titleLocalizedStringKey: "search.scope.statuses"),
+                 .init(items: results.hashtags.map(CollectionItem.tag), titleLocalizedStringKey: "search.scope.tags")]
+                    .filter { !$0.items.isEmpty }
             }
+            .removeDuplicates()
             .eraseToAnyPublisher()
     }
 

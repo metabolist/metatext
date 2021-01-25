@@ -21,6 +21,7 @@ class TableViewController: UITableViewController {
     private var cancellables = Set<AnyCancellable>()
     private var cellHeightCaches = [CGFloat: [CollectionItem: CGFloat]]()
     private var shouldKeepPlayingVideoAfterDismissal = false
+    private let insetBottom: Bool
     private weak var parentNavigationController: UINavigationController?
 
     private lazy var dataSource: TableViewDataSource = {
@@ -30,10 +31,12 @@ class TableViewController: UITableViewController {
     init(viewModel: CollectionViewModel,
          rootViewModel: RootViewModel,
          identification: Identification,
+         insetBottom: Bool = true,
          parentNavigationController: UINavigationController? = nil) {
         self.viewModel = viewModel
         self.rootViewModel = rootViewModel
         self.identification = identification
+        self.insetBottom = insetBottom
         self.parentNavigationController = parentNavigationController
 
         super.init(style: .plain)
@@ -50,7 +53,7 @@ class TableViewController: UITableViewController {
         tableView.dataSource = dataSource
         tableView.cellLayoutMarginsFollowReadableWidth = true
         tableView.tableFooterView = UIView()
-        tableView.contentInset.bottom = Self.bottomInset
+        tableView.contentInset.bottom = bottomInset
 
         if viewModel.canRefresh {
             refreshControl = UIRefreshControl()
@@ -105,12 +108,8 @@ class TableViewController: UITableViewController {
 
         if !loading,
            indexPath.section == dataSource.numberOfSections(in: tableView) - 1,
-           indexPath.row == dataSource.tableView(tableView, numberOfRowsInSection: indexPath.section) - 1,
-           let maxId = viewModel.preferLastPresentIdOverNextPageMaxId
-            ? dataSource.itemIdentifier(for: indexPath)?.itemId
-            : viewModel.nextPageMaxId {
-            // TODO: search offset
-            viewModel.request(maxId: maxId, minId: nil, search: nil)
+           indexPath.row == dataSource.tableView(tableView, numberOfRowsInSection: indexPath.section) - 1 {
+            viewModel.requestNextPage(fromIndexPath: indexPath)
         }
 
         if let loadMoreView = cell.contentView as? LoadMoreView {
@@ -239,6 +238,8 @@ private extension TableViewController {
     static let bottomInset: CGFloat = .newStatusButtonDimension + .defaultSpacing * 4
     static let loadingFooterDebounceInterval: TimeInterval = 0.5
 
+    var bottomInset: CGFloat { insetBottom ? Self.bottomInset : 0 }
+
     func setupViewModelBindings() {
         viewModel.title.sink { [weak self] in self?.navigationItem.title = $0 }.store(in: &cancellables)
 
@@ -311,7 +312,7 @@ private extension TableViewController {
                     self.tableView.contentInset.bottom = max(
                         self.tableView.safeAreaLayoutGuide.layoutFrame.height
                             - self.tableView.rectForRow(at: indexPath).height,
-                        Self.bottomInset)
+                        self.bottomInset)
                 }
 
                 self.tableView.scrollToRow(at: indexPath, at: .top, animated: false)

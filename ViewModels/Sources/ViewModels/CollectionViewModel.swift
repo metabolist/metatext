@@ -12,9 +12,9 @@ public protocol CollectionViewModel {
     var loading: AnyPublisher<Bool, Never> { get }
     var events: AnyPublisher<CollectionItemEvent, Never> { get }
     var nextPageMaxId: String? { get }
-    var preferLastPresentIdOverNextPageMaxId: Bool { get }
     var canRefresh: Bool { get }
     func request(maxId: String?, minId: String?, search: Search?)
+    func requestNextPage(fromIndexPath indexPath: IndexPath)
     func viewedAtTop(indexPath: IndexPath)
     func select(indexPath: IndexPath)
     func canSelect(indexPath: IndexPath) -> Bool
