@@ -1,9 +1,6 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
-import DB
 import MastodonAPI
-
-public typealias Timeline = DB.Timeline
 
 extension Timeline {
     var endpoint: StatusesEndpoint {

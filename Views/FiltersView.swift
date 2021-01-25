@@ -1,7 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
+import Mastodon
 import SwiftUI
-import struct Mastodon.Filter
 import ViewModels
 
 struct FiltersView: View {
