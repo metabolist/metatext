@@ -13,7 +13,6 @@ class TableViewController: UITableViewController {
 
     private let viewModel: CollectionViewModel
     private let rootViewModel: RootViewModel
-    private let identityContext: IdentityContext
     private let loadingTableFooterView = LoadingTableFooterView()
     private let webfingerIndicatorView = WebfingerIndicatorView()
     @Published private var loading = false
@@ -30,12 +29,10 @@ class TableViewController: UITableViewController {
 
     init(viewModel: CollectionViewModel,
          rootViewModel: RootViewModel,
-         identityContext: IdentityContext,
          insetBottom: Bool = true,
          parentNavigationController: UINavigationController? = nil) {
         self.viewModel = viewModel
         self.rootViewModel = rootViewModel
-        self.identityContext = identityContext
         self.insetBottom = insetBottom
         self.parentNavigationController = parentNavigationController
 
@@ -130,7 +127,7 @@ class TableViewController: UITableViewController {
 
         return cellHeightCaches[tableView.frame.width]?[item]
             ?? item.estimatedHeight(width: tableView.readableContentGuide.layoutFrame.width,
-                                    identityContext: identityContext)
+                                    identityContext: viewModel.identityContext)
     }
 
     override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
@@ -346,10 +343,9 @@ private extension TableViewController {
             let vc = TableViewController(
                 viewModel: CollectionItemsViewModel(
                     collectionService: collectionService,
-                    identityContext: identityContext),
+                    identityContext: viewModel.identityContext),
                 rootViewModel: rootViewModel,
-                identityContext: identityContext,
-            parentNavigationController: parentNavigationController)
+                parentNavigationController: parentNavigationController)
 
             if let parentNavigationController = parentNavigationController {
                 parentNavigationController.pushViewController(vc, animated: true)
@@ -360,9 +356,9 @@ private extension TableViewController {
             let vc = ProfileViewController(
                 viewModel: ProfileViewModel(
                     profileService: profileService,
-                    identityContext: identityContext),
+                    identityContext: viewModel.identityContext),
                 rootViewModel: rootViewModel,
-                identityContext: identityContext,
+                identityContext: viewModel.identityContext,
                 parentNavigationController: parentNavigationController)
 
             if let parentNavigationController = parentNavigationController {
@@ -420,7 +416,7 @@ private extension TableViewController {
 
     func compose(inReplyToViewModel: StatusViewModel?, redraft: Status?) {
         let newStatusViewModel = rootViewModel.newStatusViewModel(
-            identityContext: identityContext,
+            identityContext: viewModel.identityContext,
             inReplyTo: inReplyToViewModel,
             redraft: redraft)
         let newStatusViewController =  NewStatusViewController(viewModel: newStatusViewModel)

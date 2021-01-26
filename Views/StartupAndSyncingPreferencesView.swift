@@ -4,7 +4,7 @@ import SwiftUI
 import ViewModels
 
 struct StartupAndSyncingPreferencesView: View {
-    @EnvironmentObject var identityContext: IdentityContext
+    @StateObject var identityContext: IdentityContext
 
     var body: some View {
         Form {
@@ -46,8 +46,7 @@ import PreviewViewModels
 
 struct StartupAndSyncingPreferencesView_Previews: PreviewProvider {
     static var previews: some View {
-        StartupAndSyncingPreferencesView()
-            .environmentObject(IdentityContext.preview)
+        StartupAndSyncingPreferencesView(identityContext: .preview)
     }
 }
 #endif

@@ -19,9 +19,9 @@ public final class StatusViewModel: CollectionItemViewModel, AttachmentsRenderin
     @Published public var pollOptionSelections = Set<Int>()
     public var configuration = CollectionItem.StatusConfiguration.default
     public let events: AnyPublisher<AnyPublisher<CollectionItemEvent, Error>, Never>
+    public let identityContext: IdentityContext
 
     private let statusService: StatusService
-    private let identityContext: IdentityContext
     private let eventsSubject = PassthroughSubject<AnyPublisher<CollectionItemEvent, Error>, Never>()
 
     init(statusService: StatusService, identityContext: IdentityContext) {

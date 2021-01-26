@@ -10,8 +10,8 @@ public final class AttachmentViewModel: ObservableObject {
     @Published public var editingDescription: String
     @Published public var editingFocus: Attachment.Meta.Focus
     @Published public private(set) var descriptionRemainingCharacters = AttachmentViewModel.descriptionMaxCharacters
+    public let identityContext: IdentityContext
 
-    private let identityContext: IdentityContext
     private let status: Status?
 
     init(attachment: Attachment, identityContext: IdentityContext, status: Status? = nil) {

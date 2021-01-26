@@ -14,8 +14,7 @@ struct SecondaryNavigationView: View {
             Section {
                 NavigationLink(
                     destination: IdentitiesView(viewModel: .init(identityContext: viewModel.identityContext))
-                        .environmentObject(rootViewModel)
-                        .environmentObject(viewModel.identityContext),
+                        .environmentObject(rootViewModel),
                     label: {
                         HStack {
                             KFImage(viewModel.identityContext.identity.image)
@@ -55,8 +54,7 @@ struct SecondaryNavigationView: View {
             }
             Section {
                 NavigationLink(destination: ListsView(viewModel: .init(identityContext: viewModel.identityContext))
-                                .environmentObject(rootViewModel)
-                                .environmentObject(viewModel.identityContext)) {
+                                .environmentObject(rootViewModel)) {
                     Label("secondary-navigation.lists", systemImage: "scroll")
                 }
                 ForEach([Timeline.favorites, Timeline.bookmarks]) { timeline in
@@ -74,8 +72,7 @@ struct SecondaryNavigationView: View {
             Section {
                 NavigationLink(
                     destination: PreferencesView(viewModel: .init(identityContext: viewModel.identityContext))
-                        .environmentObject(rootViewModel)
-                        .environmentObject(viewModel.identityContext)) {
+                        .environmentObject(rootViewModel)) {
                     Label("secondary-navigation.preferences", systemImage: "gear")
                 }
             }

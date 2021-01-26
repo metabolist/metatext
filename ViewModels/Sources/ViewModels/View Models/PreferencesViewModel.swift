@@ -6,8 +6,7 @@ import ServiceLayer
 public final class PreferencesViewModel: ObservableObject {
     public let handle: String
     public let shouldShowNotificationTypePreferences: Bool
-
-    private let identityContext: IdentityContext
+    public let identityContext: IdentityContext
 
     public init(identityContext: IdentityContext) {
         self.identityContext = identityContext

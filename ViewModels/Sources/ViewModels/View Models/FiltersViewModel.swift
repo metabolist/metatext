@@ -9,8 +9,8 @@ public final class FiltersViewModel: ObservableObject {
     @Published public var activeFilters = [Filter]()
     @Published public var expiredFilters = [Filter]()
     @Published public var alertItem: AlertItem?
+    public let identityContext: IdentityContext
 
-    private let identityContext: IdentityContext
     private var cancellables = Set<AnyCancellable>()
 
     public init(identityContext: IdentityContext) {

@@ -9,9 +9,9 @@ public final class ConversationViewModel: CollectionItemViewModel, ObservableObj
     public let accountViewModels: [AccountViewModel]
     public let statusViewModel: StatusViewModel?
     public let events: AnyPublisher<AnyPublisher<CollectionItemEvent, Error>, Never>
+    public let identityContext: IdentityContext
 
     private let conversationService: ConversationService
-    private let identityContext: IdentityContext
     private let eventsSubject = PassthroughSubject<AnyPublisher<CollectionItemEvent, Error>, Never>()
 
     init(conversationService: ConversationService, identityContext: IdentityContext) {

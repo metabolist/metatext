@@ -9,9 +9,9 @@ public final class NotificationViewModel: CollectionItemViewModel, ObservableObj
     public let accountViewModel: AccountViewModel
     public let statusViewModel: StatusViewModel?
     public let events: AnyPublisher<AnyPublisher<CollectionItemEvent, Error>, Never>
+    public let identityContext: IdentityContext
 
     private let notificationService: NotificationService
-    private let identityContext: IdentityContext
     private let eventsSubject = PassthroughSubject<AnyPublisher<CollectionItemEvent, Error>, Never>()
 
     init(notificationService: NotificationService, identityContext: IdentityContext) {

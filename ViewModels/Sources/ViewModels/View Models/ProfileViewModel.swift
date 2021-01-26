@@ -62,6 +62,10 @@ public extension ProfileViewModel {
 }
 
 extension ProfileViewModel: CollectionViewModel {
+    public var identityContext: IdentityContext {
+        collectionViewModel.value.identityContext
+    }
+
     public var updates: AnyPublisher<CollectionUpdate, Never> {
         collectionViewModel.flatMap(\.updates).eraseToAnyPublisher()
     }

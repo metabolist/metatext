@@ -10,12 +10,12 @@ public final class EditFilterViewModel: ObservableObject {
     @Published public var saving = false
     @Published public var alertItem: AlertItem?
     public let saveCompleted: AnyPublisher<Void, Never>
+    public let identityContext: IdentityContext
 
     public var date: Date {
         didSet { filter.expiresAt = date }
     }
 
-    private let identityContext: IdentityContext
     private let saveCompletedSubject = PassthroughSubject<Void, Never>()
     private var cancellables = Set<AnyCancellable>()
 

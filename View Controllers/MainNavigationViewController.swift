@@ -60,15 +60,13 @@ private extension MainNavigationViewController {
                 rootViewModel: rootViewModel),
             ExploreViewController(
                 viewModel: viewModel.exploreViewModel,
-                rootViewModel: rootViewModel,
-                identityContext: viewModel.identityContext)
+                rootViewModel: rootViewModel)
         ]
 
         if let notificationsViewModel = viewModel.notificationsViewModel {
             let notificationsViewController = TableViewController(
                 viewModel: notificationsViewModel,
-                rootViewModel: rootViewModel,
-                identityContext: viewModel.identityContext)
+                rootViewModel: rootViewModel)
 
             notificationsViewController.tabBarItem = NavigationViewModel.Tab.notifications.tabBarItem
 
@@ -78,8 +76,7 @@ private extension MainNavigationViewController {
         if let conversationsViewModel = viewModel.conversationsViewModel {
             let conversationsViewController = TableViewController(
                 viewModel: conversationsViewModel,
-                rootViewModel: rootViewModel,
-                identityContext: viewModel.identityContext)
+                rootViewModel: rootViewModel)
 
             conversationsViewController.tabBarItem = NavigationViewModel.Tab.messages.tabBarItem
             conversationsViewController.navigationItem.title = NavigationViewModel.Tab.messages.title

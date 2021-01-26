@@ -5,9 +5,9 @@ import ServiceLayer
 
 public final class ExploreViewModel: ObservableObject {
     public let searchViewModel: SearchViewModel
+    public let identityContext: IdentityContext
 
     private let exploreService: ExploreService
-    private let identityContext: IdentityContext
 
     init(service: ExploreService, identityContext: IdentityContext) {
         exploreService = service

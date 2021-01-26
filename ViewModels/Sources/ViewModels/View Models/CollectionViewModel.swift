@@ -4,6 +4,7 @@ import Combine
 import Foundation
 
 public protocol CollectionViewModel {
+    var identityContext: IdentityContext { get }
     var updates: AnyPublisher<CollectionUpdate, Never> { get }
     var title: AnyPublisher<String, Never> { get }
     var titleLocalizationComponents: AnyPublisher<[String], Never> { get }

@@ -8,8 +8,8 @@ import ServiceLayer
 public final class NotificationTypesPreferencesViewModel: ObservableObject {
     @Published public var pushSubscriptionAlerts: PushSubscription.Alerts
     @Published public var alertItem: AlertItem?
+    public let identityContext: IdentityContext
 
-    private let identityContext: IdentityContext
     private var cancellables = Set<AnyCancellable>()
 
     public init(identityContext: IdentityContext) {

@@ -9,8 +9,8 @@ public final class ListsViewModel: ObservableObject {
     @Published public private(set) var lists = [List]()
     @Published public private(set) var creatingList = false
     @Published public var alertItem: AlertItem?
+    public let identityContext: IdentityContext
 
-    private let identityContext: IdentityContext
     private var cancellables = Set<AnyCancellable>()
 
     public init(identityContext: IdentityContext) {

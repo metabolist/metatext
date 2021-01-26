@@ -7,9 +7,9 @@ import ServiceLayer
 
 public struct AccountViewModel: CollectionItemViewModel {
     public let events: AnyPublisher<AnyPublisher<CollectionItemEvent, Error>, Never>
+    public let identityContext: IdentityContext
 
     private let accountService: AccountService
-    private let identityContext: IdentityContext
     private let eventsSubject = PassthroughSubject<AnyPublisher<CollectionItemEvent, Error>, Never>()
 
     init(accountService: AccountService, identityContext: IdentityContext) {

@@ -19,7 +19,6 @@ final class ProfileViewController: TableViewController {
         super.init(
             viewModel: viewModel,
             rootViewModel: rootViewModel,
-            identityContext: identityContext,
             parentNavigationController: parentNavigationController)
     }
 

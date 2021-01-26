@@ -5,21 +5,20 @@ import ViewModels
 
 struct PreferencesView: View {
     @StateObject var viewModel: PreferencesViewModel
-    @EnvironmentObject var identityContext: IdentityContext
 
     var body: some View {
         Form {
             Section(header: Text(viewModel.handle)) {
                 NavigationLink("preferences.posting-reading",
                                destination: PostingReadingPreferencesView(
-                                viewModel: .init(identityContext: identityContext)))
+                                viewModel: .init(identityContext: viewModel.identityContext)))
                 NavigationLink("preferences.filters",
                                destination: FiltersView(
-                                viewModel: .init(identityContext: identityContext)))
+                                viewModel: .init(identityContext: viewModel.identityContext)))
                 if viewModel.shouldShowNotificationTypePreferences {
                     NavigationLink("preferences.notification-types",
                                    destination: NotificationTypesPreferencesView(
-                                    viewModel: .init(identityContext: identityContext)))
+                                    viewModel: .init(identityContext: viewModel.identityContext)))
                 }
                 NavigationLink("preferences.muted-users",
                                destination: TableView(viewModelClosure: viewModel.mutedUsersViewModel)
@@ -33,9 +32,10 @@ struct PreferencesView: View {
             Section(header: Text("preferences.app")) {
                 NavigationLink("preferences.media",
                                destination: MediaPreferencesView(
-                                viewModel: .init(identityContext: identityContext)))
+                                viewModel: .init(identityContext: viewModel.identityContext)))
                 NavigationLink("preferences.startup-and-syncing",
-                               destination: StartupAndSyncingPreferencesView())
+                               destination: StartupAndSyncingPreferencesView(
+                                identityContext: viewModel.identityContext))
             }
         }
         .navigationTitle("preferences")

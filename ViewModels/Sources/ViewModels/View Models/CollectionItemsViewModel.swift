@@ -7,6 +7,7 @@ import ServiceLayer
 
 // swiftlint:disable file_length
 public class CollectionItemsViewModel: ObservableObject {
+    public let identityContext: IdentityContext
     @Published public var alertItem: AlertItem?
     public private(set) var nextPageMaxId: String?
 
@@ -15,7 +16,6 @@ public class CollectionItemsViewModel: ObservableObject {
         maintainScrollPositionItemId: nil,
         shouldAdjustContentInset: false)
     private let collectionService: CollectionService
-    private let identityContext: IdentityContext
     private var viewModelCache = [CollectionItem: (viewModel: CollectionItemViewModel, events: AnyCancellable)]()
     private let eventsSubject = PassthroughSubject<CollectionItemEvent, Never>()
     private let loadingSubject = PassthroughSubject<Bool, Never>()

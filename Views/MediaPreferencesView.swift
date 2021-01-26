@@ -5,8 +5,13 @@ import ViewModels
 
 struct MediaPreferencesView: View {
     @StateObject var viewModel: MediaPreferencesViewModel
-    @EnvironmentObject var identityContext: IdentityContext
+    @StateObject var identityContext: IdentityContext
     @Environment(\.accessibilityReduceMotion) var accessibilityReduceMotion
+
+    init(viewModel: MediaPreferencesViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+        _identityContext = StateObject(wrappedValue: viewModel.identityContext)
+    }
 
     var body: some View {
         Form {

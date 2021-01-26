@@ -5,7 +5,7 @@ import Foundation
 import ServiceLayer
 
 public final class MediaPreferencesViewModel: ObservableObject {
-    private let identityContext: IdentityContext
+    public let identityContext: IdentityContext
 
     public init(identityContext: IdentityContext) {
         self.identityContext = identityContext

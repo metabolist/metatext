@@ -7,8 +7,8 @@ import ServiceLayer
 public final class PostingReadingPreferencesViewModel: ObservableObject {
     @Published public var preferences: Identity.Preferences
     @Published public var alertItem: AlertItem?
+    public let identityContext: IdentityContext
 
-    private let identityContext: IdentityContext
     private var cancellables = Set<AnyCancellable>()
 
     public init(identityContext: IdentityContext) {

@@ -10,8 +10,8 @@ public final class IdentitiesViewModel: ObservableObject {
     @Published public var unauthenticated = [Identity]()
     @Published public var pending = [Identity]()
     @Published public var alertItem: AlertItem?
+    public let identityContext: IdentityContext
 
-    private let identityContext: IdentityContext
     private var cancellables = Set<AnyCancellable>()
 
     public init(identityContext: IdentityContext) {
