@@ -59,7 +59,7 @@ final class StatusView: UIView {
 
 extension StatusView {
     static func estimatedHeight(width: CGFloat,
-                                identification: Identification,
+                                identityContext: IdentityContext,
                                 status: Status,
                                 configuration: CollectionItem.StatusConfiguration) -> CGFloat {
         var height = CGFloat.defaultSpacing * 2
@@ -78,7 +78,7 @@ extension StatusView {
 
         height += StatusBodyView.estimatedHeight(
             width: bodyWidth,
-            identification: identification,
+            identityContext: identityContext,
             status: status,
             configuration: configuration)
             + .compactSpacing

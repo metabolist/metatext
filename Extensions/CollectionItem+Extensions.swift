@@ -32,12 +32,12 @@ extension CollectionItem {
         }
     }
 
-    func estimatedHeight(width: CGFloat, identification: Identification) -> CGFloat {
+    func estimatedHeight(width: CGFloat, identityContext: IdentityContext) -> CGFloat {
         switch self {
         case let .status(status, configuration):
             return StatusView.estimatedHeight(
                 width: width,
-                identification: identification,
+                identityContext: identityContext,
                 status: status,
                 configuration: configuration)
         case let .account(account):
@@ -47,13 +47,13 @@ extension CollectionItem {
         case let .notification(notification, configuration):
             return NotificationView.estimatedHeight(
                 width: width,
-                identification: identification,
+                identityContext: identityContext,
                 notification: notification,
                 configuration: configuration)
         case let .conversation(conversation):
             return ConversationView.estimatedHeight(
                 width: width,
-                identification: identification,
+                identityContext: identityContext,
                 conversation: conversation)
         case let .tag(tag):
             return TagView.estimatedHeight(width: width, tag: tag)

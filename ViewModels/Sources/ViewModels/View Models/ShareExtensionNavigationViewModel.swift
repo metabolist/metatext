@@ -26,7 +26,7 @@ public extension ShareExtensionNavigationViewModel {
         else { throw ShareExtensionError.noAccountFound }
 
         let identityService = try allIdentitiesService.identityService(id: identity.id)
-        let identification = Identification(
+        let identityContext = IdentityContext(
             identity: identity,
             publisher: identityService.identityPublisher(immediate: false)
                 .assignErrorsToAlertItem(to: \.alertItem, on: self),
@@ -35,7 +35,7 @@ public extension ShareExtensionNavigationViewModel {
 
         return NewStatusViewModel(
             allIdentitiesService: allIdentitiesService,
-            identification: identification,
+            identityContext: identityContext,
             environment: environment,
             inReplyTo: nil,
             redraft: nil,

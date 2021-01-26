@@ -7,30 +7,30 @@ public final class PreferencesViewModel: ObservableObject {
     public let handle: String
     public let shouldShowNotificationTypePreferences: Bool
 
-    private let identification: Identification
+    private let identityContext: IdentityContext
 
-    public init(identification: Identification) {
-        self.identification = identification
-        handle = identification.identity.handle
+    public init(identityContext: IdentityContext) {
+        self.identityContext = identityContext
+        handle = identityContext.identity.handle
 
-        shouldShowNotificationTypePreferences = identification.identity.lastRegisteredDeviceToken != nil
+        shouldShowNotificationTypePreferences = identityContext.identity.lastRegisteredDeviceToken != nil
     }
 }
 
 public extension PreferencesViewModel {
     func mutedUsersViewModel() -> CollectionViewModel {
         CollectionItemsViewModel(
-            collectionService: identification.service.service(accountList: .mutes),
-            identification: identification)
+            collectionService: identityContext.service.service(accountList: .mutes),
+            identityContext: identityContext)
     }
 
     func blockedUsersViewModel() -> CollectionViewModel {
         CollectionItemsViewModel(
-            collectionService: identification.service.service(accountList: .blocks),
-            identification: identification)
+            collectionService: identityContext.service.service(accountList: .blocks),
+            identityContext: identityContext)
     }
 
     func domainBlocksViewModel() -> DomainBlocksViewModel {
-        DomainBlocksViewModel(service: identification.service.domainBlocksService())
+        DomainBlocksViewModel(service: identityContext.service.domainBlocksService())
     }
 }

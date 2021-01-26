@@ -82,7 +82,7 @@ final class AttachmentsView: UIView {
 
 extension AttachmentsView {
     static func estimatedHeight(width: CGFloat,
-                                identification: Identification,
+                                identityContext: IdentityContext,
                                 status: Status,
                                 configuration: CollectionItem.StatusConfiguration) -> CGFloat {
         let height: CGFloat

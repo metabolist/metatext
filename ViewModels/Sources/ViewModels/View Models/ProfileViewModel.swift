@@ -16,23 +16,23 @@ final public class ProfileViewModel {
     private let imagePresentationsSubject = PassthroughSubject<URL, Never>()
     private var cancellables = Set<AnyCancellable>()
 
-    public init(profileService: ProfileService, identification: Identification) {
+    public init(profileService: ProfileService, identityContext: IdentityContext) {
         self.profileService = profileService
         imagePresentations = imagePresentationsSubject.eraseToAnyPublisher()
 
         collectionViewModel = CurrentValueSubject(
             CollectionItemsViewModel(
                 collectionService: profileService.timelineService(profileCollection: .statuses),
-                identification: identification))
+                identityContext: identityContext))
 
         profileService.accountServicePublisher
-            .map { AccountViewModel(accountService: $0, identification: identification) }
+            .map { AccountViewModel(accountService: $0, identityContext: identityContext) }
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$accountViewModel)
 
         $collection.dropFirst()
             .map(profileService.timelineService(profileCollection:))
-            .map { CollectionItemsViewModel(collectionService: $0, identification: identification) }
+            .map { CollectionItemsViewModel(collectionService: $0, identityContext: identityContext) }
             .sink { [weak self] in
                 guard let self = self else { return }
 

@@ -15,13 +15,13 @@ public final class EditFilterViewModel: ObservableObject {
         didSet { filter.expiresAt = date }
     }
 
-    private let identification: Identification
+    private let identityContext: IdentityContext
     private let saveCompletedSubject = PassthroughSubject<Void, Never>()
     private var cancellables = Set<AnyCancellable>()
 
-    public init(filter: Filter, identification: Identification) {
+    public init(filter: Filter, identityContext: IdentityContext) {
         self.filter = filter
-        self.identification = identification
+        self.identityContext = identityContext
         date = filter.expiresAt ?? Date()
         saveCompleted = saveCompletedSubject.eraseToAnyPublisher()
     }
@@ -41,7 +41,7 @@ public extension EditFilterViewModel {
     }
 
     func save() {
-        (isNew ? identification.service.createFilter(filter) : identification.service.updateFilter(filter))
+        (isNew ? identityContext.service.createFilter(filter) : identityContext.service.updateFilter(filter))
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .handleEvents(
                 receiveSubscription: { [weak self] _ in self?.saving = true },

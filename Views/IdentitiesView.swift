@@ -105,7 +105,7 @@ import PreviewViewModels
 
 struct IdentitiesView_Previews: PreviewProvider {
     static var previews: some View {
-        IdentitiesView(viewModel: .init(identification: .preview))
+        IdentitiesView(viewModel: .init(identityContext: .preview))
             .environmentObject(RootViewModel.preview)
     }
 }

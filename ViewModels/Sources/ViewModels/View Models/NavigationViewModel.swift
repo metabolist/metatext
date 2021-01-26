@@ -6,7 +6,7 @@ import Mastodon
 import ServiceLayer
 
 public final class NavigationViewModel: ObservableObject {
-    public let identification: Identification
+    public let identityContext: IdentityContext
     public let timelineNavigations: AnyPublisher<Timeline, Never>
 
     @Published public private(set) var recentIdentities = [Identity]()
@@ -15,8 +15,8 @@ public final class NavigationViewModel: ObservableObject {
 
     public lazy var exploreViewModel: ExploreViewModel = {
         let exploreViewModel = ExploreViewModel(
-            service: identification.service.exploreService(),
-            identification: identification)
+            service: identityContext.service.exploreService(),
+            identityContext: identityContext)
 
         // TODO: initial request
 
@@ -24,10 +24,10 @@ public final class NavigationViewModel: ObservableObject {
     }()
 
     public lazy var notificationsViewModel: CollectionViewModel? = {
-        if identification.identity.authenticated {
+        if identityContext.identity.authenticated {
                 let notificationsViewModel = CollectionItemsViewModel(
-                    collectionService: identification.service.notificationsService(),
-                    identification: identification)
+                    collectionService: identityContext.service.notificationsService(),
+                    identityContext: identityContext)
 
                 notificationsViewModel.request(maxId: nil, minId: nil, search: nil)
 
@@ -38,10 +38,10 @@ public final class NavigationViewModel: ObservableObject {
     }()
 
     public lazy var conversationsViewModel: CollectionViewModel? = {
-        if identification.identity.authenticated {
+        if identityContext.identity.authenticated {
                 let conversationsViewModel = CollectionItemsViewModel(
-                    collectionService: identification.service.conversationsService(),
-                    identification: identification)
+                    collectionService: identityContext.service.conversationsService(),
+                    identityContext: identityContext)
 
                 conversationsViewModel.request(maxId: nil, minId: nil, search: nil)
 
@@ -54,15 +54,15 @@ public final class NavigationViewModel: ObservableObject {
     private let timelineNavigationsSubject = PassthroughSubject<Timeline, Never>()
     private var cancellables = Set<AnyCancellable>()
 
-    public init(identification: Identification) {
-        self.identification = identification
+    public init(identityContext: IdentityContext) {
+        self.identityContext = identityContext
         timelineNavigations = timelineNavigationsSubject.eraseToAnyPublisher()
 
-        identification.$identity
+        identityContext.$identity
             .sink { [weak self] _ in self?.objectWillChange.send() }
             .store(in: &cancellables)
 
-        identification.service.recentIdentitiesPublisher()
+        identityContext.service.recentIdentitiesPublisher()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$recentIdentities)
     }
@@ -77,7 +77,7 @@ public extension NavigationViewModel {
     }
 
     var tabs: [Tab] {
-        if identification.identity.authenticated {
+        if identityContext.identity.authenticated {
             return Tab.allCases
         } else {
             return [.timelines, .explore]
@@ -85,7 +85,7 @@ public extension NavigationViewModel {
     }
 
     var timelines: [Timeline] {
-        if identification.identity.authenticated {
+        if identityContext.identity.authenticated {
             return Timeline.authenticatedDefaults
         } else {
             return Timeline.unauthenticatedDefaults
@@ -93,39 +93,39 @@ public extension NavigationViewModel {
     }
 
     func refreshIdentity() {
-        if identification.identity.pending {
-            identification.service.verifyCredentials()
+        if identityContext.identity.pending {
+            identityContext.service.verifyCredentials()
                 .collect()
                 .map { _ in () }
-                .flatMap(identification.service.confirmIdentity)
+                .flatMap(identityContext.service.confirmIdentity)
                 .sink { _ in } receiveValue: { _ in }
                 .store(in: &cancellables)
-        } else if identification.identity.authenticated {
-            identification.service.verifyCredentials()
+        } else if identityContext.identity.authenticated {
+            identityContext.service.verifyCredentials()
                 .assignErrorsToAlertItem(to: \.alertItem, on: self)
                 .sink { _ in }
                 .store(in: &cancellables)
-            identification.service.refreshLists()
+            identityContext.service.refreshLists()
                 .sink { _ in } receiveValue: { _ in }
                 .store(in: &cancellables)
-            identification.service.refreshFilters()
+            identityContext.service.refreshFilters()
                 .sink { _ in } receiveValue: { _ in }
                 .store(in: &cancellables)
-            identification.service.refreshEmojis()
+            identityContext.service.refreshEmojis()
                 .sink { _ in } receiveValue: { _ in }
                 .store(in: &cancellables)
-            identification.service.refreshAnnouncements()
+            identityContext.service.refreshAnnouncements()
                 .sink { _ in } receiveValue: { _ in }
                 .store(in: &cancellables)
 
-            if identification.identity.preferences.useServerPostingReadingPreferences {
-                identification.service.refreshServerPreferences()
+            if identityContext.identity.preferences.useServerPostingReadingPreferences {
+                identityContext.service.refreshServerPreferences()
                     .sink { _ in } receiveValue: { _ in }
                     .store(in: &cancellables)
             }
         }
 
-        identification.service.refreshInstance()
+        identityContext.service.refreshInstance()
             .sink { _ in } receiveValue: { _ in }
             .store(in: &cancellables)
     }
@@ -137,7 +137,7 @@ public extension NavigationViewModel {
 
     func viewModel(timeline: Timeline) -> CollectionItemsViewModel {
         CollectionItemsViewModel(
-            collectionService: identification.service.service(timeline: timeline),
-            identification: identification)
+            collectionService: identityContext.service.service(timeline: timeline),
+            identityContext: identityContext)
     }
 }

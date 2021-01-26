@@ -66,7 +66,7 @@ final class NewStatusViewController: UIViewController {
             activityIndicatorView.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor)
         ])
 
-        setupBarButtonItems(identification: viewModel.identification)
+        setupBarButtonItems(identityContext: viewModel.identityContext)
 
         postButton.primaryAction = UIAction(title: NSLocalizedString("post", comment: "")) { [weak self] _ in
             self?.viewModel.post()
@@ -234,8 +234,8 @@ private extension NewStatusViewController {
         viewModel.$compositionViewModels
             .sink { [weak self] in self?.set(compositionViewModels: $0) }
             .store(in: &cancellables)
-        viewModel.$identification
-            .sink { [weak self] in self?.setupBarButtonItems(identification: $0) }
+        viewModel.$identityContext
+            .sink { [weak self] in self?.setupBarButtonItems(identityContext: $0) }
             .store(in: &cancellables)
         viewModel.$postingState
             .sink { [weak self] in self?.apply(postingState: $0) }
@@ -250,14 +250,14 @@ private extension NewStatusViewController {
             .store(in: &cancellables)
     }
 
-    func setupBarButtonItems(identification: Identification) {
+    func setupBarButtonItems(identityContext: IdentityContext) {
         let cancelButton = UIBarButtonItem(
             systemItem: .cancel,
             primaryAction: UIAction { [weak self] _ in self?.dismiss() })
 
         navigationItem.leftBarButtonItem = cancelButton
         navigationItem.titleView = viewModel.canChangeIdentity
-            ? changeIdentityButton(identification: identification)
+            ? changeIdentityButton(identityContext: identityContext)
             : nil
         navigationItem.rightBarButtonItem = postButton
     }
@@ -371,7 +371,7 @@ private extension NewStatusViewController {
 
         guard let fromView = view.viewWithTag(tag) else { return }
 
-        let emojiPickerViewModel = EmojiPickerViewModel(identification: viewModel.identification)
+        let emojiPickerViewModel = EmojiPickerViewModel(identityContext: viewModel.identityContext)
 
         emojiPickerViewModel.$alertItem.assign(to: \.alertItem, on: viewModel).store(in: &cancellables)
 
@@ -422,14 +422,14 @@ private extension NewStatusViewController {
         }
     }
 
-    func changeIdentityButton(identification: Identification) -> UIButton {
+    func changeIdentityButton(identityContext: IdentityContext) -> UIButton {
         let changeIdentityButton = UIButton()
         let downsampled = KingfisherOptionsInfo.downsampled(
             dimension: .barButtonItemDimension,
             scaleFactor: UIScreen.main.scale)
 
         let menuItems = viewModel.authenticatedIdentities
-            .filter { $0.id != identification.identity.id }
+            .filter { $0.id != identityContext.identity.id }
             .map { identity in
                 UIDeferredMenuElement { completion in
                     let action = UIAction(title: identity.handle) { [weak self] _ in
@@ -451,7 +451,7 @@ private extension NewStatusViewController {
             }
 
         changeIdentityButton.kf.setImage(
-            with: identification.identity.image,
+            with: identityContext.identity.image,
             for: .normal,
             options: downsampled)
         changeIdentityButton.showsMenuAsPrimaryAction = true

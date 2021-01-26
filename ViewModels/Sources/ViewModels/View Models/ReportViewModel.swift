@@ -16,13 +16,13 @@ public final class ReportViewModel: ObservableObject {
     private let eventsSubject = PassthroughSubject<Event, Never>()
     private var cancellables = Set<AnyCancellable>()
 
-    public init(accountService: AccountService, statusService: StatusService? = nil, identification: Identification) {
+    public init(accountService: AccountService, statusService: StatusService? = nil, identityContext: IdentityContext) {
         self.accountService = accountService
         elements = ReportElements(accountId: accountService.account.id)
         events = eventsSubject.eraseToAnyPublisher()
 
         if let statusService = statusService {
-            statusViewModel = StatusViewModel(statusService: statusService, identification: identification)
+            statusViewModel = StatusViewModel(statusService: statusService, identityContext: identityContext)
             elements.statusIds.insert(statusService.status.displayStatus.id)
         } else {
             statusViewModel = nil

@@ -96,7 +96,9 @@ public extension CompositionViewModel {
 
     typealias Id = UUID
 
-    convenience init(eventsSubject: PassthroughSubject<Event, Never>, redraft: Status, identification: Identification) {
+    convenience init(eventsSubject: PassthroughSubject<Event, Never>,
+                     redraft: Status,
+                     identityContext: IdentityContext) {
         self.init(eventsSubject: eventsSubject)
 
         if let text = redraft.text {
@@ -108,7 +110,7 @@ public extension CompositionViewModel {
         sensitive = redraft.sensitive
         displayPoll = redraft.poll != nil
         attachmentViewModels = redraft.mediaAttachments.map {
-            AttachmentViewModel(attachment: $0, identification: identification)
+            AttachmentViewModel(attachment: $0, identityContext: identityContext)
         }
 
         if let poll = redraft.poll {
@@ -209,7 +211,7 @@ extension CompositionViewModel {
                     self.attachmentUpload = AttachmentUpload(progress: progress, data: data, mimeType: mimeType)
                 }
 
-                return parentViewModel.identification.service.uploadAttachment(
+                return parentViewModel.identityContext.service.uploadAttachment(
                     data: data,
                     mimeType: mimeType,
                     progress: progress)
@@ -223,7 +225,7 @@ extension CompositionViewModel {
                 self?.attachmentViewModels.append(
                     AttachmentViewModel(
                         attachment: $0,
-                        identification: parentViewModel.identification))
+                        identityContext: parentViewModel.identityContext))
             }
     }
 }

@@ -8,7 +8,7 @@ import ServiceLayer
 public final class NewStatusViewModel: ObservableObject {
     @Published public var visibility: Status.Visibility
     @Published public private(set) var compositionViewModels = [CompositionViewModel]()
-    @Published public private(set) var identification: Identification
+    @Published public private(set) var identityContext: IdentityContext
     @Published public private(set) var authenticatedIdentities = [Identity]()
     @Published public var canPost = false
     @Published public var canChangeIdentity = true
@@ -24,17 +24,17 @@ public final class NewStatusViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
 
     public init(allIdentitiesService: AllIdentitiesService,
-                identification: Identification,
+                identityContext: IdentityContext,
                 environment: AppEnvironment,
                 inReplyTo: StatusViewModel?,
                 redraft: Status?,
                 extensionContext: NSExtensionContext?) {
         self.allIdentitiesService = allIdentitiesService
-        self.identification = identification
+        self.identityContext = identityContext
         self.environment = environment
         inReplyToViewModel = inReplyTo
         events = eventsSubject.eraseToAnyPublisher()
-        visibility = identification.identity.preferences.postingDefaultVisibility
+        visibility = identityContext.identity.preferences.postingDefaultVisibility
 
         let compositionViewModel: CompositionViewModel
 
@@ -42,7 +42,7 @@ public final class NewStatusViewModel: ObservableObject {
             compositionViewModel = CompositionViewModel(
                 eventsSubject: compositionEventsSubject,
                 redraft: redraft,
-                identification: identification)
+                identityContext: identityContext)
         } else if let extensionContext = extensionContext {
             compositionViewModel = CompositionViewModel(
                 eventsSubject: compositionEventsSubject,
@@ -95,7 +95,7 @@ public extension NewStatusViewModel {
             return
         }
 
-        identification = Identification(
+        identityContext = IdentityContext(
             identity: identity,
             publisher: identityService.identityPublisher(immediate: false)
                 .assignErrorsToAlertItem(to: \.alertItem, on: self),
@@ -161,7 +161,7 @@ private extension NewStatusViewModel {
     }
     func post(viewModel: CompositionViewModel, inReplyToId: Status.Id?) {
         postingState = .posting
-        identification.service.post(statusComponents: viewModel.components(
+        identityContext.service.post(statusComponents: viewModel.components(
                                         inReplyToId: inReplyToId,
                                         visibility: visibility))
             .receive(on: DispatchQueue.main)

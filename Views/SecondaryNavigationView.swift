@@ -13,30 +13,30 @@ struct SecondaryNavigationView: View {
         Form {
             Section {
                 NavigationLink(
-                    destination: IdentitiesView(viewModel: .init(identification: viewModel.identification))
+                    destination: IdentitiesView(viewModel: .init(identityContext: viewModel.identityContext))
                         .environmentObject(rootViewModel)
-                        .environmentObject(viewModel.identification),
+                        .environmentObject(viewModel.identityContext),
                     label: {
                         HStack {
-                            KFImage(viewModel.identification.identity.image)
+                            KFImage(viewModel.identityContext.identity.image)
                                 .downsampled(dimension: .avatarDimension, scaleFactor: displayScale)
                             VStack(alignment: .leading) {
-                                if viewModel.identification.identity.authenticated {
-                                    if let account = viewModel.identification.identity.account {
+                                if viewModel.identityContext.identity.authenticated {
+                                    if let account = viewModel.identityContext.identity.account {
                                         CustomEmojiText(
                                             text: account.displayName,
                                             emojis: account.emojis,
                                             textStyle: .headline)
                                     }
-                                    Text(viewModel.identification.identity.handle)
+                                    Text(viewModel.identityContext.identity.handle)
                                         .font(.subheadline)
                                         .foregroundColor(.secondary)
                                         .lineLimit(1)
                                         .minimumScaleFactor(0.5)
                                 } else {
-                                    Text(viewModel.identification.identity.handle)
+                                    Text(viewModel.identityContext.identity.handle)
                                         .font(.headline)
-                                    if let instance = viewModel.identification.identity.instance {
+                                    if let instance = viewModel.identityContext.identity.instance {
                                         Text(instance.uri)
                                             .font(.subheadline)
                                             .foregroundColor(.secondary)
@@ -54,9 +54,9 @@ struct SecondaryNavigationView: View {
                     })
             }
             Section {
-                NavigationLink(destination: ListsView(viewModel: .init(identification: viewModel.identification))
+                NavigationLink(destination: ListsView(viewModel: .init(identityContext: viewModel.identityContext))
                                 .environmentObject(rootViewModel)
-                                .environmentObject(viewModel.identification)) {
+                                .environmentObject(viewModel.identityContext)) {
                     Label("secondary-navigation.lists", systemImage: "scroll")
                 }
                 ForEach([Timeline.favorites, Timeline.bookmarks]) { timeline in
@@ -73,9 +73,9 @@ struct SecondaryNavigationView: View {
             }
             Section {
                 NavigationLink(
-                    destination: PreferencesView(viewModel: .init(identification: viewModel.identification))
+                    destination: PreferencesView(viewModel: .init(identityContext: viewModel.identityContext))
                         .environmentObject(rootViewModel)
-                        .environmentObject(viewModel.identification)) {
+                        .environmentObject(viewModel.identityContext)) {
                     Label("secondary-navigation.preferences", systemImage: "gear")
                 }
             }
@@ -88,7 +88,7 @@ import PreviewViewModels
 
 struct SecondaryNavigationView_Previews: PreviewProvider {
     static var previews: some View {
-        SecondaryNavigationView(viewModel: NavigationViewModel(identification: .preview))
+        SecondaryNavigationView(viewModel: NavigationViewModel(identityContext: .preview))
             .environmentObject(RootViewModel.preview)
     }
 }

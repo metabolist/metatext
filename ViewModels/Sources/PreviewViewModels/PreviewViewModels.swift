@@ -73,8 +73,8 @@ public extension RootViewModel {
     static let preview = try! RootViewModel(environment: environment) { Empty().eraseToAnyPublisher() }
 }
 
-public extension Identification {
-    static let preview = RootViewModel.preview.navigationViewModel!.identification
+public extension IdentityContext {
+    static let preview = RootViewModel.preview.navigationViewModel!.identityContext
 }
 
 public extension ReportViewModel {
@@ -83,7 +83,7 @@ public extension ReportViewModel {
             account: .preview,
             mastodonAPIClient: .preview,
             contentDatabase: .preview),
-        identification: .preview)
+        identityContext: .preview)
 }
 
 public extension DomainBlocksViewModel {

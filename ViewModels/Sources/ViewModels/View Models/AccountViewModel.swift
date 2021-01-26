@@ -9,19 +9,19 @@ public struct AccountViewModel: CollectionItemViewModel {
     public let events: AnyPublisher<AnyPublisher<CollectionItemEvent, Error>, Never>
 
     private let accountService: AccountService
-    private let identification: Identification
+    private let identityContext: IdentityContext
     private let eventsSubject = PassthroughSubject<AnyPublisher<CollectionItemEvent, Error>, Never>()
 
-    init(accountService: AccountService, identification: Identification) {
+    init(accountService: AccountService, identityContext: IdentityContext) {
         self.accountService = accountService
-        self.identification = identification
+        self.identityContext = identityContext
         events = eventsSubject.eraseToAnyPublisher()
     }
 }
 
 public extension AccountViewModel {
     var headerURL: URL {
-        if !identification.appPreferences.shouldReduceMotion, identification.appPreferences.animateHeaders {
+        if !identityContext.appPreferences.shouldReduceMotion, identityContext.appPreferences.animateHeaders {
             return accountService.account.header
         } else {
             return accountService.account.headerStatic
@@ -56,12 +56,12 @@ public extension AccountViewModel {
 
     var followersCount: Int { accountService.account.followersCount }
 
-    var isSelf: Bool { accountService.account.id == identification.identity.account?.id }
+    var isSelf: Bool { accountService.account.id == identityContext.identity.account?.id }
 
     func avatarURL(profile: Bool = false) -> URL {
-        if !identification.appPreferences.shouldReduceMotion,
-           (identification.appPreferences.animateAvatars == .everywhere
-                || identification.appPreferences.animateAvatars == .profiles && profile) {
+        if !identityContext.appPreferences.shouldReduceMotion,
+           (identityContext.appPreferences.animateAvatars == .everywhere
+                || identityContext.appPreferences.animateAvatars == .profiles && profile) {
             return accountService.account.avatar
         } else {
             return accountService.account.avatarStatic
@@ -91,7 +91,7 @@ public extension AccountViewModel {
     }
 
     func reportViewModel() -> ReportViewModel {
-        ReportViewModel(accountService: accountService, identification: identification)
+        ReportViewModel(accountService: accountService, identityContext: identityContext)
     }
 
     func follow() {

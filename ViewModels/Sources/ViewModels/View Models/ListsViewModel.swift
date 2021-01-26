@@ -10,13 +10,13 @@ public final class ListsViewModel: ObservableObject {
     @Published public private(set) var creatingList = false
     @Published public var alertItem: AlertItem?
 
-    private let identification: Identification
+    private let identityContext: IdentityContext
     private var cancellables = Set<AnyCancellable>()
 
-    public init(identification: Identification) {
-        self.identification = identification
+    public init(identityContext: IdentityContext) {
+        self.identityContext = identityContext
 
-        identification.service.listsPublisher()
+        identityContext.service.listsPublisher()
             .map {
                 $0.compactMap {
                     guard case let .list(list) = $0 else { return nil }
@@ -31,14 +31,14 @@ public final class ListsViewModel: ObservableObject {
 
 public extension ListsViewModel {
     func refreshLists() {
-        identification.service.refreshLists()
+        identityContext.service.refreshLists()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .sink { _ in }
             .store(in: &cancellables)
     }
 
     func createList(title: String) {
-        identification.service.createList(title: title)
+        identityContext.service.createList(title: title)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .handleEvents(
                 receiveSubscription: { [weak self] _ in self?.creatingList = true },
@@ -48,7 +48,7 @@ public extension ListsViewModel {
     }
 
     func delete(list: List) {
-        identification.service.deleteList(id: list.id)
+        identityContext.service.deleteList(id: list.id)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .sink { _ in }
             .store(in: &cancellables)

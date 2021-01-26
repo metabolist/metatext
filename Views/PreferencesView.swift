@@ -5,21 +5,21 @@ import ViewModels
 
 struct PreferencesView: View {
     @StateObject var viewModel: PreferencesViewModel
-    @EnvironmentObject var identification: Identification
+    @EnvironmentObject var identityContext: IdentityContext
 
     var body: some View {
         Form {
             Section(header: Text(viewModel.handle)) {
                 NavigationLink("preferences.posting-reading",
                                destination: PostingReadingPreferencesView(
-                                viewModel: .init(identification: identification)))
+                                viewModel: .init(identityContext: identityContext)))
                 NavigationLink("preferences.filters",
                                destination: FiltersView(
-                                viewModel: .init(identification: identification)))
+                                viewModel: .init(identityContext: identityContext)))
                 if viewModel.shouldShowNotificationTypePreferences {
                     NavigationLink("preferences.notification-types",
                                    destination: NotificationTypesPreferencesView(
-                                    viewModel: .init(identification: identification)))
+                                    viewModel: .init(identityContext: identityContext)))
                 }
                 NavigationLink("preferences.muted-users",
                                destination: TableView(viewModelClosure: viewModel.mutedUsersViewModel)
@@ -33,7 +33,7 @@ struct PreferencesView: View {
             Section(header: Text("preferences.app")) {
                 NavigationLink("preferences.media",
                                destination: MediaPreferencesView(
-                                viewModel: .init(identification: identification)))
+                                viewModel: .init(identityContext: identityContext)))
                 NavigationLink("preferences.startup-and-syncing",
                                destination: StartupAndSyncingPreferencesView())
             }
@@ -47,7 +47,7 @@ import PreviewViewModels
 
 struct PreferencesView_Previews: PreviewProvider {
     static var previews: some View {
-        PreferencesView(viewModel: .init(identification: .preview))
+        PreferencesView(viewModel: .init(identityContext: .preview))
     }
 }
 #endif

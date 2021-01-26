@@ -6,7 +6,7 @@ import ViewModels
 struct MainNavigationView: UIViewControllerRepresentable {
     let viewModelClosure: () -> NavigationViewModel
     @EnvironmentObject var rootViewModel: RootViewModel
-    @EnvironmentObject var identification: Identification
+    @EnvironmentObject var identityContext: IdentityContext
 
     func makeUIViewController(context: Context) -> MainNavigationViewController {
         MainNavigationViewController(
@@ -24,8 +24,8 @@ import PreviewViewModels
 
 struct MainNavigationView_Previews: PreviewProvider {
     static var previews: some View {
-        MainNavigationView { NavigationViewModel(identification: .preview) }
-            .environmentObject(Identification.preview)
+        MainNavigationView { NavigationViewModel(identityContext: .preview) }
+            .environmentObject(IdentityContext.preview)
             .environmentObject(RootViewModel.preview)
     }
 }

@@ -4,7 +4,7 @@ import Combine
 import Foundation
 import ServiceLayer
 
-public final class Identification: ObservableObject {
+public final class IdentityContext: ObservableObject {
     @Published private(set) public var identity: Identity
     @Published public var appPreferences: AppPreferences
     let service: IdentityService

@@ -7,13 +7,13 @@ import ViewModels
 final class ExploreViewController: UICollectionViewController {
     private let viewModel: ExploreViewModel
     private let rootViewModel: RootViewModel
-    private let identification: Identification
+    private let identityContext: IdentityContext
     private var cancellables = Set<AnyCancellable>()
 
-    init(viewModel: ExploreViewModel, rootViewModel: RootViewModel, identification: Identification) {
+    init(viewModel: ExploreViewModel, rootViewModel: RootViewModel, identityContext: IdentityContext) {
         self.viewModel = viewModel
         self.rootViewModel = rootViewModel
-        self.identification = identification
+        self.identityContext = identityContext
 
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
 
@@ -36,7 +36,7 @@ final class ExploreViewController: UICollectionViewController {
         let searchResultsController = TableViewController(
             viewModel: viewModel.searchViewModel,
             rootViewModel: rootViewModel,
-            identification: identification,
+            identityContext: identityContext,
             insetBottom: false,
             parentNavigationController: navigationController)
 

@@ -27,7 +27,7 @@ final class MainNavigationViewController: UITabBarController {
 
         setupViewControllers()
 
-        if viewModel.identification.identity.authenticated {
+        if viewModel.identityContext.identity.authenticated {
             setupNewStatusButton()
         }
 
@@ -61,14 +61,14 @@ private extension MainNavigationViewController {
             ExploreViewController(
                 viewModel: viewModel.exploreViewModel,
                 rootViewModel: rootViewModel,
-                identification: viewModel.identification)
+                identityContext: viewModel.identityContext)
         ]
 
         if let notificationsViewModel = viewModel.notificationsViewModel {
             let notificationsViewController = TableViewController(
                 viewModel: notificationsViewModel,
                 rootViewModel: rootViewModel,
-                identification: viewModel.identification)
+                identityContext: viewModel.identityContext)
 
             notificationsViewController.tabBarItem = NavigationViewModel.Tab.notifications.tabBarItem
 
@@ -79,7 +79,7 @@ private extension MainNavigationViewController {
             let conversationsViewController = TableViewController(
                 viewModel: conversationsViewModel,
                 rootViewModel: rootViewModel,
-                identification: viewModel.identification)
+                identityContext: viewModel.identityContext)
 
             conversationsViewController.tabBarItem = NavigationViewModel.Tab.messages.tabBarItem
             conversationsViewController.navigationItem.title = NavigationViewModel.Tab.messages.title
@@ -100,7 +100,7 @@ private extension MainNavigationViewController {
         let newStatusButtonView = NewStatusButtonView(primaryAction: UIAction { [weak self] _ in
             guard let self = self else { return }
             let newStatusViewModel = self.rootViewModel.newStatusViewModel(
-                identification: self.viewModel.identification)
+                identityContext: self.viewModel.identityContext)
             let newStatusViewController = NewStatusViewController(viewModel: newStatusViewModel)
             let newStatusNavigationController = UINavigationController(rootViewController: newStatusViewController)
 

@@ -10,17 +10,17 @@ public final class FiltersViewModel: ObservableObject {
     @Published public var expiredFilters = [Filter]()
     @Published public var alertItem: AlertItem?
 
-    private let identification: Identification
+    private let identityContext: IdentityContext
     private var cancellables = Set<AnyCancellable>()
 
-    public init(identification: Identification) {
-        self.identification = identification
+    public init(identityContext: IdentityContext) {
+        self.identityContext = identityContext
 
-        identification.service.activeFiltersPublisher()
+        identityContext.service.activeFiltersPublisher()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$activeFilters)
 
-        identification.service.expiredFiltersPublisher()
+        identityContext.service.expiredFiltersPublisher()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$expiredFilters)
     }
@@ -28,14 +28,14 @@ public final class FiltersViewModel: ObservableObject {
 
 public extension FiltersViewModel {
     func refreshFilters() {
-        identification.service.refreshFilters()
+        identityContext.service.refreshFilters()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .sink { _ in }
             .store(in: &cancellables)
     }
 
     func delete(filter: Filter) {
-        identification.service.deleteFilter(id: filter.id)
+        identityContext.service.deleteFilter(id: filter.id)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .sink { _ in }
             .store(in: &cancellables)

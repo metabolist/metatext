@@ -75,14 +75,14 @@ final class EmojiPickerViewController: UIViewController {
     private lazy var defaultSkinToneSelectionMenu: UIMenu = {
         let clearSkinToneAction = UIAction(title: SystemEmoji.SkinTone.noneExample) { [weak self] _ in
             self?.skinToneButton.setTitle(SystemEmoji.SkinTone.noneExample, for: .normal)
-            self?.viewModel.identification.appPreferences.defaultEmojiSkinTone = nil
+            self?.viewModel.identityContext.appPreferences.defaultEmojiSkinTone = nil
             self?.reloadVisibleItems()
         }
 
         let setSkinToneActions = SystemEmoji.SkinTone.allCases.map { [weak self] skinTone in
             UIAction(title: skinTone.example) { _ in
                 self?.skinToneButton.setTitle(skinTone.example, for: .normal)
-                self?.viewModel.identification.appPreferences.defaultEmojiSkinTone = skinTone
+                self?.viewModel.identityContext.appPreferences.defaultEmojiSkinTone = skinTone
                 self?.reloadVisibleItems()
             }
         }
@@ -126,7 +126,7 @@ final class EmojiPickerViewController: UIViewController {
         skinToneButton.translatesAutoresizingMaskIntoConstraints = false
         skinToneButton.titleLabel?.adjustsFontSizeToFitWidth = true
         skinToneButton.setTitle(
-            viewModel.identification.appPreferences.defaultEmojiSkinTone?.example ?? SystemEmoji.SkinTone.noneExample,
+            viewModel.identityContext.appPreferences.defaultEmojiSkinTone?.example ?? SystemEmoji.SkinTone.noneExample,
             for: .normal)
         skinToneButton.showsMenuAsPrimaryAction = true
         skinToneButton.menu = defaultSkinToneSelectionMenu
@@ -241,7 +241,7 @@ private extension EmojiPickerViewController {
 
     func applyingDefaultSkinTone(emoji: PickerEmoji) -> PickerEmoji {
         if case let .system(systemEmoji, inFrequentlyUsed) = emoji,
-           let defaultEmojiSkinTone = viewModel.identification.appPreferences.defaultEmojiSkinTone {
+           let defaultEmojiSkinTone = viewModel.identityContext.appPreferences.defaultEmojiSkinTone {
             return .system(systemEmoji.applying(skinTone: defaultEmojiSkinTone), inFrequentlyUsed: inFrequentlyUsed)
         } else {
             return emoji

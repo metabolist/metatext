@@ -11,10 +11,10 @@ public final class SearchViewModel: CollectionItemsViewModel {
     private let searchService: SearchService
     private var cancellables = Set<AnyCancellable>()
 
-    public init(searchService: SearchService, identification: Identification) {
+    public init(searchService: SearchService, identityContext: IdentityContext) {
         self.searchService = searchService
 
-        super.init(collectionService: searchService, identification: identification)
+        super.init(collectionService: searchService, identityContext: identityContext)
 
         $query.removeDuplicates()
             .throttle(for: .seconds(Self.throttleInterval), scheduler: DispatchQueue.global(), latest: true)

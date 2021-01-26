@@ -9,7 +9,7 @@ struct RootView: View {
     var body: some View {
         if let navigationViewModel = viewModel.navigationViewModel {
             MainNavigationView { navigationViewModel }
-                .id(navigationViewModel.identification.identity.id)
+                .id(navigationViewModel.identityContext.identity.id)
                 .environmentObject(viewModel)
                 .transition(.opacity)
                 .edgesIgnoringSafeArea(.all)

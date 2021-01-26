@@ -28,7 +28,7 @@ final class ConversationView: UIView {
 
 extension ConversationView {
     static func estimatedHeight(width: CGFloat,
-                                identification: Identification,
+                                identityContext: IdentityContext,
                                 conversation: Conversation) -> CGFloat {
         guard let status = conversation.lastStatus else { return UITableView.automaticDimension }
 
@@ -38,7 +38,7 @@ extension ConversationView {
             + UIFont.preferredFont(forTextStyle: .headline).lineHeight
             + StatusBodyView.estimatedHeight(
                 width: bodyWidth,
-                identification: identification,
+                identityContext: identityContext,
                 status: status,
                 configuration: .default)
     }

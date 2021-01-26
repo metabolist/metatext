@@ -60,12 +60,12 @@ public extension RootViewModel {
     }
 
     func newStatusViewModel(
-        identification: Identification,
+        identityContext: IdentityContext,
         inReplyTo: StatusViewModel? = nil,
         redraft: Status? = nil) -> NewStatusViewModel {
         NewStatusViewModel(
             allIdentitiesService: allIdentitiesService,
-            identification: identification,
+            identityContext: identityContext,
             environment: environment,
             inReplyTo: inReplyTo,
             redraft: redraft,
@@ -96,30 +96,30 @@ private extension RootViewModel {
             .share()
 
         identityPublisher
-            .filter { [weak self] in $0.id != self?.navigationViewModel?.identification.identity.id }
+            .filter { [weak self] in $0.id != self?.navigationViewModel?.identityContext.identity.id }
             .map { [weak self] in
                 guard let self = self else { return nil }
 
-                let identification = Identification(
+                let identityContext = IdentityContext(
                     identity: $0,
                     publisher: identityPublisher.eraseToAnyPublisher(),
                     service: identityService,
                     environment: self.environment)
 
-                identification.service.updateLastUse()
+                identityContext.service.updateLastUse()
                     .sink { _ in } receiveValue: { _ in }
                     .store(in: &self.cancellables)
 
                 self.userNotificationService.isAuthorized()
                     .filter { $0 }
                     .zip(self.registerForRemoteNotifications())
-                    .filter { identification.identity.lastRegisteredDeviceToken != $1 }
-                    .map { ($1, identification.identity.pushSubscriptionAlerts) }
-                    .flatMap(identification.service.createPushSubscription(deviceToken:alerts:))
+                    .filter { identityContext.identity.lastRegisteredDeviceToken != $1 }
+                    .map { ($1, identityContext.identity.pushSubscriptionAlerts) }
+                    .flatMap(identityContext.service.createPushSubscription(deviceToken:alerts:))
                     .sink { _ in } receiveValue: { _ in }
                     .store(in: &self.cancellables)
 
-                return NavigationViewModel(identification: identification)
+                return NavigationViewModel(identityContext: identityContext)
             }
             .assign(to: &$navigationViewModel)
     }

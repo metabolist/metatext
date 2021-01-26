@@ -6,13 +6,13 @@ import ViewModels
 
 struct FiltersView: View {
     @StateObject var viewModel: FiltersViewModel
-    @EnvironmentObject var identification: Identification
+    @EnvironmentObject var identityContext: IdentityContext
 
     var body: some View {
         Form {
             Section {
                 NavigationLink(destination: EditFilterView(
-                                viewModel: .init(filter: .new, identification: identification))) {
+                                viewModel: .init(filter: .new, identityContext: identityContext))) {
                     Label("add", systemImage: "plus.circle")
                 }
             }
@@ -37,7 +37,7 @@ private extension FiltersView {
             Section(header: Text(title)) {
                 ForEach(filters) { filter in
                     NavigationLink(destination: EditFilterView(
-                                    viewModel: .init(filter: filter, identification: identification))) {
+                                    viewModel: .init(filter: filter, identityContext: identityContext))) {
                         HStack {
                             Text(filter.phrase)
                             Spacer()
@@ -61,7 +61,7 @@ import PreviewViewModels
 
 struct FiltersView_Previews: PreviewProvider {
     static var previews: some View {
-        FiltersView(viewModel: .init(identification: .preview))
+        FiltersView(viewModel: .init(identityContext: .preview))
     }
 }
 #endif

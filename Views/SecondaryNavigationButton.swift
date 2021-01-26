@@ -29,7 +29,7 @@ final class SecondaryNavigationButton: UIBarButtonItem {
             button.heightAnchor.constraint(equalToConstant: .barButtonItemDimension)
         ])
 
-        viewModel.identification.$identity.sink {
+        viewModel.identityContext.$identity.sink {
             button.kf.setImage(
                 with: $0.image,
                 for: .normal,

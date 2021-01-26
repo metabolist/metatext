@@ -47,7 +47,7 @@ final class CardView: UIView {
 
 extension CardView {
     static func estimatedHeight(width: CGFloat,
-                                identification: Identification,
+                                identityContext: IdentityContext,
                                 status: Status,
                                 configuration: CollectionItem.StatusConfiguration) -> CGFloat {
         if status.displayStatus.card != nil {

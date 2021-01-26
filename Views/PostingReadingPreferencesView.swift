@@ -54,7 +54,7 @@ import PreviewViewModels
 
 struct PostingReadingPreferencesViewView_Previews: PreviewProvider {
     static var previews: some View {
-        PostingReadingPreferencesView(viewModel: .init(identification: .preview))
+        PostingReadingPreferencesView(viewModel: .init(identityContext: .preview))
     }
 }
 #endif

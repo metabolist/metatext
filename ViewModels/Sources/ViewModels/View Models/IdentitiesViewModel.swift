@@ -11,14 +11,14 @@ public final class IdentitiesViewModel: ObservableObject {
     @Published public var pending = [Identity]()
     @Published public var alertItem: AlertItem?
 
-    private let identification: Identification
+    private let identityContext: IdentityContext
     private var cancellables = Set<AnyCancellable>()
 
-    public init(identification: Identification) {
-        self.identification = identification
-        currentIdentityId = identification.identity.id
+    public init(identityContext: IdentityContext) {
+        self.identityContext = identityContext
+        currentIdentityId = identityContext.identity.id
 
-        let identitiesPublisher = identification.service.identitiesPublisher()
+        let identitiesPublisher = identityContext.service.identitiesPublisher()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .share()
 

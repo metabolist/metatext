@@ -22,7 +22,7 @@ final class TimelinesViewController: UIPageViewController {
                 TableViewController(
                     viewModel: viewModel.viewModel(timeline: timeline),
                     rootViewModel: rootViewModel,
-                    identification: viewModel.identification))
+                    identityContext: viewModel.identityContext))
             segmentedControl.insertSegment(withTitle: timeline.title, at: index, animated: false)
         }
 
@@ -77,7 +77,7 @@ final class TimelinesViewController: UIPageViewController {
             let vc = TableViewController(
                 viewModel: self.viewModel.viewModel(timeline: $0),
                 rootViewModel: self.rootViewModel,
-                identification: self.viewModel.identification)
+                identityContext: self.viewModel.identityContext)
 
             vc.navigationItem.title = $0.title
 

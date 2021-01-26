@@ -8,14 +8,14 @@ public final class PostingReadingPreferencesViewModel: ObservableObject {
     @Published public var preferences: Identity.Preferences
     @Published public var alertItem: AlertItem?
 
-    private let identification: Identification
+    private let identityContext: IdentityContext
     private var cancellables = Set<AnyCancellable>()
 
-    public init(identification: Identification) {
-        self.identification = identification
-        preferences = identification.identity.preferences
+    public init(identityContext: IdentityContext) {
+        self.identityContext = identityContext
+        preferences = identityContext.identity.preferences
 
-        identification.$identity
+        identityContext.$identity
             .map(\.preferences)
             .dropFirst()
             .removeDuplicates()
@@ -23,7 +23,7 @@ public final class PostingReadingPreferencesViewModel: ObservableObject {
 
         $preferences
             .dropFirst()
-            .flatMap(identification.service.updatePreferences)
+            .flatMap(identityContext.service.updatePreferences)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .sink { _ in }
             .store(in: &cancellables)

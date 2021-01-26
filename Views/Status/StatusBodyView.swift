@@ -72,7 +72,7 @@ final class StatusBodyView: UIView {
 
 extension StatusBodyView {
     static func estimatedHeight(width: CGFloat,
-                                identification: Identification,
+                                identityContext: IdentityContext,
                                 status: Status,
                                 configuration: CollectionItem.StatusConfiguration) -> CGFloat {
         let contentFont = UIFont.preferredFont(forTextStyle: configuration.isContextParent ? .title3 : .callout)
@@ -86,7 +86,7 @@ extension StatusBodyView {
             contentHeight += .compactSpacing
             contentHeight += CardView.estimatedHeight(
                 width: width,
-                identification: identification,
+                identityContext: identityContext,
                 status: status,
                 configuration: configuration)
         }
@@ -95,7 +95,7 @@ extension StatusBodyView {
             contentHeight += .defaultSpacing
             contentHeight += PollView.estimatedHeight(
                 width: width,
-                identification: identification,
+                identityContext: identityContext,
                 status: status,
                 configuration: configuration)
         }
@@ -109,7 +109,7 @@ extension StatusBodyView {
                 width: width,
                 font: .preferredFont(forTextStyle: .headline))
 
-            if configuration.showContentToggled && !identification.identity.preferences.readingExpandSpoilers {
+            if configuration.showContentToggled && !identityContext.identity.preferences.readingExpandSpoilers {
                 height += .compactSpacing
                 height += contentHeight
             }
@@ -119,7 +119,7 @@ extension StatusBodyView {
             height += .compactSpacing
             height += AttachmentsView.estimatedHeight(
                 width: width,
-                identification: identification,
+                identityContext: identityContext,
                 status: status,
                 configuration: configuration)
         }

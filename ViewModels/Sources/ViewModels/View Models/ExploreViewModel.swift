@@ -7,13 +7,13 @@ public final class ExploreViewModel: ObservableObject {
     public let searchViewModel: SearchViewModel
 
     private let exploreService: ExploreService
-    private let identification: Identification
+    private let identityContext: IdentityContext
 
-    init(service: ExploreService, identification: Identification) {
+    init(service: ExploreService, identityContext: IdentityContext) {
         exploreService = service
-        self.identification = identification
+        self.identityContext = identityContext
         searchViewModel = SearchViewModel(
             searchService: exploreService.searchService(),
-            identification: identification)
+            identityContext: identityContext)
     }
 }

@@ -15,7 +15,7 @@ public class CollectionItemsViewModel: ObservableObject {
         maintainScrollPositionItemId: nil,
         shouldAdjustContentInset: false)
     private let collectionService: CollectionService
-    private let identification: Identification
+    private let identityContext: IdentityContext
     private var viewModelCache = [CollectionItem: (viewModel: CollectionItemViewModel, events: AnyCancellable)]()
     private let eventsSubject = PassthroughSubject<CollectionItemEvent, Never>()
     private let loadingSubject = PassthroughSubject<Bool, Never>()
@@ -27,11 +27,11 @@ public class CollectionItemsViewModel: ObservableObject {
     private var shouldRestorePositionOfLocalLastReadId = false
     private var cancellables = Set<AnyCancellable>()
 
-    public init(collectionService: CollectionService, identification: Identification) {
+    public init(collectionService: CollectionService, identityContext: IdentityContext) {
         self.collectionService = collectionService
-        self.identification = identification
+        self.identityContext = identityContext
         expandAllSubject = CurrentValueSubject(
-            collectionService is ContextService && !identification.identity.preferences.readingExpandSpoilers
+            collectionService is ContextService && !identityContext.identity.preferences.readingExpandSpoilers
                 ? .expand : .hidden)
 
         collectionService.sections
@@ -47,11 +47,11 @@ public class CollectionItemsViewModel: ObservableObject {
 
         if let markerTimeline = collectionService.markerTimeline {
             shouldRestorePositionOfLocalLastReadId =
-                identification.appPreferences.positionBehavior(markerTimeline: markerTimeline) == .rememberPosition
+                identityContext.appPreferences.positionBehavior(markerTimeline: markerTimeline) == .rememberPosition
             lastReadId.compactMap { $0 }
                 .removeDuplicates()
                 .debounce(for: .seconds(Self.lastReadIdDebounceInterval), scheduler: DispatchQueue.global())
-                .flatMap { identification.service.setLastReadId($0, forMarker: markerTimeline) }
+                .flatMap { identityContext.service.setLastReadId($0, forMarker: markerTimeline) }
                 .sink { _ in } receiveValue: { _ in }
                 .store(in: &cancellables)
         }
@@ -94,9 +94,9 @@ extension CollectionItemsViewModel: CollectionViewModel {
         let publisher: AnyPublisher<Never, Error>
 
         if let markerTimeline = collectionService.markerTimeline,
-           identification.appPreferences.positionBehavior(markerTimeline: markerTimeline) == .syncPosition,
+           identityContext.appPreferences.positionBehavior(markerTimeline: markerTimeline) == .syncPosition,
            !hasRequestedUsingMarker {
-            publisher = identification.service.getMarker(markerTimeline)
+            publisher = identityContext.service.getMarker(markerTimeline)
                 .flatMap { [weak self] in
                     self?.collectionService.request(maxId: $0.lastReadId, minId: nil, search: nil)
                         ?? Empty().eraseToAnyPublisher()
@@ -207,7 +207,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
             } else {
                 viewModel = .init(
                     statusService: collectionService.navigationService.statusService(status: status),
-                    identification: identification)
+                    identityContext: identityContext)
                 cache(viewModel: viewModel, forItem: item)
             }
 
@@ -232,7 +232,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
 
             let viewModel = AccountViewModel(
                 accountService: collectionService.navigationService.accountService(account: account),
-                identification: identification)
+                identityContext: identityContext)
 
             cache(viewModel: viewModel, forItem: item)
 
@@ -245,7 +245,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
             } else if let status = notification.status, let statusConfiguration = statusConfiguration {
                 let statusViewModel = StatusViewModel(
                     statusService: collectionService.navigationService.statusService(status: status),
-                    identification: identification)
+                    identityContext: identityContext)
                 statusViewModel.configuration = statusConfiguration
                 viewModel = statusViewModel
                 cache(viewModel: viewModel, forItem: item)
@@ -253,7 +253,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
                 viewModel = NotificationViewModel(
                     notificationService: collectionService.navigationService.notificationService(
                         notification: notification),
-                    identification: identification)
+                    identityContext: identityContext)
                 cache(viewModel: viewModel, forItem: item)
             }
 
@@ -266,7 +266,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
             let viewModel = ConversationViewModel(
                 conversationService: collectionService.navigationService.conversationService(
                     conversation: conversation),
-                identification: identification)
+                identityContext: identityContext)
 
             cache(viewModel: viewModel, forItem: item)
 
@@ -354,7 +354,7 @@ private extension CollectionItemsViewModel {
         guard let maxId = maxId else { return nil }
 
         guard let markerTimeline = collectionService.markerTimeline,
-              identification.appPreferences.positionBehavior(markerTimeline: markerTimeline) == .rememberPosition,
+              identityContext.appPreferences.positionBehavior(markerTimeline: markerTimeline) == .rememberPosition,
               let lastItemId = lastUpdate.sections.last?.items.last?.itemId
         else { return maxId }
 
@@ -367,7 +367,7 @@ private extension CollectionItemsViewModel {
 
         if shouldRestorePositionOfLocalLastReadId,
            let markerTimeline = collectionService.markerTimeline,
-           let localLastReadId = identification.service.getLocalLastReadId(markerTimeline),
+           let localLastReadId = identityContext.service.getLocalLastReadId(markerTimeline),
            newItems.contains(where: { $0.itemId == localLastReadId }) {
             shouldRestorePositionOfLocalLastReadId = false
 

@@ -114,7 +114,7 @@ final class PollView: UIView {
 
 extension PollView {
     static func estimatedHeight(width: CGFloat,
-                                identification: Identification,
+                                identityContext: IdentityContext,
                                 status: Status,
                                 configuration: CollectionItem.StatusConfiguration) -> CGFloat {
         if let poll = status.displayStatus.poll {

@@ -11,12 +11,12 @@ public final class AttachmentViewModel: ObservableObject {
     @Published public var editingFocus: Attachment.Meta.Focus
     @Published public private(set) var descriptionRemainingCharacters = AttachmentViewModel.descriptionMaxCharacters
 
-    private let identification: Identification
+    private let identityContext: IdentityContext
     private let status: Status?
 
-    init(attachment: Attachment, identification: Identification, status: Status? = nil) {
+    init(attachment: Attachment, identityContext: IdentityContext, status: Status? = nil) {
         self.attachment = attachment
-        self.identification = identification
+        self.identityContext = identityContext
         self.status = status
         editingDescription = attachment.description ?? ""
         editingFocus = attachment.meta?.focus ?? .default
@@ -34,12 +34,12 @@ public extension AttachmentViewModel {
     var shouldAutoplay: Bool {
         switch attachment.type {
         case .video:
-            return identification.appPreferences.autoplayVideos == .always
-                || (identification.appPreferences.autoplayVideos == .wifi
+            return identityContext.appPreferences.autoplayVideos == .always
+                || (identityContext.appPreferences.autoplayVideos == .wifi
                         && Self.wifiMonitor.currentPath.status == .satisfied)
         case .gifv:
-            return identification.appPreferences.autoplayGIFs == .always
-                || (identification.appPreferences.autoplayGIFs == .wifi
+            return identityContext.appPreferences.autoplayGIFs == .always
+                || (identityContext.appPreferences.autoplayGIFs == .wifi
                         && Self.wifiMonitor.currentPath.status == .satisfied)
         default: return false
         }
@@ -48,11 +48,13 @@ public extension AttachmentViewModel {
 
 extension AttachmentViewModel {
     func updated() -> AnyPublisher<AttachmentViewModel, Error> {
-        identification.service.updateAttachment(id: attachment.id, description: editingDescription, focus: editingFocus)
+        identityContext.service.updateAttachment(id: attachment.id,
+                                                 description: editingDescription,
+                                                 focus: editingFocus)
             .compactMap { [weak self] in
                 guard let self = self else { return nil }
 
-                return AttachmentViewModel(attachment: $0, identification: self.identification, status: self.status)
+                return AttachmentViewModel(attachment: $0, identityContext: self.identityContext, status: self.status)
             }
             .eraseToAnyPublisher()
     }

@@ -21,12 +21,12 @@ public final class StatusViewModel: CollectionItemViewModel, AttachmentsRenderin
     public let events: AnyPublisher<AnyPublisher<CollectionItemEvent, Error>, Never>
 
     private let statusService: StatusService
-    private let identification: Identification
+    private let identityContext: IdentityContext
     private let eventsSubject = PassthroughSubject<AnyPublisher<CollectionItemEvent, Error>, Never>()
 
-    init(statusService: StatusService, identification: Identification) {
+    init(statusService: StatusService, identityContext: IdentityContext) {
         self.statusService = statusService
-        self.identification = identification
+        self.identityContext = identityContext
         content = statusService.status.displayStatus.content.attributed
         contentEmojis = statusService.status.displayStatus.emojis
         displayName = statusService.status.displayStatus.account.displayName.isEmpty
@@ -40,19 +40,19 @@ public final class StatusViewModel: CollectionItemViewModel, AttachmentsRenderin
             : statusService.status.account.displayName
         rebloggedByDisplayNameEmojis = statusService.status.account.emojis
         attachmentViewModels = statusService.status.displayStatus.mediaAttachments
-            .map { AttachmentViewModel(attachment: $0, identification: identification, status: statusService.status) }
+            .map { AttachmentViewModel(attachment: $0, identityContext: identityContext, status: statusService.status) }
         pollEmojis = statusService.status.displayStatus.poll?.emojis ?? []
         events = eventsSubject.eraseToAnyPublisher()
     }
 }
 
 public extension StatusViewModel {
-    var isMine: Bool { statusService.status.displayStatus.account.id == identification.identity.account?.id }
+    var isMine: Bool { statusService.status.displayStatus.account.id == identityContext.identity.account?.id }
 
     var shouldShowContent: Bool {
         guard spoilerText != "" else { return true }
 
-        if identification.identity.preferences.readingExpandSpoilers {
+        if identityContext.identity.preferences.readingExpandSpoilers {
             return !configuration.showContentToggled
         } else {
             return configuration.showContentToggled
@@ -60,7 +60,7 @@ public extension StatusViewModel {
     }
 
     var shouldShowAttachments: Bool {
-        switch identification.identity.preferences.readingExpandMedia {
+        switch identityContext.identity.preferences.readingExpandMedia {
         case .default, .unknown:
             return !sensitive || configuration.showAttachmentsToggled
         case .showAll:
@@ -71,7 +71,7 @@ public extension StatusViewModel {
     }
 
     var shouldShowHideAttachmentsButton: Bool {
-        sensitive || identification.identity.preferences.readingExpandMedia == .hideAll
+        sensitive || identityContext.identity.preferences.readingExpandMedia == .hideAll
     }
 
     var id: Status.Id { statusService.status.displayStatus.id }
@@ -79,8 +79,8 @@ public extension StatusViewModel {
     var accountName: String { "@".appending(statusService.status.displayStatus.account.acct) }
 
     var avatarURL: URL {
-        if !identification.appPreferences.shouldReduceMotion,
-           identification.appPreferences.animateAvatars == .everywhere {
+        if !identityContext.appPreferences.shouldReduceMotion,
+           identityContext.appPreferences.animateAvatars == .everywhere {
             return statusService.status.displayStatus.account.avatar
         } else {
             return statusService.status.displayStatus.account.avatarStatic
@@ -209,7 +209,7 @@ public extension StatusViewModel {
     }
 
     func reply() {
-        let replyViewModel = Self(statusService: statusService, identification: identification)
+        let replyViewModel = Self(statusService: statusService, identityContext: identityContext)
 
         replyViewModel.configuration = configuration.reply()
 
@@ -269,7 +269,7 @@ public extension StatusViewModel {
     }
 
     func deleteAndRedraft() {
-        let identification = self.identification
+        let identityContext = self.identityContext
 
         eventsSubject.send(
             statusService.deleteAndRedraft()
@@ -279,7 +279,7 @@ public extension StatusViewModel {
                     if let inReplyToStatusService = inReplyToStatusService {
                         inReplyToViewModel = Self(
                             statusService: inReplyToStatusService,
-                            identification: identification)
+                            identityContext: identityContext)
                         inReplyToViewModel?.configuration = CollectionItem.StatusConfiguration.default.reply()
                     } else {
                         inReplyToViewModel = nil
@@ -306,7 +306,7 @@ public extension StatusViewModel {
                             accountService: statusService.navigationService.accountService(
                                 account: statusService.status.displayStatus.account),
                             statusService: statusService,
-                            identification: identification)))
+                            identityContext: identityContext)))
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher())
     }

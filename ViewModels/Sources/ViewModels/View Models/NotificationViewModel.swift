@@ -11,21 +11,21 @@ public final class NotificationViewModel: CollectionItemViewModel, ObservableObj
     public let events: AnyPublisher<AnyPublisher<CollectionItemEvent, Error>, Never>
 
     private let notificationService: NotificationService
-    private let identification: Identification
+    private let identityContext: IdentityContext
     private let eventsSubject = PassthroughSubject<AnyPublisher<CollectionItemEvent, Error>, Never>()
 
-    init(notificationService: NotificationService, identification: Identification) {
+    init(notificationService: NotificationService, identityContext: IdentityContext) {
         self.notificationService = notificationService
-        self.identification = identification
+        self.identityContext = identityContext
         self.accountViewModel = AccountViewModel(
             accountService: notificationService.navigationService.accountService(
                 account: notificationService.notification.account),
-            identification: identification)
+            identityContext: identityContext)
 
         if let status = notificationService.notification.status {
             statusViewModel = StatusViewModel(
                 statusService: notificationService.navigationService.statusService(status: status),
-                identification: identification)
+                identityContext: identityContext)
         } else {
             statusViewModel = nil
         }

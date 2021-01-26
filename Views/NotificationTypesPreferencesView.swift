@@ -29,7 +29,7 @@ import PreviewViewModels
 
 struct NotificationTypesPreferencesView_Previews: PreviewProvider {
     static var previews: some View {
-        NotificationTypesPreferencesView(viewModel: .init(identification: .preview))
+        NotificationTypesPreferencesView(viewModel: .init(identityContext: .preview))
     }
 }
 #endif

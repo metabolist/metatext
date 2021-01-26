@@ -10,7 +10,7 @@ final public class EmojiPickerViewModel: ObservableObject {
     @Published public var query = ""
     @Published public var locale = Locale.current
     @Published public private(set) var emoji = [PickerEmoji.Category: [PickerEmoji]]()
-    public let identification: Identification
+    public let identityContext: IdentityContext
 
     private let emojiPickerService: EmojiPickerService
     @Published private var customEmoji = [PickerEmoji.Category: [PickerEmoji]]()
@@ -20,9 +20,9 @@ final public class EmojiPickerViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
 
     // swiftlint:disable:next function_body_length
-    public init(identification: Identification) {
-        self.identification = identification
-        emojiPickerService = identification.service.emojiPickerService()
+    public init(identityContext: IdentityContext) {
+        self.identityContext = identityContext
+        emojiPickerService = identityContext.service.emojiPickerService()
 
         emojiPickerService.customEmojiPublisher()
             .receive(on: DispatchQueue.main)

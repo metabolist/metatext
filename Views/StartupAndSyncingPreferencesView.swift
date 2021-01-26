@@ -4,13 +4,13 @@ import SwiftUI
 import ViewModels
 
 struct StartupAndSyncingPreferencesView: View {
-    @EnvironmentObject var identification: Identification
+    @EnvironmentObject var identityContext: IdentityContext
 
     var body: some View {
         Form {
             Section(header: Text("preferences.startup-and-syncing.home-timeline")) {
                 Picker("preferences.startup-and-syncing.position-on-startup",
-                       selection: $identification.appPreferences.homeTimelineBehavior) {
+                       selection: $identityContext.appPreferences.homeTimelineBehavior) {
                     ForEach(AppPreferences.PositionBehavior.allCases) { option in
                         Text(option.localizedStringKey).tag(option)
                     }
@@ -18,7 +18,7 @@ struct StartupAndSyncingPreferencesView: View {
             }
             Section(header: Text("preferences.startup-and-syncing.notifications-tab")) {
                 Picker("preferences.startup-and-syncing.position-on-startup",
-                       selection: $identification.appPreferences.notificationsTabBehavior) {
+                       selection: $identityContext.appPreferences.notificationsTabBehavior) {
                     ForEach(AppPreferences.PositionBehavior.allCases) { option in
                         Text(option.localizedStringKey).tag(option)
                     }
@@ -47,7 +47,7 @@ import PreviewViewModels
 struct StartupAndSyncingPreferencesView_Previews: PreviewProvider {
     static var previews: some View {
         StartupAndSyncingPreferencesView()
-            .environmentObject(Identification.preview)
+            .environmentObject(IdentityContext.preview)
     }
 }
 #endif

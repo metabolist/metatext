@@ -175,7 +175,7 @@ private extension CompositionView {
             }
             .store(in: &cancellables)
 
-        parentViewModel.$identification.map(\.identity.image)
+        parentViewModel.$identityContext.map(\.identity.image)
             .sink { [weak self] in self?.avatarImageView.kf.setImage(with: $0) }
             .store(in: &cancellables)
 

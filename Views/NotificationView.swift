@@ -32,7 +32,7 @@ final class NotificationView: UIView {
 
 extension NotificationView {
     static func estimatedHeight(width: CGFloat,
-                                identification: Identification,
+                                identityContext: IdentityContext,
                                 notification: MastodonNotification,
                                 configuration: CollectionItem.StatusConfiguration?) -> CGFloat {
         let bodyWidth = width - .defaultSpacing - .avatarDimension
@@ -44,7 +44,7 @@ extension NotificationView {
         if let status = notification.status {
             height += StatusBodyView.estimatedHeight(
                 width: bodyWidth,
-                identification: identification,
+                identityContext: identityContext,
                 status: status,
                 configuration: configuration ?? .default)
         } else {
