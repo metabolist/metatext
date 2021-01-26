@@ -26,6 +26,7 @@ public extension MastodonNotification {
         case favourite
         case poll
         case followRequest = "follow_request"
+        case status
         case unknown
 
         public static var unknownCase: Self { .unknown }

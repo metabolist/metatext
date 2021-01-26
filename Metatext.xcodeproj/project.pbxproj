@@ -96,6 +96,7 @@
 		D08E52EF257D757100FA2C5F /* CompositionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08E52ED257D757100FA2C5F /* CompositionView.swift */; };
 		D08E52F8257D78BE00FA2C5F /* ViewConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EA59472522B8B600804347 /* ViewConstants.swift */; };
 		D097F41B25BE3E1A00859F2C /* SearchScope+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D097F41A25BE3E1A00859F2C /* SearchScope+Extensions.swift */; };
+		D097F4C125BFA04C00859F2C /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D097F4C025BFA04C00859F2C /* NotificationsViewController.swift */; };
 		D0A1F4F7252E7D4B004435BF /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A1F4F6252E7D4B004435BF /* TableViewDataSource.swift */; };
 		D0A7AC7325748BFF00E4E8AB /* ReportStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A7AC7225748BFF00E4E8AB /* ReportStatusView.swift */; };
 		D0B32F50250B373600311912 /* RegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B32F4F250B373600311912 /* RegistrationView.swift */; };
@@ -270,6 +271,7 @@
 		D08E52D1257C811200FA2C5F /* ShareExtensionError+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ShareExtensionError+Extensions.swift"; sourceTree = "<group>"; };
 		D08E52ED257D757100FA2C5F /* CompositionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionView.swift; sourceTree = "<group>"; };
 		D097F41A25BE3E1A00859F2C /* SearchScope+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchScope+Extensions.swift"; sourceTree = "<group>"; };
+		D097F4C025BFA04C00859F2C /* NotificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
 		D0A1F4F6252E7D4B004435BF /* TableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewDataSource.swift; sourceTree = "<group>"; };
 		D0A7AC7225748BFF00E4E8AB /* ReportStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportStatusView.swift; sourceTree = "<group>"; };
 		D0AD03552505814D0085A466 /* Base16 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Base16; sourceTree = "<group>"; };
@@ -570,6 +572,7 @@
 				D08B8D3C253F929E00B1EBEF /* ImageViewController.swift */,
 				D035F86825B7F2ED00DC75ED /* MainNavigationViewController.swift */,
 				D0FCC104259C4E61000B67DF /* NewStatusViewController.swift */,
+				D097F4C025BFA04C00859F2C /* NotificationsViewController.swift */,
 				D06BC5E525202AD90079541D /* ProfileViewController.swift */,
 				D0F0B12D251A97E400942152 /* TableViewController.swift */,
 				D035F87C25B7F61600DC75ED /* TimelinesViewController.swift */,
@@ -940,6 +943,7 @@
 				D0D2AC6725BD0484003D5DF2 /* LineChartView.swift in Sources */,
 				D0A7AC7325748BFF00E4E8AB /* ReportStatusView.swift in Sources */,
 				D0C7D4C324F7616A001EBDBB /* MetatextApp.swift in Sources */,
+				D097F4C125BFA04C00859F2C /* NotificationsViewController.swift in Sources */,
 				D0E1F583251F13EC00D45315 /* WebfingerIndicatorView.swift in Sources */,
 				D0BEB20524FA1107001B0F04 /* FiltersView.swift in Sources */,
 				D035F88725B8016000DC75ED /* NavigationViewModel+Extensions.swift in Sources */,

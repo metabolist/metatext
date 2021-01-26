@@ -575,10 +575,12 @@ public extension ContentDatabase {
             .eraseToAnyPublisher()
     }
 
-    func notificationsPublisher() -> AnyPublisher<[CollectionSection], Error> {
+    func notificationsPublisher(
+        excludeTypes: Set<MastodonNotification.NotificationType>) -> AnyPublisher<[CollectionSection], Error> {
         ValueObservation.tracking(
             NotificationInfo.request(
-                NotificationRecord.order(NotificationRecord.Columns.id.desc)).fetchAll)
+                NotificationRecord.order(NotificationRecord.Columns.id.desc)
+                    .filter(!excludeTypes.map(\.rawValue).contains(NotificationRecord.Columns.type))).fetchAll)
             .removeDuplicates()
             .publisher(in: databaseWriter)
             .map { [.init(items: $0.map {

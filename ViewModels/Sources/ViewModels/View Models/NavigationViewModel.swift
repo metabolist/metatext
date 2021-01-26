@@ -23,20 +23,6 @@ public final class NavigationViewModel: ObservableObject {
         return exploreViewModel
     }()
 
-    public lazy var notificationsViewModel: CollectionViewModel? = {
-        if identityContext.identity.authenticated {
-                let notificationsViewModel = CollectionItemsViewModel(
-                    collectionService: identityContext.service.notificationsService(),
-                    identityContext: identityContext)
-
-                notificationsViewModel.request(maxId: nil, minId: nil, search: nil)
-
-            return notificationsViewModel
-        } else {
-            return nil
-        }
-    }()
-
     public lazy var conversationsViewModel: CollectionViewModel? = {
         if identityContext.identity.authenticated {
                 let conversationsViewModel = CollectionItemsViewModel(
@@ -139,5 +125,15 @@ public extension NavigationViewModel {
         CollectionItemsViewModel(
             collectionService: identityContext.service.service(timeline: timeline),
             identityContext: identityContext)
+    }
+
+    func notificationsViewModel(excludeTypes: Set<MastodonNotification.NotificationType>) -> CollectionItemsViewModel {
+        let viewModel = CollectionItemsViewModel(
+            collectionService: identityContext.service.notificationsService(excludeTypes: excludeTypes),
+            identityContext: identityContext)
+
+        viewModel.request(maxId: nil, minId: nil, search: nil)
+
+        return viewModel
     }
 }

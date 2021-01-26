@@ -223,6 +223,8 @@ extension MastodonNotification.NotificationType {
             return "star.fill"
         case .poll:
             return "chart.bar.doc.horizontal"
+        case .status:
+            return "house"
         case .mention, .unknown:
             return "at"
         }

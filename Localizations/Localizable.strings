@@ -92,6 +92,8 @@
 "main-navigation.explore" = "Explore";
 "main-navigation.notifications" = "Notifications";
 "main-navigation.conversations" = "Messages";
+"notifications.all" = "All";
+"notifications.mentions" = "Mentions";
 "ok" = "OK";
 "pending.pending-confirmation" = "Your account is pending confirmation";
 "post" = "Post";

@@ -11,18 +11,22 @@ public struct NotificationsService {
     public let nextPageMaxId: AnyPublisher<String, Never>
     public let navigationService: NavigationService
 
+    private let excludeTypes: Set<MastodonNotification.NotificationType>
     private let mastodonAPIClient: MastodonAPIClient
     private let contentDatabase: ContentDatabase
     private let nextPageMaxIdSubject: CurrentValueSubject<String, Never>
 
-    init(mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
+    init(excludeTypes: Set<MastodonNotification.NotificationType>,
+         mastodonAPIClient: MastodonAPIClient,
+         contentDatabase: ContentDatabase) {
+        self.excludeTypes = excludeTypes
         self.mastodonAPIClient = mastodonAPIClient
         self.contentDatabase = contentDatabase
 
         let nextPageMaxIdSubject = CurrentValueSubject<String, Never>(String(Int.max))
 
         self.nextPageMaxIdSubject  = nextPageMaxIdSubject
-        sections = contentDatabase.notificationsPublisher()
+        sections = contentDatabase.notificationsPublisher(excludeTypes: excludeTypes)
             .handleEvents(receiveOutput: {
                 guard case let .notification(notification, _) = $0.last?.items.last,
                       notification.id < nextPageMaxIdSubject.value
@@ -37,10 +41,12 @@ public struct NotificationsService {
 }
 
 extension NotificationsService: CollectionService {
-    public var markerTimeline: Marker.Timeline? { .notifications }
+    public var markerTimeline: Marker.Timeline? { excludeTypes.isEmpty ? .notifications : nil }
 
     public func request(maxId: String?, minId: String?, search: Search?) -> AnyPublisher<Never, Error> {
-        mastodonAPIClient.pagedRequest(NotificationsEndpoint.notifications, maxId: maxId, minId: minId)
+        mastodonAPIClient.pagedRequest(NotificationsEndpoint.notifications(excludeTypes: excludeTypes),
+                                       maxId: maxId,
+                                       minId: minId)
             .handleEvents(receiveOutput: {
                 guard let maxId = $0.info.maxId, maxId < nextPageMaxIdSubject.value else { return }
 

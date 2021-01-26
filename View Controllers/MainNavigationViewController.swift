@@ -63,14 +63,8 @@ private extension MainNavigationViewController {
                 rootViewModel: rootViewModel)
         ]
 
-        if let notificationsViewModel = viewModel.notificationsViewModel {
-            let notificationsViewController = TableViewController(
-                viewModel: notificationsViewModel,
-                rootViewModel: rootViewModel)
-
-            notificationsViewController.tabBarItem = NavigationViewModel.Tab.notifications.tabBarItem
-
-            controllers.append(notificationsViewController)
+        if viewModel.identityContext.identity.authenticated {
+            controllers.append(NotificationsViewController(viewModel: viewModel, rootViewModel: rootViewModel))
         }
 
         if let conversationsViewModel = viewModel.conversationsViewModel {

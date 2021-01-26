@@ -5,7 +5,7 @@ import HTTP
 import Mastodon
 
 public enum NotificationsEndpoint {
-    case notifications
+    case notifications(excludeTypes: Set<MastodonNotification.NotificationType>)
 }
 
 extension NotificationsEndpoint: Endpoint {
@@ -13,6 +13,13 @@ extension NotificationsEndpoint: Endpoint {
 
     public var pathComponentsInContext: [String] {
         ["notifications"]
+    }
+
+    public var queryParameters: [URLQueryItem] {
+        switch self {
+        case let .notifications(excludeTypes):
+            return Array(excludeTypes).map { URLQueryItem(name: "exclude_types[]", value: $0.rawValue) }
+        }
     }
 
     public var method: HTTPMethod {
