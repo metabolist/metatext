@@ -92,7 +92,8 @@ public extension IdentityDatabase {
                 avatarStatic: account.avatarStatic,
                 header: account.header,
                 headerStatic: account.headerStatic,
-                emojis: account.emojis)
+                emojis: account.emojis,
+                followRequestCount: account.source?.followRequestsCount ?? 0)
                 .save)
             .ignoreOutput()
             .eraseToAnyPublisher()

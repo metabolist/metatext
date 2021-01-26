@@ -68,6 +68,22 @@ struct SecondaryNavigationView: View {
                         }
                     }
                 }
+                if let followRequestCount = viewModel.identityContext.identity.account?.followRequestCount,
+                   followRequestCount > 0 {
+                    Button {
+                        viewModel.navigateToFollowerRequests()
+                    } label: {
+                        Label {
+                            HStack {
+                                Text("follow-requests").foregroundColor(.primary)
+                                Spacer()
+                                Text(verbatim: String(followRequestCount))
+                            }
+                        } icon: {
+                            Image(systemName: "person.badge.plus")
+                        }
+                    }
+                }
             }
             Section {
                 NavigationLink(

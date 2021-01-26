@@ -11,6 +11,7 @@ public enum AccountsEndpoint {
     case blocks
     case accountsFollowers(id: Account.Id)
     case accountsFollowing(id: Account.Id)
+    case followRequests
 }
 
 extension AccountsEndpoint: Endpoint {
@@ -20,7 +21,7 @@ extension AccountsEndpoint: Endpoint {
         switch self {
         case .rebloggedBy, .favouritedBy:
             return defaultContext + ["statuses"]
-        case .mutes, .blocks:
+        case .mutes, .blocks, .followRequests:
             return defaultContext
         case .accountsFollowers, .accountsFollowing:
             return defaultContext + ["accounts"]
@@ -41,6 +42,8 @@ extension AccountsEndpoint: Endpoint {
             return [id, "followers"]
         case let .accountsFollowing(id):
             return [id, "following"]
+        case .followRequests:
+            return ["follow_requests"]
         }
     }
 

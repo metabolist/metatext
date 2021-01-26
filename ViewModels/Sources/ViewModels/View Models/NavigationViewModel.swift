@@ -8,6 +8,7 @@ import ServiceLayer
 public final class NavigationViewModel: ObservableObject {
     public let identityContext: IdentityContext
     public let timelineNavigations: AnyPublisher<Timeline, Never>
+    public let followRequestNavigations: AnyPublisher<CollectionViewModel, Never>
 
     @Published public private(set) var recentIdentities = [Identity]()
     @Published public var presentingSecondaryNavigation = false
@@ -38,11 +39,13 @@ public final class NavigationViewModel: ObservableObject {
     }()
 
     private let timelineNavigationsSubject = PassthroughSubject<Timeline, Never>()
+    private let followRequestNavigationsSubject = PassthroughSubject<CollectionViewModel, Never>()
     private var cancellables = Set<AnyCancellable>()
 
     public init(identityContext: IdentityContext) {
         self.identityContext = identityContext
         timelineNavigations = timelineNavigationsSubject.eraseToAnyPublisher()
+        followRequestNavigations = followRequestNavigationsSubject.eraseToAnyPublisher()
 
         identityContext.$identity
             .sink { [weak self] _ in self?.objectWillChange.send() }
@@ -119,6 +122,17 @@ public extension NavigationViewModel {
     func navigate(timeline: Timeline) {
         presentingSecondaryNavigation = false
         timelineNavigationsSubject.send(timeline)
+    }
+
+    func navigateToFollowerRequests() {
+        let followRequestsViewModel = CollectionItemsViewModel(
+            collectionService: identityContext.service.service(
+                accountList: .followRequests,
+                titleComponents: ["follow-requests"]),
+            identityContext: identityContext)
+
+        presentingSecondaryNavigation = false
+        followRequestNavigationsSubject.send(followRequestsViewModel)
     }
 
     func viewModel(timeline: Timeline) -> CollectionItemsViewModel {

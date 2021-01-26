@@ -37,6 +37,7 @@ public extension Identity {
         public let header: URL
         public let headerStatic: URL
         public let emojis: [Emoji]
+        public let followRequestCount: Int
     }
 
     struct Preferences: Codable, Hashable {

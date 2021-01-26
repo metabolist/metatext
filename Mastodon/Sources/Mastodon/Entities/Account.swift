@@ -3,12 +3,6 @@
 import Foundation
 
 public final class Account: Codable, Identifiable {
-    public struct Field: Codable, Hashable {
-        public let name: String
-        public let value: HTML
-        public let verifiedAt: Date?
-    }
-
     public let id: Id
     public let username: String
     public let acct: String
@@ -29,6 +23,7 @@ public final class Account: Codable, Identifiable {
     @DecodableDefault.False public private(set) var bot: Bool
     @DecodableDefault.False public private(set) var discoverable: Bool
     public var moved: Account?
+    public var source: Source?
 
     public init(id: Id,
                 username: String,
@@ -75,6 +70,21 @@ public final class Account: Codable, Identifiable {
 
 public extension Account {
     typealias Id = String
+
+    struct Field: Codable, Hashable {
+        public let name: String
+        public let value: HTML
+        public let verifiedAt: Date?
+    }
+
+    struct Source: Codable, Hashable {
+        public let note: String?
+        public let fields: [Field]
+        public let privacy: Status.Visibility?
+        public let sensitive: Bool?
+        public let language: String?
+        public let followRequestsCount: Int?
+    }
 }
 
 extension Account: Hashable {

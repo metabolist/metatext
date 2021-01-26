@@ -14,13 +14,20 @@ public enum RelationshipEndpoint {
     case accountsPin(id: Account.Id)
     case accountsUnpin(id: Account.Id)
     case note(String, id: Account.Id)
+    case acceptFollowRequest(id: Account.Id)
+    case rejectFollowRequest(id: Account.Id)
 }
 
 extension RelationshipEndpoint: Endpoint {
     public typealias ResultType = Relationship
 
     public var context: [String] {
-        defaultContext + ["accounts"]
+        switch self {
+        case .acceptFollowRequest, .rejectFollowRequest:
+            return defaultContext + ["follow_requests"]
+        default:
+            return defaultContext + ["accounts"]
+        }
     }
 
     public var pathComponentsInContext: [String] {
@@ -43,6 +50,10 @@ extension RelationshipEndpoint: Endpoint {
             return [id, "unpin"]
         case let .note(_, id):
             return [id, "note"]
+        case let .acceptFollowRequest(id):
+            return [id, "authorize"]
+        case let .rejectFollowRequest(id):
+            return [id, "reject"]
         }
     }
 

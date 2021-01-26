@@ -92,6 +92,14 @@ public extension AccountService {
         relationshipAction(.note(note, id: account.id))
     }
 
+    func acceptFollowRequest() -> AnyPublisher<Never, Error> {
+        relationshipAction(.acceptFollowRequest(id: account.id))
+    }
+
+    func rejectFollowRequest() -> AnyPublisher<Never, Error> {
+        relationshipAction(.rejectFollowRequest(id: account.id))
+    }
+
     func report(_ elements: ReportElements) -> AnyPublisher<Never, Error> {
         mastodonAPIClient.request(ReportEndpoint.create(elements)).ignoreOutput().eraseToAnyPublisher()
     }

@@ -82,6 +82,15 @@ final class TimelinesViewController: UIPageViewController {
             self.show(vc, sender: self)
         }
         .store(in: &cancellables)
+
+        viewModel.followRequestNavigations.sink { [weak self] in
+            guard let self = self else { return }
+
+            let vc = TableViewController(viewModel: $0, rootViewModel: self.rootViewModel)
+
+            self.show(vc, sender: self)
+        }
+        .store(in: &cancellables)
     }
 }
 

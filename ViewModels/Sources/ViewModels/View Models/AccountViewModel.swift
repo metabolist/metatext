@@ -5,9 +5,10 @@ import Foundation
 import Mastodon
 import ServiceLayer
 
-public struct AccountViewModel: CollectionItemViewModel {
+public final class AccountViewModel: CollectionItemViewModel, ObservableObject {
     public let events: AnyPublisher<AnyPublisher<CollectionItemEvent, Error>, Never>
     public let identityContext: IdentityContext
+    public internal(set) var configuration = CollectionItem.AccountConfiguration.withNote
 
     private let accountService: AccountService
     private let eventsSubject = PassthroughSubject<AnyPublisher<CollectionItemEvent, Error>, Never>()
@@ -136,6 +137,30 @@ public extension AccountViewModel {
 
     func set(note: String) {
         ignorableOutputEvent(accountService.set(note: note))
+    }
+
+    func acceptFollowRequest() {
+        ignorableOutputEvent(
+            accountService.acceptFollowRequest()
+                .collect()
+                .flatMap { [weak self] _ -> AnyPublisher<Never, Error> in
+                    guard let self = self else { return Empty().eraseToAnyPublisher() }
+
+                    return self.identityContext.service.verifyCredentials()
+                }
+                .eraseToAnyPublisher())
+    }
+
+    func rejectFollowRequest() {
+        ignorableOutputEvent(
+            accountService.rejectFollowRequest()
+                .collect()
+                .flatMap { [weak self] _ -> AnyPublisher<Never, Error> in
+                    guard let self = self else { return Empty().eraseToAnyPublisher() }
+
+                    return self.identityContext.service.verifyCredentials()
+                }
+                .eraseToAnyPublisher())
     }
 
     func domainBlock() {

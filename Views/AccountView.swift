@@ -3,12 +3,15 @@
 import Kingfisher
 import Mastodon
 import UIKit
+import ViewModels
 
 final class AccountView: UIView {
     let avatarImageView = AnimatedImageView()
     let displayNameLabel = UILabel()
     let accountLabel = UILabel()
     let noteTextView = TouchFallthroughTextView()
+    let acceptFollowRequestButton = UIButton()
+    let rejectFollowRequestButton = UIButton()
 
     private var accountConfiguration: AccountContentConfiguration
 
@@ -28,12 +31,21 @@ final class AccountView: UIView {
 }
 
 extension AccountView {
-    static func estimatedHeight(width: CGFloat, account: Account) -> CGFloat {
-        .defaultSpacing * 2
-            + .compactSpacing * 2
+    static func estimatedHeight(width: CGFloat,
+                                account: Account,
+                                configuration: CollectionItem.AccountConfiguration) -> CGFloat {
+        var height = CGFloat.defaultSpacing * 2
+            + .compactSpacing
             + account.displayName.height(width: width, font: .preferredFont(forTextStyle: .headline))
             + account.acct.height(width: width, font: .preferredFont(forTextStyle: .subheadline))
-            + account.note.attributed.string.height(width: width, font: .preferredFont(forTextStyle: .callout))
+
+        if configuration == .withNote {
+            height += .compactSpacing + account.note.attributed.string.height(
+                width: width,
+                font: .preferredFont(forTextStyle: .callout))
+        }
+
+        return max(height, .avatarDimension + .defaultSpacing * 2)
     }
 }
 
@@ -71,17 +83,24 @@ private extension AccountView {
     func initialSetup() {
         let stackView = UIStackView()
 
-        addSubview(avatarImageView)
         addSubview(stackView)
-        avatarImageView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.spacing = .defaultSpacing
+        stackView.alignment = .top
+
+        stackView.addArrangedSubview(avatarImageView)
         avatarImageView.layer.cornerRadius = .avatarDimension / 2
         avatarImageView.clipsToBounds = true
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .vertical
-        stackView.spacing = .compactSpacing
-        stackView.addArrangedSubview(displayNameLabel)
-        stackView.addArrangedSubview(accountLabel)
-        stackView.addArrangedSubview(noteTextView)
+
+        let verticalStackView = UIStackView()
+
+        stackView.addArrangedSubview(verticalStackView)
+        verticalStackView.translatesAutoresizingMaskIntoConstraints = false
+        verticalStackView.axis = .vertical
+        verticalStackView.spacing = .compactSpacing
+        verticalStackView.addArrangedSubview(displayNameLabel)
+        verticalStackView.addArrangedSubview(accountLabel)
+        verticalStackView.addArrangedSubview(noteTextView)
         displayNameLabel.numberOfLines = 0
         displayNameLabel.font = .preferredFont(forTextStyle: .headline)
         displayNameLabel.adjustsFontForContentSizeCategory = true
@@ -92,46 +111,82 @@ private extension AccountView {
         noteTextView.backgroundColor = .clear
         noteTextView.delegate = self
 
+        let largeTitlePointSize = UIFont.preferredFont(forTextStyle: .largeTitle).pointSize
+
+        stackView.addArrangedSubview(acceptFollowRequestButton)
+        acceptFollowRequestButton.setImage(
+            UIImage(systemName: "checkmark.circle",
+                    withConfiguration: UIImage.SymbolConfiguration(pointSize: largeTitlePointSize)),
+            for: .normal)
+        acceptFollowRequestButton.setContentHuggingPriority(.required, for: .horizontal)
+        acceptFollowRequestButton.addAction(
+            UIAction { [weak self] _ in self?.accountConfiguration.viewModel.acceptFollowRequest() },
+            for: .touchUpInside)
+
+        stackView.addArrangedSubview(rejectFollowRequestButton)
+        rejectFollowRequestButton.setImage(
+            UIImage(systemName: "xmark.circle",
+                    withConfiguration: UIImage.SymbolConfiguration(pointSize: largeTitlePointSize)),
+            for: .normal)
+        rejectFollowRequestButton.tintColor = .systemRed
+        rejectFollowRequestButton.setContentHuggingPriority(.required, for: .horizontal)
+        rejectFollowRequestButton.addAction(
+            UIAction { [weak self] _ in self?.accountConfiguration.viewModel.rejectFollowRequest() },
+            for: .touchUpInside)
+
         NSLayoutConstraint.activate([
             avatarImageView.widthAnchor.constraint(equalToConstant: .avatarDimension),
             avatarImageView.heightAnchor.constraint(equalToConstant: .avatarDimension),
-            avatarImageView.topAnchor.constraint(equalTo: readableContentGuide.topAnchor),
-            avatarImageView.leadingAnchor.constraint(equalTo: readableContentGuide.leadingAnchor),
-            avatarImageView.bottomAnchor.constraint(lessThanOrEqualTo: readableContentGuide.bottomAnchor),
-            stackView.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: .defaultSpacing),
+            acceptFollowRequestButton.widthAnchor.constraint(greaterThanOrEqualToConstant: .avatarDimension),
+            acceptFollowRequestButton.heightAnchor.constraint(greaterThanOrEqualToConstant: .avatarDimension),
+            rejectFollowRequestButton.widthAnchor.constraint(greaterThanOrEqualToConstant: .avatarDimension),
+            rejectFollowRequestButton.heightAnchor.constraint(greaterThanOrEqualToConstant: .avatarDimension),
+            stackView.leadingAnchor.constraint(equalTo: readableContentGuide.leadingAnchor),
             stackView.topAnchor.constraint(equalTo: readableContentGuide.topAnchor),
-            stackView.trailingAnchor.constraint(equalTo: readableContentGuide.trailingAnchor),
-            stackView.bottomAnchor.constraint(equalTo: readableContentGuide.bottomAnchor)
+            stackView.bottomAnchor.constraint(equalTo: readableContentGuide.bottomAnchor),
+            stackView.trailingAnchor.constraint(equalTo: readableContentGuide.trailingAnchor)
         ])
     }
 
     func applyAccountConfiguration() {
-        avatarImageView.kf.setImage(with: accountConfiguration.viewModel.avatarURL(profile: false))
+        let viewModel = accountConfiguration.viewModel
 
-        if accountConfiguration.viewModel.displayName.isEmpty {
+        avatarImageView.kf.setImage(with: viewModel.avatarURL(profile: false))
+
+        if viewModel.displayName.isEmpty {
             displayNameLabel.isHidden = true
         } else {
-            let mutableDisplayName = NSMutableAttributedString(string: accountConfiguration.viewModel.displayName)
+            let mutableDisplayName = NSMutableAttributedString(string: viewModel.displayName)
 
-            mutableDisplayName.insert(emojis: accountConfiguration.viewModel.emojis, view: displayNameLabel)
+            mutableDisplayName.insert(emojis: viewModel.emojis, view: displayNameLabel)
             mutableDisplayName.resizeAttachments(toLineHeight: displayNameLabel.font.lineHeight)
             displayNameLabel.attributedText = mutableDisplayName
         }
 
-        accountLabel.text = accountConfiguration.viewModel.accountName
+        accountLabel.text = viewModel.accountName
 
-        let noteFont = UIFont.preferredFont(forTextStyle: .callout)
-        let mutableNote = NSMutableAttributedString(attributedString: accountConfiguration.viewModel.note)
-        let noteRange = NSRange(location: 0, length: mutableNote.length)
+        if viewModel.configuration == .withNote {
+            let noteFont = UIFont.preferredFont(forTextStyle: .callout)
+            let mutableNote = NSMutableAttributedString(attributedString: viewModel.note)
+            let noteRange = NSRange(location: 0, length: mutableNote.length)
 
-        mutableNote.removeAttribute(.font, range: noteRange)
-        mutableNote.addAttributes(
-            [.font: noteFont as Any,
-             .foregroundColor: UIColor.label],
-            range: noteRange)
-        mutableNote.insert(emojis: accountConfiguration.viewModel.emojis, view: noteTextView)
-        mutableNote.resizeAttachments(toLineHeight: noteFont.lineHeight)
+            mutableNote.removeAttribute(.font, range: noteRange)
+            mutableNote.addAttributes(
+                [.font: noteFont as Any,
+                 .foregroundColor: UIColor.label],
+                range: noteRange)
+            mutableNote.insert(emojis: viewModel.emojis, view: noteTextView)
+            mutableNote.resizeAttachments(toLineHeight: noteFont.lineHeight)
 
-        noteTextView.attributedText = mutableNote
+            noteTextView.attributedText = mutableNote
+            noteTextView.isHidden = false
+        } else {
+            noteTextView.isHidden = true
+        }
+
+        let isFollowRequest = viewModel.configuration == .followRequest
+
+        acceptFollowRequestButton.isHidden = !isFollowRequest
+        rejectFollowRequestButton.isHidden = !isFollowRequest
     }
 }

@@ -138,7 +138,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
         case let .loadMore(loadMore):
             lastSelectedLoadMore = loadMore
             (viewModel(indexPath: indexPath) as? LoadMoreViewModel)?.loadMore()
-        case let .account(account):
+        case let .account(account, _):
             eventsSubject.send(
                 .navigation(.profile(collectionService
                                         .navigationService
@@ -225,16 +225,19 @@ extension CollectionItemsViewModel: CollectionViewModel {
             cache(viewModel: viewModel, forItem: item)
 
             return viewModel
-        case let .account(account):
-            if let cachedViewModel = cachedViewModel {
-                return cachedViewModel
+        case let .account(account, configuration):
+            let viewModel: AccountViewModel
+
+            if let cachedViewModel = cachedViewModel as? AccountViewModel {
+                viewModel = cachedViewModel
+            } else {
+                viewModel = AccountViewModel(
+                    accountService: collectionService.navigationService.accountService(account: account),
+                    identityContext: identityContext)
+                cache(viewModel: viewModel, forItem: item)
             }
 
-            let viewModel = AccountViewModel(
-                accountService: collectionService.navigationService.accountService(account: account),
-                identityContext: identityContext)
-
-            cache(viewModel: viewModel, forItem: item)
+            viewModel.configuration = configuration
 
             return viewModel
         case let .notification(notification, statusConfiguration):

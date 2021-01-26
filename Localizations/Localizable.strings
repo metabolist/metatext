@@ -70,6 +70,7 @@
 "emoji.system-group.flags" = "Flags";
 "error" = "Error";
 "favorites" = "Favorites";
+"follow-requests" = "Follow Requests";
 "registration.review-terms-of-use-and-privacy-policy-%@" = "Please review %@'s Terms of Use and Privacy Policy to continue";
 "registration.username" = "Username";
 "registration.email" = "Email";

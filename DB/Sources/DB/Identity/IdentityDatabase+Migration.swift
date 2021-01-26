@@ -38,6 +38,7 @@ extension IdentityDatabase {
                 t.column("header", .text).notNull()
                 t.column("headerStatic", .text).notNull()
                 t.column("emojis", .blob).notNull()
+                t.column("followRequestCount", .integer).notNull()
             }
         }
 

@@ -32,7 +32,7 @@ public struct AccountListService {
 
             return $0 + $1.filter { !presentIds.contains($0.id) }
         }
-        .map { [.init(items: $0.map(CollectionItem.account))] }
+        .map { [.init(items: $0.map { CollectionItem.account($0, endpoint.configuration) })] }
         .eraseToAnyPublisher()
         nextPageMaxId = nextPageMaxIdSubject.eraseToAnyPublisher()
         navigationService = NavigationService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)

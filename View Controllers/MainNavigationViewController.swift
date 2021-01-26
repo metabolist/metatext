@@ -40,8 +40,9 @@ final class MainNavigationViewController: UITabBarController {
         }
         .store(in: &cancellables)
 
-        viewModel.timelineNavigations
-            .sink { [weak self] _ in self?.selectedIndex = 0 }
+        viewModel.timelineNavigations.map { _ in }
+            .merge(with: viewModel.followRequestNavigations.map { _ in })
+            .sink { [weak self] in self?.selectedIndex = 0 }
             .store(in: &cancellables)
     }
 

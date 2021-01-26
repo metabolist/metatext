@@ -242,11 +242,12 @@ public extension IdentityService {
         TimelineService(timeline: timeline, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }
 
-    func service(accountList: AccountsEndpoint) -> AccountListService {
+    func service(accountList: AccountsEndpoint, titleComponents: [String]? = nil) -> AccountListService {
         AccountListService(
             endpoint: accountList,
             mastodonAPIClient: mastodonAPIClient,
-            contentDatabase: contentDatabase)
+            contentDatabase: contentDatabase,
+            titleComponents: titleComponents)
     }
 
     func exploreService() -> ExploreService {

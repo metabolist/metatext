@@ -524,7 +524,7 @@ public extension ContentDatabase {
                     accountIds.firstIndex(of: $0.record.id) ?? 0
                         < accountIds.firstIndex(of: $1.record.id) ?? 0
                 }
-                .map { CollectionItem.account(.init(info: $0)) }
+                .map { CollectionItem.account(.init(info: $0), .withoutNote) }
 
                 if let limit = limit, accounts.count >= limit {
                     accounts.append(.moreResults(.init(scope: .accounts)))
