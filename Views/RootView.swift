@@ -15,7 +15,9 @@ struct RootView: View {
                 .edgesIgnoringSafeArea(.all)
         } else {
             NavigationView {
-                AddIdentityView(viewModel: viewModel.addIdentityViewModel())
+                AddIdentityView(
+                    viewModelClosure: { viewModel.addIdentityViewModel() },
+                    displayWelcome: true)
                     .navigationBarTitleDisplayMode(.inline)
                     .navigationBarHidden(true)
             }

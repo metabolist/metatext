@@ -13,7 +13,9 @@ struct IdentitiesView: View {
         Form {
             Section {
                 NavigationLink(
-                    destination: AddIdentityView(viewModel: rootViewModel.addIdentityViewModel()),
+                    destination: AddIdentityView(
+                        viewModelClosure: { rootViewModel.addIdentityViewModel() },
+                        displayWelcome: false),
                     label: {
                         Label("add", systemImage: "plus.circle")
                     })

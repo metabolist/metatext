@@ -50,7 +50,7 @@ struct RegistrationView: View {
             .frame(maxWidth: .infinity, alignment: .center)
         }
         .alertItem($viewModel.alertItem)
-        .sheet(item: $presentURL) { SafariView(url: $0) }
+        .sheet(item: $presentURL) { SafariView(url: $0).edgesIgnoringSafeArea(.all) }
     }
 }
 

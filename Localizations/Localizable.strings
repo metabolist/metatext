@@ -30,8 +30,11 @@
 "add-identity.browse" = "Browse";
 "add-identity.instance-not-supported" = "In order to provide a safe experience to all users and comply with the App Store Review Guidelines, this instance is not supported.";
 "add-identity.join" = "Join";
+"add-identity.prompt" = "Enter the URL of the Mastodon instance you wish to connect to:";
 "add-identity.request-invite" = "Request an invite";
 "add-identity.unable-to-connect-to-instance" = "Unable to connect to instance";
+"add-identity.welcome" = "Welcome to Metatext";
+"add-identity.what-is-mastodon" = "What is Mastodon?";
 "attachment.edit.description" = "Describe for the visually impaired";
 "attachment.edit.description.audio" = "Describe for people with hearing loss";
 "attachment.edit.description.video" = "Describe for people with hearing loss or visual impairment";

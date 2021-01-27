@@ -154,6 +154,7 @@
 		D0F0B12E251A97E400942152 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F0B12D251A97E400942152 /* TableViewController.swift */; };
 		D0F0B136251AA12700942152 /* CollectionItem+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F0B135251AA12700942152 /* CollectionItem+Extensions.swift */; };
 		D0F2D54B2581CF7D00986197 /* VisualEffectBlur.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F2D54A2581CF7D00986197 /* VisualEffectBlur.swift */; };
+		D0F4362D25C10B9600E4F896 /* AddIdentityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F4362C25C10B9600E4F896 /* AddIdentityViewController.swift */; };
 		D0F5880525A7E4C500E3A49C /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = D0F5880425A7E4C500E3A49C /* Kingfisher */; };
 		D0F5880F25A7E6CC00E3A49C /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = D0F5880E25A7E6CC00E3A49C /* Kingfisher */; };
 		D0FCC105259C4E61000B67DF /* NewStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FCC104259C4E61000B67DF /* NewStatusViewController.swift */; };
@@ -336,6 +337,7 @@
 		D0F0B12D251A97E400942152 /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		D0F0B135251AA12700942152 /* CollectionItem+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CollectionItem+Extensions.swift"; sourceTree = "<group>"; };
 		D0F2D54A2581CF7D00986197 /* VisualEffectBlur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffectBlur.swift; sourceTree = "<group>"; };
+		D0F4362C25C10B9600E4F896 /* AddIdentityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIdentityViewController.swift; sourceTree = "<group>"; };
 		D0FCC104259C4E61000B67DF /* NewStatusViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewStatusViewController.swift; sourceTree = "<group>"; };
 		D0FE1C8E253686F9003EF1EB /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		D0FE1C9725368A9D003EF1EB /* PlayerCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerCache.swift; sourceTree = "<group>"; };
@@ -564,6 +566,7 @@
 		D0C7D43024F76169001EBDBB /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				D0F4362C25C10B9600E4F896 /* AddIdentityViewController.swift */,
 				D05936CE25A8D79800754FDF /* EditAttachmentViewController.swift */,
 				D088406C25AFBBE200BB749B /* EmojiPickerViewController.swift */,
 				D087671525BAA8C0001FDD43 /* ExploreViewController.swift */,
@@ -879,6 +882,7 @@
 				D0C7D4D624F7616A001EBDBB /* NSMutableAttributedString+Extensions.swift in Sources */,
 				D0E9F9AA258450B300EF503D /* CompositionInputAccessoryView.swift in Sources */,
 				D0849C7F25903C4900A5EBCC /* Status+Extensions.swift in Sources */,
+				D0F4362D25C10B9600E4F896 /* AddIdentityViewController.swift in Sources */,
 				D0625E59250F092900502611 /* StatusListCell.swift in Sources */,
 				D0E569DB2529319100FA1D72 /* LoadMoreView.swift in Sources */,
 				D05936FF25AA94EA00754FDF /* MarkAttachmentsSensitiveView.swift in Sources */,

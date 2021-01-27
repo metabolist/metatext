@@ -24,6 +24,7 @@ extension CGRect {
 extension TimeInterval {
     static let defaultAnimationDuration: Self = 0.5
     static let shortAnimationDuration = defaultAnimationDuration / 2
+    static let longAnimationDuration: Self = 1
 
     static func zeroIfReduceMotion(_ duration: Self) -> Self { UIAccessibility.isReduceMotionEnabled ? 0 : duration }
 }
