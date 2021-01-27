@@ -7,21 +7,18 @@ import ServiceLayer
 
 public final class NavigationViewModel: ObservableObject {
     public let identityContext: IdentityContext
-    public let timelineNavigations: AnyPublisher<Timeline, Never>
-    public let followRequestNavigations: AnyPublisher<CollectionViewModel, Never>
+    public let navigations: AnyPublisher<Navigation, Never>
 
     @Published public private(set) var recentIdentities = [Identity]()
     @Published public var presentingSecondaryNavigation = false
     @Published public var alertItem: AlertItem?
 
-    private let timelineNavigationsSubject = PassthroughSubject<Timeline, Never>()
-    private let followRequestNavigationsSubject = PassthroughSubject<CollectionViewModel, Never>()
+    private let navigationsSubject = PassthroughSubject<Navigation, Never>()
     private var cancellables = Set<AnyCancellable>()
 
     public init(identityContext: IdentityContext) {
         self.identityContext = identityContext
-        timelineNavigations = timelineNavigationsSubject.eraseToAnyPublisher()
-        followRequestNavigations = followRequestNavigationsSubject.eraseToAnyPublisher()
+        navigations = navigationsSubject.eraseToAnyPublisher()
 
         identityContext.$identity
             .sink { [weak self] _ in self?.objectWillChange.send() }
@@ -34,7 +31,7 @@ public final class NavigationViewModel: ObservableObject {
 }
 
 public extension NavigationViewModel {
-    enum Tab: CaseIterable {
+    enum Tab: Int, CaseIterable {
         case timelines
         case explore
         case notifications
@@ -95,25 +92,27 @@ public extension NavigationViewModel {
             .store(in: &cancellables)
     }
 
+    func navigateToProfile(id: Account.Id) {
+        presentingSecondaryNavigation = false
+        navigationsSubject.send(.profile(identityContext.service.navigationService.profileService(id: id)))
+    }
+
     func navigate(timeline: Timeline) {
         presentingSecondaryNavigation = false
-        timelineNavigationsSubject.send(timeline)
+        navigationsSubject.send(
+            .collection(identityContext.service.navigationService.timelineService(timeline: timeline)))
     }
 
     func navigateToFollowerRequests() {
-        let followRequestsViewModel = CollectionItemsViewModel(
-            collectionService: identityContext.service.service(
-                accountList: .followRequests,
-                titleComponents: ["follow-requests"]),
-            identityContext: identityContext)
-
         presentingSecondaryNavigation = false
-        followRequestNavigationsSubject.send(followRequestsViewModel)
+        navigationsSubject.send(.collection(identityContext.service.service(
+                                                accountList: .followRequests,
+                                                titleComponents: ["follow-requests"])))
     }
 
     func viewModel(timeline: Timeline) -> CollectionItemsViewModel {
         CollectionItemsViewModel(
-            collectionService: identityContext.service.service(timeline: timeline),
+            collectionService: identityContext.service.navigationService.timelineService(timeline: timeline),
             identityContext: identityContext)
     }
 

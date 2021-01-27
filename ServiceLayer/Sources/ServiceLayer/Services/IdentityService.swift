@@ -9,6 +9,8 @@ import MastodonAPI
 import Secrets
 
 public struct IdentityService {
+    public let navigationService: NavigationService
+
     private let id: Identity.Id
     private let identityDatabase: IdentityDatabase
     private let contentDatabase: ContentDatabase
@@ -36,6 +38,10 @@ public struct IdentityService {
             inMemory: environment.inMemoryContent,
             appGroup: AppEnvironment.appGroup,
             keychain: environment.keychain)
+
+        navigationService = NavigationService(
+            mastodonAPIClient: mastodonAPIClient,
+            contentDatabase: contentDatabase)
     }
 }
 
@@ -236,10 +242,6 @@ public extension IdentityService {
 
     func post(statusComponents: StatusComponents) -> AnyPublisher<Status.Id, Error> {
         mastodonAPIClient.request(StatusEndpoint.post(statusComponents)).map(\.id).eraseToAnyPublisher()
-    }
-
-    func service(timeline: Timeline) -> TimelineService {
-        TimelineService(timeline: timeline, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }
 
     func service(accountList: AccountsEndpoint, titleComponents: [String]? = nil) -> AccountListService {

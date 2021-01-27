@@ -12,6 +12,7 @@ public struct TimelineService {
     public let nextPageMaxId: AnyPublisher<String, Never>
     public let preferLastPresentIdOverNextPageMaxId = true
     public let title: AnyPublisher<String, Never>
+    public let titleLocalizationComponents: AnyPublisher<[String], Never>
 
     private let timeline: Timeline
     private let mastodonAPIClient: MastodonAPIClient
@@ -26,10 +27,22 @@ public struct TimelineService {
         navigationService = NavigationService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
         nextPageMaxId = nextPageMaxIdSubject.eraseToAnyPublisher()
 
-        if case let .tag(tag) = timeline {
+        switch timeline {
+        case let .list(list):
+            title = Just(list.title).eraseToAnyPublisher()
+            titleLocalizationComponents = Empty().eraseToAnyPublisher()
+        case let .tag(tag):
             title = Just("#".appending(tag)).eraseToAnyPublisher()
-        } else {
+            titleLocalizationComponents = Empty().eraseToAnyPublisher()
+        case .favorites:
             title = Empty().eraseToAnyPublisher()
+            titleLocalizationComponents = Just(["favorites"]).eraseToAnyPublisher()
+        case .bookmarks:
+            title = Empty().eraseToAnyPublisher()
+            titleLocalizationComponents = Just(["bookmarks"]).eraseToAnyPublisher()
+        default:
+            title = Empty().eraseToAnyPublisher()
+            titleLocalizationComponents = Empty().eraseToAnyPublisher()
         }
     }
 }

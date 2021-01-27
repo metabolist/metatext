@@ -40,9 +40,8 @@ final class MainNavigationViewController: UITabBarController {
             .sink { [weak self] in self?.setupViewControllers(pending: $0) }
             .store(in: &cancellables)
 
-        viewModel.timelineNavigations.map { _ in }
-            .merge(with: viewModel.followRequestNavigations.map { _ in })
-            .sink { [weak self] in self?.selectedIndex = 0 }
+        viewModel.navigations
+            .sink { [weak self] in self?.handle(navigation: $0) }
             .store(in: &cancellables)
 
         NotificationCenter.default.publisher(for: UIScene.willEnterForegroundNotification)
@@ -141,5 +140,30 @@ private extension MainNavigationViewController {
         if presentedViewController == presentedSecondaryNavigation {
             dismiss(animated: true)
         }
+    }
+
+    func handle(navigation: Navigation) {
+        let vc: UIViewController
+
+        switch navigation {
+        case let .collection(collectionService):
+            vc = TableViewController(
+                viewModel: CollectionItemsViewModel(
+                    collectionService: collectionService,
+                    identityContext: viewModel.identityContext),
+                rootViewModel: rootViewModel)
+        case let .profile(profileService):
+            vc = ProfileViewController(
+                viewModel: ProfileViewModel(
+                    profileService: profileService,
+                    identityContext: viewModel.identityContext),
+                rootViewModel: rootViewModel,
+                identityContext: viewModel.identityContext,
+                parentNavigationController: nil)
+        default:
+            return
+        }
+
+        selectedViewController?.show(vc, sender: self)
     }
 }

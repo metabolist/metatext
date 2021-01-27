@@ -69,28 +69,6 @@ final class TimelinesViewController: UIPageViewController {
                     animated: !UIAccessibility.isReduceMotionEnabled)
             },
             for: .valueChanged)
-
-        viewModel.timelineNavigations.sink { [weak self] in
-            guard let self = self else { return }
-
-            let vc = TableViewController(
-                viewModel: self.viewModel.viewModel(timeline: $0),
-                rootViewModel: self.rootViewModel)
-
-            vc.navigationItem.title = $0.title
-
-            self.show(vc, sender: self)
-        }
-        .store(in: &cancellables)
-
-        viewModel.followRequestNavigations.sink { [weak self] in
-            guard let self = self else { return }
-
-            let vc = TableViewController(viewModel: $0, rootViewModel: self.rootViewModel)
-
-            self.show(vc, sender: self)
-        }
-        .store(in: &cancellables)
     }
 }
 

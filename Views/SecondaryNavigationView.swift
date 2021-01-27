@@ -12,6 +12,17 @@ struct SecondaryNavigationView: View {
     var body: some View {
         Form {
             Section {
+                if let id = viewModel.identityContext.identity.account?.id {
+                    Button {
+                        viewModel.navigateToProfile(id: id)
+                    } label: {
+                        Label {
+                            Text("secondary-navigation.my-profile").foregroundColor(.primary)
+                        } icon: {
+                            Image(systemName: "person.crop.square")
+                        }
+                    }
+                }
                 NavigationLink(
                     destination: IdentitiesView(viewModel: .init(identityContext: viewModel.identityContext))
                         .environmentObject(rootViewModel),
