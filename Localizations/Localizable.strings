@@ -46,6 +46,7 @@
 "camera-access.open-system-settings" = "Open system settings";
 "cancel" = "Cancel";
 "compose.attachment.uploading" = "Uploading";
+"compose.attachments-will-be-discarded" = "Attachments will be discarded when changing accounts";
 "compose.browse" = "Browse";
 "compose.mark-media-sensitive" = "Mark media as sensitive";
 "compose.photo-library" = "Photo Library";

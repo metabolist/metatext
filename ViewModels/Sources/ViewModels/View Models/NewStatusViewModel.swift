@@ -11,9 +11,9 @@ public final class NewStatusViewModel: ObservableObject {
     @Published public private(set) var identityContext: IdentityContext
     @Published public private(set) var authenticatedIdentities = [Identity]()
     @Published public var canPost = false
-    @Published public var canChangeIdentity = true
     @Published public var alertItem: AlertItem?
     @Published public private(set) var postingState = PostingState.composing
+    public let canChangeIdentity: Bool
     public let inReplyToViewModel: StatusViewModel?
     public let events: AnyPublisher<Event, Never>
 
@@ -35,6 +35,17 @@ public final class NewStatusViewModel: ObservableObject {
         inReplyToViewModel = inReplyTo
         events = eventsSubject.eraseToAnyPublisher()
         visibility = identityContext.identity.preferences.postingDefaultVisibility
+
+        if let inReplyTo = inReplyTo {
+            switch inReplyTo.visibility {
+            case .public, .unlisted:
+                canChangeIdentity = true
+            default:
+                canChangeIdentity = false
+            }
+        } else {
+            canChangeIdentity = true
+        }
 
         let compositionViewModel: CompositionViewModel
 

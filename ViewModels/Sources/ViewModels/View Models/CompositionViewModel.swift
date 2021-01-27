@@ -191,6 +191,10 @@ public extension CompositionViewModel {
 
         eventsSubject.send(.updateAttachment(publisher))
     }
+
+    func discardAttachments() {
+        attachmentViewModels = []
+    }
 }
 
 public extension CompositionViewModel.PollOption {

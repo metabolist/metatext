@@ -433,7 +433,7 @@ private extension NewStatusViewController {
             .map { identity in
                 UIDeferredMenuElement { completion in
                     let action = UIAction(title: identity.handle) { [weak self] _ in
-                        self?.viewModel.setIdentity(identity)
+                        self?.changeIdentity(identity)
                     }
 
                     if let image = identity.image {
@@ -458,6 +458,34 @@ private extension NewStatusViewController {
         changeIdentityButton.menu = UIMenu(children: menuItems)
 
         return changeIdentityButton
+    }
+
+    func changeIdentity(_ identity: Identity) {
+        if viewModel.compositionViewModels.contains(where: { !$0.attachmentViewModels.isEmpty }) {
+            let alertController = UIAlertController(
+                title: nil,
+                message: NSLocalizedString("compose.attachments-will-be-discarded", comment: ""),
+                preferredStyle: .alert)
+
+            let okAction = UIAlertAction(
+                title: NSLocalizedString("ok", comment: ""),
+                style: .destructive) { [weak self] _ in
+                guard let self = self else { return }
+
+                for compositionViewModel in self.viewModel.compositionViewModels {
+                    compositionViewModel.discardAttachments()
+                }
+
+                self.viewModel.setIdentity(identity)
+            }
+            let cancelAction = UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel) { _ in }
+
+            alertController.addAction(okAction)
+            alertController.addAction(cancelAction)
+            present(alertController, animated: true)
+        } else {
+            viewModel.setIdentity(identity)
+        }
     }
 
     func adjustContentInset(notification: Notification) {
