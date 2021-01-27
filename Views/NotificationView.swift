@@ -10,6 +10,7 @@ final class NotificationView: UIView {
     private let avatarImageView = AnimatedImageView()
     private let avatarButton = UIButton()
     private let typeLabel = UILabel()
+    private let timeLabel = UILabel()
     private let displayNameLabel = UILabel()
     private let accountLabel = UILabel()
     private let statusBodyView = StatusBodyView()
@@ -75,24 +76,29 @@ private extension NotificationView {
     func initialSetup() {
         let containerStackView = UIStackView()
         let sideStackView = UIStackView()
+        let typeTimeStackView = UIStackView()
         let mainStackView = UIStackView()
 
         addSubview(containerStackView)
         containerStackView.translatesAutoresizingMaskIntoConstraints = false
         containerStackView.spacing = .defaultSpacing
+        containerStackView.alignment = .top
 
         sideStackView.axis = .vertical
         sideStackView.alignment = .trailing
         sideStackView.spacing = .compactSpacing
         sideStackView.addArrangedSubview(iconImageView)
         sideStackView.addArrangedSubview(avatarImageView)
-        sideStackView.addArrangedSubview(UIView())
         containerStackView.addArrangedSubview(sideStackView)
+
+        typeTimeStackView.spacing = .compactSpacing
+        typeTimeStackView.alignment = .top
 
         mainStackView.axis = .vertical
         mainStackView.spacing = .compactSpacing
-        mainStackView.addArrangedSubview(typeLabel)
-        mainStackView.addSubview(UIView())
+        typeTimeStackView.addArrangedSubview(typeLabel)
+        typeTimeStackView.addArrangedSubview(timeLabel)
+        mainStackView.addArrangedSubview(typeTimeStackView)
         mainStackView.addArrangedSubview(statusBodyView)
         mainStackView.addArrangedSubview(displayNameLabel)
         mainStackView.addArrangedSubview(accountLabel)
@@ -120,6 +126,12 @@ private extension NotificationView {
         typeLabel.font = .preferredFont(forTextStyle: .headline)
         typeLabel.adjustsFontForContentSizeCategory = true
         typeLabel.numberOfLines = 0
+
+        timeLabel.font = .preferredFont(forTextStyle: .subheadline)
+        timeLabel.adjustsFontForContentSizeCategory = true
+        timeLabel.textColor = .secondaryLabel
+        timeLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+        timeLabel.setContentHuggingPriority(.required, for: .horizontal)
 
         statusBodyView.alpha = 0.5
         statusBodyView.isUserInteractionEnabled = false
@@ -204,6 +216,8 @@ private extension NotificationView {
             displayNameLabel.isHidden = true
             accountLabel.isHidden = true
         }
+
+        timeLabel.text = viewModel.time
 
         iconImageView.image = UIImage(
             systemName: viewModel.type.systemImageName,

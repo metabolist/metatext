@@ -198,6 +198,7 @@ extension ContentDatabase {
                 t.column("id", .text).primaryKey(onConflict: .replace)
                 t.column("type", .text).notNull()
                 t.column("accountId", .text).notNull().references("accountRecord", onDelete: .cascade)
+                t.column("createdAt", .datetime).notNull()
                 t.column("statusId").references("statusRecord", onDelete: .cascade)
             }
 

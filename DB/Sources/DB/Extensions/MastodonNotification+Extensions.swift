@@ -24,6 +24,7 @@ extension MastodonNotification {
             id: info.record.id,
             type: info.record.type,
             account: .init(info: info.accountInfo),
+            createdAt: info.record.createdAt,
             status: status)
     }
 }
