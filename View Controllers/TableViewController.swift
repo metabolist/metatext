@@ -287,6 +287,10 @@ private extension TableViewController {
             .compactMap { [weak self] _ in self?.tableView.indexPathsForVisibleRows?.first }
             .sink { [weak self] in self?.viewModel.viewedAtTop(indexPath: $0) }
             .store(in: &cancellables)
+
+        NotificationCenter.default.publisher(for: UIScene.willEnterForegroundNotification)
+            .sink { [weak self] _ in self?.viewModel.request(maxId: nil, minId: nil, search: nil) }
+            .store(in: &cancellables)
     }
 
     func update(_ update: CollectionUpdate) {
