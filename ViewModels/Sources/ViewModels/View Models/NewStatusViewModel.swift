@@ -67,6 +67,10 @@ public final class NewStatusViewModel: ObservableObject {
 
         allIdentitiesService.authenticatedIdentitiesPublisher()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
+            .combineLatest($identityContext)
+            .map { authenticatedIdentities, currentIdentity in
+                authenticatedIdentities.filter { $0.id != currentIdentity.identity.id }
+            }
             .assign(to: &$authenticatedIdentities)
         $compositionViewModels.flatMap { Publishers.MergeMany($0.map(\.$isPostable)) }
             .receive(on: DispatchQueue.main) // hack to punt to next run loop, consider refactoring
@@ -87,6 +91,7 @@ public extension NewStatusViewModel {
         case presentDocumentPicker(CompositionViewModel)
         case presentEmojiPicker(Int)
         case editAttachment(AttachmentViewModel, CompositionViewModel)
+        case changeIdentity(Identity)
     }
 
     enum PostingState {
@@ -158,6 +163,10 @@ public extension NewStatusViewModel {
         guard let unposted = compositionViewModels.first(where: { !$0.isPosted }) else { return }
 
         post(viewModel: unposted, inReplyToId: inReplyToViewModel?.id)
+    }
+
+    func changeIdentity(_ identity: Identity) {
+        eventsSubject.send(.changeIdentity(identity))
     }
 }
 

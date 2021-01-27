@@ -6,7 +6,8 @@ import UIKit
 import ViewModels
 
 final class CompositionView: UIView {
-    let avatarImageView = UIImageView()
+    let avatarImageView = AnimatedImageView()
+    let changeIdentityButton = UIButton()
     let spoilerTextField = UITextField()
     let textView = UITextView()
     let textViewPlaceholder = UILabel()
@@ -63,6 +64,13 @@ private extension CompositionView {
         avatarImageView.layer.cornerRadius = .avatarDimension / 2
         avatarImageView.clipsToBounds = true
         avatarImageView.setContentHuggingPriority(.required, for: .horizontal)
+
+        changeIdentityButton.translatesAutoresizingMaskIntoConstraints = false
+        avatarImageView.addSubview(changeIdentityButton)
+        avatarImageView.isUserInteractionEnabled = true
+        changeIdentityButton.setBackgroundImage(.highlightedButtonBackground, for: .highlighted)
+        changeIdentityButton.showsMenuAsPrimaryAction = true
+        changeIdentityButton.menu = changeIdentityMenu(identities: parentViewModel.authenticatedIdentities)
 
         let stackView = UIStackView()
 
@@ -179,6 +187,10 @@ private extension CompositionView {
             .sink { [weak self] in self?.avatarImageView.kf.setImage(with: $0) }
             .store(in: &cancellables)
 
+        parentViewModel.$authenticatedIdentities
+            .sink { [weak self] in self?.changeIdentityButton.menu = self?.changeIdentityMenu(identities: $0) }
+            .store(in: &cancellables)
+
         viewModel.$attachmentViewModels
             .receive(on: RunLoop.main)
             .sink { [weak self] attachmentViewModels in
@@ -209,6 +221,10 @@ private extension CompositionView {
             avatarImageView.topAnchor.constraint(equalTo: guide.topAnchor),
             avatarImageView.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
             avatarImageView.bottomAnchor.constraint(lessThanOrEqualTo: guide.bottomAnchor),
+            changeIdentityButton.leadingAnchor.constraint(equalTo: avatarImageView.leadingAnchor),
+            changeIdentityButton.topAnchor.constraint(equalTo: avatarImageView.topAnchor),
+            changeIdentityButton.bottomAnchor.constraint(equalTo: avatarImageView.bottomAnchor),
+            changeIdentityButton.trailingAnchor.constraint(equalTo: avatarImageView.trailingAnchor),
             stackView.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: .defaultSpacing),
             stackView.topAnchor.constraint(greaterThanOrEqualTo: guide.topAnchor),
             stackView.bottomAnchor.constraint(lessThanOrEqualTo: guide.bottomAnchor),
@@ -227,5 +243,31 @@ private extension CompositionView {
         ]
 
         NSLayoutConstraint.activate(constraints)
+    }
+
+    func changeIdentityMenu(identities: [Identity]) -> UIMenu {
+        UIMenu(children: identities.map { identity in
+            UIDeferredMenuElement { completion in
+                let action = UIAction(title: identity.handle) { [weak self] _ in
+                    self?.parentViewModel.changeIdentity(identity)
+                }
+
+                if let image = identity.image {
+                    KingfisherManager.shared.retrieveImage(
+                        with: image,
+                        options: KingfisherOptionsInfo.downsampled(
+                            dimension: .barButtonItemDimension,
+                            scaleFactor: UIScreen.main.scale)) {
+                        if case let .success(value) = $0 {
+                            action.image = value.image
+                        }
+
+                        completion([action])
+                    }
+                } else {
+                    completion([action])
+                }
+            }
+        })
     }
 }

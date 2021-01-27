@@ -28,6 +28,11 @@ final class NewStatusViewController: UIViewController {
         self.viewModel = viewModel
 
         super.init(nibName: nil, bundle: nil)
+
+        NotificationCenter.default.publisher(for: UIResponder.keyboardDidChangeFrameNotification)
+            .merge(with: NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification))
+            .sink { [weak self] in self?.adjustContentInset(notification: $0) }
+            .store(in: &cancellables)
     }
 
     @available(*, unavailable)
@@ -66,7 +71,10 @@ final class NewStatusViewController: UIViewController {
             activityIndicatorView.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor)
         ])
 
-        setupBarButtonItems(identityContext: viewModel.identityContext)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            systemItem: .cancel,
+            primaryAction: UIAction { [weak self] _ in self?.dismiss() })
+        navigationItem.rightBarButtonItem = postButton
 
         postButton.primaryAction = UIAction(title: NSLocalizedString("post", comment: "")) { [weak self] _ in
             self?.viewModel.post()
@@ -83,11 +91,6 @@ final class NewStatusViewController: UIViewController {
             stackView.addArrangedSubview(statusView)
         }
         #endif
-
-        NotificationCenter.default.publisher(for: UIResponder.keyboardDidChangeFrameNotification)
-            .merge(with: NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification))
-            .sink { [weak self] in self?.adjustContentInset(notification: $0) }
-            .store(in: &cancellables)
 
         setupViewModelBindings()
     }
@@ -150,6 +153,8 @@ private extension NewStatusViewController {
             presentAttachmentEditor(
                 attachmentViewModel: attachmentViewModel,
                 compositionViewModel: compositionViewModel)
+        case let .changeIdentity(identity):
+            changeIdentity(identity)
         }
     }
 
@@ -234,9 +239,6 @@ private extension NewStatusViewController {
         viewModel.$compositionViewModels
             .sink { [weak self] in self?.set(compositionViewModels: $0) }
             .store(in: &cancellables)
-        viewModel.$identityContext
-            .sink { [weak self] in self?.setupBarButtonItems(identityContext: $0) }
-            .store(in: &cancellables)
         viewModel.$postingState
             .sink { [weak self] in self?.apply(postingState: $0) }
             .store(in: &cancellables)
@@ -248,18 +250,6 @@ private extension NewStatusViewController {
                 }
             }
             .store(in: &cancellables)
-    }
-
-    func setupBarButtonItems(identityContext: IdentityContext) {
-        let cancelButton = UIBarButtonItem(
-            systemItem: .cancel,
-            primaryAction: UIAction { [weak self] _ in self?.dismiss() })
-
-        navigationItem.leftBarButtonItem = cancelButton
-        navigationItem.titleView = viewModel.canChangeIdentity
-            ? changeIdentityButton(identityContext: identityContext)
-            : nil
-        navigationItem.rightBarButtonItem = postButton
     }
 
     func presentMediaPicker(compositionViewModel: CompositionViewModel) {
@@ -420,44 +410,6 @@ private extension NewStatusViewController {
         dismissEmojiPickerIfPresented {
             self.present(navigationController, animated: true)
         }
-    }
-
-    func changeIdentityButton(identityContext: IdentityContext) -> UIButton {
-        let changeIdentityButton = UIButton()
-        let downsampled = KingfisherOptionsInfo.downsampled(
-            dimension: .barButtonItemDimension,
-            scaleFactor: UIScreen.main.scale)
-
-        let menuItems = viewModel.authenticatedIdentities
-            .filter { $0.id != identityContext.identity.id }
-            .map { identity in
-                UIDeferredMenuElement { completion in
-                    let action = UIAction(title: identity.handle) { [weak self] _ in
-                        self?.changeIdentity(identity)
-                    }
-
-                    if let image = identity.image {
-                        KingfisherManager.shared.retrieveImage(with: image, options: downsampled) {
-                            if case let .success(value) = $0 {
-                                action.image = value.image
-                            }
-
-                            completion([action])
-                        }
-                    } else {
-                        completion([action])
-                    }
-                }
-            }
-
-        changeIdentityButton.kf.setImage(
-            with: identityContext.identity.image,
-            for: .normal,
-            options: downsampled)
-        changeIdentityButton.showsMenuAsPrimaryAction = true
-        changeIdentityButton.menu = UIMenu(children: menuItems)
-
-        return changeIdentityButton
     }
 
     func changeIdentity(_ identity: Identity) {
