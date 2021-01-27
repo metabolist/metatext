@@ -23,6 +23,7 @@ public final class NewStatusViewModel: ObservableObject {
     private let compositionEventsSubject = PassthroughSubject<CompositionViewModel.Event, Never>()
     private var cancellables = Set<AnyCancellable>()
 
+    // swiftlint:disable:next function_body_length
     public init(allIdentitiesService: AllIdentitiesService,
                 identityContext: IdentityContext,
                 environment: AppEnvironment,

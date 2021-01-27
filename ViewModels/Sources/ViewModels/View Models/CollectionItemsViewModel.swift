@@ -331,8 +331,6 @@ extension CollectionItemsViewModel: CollectionViewModel {
                 .assignErrorsToAlertItem(to: \.alertItem, on: self)
                 .sink { _ in }
                 .store(in: &cancellables)
-        default:
-            break
         }
     }
 }
