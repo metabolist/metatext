@@ -21,6 +21,8 @@ public final class AccountViewModel: CollectionItemViewModel, ObservableObject {
 }
 
 public extension AccountViewModel {
+    var id: Account.Id { accountService.account.id }
+
     var headerURL: URL {
         if !identityContext.appPreferences.shouldReduceMotion, identityContext.appPreferences.animateHeaders {
             return accountService.account.header
@@ -140,27 +142,11 @@ public extension AccountViewModel {
     }
 
     func acceptFollowRequest() {
-        ignorableOutputEvent(
-            accountService.acceptFollowRequest()
-                .collect()
-                .flatMap { [weak self] _ -> AnyPublisher<Never, Error> in
-                    guard let self = self else { return Empty().eraseToAnyPublisher() }
-
-                    return self.identityContext.service.verifyCredentials()
-                }
-                .eraseToAnyPublisher())
+        accountListEdit(accountService.acceptFollowRequest(), event: .acceptFollowRequest)
     }
 
     func rejectFollowRequest() {
-        ignorableOutputEvent(
-            accountService.rejectFollowRequest()
-                .collect()
-                .flatMap { [weak self] _ -> AnyPublisher<Never, Error> in
-                    guard let self = self else { return Empty().eraseToAnyPublisher() }
-
-                    return self.identityContext.service.verifyCredentials()
-                }
-                .eraseToAnyPublisher())
+        accountListEdit(accountService.rejectFollowRequest(), event: .rejectFollowRequest)
     }
 
     func domainBlock() {
@@ -175,5 +161,16 @@ public extension AccountViewModel {
 private extension AccountViewModel {
     func ignorableOutputEvent(_ action: AnyPublisher<Never, Error>) {
         eventsSubject.send(action.map { _ in .ignorableOutput }.eraseToAnyPublisher())
+    }
+
+    func accountListEdit(_ action: AnyPublisher<Never, Error>, event: CollectionItemEvent.AccountListEdit) {
+        eventsSubject.send(
+            action.collect()
+                .map { [weak self] _ -> CollectionItemEvent in
+                    guard let self = self else { return .ignorableOutput }
+
+                    return .accountListEdit(self, .acceptFollowRequest)
+                }
+                .eraseToAnyPublisher())
     }
 }

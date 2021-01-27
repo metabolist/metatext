@@ -80,6 +80,7 @@ extension AccountView: UITextViewDelegate {
 }
 
 private extension AccountView {
+    // swiftlint:disable:next function_body_length
     func initialSetup() {
         let stackView = UIStackView()
 

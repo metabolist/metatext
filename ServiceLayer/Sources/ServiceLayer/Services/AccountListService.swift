@@ -12,7 +12,7 @@ public struct AccountListService {
     public let navigationService: NavigationService
     public let canRefresh = false
 
-    private let accountsSubject = PassthroughSubject<[Account], Error>()
+    private let accountsSubject = CurrentValueSubject<[Account], Error>([])
     private let endpoint: AccountsEndpoint
     private let mastodonAPIClient: MastodonAPIClient
     private let contentDatabase: ContentDatabase
@@ -27,15 +27,17 @@ public struct AccountListService {
         self.mastodonAPIClient = mastodonAPIClient
         self.contentDatabase = contentDatabase
         self.titleComponents = titleComponents
-        sections = accountsSubject.scan([]) {
-            let presentIds = Set($0.map(\.id))
-
-            return $0 + $1.filter { !presentIds.contains($0.id) }
-        }
-        .map { [.init(items: $0.map { CollectionItem.account($0, endpoint.configuration) })] }
-        .eraseToAnyPublisher()
+        sections = accountsSubject
+            .map { [.init(items: $0.map { CollectionItem.account($0, endpoint.configuration) })] }
+            .eraseToAnyPublisher()
         nextPageMaxId = nextPageMaxIdSubject.eraseToAnyPublisher()
         navigationService = NavigationService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+    }
+}
+
+public extension AccountListService {
+    func remove(id: Account.Id) {
+        accountsSubject.value.removeAll { $0.id == id }
     }
 }
 
@@ -43,7 +45,8 @@ extension AccountListService: CollectionService {
     public func request(maxId: String?, minId: String?, search: Search?) -> AnyPublisher<Never, Error> {
         mastodonAPIClient.pagedRequest(endpoint, maxId: maxId, minId: minId)
             .handleEvents(receiveOutput: {
-                accountsSubject.send($0.result)
+                let presentIds = Set(accountsSubject.value.map(\.id))
+                accountsSubject.value.append(contentsOf: $0.result.filter { !presentIds.contains($0.id) })
 
                 guard let maxId = $0.info.maxId else { return }
 

@@ -334,6 +334,8 @@ private extension TableViewController {
             confirmDelete(statusViewModel: statusViewModel, redraft: redraft)
         case let .report(reportViewModel):
             report(reportViewModel: reportViewModel)
+        case let .accountListEdit(accountViewModel, edit):
+            accountListEdit(accountViewModel: accountViewModel, edit: edit)
         }
     }
 
@@ -452,6 +454,10 @@ private extension TableViewController {
         alertController.addAction(cancelAction)
 
         present(alertController, animated: true)
+    }
+
+    func accountListEdit(accountViewModel: AccountViewModel, edit: CollectionItemEvent.AccountListEdit) {
+        viewModel.applyAccountListEdit(viewModel: accountViewModel, edit: edit)
     }
 
     func set(expandAllState: ExpandAllState) {

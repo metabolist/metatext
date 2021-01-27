@@ -12,4 +12,12 @@ public enum CollectionItemEvent {
     case confirmDelete(StatusViewModel, redraft: Bool)
     case report(ReportViewModel)
     case share(URL)
+    case accountListEdit(AccountViewModel, AccountListEdit)
+}
+
+public extension CollectionItemEvent {
+    enum AccountListEdit {
+        case acceptFollowRequest
+        case rejectFollowRequest
+    }
 }

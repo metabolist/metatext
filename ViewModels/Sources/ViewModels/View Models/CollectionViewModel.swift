@@ -21,4 +21,5 @@ public protocol CollectionViewModel {
     func canSelect(indexPath: IndexPath) -> Bool
     func viewModel(indexPath: IndexPath) -> CollectionItemViewModel
     func toggleExpandAll()
+    func applyAccountListEdit(viewModel: AccountViewModel, edit: CollectionItemEvent.AccountListEdit)
 }

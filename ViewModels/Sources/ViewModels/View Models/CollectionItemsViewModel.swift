@@ -321,6 +321,20 @@ extension CollectionItemsViewModel: CollectionViewModel {
                 .store(in: &cancellables)
         }
     }
+
+    public func applyAccountListEdit(viewModel: AccountViewModel, edit: CollectionItemEvent.AccountListEdit) {
+        (collectionService as? AccountListService)?.remove(id: viewModel.id)
+
+        switch edit {
+        case .acceptFollowRequest, .rejectFollowRequest:
+            identityContext.service.verifyCredentials()
+                .assignErrorsToAlertItem(to: \.alertItem, on: self)
+                .sink { _ in }
+                .store(in: &cancellables)
+        default:
+            break
+        }
+    }
 }
 
 private extension CollectionItemsViewModel {

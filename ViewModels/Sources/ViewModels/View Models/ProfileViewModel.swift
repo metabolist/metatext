@@ -139,4 +139,8 @@ extension ProfileViewModel: CollectionViewModel {
     public func toggleExpandAll() {
         collectionViewModel.value.toggleExpandAll()
     }
+
+    public func applyAccountListEdit(viewModel: AccountViewModel, edit: CollectionItemEvent.AccountListEdit) {
+        collectionViewModel.value.applyAccountListEdit(viewModel: viewModel, edit: edit)
+    }
 }
