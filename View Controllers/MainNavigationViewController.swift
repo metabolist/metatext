@@ -25,12 +25,6 @@ final class MainNavigationViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupViewControllers()
-
-        if viewModel.identityContext.identity.authenticated {
-            setupNewStatusButton()
-        }
-
         viewModel.$presentingSecondaryNavigation.sink { [weak self] in
             if $0 {
                 self?.presentSecondaryNavigation()
@@ -40,9 +34,19 @@ final class MainNavigationViewController: UITabBarController {
         }
         .store(in: &cancellables)
 
+        viewModel.identityContext.$identity.map(\.pending)
+            .removeDuplicates()
+            .print()
+            .sink { [weak self] in self?.setupViewControllers(pending: $0) }
+            .store(in: &cancellables)
+
         viewModel.timelineNavigations.map { _ in }
             .merge(with: viewModel.followRequestNavigations.map { _ in })
             .sink { [weak self] in self?.selectedIndex = 0 }
+            .store(in: &cancellables)
+
+        NotificationCenter.default.publisher(for: UIScene.willEnterForegroundNotification)
+            .sink { [weak self] _ in self?.viewModel.refreshIdentity() }
             .store(in: &cancellables)
     }
 
@@ -54,29 +58,29 @@ final class MainNavigationViewController: UITabBarController {
 }
 
 private extension MainNavigationViewController {
-    func setupViewControllers() {
+    func setupViewControllers(pending: Bool) {
         var controllers: [UIViewController] = [
             TimelinesViewController(
                 viewModel: viewModel,
                 rootViewModel: rootViewModel),
             ExploreViewController(
-                viewModel: viewModel.exploreViewModel,
+                viewModel: viewModel.exploreViewModel(),
                 rootViewModel: rootViewModel)
         ]
 
-        if viewModel.identityContext.identity.authenticated {
+        if viewModel.identityContext.identity.authenticated && !pending {
             controllers.append(NotificationsViewController(viewModel: viewModel, rootViewModel: rootViewModel))
-        }
 
-        if let conversationsViewModel = viewModel.conversationsViewModel {
             let conversationsViewController = TableViewController(
-                viewModel: conversationsViewModel,
+                viewModel: viewModel.conversationsViewModel(),
                 rootViewModel: rootViewModel)
 
             conversationsViewController.tabBarItem = NavigationViewModel.Tab.messages.tabBarItem
             conversationsViewController.navigationItem.title = NavigationViewModel.Tab.messages.title
 
             controllers.append(conversationsViewController)
+
+            setupNewStatusButton()
         }
 
         let secondaryNavigationButton = SecondaryNavigationButton(viewModel: viewModel, rootViewModel: rootViewModel)

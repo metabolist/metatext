@@ -14,30 +14,6 @@ public final class NavigationViewModel: ObservableObject {
     @Published public var presentingSecondaryNavigation = false
     @Published public var alertItem: AlertItem?
 
-    public lazy var exploreViewModel: ExploreViewModel = {
-        let exploreViewModel = ExploreViewModel(
-            service: identityContext.service.exploreService(),
-            identityContext: identityContext)
-
-        // TODO: initial request
-
-        return exploreViewModel
-    }()
-
-    public lazy var conversationsViewModel: CollectionViewModel? = {
-        if identityContext.identity.authenticated {
-                let conversationsViewModel = CollectionItemsViewModel(
-                    collectionService: identityContext.service.conversationsService(),
-                    identityContext: identityContext)
-
-                conversationsViewModel.request(maxId: nil, minId: nil, search: nil)
-
-            return conversationsViewModel
-        } else {
-            return nil
-        }
-    }()
-
     private let timelineNavigationsSubject = PassthroughSubject<Timeline, Never>()
     private let followRequestNavigationsSubject = PassthroughSubject<CollectionViewModel, Never>()
     private var cancellables = Set<AnyCancellable>()
@@ -141,6 +117,16 @@ public extension NavigationViewModel {
             identityContext: identityContext)
     }
 
+    func exploreViewModel() -> ExploreViewModel {
+        let exploreViewModel = ExploreViewModel(
+            service: identityContext.service.exploreService(),
+            identityContext: identityContext)
+
+        // TODO: initial request
+
+        return exploreViewModel
+    }
+
     func notificationsViewModel(excludeTypes: Set<MastodonNotification.NotificationType>) -> CollectionItemsViewModel {
         let viewModel = CollectionItemsViewModel(
             collectionService: identityContext.service.notificationsService(excludeTypes: excludeTypes),
@@ -149,5 +135,15 @@ public extension NavigationViewModel {
         viewModel.request(maxId: nil, minId: nil, search: nil)
 
         return viewModel
+    }
+
+    func conversationsViewModel() -> CollectionViewModel {
+        let conversationsViewModel = CollectionItemsViewModel(
+            collectionService: identityContext.service.conversationsService(),
+            identityContext: identityContext)
+
+        conversationsViewModel.request(maxId: nil, minId: nil, search: nil)
+
+        return conversationsViewModel
     }
 }
