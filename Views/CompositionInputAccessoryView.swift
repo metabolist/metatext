@@ -36,6 +36,8 @@ private extension CompositionInputAccessoryView {
     func initialSetup() {
         autoresizingMask = .flexibleHeight
 
+        heightAnchor.constraint(equalToConstant: .minimumButtonDimension).isActive = true
+
         var attachmentActions = [
             UIAction(
                 title: NSLocalizedString("compose.browse", comment: ""),
