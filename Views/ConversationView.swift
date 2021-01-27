@@ -7,6 +7,7 @@ import ViewModels
 final class ConversationView: UIView {
     let avatarsView = ConversationAvatarsView()
     let displayNamesLabel = UILabel()
+    let timeLabel = UILabel()
     let statusBodyView = StatusBodyView()
 
     private var conversationConfiguration: ConversationContentConfiguration
@@ -62,27 +63,37 @@ private extension ConversationView {
         let containerStackView = UIStackView()
         let sideStackView = UIStackView()
         let mainStackView = UIStackView()
+        let namesTimeStackView = UIStackView()
 
         addSubview(containerStackView)
         containerStackView.translatesAutoresizingMaskIntoConstraints = false
         containerStackView.spacing = .defaultSpacing
 
-        sideStackView.axis = .vertical
-        sideStackView.alignment = .trailing
+        sideStackView.alignment = .top
         sideStackView.spacing = .compactSpacing
         sideStackView.addArrangedSubview(avatarsView)
-        sideStackView.addArrangedSubview(UIView())
         containerStackView.addArrangedSubview(sideStackView)
+
+        namesTimeStackView.spacing = .compactSpacing
+        namesTimeStackView.alignment = .top
+        namesTimeStackView.addArrangedSubview(displayNamesLabel)
+        namesTimeStackView.addArrangedSubview(timeLabel)
 
         mainStackView.axis = .vertical
         mainStackView.spacing = .compactSpacing
-        mainStackView.addArrangedSubview(displayNamesLabel)
-        mainStackView.addSubview(UIView())
+        mainStackView.addArrangedSubview(namesTimeStackView)
         mainStackView.addArrangedSubview(statusBodyView)
         containerStackView.addArrangedSubview(mainStackView)
 
         displayNamesLabel.font = .preferredFont(forTextStyle: .headline)
         displayNamesLabel.adjustsFontForContentSizeCategory = true
+        displayNamesLabel.numberOfLines = 0
+
+        timeLabel.font = .preferredFont(forTextStyle: .subheadline)
+        timeLabel.adjustsFontForContentSizeCategory = true
+        timeLabel.textColor = .secondaryLabel
+        timeLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+        timeLabel.setContentHuggingPriority(.required, for: .horizontal)
 
         statusBodyView.alpha = 0.5
         statusBodyView.isUserInteractionEnabled = false
@@ -113,6 +124,7 @@ private extension ConversationView {
         mutableDisplayNames.resizeAttachments(toLineHeight: displayNamesLabel.font.lineHeight)
 
         displayNamesLabel.attributedText = mutableDisplayNames
+        timeLabel.text = viewModel.statusViewModel?.time
         statusBodyView.viewModel = viewModel.statusViewModel
         avatarsView.viewModel = viewModel
     }
