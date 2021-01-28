@@ -129,6 +129,7 @@ private extension MainNavigationViewController {
         hostingController.navigationItem.leftBarButtonItem = UIBarButtonItem(
             systemItem: .close,
             primaryAction: UIAction { [weak self] _ in self?.viewModel.presentingSecondaryNavigation = false })
+        hostingController.navigationItem.titleView = SecondaryNavigationTitleView(viewModel: viewModel)
 
         let navigationController = UINavigationController(rootViewController: hostingController)
 

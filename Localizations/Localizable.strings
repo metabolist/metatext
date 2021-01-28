@@ -85,7 +85,7 @@
 "registration.terms-of-service" = "Terms of service";
 "registration.agree-to-server-rules-and-terms-of-service" = "I agree to the server rules and terms of service";
 "registration.password-confirmation-mismatch" = "Password and password confirmation do not match";
-"secondary-navigation.manage-accounts" = "Manage Accounts";
+"secondary-navigation.accounts" = "Accounts";
 "secondary-navigation.lists" = "Lists";
 "secondary-navigation.my-profile" = "My Profile";
 "secondary-navigation.preferences" = "Preferences";

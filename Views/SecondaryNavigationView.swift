@@ -25,43 +25,9 @@ struct SecondaryNavigationView: View {
                 }
                 NavigationLink(
                     destination: IdentitiesView(viewModel: .init(identityContext: viewModel.identityContext))
-                        .environmentObject(rootViewModel),
-                    label: {
-                        HStack {
-                            KFImage(viewModel.identityContext.identity.image)
-                                .downsampled(dimension: .avatarDimension, scaleFactor: displayScale)
-                            VStack(alignment: .leading) {
-                                if viewModel.identityContext.identity.authenticated {
-                                    if let account = viewModel.identityContext.identity.account {
-                                        CustomEmojiText(
-                                            text: account.displayName,
-                                            emojis: account.emojis,
-                                            textStyle: .headline)
-                                    }
-                                    Text(viewModel.identityContext.identity.handle)
-                                        .font(.subheadline)
-                                        .foregroundColor(.secondary)
-                                        .lineLimit(1)
-                                        .minimumScaleFactor(0.5)
-                                } else {
-                                    Text(viewModel.identityContext.identity.handle)
-                                        .font(.headline)
-                                    if let instance = viewModel.identityContext.identity.instance {
-                                        Text(instance.uri)
-                                            .font(.subheadline)
-                                            .foregroundColor(.secondary)
-                                            .lineLimit(1)
-                                            .minimumScaleFactor(0.5)
-                                    }
-                                }
-
-                                Spacer()
-                                Text("secondary-navigation.manage-accounts")
-                                    .font(.subheadline)
-                            }
-                            .padding()
-                        }
-                    })
+                        .environmentObject(rootViewModel)) {
+                    Label("secondary-navigation.accounts", systemImage: "rectangle.stack.person.crop")
+                }
             }
             Section {
                 NavigationLink(destination: ListsView(viewModel: .init(identityContext: viewModel.identityContext))
