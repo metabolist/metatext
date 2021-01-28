@@ -7,9 +7,12 @@ import ViewModels
 struct AddIdentityView: UIViewControllerRepresentable {
     let viewModelClosure: () -> AddIdentityViewModel
     let displayWelcome: Bool
+    @EnvironmentObject var rootViewModel: RootViewModel
 
     func makeUIViewController(context: Context) -> AddIdentityViewController {
-        AddIdentityViewController(viewModel: viewModelClosure(), displayWelcome: displayWelcome)
+        AddIdentityViewController(viewModel: viewModelClosure(),
+                                  rootViewModel: rootViewModel,
+                                  displayWelcome: displayWelcome)
     }
 
     func updateUIViewController(_ uiViewController: AddIdentityViewController, context: Context) {

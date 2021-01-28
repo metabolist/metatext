@@ -9,6 +9,7 @@ import ViewModels
 
 final class AddIdentityViewController: UIViewController {
     private let viewModel: AddIdentityViewModel
+    private let rootViewModel: RootViewModel
     private let displayWelcome: Bool
     private let scrollView = UIScrollView()
     private let stackView = UIStackView()
@@ -27,8 +28,9 @@ final class AddIdentityViewController: UIViewController {
     private let whatIsMastodonButton = UIButton(type: .system)
     private var cancellables = Set<AnyCancellable>()
 
-    init(viewModel: AddIdentityViewModel, displayWelcome: Bool) {
+    init(viewModel: AddIdentityViewModel, rootViewModel: RootViewModel, displayWelcome: Bool) {
         self.viewModel = viewModel
+        self.rootViewModel = rootViewModel
         self.displayWelcome = displayWelcome
 
         super.init(nibName: nil, bundle: nil)
@@ -213,6 +215,14 @@ private extension AddIdentityViewController {
         viewModel.$alertItem
             .compactMap { $0 }
             .sink { [weak self] in self?.present(alertItem: $0) }
+            .store(in: &cancellables)
+
+        // There is a situation adding an identity from secondary navigation in which
+        // setting presentingSecondaryNavigation = false on the navigation view model
+        // does not work and the old secondary navigation is presented over the new
+        // main navigation. This is a hack to fix it.
+        rootViewModel.$navigationViewModel.dropFirst()
+            .sink { [weak self] _ in self?.dismiss(animated: true) }
             .store(in: &cancellables)
     }
 

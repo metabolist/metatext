@@ -8,7 +8,6 @@ final class MainNavigationViewController: UITabBarController {
     private let viewModel: NavigationViewModel
     private let rootViewModel: RootViewModel
     private var cancellables = Set<AnyCancellable>()
-    private weak var presentedSecondaryNavigation: UINavigationController?
 
     init(viewModel: NavigationViewModel, rootViewModel: RootViewModel) {
         self.viewModel = viewModel
@@ -56,6 +55,8 @@ final class MainNavigationViewController: UITabBarController {
 }
 
 private extension MainNavigationViewController {
+    static let secondaryNavigationViewTag = UUID().hashValue
+
     func setupViewControllers(pending: Bool) {
         var controllers: [UIViewController] = [
             TimelinesViewController(
@@ -132,12 +133,13 @@ private extension MainNavigationViewController {
 
         let navigationController = UINavigationController(rootViewController: hostingController)
 
-        presentedSecondaryNavigation = navigationController
+        navigationController.view.tag = Self.secondaryNavigationViewTag
+
         present(navigationController, animated: true)
     }
 
     func dismissSecondaryNavigation() {
-        if presentedViewController == presentedSecondaryNavigation {
+        if presentedViewController?.view.tag == Self.secondaryNavigationViewTag {
             dismiss(animated: true)
         }
     }
