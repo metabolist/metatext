@@ -17,7 +17,7 @@ let package = Package(
             targets: ["ServiceLayerMocks"])
     ],
     dependencies: [
-        .package(url: "https://github.com/groue/CombineExpectations.git", .upToNextMajor(from: "0.5.0")),
+        .package(url: "https://github.com/groue/CombineExpectations.git", .upToNextMajor(from: "0.7.0")),
         .package(path: "CodableBloomFilter"),
         .package(path: "DB"),
         .package(path: "Keychain"),
