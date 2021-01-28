@@ -20,9 +20,12 @@ struct IdentitiesView: View {
                         Label("add", systemImage: "plus.circle")
                     })
             }
-            section(title: "identities.accounts", identities: viewModel.authenticated)
-            section(title: "identities.browsing", identities: viewModel.unauthenticated)
-            section(title: "identities.pending", identities: viewModel.pending)
+            section(title: "identities.accounts",
+                    identities: viewModel.identities.filter { $0.authenticated && !$0.pending })
+            section(title: "identities.browsing",
+                    identities: viewModel.identities.filter { !$0.authenticated && !$0.pending })
+            section(title: "identities.pending",
+                    identities: viewModel.identities.filter { $0.pending })
         }
         .navigationTitle(Text("secondary-navigation.accounts"))
         .toolbar {

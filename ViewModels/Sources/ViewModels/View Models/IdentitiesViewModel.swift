@@ -6,9 +6,7 @@ import ServiceLayer
 
 public final class IdentitiesViewModel: ObservableObject {
     public let currentIdentityId: Identity.Id
-    @Published public var authenticated = [Identity]()
-    @Published public var unauthenticated = [Identity]()
-    @Published public var pending = [Identity]()
+    @Published public private(set) var identities = [Identity]()
     @Published public var alertItem: AlertItem?
     public let identityContext: IdentityContext
 
@@ -18,15 +16,8 @@ public final class IdentitiesViewModel: ObservableObject {
         self.identityContext = identityContext
         currentIdentityId = identityContext.identity.id
 
-        let identitiesPublisher = identityContext.service.identitiesPublisher()
+        identityContext.service.identitiesPublisher()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
-            .share()
-
-        identitiesPublisher.map { $0.filter { $0.authenticated && !$0.pending } }
-            .assign(to: &$authenticated)
-        identitiesPublisher.map { $0.filter { !$0.authenticated && !$0.pending } }
-            .assign(to: &$unauthenticated)
-        identitiesPublisher.map { $0.filter { $0.pending } }
-            .assign(to: &$pending)
+            .assign(to: &$identities)
     }
 }
