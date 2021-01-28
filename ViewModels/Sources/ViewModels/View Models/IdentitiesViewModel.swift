@@ -5,7 +5,6 @@ import Foundation
 import ServiceLayer
 
 public final class IdentitiesViewModel: ObservableObject {
-    public let currentIdentityId: Identity.Id
     @Published public private(set) var identities = [Identity]()
     @Published public var alertItem: AlertItem?
     public let identityContext: IdentityContext
@@ -14,10 +13,16 @@ public final class IdentitiesViewModel: ObservableObject {
 
     public init(identityContext: IdentityContext) {
         self.identityContext = identityContext
-        currentIdentityId = identityContext.identity.id
 
         identityContext.service.identitiesPublisher()
+            .receive(on: RunLoop.main)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$identities)
+    }
+}
+
+public extension IdentitiesViewModel {
+    func viewModel(identity: Identity) -> IdentityViewModel {
+        .init(identity: identity, identityContext: identityContext)
     }
 }

@@ -24,7 +24,7 @@ struct SecondaryNavigationView: View {
                     }
                 }
                 NavigationLink(
-                    destination: IdentitiesView(viewModel: .init(identityContext: viewModel.identityContext))
+                    destination: IdentitiesView { .init(identityContext: viewModel.identityContext) }
                         .environmentObject(rootViewModel)) {
                     Label("secondary-navigation.accounts", systemImage: "rectangle.stack.person.crop")
                 }

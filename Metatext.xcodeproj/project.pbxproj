@@ -21,6 +21,11 @@
 		D01EF22425182B1F00650C6B /* AccountHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01EF22325182B1F00650C6B /* AccountHeaderView.swift */; };
 		D01F41D924F880C400D55A2D /* TouchFallthroughTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01F41D624F880C400D55A2D /* TouchFallthroughTextView.swift */; };
 		D01F41E424F8889700D55A2D /* AttachmentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01F41E224F8889700D55A2D /* AttachmentsView.swift */; };
+		D021A5F625C34538008A0C0D /* IdentitiesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D021A5F525C34538008A0C0D /* IdentitiesViewController.swift */; };
+		D021A60025C3478F008A0C0D /* IdentitiesDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D021A5FF25C3478F008A0C0D /* IdentitiesDataSource.swift */; };
+		D021A60A25C36B32008A0C0D /* IdentityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D021A60925C36B32008A0C0D /* IdentityTableViewCell.swift */; };
+		D021A61425C36BFB008A0C0D /* IdentityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D021A61325C36BFB008A0C0D /* IdentityView.swift */; };
+		D021A61A25C36C1A008A0C0D /* IdentityContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D021A61925C36C1A008A0C0D /* IdentityContentConfiguration.swift */; };
 		D02E1F95250B13210071AD56 /* SafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02E1F94250B13210071AD56 /* SafariView.swift */; };
 		D035F86925B7F2ED00DC75ED /* MainNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D035F86825B7F2ED00DC75ED /* MainNavigationViewController.swift */; };
 		D035F86F25B7F30E00DC75ED /* MainNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D035F86E25B7F30E00DC75ED /* MainNavigationView.swift */; };
@@ -213,6 +218,11 @@
 		D01EF22325182B1F00650C6B /* AccountHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountHeaderView.swift; sourceTree = "<group>"; };
 		D01F41D624F880C400D55A2D /* TouchFallthroughTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchFallthroughTextView.swift; sourceTree = "<group>"; };
 		D01F41E224F8889700D55A2D /* AttachmentsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttachmentsView.swift; sourceTree = "<group>"; };
+		D021A5F525C34538008A0C0D /* IdentitiesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentitiesViewController.swift; sourceTree = "<group>"; };
+		D021A5FF25C3478F008A0C0D /* IdentitiesDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentitiesDataSource.swift; sourceTree = "<group>"; };
+		D021A60925C36B32008A0C0D /* IdentityTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityTableViewCell.swift; sourceTree = "<group>"; };
+		D021A61325C36BFB008A0C0D /* IdentityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityView.swift; sourceTree = "<group>"; };
+		D021A61925C36C1A008A0C0D /* IdentityContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityContentConfiguration.swift; sourceTree = "<group>"; };
 		D02E1F94250B13210071AD56 /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariView.swift; sourceTree = "<group>"; };
 		D035F86825B7F2ED00DC75ED /* MainNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationViewController.swift; sourceTree = "<group>"; };
 		D035F86E25B7F30E00DC75ED /* MainNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationView.swift; sourceTree = "<group>"; };
@@ -478,6 +488,7 @@
 		D0A1F4F5252E7D2A004435BF /* Data Sources */ = {
 			isa = PBXGroup;
 			children = (
+				D021A5FF25C3478F008A0C0D /* IdentitiesDataSource.swift */,
 				D0A1F4F6252E7D4B004435BF /* TableViewDataSource.swift */,
 			);
 			path = "Data Sources";
@@ -522,6 +533,9 @@
 				D07EC7F125B13E57006DF726 /* EmojiView.swift */,
 				D0BEB20424FA1107001B0F04 /* FiltersView.swift */,
 				D0C7D42224F76169001EBDBB /* IdentitiesView.swift */,
+				D021A61925C36C1A008A0C0D /* IdentityContentConfiguration.swift */,
+				D021A60925C36B32008A0C0D /* IdentityTableViewCell.swift */,
+				D021A61325C36BFB008A0C0D /* IdentityView.swift */,
 				D0D2AC6625BD0484003D5DF2 /* LineChartView.swift */,
 				D0BEB1FE24F9E5BB001B0F04 /* ListsView.swift */,
 				D0BEB1F624F9A84B001B0F04 /* LoadingTableFooterView.swift */,
@@ -570,6 +584,7 @@
 				D05936CE25A8D79800754FDF /* EditAttachmentViewController.swift */,
 				D088406C25AFBBE200BB749B /* EmojiPickerViewController.swift */,
 				D087671525BAA8C0001FDD43 /* ExploreViewController.swift */,
+				D021A5F525C34538008A0C0D /* IdentitiesViewController.swift */,
 				D08B8D49253FC36500B1EBEF /* ImageNavigationController.swift */,
 				D08B8D41253F92B600B1EBEF /* ImagePageViewController.swift */,
 				D08B8D3C253F929E00B1EBEF /* ImageViewController.swift */,
@@ -851,6 +866,7 @@
 				D07EC7CF25B13921006DF726 /* PickerEmoji+Extensions.swift in Sources */,
 				D00702292555E51200F38136 /* ConversationListCell.swift in Sources */,
 				D03B1B2A253818F3008F964B /* MediaPreferencesView.swift in Sources */,
+				D021A5F625C34538008A0C0D /* IdentitiesViewController.swift in Sources */,
 				D07EC7DC25B13DBB006DF726 /* EmojiCollectionViewCell.swift in Sources */,
 				D0C7D49C24F7616A001EBDBB /* RootView.swift in Sources */,
 				D0F0B126251A90F400942152 /* AccountListCell.swift in Sources */,
@@ -881,6 +897,7 @@
 				D01F41D924F880C400D55A2D /* TouchFallthroughTextView.swift in Sources */,
 				D0C7D4D624F7616A001EBDBB /* NSMutableAttributedString+Extensions.swift in Sources */,
 				D0E9F9AA258450B300EF503D /* CompositionInputAccessoryView.swift in Sources */,
+				D021A60A25C36B32008A0C0D /* IdentityTableViewCell.swift in Sources */,
 				D0849C7F25903C4900A5EBCC /* Status+Extensions.swift in Sources */,
 				D0F4362D25C10B9600E4F896 /* AddIdentityViewController.swift in Sources */,
 				D0625E59250F092900502611 /* StatusListCell.swift in Sources */,
@@ -889,6 +906,7 @@
 				D0C7D49D24F7616A001EBDBB /* PostingReadingPreferencesView.swift in Sources */,
 				D07EC7E325B13DD3006DF726 /* EmojiContentConfiguration.swift in Sources */,
 				D0B5FE9B251583DB00478838 /* ProfileCollection+Extensions.swift in Sources */,
+				D021A61A25C36C1A008A0C0D /* IdentityContentConfiguration.swift in Sources */,
 				D0C7D49E24F7616A001EBDBB /* SecondaryNavigationView.swift in Sources */,
 				D08B8D602540DE3B00B1EBEF /* ZoomAnimator.swift in Sources */,
 				D08B8D672540DEB200B1EBEF /* ZoomAnimatableView.swift in Sources */,
@@ -905,6 +923,7 @@
 				D0C7D4A224F7616A001EBDBB /* NotificationTypesPreferencesView.swift in Sources */,
 				D00702362555F4C500F38136 /* ConversationContentConfiguration.swift in Sources */,
 				D0BEB1F724F9A84B001B0F04 /* LoadingTableFooterView.swift in Sources */,
+				D021A61425C36BFB008A0C0D /* IdentityView.swift in Sources */,
 				D06BC5E625202AD90079541D /* ProfileViewController.swift in Sources */,
 				D0D2AC4D25BCD2A9003D5DF2 /* TagTableViewCell.swift in Sources */,
 				D0D2AC5325BCD2BA003D5DF2 /* TagContentConfiguration.swift in Sources */,
@@ -914,6 +933,7 @@
 				D0EA59402522AC8700804347 /* CardView.swift in Sources */,
 				D0F0B10E251A868200942152 /* AccountView.swift in Sources */,
 				D0BEB1FF24F9E5BB001B0F04 /* ListsView.swift in Sources */,
+				D021A60025C3478F008A0C0D /* IdentitiesDataSource.swift in Sources */,
 				D0C7D49724F7616A001EBDBB /* IdentitiesView.swift in Sources */,
 				D01EF22425182B1F00650C6B /* AccountHeaderView.swift in Sources */,
 				D059373E25AB8D5200754FDF /* CompositionPollOptionView.swift in Sources */,

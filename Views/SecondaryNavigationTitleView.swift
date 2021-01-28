@@ -31,7 +31,6 @@ private extension SecondaryNavigationTitleView {
         addSubview(avatarImageView)
         avatarImageView.translatesAutoresizingMaskIntoConstraints = false
         avatarImageView.layer.cornerRadius = .barButtonItemDimension / 2
-        avatarImageView.autoPlayAnimatedImage = viewModel.identityContext.appPreferences.animateAvatars == .everywhere
         avatarImageView.contentMode = .scaleAspectFill
         avatarImageView.clipsToBounds = true
 
@@ -67,6 +66,7 @@ private extension SecondaryNavigationTitleView {
 
     func applyViewModel() {
         avatarImageView.kf.setImage(with: viewModel.identityContext.identity.image)
+        avatarImageView.autoPlayAnimatedImage = viewModel.identityContext.appPreferences.animateAvatars == .everywhere
 
         if let displayName = viewModel.identityContext.identity.account?.displayName,
            !displayName.isEmpty {
