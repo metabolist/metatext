@@ -48,5 +48,5 @@ extension PollOptionButton {
 }
 
 private extension PollOptionButton {
-    static let titleEdgeInsets = UIEdgeInsets(top: 0, left: .compactSpacing, bottom: 0, right: .compactSpacing)
+    static let titleEdgeInsets = UIEdgeInsets(top: 0, left: .defaultSpacing, bottom: 0, right: .compactSpacing)
 }

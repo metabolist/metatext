@@ -84,6 +84,8 @@ final class AccountFieldView: UIView {
         checkButton.tintColor = .systemGreen
         checkButton.isHidden = verifiedAt == nil
         checkButton.showsMenuAsPrimaryAction = true
+        checkButton.setContentCompressionResistancePriority(.required, for: .horizontal)
+        checkButton.setContentHuggingPriority(.required, for: .horizontal)
 
         if let verifiedAt = verifiedAt {
             checkButton.menu = UIMenu(
