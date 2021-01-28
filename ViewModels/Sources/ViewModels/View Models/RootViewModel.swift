@@ -88,7 +88,9 @@ private extension RootViewModel {
         let identityPublisher = identityService.identityPublisher(immediate: immediate)
             .catch { [weak self] _ -> Empty<Identity, Never> in
                 DispatchQueue.main.async {
-                    self?.identitySelected(id: self?.mostRecentlyUsedIdentityId, immediate: false)
+                    if self?.navigationViewModel?.identityContext.identity.id == id {
+                        self?.identitySelected(id: self?.mostRecentlyUsedIdentityId, immediate: false)
+                    }
                 }
 
                 return Empty()
