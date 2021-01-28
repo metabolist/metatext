@@ -14,7 +14,6 @@ public final class RootViewModel: ObservableObject {
     private let userNotificationService: UserNotificationService
     private let registerForRemoteNotifications: () -> AnyPublisher<Data, Error>
     private var cancellables = Set<AnyCancellable>()
-    private var navigationViewModelCancellable: AnyCancellable?
 
     public init(environment: AppEnvironment,
                 registerForRemoteNotifications: @escaping () -> AnyPublisher<Data, Error>) throws {
@@ -96,8 +95,8 @@ private extension RootViewModel {
             }
             .share()
 
-        navigationViewModelCancellable = identityPublisher
-            .filter { [weak self] in $0.id != self?.navigationViewModel?.identityContext.identity.id }
+        identityPublisher
+            .first()
             .map { [weak self] in
                 guard let self = self else { return nil }
 
@@ -122,6 +121,6 @@ private extension RootViewModel {
 
                 return NavigationViewModel(identityContext: identityContext)
             }
-            .sink { [weak self] in self?.navigationViewModel = $0 }
+            .assign(to: &$navigationViewModel)
     }
 }
