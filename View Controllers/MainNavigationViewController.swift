@@ -36,7 +36,6 @@ final class MainNavigationViewController: UITabBarController {
 
         viewModel.identityContext.$identity.map(\.pending)
             .removeDuplicates()
-            .print()
             .sink { [weak self] in self?.setupViewControllers(pending: $0) }
             .store(in: &cancellables)
 
