@@ -66,7 +66,7 @@ private extension AddIdentityViewController {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
 
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.spacing = 20
+        stackView.spacing = .defaultSpacing
         stackView.axis = .vertical
         stackView.distribution = .equalSpacing
 
