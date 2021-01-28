@@ -74,14 +74,7 @@ private extension CompositionInputAccessoryView {
             primaryAction: UIAction { [weak self] _ in self?.viewModel.displayPoll.toggle() })
         let visibilityButton = UIBarButtonItem(
             image: UIImage(systemName: parentViewModel.visibility.systemImageName),
-            menu: UIMenu(children: Status.Visibility.allCasesExceptUnknown.reversed().map { visibility in
-                UIAction(
-                    title: visibility.title ?? "",
-                    image: UIImage(systemName: visibility.systemImageName),
-                    discoverabilityTitle: visibility.description) { [weak self] _ in
-                    self?.parentViewModel.visibility = visibility
-                }
-            }))
+            menu: visibilityMenu(selectedVisibility: parentViewModel.visibility))
         let contentWarningButton = UIBarButtonItem(
             title: NSLocalizedString("status.content-warning-abbreviation", comment: ""),
             primaryAction: UIAction { [weak self] _ in self?.viewModel.displayContentWarning.toggle() })
@@ -143,7 +136,24 @@ private extension CompositionInputAccessoryView {
             .store(in: &cancellables)
 
         parentViewModel.$visibility
-            .sink { visibilityButton.image = UIImage(systemName: $0.systemImageName) }
+            .sink { [weak self] in
+                visibilityButton.image = UIImage(systemName: $0.systemImageName)
+                visibilityButton.menu = self?.visibilityMenu(selectedVisibility: $0)
+            }
             .store(in: &cancellables)
+    }
+}
+
+private extension CompositionInputAccessoryView {
+    func visibilityMenu(selectedVisibility: Status.Visibility) -> UIMenu {
+        UIMenu(children: Status.Visibility.allCasesExceptUnknown.reversed().map { visibility in
+            UIAction(
+                title: visibility.title ?? "",
+                image: UIImage(systemName: visibility.systemImageName),
+                discoverabilityTitle: visibility.description,
+                state: visibility == selectedVisibility ? .on : .off) { [weak self] _ in
+                self?.parentViewModel.visibility = visibility
+            }
+        })
     }
 }
