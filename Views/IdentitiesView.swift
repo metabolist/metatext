@@ -24,6 +24,7 @@ struct IdentitiesView: View {
             section(title: "identities.browsing", identities: viewModel.unauthenticated)
             section(title: "identities.pending", identities: viewModel.pending)
         }
+        .navigationTitle(Text("secondary-navigation.accounts"))
         .toolbar {
             ToolbarItem(placement: ToolbarItemPlacement.navigationBarTrailing) {
                 EditButton()
@@ -64,35 +65,11 @@ private extension IdentitiesView {
     @ViewBuilder
     func row(identity: Identity) -> some View {
         HStack {
-            KFImage(identity.image)
-                .downsampled(dimension: 40, scaleFactor: displayScale)
-            VStack(alignment: .leading, spacing: 0) {
-                Spacer()
-                if identity.authenticated {
-                    if let account = identity.account {
-                        CustomEmojiText(
-                            text: account.displayName,
-                            emojis: account.emojis,
-                            textStyle: .headline)
-                    }
-                    Text(identity.handle)
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                } else {
-                    if let instance = identity.instance {
-                        CustomEmojiText(
-                            text: instance.title,
-                            emojis: [],
-                            textStyle: .headline)
-                        Text(instance.uri)
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                    } else {
-                        Text(identity.handle)
-                            .font(.headline)
-                    }
-                }
-                Spacer()
+            Label {
+                Text(verbatim: identity.handle)
+            } icon: {
+                KFImage(identity.image)
+                    .downsampled(dimension: .barButtonItemDimension, scaleFactor: displayScale)
             }
             Spacer()
             if identity.id == viewModel.currentIdentityId {

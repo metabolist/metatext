@@ -112,7 +112,6 @@
 		D0BECB9A2501C15F002C1B13 /* Mastodon in Frameworks */ = {isa = PBXBuildFile; productRef = D0BECB992501C15F002C1B13 /* Mastodon */; };
 		D0BECB9F2501D9AD002C1B13 /* PreviewViewModels in Frameworks */ = {isa = PBXBuildFile; productRef = D0BECB9E2501D9AD002C1B13 /* PreviewViewModels */; };
 		D0C7D49724F7616A001EBDBB /* IdentitiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42224F76169001EBDBB /* IdentitiesView.swift */; };
-		D0C7D49824F7616A001EBDBB /* CustomEmojiText.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42324F76169001EBDBB /* CustomEmojiText.swift */; };
 		D0C7D49924F7616A001EBDBB /* AddIdentityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42424F76169001EBDBB /* AddIdentityView.swift */; };
 		D0C7D49A24F7616A001EBDBB /* TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42524F76169001EBDBB /* TableView.swift */; };
 		D0C7D49B24F7616A001EBDBB /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42624F76169001EBDBB /* PreferencesView.swift */; };
@@ -294,7 +293,6 @@
 		D0C7D41E24F76169001EBDBB /* Metatext.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Metatext.entitlements; sourceTree = "<group>"; };
 		D0C7D41F24F76169001EBDBB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D0C7D42224F76169001EBDBB /* IdentitiesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentitiesView.swift; sourceTree = "<group>"; };
-		D0C7D42324F76169001EBDBB /* CustomEmojiText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomEmojiText.swift; sourceTree = "<group>"; };
 		D0C7D42424F76169001EBDBB /* AddIdentityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddIdentityView.swift; sourceTree = "<group>"; };
 		D0C7D42524F76169001EBDBB /* TableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableView.swift; sourceTree = "<group>"; };
 		D0C7D42624F76169001EBDBB /* PreferencesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
@@ -514,7 +512,6 @@
 				D00702352555F4C500F38136 /* ConversationContentConfiguration.swift */,
 				D00702282555E51200F38136 /* ConversationListCell.swift */,
 				D00702302555F4AE00F38136 /* ConversationView.swift */,
-				D0C7D42324F76169001EBDBB /* CustomEmojiText.swift */,
 				D08E52602579D2E100FA2C5F /* DomainBlocksView.swift */,
 				D05936E825AA3F3D00754FDF /* EditAttachmentView.swift */,
 				D0BEB21024FA2A90001B0F04 /* EditFilterView.swift */,
@@ -930,7 +927,6 @@
 				D0EA59482522B8B600804347 /* ViewConstants.swift in Sources */,
 				D04226FD2546AC0B000980A3 /* StartupAndSyncingPreferencesView.swift in Sources */,
 				D036AA0C254B612B009094DF /* NotificationContentConfiguration.swift in Sources */,
-				D0C7D49824F7616A001EBDBB /* CustomEmojiText.swift in Sources */,
 				D08B8D3D253F929E00B1EBEF /* ImageViewController.swift in Sources */,
 				D035F86925B7F2ED00DC75ED /* MainNavigationViewController.swift in Sources */,
 				D0B8510C25259E56004E0744 /* LoadMoreCell.swift in Sources */,
