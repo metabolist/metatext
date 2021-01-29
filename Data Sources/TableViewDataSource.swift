@@ -18,18 +18,18 @@ final class TableViewDataSource: UITableViewDiffableDataSource<CollectionSection
                 for: indexPath)
 
             switch (cell, viewModelProvider(indexPath)) {
-            case let (statusListCell as StatusListCell, statusViewModel as StatusViewModel):
-                statusListCell.viewModel = statusViewModel
-            case let (accountListCell as AccountListCell, accountViewModel as AccountViewModel):
-                accountListCell.viewModel = accountViewModel
-            case let (loadMoreCell as LoadMoreCell, loadMoreViewModel as LoadMoreViewModel):
+            case let (statusCell as StatusTableViewCell, statusViewModel as StatusViewModel):
+                statusCell.viewModel = statusViewModel
+            case let (accountCell as AccountTableViewCell, accountViewModel as AccountViewModel):
+                accountCell.viewModel = accountViewModel
+            case let (loadMoreCell as LoadMoreTableViewCell, loadMoreViewModel as LoadMoreViewModel):
                 loadMoreCell.viewModel = loadMoreViewModel
-            case let (notificationListCell as NotificationListCell, notificationViewModel as NotificationViewModel):
-                notificationListCell.viewModel = notificationViewModel
-            case let (conversationListCell as ConversationListCell, conversationViewModel as ConversationViewModel):
-                conversationListCell.viewModel = conversationViewModel
-            case let (tagTableViewCell as TagTableViewCell, tagViewModel as TagViewModel):
-                tagTableViewCell.viewModel = tagViewModel
+            case let (notificationCell as NotificationTableViewCell, notificationViewModel as NotificationViewModel):
+                notificationCell.viewModel = notificationViewModel
+            case let (conversationCell as ConversationTableViewCell, conversationViewModel as ConversationViewModel):
+                conversationCell.viewModel = conversationViewModel
+            case let (tagCell as TagTableViewCell, tagViewModel as TagViewModel):
+                tagCell.viewModel = tagViewModel
             case let (_, moreResultsViewModel as MoreResultsViewModel):
                 var configuration = cell.defaultContentConfiguration()
 

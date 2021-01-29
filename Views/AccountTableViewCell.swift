@@ -3,13 +3,13 @@
 import UIKit
 import ViewModels
 
-final class ConversationListCell: UITableViewCell {
-    var viewModel: ConversationViewModel?
+final class AccountTableViewCell: UITableViewCell {
+    var viewModel: AccountViewModel?
 
     override func updateConfiguration(using state: UICellConfigurationState) {
         guard let viewModel = viewModel else { return }
 
-        contentConfiguration = ConversationContentConfiguration(viewModel: viewModel).updated(for: state)
+        contentConfiguration = AccountContentConfiguration(viewModel: viewModel).updated(for: state)
     }
 
     override func layoutSubviews() {

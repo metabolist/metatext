@@ -5,26 +5,26 @@ import ViewModels
 
 extension CollectionItem {
     static let cellClasses = [
-        StatusListCell.self,
-        AccountListCell.self,
-        LoadMoreCell.self,
-        NotificationListCell.self,
-        ConversationListCell.self,
+        StatusTableViewCell.self,
+        AccountTableViewCell.self,
+        LoadMoreTableViewCell.self,
+        NotificationTableViewCell.self,
+        ConversationTableViewCell.self,
         TagTableViewCell.self,
         UITableViewCell.self]
 
     var cellClass: AnyClass {
         switch self {
         case .status:
-            return StatusListCell.self
+            return StatusTableViewCell.self
         case .account:
-            return AccountListCell.self
+            return AccountTableViewCell.self
         case .loadMore:
-            return LoadMoreCell.self
+            return LoadMoreTableViewCell.self
         case let .notification(_, statusConfiguration):
-            return statusConfiguration == nil ? NotificationListCell.self : StatusListCell.self
+            return statusConfiguration == nil ? NotificationTableViewCell.self : StatusTableViewCell.self
         case .conversation:
-            return ConversationListCell.self
+            return ConversationTableViewCell.self
         case .tag:
             return TagTableViewCell.self
         case .moreResults:

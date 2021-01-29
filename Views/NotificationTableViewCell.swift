@@ -3,7 +3,7 @@
 import UIKit
 import ViewModels
 
-final class NotificationListCell: UITableViewCell {
+final class NotificationTableViewCell: UITableViewCell {
     var viewModel: NotificationViewModel?
 
     override func updateConfiguration(using state: UICellConfigurationState) {

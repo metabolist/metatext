@@ -3,13 +3,13 @@
 import UIKit
 import ViewModels
 
-final class LoadMoreCell: UITableViewCell {
-    var viewModel: LoadMoreViewModel?
+final class ConversationTableViewCell: UITableViewCell {
+    var viewModel: ConversationViewModel?
 
     override func updateConfiguration(using state: UICellConfigurationState) {
         guard let viewModel = viewModel else { return }
 
-        contentConfiguration = LoadMoreContentConfiguration(viewModel: viewModel)
+        contentConfiguration = ConversationContentConfiguration(viewModel: viewModel).updated(for: state)
     }
 
     override func layoutSubviews() {
