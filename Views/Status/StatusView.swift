@@ -16,7 +16,7 @@ final class StatusView: UIView {
     let timeLabel = UILabel()
     let bodyView = StatusBodyView()
     let contextParentTimeLabel = UILabel()
-    let timeApplicationDividerLabel = UILabel()
+    let visibilityImageView = UIImageView()
     let applicationButton = UIButton(type: .system)
     let rebloggedByButton = UIButton()
     let favoritedByButton = UIButton()
@@ -33,6 +33,8 @@ final class StatusView: UIView {
     private let nameAccountContainerStackView = UIStackView()
     private let nameAccountTimeStackView = UIStackView()
     private let contextParentTimeApplicationStackView = UIStackView()
+    private let timeVisibilityDividerLabel = UILabel()
+    private let visibilityApplicationDividerLabel = UILabel()
     private let contextParentTopNameAccountSpacingView = UIView()
     private let contextParentBottomNameAccountSpacingView = UIView()
     private let interactionsDividerView = UIView()
@@ -173,7 +175,6 @@ private extension StatusView {
         mainStackView.addArrangedSubview(nameAccountContainerStackView)
 
         mainStackView.addArrangedSubview(bodyView)
-        bodyView.tag = 666
 
         contextParentTimeLabel.font = .preferredFont(forTextStyle: .footnote)
         contextParentTimeLabel.adjustsFontForContentSizeCategory = true
@@ -181,12 +182,21 @@ private extension StatusView {
         contextParentTimeLabel.setContentHuggingPriority(.required, for: .horizontal)
         contextParentTimeApplicationStackView.addArrangedSubview(contextParentTimeLabel)
 
-        timeApplicationDividerLabel.font = .preferredFont(forTextStyle: .footnote)
-        timeApplicationDividerLabel.adjustsFontForContentSizeCategory = true
-        timeApplicationDividerLabel.textColor = .secondaryLabel
-        timeApplicationDividerLabel.text = "•"
-        timeApplicationDividerLabel.setContentHuggingPriority(.required, for: .horizontal)
-        contextParentTimeApplicationStackView.addArrangedSubview(timeApplicationDividerLabel)
+        for label in [timeVisibilityDividerLabel, visibilityApplicationDividerLabel] {
+            label.font = .preferredFont(forTextStyle: .footnote)
+            label.adjustsFontForContentSizeCategory = true
+            label.textColor = .secondaryLabel
+            label.text = "•"
+            label.setContentHuggingPriority(.required, for: .horizontal)
+        }
+
+        contextParentTimeApplicationStackView.addArrangedSubview(timeVisibilityDividerLabel)
+
+        contextParentTimeApplicationStackView.addArrangedSubview(visibilityImageView)
+        visibilityImageView.contentMode = .scaleAspectFit
+        visibilityImageView.tintColor = .secondaryLabel
+
+        contextParentTimeApplicationStackView.addArrangedSubview(visibilityApplicationDividerLabel)
 
         applicationButton.titleLabel?.font = .preferredFont(forTextStyle: .footnote)
         applicationButton.titleLabel?.adjustsFontForContentSizeCategory = true
@@ -380,7 +390,8 @@ private extension StatusView {
         bodyView.viewModel = viewModel
 
         contextParentTimeLabel.text = viewModel.contextParentTime
-        timeApplicationDividerLabel.isHidden = viewModel.applicationName == nil
+        visibilityImageView.image = UIImage(systemName: viewModel.visibility.systemImageName)
+        visibilityApplicationDividerLabel.isHidden = viewModel.applicationName == nil
         applicationButton.isHidden = viewModel.applicationName == nil
         applicationButton.setTitle(viewModel.applicationName, for: .normal)
         applicationButton.isEnabled = viewModel.applicationURL != nil
