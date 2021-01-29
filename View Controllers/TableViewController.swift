@@ -56,7 +56,7 @@ class TableViewController: UITableViewController {
             refreshControl = UIRefreshControl()
             refreshControl?.addAction(
                 UIAction { [weak self] _ in
-                    self?.viewModel.request(maxId: nil, minId: nil, search: nil) },
+                    self?.refreshIfAble() },
                 for: .valueChanged)
         }
 
@@ -69,12 +69,14 @@ class TableViewController: UITableViewController {
         ])
 
         setupViewModelBindings()
+
+        viewModel.request(maxId: nil, minId: nil, search: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        viewModel.request(maxId: nil, minId: nil, search: nil)
+        refreshIfAble()
     }
 
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -289,7 +291,8 @@ private extension TableViewController {
             .store(in: &cancellables)
 
         NotificationCenter.default.publisher(for: UIScene.willEnterForegroundNotification)
-            .sink { [weak self] _ in self?.viewModel.request(maxId: nil, minId: nil, search: nil) }
+            .merge(with: NotificationCenter.default.publisher(for: NewStatusViewController.newStatusPostedNotification))
+            .sink { [weak self] _ in self?.refreshIfAble() }
             .store(in: &cancellables)
     }
 
@@ -491,6 +494,12 @@ private extension TableViewController {
         }
 
         present(activityViewController, animated: true, completion: nil)
+    }
+
+    func refreshIfAble() {
+        if viewModel.canRefresh {
+            viewModel.request(maxId: nil, minId: nil, search: nil)
+        }
     }
 }
 // swiftlint:enable file_length

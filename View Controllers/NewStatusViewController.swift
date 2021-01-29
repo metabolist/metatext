@@ -96,6 +96,10 @@ final class NewStatusViewController: UIViewController {
     }
 }
 
+extension NewStatusViewController {
+    static let newStatusPostedNotification = Notification.Name("com.metabolist.metatext.new-status-posted-notification")
+}
+
 extension NewStatusViewController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         mediaSelections.send(results)
@@ -169,6 +173,7 @@ private extension NewStatusViewController {
             stackView.isUserInteractionEnabled = false
             stackView.alpha = 0.5
         case .done:
+            NotificationCenter.default.post(.init(name: Self.newStatusPostedNotification))
             dismiss()
         }
     }
