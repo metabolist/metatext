@@ -133,6 +133,11 @@ public extension AppPreferences {
             return notificationsTabBehavior
         }
     }
+
+    var showReblogAndFavoriteCounts: Bool {
+        get { self[.showReblogAndFavoriteCounts] ?? false }
+        set { self[.showReblogAndFavoriteCounts] = newValue }
+    }
 }
 
 extension AppPreferences {
@@ -160,6 +165,7 @@ private extension AppPreferences {
         case homeTimelineBehavior
         case notificationsTabBehavior
         case defaultEmojiSkinTone
+        case showReblogAndFavoriteCounts
     }
 
     subscript<T>(index: Item) -> T? {

@@ -152,6 +152,7 @@
 "preferences.position.remember-position" = "Remember position";
 "preferences.position.sync-position" = "Sync position with web and other devices";
 "preferences.position.newest" = "Load newest";
+"preferences.show-reblog-and-favorite-counts" = "Show reblog and favorite counts";
 "filters.active" = "Active";
 "filters.expired" = "Expired";
 "filter.add-new" = "Add New Filter";

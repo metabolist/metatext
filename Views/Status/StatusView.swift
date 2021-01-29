@@ -428,8 +428,14 @@ private extension StatusView {
         setButtonImages(scale: isContextParent ? .medium : .small)
 
         replyButton.setCountTitle(count: viewModel.repliesCount, isContextParent: isContextParent)
-        reblogButton.setCountTitle(count: viewModel.reblogsCount, isContextParent: isContextParent)
-        favoriteButton.setCountTitle(count: viewModel.favoritesCount, isContextParent: isContextParent)
+
+        if viewModel.identityContext.appPreferences.showReblogAndFavoriteCounts || isContextParent {
+            reblogButton.setCountTitle(count: viewModel.reblogsCount, isContextParent: isContextParent)
+            favoriteButton.setCountTitle(count: viewModel.favoritesCount, isContextParent: isContextParent)
+        } else {
+            reblogButton.setTitle(nil, for: .normal)
+            favoriteButton.setTitle(nil, for: .normal)
+        }
 
         let reblogColor: UIColor = viewModel.reblogged ? .systemGreen : .secondaryLabel
 
@@ -517,7 +523,7 @@ private extension StatusView {
 
 private extension UIButton {
     func setCountTitle(count: Int, isContextParent: Bool) {
-        setTitle((isContextParent || count == 0) ? "" : String(count), for: .normal)
+        setTitle((isContextParent || count == 0) ? nil : String(count), for: .normal)
     }
 }
 // swiftlint:enable file_length
