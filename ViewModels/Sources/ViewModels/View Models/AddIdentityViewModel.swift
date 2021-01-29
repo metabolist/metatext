@@ -74,12 +74,6 @@ public extension AddIdentityViewModel {
         addIdentity(kind: .browsing)
     }
 
-    func refreshFilter() {
-        instanceURLService.updateFilter()
-            .sink { _ in } receiveValue: { _ in }
-            .store(in: &cancellables)
-    }
-
     func registrationViewModel(instance: Instance, url: URL) -> RegistrationViewModel {
         RegistrationViewModel(instance: instance, url: url, allIdentitiesService: allIdentitiesService)
     }

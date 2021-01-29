@@ -62,31 +62,12 @@ public extension InstanceURLService {
             .map { _ in true }
             .eraseToAnyPublisher()
     }
-
-    func updateFilter() -> AnyPublisher<Never, Error> {
-        httpClient.request(UpdatedFilterTarget())
-            .handleEvents(receiveOutput: { appPreferences.updateInstanceFilter($0) })
-            .ignoreOutput()
-            .eraseToAnyPublisher()
-    }
-}
-
-private struct UpdatedFilterTarget: DecodableTarget {
-    typealias ResultType = BloomFilter<String>
-
-    let baseURL = URL(string: "https://filter.metabolist.com")!
-    let pathComponents = ["filter"]
-    let method = HTTPMethod.get
-    let queryParameters: [URLQueryItem] = []
-    let jsonBody: [String: Any]? = nil
-    let multipartFormData: [String: MultipartFormValue]? = nil
-    let headers: [String: String]? = nil
 }
 
 private extension InstanceURLService {
     static let httpsPrefix = "https://"
     static let shortestPossibleURLLength = 4
-    static let defaultFilter = BloomFilter<String>(
+    static let filter = BloomFilter<String>(
         hashes: [.djb232, .djb2a32, .sdbm32, .fnv132, .fnv1a32],
         data: Data([
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -123,10 +104,6 @@ private extension InstanceURLService {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0
         ]))
 
-    var filter: BloomFilter<String> {
-        appPreferences.updatedInstanceFilter ?? Self.defaultFilter
-    }
-
     private func isFiltered(url: URL) -> Bool {
         guard let host = url.host else { return true }
 
@@ -136,7 +113,7 @@ private extension InstanceURLService {
         for component in allHostComponents.reversed() {
             hostComponents.insert(component, at: 0)
 
-            if filter.contains(hostComponents.joined(separator: ".")) {
+            if Self.filter.contains(hostComponents.joined(separator: ".")) {
                 return true
             }
         }

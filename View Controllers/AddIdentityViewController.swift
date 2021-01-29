@@ -50,12 +50,6 @@ final class AddIdentityViewController: UIViewController {
         setupViewModelBindings()
         initialDisplay()
     }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
-
-        viewModel.refreshFilter()
-    }
 }
 
 private extension AddIdentityViewController {
