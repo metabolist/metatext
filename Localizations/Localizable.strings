@@ -144,6 +144,7 @@
 "preferences.notification-types.reblog" = "Reblog";
 "preferences.notification-types.mention" = "Mention";
 "preferences.notification-types.poll" = "Poll";
+"preferences.notification-types.status" = "Status";
 "preferences.muted-users" = "Muted Users";
 "preferences.startup-and-syncing" = "Startup and Syncing";
 "preferences.startup-and-syncing.home-timeline" = "Home timeline";

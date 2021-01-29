@@ -47,7 +47,8 @@ extension PushSubscriptionEndpoint: Endpoint {
                             "favourite": alerts.favourite,
                             "reblog": alerts.reblog,
                             "mention": alerts.mention,
-                            "poll": alerts.poll
+                            "poll": alerts.poll,
+                            "status": alerts.status
                         ]]]
         case let .update(alerts):
             return ["data":
@@ -56,7 +57,8 @@ extension PushSubscriptionEndpoint: Endpoint {
                              "favourite": alerts.favourite,
                              "reblog": alerts.reblog,
                              "mention": alerts.mention,
-                             "poll": alerts.poll]]]
+                             "poll": alerts.poll,
+                             "status": alerts.status]]]
         default: return nil
         }
     }

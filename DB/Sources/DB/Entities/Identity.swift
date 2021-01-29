@@ -24,6 +24,8 @@ public extension Identity {
         public let streamingAPI: URL
         public let title: String
         public let thumbnail: URL?
+        public let version: String
+        public let maxTootChars: Int?
     }
 
     struct Account: Codable, Hashable {

@@ -70,7 +70,9 @@ public extension IdentityDatabase {
                 uri: instance.uri,
                 streamingAPI: instance.urls.streamingApi,
                 title: instance.title,
-                thumbnail: instance.thumbnail)
+                thumbnail: instance.thumbnail,
+                version: instance.version,
+                maxTootChars: instance.maxTootChars)
                 .save($0)
             try IdentityRecord
                 .filter(IdentityRecord.Columns.id == id)

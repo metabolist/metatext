@@ -9,9 +9,11 @@ extension IdentityDatabase {
         migrator.registerMigration("0.1.0") { db in
             try db.create(table: "instance", ifNotExists: true) { t in
                 t.column("uri", .text).primaryKey(onConflict: .replace)
-                t.column("streamingAPI", .text)
-                t.column("title", .text)
+                t.column("streamingAPI", .text).notNull()
+                t.column("title", .text).notNull()
                 t.column("thumbnail", .text)
+                t.column("version", .text).notNull()
+                t.column("maxTootChars", .integer)
             }
 
             try db.create(table: "identityRecord", ifNotExists: true) { t in

@@ -9,6 +9,7 @@ public struct PushSubscription: Codable {
         public var reblog: Bool
         public var mention: Bool
         @DecodableDefault.True public var poll: Bool
+        @DecodableDefault.True public var status: Bool
     }
 
     public let endpoint: URL
@@ -22,5 +23,6 @@ public extension PushSubscription.Alerts {
         favourite: true,
         reblog: true,
         mention: true,
-        poll: DecodableDefault.True())
+        poll: DecodableDefault.True(),
+        status: DecodableDefault.True())
 }

@@ -27,4 +27,5 @@ public struct Instance: Codable, Hashable {
     public let stats: Stats
     public let thumbnail: URL?
     public let contactAccount: Account?
+    public let maxTootChars: Int?
 }
