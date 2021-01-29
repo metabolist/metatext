@@ -16,6 +16,8 @@ struct NotificationTypesPreferencesView: View {
                    isOn: $viewModel.pushSubscriptionAlerts.reblog)
             Toggle("preferences.notification-types.mention",
                    isOn: $viewModel.pushSubscriptionAlerts.mention)
+            Toggle("preferences.notification-types.follow-request",
+                   isOn: $viewModel.pushSubscriptionAlerts.followRequest)
             Toggle("preferences.notification-types.poll",
                    isOn: $viewModel.pushSubscriptionAlerts.poll)
             Toggle("preferences.notification-types.status",

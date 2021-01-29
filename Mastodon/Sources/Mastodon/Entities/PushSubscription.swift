@@ -8,6 +8,7 @@ public struct PushSubscription: Codable {
         public var favourite: Bool
         public var reblog: Bool
         public var mention: Bool
+        @DecodableDefault.True public var followRequest: Bool
         @DecodableDefault.True public var poll: Bool
         @DecodableDefault.True public var status: Bool
     }
@@ -23,6 +24,7 @@ public extension PushSubscription.Alerts {
         favourite: true,
         reblog: true,
         mention: true,
+        followRequest: DecodableDefault.True(),
         poll: DecodableDefault.True(),
         status: DecodableDefault.True())
 }

@@ -141,6 +141,7 @@
 "preferences.notification-types" = "Notification Types";
 "preferences.notification-types.follow" = "Follow";
 "preferences.notification-types.favourite" = "Favorite";
+"preferences.notification-types.follow-request" = "Follow Request";
 "preferences.notification-types.reblog" = "Reblog";
 "preferences.notification-types.mention" = "Mention";
 "preferences.notification-types.poll" = "Poll";

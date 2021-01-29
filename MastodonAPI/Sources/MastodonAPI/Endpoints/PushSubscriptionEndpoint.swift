@@ -47,6 +47,7 @@ extension PushSubscriptionEndpoint: Endpoint {
                             "favourite": alerts.favourite,
                             "reblog": alerts.reblog,
                             "mention": alerts.mention,
+                            "follow_request": alerts.followRequest,
                             "poll": alerts.poll,
                             "status": alerts.status
                         ]]]
@@ -57,6 +58,7 @@ extension PushSubscriptionEndpoint: Endpoint {
                              "favourite": alerts.favourite,
                              "reblog": alerts.reblog,
                              "mention": alerts.mention,
+                             "follow_request": alerts.followRequest,
                              "poll": alerts.poll,
                              "status": alerts.status]]]
         default: return nil
