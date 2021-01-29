@@ -5,7 +5,7 @@ import Foundation
 import UserNotifications
 
 public struct UserNotificationService {
-    let events: AnyPublisher<UserNotificationClient.DelegateEvent, Never>
+    public let events: AnyPublisher<Event, Never>
 
     private let userNotificationClient: UserNotificationClient
 
@@ -16,12 +16,14 @@ public struct UserNotificationService {
 }
 
 public extension UserNotificationService {
-    func isAuthorized() -> AnyPublisher<Bool, Error> {
+    typealias Event = UserNotificationClient.DelegateEvent
+
+    func isAuthorized(request: Bool) -> AnyPublisher<Bool, Error> {
         getNotificationSettings()
             .map(\.authorizationStatus)
             .flatMap { status -> AnyPublisher<Bool, Error> in
-                if status == .notDetermined {
-                    return requestProvisionalAuthorization().eraseToAnyPublisher()
+                if request, status == .notDetermined {
+                    return requestAuthorization().eraseToAnyPublisher()
                 }
 
                 return Just(status == .authorized || status == .provisional)
@@ -40,9 +42,9 @@ private extension UserNotificationService {
         .eraseToAnyPublisher()
     }
 
-    func requestProvisionalAuthorization() -> AnyPublisher<Bool, Error> {
+    func requestAuthorization() -> AnyPublisher<Bool, Error> {
         Future<Bool, Error> { promise in
-            userNotificationClient.requestAuthorization([.alert, .sound, .badge, .provisional]) { granted, error in
+            userNotificationClient.requestAuthorization([.alert, .sound, .badge]) { granted, error in
                 if let error = error {
                     promise(.failure(error))
                 } else {

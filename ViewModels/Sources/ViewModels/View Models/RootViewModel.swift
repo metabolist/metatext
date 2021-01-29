@@ -32,12 +32,16 @@ public final class RootViewModel: ObservableObject {
             .sink { [weak self] in self?.identitySelected(id: $0) }
             .store(in: &cancellables)
 
-        userNotificationService.isAuthorized()
+        userNotificationService.isAuthorized(request: false)
             .filter { $0 }
             .zip(registerForRemoteNotifications())
             .map { $1 }
             .flatMap(allIdentitiesService.updatePushSubscriptions(deviceToken:))
             .sink { _ in } receiveValue: { _ in }
+            .store(in: &cancellables)
+
+        userNotificationService.events
+            .sink { [weak self] in self?.handle(event: $0) }
             .store(in: &cancellables)
     }
 }
@@ -112,17 +116,28 @@ private extension RootViewModel {
                     .sink { _ in } receiveValue: { _ in }
                     .store(in: &self.cancellables)
 
-                self.userNotificationService.isAuthorized()
-                    .filter { $0 }
-                    .zip(self.registerForRemoteNotifications())
-                    .filter { identityContext.identity.lastRegisteredDeviceToken != $1 }
-                    .map { ($1, identityContext.identity.pushSubscriptionAlerts) }
-                    .flatMap(identityContext.service.createPushSubscription(deviceToken:alerts:))
-                    .sink { _ in } receiveValue: { _ in }
-                    .store(in: &self.cancellables)
+                if identityContext.identity.authenticated && !identityContext.identity.pending {
+                    self.userNotificationService.isAuthorized(request: true)
+                        .filter { $0 }
+                        .zip(self.registerForRemoteNotifications())
+                        .filter { identityContext.identity.lastRegisteredDeviceToken != $1 }
+                        .map { ($1, identityContext.identity.pushSubscriptionAlerts) }
+                        .flatMap(identityContext.service.createPushSubscription(deviceToken:alerts:))
+                        .sink { _ in } receiveValue: { _ in }
+                        .store(in: &self.cancellables)
+                }
 
                 return NavigationViewModel(identityContext: identityContext)
             }
             .assign(to: &$navigationViewModel)
+    }
+
+    func handle(event: UserNotificationService.Event) {
+        switch event {
+        case let .willPresentNotification(_, completionHandler):
+            completionHandler(.banner)
+        default:
+            break
+        }
     }
 }

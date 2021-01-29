@@ -210,7 +210,9 @@ public extension IdentityDatabase {
     func fetchIdentitiesWithOutdatedDeviceTokens(deviceToken: Data) -> AnyPublisher<[Identity], Error> {
         databaseWriter.readPublisher(
             value: IdentityInfo.request(IdentityRecord.order(IdentityRecord.Columns.lastUsedAt.desc))
-                .filter(IdentityRecord.Columns.lastRegisteredDeviceToken != deviceToken)
+                .filter(IdentityRecord.Columns.authenticated == true
+                            && IdentityRecord.Columns.pending == false
+                            && IdentityRecord.Columns.lastRegisteredDeviceToken != deviceToken)
                 .fetchAll)
             .map { $0.map(Identity.init(info:)) }
             .eraseToAnyPublisher()
