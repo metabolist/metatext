@@ -1,18 +1,35 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
+import Combine
 import Foundation
 import ServiceLayer
 
 public final class PreferencesViewModel: ObservableObject {
-    public let handle: String
+    @Published public var preferences: Identity.Preferences
+    @Published public var alertItem: AlertItem?
     public let shouldShowNotificationTypePreferences: Bool
     public let identityContext: IdentityContext
 
+    private var cancellables = Set<AnyCancellable>()
+
     public init(identityContext: IdentityContext) {
         self.identityContext = identityContext
-        handle = identityContext.identity.handle
 
         shouldShowNotificationTypePreferences = identityContext.identity.lastRegisteredDeviceToken != nil
+        preferences = identityContext.identity.preferences
+
+        identityContext.$identity
+            .map(\.preferences)
+            .dropFirst()
+            .removeDuplicates()
+            .assign(to: &$preferences)
+
+        $preferences
+            .dropFirst()
+            .flatMap(identityContext.service.updatePreferences)
+            .assignErrorsToAlertItem(to: \.alertItem, on: self)
+            .sink { _ in }
+            .store(in: &cancellables)
     }
 }
 

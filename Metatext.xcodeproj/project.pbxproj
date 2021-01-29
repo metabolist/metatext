@@ -44,9 +44,7 @@
 		D036EBB8259FE29800EC1CFC /* Status+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0849C7E25903C4900A5EBCC /* Status+Extensions.swift */; };
 		D036EBC2259FE2AD00EC1CFC /* UIVIewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E7AD3825870B13005F5E2D /* UIVIewController+Extensions.swift */; };
 		D036EBC7259FE2B700EC1CFC /* KingfisherOptionsInfo+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D46E24F76169001EBDBB /* KingfisherOptionsInfo+Extensions.swift */; };
-		D03B1B2A253818F3008F964B /* MediaPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03B1B29253818F3008F964B /* MediaPreferencesView.swift */; };
 		D03D87F425C23C44004DCBB2 /* SecondaryNavigationTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03D87F325C23C44004DCBB2 /* SecondaryNavigationTitleView.swift */; };
-		D04226FD2546AC0B000980A3 /* StartupAndSyncingPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04226FC2546AC0B000980A3 /* StartupAndSyncingPreferencesView.swift */; };
 		D04F9E8E259E9C950081B0C9 /* ViewModels in Frameworks */ = {isa = PBXBuildFile; productRef = D04F9E8D259E9C950081B0C9 /* ViewModels */; };
 		D05936CF25A8D79800754FDF /* EditAttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05936CE25A8D79800754FDF /* EditAttachmentViewController.swift */; };
 		D05936D025A8D79800754FDF /* EditAttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05936CE25A8D79800754FDF /* EditAttachmentViewController.swift */; };
@@ -123,7 +121,6 @@
 		D0C7D49A24F7616A001EBDBB /* TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42524F76169001EBDBB /* TableView.swift */; };
 		D0C7D49B24F7616A001EBDBB /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42624F76169001EBDBB /* PreferencesView.swift */; };
 		D0C7D49C24F7616A001EBDBB /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42724F76169001EBDBB /* RootView.swift */; };
-		D0C7D49D24F7616A001EBDBB /* PostingReadingPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42824F76169001EBDBB /* PostingReadingPreferencesView.swift */; };
 		D0C7D49E24F7616A001EBDBB /* SecondaryNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42924F76169001EBDBB /* SecondaryNavigationView.swift */; };
 		D0C7D4A224F7616A001EBDBB /* NotificationTypesPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D42D24F76169001EBDBB /* NotificationTypesPreferencesView.swift */; };
 		D0C7D4C224F7616A001EBDBB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0C7D45224F76169001EBDBB /* Assets.xcassets */; };
@@ -239,9 +236,7 @@
 		D036AA06254B6118009094DF /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		D036AA0B254B612B009094DF /* NotificationContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationContentConfiguration.swift; sourceTree = "<group>"; };
 		D036AA16254CA823009094DF /* StatusBodyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBodyView.swift; sourceTree = "<group>"; };
-		D03B1B29253818F3008F964B /* MediaPreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPreferencesView.swift; sourceTree = "<group>"; };
 		D03D87F325C23C44004DCBB2 /* SecondaryNavigationTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondaryNavigationTitleView.swift; sourceTree = "<group>"; };
-		D04226FC2546AC0B000980A3 /* StartupAndSyncingPreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartupAndSyncingPreferencesView.swift; sourceTree = "<group>"; };
 		D047FA8C24C3E21200AF17C5 /* Metatext.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Metatext.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D05936CE25A8D79800754FDF /* EditAttachmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAttachmentViewController.swift; sourceTree = "<group>"; };
 		D05936DD25A937EC00754FDF /* EditThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditThumbnailView.swift; sourceTree = "<group>"; };
@@ -311,7 +306,6 @@
 		D0C7D42524F76169001EBDBB /* TableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableView.swift; sourceTree = "<group>"; };
 		D0C7D42624F76169001EBDBB /* PreferencesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
 		D0C7D42724F76169001EBDBB /* RootView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
-		D0C7D42824F76169001EBDBB /* PostingReadingPreferencesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostingReadingPreferencesView.swift; sourceTree = "<group>"; };
 		D0C7D42924F76169001EBDBB /* SecondaryNavigationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecondaryNavigationView.swift; sourceTree = "<group>"; };
 		D0C7D42D24F76169001EBDBB /* NotificationTypesPreferencesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationTypesPreferencesView.swift; sourceTree = "<group>"; };
 		D0C7D45224F76169001EBDBB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -550,7 +544,6 @@
 				D0E569DA2529319100FA1D72 /* LoadMoreView.swift */,
 				D035F86E25B7F30E00DC75ED /* MainNavigationView.swift */,
 				D05936FE25AA94EA00754FDF /* MarkAttachmentsSensitiveView.swift */,
-				D03B1B29253818F3008F964B /* MediaPreferencesView.swift */,
 				D035F8A825B9155900DC75ED /* NewStatusButtonView.swift */,
 				D036AA0B254B612B009094DF /* NotificationContentConfiguration.swift */,
 				D036AA01254B6101009094DF /* NotificationListCell.swift */,
@@ -560,7 +553,6 @@
 				D08B8D812544D80000B1EBEF /* PollOptionButton.swift */,
 				D08B8D8C2544E6EC00B1EBEF /* PollResultView.swift */,
 				D08B8D71254246E200B1EBEF /* PollView.swift */,
-				D0C7D42824F76169001EBDBB /* PostingReadingPreferencesView.swift */,
 				D0C7D42624F76169001EBDBB /* PreferencesView.swift */,
 				D0B32F4F250B373600311912 /* RegistrationView.swift */,
 				D0DD50CA256B1F24004A04F7 /* ReportView.swift */,
@@ -569,7 +561,6 @@
 				D035F8C625B96A4000DC75ED /* SecondaryNavigationButton.swift */,
 				D03D87F325C23C44004DCBB2 /* SecondaryNavigationTitleView.swift */,
 				D0C7D42924F76169001EBDBB /* SecondaryNavigationView.swift */,
-				D04226FC2546AC0B000980A3 /* StartupAndSyncingPreferencesView.swift */,
 				D0625E55250F086B00502611 /* Status */,
 				D0C7D42524F76169001EBDBB /* TableView.swift */,
 				D0D2AC5225BCD2BA003D5DF2 /* TagContentConfiguration.swift */,
@@ -872,7 +863,6 @@
 				D021A63625C38ADB008A0C0D /* AcknowledgmentsView.swift in Sources */,
 				D07EC7CF25B13921006DF726 /* PickerEmoji+Extensions.swift in Sources */,
 				D00702292555E51200F38136 /* ConversationListCell.swift in Sources */,
-				D03B1B2A253818F3008F964B /* MediaPreferencesView.swift in Sources */,
 				D021A5F625C34538008A0C0D /* IdentitiesViewController.swift in Sources */,
 				D07EC7DC25B13DBB006DF726 /* EmojiCollectionViewCell.swift in Sources */,
 				D0C7D49C24F7616A001EBDBB /* RootView.swift in Sources */,
@@ -910,7 +900,6 @@
 				D0625E59250F092900502611 /* StatusListCell.swift in Sources */,
 				D0E569DB2529319100FA1D72 /* LoadMoreView.swift in Sources */,
 				D05936FF25AA94EA00754FDF /* MarkAttachmentsSensitiveView.swift in Sources */,
-				D0C7D49D24F7616A001EBDBB /* PostingReadingPreferencesView.swift in Sources */,
 				D07EC7E325B13DD3006DF726 /* EmojiContentConfiguration.swift in Sources */,
 				D0B5FE9B251583DB00478838 /* ProfileCollection+Extensions.swift in Sources */,
 				D021A61A25C36C1A008A0C0D /* IdentityContentConfiguration.swift in Sources */,
@@ -953,7 +942,6 @@
 				D05936E925AA3F3D00754FDF /* EditAttachmentView.swift in Sources */,
 				D035F8C725B96A4000DC75ED /* SecondaryNavigationButton.swift in Sources */,
 				D0EA59482522B8B600804347 /* ViewConstants.swift in Sources */,
-				D04226FD2546AC0B000980A3 /* StartupAndSyncingPreferencesView.swift in Sources */,
 				D036AA0C254B612B009094DF /* NotificationContentConfiguration.swift in Sources */,
 				D08B8D3D253F929E00B1EBEF /* ImageViewController.swift in Sources */,
 				D035F86925B7F2ED00DC75ED /* MainNavigationViewController.swift in Sources */,
