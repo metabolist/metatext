@@ -68,6 +68,11 @@ struct SecondaryNavigationView: View {
                         .environmentObject(rootViewModel)) {
                     Label("secondary-navigation.preferences", systemImage: "gear")
                 }
+                NavigationLink(
+                    destination: AboutView()
+                        .environmentObject(rootViewModel)) {
+                    Label("secondary-navigation.about", systemImage: "info.circle")
+                }
             }
         }
     }

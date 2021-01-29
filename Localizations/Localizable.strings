@@ -1,5 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
+"about" = "About";
+"about.acknowledgments" = "Acknowledgments";
 "account.%@-followers" = "%@'s Followers";
 "account.block" = "Block";
 "account.block.confirm-%@" = "Block %@?";
@@ -85,6 +87,7 @@
 "registration.terms-of-service" = "Terms of service";
 "registration.agree-to-server-rules-and-terms-of-service" = "I agree to the server rules and terms of service";
 "registration.password-confirmation-mismatch" = "Password and password confirmation do not match";
+"secondary-navigation.about" = "About This App";
 "secondary-navigation.accounts" = "Accounts";
 "secondary-navigation.lists" = "Lists";
 "secondary-navigation.my-profile" = "My Profile";
@@ -98,6 +101,7 @@
 "main-navigation.explore" = "Explore";
 "main-navigation.notifications" = "Notifications";
 "main-navigation.conversations" = "Messages";
+"metatext" = "Metatext";
 "notifications.all" = "All";
 "notifications.mentions" = "Mentions";
 "ok" = "OK";

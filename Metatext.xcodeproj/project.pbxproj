@@ -26,6 +26,8 @@
 		D021A60A25C36B32008A0C0D /* IdentityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D021A60925C36B32008A0C0D /* IdentityTableViewCell.swift */; };
 		D021A61425C36BFB008A0C0D /* IdentityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D021A61325C36BFB008A0C0D /* IdentityView.swift */; };
 		D021A61A25C36C1A008A0C0D /* IdentityContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D021A61925C36C1A008A0C0D /* IdentityContentConfiguration.swift */; };
+		D021A62C25C38570008A0C0D /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D021A62B25C38570008A0C0D /* AboutView.swift */; };
+		D021A63625C38ADB008A0C0D /* AcknowledgmentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D021A63525C38ADB008A0C0D /* AcknowledgmentsView.swift */; };
 		D02E1F95250B13210071AD56 /* SafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02E1F94250B13210071AD56 /* SafariView.swift */; };
 		D035F86925B7F2ED00DC75ED /* MainNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D035F86825B7F2ED00DC75ED /* MainNavigationViewController.swift */; };
 		D035F86F25B7F30E00DC75ED /* MainNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D035F86E25B7F30E00DC75ED /* MainNavigationView.swift */; };
@@ -223,6 +225,8 @@
 		D021A60925C36B32008A0C0D /* IdentityTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityTableViewCell.swift; sourceTree = "<group>"; };
 		D021A61325C36BFB008A0C0D /* IdentityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityView.swift; sourceTree = "<group>"; };
 		D021A61925C36C1A008A0C0D /* IdentityContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityContentConfiguration.swift; sourceTree = "<group>"; };
+		D021A62B25C38570008A0C0D /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
+		D021A63525C38ADB008A0C0D /* AcknowledgmentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcknowledgmentsView.swift; sourceTree = "<group>"; };
 		D02E1F94250B13210071AD56 /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariView.swift; sourceTree = "<group>"; };
 		D035F86825B7F2ED00DC75ED /* MainNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationViewController.swift; sourceTree = "<group>"; };
 		D035F86E25B7F30E00DC75ED /* MainNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationView.swift; sourceTree = "<group>"; };
@@ -506,11 +510,13 @@
 		D0C7D42024F76169001EBDBB /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D021A62B25C38570008A0C0D /* AboutView.swift */,
 				D0F0B112251A86A000942152 /* AccountContentConfiguration.swift */,
 				D0070251255921B100F38136 /* AccountFieldView.swift */,
 				D01EF22325182B1F00650C6B /* AccountHeaderView.swift */,
 				D0F0B125251A90F400942152 /* AccountListCell.swift */,
 				D0F0B10D251A868200942152 /* AccountView.swift */,
+				D021A63525C38ADB008A0C0D /* AcknowledgmentsView.swift */,
 				D0C7D42424F76169001EBDBB /* AddIdentityView.swift */,
 				D01F41E224F8889700D55A2D /* AttachmentsView.swift */,
 				D0CE9F86258B076900E3A6B6 /* AttachmentUploadView.swift */,
@@ -863,6 +869,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D02E1F95250B13210071AD56 /* SafariView.swift in Sources */,
+				D021A63625C38ADB008A0C0D /* AcknowledgmentsView.swift in Sources */,
 				D07EC7CF25B13921006DF726 /* PickerEmoji+Extensions.swift in Sources */,
 				D00702292555E51200F38136 /* ConversationListCell.swift in Sources */,
 				D03B1B2A253818F3008F964B /* MediaPreferencesView.swift in Sources */,
@@ -921,6 +928,7 @@
 				D07EC7F225B13E57006DF726 /* EmojiView.swift in Sources */,
 				D05936CF25A8D79800754FDF /* EditAttachmentViewController.swift in Sources */,
 				D0C7D4A224F7616A001EBDBB /* NotificationTypesPreferencesView.swift in Sources */,
+				D021A62C25C38570008A0C0D /* AboutView.swift in Sources */,
 				D00702362555F4C500F38136 /* ConversationContentConfiguration.swift in Sources */,
 				D0BEB1F724F9A84B001B0F04 /* LoadingTableFooterView.swift in Sources */,
 				D021A61425C36BFB008A0C0D /* IdentityView.swift in Sources */,
