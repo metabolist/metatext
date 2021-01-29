@@ -61,13 +61,13 @@ private extension MainNavigationViewController {
         var controllers: [UIViewController] = [
             TimelinesViewController(
                 viewModel: viewModel,
-                rootViewModel: rootViewModel),
-            ExploreViewController(
-                viewModel: viewModel.exploreViewModel(),
                 rootViewModel: rootViewModel)
         ]
 
         if viewModel.identityContext.identity.authenticated && !pending {
+            tabBar.isHidden = false
+            controllers.append(ExploreViewController(viewModel: viewModel.exploreViewModel(),
+                                                     rootViewModel: rootViewModel))
             controllers.append(NotificationsViewController(viewModel: viewModel, rootViewModel: rootViewModel))
 
             let conversationsViewController = TableViewController(
@@ -80,6 +80,8 @@ private extension MainNavigationViewController {
             controllers.append(conversationsViewController)
 
             setupNewStatusButton()
+        } else {
+            tabBar.isHidden = true
         }
 
         let secondaryNavigationButton = SecondaryNavigationButton(viewModel: viewModel, rootViewModel: rootViewModel)
