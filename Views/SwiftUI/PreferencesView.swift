@@ -92,7 +92,8 @@ struct PreferencesView: View {
                         .disabled(reduceMotion)
                 }
                 .disabled(reduceMotion)
-                Toggle("preferences.show-reblog-and-favorite-counts", isOn: $identityContext.appPreferences.showReblogAndFavoriteCounts)
+                Toggle("preferences.show-reblog-and-favorite-counts",
+                       isOn: $identityContext.appPreferences.showReblogAndFavoriteCounts)
                 Picker("preferences.home-timeline-position-on-startup",
                        selection: $identityContext.appPreferences.homeTimelineBehavior) {
                     ForEach(AppPreferences.PositionBehavior.allCases) { option in
