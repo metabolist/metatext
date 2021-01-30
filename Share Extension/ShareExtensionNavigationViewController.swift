@@ -1,5 +1,6 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
+import AVKit
 import Combine
 import ServiceLayer
 import SwiftUI
@@ -7,14 +8,17 @@ import ViewModels
 
 @objc(ShareExtensionNavigationViewController)
 class ShareExtensionNavigationViewController: UINavigationController {
-    private let viewModel = ShareExtensionNavigationViewModel(
-        environment: .live(
-            userNotificationCenter: .current(),
-            reduceMotion: { UIAccessibility.isReduceMotionEnabled }))
+    private let environment = AppEnvironment.live(
+        userNotificationCenter: .current(),
+        reduceMotion: { UIAccessibility.isReduceMotionEnabled })
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        try? AVAudioSession.sharedInstance().setCategory(.ambient, mode: .default)
+        try? ImageCacheConfiguration(environment: environment).configure()
+
+        let viewModel = ShareExtensionNavigationViewModel(environment: environment)
         let newStatusViewModel: NewStatusViewModel
 
         do {

@@ -14,9 +14,6 @@ final class SecondaryNavigationButton: UIBarButtonItem {
         let button = UIButton(
             type: .custom,
             primaryAction: UIAction { _ in viewModel.presentingSecondaryNavigation = true })
-        let downsampled = KingfisherOptionsInfo.downsampled(
-            dimension: .barButtonItemDimension,
-            scaleFactor: UIScreen.main.scale)
 
         button.imageView?.contentMode = .scaleAspectFill
         button.layer.cornerRadius = .barButtonItemDimension / 2
@@ -33,8 +30,7 @@ final class SecondaryNavigationButton: UIBarButtonItem {
             button.kf.setImage(
                 with: $0.image,
                 for: .normal,
-                placeholder: UIImage(systemName: "line.horizontal.3"),
-                options: downsampled)
+                placeholder: UIImage(systemName: "line.horizontal.3"))
         }
         .store(in: &cancellables)
 
@@ -46,7 +42,7 @@ final class SecondaryNavigationButton: UIBarButtonItem {
                     }
 
                     if let image = identity.image {
-                        KingfisherManager.shared.retrieveImage(with: image, options: downsampled) {
+                        KingfisherManager.shared.retrieveImage(with: image) {
                             if case let .success(value) = $0 {
                                 action.image = value.image
                             }

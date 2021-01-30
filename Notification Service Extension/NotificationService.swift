@@ -2,11 +2,20 @@
 
 import CryptoKit
 import Keychain
+import Kingfisher
 import Mastodon
 import Secrets
+import ServiceLayer
 import UserNotifications
 
 final class NotificationService: UNNotificationServiceExtension {
+    private let environment = AppEnvironment.live(
+        userNotificationCenter: .current(),
+        reduceMotion: { false })
+
+    override init() {
+        super.init()
+    }
 
     var contentHandler: ((UNNotificationContent) -> Void)?
     var bestAttemptContent: UNMutableNotificationContent?
@@ -37,16 +46,33 @@ final class NotificationService: UNNotificationServiceExtension {
         let fileName = pushNotification.icon.lastPathComponent
         let fileURL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true).appendingPathComponent(fileName)
 
-        do {
-            let iconData = try Data(contentsOf: pushNotification.icon)
+        KingfisherManager.shared.retrieveImage(with: pushNotification.icon) {
+            switch $0 {
+            case let .success(result):
+                let format: ImageFormat
 
-            try iconData.write(to: fileURL)
-            bestAttemptContent.attachments = [try UNNotificationAttachment(identifier: fileName, url: fileURL)]
-        } catch {
-            // no-op
+                switch fileURL.pathExtension.lowercased() {
+                case "jpg", "jpeg":
+                    format = .JPEG
+                case "gif":
+                    format = .GIF
+                case "png":
+                    format = .PNG
+                default:
+                    format = .unknown
+                }
+
+                do {
+                    try result.image.kf.data(format: format)?.write(to: fileURL)
+                    bestAttemptContent.attachments = [try UNNotificationAttachment(identifier: fileName, url: fileURL)]
+                    contentHandler(bestAttemptContent)
+                } catch {
+                    contentHandler(bestAttemptContent)
+                }
+            case .failure:
+                contentHandler(bestAttemptContent)
+            }
         }
-
-        contentHandler(bestAttemptContent)
     }
 
     override func serviceExtensionTimeWillExpire() {

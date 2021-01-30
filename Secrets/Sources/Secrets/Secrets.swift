@@ -1,6 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import Base16
+import CryptoKit
 import Foundation
 import Keychain
 
@@ -32,6 +33,7 @@ public extension Secrets {
         case pushKey
         case pushAuth
         case databaseKey
+        case imageCacheKey
         case identityDatabaseName
     }
 }
@@ -46,7 +48,7 @@ extension Secrets.Item {
         case key
     }
 
-    // Note `databaseKey` is a generic password and not a key
+    // Note `databaseKey` and `imageCacheKey` are stored as generic passwords, not keys
     var kind: Kind {
         switch self {
         case .pushKey: return .key
@@ -65,6 +67,18 @@ public extension Secrets {
             try setUnscoped(identityDatabaseName, forItem: .identityDatabaseName, keychain: keychain)
 
             return identityDatabaseName
+        }
+    }
+
+    static func imageCacheKey(keychain: Keychain.Type) throws -> Data {
+        do {
+            return try unscopedItem(.imageCacheKey, keychain: keychain)
+        } catch SecretsError.itemAbsent {
+            let imageCacheKey = Data(SymmetricKey(size: .bits256).withUnsafeBytes(Array.init))
+
+            try setUnscoped(imageCacheKey, forItem: .imageCacheKey, keychain: keychain)
+
+            return imageCacheKey
         }
     }
 

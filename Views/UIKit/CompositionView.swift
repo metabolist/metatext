@@ -253,11 +253,7 @@ private extension CompositionView {
                 }
 
                 if let image = identity.image {
-                    KingfisherManager.shared.retrieveImage(
-                        with: image,
-                        options: KingfisherOptionsInfo.downsampled(
-                            dimension: .barButtonItemDimension,
-                            scaleFactor: UIScreen.main.scale)) {
+                    KingfisherManager.shared.retrieveImage(with: image) {
                         if case let .success(value) = $0 {
                             action.image = value.image
                         }
