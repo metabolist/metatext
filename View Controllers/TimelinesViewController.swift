@@ -52,7 +52,6 @@ final class TimelinesViewController: UIPageViewController {
         dataSource = self
         delegate = self
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "megaphone"), primaryAction: nil)
         navigationItem.titleView = segmentedControl
         segmentedControl.selectedSegmentIndex = 0
         segmentedControl.addAction(
