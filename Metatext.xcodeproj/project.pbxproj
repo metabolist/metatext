@@ -145,6 +145,9 @@
 		D0D2AC5325BCD2BA003D5DF2 /* TagContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D2AC5225BCD2BA003D5DF2 /* TagContentConfiguration.swift */; };
 		D0D2AC6725BD0484003D5DF2 /* LineChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D2AC6625BD0484003D5DF2 /* LineChartView.swift */; };
 		D0DD50CB256B1F24004A04F7 /* ReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DD50CA256B1F24004A04F7 /* ReportView.swift */; };
+		D0DDA76B25C5F20800FA0F91 /* ExploreDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DDA76A25C5F20800FA0F91 /* ExploreDataSource.swift */; };
+		D0DDA77525C5F73F00FA0F91 /* TagCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DDA77425C5F73F00FA0F91 /* TagCollectionViewCell.swift */; };
+		D0DDA77F25C6058300FA0F91 /* ExploreSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DDA77E25C6058300FA0F91 /* ExploreSectionHeaderView.swift */; };
 		D0E1F583251F13EC00D45315 /* WebfingerIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E1F582251F13EC00D45315 /* WebfingerIndicatorView.swift */; };
 		D0E2C1D124FD97F000854680 /* ViewModels in Frameworks */ = {isa = PBXBuildFile; productRef = D0E2C1D024FD97F000854680 /* ViewModels */; };
 		D0E5361C24E3EB4D00FB1CE1 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E5361B24E3EB4D00FB1CE1 /* NotificationService.swift */; };
@@ -332,6 +335,9 @@
 		D0D2AC6625BD0484003D5DF2 /* LineChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineChartView.swift; sourceTree = "<group>"; };
 		D0D7C013250440610039AD6F /* CodableBloomFilter */ = {isa = PBXFileReference; lastKnownFileType = folder; path = CodableBloomFilter; sourceTree = "<group>"; };
 		D0DD50CA256B1F24004A04F7 /* ReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportView.swift; sourceTree = "<group>"; };
+		D0DDA76A25C5F20800FA0F91 /* ExploreDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreDataSource.swift; sourceTree = "<group>"; };
+		D0DDA77425C5F73F00FA0F91 /* TagCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagCollectionViewCell.swift; sourceTree = "<group>"; };
+		D0DDA77E25C6058300FA0F91 /* ExploreSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreSectionHeaderView.swift; sourceTree = "<group>"; };
 		D0E0F1E424FC49FC002C04BF /* Mastodon */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Mastodon; sourceTree = "<group>"; };
 		D0E1F582251F13EC00D45315 /* WebfingerIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebfingerIndicatorView.swift; sourceTree = "<group>"; };
 		D0E2C1CF24FD8BA400854680 /* ViewModels */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ViewModels; sourceTree = "<group>"; };
@@ -415,6 +421,7 @@
 				D007023D25562A2800F38136 /* ConversationAvatarsView.swift */,
 				D05936DD25A937EC00754FDF /* EditThumbnailView.swift */,
 				D07EC7FC25B16994006DF726 /* EmojiCategoryHeaderView.swift */,
+				D0DDA77E25C6058300FA0F91 /* ExploreSectionHeaderView.swift */,
 				D0D2AC6625BD0484003D5DF2 /* LineChartView.swift */,
 				D0BEB1F624F9A84B001B0F04 /* LoadingTableFooterView.swift */,
 				D05936FE25AA94EA00754FDF /* MarkAttachmentsSensitiveView.swift */,
@@ -485,6 +492,7 @@
 			isa = PBXGroup;
 			children = (
 				D07EC7DB25B13DBB006DF726 /* EmojiCollectionViewCell.swift */,
+				D0DDA77425C5F73F00FA0F91 /* TagCollectionViewCell.swift */,
 			);
 			path = "Collection View Cells";
 			sourceTree = "<group>";
@@ -610,6 +618,7 @@
 		D0A1F4F5252E7D2A004435BF /* Data Sources */ = {
 			isa = PBXGroup;
 			children = (
+				D0DDA76A25C5F20800FA0F91 /* ExploreDataSource.swift */,
 				D021A5FF25C3478F008A0C0D /* IdentitiesDataSource.swift */,
 				D0A1F4F6252E7D4B004435BF /* TableViewDataSource.swift */,
 			);
@@ -934,6 +943,7 @@
 				D036AA07254B6118009094DF /* NotificationView.swift in Sources */,
 				D08E52EE257D757100FA2C5F /* CompositionView.swift in Sources */,
 				D0E569E0252931B100FA1D72 /* LoadMoreContentConfiguration.swift in Sources */,
+				D0DDA77525C5F73F00FA0F91 /* TagCollectionViewCell.swift in Sources */,
 				D0FE1C9825368A9D003EF1EB /* PlayerCache.swift in Sources */,
 				D05936DE25A937EC00754FDF /* EditThumbnailView.swift in Sources */,
 				D0F0B136251AA12700942152 /* CollectionItem+Extensions.swift in Sources */,
@@ -1021,6 +1031,7 @@
 				D025B17E25C500BC001C69A8 /* CapsuleButton.swift in Sources */,
 				D0C7D4C424F7616A001EBDBB /* AppDelegate.swift in Sources */,
 				D0C7D49924F7616A001EBDBB /* AddIdentityView.swift in Sources */,
+				D0DDA77F25C6058300FA0F91 /* ExploreSectionHeaderView.swift in Sources */,
 				D0FCC105259C4E61000B67DF /* NewStatusViewController.swift in Sources */,
 				D087671625BAA8C0001FDD43 /* ExploreViewController.swift in Sources */,
 				D0D2AC6725BD0484003D5DF2 /* LineChartView.swift in Sources */,
@@ -1029,6 +1040,7 @@
 				D097F4C125BFA04C00859F2C /* NotificationsViewController.swift in Sources */,
 				D0E1F583251F13EC00D45315 /* WebfingerIndicatorView.swift in Sources */,
 				D0BEB20524FA1107001B0F04 /* FiltersView.swift in Sources */,
+				D0DDA76B25C5F20800FA0F91 /* ExploreDataSource.swift in Sources */,
 				D035F88725B8016000DC75ED /* NavigationViewModel+Extensions.swift in Sources */,
 				D0C7D49B24F7616A001EBDBB /* PreferencesView.swift in Sources */,
 				D088406D25AFBBE200BB749B /* EmojiPickerViewController.swift in Sources */,

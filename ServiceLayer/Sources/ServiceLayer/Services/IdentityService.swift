@@ -64,7 +64,10 @@ public extension IdentityService {
 
     func refreshInstance() -> AnyPublisher<Never, Error> {
         mastodonAPIClient.request(InstanceEndpoint.instance)
-            .flatMap { identityDatabase.updateInstance($0, id: id) }
+            .flatMap {
+                identityDatabase.updateInstance($0, id: id)
+                    .merge(with: contentDatabase.insert(instance: $0))
+            }
             .eraseToAnyPublisher()
     }
 

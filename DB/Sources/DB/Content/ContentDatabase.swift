@@ -439,6 +439,12 @@ public extension ContentDatabase {
         .eraseToAnyPublisher()
     }
 
+    func insert(instance: Instance) -> AnyPublisher<Never, Error> {
+        databaseWriter.writePublisher(updates: instance.save)
+            .ignoreOutput()
+            .eraseToAnyPublisher()
+    }
+
     func timelinePublisher(_ timeline: Timeline) -> AnyPublisher<[CollectionSection], Error> {
         ValueObservation.tracking(
             TimelineItemsInfo.request(TimelineRecord.filter(TimelineRecord.Columns.id == timeline.id)).fetchOne)
@@ -608,6 +614,16 @@ public extension ContentDatabase {
                 $0.sorted { $0.lastStatusInfo.record.createdAt > $1.lastStatusInfo.record.createdAt }
                     .map(Conversation.init(info:))
             }
+            .eraseToAnyPublisher()
+    }
+
+    func instancePublisher(uri: String) -> AnyPublisher<Instance, Error> {
+        ValueObservation.tracking(
+            InstanceInfo.request(InstanceRecord.filter(InstanceRecord.Columns.uri == uri)).fetchOne)
+            .removeDuplicates()
+            .publisher(in: databaseWriter)
+            .compactMap { $0 }
+            .map(Instance.init(info:))
             .eraseToAnyPublisher()
     }
 

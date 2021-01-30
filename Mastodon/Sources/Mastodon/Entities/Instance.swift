@@ -28,4 +28,28 @@ public struct Instance: Codable, Hashable {
     public let thumbnail: URL?
     public let contactAccount: Account?
     public let maxTootChars: Int?
+
+    public init(uri: String,
+                title: String,
+                description: String,
+                shortDescription: String?,
+                email: String,
+                version: String,
+                urls: Instance.URLs,
+                stats: Instance.Stats,
+                thumbnail: URL?,
+                contactAccount: Account?,
+                maxTootChars: Int?) {
+        self.uri = uri
+        self.title = title
+        self.description = description
+        self.shortDescription = shortDescription
+        self.email = email
+        self.version = version
+        self.urls = urls
+        self.stats = stats
+        self.thumbnail = thumbnail
+        self.contactAccount = contactAccount
+        self.maxTootChars = maxTootChars
+    }
 }

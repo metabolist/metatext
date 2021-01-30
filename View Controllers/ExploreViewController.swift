@@ -9,11 +9,15 @@ final class ExploreViewController: UICollectionViewController {
     private let rootViewModel: RootViewModel
     private var cancellables = Set<AnyCancellable>()
 
+    private lazy var dataSource: ExploreDataSource = {
+        .init(collectionView: collectionView, viewModel: viewModel)
+    }()
+
     init(viewModel: ExploreViewModel, rootViewModel: RootViewModel) {
         self.viewModel = viewModel
         self.rootViewModel = rootViewModel
 
-        super.init(collectionViewLayout: UICollectionViewFlowLayout())
+        super.init(collectionViewLayout: Self.layout())
 
         tabBarItem = UITabBarItem(
             title: NSLocalizedString("main-navigation.explore", comment: ""),
@@ -29,6 +33,16 @@ final class ExploreViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        collectionView.dataSource = dataSource
+        collectionView.backgroundColor = .systemBackground
+        clearsSelectionOnViewWillAppear = true
+
+        collectionView.refreshControl = UIRefreshControl()
+        collectionView.refreshControl?.addAction(
+            UIAction { [weak self] _ in
+                self?.viewModel.refresh() },
+            for: .valueChanged)
+
         navigationItem.title = NSLocalizedString("main-navigation.explore", comment: "")
 
         let searchResultsController = TableViewController(
@@ -43,6 +57,19 @@ final class ExploreViewController: UICollectionViewController {
         searchController.searchResultsUpdater = self
         navigationItem.searchController = searchController
 
+        viewModel.events.sink { [weak self] in self?.handle(event: $0) }.store(in: &cancellables)
+
+        viewModel.$loading.sink { [weak self] in
+            guard let self = self else { return }
+
+            let refreshControlVisibile = self.collectionView.refreshControl?.isRefreshing ?? false
+
+            if !$0, refreshControlVisibile {
+                self.collectionView.refreshControl?.endRefreshing()
+            }
+        }
+        .store(in: &cancellables)
+
         viewModel.searchViewModel.events.sink { [weak self] in
             if case let .navigation(navigation) = $0,
                case let .searchScope(scope) = navigation {
@@ -51,6 +78,18 @@ final class ExploreViewController: UICollectionViewController {
             }
         }
         .store(in: &cancellables)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        viewModel.refresh()
+    }
+
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
+
+        viewModel.select(item: item)
     }
 }
 
@@ -66,5 +105,38 @@ extension ExploreViewController: UISearchResultsUpdating {
         }
 
         viewModel.searchViewModel.query = searchController.searchBar.text ?? ""
+    }
+}
+
+private extension ExploreViewController {
+    static func layout() -> UICollectionViewLayout {
+        var config = UICollectionLayoutListConfiguration(appearance: .plain)
+
+        config.headerMode = .supplementary
+
+        return UICollectionViewCompositionalLayout.list(using: config)
+    }
+
+    func handle(event: ExploreViewModel.Event) {
+        switch event {
+        case let .navigation(navigation):
+            handle(navigation: navigation)
+        }
+    }
+
+    func handle(navigation: Navigation) {
+        switch navigation {
+        case let .collection(collectionService):
+            let vc = TableViewController(
+                viewModel: CollectionItemsViewModel(
+                    collectionService: collectionService,
+                    identityContext: viewModel.identityContext),
+                rootViewModel: rootViewModel,
+                parentNavigationController: nil)
+
+                show(vc, sender: self)
+        default:
+            break
+        }
     }
 }

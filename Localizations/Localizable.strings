@@ -74,6 +74,8 @@
 "emoji.system-group.objects" = "Objects";
 "emoji.system-group.symbols" = "Symbols";
 "emoji.system-group.flags" = "Flags";
+"explore.trending" = "Trending Now";
+"explore.instance" = "Instance";
 "error" = "Error";
 "favorites" = "Favorites";
 "follow-requests" = "Follow Requests";

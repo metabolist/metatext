@@ -7,17 +7,30 @@ import Mastodon
 import MastodonAPI
 
 public struct ExploreService {
+    public let navigationService: NavigationService
+
     private let mastodonAPIClient: MastodonAPIClient
     private let contentDatabase: ContentDatabase
 
     init(mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
         self.mastodonAPIClient = mastodonAPIClient
         self.contentDatabase = contentDatabase
+        navigationService = NavigationService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }
 }
 
 public extension ExploreService {
     func searchService() -> SearchService {
         SearchService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+    }
+
+    func instanceServicePublisher(uri: String) -> AnyPublisher<InstanceService, Error> {
+        contentDatabase.instancePublisher(uri: uri)
+            .map { InstanceService(instance: $0, mastodonAPIClient: mastodonAPIClient) }
+            .eraseToAnyPublisher()
+    }
+
+    func fetchTrends() -> AnyPublisher<[Tag], Error> {
+        mastodonAPIClient.request(TagsEndpoint.trends)
     }
 }

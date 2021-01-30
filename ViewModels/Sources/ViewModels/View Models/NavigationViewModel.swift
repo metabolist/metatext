@@ -121,7 +121,7 @@ public extension NavigationViewModel {
             service: identityContext.service.exploreService(),
             identityContext: identityContext)
 
-        // TODO: initial request
+        exploreViewModel.refresh()
 
         return exploreViewModel
     }

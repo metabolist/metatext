@@ -202,6 +202,24 @@ extension ContentDatabase {
                 t.column("statusId").references("statusRecord", onDelete: .cascade)
             }
 
+            try db.create(table: "instanceRecord") { t in
+                t.column("uri", .text).primaryKey(onConflict: .replace)
+                t.column("title", .text).notNull()
+                t.column("description", .text).notNull()
+                t.column("shortDescription", .text)
+                t.column("email", .text).notNull()
+                t.column("version", .text).notNull()
+                t.column("languages", .blob).notNull()
+                t.column("registrations", .boolean).notNull()
+                t.column("approvalRequired", .boolean).notNull()
+                t.column("invitesEnabled", .boolean).notNull()
+                t.column("urls", .blob).notNull()
+                t.column("stats", .blob).notNull()
+                t.column("thumbnail", .text)
+                t.column("contactAccountId", .text).references("accountRecord", onDelete: .cascade)
+                t.column("maxTootChars", .integer)
+            }
+
             try db.create(table: "statusAncestorJoin") { t in
                 t.column("parentId", .text).indexed().notNull()
                     .references("statusRecord", onDelete: .cascade)
