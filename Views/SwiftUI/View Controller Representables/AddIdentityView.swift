@@ -40,6 +40,7 @@ struct AddAccountView_Previews: PreviewProvider {
         NavigationView {
             AddIdentityView(viewModelClosure: { RootViewModel.preview.addIdentityViewModel() }, displayWelcome: false)
                 .navigationBarTitleDisplayMode(.inline)
+                .environmentObject(RootViewModel.preview)
         }
     }
 }

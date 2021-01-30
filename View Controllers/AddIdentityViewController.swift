@@ -16,15 +16,16 @@ final class AddIdentityViewController: UIViewController {
     private let promptLabel = UILabel()
     private let urlTextField = UITextField()
     private let welcomeLabel = UILabel()
-    private let instanceVisualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
+    private let instanceAndButtonsStackView = UIStackView()
     private let instanceStackView = UIStackView()
+    private let instanceImageView = AnimatedImageView()
     private let instanceTitleLabel = UILabel()
     private let instanceURLLabel = UILabel()
-    private let instanceImageView = AnimatedImageView()
-    private let logInButton = UIButton(type: .system)
-    private let activityIndicator = UIActivityIndicatorView()
-    private let joinButton = UIButton(type: .system)
-    private let browseButton = UIButton(type: .system)
+    private let buttonsStackView = UIStackView()
+    private let logInButton = CapsuleButton()
+    private let activityIndicator = UIActivityIndicatorView(style: .large)
+    private let joinButton = CapsuleButton()
+    private let browseButton = CapsuleButton()
     private let whatIsMastodonButton = UIButton(type: .system)
     private var cancellables = Set<AnyCancellable>()
 
@@ -53,6 +54,7 @@ final class AddIdentityViewController: UIViewController {
 }
 
 private extension AddIdentityViewController {
+    static let verticalSpacing: CGFloat = 20
     static let whatIsMastodonURL = URL(string: "https://joinmastodon.org")!
 
     // swiftlint:disable:next function_body_length
@@ -60,10 +62,10 @@ private extension AddIdentityViewController {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
 
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.spacing = .defaultSpacing
+        stackView.spacing = Self.verticalSpacing
         stackView.axis = .vertical
-        stackView.distribution = .equalSpacing
 
+        welcomeLabel.translatesAutoresizingMaskIntoConstraints = false
         welcomeLabel.numberOfLines = 0
         welcomeLabel.textAlignment = .center
         welcomeLabel.adjustsFontForContentSizeCategory = true
@@ -86,18 +88,13 @@ private extension AddIdentityViewController {
             UIAction { [weak self] _ in self?.viewModel.urlFieldText = self?.urlTextField.text ?? "" },
             for: .editingChanged)
 
-        logInButton.setTitle(NSLocalizedString("add-identity.log-in", comment: ""), for: .normal)
-        logInButton.addAction(
-            UIAction { [weak self] _ in self?.viewModel.logInTapped() },
-            for: .touchUpInside)
-
-        activityIndicator.hidesWhenStopped = true
-
-        instanceVisualEffectView.translatesAutoresizingMaskIntoConstraints = false
+        instanceAndButtonsStackView.spacing = .defaultSpacing
+        instanceAndButtonsStackView.distribution = .fillEqually
 
         instanceStackView.translatesAutoresizingMaskIntoConstraints = false
         instanceStackView.axis = .vertical
         instanceStackView.spacing = .compactSpacing
+        instanceStackView.isHidden_stackViewSafe = true
 
         instanceTitleLabel.numberOfLines = 0
         instanceTitleLabel.textAlignment = .center
@@ -114,15 +111,25 @@ private extension AddIdentityViewController {
         instanceImageView.layer.cornerRadius = .defaultCornerRadius
         instanceImageView.clipsToBounds = true
         instanceImageView.kf.indicatorType = .activity
-        instanceImageView.isHidden = true
+
+        buttonsStackView.axis = .vertical
+        buttonsStackView.spacing = .defaultSpacing
+
+        activityIndicator.hidesWhenStopped = true
+
+        logInButton.setTitle(NSLocalizedString("add-identity.log-in", comment: ""), for: .normal)
+        logInButton.addAction(
+            UIAction { [weak self] _ in self?.viewModel.logInTapped() },
+            for: .touchUpInside)
 
         joinButton.addAction(UIAction { [weak self] _ in self?.join() }, for: .touchUpInside)
+        joinButton.isHidden_stackViewSafe = true
 
         browseButton.setTitle(NSLocalizedString("add-identity.browse", comment: ""), for: .normal)
-        browseButton.isHidden = true
         browseButton.addAction(
             UIAction { [weak self] _ in self?.viewModel.browseTapped() },
             for: .touchUpInside)
+        browseButton.isHidden_stackViewSafe = true
 
         whatIsMastodonButton.setTitle(NSLocalizedString("add-identity.what-is-mastodon", comment: ""), for: .normal)
         whatIsMastodonButton.addAction(
@@ -131,27 +138,28 @@ private extension AddIdentityViewController {
             },
             for: .touchUpInside)
 
-        for button in [logInButton, browseButton, joinButton, whatIsMastodonButton] {
-            button.titleLabel?.adjustsFontForContentSizeCategory = true
-            button.titleLabel?.font = .preferredFont(forTextStyle: .title3)
+        for button in [logInButton, joinButton, browseButton, whatIsMastodonButton] {
+            button.setContentCompressionResistancePriority(.required, for: .vertical)
         }
     }
 
     func setupViewHierarchy() {
+        view.addSubview(welcomeLabel)
         view.addSubview(scrollView)
         scrollView.addSubview(stackView)
         stackView.addArrangedSubview(promptLabel)
         stackView.addArrangedSubview(urlTextField)
-        stackView.addArrangedSubview(welcomeLabel)
+        stackView.addArrangedSubview(instanceAndButtonsStackView)
+        instanceStackView.addArrangedSubview(instanceImageView)
         instanceStackView.addArrangedSubview(instanceTitleLabel)
         instanceStackView.addArrangedSubview(instanceURLLabel)
-        instanceVisualEffectView.contentView.addSubview(instanceStackView)
-        instanceImageView.addSubview(instanceVisualEffectView)
-        stackView.addArrangedSubview(instanceImageView)
-        stackView.addArrangedSubview(activityIndicator)
-        stackView.addArrangedSubview(logInButton)
-        stackView.addArrangedSubview(joinButton)
-        stackView.addArrangedSubview(browseButton)
+        instanceAndButtonsStackView.addArrangedSubview(instanceStackView)
+        instanceAndButtonsStackView.addArrangedSubview(buttonsStackView)
+        buttonsStackView.addArrangedSubview(activityIndicator)
+        buttonsStackView.addArrangedSubview(logInButton)
+        buttonsStackView.addArrangedSubview(joinButton)
+        buttonsStackView.addArrangedSubview(browseButton)
+        buttonsStackView.addArrangedSubview(UIView())
         stackView.addArrangedSubview(whatIsMastodonButton)
     }
 
@@ -161,6 +169,9 @@ private extension AddIdentityViewController {
         instanceImageViewWidthConstraint.priority = .justBelowMax
 
         NSLayoutConstraint.activate([
+            welcomeLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            welcomeLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            welcomeLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -169,16 +180,7 @@ private extension AddIdentityViewController {
             stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             stackView.widthAnchor.constraint(equalTo: scrollView.readableContentGuide.widthAnchor),
             stackView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-            instanceImageViewWidthConstraint,
-            instanceVisualEffectView.leadingAnchor.constraint(equalTo: instanceImageView.leadingAnchor),
-            instanceVisualEffectView.trailingAnchor.constraint(equalTo: instanceImageView.trailingAnchor),
-            instanceVisualEffectView.bottomAnchor.constraint(equalTo: instanceImageView.bottomAnchor),
-            instanceStackView.leadingAnchor.constraint(equalTo: instanceVisualEffectView.contentView.leadingAnchor),
-            instanceStackView.topAnchor.constraint(equalTo: instanceVisualEffectView.contentView.topAnchor,
-                                                   constant: .defaultSpacing),
-            instanceStackView.trailingAnchor.constraint(equalTo: instanceVisualEffectView.contentView.trailingAnchor),
-            instanceStackView.bottomAnchor.constraint(equalTo: instanceVisualEffectView.contentView.bottomAnchor,
-                                                      constant: -.defaultSpacing)
+            instanceImageViewWidthConstraint
         ])
     }
 
@@ -188,21 +190,23 @@ private extension AddIdentityViewController {
 
             if $0 {
                 self.activityIndicator.startAnimating()
-                self.logInButton.isHidden = true
-                self.joinButton.isHidden = true
-                self.browseButton.isHidden = true
-                self.whatIsMastodonButton.isHidden = true
+                self.logInButton.isHidden_stackViewSafe = true
+                self.joinButton.isHidden_stackViewSafe = true
+                self.browseButton.isHidden_stackViewSafe = true
+                self.whatIsMastodonButton.isHidden_stackViewSafe = true
             } else {
                 self.activityIndicator.stopAnimating()
-                self.logInButton.isHidden = false
-                self.joinButton.isHidden = !(self.viewModel.instance?.registrations ?? true)
-                self.browseButton.isHidden = !self.viewModel.isPublicTimelineAvailable
-                self.whatIsMastodonButton.isHidden = false
+                self.logInButton.isHidden_stackViewSafe = false
+                self.joinButton.isHidden_stackViewSafe = !(self.viewModel.instance?.registrations ?? false)
+                self.browseButton.isHidden_stackViewSafe = !self.viewModel.isPublicTimelineAvailable
+                self.whatIsMastodonButton.isHidden_stackViewSafe =
+                    !self.displayWelcome || self.viewModel.instance == nil
             }
         }
         .store(in: &cancellables)
 
         viewModel.$instance.combineLatest(viewModel.$isPublicTimelineAvailable)
+            .throttle(for: .seconds(.defaultAnimationDuration), scheduler: DispatchQueue.main, latest: true)
             .sink { [weak self] in self?.configure(instance: $0, isPublicTimelineAvailable: $1) }
             .store(in: &cancellables)
 
@@ -245,6 +249,8 @@ private extension AddIdentityViewController {
                             UIView.animate(withDuration: .longAnimationDuration) {
                                 self.logInButton.alpha = 1
                             } completion: { _ in
+                                self.whatIsMastodonButton.isHidden_stackViewSafe = false
+                                self.whatIsMastodonButton.alpha = 0
                                 UIView.animate(withDuration: .longAnimationDuration) {
                                     self.whatIsMastodonButton.alpha = 1
                                 }
@@ -254,39 +260,43 @@ private extension AddIdentityViewController {
                 }
             }
         } else {
-            welcomeLabel.isHidden = true
-            whatIsMastodonButton.isHidden = true
+            welcomeLabel.isHidden_stackViewSafe = true
+            whatIsMastodonButton.isHidden_stackViewSafe = true
             urlTextField.becomeFirstResponder()
         }
     }
 
     func configure(instance: Instance?, isPublicTimelineAvailable: Bool) {
-        if let instance = instance {
-            instanceTitleLabel.text = instance.title
-            instanceURLLabel.text = instance.uri
-            instanceImageView.kf.setImage(with: instance.thumbnail)
-            instanceImageView.isHidden = false
+        UIView.animate(withDuration: .zeroIfReduceMotion(.defaultAnimationDuration)) {
+            if let instance = instance {
+                self.instanceTitleLabel.text = instance.title
+                self.instanceURLLabel.text = instance.uri
+                self.instanceImageView.kf.setImage(with: instance.thumbnail)
+                self.instanceStackView.isHidden_stackViewSafe = false
 
-            if instance.registrations {
-                let joinButtonTitle: String
+                if instance.registrations {
+                    let joinButtonTitle: String
 
-                if instance.approvalRequired {
-                    joinButtonTitle = NSLocalizedString("add-identity.request-invite", comment: "")
+                    if instance.approvalRequired {
+                        joinButtonTitle = NSLocalizedString("add-identity.request-invite", comment: "")
+                    } else {
+                        joinButtonTitle = NSLocalizedString("add-identity.join", comment: "")
+                    }
+
+                    self.joinButton.setTitle(joinButtonTitle, for: .normal)
+                    self.joinButton.isHidden_stackViewSafe = false
                 } else {
-                    joinButtonTitle = NSLocalizedString("add-identity.join", comment: "")
+                    self.joinButton.isHidden_stackViewSafe = true
                 }
 
-                joinButton.setTitle(joinButtonTitle, for: .normal)
-                joinButton.isHidden = false
+                self.browseButton.isHidden_stackViewSafe = !isPublicTimelineAvailable
+                self.whatIsMastodonButton.isHidden_stackViewSafe = true
             } else {
-                joinButton.isHidden = true
+                self.instanceStackView.isHidden_stackViewSafe = true
+                self.joinButton.isHidden_stackViewSafe = true
+                self.browseButton.isHidden_stackViewSafe = true
+                self.whatIsMastodonButton.isHidden_stackViewSafe = !self.displayWelcome || self.logInButton.alpha < 1
             }
-
-            browseButton.isHidden = !isPublicTimelineAvailable
-        } else {
-            instanceImageView.isHidden = true
-            joinButton.isHidden = true
-            browseButton.isHidden = true
         }
     }
 
@@ -298,5 +308,18 @@ private extension AddIdentityViewController {
         let registrationViewController = UIHostingController(rootView: registrationView)
 
         show(registrationViewController, sender: self)
+    }
+}
+
+// http://www.openradar.me/25087688
+extension UIView {
+    var isHidden_stackViewSafe: Bool {
+        get { isHidden }
+        set {
+            if isHidden != newValue {
+                isHidden = newValue
+                alpha = isHidden ? 0 : 1
+            }
+        }
     }
 }

@@ -39,6 +39,7 @@
 		D025B16025C4EA81001C69A8 /* ImageCacheSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D025B14525C4D26A001C69A8 /* ImageCacheSerializer.swift */; };
 		D025B16A25C4EB18001C69A8 /* ServiceLayer in Frameworks */ = {isa = PBXBuildFile; productRef = D025B16925C4EB18001C69A8 /* ServiceLayer */; };
 		D025B17025C4EB58001C69A8 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = D025B16F25C4EB58001C69A8 /* Kingfisher */; };
+		D025B17E25C500BC001C69A8 /* CapsuleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D025B17D25C500BC001C69A8 /* CapsuleButton.swift */; };
 		D02E1F95250B13210071AD56 /* SafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02E1F94250B13210071AD56 /* SafariView.swift */; };
 		D035F86925B7F2ED00DC75ED /* MainNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D035F86825B7F2ED00DC75ED /* MainNavigationViewController.swift */; };
 		D035F86F25B7F30E00DC75ED /* MainNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D035F86E25B7F30E00DC75ED /* MainNavigationView.swift */; };
@@ -229,6 +230,7 @@
 		D021A63525C38ADB008A0C0D /* AcknowledgmentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcknowledgmentsView.swift; sourceTree = "<group>"; };
 		D025B14525C4D26A001C69A8 /* ImageCacheSerializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCacheSerializer.swift; sourceTree = "<group>"; };
 		D025B14C25C4E482001C69A8 /* ImageCacheConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheConfiguration.swift; sourceTree = "<group>"; };
+		D025B17D25C500BC001C69A8 /* CapsuleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleButton.swift; sourceTree = "<group>"; };
 		D02E1F94250B13210071AD56 /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariView.swift; sourceTree = "<group>"; };
 		D035F86825B7F2ED00DC75ED /* MainNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationViewController.swift; sourceTree = "<group>"; };
 		D035F86E25B7F30E00DC75ED /* MainNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationView.swift; sourceTree = "<group>"; };
@@ -401,6 +403,7 @@
 				D01F41E224F8889700D55A2D /* AttachmentsView.swift */,
 				D0CE9F86258B076900E3A6B6 /* AttachmentUploadView.swift */,
 				D0BEB1F224F8EE8C001B0F04 /* AttachmentView.swift */,
+				D025B17D25C500BC001C69A8 /* CapsuleButton.swift */,
 				D0EA593F2522AC8700804347 /* CardView.swift */,
 				D021A66F25C3E1F9008A0C0D /* Collection View Cells */,
 				D0E9F9A9258450B300EF503D /* CompositionInputAccessoryView.swift */,
@@ -1015,6 +1018,7 @@
 				D0030982250C6C8500EACB32 /* URL+Extensions.swift in Sources */,
 				D00CB2ED2533ACC00080096B /* StatusView.swift in Sources */,
 				D0A1F4F7252E7D4B004435BF /* TableViewDataSource.swift in Sources */,
+				D025B17E25C500BC001C69A8 /* CapsuleButton.swift in Sources */,
 				D0C7D4C424F7616A001EBDBB /* AppDelegate.swift in Sources */,
 				D0C7D49924F7616A001EBDBB /* AddIdentityView.swift in Sources */,
 				D0FCC105259C4E61000B67DF /* NewStatusViewController.swift in Sources */,
