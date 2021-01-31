@@ -21,7 +21,7 @@ struct StatusRecord: ContentDatabaseRecord, Hashable {
     let favouritesCount: Int
     let repliesCount: Int
     let application: Application?
-    let url: URL?
+    let url: String?
     let inReplyToId: Status.Id?
     let inReplyToAccountId: Account.Id?
     let reblogId: Status.Id?

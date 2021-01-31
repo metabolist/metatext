@@ -34,10 +34,10 @@ public struct AccountService {
 
 public extension AccountService {
     var isLocal: Bool {
-        account.url.host == mastodonAPIClient.instanceURL.host
+        URL(string: account.url)?.host == mastodonAPIClient.instanceURL.host
     }
 
-    var domain: String? { account.url.host }
+    var domain: String? { URL(string: account.url)?.host }
 
     func follow() -> AnyPublisher<Never, Error> {
         relationshipAction(.accountsFollow(id: account.id))

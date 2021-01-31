@@ -38,7 +38,7 @@ public extension ReportViewModel {
     var accountName: String { "@".appending(accountService.account.acct) }
 
     var accountHost: String {
-        accountService.account.url.host ?? ""
+        URL(string: accountService.account.url)?.host ?? ""
     }
 
     var isLocalAccount: Bool { accountService.isLocal }

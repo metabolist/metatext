@@ -13,7 +13,7 @@ public final class Account: Codable, Identifiable {
     public let followingCount: Int
     public let statusesCount: Int
     public let note: HTML
-    public let url: URL
+    public let url: String
     public let avatar: URL
     public let avatarStatic: URL
     public let header: URL
@@ -35,7 +35,7 @@ public final class Account: Codable, Identifiable {
                 followingCount: Int,
                 statusesCount: Int,
                 note: HTML,
-                url: URL,
+                url: String,
                 avatar: URL,
                 avatarStatic: URL,
                 header: URL,

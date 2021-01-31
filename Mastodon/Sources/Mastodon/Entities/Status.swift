@@ -29,7 +29,7 @@ public final class Status: Codable, Identifiable {
     public let favouritesCount: Int
     @DecodableDefault.Zero public private(set) var repliesCount: Int
     public let application: Application?
-    public let url: URL?
+    public let url: String?
     public let inReplyToId: Status.Id?
     public let inReplyToAccountId: Account.Id?
     public let reblog: Status?
@@ -60,7 +60,7 @@ public final class Status: Codable, Identifiable {
         favouritesCount: Int,
         repliesCount: Int,
         application: Application?,
-        url: URL?,
+        url: String?,
         inReplyToId: Status.Id?,
         inReplyToAccountId: Account.Id?,
         reblog: Status?,

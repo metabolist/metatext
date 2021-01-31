@@ -121,7 +121,11 @@ public extension StatusViewModel {
 
     var muted: Bool { statusService.status.displayStatus.muted }
 
-    var sharingURL: URL? { statusService.status.displayStatus.url }
+    var sharingURL: URL? {
+        guard let urlString = statusService.status.displayStatus.url else { return nil }
+
+        return URL(string: urlString)
+    }
 
     var isPollExpired: Bool { statusService.status.displayStatus.poll?.expired ?? true }
 
@@ -297,7 +301,9 @@ public extension StatusViewModel {
     }
 
     func shareStatus() {
-        guard let url = statusService.status.displayStatus.url else { return }
+        guard let urlString = statusService.status.displayStatus.url,
+              let url = URL(string: urlString)
+              else { return }
 
         eventsSubject.send(Just(.share(url)).setFailureType(to: Error.self).eraseToAnyPublisher())
     }

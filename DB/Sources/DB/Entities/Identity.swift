@@ -33,7 +33,7 @@ public extension Identity {
         public let identityId: Identity.Id
         public let username: String
         public let displayName: String
-        public let url: URL
+        public let url: String
         public let avatar: URL
         public let avatarStatic: URL
         public let header: URL
@@ -52,8 +52,8 @@ public extension Identity {
     }
 
     var handle: String {
-        if let account = account, let host = account.url.host {
-            return account.url.lastPathComponent.appending("@").appending(host)
+        if let urlString = account?.url, let url = URL(string: urlString), let host = url.host {
+            return url.lastPathComponent.appending("@").appending(host)
         }
 
         return instance?.title ?? url.host ?? url.absoluteString

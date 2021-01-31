@@ -15,7 +15,7 @@ struct AccountRecord: ContentDatabaseRecord, Hashable {
     let followingCount: Int
     let statusesCount: Int
     let note: HTML
-    let url: URL
+    let url: String
     let avatar: URL
     let avatarStatic: URL
     let header: URL
