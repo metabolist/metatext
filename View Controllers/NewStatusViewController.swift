@@ -15,7 +15,7 @@ final class NewStatusViewController: UIViewController {
     private let stackView = UIStackView()
     private let activityIndicatorView = UIActivityIndicatorView(style: .large)
     private let postButton = UIBarButtonItem(
-        title: NSLocalizedString("post", comment: ""),
+        title: nil,
         style: .done,
         target: nil,
         action: nil)
@@ -40,6 +40,7 @@ final class NewStatusViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // swiftlint:disable:next function_body_length
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -76,7 +77,16 @@ final class NewStatusViewController: UIViewController {
             primaryAction: UIAction { [weak self] _ in self?.dismiss() })
         navigationItem.rightBarButtonItem = postButton
 
-        postButton.primaryAction = UIAction(title: NSLocalizedString("post", comment: "")) { [weak self] _ in
+        let postActionTitle: String
+
+        switch viewModel.identityContext.appPreferences.statusWord {
+        case .toot:
+            postActionTitle = NSLocalizedString("toot", comment: "")
+        case .post:
+            postActionTitle = NSLocalizedString("post", comment: "")
+        }
+
+        postButton.primaryAction = UIAction(title: postActionTitle) { [weak self] _ in
             self?.viewModel.post()
         }
 

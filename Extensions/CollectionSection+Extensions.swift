@@ -6,7 +6,7 @@ import ViewModels
 extension CollectionSection {
     struct Identifier: Hashable {
         let index: Int
-        let titleLocalizedStringKey: String?
+        let searchScope: SearchScope?
     }
 }
 
@@ -17,7 +17,7 @@ extension Array where Element == CollectionSection {
         for (index, section) in enumerated() {
             let identifier = CollectionSection.Identifier(
                 index: index,
-                titleLocalizedStringKey: section.titleLocalizedStringKey)
+                searchScope: section.searchScope)
             snapshot.appendSections([identifier])
             snapshot.appendItems(section.items, toSection: identifier)
         }

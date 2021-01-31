@@ -62,6 +62,12 @@ struct PreferencesView: View {
                 .disabled(viewModel.preferences.useServerPostingReadingPreferences)
             }
             Section(header: Text("preferences.app")) {
+                Picker("preferences.status-word",
+                       selection: $identityContext.appPreferences.statusWord) {
+                    ForEach(AppPreferences.StatusWord.allCases) { option in
+                        Text(option.localizedStringKey).tag(option)
+                    }
+                }
                 if accessibilityReduceMotion {
                     Toggle("preferences.media.use-system-reduce-motion",
                            isOn: $identityContext.appPreferences.useSystemReduceMotionForMedia)
@@ -116,6 +122,17 @@ struct PreferencesView: View {
 private extension PreferencesView {
     var reduceMotion: Bool {
         identityContext.appPreferences.shouldReduceMotion
+    }
+}
+
+extension AppPreferences.StatusWord {
+    var localizedStringKey: LocalizedStringKey {
+        switch self {
+        case .toot:
+            return "toot"
+        case .post:
+            return "post"
+        }
     }
 }
 

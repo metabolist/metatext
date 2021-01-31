@@ -25,10 +25,7 @@ final class ProfileViewController: TableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Initial size is to avoid unsatisfiable constraint warning
-        let accountHeaderView = AccountHeaderView(frame: .init(origin: .zero, size: .init(width: 300, height: 300)))
-
-        accountHeaderView.viewModel = viewModel
+        let accountHeaderView = AccountHeaderView(viewModel: viewModel)
 
         viewModel.$accountViewModel
             .receive(on: DispatchQueue.main)

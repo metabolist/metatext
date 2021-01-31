@@ -24,7 +24,7 @@ class TableViewController: UITableViewController {
     private weak var parentNavigationController: UINavigationController?
 
     private lazy var dataSource: TableViewDataSource = {
-        .init(tableView: tableView, viewModelProvider: viewModel.viewModel(indexPath:))
+        .init(tableView: tableView, viewModel: viewModel)
     }()
 
     init(viewModel: CollectionViewModel,
@@ -441,11 +441,23 @@ private extension TableViewController {
     }
 
     func confirmDelete(statusViewModel: StatusViewModel, redraft: Bool) {
+        let deleteAndRedraftConfirmMessage: String
+        let deleteConfirmMessage: String
+
+        switch viewModel.identityContext.appPreferences.statusWord {
+        case .toot:
+            deleteAndRedraftConfirmMessage = NSLocalizedString("status.delete-and-redraft.confirm.toot", comment: "")
+            deleteConfirmMessage = NSLocalizedString("status.delete.confirm.toot", comment: "")
+        case .post:
+            deleteAndRedraftConfirmMessage = NSLocalizedString("status.delete-and-redraft.confirm.post", comment: "")
+            deleteConfirmMessage = NSLocalizedString("status.delete.confirm.post", comment: "")
+        }
+
         let alertController = UIAlertController(
             title: nil,
             message: redraft
-                ? NSLocalizedString("status.delete-and-redraft.confirm", comment: "")
-                : NSLocalizedString("status.delete.confirm", comment: ""),
+                ? deleteAndRedraftConfirmMessage
+                : deleteConfirmMessage,
             preferredStyle: .alert)
 
         let deleteAction = UIAlertAction(

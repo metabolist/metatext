@@ -4,10 +4,10 @@ import Foundation
 
 public struct CollectionSection: Hashable {
     public let items: [CollectionItem]
-    public let titleLocalizedStringKey: String?
+    public let searchScope: SearchScope?
 
-    public init(items: [CollectionItem], titleLocalizedStringKey: String? = nil) {
+    public init(items: [CollectionItem], searchScope: SearchScope? = nil) {
         self.items = items
-        self.titleLocalizedStringKey = titleLocalizedStringKey
+        self.searchScope = searchScope
     }
 }

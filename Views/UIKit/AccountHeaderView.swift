@@ -26,9 +26,9 @@ final class AccountHeaderView: UIView {
     let segmentedControl = UISegmentedControl()
     let unavailableLabel = UILabel()
 
-    var viewModel: ProfileViewModel? {
+    var viewModel: ProfileViewModel {
         didSet {
-            if let accountViewModel = viewModel?.accountViewModel {
+            if let accountViewModel = viewModel.accountViewModel {
                 headerImageView.kf.setImage(with: accountViewModel.headerURL) { [weak self] in
                     if case let .success(result) = $0, result.image.size != Self.missingHeaderImageSize {
                         self?.headerButton.isEnabled = true
@@ -127,8 +127,11 @@ final class AccountHeaderView: UIView {
         }
     }
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(viewModel: ProfileViewModel) {
+        self.viewModel = viewModel
+
+        // Initial size is to avoid unsatisfiable constraint warning
+        super.init(frame: .init(origin: .zero, size: .init(width: 300, height: 300)))
 
         initialSetup()
     }
@@ -158,7 +161,7 @@ extension AccountHeaderView: UITextViewDelegate {
         interaction: UITextItemInteraction) -> Bool {
         switch interaction {
         case .invokeDefaultAction:
-            viewModel?.accountViewModel?.urlSelected(URL)
+            viewModel.accountViewModel?.urlSelected(URL)
             return false
         case .preview: return false
         case .presentActions: return false
@@ -189,7 +192,7 @@ private extension AccountHeaderView {
         headerButton.translatesAutoresizingMaskIntoConstraints = false
         headerButton.setBackgroundImage(.highlightedButtonBackground, for: .highlighted)
 
-        headerButton.addAction(UIAction { [weak self] _ in self?.viewModel?.presentHeader() }, for: .touchUpInside)
+        headerButton.addAction(UIAction { [weak self] _ in self?.viewModel.presentHeader() }, for: .touchUpInside)
         headerButton.isEnabled = false
 
         let avatarBackgroundViewDimension = Self.avatarDimension + .compactSpacing * 2
@@ -210,7 +213,7 @@ private extension AccountHeaderView {
         avatarButton.translatesAutoresizingMaskIntoConstraints = false
         avatarButton.setBackgroundImage(.highlightedButtonBackground, for: .highlighted)
 
-        avatarButton.addAction(UIAction { [weak self] _ in self?.viewModel?.presentAvatar() }, for: .touchUpInside)
+        avatarButton.addAction(UIAction { [weak self] _ in self?.viewModel.presentAvatar() }, for: .touchUpInside)
 
         addSubview(relationshipButtonsStackView)
         relationshipButtonsStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -230,7 +233,7 @@ private extension AccountHeaderView {
                 withConfiguration: UIImage.SymbolConfiguration(scale: .small)),
             for: .normal)
         followButton.addAction(
-            UIAction { [weak self] _ in self?.viewModel?.accountViewModel?.follow() },
+            UIAction { [weak self] _ in self?.viewModel.accountViewModel?.follow() },
             for: .touchUpInside)
 
         unfollowButton.setImage(
@@ -241,7 +244,7 @@ private extension AccountHeaderView {
         unfollowButton.setTitle(NSLocalizedString("account.following", comment: ""), for: .normal)
         unfollowButton.showsMenuAsPrimaryAction = true
         unfollowButton.menu = UIMenu(children: [UIDeferredMenuElement { [weak self] completion in
-            guard let accountViewModel = self?.viewModel?.accountViewModel else { return }
+            guard let accountViewModel = self?.viewModel.accountViewModel else { return }
 
             let unfollowAction = UIAction(
                 title: NSLocalizedString("account.unfollow", comment: ""),
@@ -299,20 +302,22 @@ private extension AccountHeaderView {
         followStackView.distribution = .fillEqually
 
         followingButton.addAction(
-            UIAction { [weak self] _ in self?.viewModel?.accountViewModel?.followingSelected() },
+            UIAction { [weak self] _ in self?.viewModel.accountViewModel?.followingSelected() },
             for: .touchUpInside)
         followStackView.addArrangedSubview(followingButton)
 
         followersButton.addAction(
-            UIAction { [weak self] _ in self?.viewModel?.accountViewModel?.followersSelected() },
+            UIAction { [weak self] _ in self?.viewModel.accountViewModel?.followersSelected() },
             for: .touchUpInside)
         followStackView.addArrangedSubview(followersButton)
 
+        let statusWord = viewModel.identityContext.appPreferences.statusWord
+
         for (index, collection) in ProfileCollection.allCases.enumerated() {
             segmentedControl.insertSegment(
-                action: UIAction(title: collection.title) { [weak self] _ in
-                    self?.viewModel?.collection = collection
-                    self?.viewModel?.request(maxId: nil, minId: nil, search: nil)
+                action: UIAction(title: collection.title(statusWord: statusWord)) { [weak self] _ in
+                    self?.viewModel.collection = collection
+                    self?.viewModel.request(maxId: nil, minId: nil, search: nil)
                 },
                 at: index,
                 animated: false)

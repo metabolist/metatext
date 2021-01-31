@@ -15,6 +15,13 @@ public struct AppPreferences {
 }
 
 public extension AppPreferences {
+    enum StatusWord: String, CaseIterable, Identifiable {
+        case toot
+        case post
+
+        public var id: String { rawValue }
+    }
+
     enum AnimateAvatars: String, CaseIterable, Identifiable {
         case everywhere
         case profiles
@@ -42,6 +49,18 @@ public extension AppPreferences {
     var useSystemReduceMotionForMedia: Bool {
         get { self[.useSystemReduceMotionForMedia] ?? true }
         set { self[.useSystemReduceMotionForMedia] = newValue }
+    }
+
+    var statusWord: StatusWord {
+        get {
+            if let rawValue = self[.statusWord] as String?,
+               let value = StatusWord(rawValue: rawValue) {
+                return value
+            }
+
+            return .toot
+        }
+        set { self[.statusWord] = newValue.rawValue }
     }
 
     var animateAvatars: AnimateAvatars {
@@ -140,23 +159,9 @@ public extension AppPreferences {
     }
 }
 
-extension AppPreferences {
-    var updatedInstanceFilter: BloomFilter<String>? {
-        guard let data = self[.updatedFilter] as Data? else {
-            return nil
-        }
-
-        return try? JSONDecoder().decode(BloomFilter<String>.self, from: data)
-    }
-
-    func updateInstanceFilter( _ filter: BloomFilter<String>) {
-        userDefaults.set(try? JSONEncoder().encode(filter), forKey: Item.updatedFilter.rawValue)
-    }
-}
-
 private extension AppPreferences {
     enum Item: String {
-        case updatedFilter
+        case statusWord
         case useSystemReduceMotionForMedia
         case animateAvatars
         case animateHeaders

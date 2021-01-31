@@ -53,9 +53,15 @@ final class ExploreViewController: UICollectionViewController {
 
         let searchController = UISearchController(searchResultsController: searchResultsController)
 
-        searchController.searchBar.scopeButtonTitles = SearchScope.allCases.map(\.title)
         searchController.searchResultsUpdater = self
         navigationItem.searchController = searchController
+
+        viewModel.identityContext.$appPreferences.sink { appPreferences in
+            searchController.searchBar.scopeButtonTitles = SearchScope.allCases.map {
+                $0.title(statusWord: appPreferences.statusWord)
+            }
+        }
+        .store(in: &cancellables)
 
         viewModel.events.sink { [weak self] in self?.handle(event: $0) }.store(in: &cancellables)
 

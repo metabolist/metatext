@@ -573,9 +573,9 @@ public extension ContentDatabase {
 
         return accountsPublisher.combineLatest(statusesPublisher)
             .map { accounts, statuses in
-                [.init(items: accounts, titleLocalizedStringKey: "search.scope.accounts"),
-                 .init(items: statuses, titleLocalizedStringKey: "search.scope.statuses"),
-                 .init(items: hashtags, titleLocalizedStringKey: "search.scope.tags")]
+                [.init(items: accounts, searchScope: .accounts),
+                 .init(items: statuses, searchScope: .statuses),
+                 .init(items: hashtags, searchScope: .tags)]
                     .filter { !$0.items.isEmpty }
             }
             .removeDuplicates()

@@ -6,8 +6,11 @@ import ViewModels
 final class TableViewDataSource: UITableViewDiffableDataSource<CollectionSection.Identifier, CollectionItem> {
     private let updateQueue =
         DispatchQueue(label: "com.metabolist.metatext.collection-data-source.update-queue")
+    private let viewModel: CollectionViewModel
 
-    init(tableView: UITableView, viewModelProvider: @escaping (IndexPath) -> CollectionItemViewModel) {
+    init(tableView: UITableView, viewModel: CollectionViewModel) {
+        self.viewModel = viewModel
+
         for cellClass in CollectionItem.cellClasses {
             tableView.register(cellClass, forCellReuseIdentifier: String(describing: cellClass))
         }
@@ -17,7 +20,7 @@ final class TableViewDataSource: UITableViewDiffableDataSource<CollectionSection
                 withIdentifier: String(describing: item.cellClass),
                 for: indexPath)
 
-            switch (cell, viewModelProvider(indexPath)) {
+            switch (cell, viewModel.viewModel(indexPath: indexPath)) {
             case let (statusCell as StatusTableViewCell, statusViewModel as StatusViewModel):
                 statusCell.viewModel = statusViewModel
             case let (accountCell as AccountTableViewCell, accountViewModel as AccountViewModel):
@@ -32,8 +35,9 @@ final class TableViewDataSource: UITableViewDiffableDataSource<CollectionSection
                 tagCell.viewModel = tagViewModel
             case let (_, moreResultsViewModel as MoreResultsViewModel):
                 var configuration = cell.defaultContentConfiguration()
+                let statusWord = viewModel.identityContext.appPreferences.statusWord
 
-                configuration.text = moreResultsViewModel.scope.moreDescription
+                configuration.text = moreResultsViewModel.scope.moreDescription(statusWord: statusWord)
 
                 cell.contentConfiguration = configuration
                 cell.accessoryType = .disclosureIndicator
@@ -58,8 +62,8 @@ final class TableViewDataSource: UITableViewDiffableDataSource<CollectionSection
         let section = currentSnapshot.sectionIdentifiers[section]
 
         if currentSnapshot.numberOfItems(inSection: section) > 0,
-           let localizedStringKey = section.titleLocalizedStringKey {
-            return NSLocalizedString(localizedStringKey, comment: "")
+           let searchScope = section.searchScope {
+            return searchScope.title(statusWord: viewModel.identityContext.appPreferences.statusWord)
         }
 
         return nil

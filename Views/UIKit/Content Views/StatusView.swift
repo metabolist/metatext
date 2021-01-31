@@ -354,7 +354,16 @@ private extension StatusView {
             infoLabel.isHidden = false
             infoIcon.isHidden = false
         } else if viewModel.configuration.isPinned {
-            infoLabel.text = NSLocalizedString("status.pinned-post", comment: "")
+            let pinnedText: String
+
+            switch viewModel.identityContext.appPreferences.statusWord {
+            case .toot:
+                pinnedText = NSLocalizedString("status.pinned.toot", comment: "")
+            case .post:
+                pinnedText = NSLocalizedString("status.pinned.post", comment: "")
+            }
+
+            infoLabel.text = pinnedText
             infoIcon.image = UIImage(
                 systemName: "pin",
                 withConfiguration: UIImage.SymbolConfiguration(scale: .small))
