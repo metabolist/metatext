@@ -59,7 +59,8 @@ struct PreferencesView: View {
                     Toggle("preferences.reading-expand-spoilers",
                            isOn: $viewModel.preferences.readingExpandSpoilers)
                 }
-                .disabled(viewModel.preferences.useServerPostingReadingPreferences)
+                .disabled(viewModel.preferences.useServerPostingReadingPreferences
+                            && viewModel.identityContext.identity.authenticated)
             }
             Section(header: Text("preferences.app")) {
                 Picker("preferences.status-word",
@@ -100,16 +101,19 @@ struct PreferencesView: View {
                 .disabled(reduceMotion)
                 Toggle("preferences.show-reblog-and-favorite-counts",
                        isOn: $identityContext.appPreferences.showReblogAndFavoriteCounts)
-                Picker("preferences.home-timeline-position-on-startup",
-                       selection: $identityContext.appPreferences.homeTimelineBehavior) {
-                    ForEach(AppPreferences.PositionBehavior.allCases) { option in
-                        Text(option.localizedStringKey).tag(option)
+                if viewModel.identityContext.identity.authenticated
+                    && !viewModel.identityContext.identity.pending {
+                    Picker("preferences.home-timeline-position-on-startup",
+                           selection: $identityContext.appPreferences.homeTimelineBehavior) {
+                        ForEach(AppPreferences.PositionBehavior.allCases) { option in
+                            Text(option.localizedStringKey).tag(option)
+                        }
                     }
-                }
-                Picker("preferences.notifications-position-on-startup",
-                       selection: $identityContext.appPreferences.notificationsTabBehavior) {
-                    ForEach(AppPreferences.PositionBehavior.allCases) { option in
-                        Text(option.localizedStringKey).tag(option)
+                    Picker("preferences.notifications-position-on-startup",
+                           selection: $identityContext.appPreferences.notificationsTabBehavior) {
+                        ForEach(AppPreferences.PositionBehavior.allCases) { option in
+                            Text(option.localizedStringKey).tag(option)
+                        }
                     }
                 }
             }

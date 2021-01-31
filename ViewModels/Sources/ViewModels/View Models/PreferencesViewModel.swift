@@ -26,7 +26,11 @@ public final class PreferencesViewModel: ObservableObject {
 
         $preferences
             .dropFirst()
-            .flatMap(identityContext.service.updatePreferences)
+            .flatMap {
+                identityContext.service.updatePreferences(
+                    $0,
+                    authenticated: identityContext.identity.authenticated)
+            }
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .sink { _ in }
             .store(in: &cancellables)

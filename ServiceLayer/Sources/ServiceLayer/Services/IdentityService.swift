@@ -190,10 +190,10 @@ public extension IdentityService {
         contentDatabase.pickerEmojisPublisher()
     }
 
-    func updatePreferences(_ preferences: Identity.Preferences) -> AnyPublisher<Never, Error> {
+    func updatePreferences(_ preferences: Identity.Preferences, authenticated: Bool) -> AnyPublisher<Never, Error> {
         identityDatabase.updatePreferences(preferences, id: id)
             .collect()
-            .filter { _ in preferences.useServerPostingReadingPreferences }
+            .filter { _ in preferences.useServerPostingReadingPreferences && authenticated }
             .flatMap { _ in refreshServerPreferences() }
             .eraseToAnyPublisher()
     }
