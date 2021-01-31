@@ -317,6 +317,8 @@ private extension StatusView {
         let viewModel = statusConfiguration.viewModel
         let isContextParent = viewModel.configuration.isContextParent
         let mutableDisplayName = NSMutableAttributedString(string: viewModel.displayName)
+        let isAuthenticated = viewModel.identityContext.identity.authenticated
+            && !viewModel.identityContext.identity.pending
 
         menuButton.menu = menu(viewModel: viewModel)
 
@@ -437,6 +439,7 @@ private extension StatusView {
         setButtonImages(scale: isContextParent ? .medium : .small)
 
         replyButton.setCountTitle(count: viewModel.repliesCount, isContextParent: isContextParent)
+        replyButton.isEnabled = isAuthenticated
 
         if viewModel.identityContext.appPreferences.showReblogAndFavoriteCounts || isContextParent {
             reblogButton.setCountTitle(count: viewModel.reblogsCount, isContextParent: isContextParent)
@@ -450,14 +453,17 @@ private extension StatusView {
 
         reblogButton.tintColor = reblogColor
         reblogButton.setTitleColor(reblogColor, for: .normal)
-        reblogButton.isEnabled = viewModel.canBeReblogged
+        reblogButton.isEnabled = viewModel.canBeReblogged && isAuthenticated
 
         let favoriteColor: UIColor = viewModel.favorited ? .systemYellow : .secondaryLabel
 
         favoriteButton.tintColor = favoriteColor
         favoriteButton.setTitleColor(favoriteColor, for: .normal)
+        favoriteButton.isEnabled = isAuthenticated
 
         shareButton.tag = viewModel.sharingURL?.hashValue ?? 0
+
+        menuButton.isEnabled = isAuthenticated
     }
     // swiftlint:enable function_body_length
 
