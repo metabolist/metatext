@@ -465,16 +465,10 @@ private extension StatusView {
             favoriteButton.setTitle(nil, for: .normal)
         }
 
-        let reblogColor: UIColor = viewModel.reblogged ? .systemGreen : .secondaryLabel
-
-        reblogButton.tintColor = reblogColor
-        reblogButton.setTitleColor(reblogColor, for: .normal)
+        setReblogButtonColor(reblogged: viewModel.reblogged)
         reblogButton.isEnabled = viewModel.canBeReblogged && isAuthenticated
 
-        let favoriteColor: UIColor = viewModel.favorited ? .systemYellow : .secondaryLabel
-
-        favoriteButton.tintColor = favoriteColor
-        favoriteButton.setTitleColor(favoriteColor, for: .normal)
+        setFavoriteButtonColor(favorited: viewModel.favorited)
         favoriteButton.isEnabled = isAuthenticated
 
         shareButton.tag = viewModel.sharingURL?.hashValue ?? 0
@@ -571,14 +565,54 @@ private extension StatusView {
         favorite()
     }
 
+    func setReblogButtonColor(reblogged: Bool) {
+        let reblogColor: UIColor = reblogged ? .systemGreen : .secondaryLabel
+
+        reblogButton.tintColor = reblogColor
+        reblogButton.setTitleColor(reblogColor, for: .normal)
+    }
+
+    func setFavoriteButtonColor(favorited: Bool) {
+        let favoriteColor: UIColor = favorited ? .systemYellow : .secondaryLabel
+
+        favoriteButton.tintColor = favoriteColor
+        favoriteButton.setTitleColor(favoriteColor, for: .normal)
+    }
+
     func reblog() {
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+
+        if !UIAccessibility.isReduceMotionEnabled {
+            UIViewPropertyAnimator.runningPropertyAnimator(
+                withDuration: .defaultAnimationDuration,
+                delay: 0,
+                options: .curveLinear) {
+                self.setReblogButtonColor(reblogged: !self.statusConfiguration.viewModel.reblogged)
+                self.reblogButton.imageView?.transform =
+                    self.reblogButton.imageView?.transform.rotated(by: .pi) ?? .identity
+            } completion: { _ in
+                self.reblogButton.imageView?.transform = .identity
+            }
+        }
 
         statusConfiguration.viewModel.toggleReblogged()
     }
 
     func favorite() {
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+
+        if !UIAccessibility.isReduceMotionEnabled {
+            UIViewPropertyAnimator.runningPropertyAnimator(
+                withDuration: .defaultAnimationDuration,
+                delay: 0,
+                options: .curveLinear) {
+                self.setFavoriteButtonColor(favorited: !self.statusConfiguration.viewModel.favorited)
+                self.favoriteButton.imageView?.transform =
+                    self.favoriteButton.imageView?.transform.rotated(by: .pi) ?? .identity
+            } completion: { _ in
+                self.favoriteButton.imageView?.transform = .identity
+            }
+        }
 
         statusConfiguration.viewModel.toggleFavorited()
     }
