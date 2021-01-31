@@ -79,6 +79,7 @@
 "emoji.system-group.flags" = "Flags";
 "explore.trending" = "Trending Now";
 "explore.instance" = "Instance";
+"explore.profile-directory" = "Profile Directory";
 "error" = "Error";
 "favorites" = "Favorites";
 "follow-requests" = "Follow Requests";

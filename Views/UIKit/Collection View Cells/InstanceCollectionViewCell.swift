@@ -3,13 +3,13 @@
 import UIKit
 import ViewModels
 
-final class TagCollectionViewCell: SeparatorConfiguredCollectionViewListCell {
-    var viewModel: TagViewModel?
+final class InstanceCollectionViewCell: SeparatorConfiguredCollectionViewListCell {
+    var viewModel: InstanceViewModel?
 
     override func updateConfiguration(using state: UICellConfigurationState) {
         guard let viewModel = viewModel else { return }
 
-        contentConfiguration = TagContentConfiguration(viewModel: viewModel).updated(for: state)
+        contentConfiguration = InstanceContentConfiguration(viewModel: viewModel).updated(for: state)
         updateConstraintsIfNeeded()
     }
 }

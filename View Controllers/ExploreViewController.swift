@@ -35,6 +35,7 @@ final class ExploreViewController: UICollectionViewController {
 
         collectionView.dataSource = dataSource
         collectionView.backgroundColor = .systemBackground
+        collectionView.contentInset.bottom = Self.bottomInset
         clearsSelectionOnViewWillAppear = true
 
         collectionView.refreshControl = UIRefreshControl()
@@ -92,6 +93,11 @@ final class ExploreViewController: UICollectionViewController {
         viewModel.refresh()
     }
 
+    override func collectionView(_ collectionView: UICollectionView,
+                                 shouldHighlightItemAt indexPath: IndexPath) -> Bool {
+        dataSource.itemIdentifier(for: indexPath) != .instance
+    }
+
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
 
@@ -115,12 +121,23 @@ extension ExploreViewController: UISearchResultsUpdating {
 }
 
 private extension ExploreViewController {
+    static let bottomInset: CGFloat = .newStatusButtonDimension + .defaultSpacing * 4
+
     static func layout() -> UICollectionViewLayout {
-        var config = UICollectionLayoutListConfiguration(appearance: .plain)
+        var listConfiguration = UICollectionLayoutListConfiguration(appearance: .plain)
 
-        config.headerMode = .supplementary
+        listConfiguration.headerMode = .supplementary
 
-        return UICollectionViewCompositionalLayout.list(using: config)
+        return UICollectionViewCompositionalLayout(
+            sectionProvider: {
+                let section = NSCollectionLayoutSection.list(using: listConfiguration, layoutEnvironment: $1)
+
+                if UIDevice.current.userInterfaceIdiom == .pad {
+                    section.contentInsetsReference = .readableContent
+                }
+
+                return section
+            })
     }
 
     func handle(event: ExploreViewModel.Event) {

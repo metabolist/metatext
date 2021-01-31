@@ -49,6 +49,8 @@ public extension ExploreViewModel {
 
     enum Item: Hashable {
         case tag(Tag)
+        case instance
+        case profileDirectory
     }
 
     func refresh() {
@@ -78,6 +80,14 @@ public extension ExploreViewModel {
                 .navigation(.collection(exploreService
                                             .navigationService
                                             .timelineService(timeline: .tag(tag.name)))))
+        case .instance:
+            break
+        case .profileDirectory:
+            eventsSubject.send(
+                .navigation(.collection(identityContext
+                                            .service
+                                            .service(accountList: .directory(local: true),
+                                                     titleComponents: ["explore.profile-directory"]))))
         }
     }
 }

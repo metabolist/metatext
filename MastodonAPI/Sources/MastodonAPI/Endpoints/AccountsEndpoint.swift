@@ -12,6 +12,7 @@ public enum AccountsEndpoint {
     case accountsFollowers(id: Account.Id)
     case accountsFollowing(id: Account.Id)
     case followRequests
+    case directory(local: Bool)
 }
 
 extension AccountsEndpoint: Endpoint {
@@ -21,7 +22,7 @@ extension AccountsEndpoint: Endpoint {
         switch self {
         case .rebloggedBy, .favouritedBy:
             return defaultContext + ["statuses"]
-        case .mutes, .blocks, .followRequests:
+        case .mutes, .blocks, .followRequests, .directory:
             return defaultContext
         case .accountsFollowers, .accountsFollowing:
             return defaultContext + ["accounts"]
@@ -44,6 +45,17 @@ extension AccountsEndpoint: Endpoint {
             return [id, "following"]
         case .followRequests:
             return ["follow_requests"]
+        case .directory:
+            return ["directory"]
+        }
+    }
+
+    public var queryParameters: [URLQueryItem] {
+        switch self {
+        case let .directory(local):
+            return [.init(name: "local", value: String(local))]
+        default:
+            return []
         }
     }
 

@@ -25,20 +25,21 @@ private extension ExploreSectionHeaderView {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.adjustsFontForContentSizeCategory = true
         label.font = .preferredFont(forTextStyle: .headline)
+        label.textColor = .secondaryLabel
 
-        let layoutGuide: UILayoutGuide
+        let leadingConstraint: NSLayoutConstraint
 
         if UIDevice.current.userInterfaceIdiom == .pad {
-            layoutGuide = readableContentGuide
+            leadingConstraint = label.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 1)
         } else {
-            layoutGuide = layoutMarginsGuide
+            leadingConstraint = label.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor)
         }
 
         NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: layoutGuide.leadingAnchor),
-            label.topAnchor.constraint(equalTo: layoutGuide.topAnchor),
-            label.trailingAnchor.constraint(equalTo: layoutGuide.trailingAnchor),
-            label.bottomAnchor.constraint(equalTo: layoutGuide.bottomAnchor)
+            leadingConstraint,
+            label.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+            label.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+            label.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
         ])
     }
 }

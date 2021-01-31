@@ -53,3 +53,33 @@ public struct Instance: Codable, Hashable {
         self.maxTootChars = maxTootChars
     }
 }
+
+public extension Instance {
+    var majorVersion: Int? {
+        guard let majorVersionString = version.split(separator: ".").first else { return nil }
+
+        return Int(majorVersionString)
+    }
+
+    var minorVersion: Int? {
+        let versionComponents = version.split(separator: ".")
+
+        guard versionComponents.count > 1 else { return nil }
+
+        return Int(versionComponents[1])
+    }
+
+    var patchVersion: String? {
+        let versionComponents = version.split(separator: ".")
+
+        guard versionComponents.count > 2 else { return nil }
+
+        return String(versionComponents[2])
+    }
+
+    var canShowProfileDirectory: Bool {
+        guard let majorVersion = majorVersion else { return false }
+
+        return majorVersion >= 3
+    }
+}
