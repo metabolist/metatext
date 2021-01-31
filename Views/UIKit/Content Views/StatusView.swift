@@ -448,7 +448,7 @@ private extension StatusView {
                 button.heightAnchor.constraint(equalToConstant: .minimumButtonDimension).isActive = true
             } else {
                 button.heightAnchor.constraint(
-                    greaterThanOrEqualToConstant: .minimumButtonDimension / 2).isActive = true
+                    greaterThanOrEqualToConstant: .minimumButtonDimension * 2 / 3).isActive = true
             }
         }
 
