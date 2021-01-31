@@ -29,35 +29,37 @@ struct SecondaryNavigationView: View {
                     Label("secondary-navigation.accounts", systemImage: "rectangle.stack.person.crop")
                 }
             }
-            Section {
-                NavigationLink(destination: ListsView(viewModel: .init(identityContext: viewModel.identityContext))
-                                .environmentObject(rootViewModel)) {
-                    Label("secondary-navigation.lists", systemImage: "scroll")
-                }
-                ForEach([Timeline.favorites, Timeline.bookmarks]) { timeline in
-                    Button {
-                        viewModel.navigate(timeline: timeline)
-                    } label: {
-                        Label {
-                            Text(timeline.title).foregroundColor(.primary)
-                        } icon: {
-                            Image(systemName: timeline.systemImageName)
+            if viewModel.identityContext.identity.authenticated && !viewModel.identityContext.identity.pending {
+                Section {
+                    NavigationLink(destination: ListsView(viewModel: .init(identityContext: viewModel.identityContext))
+                                    .environmentObject(rootViewModel)) {
+                        Label("secondary-navigation.lists", systemImage: "scroll")
+                    }
+                    ForEach([Timeline.favorites, Timeline.bookmarks]) { timeline in
+                        Button {
+                            viewModel.navigate(timeline: timeline)
+                        } label: {
+                            Label {
+                                Text(timeline.title).foregroundColor(.primary)
+                            } icon: {
+                                Image(systemName: timeline.systemImageName)
+                            }
                         }
                     }
-                }
-                if let followRequestCount = viewModel.identityContext.identity.account?.followRequestCount,
-                   followRequestCount > 0 {
-                    Button {
-                        viewModel.navigateToFollowerRequests()
-                    } label: {
-                        Label {
-                            HStack {
-                                Text("follow-requests").foregroundColor(.primary)
-                                Spacer()
-                                Text(verbatim: String(followRequestCount))
+                    if let followRequestCount = viewModel.identityContext.identity.account?.followRequestCount,
+                       followRequestCount > 0 {
+                        Button {
+                            viewModel.navigateToFollowerRequests()
+                        } label: {
+                            Label {
+                                HStack {
+                                    Text("follow-requests").foregroundColor(.primary)
+                                    Spacer()
+                                    Text(verbatim: String(followRequestCount))
+                                }
+                            } icon: {
+                                Image(systemName: "person.badge.plus")
                             }
-                        } icon: {
-                            Image(systemName: "person.badge.plus")
                         }
                     }
                 }
