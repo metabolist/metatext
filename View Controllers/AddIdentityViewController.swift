@@ -185,29 +185,9 @@ private extension AddIdentityViewController {
     }
 
     func setupViewModelBindings() {
-        viewModel.$loading.sink { [weak self] in
-            guard let self = self else { return }
-
-            if $0 {
-                self.activityIndicator.startAnimating()
-                self.logInButton.isHidden_stackViewSafe = true
-                self.joinButton.isHidden_stackViewSafe = true
-                self.browseButton.isHidden_stackViewSafe = true
-                self.whatIsMastodonButton.isHidden_stackViewSafe = true
-            } else {
-                self.activityIndicator.stopAnimating()
-                self.logInButton.isHidden_stackViewSafe = false
-                self.joinButton.isHidden_stackViewSafe = !(self.viewModel.instance?.registrations ?? false)
-                self.browseButton.isHidden_stackViewSafe = !self.viewModel.isPublicTimelineAvailable
-                self.whatIsMastodonButton.isHidden_stackViewSafe =
-                    !self.displayWelcome || self.viewModel.instance == nil
-            }
-        }
-        .store(in: &cancellables)
-
-        viewModel.$instance.combineLatest(viewModel.$isPublicTimelineAvailable)
+        viewModel.$instance.combineLatest(viewModel.$isPublicTimelineAvailable, viewModel.$loading)
             .throttle(for: .seconds(.defaultAnimationDuration), scheduler: DispatchQueue.main, latest: true)
-            .sink { [weak self] in self?.configure(instance: $0, isPublicTimelineAvailable: $1) }
+            .sink { [weak self] in self?.configure(instance: $0, isPublicTimelineAvailable: $1, loading: $2) }
             .store(in: &cancellables)
 
         viewModel.$alertItem
@@ -266,8 +246,16 @@ private extension AddIdentityViewController {
         }
     }
 
-    func configure(instance: Instance?, isPublicTimelineAvailable: Bool) {
+    func configure(instance: Instance?, isPublicTimelineAvailable: Bool, loading: Bool) {
+        if loading {
+            self.activityIndicator.startAnimating()
+        } else {
+            self.activityIndicator.stopAnimating()
+        }
+
         UIView.animate(withDuration: .zeroIfReduceMotion(.defaultAnimationDuration)) {
+            self.logInButton.isHidden_stackViewSafe = loading
+
             if let instance = instance {
                 self.instanceTitleLabel.text = instance.title
                 self.instanceURLLabel.text = instance.uri
@@ -284,18 +272,19 @@ private extension AddIdentityViewController {
                     }
 
                     self.joinButton.setTitle(joinButtonTitle, for: .normal)
-                    self.joinButton.isHidden_stackViewSafe = false
+                    self.joinButton.isHidden_stackViewSafe = loading
                 } else {
                     self.joinButton.isHidden_stackViewSafe = true
                 }
 
-                self.browseButton.isHidden_stackViewSafe = !isPublicTimelineAvailable
+                self.browseButton.isHidden_stackViewSafe = !isPublicTimelineAvailable || loading
                 self.whatIsMastodonButton.isHidden_stackViewSafe = true
             } else {
                 self.instanceStackView.isHidden_stackViewSafe = true
                 self.joinButton.isHidden_stackViewSafe = true
                 self.browseButton.isHidden_stackViewSafe = true
-                self.whatIsMastodonButton.isHidden_stackViewSafe = !self.displayWelcome || self.logInButton.alpha < 1
+                self.whatIsMastodonButton.isHidden_stackViewSafe =
+                    !self.displayWelcome || self.logInButton.alpha < 1 || loading
             }
         }
     }
