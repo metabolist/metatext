@@ -6,7 +6,7 @@ import ViewModels
 
 final class StatusBodyView: UIView {
     let spoilerTextLabel = UILabel()
-    let toggleShowContentButton = UIButton(type: .system)
+    let toggleShowContentButton = CapsuleButton()
     let contentTextView = TouchFallthroughTextView()
     let attachmentsView = AttachmentsView()
     let pollView = PollView()
@@ -152,14 +152,12 @@ private extension StatusBodyView {
         addSubview(stackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
-        stackView.spacing = .compactSpacing
+        stackView.spacing = .defaultSpacing
 
         spoilerTextLabel.numberOfLines = 0
         spoilerTextLabel.adjustsFontForContentSizeCategory = true
         stackView.addArrangedSubview(spoilerTextLabel)
 
-        toggleShowContentButton.titleLabel?.font = .preferredFont(forTextStyle: .headline)
-        toggleShowContentButton.titleLabel?.adjustsFontForContentSizeCategory = true
         toggleShowContentButton.addAction(
             UIAction { [weak self] _ in self?.viewModel?.toggleShowContent() },
             for: .touchUpInside)

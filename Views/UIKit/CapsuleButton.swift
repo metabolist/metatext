@@ -25,6 +25,12 @@ final class CapsuleButton: UIButton {
             backgroundColor = isHighlighted ? Self.highlightedColor : .link
         }
     }
+
+    override var isEnabled: Bool {
+        didSet {
+            backgroundColor = isEnabled ? .link : UIColor.link.withAlphaComponent(0.5)
+        }
+    }
 }
 
 private extension CapsuleButton {
@@ -45,5 +51,6 @@ private extension CapsuleButton {
         titleLabel?.font = .preferredFont(forTextStyle: .headline)
         setTitleColor(.white, for: .normal)
         setTitleColor(.lightText, for: .highlighted)
+        setTitleColor(.lightText, for: .disabled)
     }
 }

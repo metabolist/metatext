@@ -7,9 +7,8 @@ import ViewModels
 
 final class PollView: UIView {
     private let stackView = UIStackView()
-    private let voteButtonStackView = UIStackView()
     private let bottomStackView = UIStackView()
-    private let voteButton = UIButton(type: .system)
+    private let voteButton = CapsuleButton()
     private let refreshButton = UIButton(type: .system)
     private let refreshDividerLabel = UILabel()
     private let votesCountLabel = UILabel()
@@ -65,7 +64,7 @@ final class PollView: UIView {
             }
 
             if !viewModel.isPollExpired, !viewModel.hasVotedInPoll {
-                stackView.addArrangedSubview(voteButtonStackView)
+                stackView.addArrangedSubview(voteButton)
 
                 selectionCancellable = viewModel.$pollOptionSelections.sink { [weak self] in
                     guard let self = self else { return }
@@ -147,11 +146,6 @@ private extension PollView {
         stackView.axis = .vertical
         stackView.spacing = .defaultSpacing
 
-        voteButtonStackView.addArrangedSubview(voteButton)
-        voteButtonStackView.addArrangedSubview(UIView())
-
-        voteButton.titleLabel?.font = .preferredFont(forTextStyle: .headline)
-        voteButton.titleLabel?.adjustsFontForContentSizeCategory = true
         voteButton.setTitle(NSLocalizedString("status.poll.vote", comment: ""), for: .normal)
         voteButton.addAction(UIAction { [weak self] _ in self?.viewModel?.vote() }, for: .touchUpInside)
 
@@ -175,11 +169,9 @@ private extension PollView {
 
         bottomStackView.addArrangedSubview(UIView())
 
-        let voteButtonHeightConstraint = voteButton.heightAnchor.constraint(equalToConstant: .minimumButtonDimension)
         let refreshButtonHeightConstraint = refreshButton.heightAnchor.constraint(
             equalToConstant: .minimumButtonDimension / 2)
 
-        refreshButtonHeightConstraint.priority = .justBelowMax
         refreshButtonHeightConstraint.priority = .justBelowMax
 
         NSLayoutConstraint.activate([
@@ -187,7 +179,6 @@ private extension PollView {
             stackView.topAnchor.constraint(equalTo: topAnchor),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
             stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            voteButtonHeightConstraint,
             refreshButtonHeightConstraint
         ])
     }
