@@ -58,6 +58,7 @@ public extension ContentDatabase {
         .eraseToAnyPublisher()
     }
 
+    // swiftlint:disable:next function_body_length
     func insert(
         statuses: [Status],
         timeline: Timeline,
@@ -69,10 +70,24 @@ public extension ContentDatabase {
 
             let maxIdPresent = try String.fetchOne($0, timelineRecord.statuses.select(max(StatusRecord.Columns.id)))
 
+            var order = timeline.ordered
+                ? try Int.fetchOne(
+                    $0,
+                    TimelineStatusJoin.filter(TimelineStatusJoin.Columns.timelineId == timeline.id)
+                        .select(max(TimelineStatusJoin.Columns.order)))
+                : nil
+
             for status in statuses {
                 try status.save($0)
 
-                try TimelineStatusJoin(timelineId: timeline.id, statusId: status.id).save($0)
+                if let order = order {
+                    print("saving with order: \(order)")
+                }
+                try TimelineStatusJoin(timelineId: timeline.id, statusId: status.id, order: order).save($0)
+
+                if let presentOrder = order {
+                    order = presentOrder + 1
+                }
             }
 
             if let maxIdPresent = maxIdPresent,
@@ -447,7 +462,8 @@ public extension ContentDatabase {
 
     func timelinePublisher(_ timeline: Timeline) -> AnyPublisher<[CollectionSection], Error> {
         ValueObservation.tracking(
-            TimelineItemsInfo.request(TimelineRecord.filter(TimelineRecord.Columns.id == timeline.id)).fetchOne)
+            TimelineItemsInfo.request(TimelineRecord.filter(TimelineRecord.Columns.id == timeline.id),
+                                      ordered: timeline.ordered).fetchOne)
             .removeDuplicates()
             .publisher(in: databaseWriter)
             .handleEvents(

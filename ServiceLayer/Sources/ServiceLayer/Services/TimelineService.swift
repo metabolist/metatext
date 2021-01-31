@@ -10,7 +10,6 @@ public struct TimelineService {
     public let sections: AnyPublisher<[CollectionSection], Error>
     public let navigationService: NavigationService
     public let nextPageMaxId: AnyPublisher<String, Never>
-    public let preferLastPresentIdOverNextPageMaxId = true
     public let title: AnyPublisher<String, Never>
     public let titleLocalizationComponents: AnyPublisher<[String], Never>
 
@@ -48,6 +47,10 @@ public struct TimelineService {
 }
 
 extension TimelineService: CollectionService {
+    public var preferLastPresentIdOverNextPageMaxId: Bool {
+        !timeline.ordered
+    }
+
     public var markerTimeline: Marker.Timeline? {
         switch timeline {
         case .home:

@@ -128,6 +128,7 @@ extension ContentDatabase {
                     .references("timelineRecord", onDelete: .cascade)
                 t.column("statusId", .text).indexed().notNull()
                     .references("statusRecord", onDelete: .cascade)
+                t.column("order", .integer)
 
                 t.primaryKey(["timelineId", "statusId"], onConflict: .replace)
             }

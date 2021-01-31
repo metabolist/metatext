@@ -29,11 +29,19 @@ extension TimelineRecord {
         through: statusJoins,
         using: TimelineStatusJoin.status)
         .order(StatusRecord.Columns.id.desc)
+    static let orderedStatuses = hasMany(
+        StatusRecord.self,
+        through: statusJoins.order(TimelineStatusJoin.Columns.order),
+        using: TimelineStatusJoin.status)
     static let account = belongsTo(AccountRecord.self, using: ForeignKey([Columns.accountId]))
     static let loadMores = hasMany(LoadMoreRecord.self)
 
     var statuses: QueryInterfaceRequest<StatusInfo> {
         StatusInfo.request(request(for: Self.statuses))
+    }
+
+    var orderedStatuses: QueryInterfaceRequest<StatusInfo> {
+        StatusInfo.request(request(for: Self.orderedStatuses))
     }
 
     var loadMores: QueryInterfaceRequest<LoadMoreRecord> {

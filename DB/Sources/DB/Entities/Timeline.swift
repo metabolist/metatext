@@ -32,6 +32,15 @@ public extension Timeline {
             return nil
         }
     }
+
+    var ordered: Bool {
+        switch self {
+        case .favorites, .bookmarks:
+            return true
+        default:
+            return false
+        }
+    }
 }
 
 extension Timeline: Identifiable {

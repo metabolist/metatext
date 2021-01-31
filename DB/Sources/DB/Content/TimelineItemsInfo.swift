@@ -17,15 +17,17 @@ extension TimelineItemsInfo {
         let pinnedStatusInfos: [StatusInfo]
     }
 
-    static func addingIncludes<T: DerivableRequest>( _ request: T) -> T where T.RowDecoder == TimelineRecord {
-        request.including(all: StatusInfo.addingIncludes(TimelineRecord.statuses).forKey(CodingKeys.statusInfos))
+    static func addingIncludes<T: DerivableRequest>( _ request: T, ordered: Bool) -> T where T.RowDecoder == TimelineRecord {
+        let statusesAssociation = ordered ? TimelineRecord.orderedStatuses : TimelineRecord.statuses
+
+        return request.including(all: StatusInfo.addingIncludes(statusesAssociation).forKey(CodingKeys.statusInfos))
             .including(all: TimelineRecord.loadMores.forKey(CodingKeys.loadMoreRecords))
             .including(optional: PinnedStatusesInfo.addingIncludes(TimelineRecord.account)
                         .forKey(CodingKeys.pinnedStatusesInfo))
     }
 
-    static func request(_ request: QueryInterfaceRequest<TimelineRecord>) -> QueryInterfaceRequest<Self> {
-        addingIncludes(request).asRequest(of: self)
+    static func request(_ request: QueryInterfaceRequest<TimelineRecord>, ordered: Bool) -> QueryInterfaceRequest<Self> {
+        addingIncludes(request, ordered: ordered).asRequest(of: self)
     }
 
     func items(filters: [Filter]) -> [CollectionSection] {
