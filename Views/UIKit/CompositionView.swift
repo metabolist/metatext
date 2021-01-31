@@ -246,14 +246,19 @@ private extension CompositionView {
     }
 
     func changeIdentityMenu(identities: [Identity]) -> UIMenu {
-        UIMenu(children: identities.map { identity in
+        let processor = RoundCornerImageProcessor(radius: .widthFraction(0.5))
+        var imageOptions = KingfisherManager.shared.defaultOptions
+
+        imageOptions.append(.processor(processor))
+
+        return UIMenu(children: identities.map { identity in
             UIDeferredMenuElement { completion in
                 let action = UIAction(title: identity.handle) { [weak self] _ in
                     self?.parentViewModel.changeIdentity(identity)
                 }
 
                 if let image = identity.image {
-                    KingfisherManager.shared.retrieveImage(with: image) {
+                    KingfisherManager.shared.retrieveImage(with: image, options: imageOptions) {
                         if case let .success(value) = $0 {
                             action.image = value.image
                         }

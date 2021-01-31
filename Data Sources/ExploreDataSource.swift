@@ -13,44 +13,21 @@ final class ExploreDataSource: UICollectionViewDiffableDataSource<ExploreViewMod
 
     init(collectionView: UICollectionView, viewModel: ExploreViewModel) {
         self.collectionView = collectionView
-        let tagRegistration = UICollectionView.CellRegistration<TagCollectionViewCell, TagViewModel> {
-            $0.viewModel = $2
-        }
-
-        let instanceRegistration = UICollectionView.CellRegistration<InstanceCollectionViewCell, InstanceViewModel> {
-            $0.viewModel = $2
-        }
-
-        let itemRegistration = UICollectionView.CellRegistration
-        <SeparatorConfiguredCollectionViewListCell, ExploreViewModel.Item> {
-            var configuration = $0.defaultContentConfiguration()
-
-            switch $2 {
-            case .profileDirectory:
-                configuration.text = NSLocalizedString("explore.profile-directory", comment: "")
-                configuration.image = UIImage(systemName: "person.crop.square.fill.and.at.rectangle")
-            default:
-                break
-            }
-
-            $0.contentConfiguration = configuration
-            $0.accessories = [.disclosureIndicator()]
-        }
 
         super.init(collectionView: collectionView) {
             switch $2 {
             case let .tag(tag):
                 return $0.dequeueConfiguredReusableCell(
-                    using: tagRegistration,
+                    using: Self.tagRegistration,
                     for: $1,
                     item: viewModel.viewModel(tag: tag))
             case .instance:
                 return $0.dequeueConfiguredReusableCell(
-                    using: instanceRegistration,
+                    using: Self.instanceRegistration,
                     for: $1,
                     item: viewModel.instanceViewModel)
             default:
-                return $0.dequeueConfiguredReusableCell(using: itemRegistration, for: $1, item: $2)
+                return $0.dequeueConfiguredReusableCell(using: Self.itemRegistration, for: $1, item: $2)
             }
         }
 
@@ -78,27 +55,51 @@ final class ExploreDataSource: UICollectionViewDiffableDataSource<ExploreViewMod
 }
 
 private extension ExploreDataSource {
+    static let tagRegistration = UICollectionView.CellRegistration<TagCollectionViewCell, TagViewModel> {
+        $0.viewModel = $2
+    }
+
+    static let instanceRegistration = UICollectionView.CellRegistration<InstanceCollectionViewCell, InstanceViewModel> {
+        $0.viewModel = $2
+    }
+
+    static let itemRegistration = UICollectionView.CellRegistration
+    <SeparatorConfiguredCollectionViewListCell, ExploreViewModel.Item> {
+        var configuration = $0.defaultContentConfiguration()
+
+        switch $2 {
+        case .profileDirectory:
+            configuration.text = NSLocalizedString("explore.profile-directory", comment: "")
+            configuration.image = UIImage(systemName: "person.crop.square.fill.and.at.rectangle")
+        default:
+            break
+        }
+
+        $0.contentConfiguration = configuration
+        $0.accessories = [.disclosureIndicator()]
+    }
+
     func update(tags: [Tag], instanceViewModel: InstanceViewModel?) {
-        var snapshot = NSDiffableDataSourceSnapshot<ExploreViewModel.Section, ExploreViewModel.Item>()
+        var newsnapshot = NSDiffableDataSourceSnapshot<ExploreViewModel.Section, ExploreViewModel.Item>()
 
         if !tags.isEmpty {
-            snapshot.appendSections([.trending])
-            snapshot.appendItems(tags.map(ExploreViewModel.Item.tag), toSection: .trending)
+            newsnapshot.appendSections([.trending])
+            newsnapshot.appendItems(tags.map(ExploreViewModel.Item.tag), toSection: .trending)
         }
 
         if let instanceViewModel = instanceViewModel {
-            snapshot.appendSections([.instance])
-            snapshot.appendItems([.instance], toSection: .instance)
+            newsnapshot.appendSections([.instance])
+            newsnapshot.appendItems([.instance], toSection: .instance)
 
             if instanceViewModel.instance.canShowProfileDirectory {
-                snapshot.appendItems([.profileDirectory], toSection: .instance)
+                newsnapshot.appendItems([.profileDirectory], toSection: .instance)
             }
         }
 
         let wasEmpty = self.snapshot().itemIdentifiers.isEmpty
         let contentOffset = collectionView?.contentOffset
 
-        apply(snapshot, animatingDifferences: false) {
+        apply(newsnapshot, animatingDifferences: false) {
             if let contentOffset = contentOffset, !wasEmpty {
                 self.collectionView?.contentOffset = contentOffset
             }

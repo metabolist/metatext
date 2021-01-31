@@ -34,6 +34,11 @@ final class SecondaryNavigationButton: UIBarButtonItem {
         }
         .store(in: &cancellables)
 
+        let processor = RoundCornerImageProcessor(radius: .widthFraction(0.5))
+        var imageOptions = KingfisherManager.shared.defaultOptions
+
+        imageOptions.append(.processor(processor))
+
         viewModel.$recentIdentities.sink { identities in
             button.menu = UIMenu(children: identities.map { identity in
                 UIDeferredMenuElement { completion in
@@ -42,7 +47,7 @@ final class SecondaryNavigationButton: UIBarButtonItem {
                     }
 
                     if let image = identity.image {
-                        KingfisherManager.shared.retrieveImage(with: image) {
+                        KingfisherManager.shared.retrieveImage(with: image, options: imageOptions) {
                             if case let .success(value) = $0 {
                                 action.image = value.image
                             }
