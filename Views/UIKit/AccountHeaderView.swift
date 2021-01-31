@@ -254,8 +254,7 @@ private extension AccountHeaderView {
             }
 
             completion([unfollowAction])
-        },
-        UIAction(title: NSLocalizedString("cancel", comment: "")) { _ in }])
+        }])
 
         addSubview(baseStackView)
         baseStackView.translatesAutoresizingMaskIntoConstraints = false

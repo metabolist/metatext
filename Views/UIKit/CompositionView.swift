@@ -104,6 +104,7 @@ private extension CompositionView {
             parentViewModel: parentViewModel)
 
         stackView.addArrangedSubview(textView)
+        textView.keyboardType = .twitter
         textView.isScrollEnabled = false
         textView.adjustsFontForContentSizeCategory = true
         textView.font = textViewFont
