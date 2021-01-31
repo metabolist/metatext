@@ -9,6 +9,7 @@ final class AttachmentView: UIView {
     let playerView = PlayerView()
     let imageView = AnimatedImageView()
     let removeButton = UIButton(type: .close)
+    let editIcon = UIImageView()
     let selectionButton = UIButton()
 
     var playing: Bool = false {
@@ -151,6 +152,15 @@ private extension AttachmentView {
                     self.parentViewModel.removeAttachment(viewModel: self.viewModel)
                 }])
 
+        addSubview(editIcon)
+        editIcon.translatesAutoresizingMaskIntoConstraints = false
+        editIcon.image = UIImage(
+            systemName: "pencil",
+            withConfiguration: UIImage.SymbolConfiguration(scale: .large))
+        editIcon.layer.shadowOffset = .zero
+        editIcon.layer.shadowRadius = .defaultShadowRadius
+        editIcon.layer.shadowOpacity = .defaultShadowOpacity
+
         switch viewModel.attachment.type {
         case .image, .video, .gifv:
             imageView.kf.setImage(
@@ -196,7 +206,9 @@ private extension AttachmentView {
             selectionButton.topAnchor.constraint(equalTo: topAnchor),
             selectionButton.bottomAnchor.constraint(equalTo: bottomAnchor),
             removeButton.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-            removeButton.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor)
+            removeButton.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+            editIcon.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+            editIcon.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
         ])
     }
 }

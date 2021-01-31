@@ -130,7 +130,7 @@ private extension EditThumbnailView {
         previewImageContainerView.layer.cornerRadius = .defaultCornerRadius
         previewImageContainerView.layer.shadowOffset = .zero
         previewImageContainerView.layer.shadowRadius = .defaultShadowRadius
-        previewImageContainerView.layer.shadowOpacity = 0.25
+        previewImageContainerView.layer.shadowOpacity = .defaultShadowOpacity
 
         previewImageContainerView.addSubview(previewImageView)
         previewImageView.translatesAutoresizingMaskIntoConstraints = false

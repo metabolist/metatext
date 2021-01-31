@@ -37,7 +37,7 @@ private extension NewStatusButtonView {
             .cgPath
         layer.shadowOffset = .zero
         layer.shadowRadius = .defaultShadowRadius
-        layer.shadowOpacity = 0.25
+        layer.shadowOpacity = .defaultShadowOpacity
 
         addSubview(blurView)
         blurView.translatesAutoresizingMaskIntoConstraints = false

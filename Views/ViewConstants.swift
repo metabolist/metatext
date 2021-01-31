@@ -17,6 +17,10 @@ extension CGFloat {
     static let systemMenuInset: Self = 15
 }
 
+extension Float {
+    static let defaultShadowOpacity: Self = 0.25
+}
+
 extension CGRect {
     static let defaultContentsRect = Self(origin: .zero, size: .init(width: 1, height: 1))
 }
