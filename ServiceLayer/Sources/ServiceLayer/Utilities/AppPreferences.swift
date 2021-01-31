@@ -157,11 +157,23 @@ public extension AppPreferences {
         get { self[.showReblogAndFavoriteCounts] ?? false }
         set { self[.showReblogAndFavoriteCounts] = newValue }
     }
+
+    var requireDoubleTapToReblog: Bool {
+        get { self[.requireDoubleTapToReblog] ?? false }
+        set { self[.requireDoubleTapToReblog] = newValue }
+    }
+
+    var requireDoubleTapToFavorite: Bool {
+        get { self[.requireDoubleTapToFavorite] ?? false }
+        set { self[.requireDoubleTapToFavorite] = newValue }
+    }
 }
 
 private extension AppPreferences {
     enum Item: String {
         case statusWord
+        case requireDoubleTapToReblog
+        case requireDoubleTapToFavorite
         case useSystemReduceMotionForMedia
         case animateAvatars
         case animateHeaders

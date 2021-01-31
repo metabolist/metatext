@@ -69,6 +69,10 @@ struct PreferencesView: View {
                         Text(option.localizedStringKey).tag(option)
                     }
                 }
+                Toggle("preferences.require-double-tap-to-reblog",
+                       isOn: $identityContext.appPreferences.requireDoubleTapToReblog)
+                Toggle("preferences.require-double-tap-to-favorite",
+                       isOn: $identityContext.appPreferences.requireDoubleTapToFavorite)
                 if accessibilityReduceMotion {
                     Toggle("preferences.media.use-system-reduce-motion",
                            isOn: $identityContext.appPreferences.useSystemReduceMotionForMedia)

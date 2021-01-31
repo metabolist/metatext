@@ -245,12 +245,28 @@ private extension StatusView {
             for: .touchUpInside)
 
         reblogButton.addAction(
-            UIAction { [weak self] _ in self?.statusConfiguration.viewModel.toggleReblogged() },
+            UIAction { [weak self] _ in
+                guard let self = self,
+                      !self.statusConfiguration.viewModel.identityContext.appPreferences.requireDoubleTapToReblog
+                else { return }
+
+                self.reblog()
+            },
             for: .touchUpInside)
 
+        reblogButton.addTarget(self, action: #selector(reblogButtonDoubleTap(sender:event:)), for: .touchDownRepeat)
+
         favoriteButton.addAction(
-            UIAction { [weak self] _ in self?.statusConfiguration.viewModel.toggleFavorited() },
+            UIAction { [weak self] _ in
+                guard let self = self,
+                      !self.statusConfiguration.viewModel.identityContext.appPreferences.requireDoubleTapToFavorite
+                else { return }
+
+                self.favorite()
+            },
             for: .touchUpInside)
+
+        favoriteButton.addTarget(self, action: #selector(favoriteButtonDoubleTap(sender:event:)), for: .touchDownRepeat)
 
         shareButton.addAction(
             UIAction { [weak self] _ in self?.statusConfiguration.viewModel.shareStatus() },
@@ -533,6 +549,38 @@ private extension StatusView {
                                      withConfiguration: UIImage.SymbolConfiguration(scale: scale)), for: .normal)
         menuButton.setImage(UIImage(systemName: "ellipsis",
                                     withConfiguration: UIImage.SymbolConfiguration(scale: scale)), for: .normal)
+    }
+
+    @objc func reblogButtonDoubleTap(sender: UIButton, event: UIEvent) {
+        guard
+            statusConfiguration.viewModel.identityContext.appPreferences.requireDoubleTapToReblog,
+            event.allTouches?.first?.tapCount == 2 else {
+            return
+        }
+
+        reblog()
+    }
+
+    @objc func favoriteButtonDoubleTap(sender: UIButton, event: UIEvent) {
+        guard
+            statusConfiguration.viewModel.identityContext.appPreferences.requireDoubleTapToFavorite,
+            event.allTouches?.first?.tapCount == 2 else {
+            return
+        }
+
+        favorite()
+    }
+
+    func reblog() {
+        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+
+        statusConfiguration.viewModel.toggleReblogged()
+    }
+
+    func favorite() {
+        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+
+        statusConfiguration.viewModel.toggleFavorited()
     }
 }
 
