@@ -67,7 +67,18 @@ extension ProfileViewModel: CollectionViewModel {
     }
 
     public var updates: AnyPublisher<CollectionUpdate, Never> {
-        collectionViewModel.flatMap(\.updates).eraseToAnyPublisher()
+        collectionViewModel.flatMap(\.updates)
+            .combineLatest($accountViewModel.map { $0?.relationship })
+            .map {
+                let (updates, relationship) = $0
+
+                if let relationship = relationship, relationship.blockedBy {
+                    return .empty
+                } else {
+                    return updates
+                }
+            }
+            .eraseToAnyPublisher()
     }
 
     public var title: AnyPublisher<String, Never> {

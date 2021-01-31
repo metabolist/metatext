@@ -21,6 +21,7 @@
 "account.statuses-and-replies" = "Posts & Replies";
 "account.media" = "Media";
 "account.show-reblogs" = "Show boosts";
+"account.unavailable" = "Profile unavailable";
 "account.unblock" = "Unblock";
 "account.unblock.confirm-%@" = "Unblock %@?";
 "account.unfollow" = "Unfollow";

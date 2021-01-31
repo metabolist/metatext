@@ -24,6 +24,7 @@ final class AccountHeaderView: UIView {
     let followingButton = UIButton()
     let followersButton = UIButton()
     let segmentedControl = UISegmentedControl()
+    let unavailableLabel = UILabel()
 
     var viewModel: ProfileViewModel? {
         didSet {
@@ -47,8 +48,10 @@ final class AccountHeaderView: UIView {
                     unfollowButton.isHidden = !relationship.following
 
                     relationshipButtonsStackView.isHidden = false
+                    unavailableLabel.isHidden = !relationship.blockedBy
                 } else {
                     relationshipButtonsStackView.isHidden = true
+                    unavailableLabel.isHidden = true
                 }
 
                 if accountViewModel.displayName.isEmpty {
@@ -318,6 +321,14 @@ private extension AccountHeaderView {
         segmentedControl.selectedSegmentIndex = 0
 
         baseStackView.addArrangedSubview(segmentedControl)
+
+        baseStackView.addArrangedSubview(unavailableLabel)
+        unavailableLabel.adjustsFontForContentSizeCategory = true
+        unavailableLabel.font = .preferredFont(forTextStyle: .title3)
+        unavailableLabel.textAlignment = .center
+        unavailableLabel.numberOfLines = 0
+        unavailableLabel.text = NSLocalizedString("account.unavailable", comment: "")
+        unavailableLabel.isHidden = true
 
         let headerImageAspectRatioConstraint = headerImageView.heightAnchor.constraint(
             equalTo: headerImageView.widthAnchor,

@@ -11,10 +11,7 @@ public class CollectionItemsViewModel: ObservableObject {
     @Published public var alertItem: AlertItem?
     public private(set) var nextPageMaxId: String?
 
-    @Published private var lastUpdate = CollectionUpdate(
-        sections: [],
-        maintainScrollPositionItemId: nil,
-        shouldAdjustContentInset: false)
+    @Published private var lastUpdate = CollectionUpdate.empty
     private let collectionService: CollectionService
     private var viewModelCache = [CollectionItem: (viewModel: CollectionItemViewModel, events: AnyCancellable)]()
     private let eventsSubject = PassthroughSubject<CollectionItemEvent, Never>()
