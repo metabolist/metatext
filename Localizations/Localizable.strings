@@ -28,6 +28,7 @@
 "account.unblock.confirm-%@" = "Unblock %@?";
 "account.unfollow" = "Unfollow";
 "account.unmute" = "Unmute";
+"activity.open-in-safari" = "Open in Safari";
 "add" = "Add";
 "apns-default-message" = "New notification";
 "add-identity.instance-url" = "Instance URL";

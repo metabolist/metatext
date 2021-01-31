@@ -513,7 +513,9 @@ private extension TableViewController {
     }
 
     func share(url: URL) {
-        let activityViewController = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        let activityViewController = UIActivityViewController(
+            activityItems: [url],
+            applicationActivities: [OpenInSafariActivity()])
 
         if UIDevice.current.userInterfaceIdiom == .pad {
             guard let sourceView = tableView.viewWithTag(url.hashValue) else { return }
