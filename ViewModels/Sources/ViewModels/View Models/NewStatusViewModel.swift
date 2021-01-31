@@ -64,6 +64,10 @@ public final class NewStatusViewModel: ObservableObject {
             compositionViewModel = CompositionViewModel(eventsSubject: compositionEventsSubject)
         }
 
+        if let inReplyTo = inReplyTo {
+            compositionViewModel.text = inReplyTo.accountName.appending(" ")
+        }
+
         compositionViewModels = [compositionViewModel]
 
         allIdentitiesService.authenticatedIdentitiesPublisher()
