@@ -135,12 +135,12 @@ public extension ContentDatabase {
         databaseWriter.writePublisher {
             for (index, status) in context.ancestors.enumerated() {
                 try status.save($0)
-                try StatusAncestorJoin(parentId: parentId, statusId: status.id, index: index).save($0)
+                try StatusAncestorJoin(parentId: parentId, statusId: status.id, order: index).save($0)
             }
 
             for (index, status) in context.descendants.enumerated() {
                 try status.save($0)
-                try StatusDescendantJoin(parentId: parentId, statusId: status.id, index: index).save($0)
+                try StatusDescendantJoin(parentId: parentId, statusId: status.id, order: index).save($0)
             }
 
             try StatusAncestorJoin.filter(
@@ -161,7 +161,7 @@ public extension ContentDatabase {
         databaseWriter.writePublisher {
             for (index, status) in pinnedStatuses.enumerated() {
                 try status.save($0)
-                try AccountPinnedStatusJoin(accountId: accountId, statusId: status.id, index: index).save($0)
+                try AccountPinnedStatusJoin(accountId: accountId, statusId: status.id, order: index).save($0)
             }
 
             try AccountPinnedStatusJoin.filter(

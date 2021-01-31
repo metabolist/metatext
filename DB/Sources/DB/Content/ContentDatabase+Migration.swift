@@ -226,7 +226,7 @@ extension ContentDatabase {
                     .references("statusRecord", onDelete: .cascade)
                 t.column("statusId", .text).indexed().notNull()
                     .references("statusRecord", onDelete: .cascade)
-                t.column("index", .integer).notNull()
+                t.column("order", .integer).notNull()
 
                 t.primaryKey(["parentId", "statusId"], onConflict: .replace)
             }
@@ -236,7 +236,7 @@ extension ContentDatabase {
                     .references("statusRecord", onDelete: .cascade)
                 t.column("statusId", .text).indexed().notNull()
                     .references("statusRecord", onDelete: .cascade)
-                t.column("index", .integer).notNull()
+                t.column("order", .integer).notNull()
 
                 t.primaryKey(["parentId", "statusId"], onConflict: .replace)
             }
@@ -246,7 +246,7 @@ extension ContentDatabase {
                     .references("accountRecord", onDelete: .cascade)
                 t.column("statusId", .text).indexed().notNull()
                     .references("statusRecord", onDelete: .cascade)
-                t.column("index", .integer).notNull()
+                t.column("order", .integer).notNull()
 
                 t.primaryKey(["accountId", "statusId"], onConflict: .replace)
             }

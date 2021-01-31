@@ -58,7 +58,7 @@ extension AccountRecord {
     static let identityProofs = hasMany(IdentityProofRecord.self)
     static let featuredTags = hasMany(FeaturedTagRecord.self)
     static let pinnedStatusJoins = hasMany(AccountPinnedStatusJoin.self)
-        .order(AccountPinnedStatusJoin.Columns.index)
+        .order(AccountPinnedStatusJoin.Columns.order)
     static let pinnedStatuses = hasMany(
         StatusRecord.self,
         through: pinnedStatusJoins,
