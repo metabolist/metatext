@@ -56,6 +56,7 @@
 		D036EBB8259FE29800EC1CFC /* Status+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0849C7E25903C4900A5EBCC /* Status+Extensions.swift */; };
 		D036EBC2259FE2AD00EC1CFC /* UIVIewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E7AD3825870B13005F5E2D /* UIVIewController+Extensions.swift */; };
 		D03D87F425C23C44004DCBB2 /* SecondaryNavigationTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03D87F325C23C44004DCBB2 /* SecondaryNavigationTitleView.swift */; };
+		D0477F1525C68BAC005C5368 /* PrefetchRequestModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0477F1425C68BAC005C5368 /* PrefetchRequestModifier.swift */; };
 		D04F9E8E259E9C950081B0C9 /* ViewModels in Frameworks */ = {isa = PBXBuildFile; productRef = D04F9E8D259E9C950081B0C9 /* ViewModels */; };
 		D05936CF25A8D79800754FDF /* EditAttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05936CE25A8D79800754FDF /* EditAttachmentViewController.swift */; };
 		D05936D025A8D79800754FDF /* EditAttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05936CE25A8D79800754FDF /* EditAttachmentViewController.swift */; };
@@ -251,6 +252,7 @@
 		D036AA0B254B612B009094DF /* NotificationContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationContentConfiguration.swift; sourceTree = "<group>"; };
 		D036AA16254CA823009094DF /* StatusBodyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBodyView.swift; sourceTree = "<group>"; };
 		D03D87F325C23C44004DCBB2 /* SecondaryNavigationTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondaryNavigationTitleView.swift; sourceTree = "<group>"; };
+		D0477F1425C68BAC005C5368 /* PrefetchRequestModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefetchRequestModifier.swift; sourceTree = "<group>"; };
 		D047FA8C24C3E21200AF17C5 /* Metatext.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Metatext.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D05936CE25A8D79800754FDF /* EditAttachmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAttachmentViewController.swift; sourceTree = "<group>"; };
 		D05936DD25A937EC00754FDF /* EditThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditThumbnailView.swift; sourceTree = "<group>"; };
@@ -737,6 +739,7 @@
 				D025B14C25C4E482001C69A8 /* ImageCacheConfiguration.swift */,
 				D025B14525C4D26A001C69A8 /* ImageCacheSerializer.swift */,
 				D0FE1C9725368A9D003EF1EB /* PlayerCache.swift */,
+				D0477F1425C68BAC005C5368 /* PrefetchRequestModifier.swift */,
 			);
 			path = Caches;
 			sourceTree = "<group>";
@@ -967,6 +970,7 @@
 				D08B8D622540DE3B00B1EBEF /* ZoomTransitionController.swift in Sources */,
 				D0F0B12E251A97E400942152 /* TableViewController.swift in Sources */,
 				D0DD50CB256B1F24004A04F7 /* ReportView.swift in Sources */,
+				D0477F1525C68BAC005C5368 /* PrefetchRequestModifier.swift in Sources */,
 				D097F41B25BE3E1A00859F2C /* SearchScope+Extensions.swift in Sources */,
 				D035F8B325B9616000DC75ED /* Timeline+Extensions.swift in Sources */,
 				D0FE1C8F253686F9003EF1EB /* PlayerView.swift in Sources */,

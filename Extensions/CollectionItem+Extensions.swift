@@ -1,5 +1,6 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
+import Mastodon
 import UIKit
 import ViewModels
 
@@ -60,5 +61,51 @@ extension CollectionItem {
         case .moreResults:
             return UITableView.automaticDimension
         }
+    }
+
+    func mediaPrefetchURLs(identityContext: IdentityContext) -> Set<URL> {
+        switch self {
+        case let .status(status, _):
+            return status.mediaPrefetchURLs(identityContext: identityContext)
+        case let .account(account, _):
+            return account.mediaPrefetchURLs(identityContext: identityContext)
+        case let .notification(notification, _):
+            var urls = notification.account.mediaPrefetchURLs(identityContext: identityContext)
+
+            if let status = notification.status {
+                urls.formUnion(status.mediaPrefetchURLs(identityContext: identityContext))
+            }
+
+            return urls
+        case let .conversation(conversation):
+            return conversation.accounts.reduce(Set<URL>()) {
+                $0.union($1.mediaPrefetchURLs(identityContext: identityContext))
+            }
+        default:
+            return []
+        }
+    }
+}
+
+private extension Account {
+    func mediaPrefetchURLs(identityContext: IdentityContext) -> Set<URL> {
+        var urls = Set(emojis.map(\.url))
+
+        if !identityContext.appPreferences.shouldReduceMotion
+            && identityContext.appPreferences.animateAvatars == .everywhere {
+            urls.insert(avatar)
+        } else {
+            urls.insert(avatarStatic)
+        }
+
+        return urls
+    }
+}
+
+private extension Status {
+    func mediaPrefetchURLs(identityContext: IdentityContext) -> Set<URL> {
+        displayStatus.account.mediaPrefetchURLs(identityContext: identityContext)
+            .union(displayStatus.mediaAttachments.compactMap(\.previewUrl))
+            .union(displayStatus.emojis.map(\.url))
     }
 }
