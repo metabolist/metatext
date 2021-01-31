@@ -18,6 +18,7 @@ final class AccountHeaderView: UIView {
     let accountStackView = UIStackView()
     let accountLabel = UILabel()
     let lockedImageView = UIImageView()
+    let followsYouLabel = FollowsYouLabel()
     let fieldsStackView = UIStackView()
     let noteTextView = TouchFallthroughTextView()
     let followStackView = UIStackView()
@@ -39,6 +40,7 @@ final class AccountHeaderView: UIView {
                 avatarImageView.tag = accountViewModel.avatarURL(profile: true).hashValue
 
                 if !accountViewModel.isSelf, let relationship = accountViewModel.relationship {
+                    followsYouLabel.isHidden = !relationship.followedBy
                     followButton.setTitle(
                         NSLocalizedString(
                             accountViewModel.isLocked ? "account.request" : "account.follow",
@@ -267,6 +269,7 @@ private extension AccountHeaderView {
         displayNameLabel.adjustsFontForContentSizeCategory = true
 
         baseStackView.addArrangedSubview(accountStackView)
+        accountStackView.spacing = .compactSpacing
 
         accountStackView.addArrangedSubview(accountLabel)
         accountLabel.numberOfLines = 0
@@ -282,6 +285,10 @@ private extension AccountHeaderView {
             withConfiguration: UIImage.SymbolConfiguration(scale: .small))
         lockedImageView.tintColor = .secondaryLabel
         lockedImageView.contentMode = .scaleAspectFit
+
+        accountStackView.addArrangedSubview(followsYouLabel)
+        followsYouLabel.text = NSLocalizedString("account.follows-you", comment: "")
+        followsYouLabel.isHidden = true
 
         accountStackView.addArrangedSubview(UIView())
 

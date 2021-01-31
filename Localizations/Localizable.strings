@@ -14,6 +14,7 @@
 "account.following" = "Following";
 "account.following-count" = "%ld Following";
 "account.followed-by-%@" = "Followed by %@";
+"account.follows-you" = "Follows you";
 "account.hide-reblogs" = "Hide boosts";
 "account.mute" = "Mute";
 "account.request" = "Request";

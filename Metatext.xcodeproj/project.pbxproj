@@ -58,6 +58,7 @@
 		D03D87F425C23C44004DCBB2 /* SecondaryNavigationTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03D87F325C23C44004DCBB2 /* SecondaryNavigationTitleView.swift */; };
 		D0477F1525C68BAC005C5368 /* PrefetchRequestModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0477F1425C68BAC005C5368 /* PrefetchRequestModifier.swift */; };
 		D0477F2C25C6EBAD005C5368 /* OpenInSafariActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0477F2B25C6EBAD005C5368 /* OpenInSafariActivity.swift */; };
+		D0477F4625C72E50005C5368 /* FollowsYouLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0477F4525C72E50005C5368 /* FollowsYouLabel.swift */; };
 		D04F9E8E259E9C950081B0C9 /* ViewModels in Frameworks */ = {isa = PBXBuildFile; productRef = D04F9E8D259E9C950081B0C9 /* ViewModels */; };
 		D05936CF25A8D79800754FDF /* EditAttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05936CE25A8D79800754FDF /* EditAttachmentViewController.swift */; };
 		D05936D025A8D79800754FDF /* EditAttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05936CE25A8D79800754FDF /* EditAttachmentViewController.swift */; };
@@ -255,6 +256,7 @@
 		D03D87F325C23C44004DCBB2 /* SecondaryNavigationTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondaryNavigationTitleView.swift; sourceTree = "<group>"; };
 		D0477F1425C68BAC005C5368 /* PrefetchRequestModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefetchRequestModifier.swift; sourceTree = "<group>"; };
 		D0477F2B25C6EBAD005C5368 /* OpenInSafariActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenInSafariActivity.swift; sourceTree = "<group>"; };
+		D0477F4525C72E50005C5368 /* FollowsYouLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowsYouLabel.swift; sourceTree = "<group>"; };
 		D047FA8C24C3E21200AF17C5 /* Metatext.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Metatext.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D05936CE25A8D79800754FDF /* EditAttachmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAttachmentViewController.swift; sourceTree = "<group>"; };
 		D05936DD25A937EC00754FDF /* EditThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditThumbnailView.swift; sourceTree = "<group>"; };
@@ -434,6 +436,7 @@
 				D05936DD25A937EC00754FDF /* EditThumbnailView.swift */,
 				D07EC7FC25B16994006DF726 /* EmojiCategoryHeaderView.swift */,
 				D0DDA77E25C6058300FA0F91 /* ExploreSectionHeaderView.swift */,
+				D0477F4525C72E50005C5368 /* FollowsYouLabel.swift */,
 				D0D2AC6625BD0484003D5DF2 /* LineChartView.swift */,
 				D0BEB1F624F9A84B001B0F04 /* LoadingTableFooterView.swift */,
 				D05936FE25AA94EA00754FDF /* MarkAttachmentsSensitiveView.swift */,
@@ -1071,6 +1074,7 @@
 				D0E1F583251F13EC00D45315 /* WebfingerIndicatorView.swift in Sources */,
 				D0BEB20524FA1107001B0F04 /* FiltersView.swift in Sources */,
 				D0DDA76B25C5F20800FA0F91 /* ExploreDataSource.swift in Sources */,
+				D0477F4625C72E50005C5368 /* FollowsYouLabel.swift in Sources */,
 				D035F88725B8016000DC75ED /* NavigationViewModel+Extensions.swift in Sources */,
 				D0C7D49B24F7616A001EBDBB /* PreferencesView.swift in Sources */,
 				D09D972225C65682007E6394 /* SeparatorConfiguredCollectionViewListCell.swift in Sources */,
