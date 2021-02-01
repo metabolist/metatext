@@ -69,15 +69,44 @@ private extension CompositionInputAccessoryView {
         let attachmentButton = UIBarButtonItem(
             image: UIImage(systemName: "paperclip"),
             menu: UIMenu(children: attachmentActions))
+
+        attachmentButton.accessibilityLabel =
+            NSLocalizedString("compose.attachments-button.accessibility-label", comment: "")
+
         let pollButton = UIBarButtonItem(
             image: UIImage(systemName: "chart.bar.xaxis"),
             primaryAction: UIAction { [weak self] _ in self?.viewModel.displayPoll.toggle() })
+
+        pollButton.accessibilityLabel = NSLocalizedString("compose.poll-button.accessibility-label", comment: "")
+
         let visibilityButton = UIBarButtonItem(
             image: UIImage(systemName: parentViewModel.visibility.systemImageName),
             menu: visibilityMenu(selectedVisibility: parentViewModel.visibility))
+
+        switch parentViewModel.identityContext.appPreferences.statusWord {
+        case .toot:
+            visibilityButton.accessibilityLabel =
+                NSLocalizedString("compose.visibility-button.accessibility-label.toot", comment: "")
+        case .post:
+            visibilityButton.accessibilityLabel =
+                NSLocalizedString("compose.visibility-button.accessibility-label.post", comment: "")
+        }
+
         let contentWarningButton = UIBarButtonItem(
             title: NSLocalizedString("status.content-warning-abbreviation", comment: ""),
             primaryAction: UIAction { [weak self] _ in self?.viewModel.displayContentWarning.toggle() })
+
+        viewModel.$displayContentWarning.sink {
+            if $0 {
+                contentWarningButton.accessibilityHint =
+                    NSLocalizedString("compose.content-warning-button.remove", comment: "")
+            } else {
+                contentWarningButton.accessibilityHint =
+                    NSLocalizedString("compose.content-warning-button.add", comment: "")
+            }
+        }
+        .store(in: &cancellables)
+
         let emojiButton = UIBarButtonItem(
             image: UIImage(systemName: "face.smiling"),
             primaryAction: UIAction { [weak self] _ in
@@ -85,6 +114,9 @@ private extension CompositionInputAccessoryView {
 
                 self.parentViewModel.presentEmojiPicker(tag: self.tagForInputView)
             })
+
+        emojiButton.accessibilityLabel = NSLocalizedString("compose.emoji-button", comment: "")
+
         let addButton = UIBarButtonItem(
             image: UIImage(systemName: "plus.circle.fill"),
             primaryAction: UIAction { [weak self] _ in
@@ -92,6 +124,15 @@ private extension CompositionInputAccessoryView {
 
                 self.parentViewModel.insert(after: self.viewModel)
             })
+
+        switch parentViewModel.identityContext.appPreferences.statusWord {
+        case .toot:
+            addButton.accessibilityLabel =
+                NSLocalizedString("compose.add-button-accessibility-label.toot", comment: "")
+        case .post:
+            addButton.accessibilityLabel =
+                NSLocalizedString("compose.add-button-accessibility-label.post", comment: "")
+        }
 
         let charactersLabel = UILabel()
 
@@ -128,6 +169,9 @@ private extension CompositionInputAccessoryView {
         viewModel.$remainingCharacters.sink {
             charactersLabel.text = String($0)
             charactersLabel.textColor = $0 < 0 ? .systemRed : .label
+            charactersLabel.accessibilityLabel = String.localizedStringWithFormat(
+                NSLocalizedString("compose.characters-remaining-accessibility-label-%ld", comment: ""),
+                $0)
         }
         .store(in: &cancellables)
 

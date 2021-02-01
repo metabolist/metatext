@@ -102,7 +102,7 @@ private extension MainNavigationViewController {
             let newStatusNavigationController = UINavigationController(rootViewController: newStatusViewController)
 
             if UIDevice.current.userInterfaceIdiom == .phone {
-                newStatusNavigationController.modalPresentationStyle = .overFullScreen
+                newStatusNavigationController.modalPresentationStyle = .fullScreen
             } else {
                 newStatusNavigationController.isModalInPresentation = true
             }
@@ -112,6 +112,18 @@ private extension MainNavigationViewController {
 
         view.addSubview(newStatusButtonView)
         newStatusButtonView.translatesAutoresizingMaskIntoConstraints = false
+
+        viewModel.identityContext.$appPreferences.map(\.statusWord).removeDuplicates().sink {
+            switch $0 {
+            case .toot:
+                newStatusButtonView.button.accessibilityLabel =
+                    NSLocalizedString("compose-button.accessibility-label.toot", comment: "")
+            case.post:
+                newStatusButtonView.button.accessibilityLabel =
+                    NSLocalizedString("compose-button.accessibility-label.post", comment: "")
+            }
+        }
+        .store(in: &cancellables)
 
         NSLayoutConstraint.activate([
             newStatusButtonView.widthAnchor.constraint(equalToConstant: .newStatusButtonDimension),

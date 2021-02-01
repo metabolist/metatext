@@ -15,6 +15,7 @@ final class SecondaryNavigationButton: UIBarButtonItem {
             type: .custom,
             primaryAction: UIAction { _ in viewModel.presentingSecondaryNavigation = true })
 
+        button.accessibilityLabel = NSLocalizedString("secondary-navigation-button.accessibility-title", comment: "")
         button.imageView?.contentMode = .scaleAspectFill
         button.layer.cornerRadius = .barButtonItemDimension / 2
         button.clipsToBounds = true
