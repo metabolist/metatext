@@ -251,7 +251,7 @@ extension TableViewController: ZoomAnimatorDelegate {
 
 private extension TableViewController {
     static let bottomInset: CGFloat = .newStatusButtonDimension + .defaultSpacing * 4
-    static let loadingFooterDebounceInterval: TimeInterval = 0.5
+    static let loadingFooterDebounceInterval: TimeInterval = 0.75
 
     var bottomInset: CGFloat { insetBottom ? Self.bottomInset : 0 }
 
@@ -279,19 +279,21 @@ private extension TableViewController {
 
         viewModel.loading.receive(on: DispatchQueue.main).assign(to: &$loading)
 
+        $loading.combineLatest(
         $loading.debounce(
             for: .seconds(Self.loadingFooterDebounceInterval),
-            scheduler: DispatchQueue.main)
-            .sink { [weak self] in
+            scheduler: DispatchQueue.main))
+            .sink { [weak self] loading, debouncedLoading in
                 guard let self = self else { return }
 
                 let refreshControlVisibile = self.refreshControl?.isRefreshing ?? false
 
-                if !$0, refreshControlVisibile {
+                if !loading, refreshControlVisibile {
                     self.refreshControl?.endRefreshing()
                 }
 
-                self.tableView.tableFooterView = $0 && !refreshControlVisibile ? self.loadingTableFooterView : UIView()
+                self.tableView.tableFooterView =
+                    loading && debouncedLoading && !refreshControlVisibile ? self.loadingTableFooterView : UIView()
                 self.sizeTableHeaderFooterViews()
             }
             .store(in: &cancellables)
