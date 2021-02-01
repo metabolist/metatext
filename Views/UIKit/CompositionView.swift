@@ -123,13 +123,13 @@ private extension CompositionView {
         textViewPlaceholder.text = NSLocalizedString("compose.prompt", comment: "")
 
         stackView.addArrangedSubview(attachmentsView)
-        attachmentsView.isHidden = true
+        attachmentsView.isHidden_stackViewSafe = true
         stackView.addArrangedSubview(attachmentUploadView)
-        attachmentUploadView.isHidden = true
+        attachmentUploadView.isHidden_stackViewSafe = true
         stackView.addArrangedSubview(markAttachmentsSensitiveView)
-        markAttachmentsSensitiveView.isHidden = true
+        markAttachmentsSensitiveView.isHidden_stackViewSafe = true
         stackView.addArrangedSubview(pollView)
-        pollView.isHidden = true
+        pollView.isHidden_stackViewSafe = true
 
         addSubview(removeButton)
         removeButton.translatesAutoresizingMaskIntoConstraints = false
@@ -162,10 +162,13 @@ private extension CompositionView {
             constant: -textViewFont.lineHeight / 2)
 
         viewModel.$text.map(\.isEmpty)
-            .sink { [weak self] in self?.textViewPlaceholder.isHidden = !$0 }
+            .sink { [weak self] in self?.textViewPlaceholder.isHidden_stackViewSafe = !$0 }
             .store(in: &cancellables)
 
         viewModel.$displayContentWarning
+            .throttle(for: .seconds(TimeInterval.zeroIfReduceMotion(.shortAnimationDuration)),
+                      scheduler: DispatchQueue.main,
+                      latest: true)
             .sink { [weak self] displayContentWarning in
                 guard let self = self else { return }
 
@@ -178,7 +181,7 @@ private extension CompositionView {
                 }
 
                 UIView.animate(withDuration: .zeroIfReduceMotion(.shortAnimationDuration)) {
-                    self.spoilerTextField.isHidden = !displayContentWarning
+                    self.spoilerTextField.isHidden_stackViewSafe = !displayContentWarning
                     textViewBaselineConstraint.isActive = !displayContentWarning
                 }
             }
@@ -200,24 +203,29 @@ private extension CompositionView {
             .store(in: &cancellables)
 
         viewModel.$attachmentViewModels
-            .receive(on: RunLoop.main)
+            .throttle(for: .seconds(TimeInterval.zeroIfReduceMotion(.shortAnimationDuration)),
+                      scheduler: DispatchQueue.main,
+                      latest: true)
             .sink { [weak self] attachmentViewModels in
                 UIView.animate(withDuration: .zeroIfReduceMotion(.shortAnimationDuration)) {
                     self?.attachmentsView.viewModel = self?.viewModel
-                    self?.attachmentsView.isHidden = attachmentViewModels.isEmpty
-                    self?.markAttachmentsSensitiveView.isHidden = attachmentViewModels.isEmpty
+                    self?.attachmentsView.isHidden_stackViewSafe = attachmentViewModels.isEmpty
+                    self?.markAttachmentsSensitiveView.isHidden_stackViewSafe = attachmentViewModels.isEmpty
                 }
             }
             .store(in: &cancellables)
 
         viewModel.$displayPoll
+            .throttle(for: .seconds(TimeInterval.zeroIfReduceMotion(.shortAnimationDuration)),
+                      scheduler: DispatchQueue.main,
+                      latest: true)
             .sink { [weak self] displayPoll in
                 if !displayPoll {
                     self?.textView.becomeFirstResponder()
                 }
 
                 UIView.animate(withDuration: .zeroIfReduceMotion(.shortAnimationDuration)) {
-                    self?.pollView.isHidden = !displayPoll
+                    self?.pollView.isHidden_stackViewSafe = !displayPoll
                 }
             }
             .store(in: &cancellables)

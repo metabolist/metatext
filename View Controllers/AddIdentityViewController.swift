@@ -299,16 +299,3 @@ private extension AddIdentityViewController {
         show(registrationViewController, sender: self)
     }
 }
-
-// http://www.openradar.me/25087688
-extension UIView {
-    var isHidden_stackViewSafe: Bool {
-        get { isHidden }
-        set {
-            if isHidden != newValue {
-                isHidden = newValue
-                alpha = isHidden ? 0 : 1
-            }
-        }
-    }
-}

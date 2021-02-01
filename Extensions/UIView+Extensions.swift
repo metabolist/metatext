@@ -25,4 +25,15 @@ extension UIView {
 
         layer.contentsRect = CGRect(origin: origin, size: Self.defaultContentsRectSize)
     }
+
+    // http://www.openradar.me/25087688
+    var isHidden_stackViewSafe: Bool {
+        get { isHidden }
+        set {
+            if isHidden != newValue {
+                isHidden = newValue
+                alpha = isHidden ? 0 : 1
+            }
+        }
+    }
 }

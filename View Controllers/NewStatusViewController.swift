@@ -96,7 +96,7 @@ final class NewStatusViewController: UIViewController {
 
             statusView.isUserInteractionEnabled = false
             statusView.bodyView.alpha = 0.5
-            statusView.buttonsStackView.isHidden = true
+            statusView.buttonsStackView.isHidden_stackViewSafe = true
 
             stackView.addArrangedSubview(statusView)
         }
@@ -229,10 +229,11 @@ private extension NewStatusViewController {
         }
 
         for compositionView in stackView.arrangedSubviews.compactMap({ $0 as? CompositionView }) {
-            compositionView.removeButton.isHidden = compositionViewModels.count == 1
-            compositionView.inReplyToView.isHidden = compositionView === stackView.arrangedSubviews.first
+            compositionView.removeButton.isHidden_stackViewSafe = compositionViewModels.count == 1
+            compositionView.inReplyToView.isHidden_stackViewSafe = compositionView === stackView.arrangedSubviews.first
                 && viewModel.inReplyToViewModel == nil
-            compositionView.hasReplyFollowingView.isHidden = compositionView === stackView.arrangedSubviews.last
+            compositionView.hasReplyFollowingView.isHidden_stackViewSafe =
+                compositionView === stackView.arrangedSubviews.last
         }
     }
 

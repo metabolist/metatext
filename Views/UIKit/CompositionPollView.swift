@@ -131,7 +131,7 @@ private extension CompositionPollView {
             }
 
             for (index, optionView) in self.pollOptionViews.enumerated() {
-                optionView.removeButton.isHidden = index < CompositionViewModel.minPollOptionCount
+                optionView.removeButton.isHidden_stackViewSafe = index < CompositionViewModel.minPollOptionCount
 
                 if !$0.contains(where: { $0 === optionView.option }) {
                     if optionView.textField.isFirstResponder {
