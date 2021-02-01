@@ -80,9 +80,6 @@ public extension ContentDatabase {
             for status in statuses {
                 try status.save($0)
 
-                if let order = order {
-                    print("saving with order: \(order)")
-                }
                 try TimelineStatusJoin(timelineId: timeline.id, statusId: status.id, order: order).save($0)
 
                 if let presentOrder = order {
