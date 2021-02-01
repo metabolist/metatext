@@ -106,7 +106,7 @@ public extension CompositionViewModel {
         }
 
         contentWarning = redraft.spoilerText
-        displayContentWarning = redraft.spoilerText.isEmpty
+        displayContentWarning = !redraft.spoilerText.isEmpty
         sensitive = redraft.sensitive
         displayPoll = redraft.poll != nil
         attachmentViewModels = redraft.mediaAttachments.map {

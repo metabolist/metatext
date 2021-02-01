@@ -64,7 +64,7 @@ public final class NewStatusViewModel: ObservableObject {
             compositionViewModel = CompositionViewModel(eventsSubject: compositionEventsSubject)
         }
 
-        if let inReplyTo = inReplyTo {
+        if let inReplyTo = inReplyTo, redraft == nil {
             compositionViewModel.text = inReplyTo.accountName.appending(" ")
         }
 
