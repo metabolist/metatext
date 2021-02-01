@@ -397,7 +397,8 @@ private extension NewStatusViewController {
         emojiPickerController.modalPresentationStyle = .popover
         emojiPickerController.popoverPresentationController?.delegate = self
         emojiPickerController.popoverPresentationController?.sourceView = fromView
-        emojiPickerController.popoverPresentationController?.sourceRect = fromView.bounds
+        emojiPickerController.popoverPresentationController?.sourceRect =
+            .init(origin: .init(x: fromView.bounds.midX, y: fromView.bounds.maxY), size: .zero)
         emojiPickerController.popoverPresentationController?.backgroundColor = .clear
 
         present(emojiPickerController, animated: true)
