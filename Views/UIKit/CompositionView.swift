@@ -184,8 +184,15 @@ private extension CompositionView {
             }
             .store(in: &cancellables)
 
-        parentViewModel.$identityContext.map(\.identity.image)
-            .sink { [weak self] in self?.avatarImageView.kf.setImage(with: $0) }
+        parentViewModel.$identityContext.map(\.identity)
+            .sink { [weak self] in
+                guard let self = self else { return }
+
+                self.avatarImageView.kf.setImage(with: $0.image)
+                self.changeIdentityButton.accessibilityLabel = $0.handle
+                self.changeIdentityButton.accessibilityHint =
+                    NSLocalizedString("compose.change-identity-button.accessibility-hint", comment: "")
+            }
             .store(in: &cancellables)
 
         parentViewModel.$authenticatedIdentities

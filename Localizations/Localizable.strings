@@ -62,6 +62,7 @@
 "compose.attachments-will-be-discarded" = "Attachments will be discarded when changing accounts";
 "compose.browse" = "Browse";
 "compose.characters-remaining-accessibility-label-%ld" = "%ld characters remaining";
+"compose.change-identity-button.accessibility-hint" = "Tap to post with a different account";
 "compose.content-warning-button.add" = "Add content warning";
 "compose.content-warning-button.remove" = "Remove content warning";
 "compose.emoji-button" = "Emoji picker";
