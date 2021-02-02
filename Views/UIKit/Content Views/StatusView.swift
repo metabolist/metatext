@@ -504,7 +504,9 @@ private extension StatusView {
             accessibilityAttributedLabel.appendWithSeparator(bodyAccessibilityAttributedLabel)
         }
 
-        accessibilityAttributedLabel.appendWithSeparator(viewModel.accessibilityTime)
+        if let accessibilityTime = viewModel.accessibilityTime {
+            accessibilityAttributedLabel.appendWithSeparator(accessibilityTime)
+        }
 
         self.accessibilityAttributedLabel = accessibilityAttributedLabel
 

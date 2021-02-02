@@ -41,6 +41,10 @@ public extension NotificationViewModel {
 
     var time: String? { notificationService.notification.createdAt.timeAgo }
 
+    var accessibilityTime: String? {
+        notificationService.notification.createdAt.accessibilityTimeAgo
+    }
+
     func accountSelected() {
         eventsSubject.send(
             Just(.navigation(

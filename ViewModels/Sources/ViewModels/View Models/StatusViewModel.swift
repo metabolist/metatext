@@ -89,11 +89,7 @@ public extension StatusViewModel {
 
     var time: String? { statusService.status.displayStatus.createdAt.timeAgo }
 
-    var accessibilityTime: String {
-        Self.accessiblityTimeFormatter.localizedString(
-            for: statusService.status.displayStatus.createdAt,
-            relativeTo: Date())
-    }
+    var accessibilityTime: String? { statusService.status.displayStatus.createdAt.accessibilityTimeAgo }
 
     var contextParentTime: String {
         Self.contextParentDateFormatter.string(from: statusService.status.displayStatus.createdAt)
@@ -345,14 +341,6 @@ public extension StatusViewModel {
 }
 
 private extension StatusViewModel {
-    private static let accessiblityTimeFormatter: RelativeDateTimeFormatter = {
-        let dateFormatter = RelativeDateTimeFormatter()
-
-        dateFormatter.unitsStyle = .full
-
-        return dateFormatter
-    }()
-
     private static let contextParentDateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
 

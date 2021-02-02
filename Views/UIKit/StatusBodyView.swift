@@ -90,7 +90,7 @@ final class StatusBodyView: UIView {
                 accessibilityAttributedLabel.appendWithSeparator(viewAccessibilityLabel)
             }
 
-            self.accessibilityLabel = accessibilityAttributedLabel.string
+            self.accessibilityAttributedLabel = accessibilityAttributedLabel
         }
     }
 

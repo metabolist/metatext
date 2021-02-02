@@ -159,6 +159,8 @@ private extension NotificationView {
             avatarButton.bottomAnchor.constraint(equalTo: avatarImageView.bottomAnchor),
             avatarButton.trailingAnchor.constraint(equalTo: avatarImageView.trailingAnchor)
         ])
+
+        isAccessibilityElement = true
     }
 
     func applyNotificationConfiguration() {
@@ -218,10 +220,30 @@ private extension NotificationView {
         }
 
         timeLabel.text = viewModel.time
+        timeLabel.accessibilityLabel = viewModel.accessibilityTime
 
         iconImageView.image = UIImage(
             systemName: viewModel.type.systemImageName,
             withConfiguration: UIImage.SymbolConfiguration(scale: .medium))
+
+        let accessibilityAttributedLabel = NSMutableAttributedString(string: "")
+
+        if let typeText = typeLabel.attributedText {
+            accessibilityAttributedLabel.appendWithSeparator(typeText)
+        }
+
+        if !statusBodyView.isHidden,
+           let statusBodyAccessibilityAttributedLabel = statusBodyView.accessibilityAttributedLabel {
+            accessibilityAttributedLabel.appendWithSeparator(statusBodyAccessibilityAttributedLabel)
+        } else if !accountLabel.isHidden, let accountText = accountLabel.text {
+            accessibilityAttributedLabel.appendWithSeparator(accountText)
+        }
+
+        if let accessibilityTime = viewModel.accessibilityTime {
+            accessibilityAttributedLabel.appendWithSeparator(accessibilityTime)
+        }
+
+        self.accessibilityAttributedLabel = accessibilityAttributedLabel
     }
     // swiftlint:enable function_body_length
 }

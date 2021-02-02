@@ -30,6 +30,19 @@ extension Date {
         return Self.abbreviatedDateComponentsFormatter.string(from: self, to: now)
     }
 
+    var accessibilityTimeAgo: String? {
+        let calendar = Calendar.autoupdatingCurrent
+        let now = Date()
+
+        if
+            let oneWeekAgo = calendar.date(byAdding: DateComponents(weekOfMonth: -1), to: now),
+            oneWeekAgo < self {
+            return Self.realtiveTimeFormatter.localizedString(for: self, relativeTo: Date())
+        }
+
+        return Self.accessibilityFullDateComponentsFormatter.string(from: self)
+    }
+
     var fullUnitTimeUntil: String? {
         let calendar = Calendar.autoupdatingCurrent
         let now = Date()
@@ -75,6 +88,22 @@ private extension Date {
         let dateFormatter = DateFormatter()
 
         dateFormatter.dateStyle = .short
+
+        return dateFormatter
+    }()
+
+    private static let realtiveTimeFormatter: RelativeDateTimeFormatter = {
+        let dateFormatter = RelativeDateTimeFormatter()
+
+        dateFormatter.unitsStyle = .full
+
+        return dateFormatter
+    }()
+
+    private static let accessibilityFullDateComponentsFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+
+        dateFormatter.dateStyle = .long
 
         return dateFormatter
     }()

@@ -10,6 +10,7 @@ final class NotificationTableViewCell: UITableViewCell {
         guard let viewModel = viewModel else { return }
 
         contentConfiguration = NotificationContentConfiguration(viewModel: viewModel).updated(for: state)
+        accessibilityElements = [contentView]
     }
 
     override func layoutSubviews() {
