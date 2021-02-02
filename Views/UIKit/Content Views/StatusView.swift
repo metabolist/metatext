@@ -245,6 +245,7 @@ private extension StatusView {
         replyButton.addAction(
             UIAction { [weak self] _ in self?.statusConfiguration.viewModel.reply() },
             for: .touchUpInside)
+        replyButton.accessibilityLabel = NSLocalizedString("status.reply-button.accessibility-label", comment: "")
 
         reblogButton.addAction(
             UIAction { [weak self] _ in
@@ -255,7 +256,6 @@ private extension StatusView {
                 self.reblog()
             },
             for: .touchUpInside)
-
         reblogButton.addTarget(self, action: #selector(reblogButtonDoubleTap(sender:event:)), for: .touchDownRepeat)
 
         favoriteButton.addAction(
@@ -267,7 +267,7 @@ private extension StatusView {
                 self.favorite()
             },
             for: .touchUpInside)
-
+        favoriteButton.accessibilityLabel = NSLocalizedString("status.favorite-button.accessibility-label", comment: "")
         favoriteButton.addTarget(self, action: #selector(favoriteButtonDoubleTap(sender:event:)), for: .touchDownRepeat)
 
         shareButton.addAction(
@@ -494,6 +494,8 @@ private extension StatusView {
         self.accessibilityAttributedLabel = accessibilityAttributedLabel
 
         configureUserInteractionEnabledForAccessibility()
+
+        accessibilityCustomActions = accessibilityCustomActions(viewModel: viewModel)
     }
     // swiftlint:enable function_body_length
 
@@ -590,6 +592,14 @@ private extension StatusView {
 
         reblogButton.tintColor = reblogColor
         reblogButton.setTitleColor(reblogColor, for: .normal)
+
+        if reblogged {
+            reblogButton.accessibilityLabel =
+                NSLocalizedString("status.reblog-button.undo.accessibility-label", comment: "")
+        } else {
+            reblogButton.accessibilityLabel =
+                NSLocalizedString("status.reblog-button.accessibility-label", comment: "")
+        }
     }
 
     func setFavoriteButtonColor(favorited: Bool) {
@@ -597,6 +607,14 @@ private extension StatusView {
 
         favoriteButton.tintColor = favoriteColor
         favoriteButton.setTitleColor(favoriteColor, for: .normal)
+
+        if favorited {
+            favoriteButton.accessibilityLabel =
+                NSLocalizedString("status.favorite-button.undo.accessibility-label", comment: "")
+        } else {
+            favoriteButton.accessibilityLabel =
+                NSLocalizedString("status.favorite-button.accessibility-label", comment: "")
+        }
     }
 
     func reblog() {
@@ -640,6 +658,106 @@ private extension StatusView {
     func configureUserInteractionEnabledForAccessibility() {
         isUserInteractionEnabled = !UIAccessibility.isVoiceOverRunning
             || statusConfiguration.viewModel.configuration.isContextParent
+    }
+
+    func accessibilityCustomActions(viewModel: StatusViewModel) -> [UIAccessibilityCustomAction] {
+        guard !viewModel.configuration.isContextParent else {
+            return []
+        }
+
+        var actions = [UIAccessibilityCustomAction]()
+
+        if replyButton.isEnabled {
+            actions.append(UIAccessibilityCustomAction(
+                name: replyButton.accessibilityLabel ?? "") { _ in
+                    viewModel.reply()
+
+                    return true
+                })
+        }
+
+        if viewModel.canBeReblogged, reblogButton.isEnabled {
+            actions.append(UIAccessibilityCustomAction(
+                name: reblogButton.accessibilityLabel ?? "") { [weak self] _ in
+                    self?.reblog()
+
+                    return true
+                })
+        }
+
+        if favoriteButton.isEnabled {
+            actions.append(UIAccessibilityCustomAction(
+                name: favoriteButton.accessibilityLabel ?? "") { [weak self] _ in
+                self?.favorite()
+
+                return true
+            })
+        }
+
+        if shareButton.isEnabled {
+            actions.append(UIAccessibilityCustomAction(
+                name: shareButton.accessibilityLabel ?? "") { _ in
+                viewModel.shareStatus()
+
+                return true
+            })
+        }
+
+        if menuButton.isEnabled {
+            actions.append(UIAccessibilityCustomAction(
+                name: viewModel.bookmarked
+                    ? NSLocalizedString("status.unbookmark", comment: "")
+                    : NSLocalizedString("status.bookmark", comment: "")) { _ in
+                viewModel.toggleBookmarked()
+
+                return true
+            })
+
+            if let pinned = viewModel.pinned {
+                actions.append(UIAccessibilityCustomAction(
+                    name: pinned
+                        ? NSLocalizedString("status.unpin", comment: "")
+                        : NSLocalizedString("status.pin", comment: "")) { _ in
+                    viewModel.togglePinned()
+
+                    return true
+                })
+            }
+
+            if viewModel.isMine {
+                actions += [
+                    UIAccessibilityCustomAction(
+                        name: viewModel.muted
+                            ? NSLocalizedString("status.unmute", comment: "")
+                            : NSLocalizedString("status.mute", comment: "")) { _ in
+                        viewModel.toggleMuted()
+
+                        return true
+                    },
+                    UIAccessibilityCustomAction(
+                        name: NSLocalizedString("status.delete", comment: "")) { _ in
+                        viewModel.confirmDelete(redraft: false)
+
+                        return true
+                    },
+                    UIAccessibilityCustomAction(
+                        name: NSLocalizedString("status.delete-and-redraft", comment: "")) { _ in
+                        viewModel.confirmDelete(redraft: true)
+
+                        return true
+                    }
+                ]
+            } else {
+                actions.append(UIAccessibilityCustomAction(
+                    name: NSLocalizedString("report", comment: "")) { _ in
+                    viewModel.reportStatus()
+
+                    return true
+                })
+            }
+        }
+
+        return actions
     }
 }
 

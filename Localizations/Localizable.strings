@@ -253,6 +253,11 @@
 "status.poll.refresh" = "Refresh";
 "status.poll.closed" = "Closed";
 "status.reblogged-by" = "%@ boosted";
+"status.reply-button.accessibility-label" = "Reply";
+"status.reblog-button.accessibility-label" = "Boost";
+"status.reblog-button.undo.accessibility-label" = "Unboost";
+"status.favorite-button.accessibility-label" = "Favorite";
+"status.favorite-button.undo.accessibility-label" = "Unfavorite";
 "status.show-more" = "Show More";
 "status.show-less" = "Show Less";
 "status.spoiler-text-placeholder" = "Write your warning here";
