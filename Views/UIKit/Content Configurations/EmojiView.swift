@@ -64,6 +64,8 @@ private extension EmojiView {
             emojiLabel.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
             emojiLabel.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
         ])
+
+        setupAccessibility()
     }
 
     func applyEmojiConfiguration() {
@@ -74,11 +76,17 @@ private extension EmojiView {
             emojiLabel.isHidden = true
 
             imageView.kf.setImage(with: emoji.url)
+            accessibilityLabel = emoji.shortcode
         } else {
             imageView.isHidden = true
             emojiLabel.isHidden = false
 
             emojiLabel.text = emojiConfiguration.emoji.name
+            accessibilityLabel = emojiConfiguration.emoji.name
         }
+    }
+
+    func setupAccessibility() {
+        isAccessibilityElement = true
     }
 }

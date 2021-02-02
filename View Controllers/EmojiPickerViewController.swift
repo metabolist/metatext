@@ -130,12 +130,16 @@ final class EmojiPickerViewController: UIViewController {
             for: .normal)
         skinToneButton.showsMenuAsPrimaryAction = true
         skinToneButton.menu = defaultSkinToneSelectionMenu
+        skinToneButton.accessibilityLabel =
+            NSLocalizedString("emoji.default-skin-tone-button.accessibility-label", comment: "")
 
         view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .clear
         collectionView.dataSource = dataSource
         collectionView.delegate = self
+        collectionView.isAccessibilityElement = false
+        collectionView.shouldGroupAccessibilityChildren = true
 
         NSLayoutConstraint.activate([
             searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),

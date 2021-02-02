@@ -80,6 +80,7 @@
 "compose-button.accessibility-label.toot" = "Compose Toot";
 "emoji.custom" = "Custom";
 "emoji.default-skin-tone" = "Default skin tone";
+"emoji.default-skin-tone-button.accessibility-label" = "Select default skin tone";
 "emoji.frequently-used" = "Frequently used";
 "emoji.search" = "Search Emoji";
 "emoji.system-group.smileys-and-emotion" = "Smileys & Emotion";
