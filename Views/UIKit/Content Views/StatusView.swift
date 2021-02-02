@@ -190,6 +190,7 @@ private extension StatusView {
             label.textColor = .secondaryLabel
             label.text = "•"
             label.setContentHuggingPriority(.required, for: .horizontal)
+            label.isAccessibilityElement = false
         }
 
         contextParentTimeApplicationStackView.addArrangedSubview(timeVisibilityDividerLabel)
@@ -197,6 +198,7 @@ private extension StatusView {
         contextParentTimeApplicationStackView.addArrangedSubview(visibilityImageView)
         visibilityImageView.contentMode = .scaleAspectFit
         visibilityImageView.tintColor = .secondaryLabel
+        visibilityImageView.isAccessibilityElement = true
 
         contextParentTimeApplicationStackView.addArrangedSubview(visibilityApplicationDividerLabel)
 
@@ -330,13 +332,12 @@ private extension StatusView {
             interactionsStackView.heightAnchor.constraint(greaterThanOrEqualToConstant: .minimumButtonDimension)
         ])
 
-
-
         NotificationCenter.default.publisher(for: UIAccessibility.voiceOverStatusDidChangeNotification)
             .sink { [weak self] _ in self?.configureUserInteractionEnabledForAccessibility() }
             .store(in: &cancellables)
     }
 
+    // swiftlint:disable:next cyclomatic_complexity
     func applyStatusConfiguration() {
         let viewModel = statusConfiguration.viewModel
         let isContextParent = viewModel.configuration.isContextParent
@@ -347,6 +348,9 @@ private extension StatusView {
         menuButton.menu = menu(viewModel: viewModel)
 
         avatarImageView.kf.setImage(with: viewModel.avatarURL)
+        avatarButton.accessibilityLabel = String.localizedStringWithFormat(
+            NSLocalizedString("account.avatar.accessibility-label-%@", comment: ""),
+            viewModel.displayName)
 
         sideStackView.isHidden = isContextParent
         avatarImageView.removeFromSuperview()
@@ -420,12 +424,15 @@ private extension StatusView {
 
         accountLabel.text = viewModel.accountName
         timeLabel.text = viewModel.time
+        timeLabel.accessibilityLabel = viewModel.accessibilityTime
         timeLabel.isHidden = isContextParent
 
         bodyView.viewModel = viewModel
 
         contextParentTimeLabel.text = viewModel.contextParentTime
+        contextParentTimeLabel.accessibilityLabel = viewModel.accessibilityContextParentTime
         visibilityImageView.image = UIImage(systemName: viewModel.visibility.systemImageName)
+        visibilityImageView.accessibilityLabel = viewModel.visibility.title
         visibilityApplicationDividerLabel.isHidden = viewModel.applicationName == nil
         applicationButton.isHidden = viewModel.applicationName == nil
         applicationButton.setTitle(viewModel.applicationName, for: .normal)
@@ -485,11 +492,19 @@ private extension StatusView {
 
         isAccessibilityElement = !viewModel.configuration.isContextParent
 
-        let accessibilityAttributedLabel = NSMutableAttributedString(attributedString: mutableDisplayName)
+        let accessibilityAttributedLabel = NSMutableAttributedString(string: "")
+
+        if let infoText = infoLabel.attributedText {
+            accessibilityAttributedLabel.appendWithSeparator(infoText)
+        }
+
+        accessibilityAttributedLabel.append(mutableDisplayName)
 
         if let bodyAccessibilityAttributedLabel = bodyView.accessibilityAttributedLabel {
             accessibilityAttributedLabel.appendWithSeparator(bodyAccessibilityAttributedLabel)
         }
+
+        accessibilityAttributedLabel.appendWithSeparator(viewModel.accessibilityTime)
 
         self.accessibilityAttributedLabel = accessibilityAttributedLabel
 

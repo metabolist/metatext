@@ -36,8 +36,14 @@ final class AccountHeaderView: UIView {
                     }
                 }
                 headerImageView.tag = accountViewModel.headerURL.hashValue
+                headerButton.accessibilityLabel = String.localizedStringWithFormat(
+                    NSLocalizedString("account.header.accessibility-label-%@", comment: ""),
+                    accountViewModel.displayName)
                 avatarImageView.kf.setImage(with: accountViewModel.avatarURL(profile: true))
                 avatarImageView.tag = accountViewModel.avatarURL(profile: true).hashValue
+                avatarButton.accessibilityLabel = String.localizedStringWithFormat(
+                    NSLocalizedString("account.avatar.accessibility-label-%@", comment: ""),
+                    accountViewModel.displayName)
 
                 if !accountViewModel.isSelf, let relationship = accountViewModel.relationship {
                     followsYouLabel.isHidden = !relationship.followedBy
