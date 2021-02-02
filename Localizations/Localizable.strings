@@ -265,7 +265,9 @@
 "status.favorite-button.accessibility-label" = "Favorite";
 "status.favorite-button.undo.accessibility-label" = "Unfavorite";
 "status.show-more" = "Show More";
+"status.show-more-all-button.accessibilty-label" = "Show more for all";
 "status.show-less" = "Show Less";
+"status.show-less-all-button.accessibilty-label" = "Show less for all";
 "status.spoiler-text-placeholder" = "Write your warning here";
 "status.unbookmark" = "Unbookmark";
 "status.unmute" = "Unmute conversation";
