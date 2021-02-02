@@ -11,6 +11,7 @@
 "account.domain-block.confirm-%@" = "Block domain %@?";
 "account.domain-unblock-%@" = "Unblock domain %@";
 "account.domain-unblock.confirm-%@" = "Unblock domain %@?";
+"account.field.activate-link-accessibility-action-%@" = "Activate link: %@";
 "account.field.verified" = "Verified %@";
 "account.follow" = "Follow";
 "account.following" = "Following";

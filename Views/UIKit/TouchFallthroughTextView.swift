@@ -26,7 +26,9 @@ final class TouchFallthroughTextView: UITextView {
     }
 
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        shouldFallthrough ? urlAndRect(at: point) != nil : super.point(inside: point, with: event)
+        guard !UIAccessibility.isVoiceOverRunning else { return super.point(inside: point, with: event) }
+
+        return shouldFallthrough ? urlAndRect(at: point) != nil : super.point(inside: point, with: event)
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

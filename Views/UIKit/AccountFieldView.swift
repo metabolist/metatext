@@ -1,15 +1,21 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
+import Combine
 import Mastodon
 import UIKit
 
 final class AccountFieldView: UIView {
     let nameLabel = UILabel()
     let valueTextView = TouchFallthroughTextView()
+    private var cancellables = Set<AnyCancellable>()
 
     // swiftlint:disable:next function_body_length
     init(name: String, value: NSAttributedString, verifiedAt: Date?, emojis: [Emoji]) {
         super.init(frame: .zero)
+
+        NotificationCenter.default.publisher(for: UIAccessibility.voiceOverStatusDidChangeNotification)
+            .sink { [weak self] _ in self?.configureUserInteractionEnabledForAccessibility() }
+            .store(in: &cancellables)
 
         backgroundColor = .systemBackground
 
@@ -134,6 +140,51 @@ final class AccountFieldView: UIView {
             valueBackgroundView.trailingAnchor.constraint(equalTo: trailingAnchor),
             valueBackgroundView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
+
+//        isAccessibilityElement = true
+
+        let accessibilityAttributedLabel = NSMutableAttributedString(attributedString: mutableName)
+
+        accessibilityAttributedLabel.appendWithSeparator(mutableValue)
+
+        if let verifiedAt = verifiedAt {
+            accessibilityAttributedLabel.appendWithSeparator(
+                String.localizedStringWithFormat(
+                    NSLocalizedString("account.field.verified", comment: ""),
+                    Self.dateFormatter.string(from: verifiedAt)))
+        }
+
+        isAccessibilityElement = true
+
+        var accessibilityCustomActions = [UIAccessibilityCustomAction]()
+
+        mutableValue.enumerateAttribute(
+            .link,
+            in: NSRange(location: 0, length: mutableValue.length),
+            options: []) { attribute, range, _ in
+            guard let url = attribute as? URL else { return }
+
+            accessibilityCustomActions.append(
+                UIAccessibilityCustomAction(
+                    name: String.localizedStringWithFormat(
+                        NSLocalizedString("account.field.activate-link-accessibility-action-%@", comment: ""),
+                        mutableValue.attributedSubstring(from: range).string)) { [weak self] _ in
+                    guard let valueTextView = self?.valueTextView else { return false }
+
+                    _ = valueTextView.delegate?.textView?(
+                        valueTextView,
+                        shouldInteractWith: url,
+                        in: range,
+                        interaction: .invokeDefaultAction)
+
+                    return true
+                })
+        }
+
+        self.accessibilityAttributedLabel = accessibilityAttributedLabel
+        self.accessibilityCustomActions = accessibilityCustomActions
+
+        configureUserInteractionEnabledForAccessibility()
     }
 
     @available(*, unavailable)
@@ -150,4 +201,8 @@ private extension AccountFieldView {
 
         return formatter
     }()
+
+    func configureUserInteractionEnabledForAccessibility() {
+        valueTextView.isUserInteractionEnabled = !UIAccessibility.isVoiceOverRunning
+    }
 }
