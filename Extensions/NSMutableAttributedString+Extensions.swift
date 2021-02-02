@@ -12,6 +12,7 @@ extension NSMutableAttributedString {
             while let tokenRange = string.range(of: token) {
                 let attachment = NSTextAttachment()
 
+                attachment.accessibilityLabel = emoji.shortcode
                 attachment.kf.setImage(with: emoji.url, attributedView: view)
                 replaceCharacters(in: NSRange(tokenRange, in: string), with: NSAttributedString(attachment: attachment))
             }
