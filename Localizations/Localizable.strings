@@ -51,7 +51,7 @@
 "attachment.media-hidden" = "Media hidden";
 "attachment.type.image" = "Image";
 "attachment.type.images-%ld" = "%ld images";
-"attachment.type.audio" = "Audio";
+"attachment.type.audio" = "Audio file";
 "attachment.type.audios-%ld" = "%ld audio files";
 "attachment.type.video" = "Video";
 "attachment.type.videos-%ld" = "%ld videos";

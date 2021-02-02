@@ -660,6 +660,7 @@ private extension StatusView {
             || statusConfiguration.viewModel.configuration.isContextParent
     }
 
+    // swiftlint:disable:next function_body_length
     func accessibilityCustomActions(viewModel: StatusViewModel) -> [UIAccessibilityCustomAction] {
         guard !viewModel.configuration.isContextParent else {
             return []
