@@ -3,6 +3,7 @@
 "about" = "About";
 "about.acknowledgments" = "Acknowledgments";
 "account.%@-followers" = "%@'s Followers";
+"account.accept-follow-request-button.accessibility-label" = "Accept follow request";
 "account.avatar.accessibility-label-%@" = "Avatar: %@";
 "account.block" = "Block";
 "account.block.confirm-%@" = "Block %@?";
@@ -19,6 +20,7 @@
 "account.header.accessibility-label-%@" = "Header image: %@";
 "account.hide-reblogs" = "Hide boosts";
 "account.mute" = "Mute";
+"account.reject-follow-request-button.accessibility-label" = "Reject follow request";
 "account.request" = "Request";
 "account.statuses.post" = "Posts";
 "account.statuses.toot" = "Toots";

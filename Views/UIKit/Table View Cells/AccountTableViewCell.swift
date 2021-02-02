@@ -10,6 +10,7 @@ final class AccountTableViewCell: UITableViewCell {
         guard let viewModel = viewModel else { return }
 
         contentConfiguration = AccountContentConfiguration(viewModel: viewModel).updated(for: state)
+        accessibilityElements = [contentView]
     }
 
     override func layoutSubviews() {

@@ -147,22 +147,23 @@ private extension AccountView {
             stackView.bottomAnchor.constraint(equalTo: readableContentGuide.bottomAnchor),
             stackView.trailingAnchor.constraint(equalTo: readableContentGuide.trailingAnchor)
         ])
+
+        isAccessibilityElement = true
     }
 
+    // swiftlint:disable:next function_body_length
     func applyAccountConfiguration() {
         let viewModel = accountConfiguration.viewModel
 
         avatarImageView.kf.setImage(with: viewModel.avatarURL(profile: false))
 
-        if viewModel.displayName.isEmpty {
-            displayNameLabel.isHidden = true
-        } else {
-            let mutableDisplayName = NSMutableAttributedString(string: viewModel.displayName)
+        let mutableDisplayName = NSMutableAttributedString(string: viewModel.displayName)
 
-            mutableDisplayName.insert(emojis: viewModel.emojis, view: displayNameLabel)
-            mutableDisplayName.resizeAttachments(toLineHeight: displayNameLabel.font.lineHeight)
-            displayNameLabel.attributedText = mutableDisplayName
-        }
+        mutableDisplayName.insert(emojis: viewModel.emojis, view: displayNameLabel)
+        mutableDisplayName.resizeAttachments(toLineHeight: displayNameLabel.font.lineHeight)
+        displayNameLabel.attributedText = mutableDisplayName
+
+        displayNameLabel.isHidden = viewModel.displayName.isEmpty
 
         accountLabel.text = viewModel.accountName
 
@@ -189,5 +190,42 @@ private extension AccountView {
 
         acceptFollowRequestButton.isHidden = !isFollowRequest
         rejectFollowRequestButton.isHidden = !isFollowRequest
+
+        let accessibilityAttributedLabel = NSMutableAttributedString(string: "")
+
+        if !displayNameLabel.isHidden, let displayName = displayNameLabel.attributedText {
+            accessibilityAttributedLabel.append(displayName)
+            accessibilityAttributedLabel.appendWithSeparator(viewModel.accountName)
+        } else {
+            accessibilityAttributedLabel.appendWithSeparator(viewModel.accountName)
+        }
+
+        if !noteTextView.isHidden, let note = noteTextView.attributedText {
+            accessibilityAttributedLabel.appendWithSeparator(note)
+        }
+
+        self.accessibilityAttributedLabel = accessibilityAttributedLabel
+
+        if isFollowRequest {
+            accessibilityCustomActions = [
+                UIAccessibilityCustomAction(
+                    name: NSLocalizedString(
+                        "account.accept-follow-request-button.accessibility-label",
+                        comment: "")) { [weak self] _ in
+                        self?.accountConfiguration.viewModel.acceptFollowRequest()
+
+                        return true
+                    },
+                UIAccessibilityCustomAction(
+                    name: NSLocalizedString(
+                        "account.reject-follow-request-button.accessibility-label",
+                        comment: "")) { [weak self] _ in
+                        self?.accountConfiguration.viewModel.rejectFollowRequest()
+
+                        return true
+                    }]
+        } else {
+            accessibilityCustomActions = []
+        }
     }
 }
