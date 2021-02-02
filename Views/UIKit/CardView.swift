@@ -16,6 +16,9 @@ final class CardView: UIView {
         didSet {
             guard let viewModel = viewModel else { return }
 
+            var accessibilityLabel = NSLocalizedString("card.link.accessibility-label", comment: "")
+                .appendingWithSeparator(viewModel.title)
+
             imageView.isHidden = viewModel.imageURL == nil
             imageView.kf.setImage(with: viewModel.imageURL)
 
@@ -30,6 +33,12 @@ final class CardView: UIView {
             } else {
                 urlLabel.text = viewModel.url.host
             }
+
+            if let urlLabelText = urlLabel.text {
+                accessibilityLabel.appendWithSeparator(urlLabelText)
+            }
+
+            self.accessibilityLabel = accessibilityLabel
         }
     }
 
@@ -37,6 +46,7 @@ final class CardView: UIView {
         super.init(frame: frame)
 
         initialSetup()
+        setupAccessibility()
     }
 
     @available(*, unavailable)
@@ -119,5 +129,9 @@ private extension CardView {
             imageView.heightAnchor.constraint(equalTo: innerStackView.heightAnchor),
             imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor)
         ])
+    }
+
+    func setupAccessibility() {
+        isAccessibilityElement = true
     }
 }

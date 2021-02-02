@@ -1,6 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 // swiftlint:disable file_length
+import Combine
 import Kingfisher
 import Mastodon
 import UIKit
@@ -43,6 +44,7 @@ final class StatusView: UIView {
     private let inReplyToView = UIView()
     private let hasReplyFollowingView = UIView()
     private var statusConfiguration: StatusContentConfiguration
+    private var cancellables = Set<AnyCancellable>()
 
     init(configuration: StatusContentConfiguration) {
         self.statusConfiguration = configuration
@@ -327,6 +329,12 @@ private extension StatusView {
                 greaterThanOrEqualToConstant: .minimumButtonDimension / 2),
             interactionsStackView.heightAnchor.constraint(greaterThanOrEqualToConstant: .minimumButtonDimension)
         ])
+
+
+
+        NotificationCenter.default.publisher(for: UIAccessibility.voiceOverStatusDidChangeNotification)
+            .sink { [weak self] _ in self?.configureUserInteractionEnabledForAccessibility() }
+            .store(in: &cancellables)
     }
 
     func applyStatusConfiguration() {
@@ -474,6 +482,18 @@ private extension StatusView {
         shareButton.tag = viewModel.sharingURL?.hashValue ?? 0
 
         menuButton.isEnabled = isAuthenticated
+
+        isAccessibilityElement = !viewModel.configuration.isContextParent
+
+        let accessibilityAttributedLabel = NSMutableAttributedString(attributedString: mutableDisplayName)
+
+        if let bodyAccessibilityAttributedLabel = bodyView.accessibilityAttributedLabel {
+            accessibilityAttributedLabel.appendWithSeparator(bodyAccessibilityAttributedLabel)
+        }
+
+        self.accessibilityAttributedLabel = accessibilityAttributedLabel
+
+        configureUserInteractionEnabledForAccessibility()
     }
     // swiftlint:enable function_body_length
 
@@ -615,6 +635,11 @@ private extension StatusView {
         }
 
         statusConfiguration.viewModel.toggleFavorited()
+    }
+
+    func configureUserInteractionEnabledForAccessibility() {
+        isUserInteractionEnabled = !UIAccessibility.isVoiceOverRunning
+            || statusConfiguration.viewModel.configuration.isContextParent
     }
 }
 

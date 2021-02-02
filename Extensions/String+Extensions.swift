@@ -4,6 +4,10 @@ import Mastodon
 import UIKit
 
 extension String {
+    static var separator: Self {
+        (Locale.autoupdatingCurrent.groupingSeparator ?? ",").appending(" ")
+    }
+
     func height(width: CGFloat, font: UIFont) -> CGFloat {
         (self as NSString).boundingRect(
             with: CGSize(width: width, height: .greatestFiniteMagnitude),
@@ -59,11 +63,5 @@ extension String {
 
     mutating func appendWithSeparator(_ string: Self) {
         append(Self.separator.appending(string))
-    }
-}
-
-private extension String {
-    static var separator: Self {
-        Locale.autoupdatingCurrent.groupingSeparator ?? ","
     }
 }

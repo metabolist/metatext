@@ -34,6 +34,7 @@ final class AttachmentsView: UIView {
                 attachmentView.playing = viewModel.shouldShowAttachments && attachmentViewModel.shouldAutoplay
                 attachmentView.removeButton.isHidden = !viewModel.canRemoveAttachments
                 attachmentView.editIcon.isHidden = !viewModel.canRemoveAttachments
+                attachmentView.isAccessibilityElement = !viewModel.canRemoveAttachments
 
                 if viewModel.attachmentViewModels.count == 2 && index == 1
                     || viewModel.attachmentViewModels.count == 3 && index != 0
@@ -66,6 +67,25 @@ final class AttachmentsView: UIView {
                                   comment: ""),
                                    for: .normal)
             hideButtonBackground.isHidden = !viewModel.shouldShowHideAttachmentsButton
+
+            if curtain.isHidden {
+                let type: Attachment.AttachmentType
+
+                if viewModel.attachmentViewModels
+                    .allSatisfy({ $0.attachment.type == .image || $0.attachment.type == .gifv }) {
+                    type = .image
+                } else if viewModel.attachmentViewModels.allSatisfy({ $0.attachment.type == .video }) {
+                    type = .video
+                } else if viewModel.attachmentViewModels.allSatisfy({ $0.attachment.type == .audio }) {
+                    type = .audio
+                } else {
+                    type = .unknown
+                }
+
+                accessibilityLabel = type.accessibilityNames(count: viewModel.attachmentViewModels.count)
+            } else {
+                accessibilityLabel = curtainButton.title(for: .normal)
+            }
         }
     }
 

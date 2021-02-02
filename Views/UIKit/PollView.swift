@@ -29,6 +29,9 @@ final class PollView: UIView {
                 return
             }
 
+            let accessibilityAttributedLabel = NSMutableAttributedString(
+                string: NSLocalizedString("status.poll.accessibility-label", comment: ""))
+
             if !viewModel.isPollExpired, !viewModel.hasVotedInPoll {
                 for (index, option) in viewModel.pollOptions.enumerated() {
                     let button = PollOptionButton(
@@ -63,6 +66,41 @@ final class PollView: UIView {
                 }
             }
 
+            for (index, view) in stackView.arrangedSubviews.enumerated() {
+                var title: NSAttributedString?
+                var percent: String?
+                let indexLabel = String.localizedStringWithFormat(
+                    NSLocalizedString("status.poll.option-%ld", comment: ""),
+                    index + 1)
+
+                if let optionView = view as? PollOptionButton,
+                   let attributedTitle = optionView.attributedTitle(for: .normal) {
+                    title = attributedTitle
+
+                    let optionAccessibilityAttributedLabel = NSMutableAttributedString(string: indexLabel)
+
+                    if viewModel.isPollMultipleSelection {
+                        optionAccessibilityAttributedLabel.appendWithSeparator(
+                            NSLocalizedString("compose.poll.accessibility.multiple-choices-allowed", comment: ""))
+                    }
+
+                    optionAccessibilityAttributedLabel.appendWithSeparator(attributedTitle)
+                    optionView.accessibilityAttributedLabel = optionAccessibilityAttributedLabel
+                } else if let resultView = view as? PollResultView {
+                    title = resultView.titleLabel.attributedText
+                    percent = resultView.percentLabel.text
+                }
+
+                guard let presentTitle = title else { continue }
+
+                accessibilityAttributedLabel.appendWithSeparator(indexLabel)
+                accessibilityAttributedLabel.appendWithSeparator(presentTitle)
+
+                if let percent = percent {
+                    accessibilityAttributedLabel.appendWithSeparator(percent)
+                }
+            }
+
             if !viewModel.isPollExpired, !viewModel.hasVotedInPoll {
                 stackView.addArrangedSubview(voteButton)
 
@@ -81,21 +119,43 @@ final class PollView: UIView {
 
             stackView.addArrangedSubview(bottomStackView)
 
-            votesCountLabel.text = String.localizedStringWithFormat(
+            let votesCount = String.localizedStringWithFormat(
                 NSLocalizedString("status.poll.participation-count", comment: ""),
                 viewModel.pollVotersCount)
+
+            votesCountLabel.text = votesCount
+            votesCountLabel.isAccessibilityElement = true
+            votesCountLabel.accessibilityLabel = votesCountLabel.text
+            accessibilityAttributedLabel.appendWithSeparator(votesCount)
 
             if !viewModel.isPollExpired, let pollTimeLeft = viewModel.pollTimeLeft {
                 expiryLabel.text = String.localizedStringWithFormat(
                     NSLocalizedString("status.poll.time-left", comment: ""),
                     pollTimeLeft)
                 refreshButton.isHidden = false
+                accessibilityCustomActions =
+                    [UIAccessibilityCustomAction(
+                        name: NSLocalizedString("status.poll.refresh", comment: "")) { [weak self] _ in
+                        self?.viewModel?.refreshPoll()
+
+                        return true
+                    }]
             } else {
                 expiryLabel.text = NSLocalizedString("status.poll.closed", comment: "")
                 refreshButton.isHidden = true
+                accessibilityCustomActions = nil
+            }
+
+            expiryLabel.isAccessibilityElement = true
+            expiryLabel.accessibilityLabel = expiryLabel.text
+
+            if let expiry = expiryLabel.text {
+                accessibilityAttributedLabel.appendWithSeparator(expiry)
             }
 
             refreshDividerLabel.isHidden = refreshButton.isHidden
+
+            self.accessibilityAttributedLabel = accessibilityAttributedLabel
         }
     }
 

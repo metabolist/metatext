@@ -25,4 +25,13 @@ extension NSMutableAttributedString {
             attachment.bounds = CGRect(x: 0, y: lineHeight * -0.25, width: lineHeight, height: lineHeight)
         }
     }
+
+    func appendWithSeparator(_ string: NSAttributedString) {
+        append(.init(string: .separator))
+        append(string)
+    }
+
+    func appendWithSeparator(_ string: String) {
+        appendWithSeparator(.init(string: string))
+    }
 }

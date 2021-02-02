@@ -124,7 +124,7 @@ private extension CompositionPollView {
                         option: option)
 
                     optionView.textField.placeholder = String.localizedStringWithFormat(
-                        NSLocalizedString("compose.poll.option-%ld", comment: ""),
+                        NSLocalizedString("status.poll.option-%ld", comment: ""),
                         index + 1)
                     self.stackView.insertArrangedSubview(optionView, at: index)
                 }

@@ -4,10 +4,10 @@ import Mastodon
 import UIKit
 
 final class PollResultView: UIView {
+    let titleLabel = UILabel()
+    let percentLabel = UILabel()
     private let verticalStackView = UIStackView()
     private let horizontalStackView = UIStackView()
-    private let titleLabel = UILabel()
-    private let percentLabel = UILabel()
     private let percentView = UIProgressView()
 
     init(option: Poll.Option, emojis: [Emoji], selected: Bool, multipleSelection: Bool, votersCount: Int) {

@@ -2,6 +2,7 @@
 
 import AVFoundation
 import Kingfisher
+import Mastodon
 import UIKit
 import ViewModels
 
@@ -133,11 +134,21 @@ final class ImageViewController: UIViewController {
                 player.play()
             default: break
             }
+
+            var accessibilityLabel = viewModel.attachment.type.accessibilityName
+
+            if let description = viewModel.attachment.description {
+                accessibilityLabel.appendWithSeparator(description)
+            }
         } else if let imageURL = imageURL {
             imageView.tag = imageURL.hashValue
             playerView.isHidden = true
             imageView.kf.setImage(with: imageURL)
         }
+
+        contentView.accessibilityLabel = viewModel?.attachment.type.accessibilityName
+            ?? Attachment.AttachmentType.image.accessibilityName
+        contentView.isAccessibilityElement = true
     }
 }
 

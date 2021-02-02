@@ -13,6 +13,7 @@ final class AttachmentUploadView: UIView {
     private var progressCancellable: AnyCancellable?
     private var cancellables = Set<AnyCancellable>()
 
+    // swiftlint:disable:next function_body_length
     init(viewModel: CompositionViewModel) {
         self.viewModel = viewModel
 
@@ -33,6 +34,8 @@ final class AttachmentUploadView: UIView {
         cancelButton.titleLabel?.font = .preferredFont(forTextStyle: .callout)
         cancelButton.setTitle(NSLocalizedString("cancel", comment: ""), for: .normal)
         cancelButton.addAction(UIAction { _ in viewModel.cancelUpload() }, for: .touchUpInside)
+        cancelButton.accessibilityLabel =
+            NSLocalizedString("compose.attachment.cancel-upload.accessibility-label", comment: "")
 
         addSubview(progressView)
         progressView.translatesAutoresizingMaskIntoConstraints = false
