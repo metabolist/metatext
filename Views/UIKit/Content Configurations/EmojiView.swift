@@ -14,6 +14,7 @@ final class EmojiView: UIView {
         super.init(frame: .zero)
 
         initialSetup()
+        setupAccessibility()
         applyEmojiConfiguration()
     }
 
@@ -64,8 +65,6 @@ private extension EmojiView {
             emojiLabel.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
             emojiLabel.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
         ])
-
-        setupAccessibility()
     }
 
     func applyEmojiConfiguration() {

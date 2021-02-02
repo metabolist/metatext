@@ -15,6 +15,7 @@ final class InstanceView: UIView {
         super.init(frame: .zero)
 
         initialSetup()
+        setupAccessibility()
         applyInstanceConfiguration()
     }
 
@@ -71,8 +72,6 @@ private extension InstanceView {
             stackView.bottomAnchor.constraint(equalTo: readableContentGuide.bottomAnchor),
             imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor, multiplier: 16 / 9)
         ])
-
-        setupAccessibility()
     }
 
     func applyInstanceConfiguration() {

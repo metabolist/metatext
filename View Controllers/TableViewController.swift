@@ -53,6 +53,8 @@ class TableViewController: UITableViewController {
         tableView.cellLayoutMarginsFollowReadableWidth = true
         tableView.tableFooterView = UIView()
         tableView.contentInset.bottom = bottomInset
+        tableView.isAccessibilityElement = false
+        tableView.shouldGroupAccessibilityChildren = true
 
         if viewModel.canRefresh {
             refreshControl = UIRefreshControl()

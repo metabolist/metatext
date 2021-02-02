@@ -16,6 +16,7 @@ final class TagView: UIView {
         super.init(frame: .zero)
 
         initialSetup()
+        setupAccessibility()
         applyTagConfiguration()
     }
 
@@ -84,8 +85,6 @@ private extension TagView {
             lineChartView.heightAnchor.constraint(equalTo: usesLabel.heightAnchor),
             lineChartView.widthAnchor.constraint(equalTo: lineChartView.heightAnchor, multiplier: 16 / 9)
         ])
-
-        setupAccessibility()
     }
 
     func applyTagConfiguration() {
