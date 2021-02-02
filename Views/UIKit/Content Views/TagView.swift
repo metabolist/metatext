@@ -99,8 +99,7 @@ private extension TagView {
                 NSLocalizedString("tag.people-talking", comment: ""),
                 accounts)
             accountsLabel.text = accountsText
-            accessibilityLabel.append("\n")
-            accessibilityLabel.append(accountsText)
+            accessibilityLabel.appendWithSeparator(accountsText)
             accountsLabel.isHidden = false
         } else {
             accountsLabel.isHidden = true
@@ -112,8 +111,7 @@ private extension TagView {
             let accessibilityRecentUses = String.localizedStringWithFormat(
                 NSLocalizedString("tag.accessibility-recent-uses-%ld", comment: ""),
                 uses)
-            accessibilityLabel.append("\n")
-            accessibilityLabel.append(accessibilityRecentUses)
+            accessibilityLabel.appendWithSeparator(accessibilityRecentUses)
         } else {
             usesLabel.isHidden = true
         }

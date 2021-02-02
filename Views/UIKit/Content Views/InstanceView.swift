@@ -83,7 +83,7 @@ private extension InstanceView {
         titleLabel.text = viewModel.instance.title
         uriLabel.text = viewModel.instance.uri
 
-        accessibilityLabel = viewModel.instance.title.appending("\n").appending(viewModel.instance.uri)
+        accessibilityLabel = viewModel.instance.title.appendingWithSeparator(viewModel.instance.uri)
     }
 
     func setupAccessibility() {

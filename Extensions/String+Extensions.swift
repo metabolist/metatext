@@ -52,4 +52,18 @@ extension String {
 
         return mutableString
     }
+
+    func appendingWithSeparator(_ string: Self) -> Self {
+        appending(Self.separator).appending(string)
+    }
+
+    mutating func appendWithSeparator(_ string: Self) {
+        append(Self.separator.appending(string))
+    }
+}
+
+private extension String {
+    static var separator: Self {
+        Locale.autoupdatingCurrent.groupingSeparator ?? ","
+    }
 }
