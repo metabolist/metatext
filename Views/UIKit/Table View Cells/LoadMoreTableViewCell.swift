@@ -10,6 +10,7 @@ final class LoadMoreTableViewCell: UITableViewCell {
         guard let viewModel = viewModel else { return }
 
         contentConfiguration = LoadMoreContentConfiguration(viewModel: viewModel)
+        accessibilityElements = [contentView]
     }
 
     override func layoutSubviews() {

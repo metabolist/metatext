@@ -17,7 +17,7 @@ public final class LoadMoreViewModel: ObservableObject, CollectionItemViewModel 
     }
 }
 
-extension LoadMoreViewModel {
+public extension LoadMoreViewModel {
     func loadMore() {
         eventsSubject.send(
             loadMoreService.request(direction: direction)

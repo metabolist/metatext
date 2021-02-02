@@ -10,6 +10,7 @@ final class ConversationTableViewCell: UITableViewCell {
         guard let viewModel = viewModel else { return }
 
         contentConfiguration = ConversationContentConfiguration(viewModel: viewModel).updated(for: state)
+        accessibilityElements = [contentView]
     }
 
     override func layoutSubviews() {

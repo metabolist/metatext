@@ -59,6 +59,7 @@ extension ConversationView: UIContentView {
 }
 
 private extension ConversationView {
+    // swiftlint:disable:next function_body_length
     func initialSetup() {
         let containerStackView = UIStackView()
         let sideStackView = UIStackView()
@@ -111,6 +112,8 @@ private extension ConversationView {
             avatarsHeightConstraint,
             sideStackView.widthAnchor.constraint(equalToConstant: .avatarDimension)
         ])
+
+        isAccessibilityElement = true
     }
 
     func applyConversationConfiguration() {
@@ -125,7 +128,20 @@ private extension ConversationView {
 
         displayNamesLabel.attributedText = mutableDisplayNames
         timeLabel.text = viewModel.statusViewModel?.time
+        timeLabel.accessibilityLabel = viewModel.statusViewModel?.accessibilityTime
         statusBodyView.viewModel = viewModel.statusViewModel
         avatarsView.viewModel = viewModel
+
+        let accessibilityAttributedLabel = NSMutableAttributedString(attributedString: mutableDisplayNames)
+
+        if let statusBodyAccessibilityAttributedLabel = statusBodyView.accessibilityAttributedLabel {
+            accessibilityAttributedLabel.appendWithSeparator(statusBodyAccessibilityAttributedLabel)
+        }
+
+        if let accessibilityTime = viewModel.statusViewModel?.accessibilityTime {
+            accessibilityAttributedLabel.appendWithSeparator(accessibilityTime)
+        }
+
+        self.accessibilityAttributedLabel = accessibilityAttributedLabel
     }
 }

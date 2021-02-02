@@ -68,6 +68,7 @@ private extension LoadMoreView {
     static let directionChangeMax = CGFloat.pi
     static let directionChangeIncrement = CGFloat.pi / 10
 
+    // swiftlint:disable:next function_body_length
     func initialSetup() {
         for arrowImageView in [leadingArrowImageView, trailingArrowImageView] {
             addSubview(arrowImageView)
@@ -106,6 +107,25 @@ private extension LoadMoreView {
             activityIndicatorView.centerXAnchor.constraint(equalTo: centerXAnchor),
             activityIndicatorView.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
+
+        isAccessibilityElement = true
+        accessibilityLabel = NSLocalizedString("load-more", comment: "")
+        accessibilityCustomActions = [
+            UIAccessibilityCustomAction(
+                name: NSLocalizedString("load-more.older.accessibility-label", comment: "")) { [weak self] _ in
+                self?.loadMoreConfiguration.viewModel.direction = .down
+                self?.loadMoreConfiguration.viewModel.loadMore()
+
+                return true
+            },
+            UIAccessibilityCustomAction(
+                name: NSLocalizedString("load-more.newer.accessibility-label", comment: "")) { [weak self] _ in
+                self?.loadMoreConfiguration.viewModel.direction = .up
+                self?.loadMoreConfiguration.viewModel.loadMore()
+
+                return true
+            }
+        ]
     }
 
     func applyLoadMoreConfiguration() {

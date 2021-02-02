@@ -134,6 +134,8 @@
 "identities.pending" = "Pending";
 "lists.new-list-title" = "New List Title";
 "load-more" = "Load More";
+"load-more.newer.accessibility-label" = "Load newer items";
+"load-more.older.accessibility-label" = "Load older items";
 "main-navigation.timelines" = "Timelines";
 "main-navigation.explore" = "Explore";
 "main-navigation.notifications" = "Notifications";

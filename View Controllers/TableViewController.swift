@@ -137,7 +137,11 @@ class TableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        viewModel.canSelect(indexPath: indexPath)
+        if case .loadMore = dataSource.itemIdentifier(for: indexPath), UIAccessibility.isVoiceOverRunning {
+            return false
+        }
+
+        return viewModel.canSelect(indexPath: indexPath)
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
