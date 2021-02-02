@@ -5,12 +5,14 @@ import Foundation
 import Mastodon
 
 public struct TagViewModel: CollectionItemViewModel {
+    public let identityContext: IdentityContext
     public let events: AnyPublisher<AnyPublisher<CollectionItemEvent, Error>, Never>
 
     private let tag: Tag
 
-    init(tag: Tag) {
+    init(tag: Tag, identityContext: IdentityContext) {
         self.tag = tag
+        self.identityContext = identityContext
         events = Empty().eraseToAnyPublisher()
     }
 }

@@ -250,6 +250,9 @@
 "status.visibility.private.description" = "Visible for followers only";
 "status.visibility.direct.description" = "Visible for mentioned users only";
 "submit" = "Submit";
+"tag.accessibility-recent-uses-%ld" = "%ld recent uses";
+"tag.accessibility-hint.post" = "View posts associated with trend";
+"tag.accessibility-hint.toot" = "View toots associated with trend";
 "timelines.home" = "Home";
 "timelines.local" = "Local";
 "timelines.federated" = "Federated";

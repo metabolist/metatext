@@ -276,7 +276,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
                 return cachedViewModel
             }
 
-            let viewModel = TagViewModel(tag: tag)
+            let viewModel = TagViewModel(tag: tag, identityContext: identityContext)
 
             cache(viewModel: viewModel, forItem: item)
 

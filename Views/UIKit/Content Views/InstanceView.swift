@@ -71,6 +71,8 @@ private extension InstanceView {
             stackView.bottomAnchor.constraint(equalTo: readableContentGuide.bottomAnchor),
             imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor, multiplier: 16 / 9)
         ])
+
+        setupAccessibility()
     }
 
     func applyInstanceConfiguration() {
@@ -80,5 +82,11 @@ private extension InstanceView {
 
         titleLabel.text = viewModel.instance.title
         uriLabel.text = viewModel.instance.uri
+
+        accessibilityLabel = viewModel.instance.title.appending("\n").appending(viewModel.instance.uri)
+    }
+
+    func setupAccessibility() {
+        isAccessibilityElement = true
     }
 }

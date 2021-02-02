@@ -84,17 +84,23 @@ private extension TagView {
             lineChartView.heightAnchor.constraint(equalTo: usesLabel.heightAnchor),
             lineChartView.widthAnchor.constraint(equalTo: lineChartView.heightAnchor, multiplier: 16 / 9)
         ])
+
+        setupAccessibility()
     }
 
     func applyTagConfiguration() {
         let viewModel = tagConfiguration.viewModel
+        var accessibilityLabel = viewModel.name
 
         nameLabel.text = viewModel.name
 
         if let accounts = viewModel.accounts {
-            accountsLabel.text = String.localizedStringWithFormat(
+            let accountsText = String.localizedStringWithFormat(
                 NSLocalizedString("tag.people-talking", comment: ""),
                 accounts)
+            accountsLabel.text = accountsText
+            accessibilityLabel.append("\n")
+            accessibilityLabel.append(accountsText)
             accountsLabel.isHidden = false
         } else {
             accountsLabel.isHidden = true
@@ -103,11 +109,29 @@ private extension TagView {
         if let uses = viewModel.uses {
             usesLabel.text = String(uses)
             usesLabel.isHidden = false
+            let accessibilityRecentUses = String.localizedStringWithFormat(
+                NSLocalizedString("tag.accessibility-recent-uses-%ld", comment: ""),
+                uses)
+            accessibilityLabel.append("\n")
+            accessibilityLabel.append(accessibilityRecentUses)
         } else {
             usesLabel.isHidden = true
         }
 
         lineChartView.values = viewModel.usageHistory.reversed()
         lineChartView.isHidden = viewModel.usageHistory.isEmpty
+
+        self.accessibilityLabel = accessibilityLabel
+
+        switch viewModel.identityContext.appPreferences.statusWord {
+        case .toot:
+            accessibilityHint = NSLocalizedString("tag.accessibility-hint.toot", comment: "")
+        case .post:
+            accessibilityHint = NSLocalizedString("tag.accessibility-hint.post", comment: "")
+        }
+    }
+
+    func setupAccessibility() {
+        isAccessibilityElement = true
     }
 }

@@ -36,6 +36,8 @@ final class ExploreViewController: UICollectionViewController {
         collectionView.dataSource = dataSource
         collectionView.backgroundColor = .systemBackground
         collectionView.contentInset.bottom = Self.bottomInset
+        collectionView.isAccessibilityElement = false
+        collectionView.shouldGroupAccessibilityChildren = true
         clearsSelectionOnViewWillAppear = true
 
         collectionView.refreshControl = UIRefreshControl()

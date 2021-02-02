@@ -70,7 +70,7 @@ public extension ExploreViewModel {
     }
 
     func viewModel(tag: Tag) -> TagViewModel {
-        .init(tag: tag)
+        .init(tag: tag, identityContext: identityContext)
     }
 
     func select(item: ExploreViewModel.Item) {
