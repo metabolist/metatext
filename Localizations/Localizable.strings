@@ -91,8 +91,7 @@
 "compose.poll-button.accessibility-label" = "Add a poll";
 "compose.prompt" = "What's on your mind?";
 "compose.take-photo-or-video" = "Take Photo or Video";
-"compose.visibility-button.accessibility-label.toot" = "Adjust toot privacy";
-"compose.visibility-button.accessibility-label.post" = "Adjust post privacy";
+"compose.visibility-button.accessibility-label-%@" = "Privacy: %@";
 "compose-button.accessibility-label.post" = "Compose Post";
 "compose-button.accessibility-label.toot" = "Compose Toot";
 "emoji.custom" = "Custom";

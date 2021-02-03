@@ -400,6 +400,8 @@ private extension StatusView {
             infoLabel.isHidden = false
             infoIcon.isHidden = false
         } else {
+            infoLabel.text = nil
+            infoIcon.image = nil
             infoLabel.isHidden = true
             infoIcon.isHidden = true
         }
@@ -494,7 +496,7 @@ private extension StatusView {
 
         let accessibilityAttributedLabel = NSMutableAttributedString(string: "")
 
-        if let infoText = infoLabel.attributedText {
+        if !infoLabel.isHidden, let infoText = infoLabel.attributedText {
             accessibilityAttributedLabel.appendWithSeparator(infoText)
         }
 

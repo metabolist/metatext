@@ -83,15 +83,6 @@ private extension CompositionInputAccessoryView {
             image: UIImage(systemName: parentViewModel.visibility.systemImageName),
             menu: visibilityMenu(selectedVisibility: parentViewModel.visibility))
 
-        switch parentViewModel.identityContext.appPreferences.statusWord {
-        case .toot:
-            visibilityButton.accessibilityLabel =
-                NSLocalizedString("compose.visibility-button.accessibility-label.toot", comment: "")
-        case .post:
-            visibilityButton.accessibilityLabel =
-                NSLocalizedString("compose.visibility-button.accessibility-label.post", comment: "")
-        }
-
         let contentWarningButton = UIBarButtonItem(
             title: NSLocalizedString("status.content-warning-abbreviation", comment: ""),
             primaryAction: UIAction { [weak self] _ in self?.viewModel.displayContentWarning.toggle() })
@@ -183,6 +174,9 @@ private extension CompositionInputAccessoryView {
             .sink { [weak self] in
                 visibilityButton.image = UIImage(systemName: $0.systemImageName)
                 visibilityButton.menu = self?.visibilityMenu(selectedVisibility: $0)
+                visibilityButton.accessibilityLabel = String.localizedStringWithFormat(
+                    NSLocalizedString("compose.visibility-button.accessibility-label-%@", comment: ""),
+                    $0.title ?? "")
             }
             .store(in: &cancellables)
     }
