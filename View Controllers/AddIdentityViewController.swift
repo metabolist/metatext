@@ -205,7 +205,7 @@ private extension AddIdentityViewController {
     }
 
     func initialDisplay() {
-        if displayWelcome {
+        if displayWelcome, !UIAccessibility.isVoiceOverRunning {
             welcomeLabel.alpha = 0
             promptLabel.alpha = 0
             urlTextField.alpha = 0
@@ -241,7 +241,7 @@ private extension AddIdentityViewController {
             }
         } else {
             welcomeLabel.isHidden_stackViewSafe = true
-            whatIsMastodonButton.isHidden_stackViewSafe = true
+            whatIsMastodonButton.isHidden_stackViewSafe = !displayWelcome
             urlTextField.becomeFirstResponder()
         }
     }
