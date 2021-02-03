@@ -255,7 +255,8 @@ public extension StatusViewModel {
     func togglePinned() {
         eventsSubject.send(
             statusService.togglePinned()
-                .map { _ in .ignorableOutput }
+                .collect()
+                .map { _ in .refresh }
                 .eraseToAnyPublisher())
     }
 

@@ -355,6 +355,8 @@ private extension TableViewController {
         switch event {
         case .ignorableOutput:
             break
+        case .refresh:
+            refreshIfAble()
         case let .share(url):
             share(url: url)
         case let .navigation(navigation):

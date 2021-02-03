@@ -6,6 +6,7 @@ import ServiceLayer
 
 public enum CollectionItemEvent {
     case ignorableOutput
+    case refresh
     case navigation(Navigation)
     case attachment(AttachmentViewModel, StatusViewModel)
     case compose(inReplyTo: StatusViewModel?, redraft: Status?)
