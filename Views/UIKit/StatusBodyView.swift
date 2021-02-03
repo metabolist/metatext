@@ -91,6 +91,33 @@ final class StatusBodyView: UIView {
             }
 
             self.accessibilityAttributedLabel = accessibilityAttributedLabel
+
+            var accessibilityCustomActions = [UIAccessibilityCustomAction]()
+
+            mutableContent.enumerateAttribute(
+                .link,
+                in: NSRange(location: 0, length: mutableContent.length),
+                options: []) { attribute, range, _ in
+                guard let url = attribute as? URL else { return }
+
+                accessibilityCustomActions.append(
+                    UIAccessibilityCustomAction(
+                        name: String.localizedStringWithFormat(
+                            NSLocalizedString("accessibility.activate-link-%@", comment: ""),
+                            mutableContent.attributedSubstring(from: range).string)) { [weak self] _ in
+                        guard let contentTextView = self?.contentTextView else { return false }
+
+                        _ = contentTextView.delegate?.textView?(
+                            contentTextView,
+                            shouldInteractWith: url,
+                            in: range,
+                            interaction: .invokeDefaultAction)
+
+                        return true
+                    })
+            }
+
+            self.accessibilityCustomActions = accessibilityCustomActions
         }
     }
 

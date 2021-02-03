@@ -167,7 +167,7 @@ final class AccountFieldView: UIView {
             accessibilityCustomActions.append(
                 UIAccessibilityCustomAction(
                     name: String.localizedStringWithFormat(
-                        NSLocalizedString("account.field.activate-link-accessibility-action-%@", comment: ""),
+                        NSLocalizedString("accessibility.activate-link-%@", comment: ""),
                         mutableValue.attributedSubstring(from: range).string)) { [weak self] _ in
                     guard let valueTextView = self?.valueTextView else { return false }
 

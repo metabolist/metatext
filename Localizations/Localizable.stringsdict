@@ -66,6 +66,22 @@
 			<string>%ld Favorites</string>
 		</dict>
 	</dict>
+	<key>status.replies-count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@replies@</string>
+		<key>replies</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld Reply</string>
+			<key>other</key>
+			<string>%ld Replies</string>
+		</dict>
+	</dict>
 	<key>account.followers-count</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>

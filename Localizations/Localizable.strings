@@ -2,6 +2,7 @@
 
 "about" = "About";
 "about.acknowledgments" = "Acknowledgments";
+"accessibility.activate-link-%@" = "Activate link: %@";
 "account.%@-followers" = "%@'s Followers";
 "account.accept-follow-request-button.accessibility-label" = "Accept follow request";
 "account.avatar.accessibility-label-%@" = "Avatar: %@";
@@ -11,7 +12,6 @@
 "account.domain-block.confirm-%@" = "Block domain %@?";
 "account.domain-unblock-%@" = "Unblock domain %@";
 "account.domain-unblock.confirm-%@" = "Unblock domain %@?";
-"account.field.activate-link-accessibility-action-%@" = "Activate link: %@";
 "account.field.verified" = "Verified %@";
 "account.follow" = "Follow";
 "account.following" = "Following";
@@ -237,6 +237,7 @@
 "search.scope.statuses.toot" = "Toots";
 "search.scope.tags" = "Hashtags";
 "share-extension-error.no-account-found" = "No account found";
+"status.accessibility.view-author-profile" = "View author's profile";
 "status.bookmark" = "Bookmark";
 "status.content-warning-abbreviation" = "CW";
 "status.content-warning.accessibility" = "Content warning";

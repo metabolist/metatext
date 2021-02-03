@@ -510,6 +510,29 @@ private extension StatusView {
             accessibilityAttributedLabel.appendWithSeparator(accessibilityTime)
         }
 
+        if viewModel.repliesCount > 0 {
+            accessibilityAttributedLabel.appendWithSeparator(
+                String.localizedStringWithFormat(
+                    NSLocalizedString("status.replies-count", comment: ""),
+                    viewModel.repliesCount))
+        }
+
+        if viewModel.identityContext.appPreferences.showReblogAndFavoriteCounts {
+            if viewModel.reblogsCount > 0 {
+                accessibilityAttributedLabel.appendWithSeparator(
+                    String.localizedStringWithFormat(
+                        NSLocalizedString("status.reblogs-count", comment: ""),
+                        viewModel.reblogsCount))
+            }
+
+            if viewModel.favoritesCount > 0 {
+                accessibilityAttributedLabel.appendWithSeparator(
+                    String.localizedStringWithFormat(
+                        NSLocalizedString("status.favorites-count", comment: ""),
+                        viewModel.favoritesCount))
+            }
+        }
+
         self.accessibilityAttributedLabel = accessibilityAttributedLabel
 
         configureUserInteractionEnabledForAccessibility()
@@ -722,6 +745,17 @@ private extension StatusView {
                 return true
             })
         }
+
+        actions.append(
+            UIAccessibilityCustomAction(
+                name: NSLocalizedString("status.accessibility.view-author-profile",
+                                        comment: "")) { [weak self] _ in
+                self?.statusConfiguration.viewModel.accountSelected()
+
+                return true
+            })
+
+        actions.append(contentsOf: bodyView.accessibilityCustomActions ?? [])
 
         if menuButton.isEnabled {
             actions.append(UIAccessibilityCustomAction(
