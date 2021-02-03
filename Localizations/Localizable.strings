@@ -21,6 +21,7 @@
 "account.follows-you" = "Follows you";
 "account.header.accessibility-label-%@" = "Header image: %@";
 "account.hide-reblogs" = "Hide boosts";
+"account.locked.accessibility-label" = "Locked account";
 "account.mute" = "Mute";
 "account.reject-follow-request-button.accessibility-label" = "Reject follow request";
 "account.request" = "Request";

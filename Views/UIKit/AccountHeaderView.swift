@@ -75,6 +75,19 @@ final class AccountHeaderView: UIView {
                 accountLabel.text = accountViewModel.accountName
                 lockedImageView.isHidden = !accountViewModel.isLocked
 
+                var accountStackViewAccessibilityLabel = accountViewModel.accountName
+
+                if !lockedImageView.isHidden {
+                    accountStackViewAccessibilityLabel
+                        .appendWithSeparator(NSLocalizedString("account.locked.accessibility-label", comment: ""))
+                }
+
+                if !followsYouLabel.isHidden, let followsYouText = followsYouLabel.text {
+                    accountStackViewAccessibilityLabel.appendWithSeparator(followsYouText)
+                }
+
+                accountStackView.accessibilityLabel = accountStackViewAccessibilityLabel
+
                 for view in fieldsStackView.arrangedSubviews {
                     fieldsStackView.removeArrangedSubview(view)
                     view.removeFromSuperview()
@@ -276,6 +289,7 @@ private extension AccountHeaderView {
 
         baseStackView.addArrangedSubview(accountStackView)
         accountStackView.spacing = .compactSpacing
+        accountStackView.isAccessibilityElement = true
 
         accountStackView.addArrangedSubview(accountLabel)
         accountLabel.numberOfLines = 0
