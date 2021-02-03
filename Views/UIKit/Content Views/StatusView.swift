@@ -755,6 +755,15 @@ private extension StatusView {
                 return true
             })
 
+        actions.append(
+            UIAccessibilityCustomAction(
+                name: NSLocalizedString("accessibility.copy-text",
+                                        comment: "")) { [weak self] _ in
+                UIPasteboard.general.string = self?.bodyView.contentTextView.text
+
+                return true
+            })
+
         actions.append(contentsOf: bodyView.accessibilityCustomActions ?? [])
 
         if menuButton.isEnabled {

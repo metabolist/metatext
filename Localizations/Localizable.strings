@@ -3,6 +3,7 @@
 "about" = "About";
 "about.acknowledgments" = "Acknowledgments";
 "accessibility.activate-link-%@" = "Activate link: %@";
+"accessibility.copy-text" = "Copy text";
 "account.%@-followers" = "%@'s Followers";
 "account.accept-follow-request-button.accessibility-label" = "Accept follow request";
 "account.avatar.accessibility-label-%@" = "Avatar: %@";
