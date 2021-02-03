@@ -58,7 +58,8 @@ extension TimelineItemsInfo {
                 at: index)
         }
 
-        if let pinnedStatusInfos = pinnedStatusesInfo?.pinnedStatusInfos {
+        if timelineRecord.profileCollection == .statuses,
+           let pinnedStatusInfos = pinnedStatusesInfo?.pinnedStatusInfos {
             return [.init(items: pinnedStatusInfos.filtered(regularExpression: filterRegularExpression)
                         .map {
                             CollectionItem.status(
