@@ -178,6 +178,12 @@ private extension RootViewModel {
         if identityId != navigationViewModel?.identityContext.identity.id {
             identitySelected(id: identityId, immediate: false, notify: true)
         }
+
+        $navigationViewModel.first { $0?.identityContext.identity.id == identityId }
+            // Ensure views are set up if switching accounts
+            .delay(for: .milliseconds(1), scheduler: DispatchQueue.main)
+            .sink { $0?.navigate(pushNotification: pushNotification) }
+            .store(in: &cancellables)
     }
 
     func notifyIdentityChange(identityContext: IdentityContext) {

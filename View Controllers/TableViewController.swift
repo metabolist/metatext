@@ -452,20 +452,10 @@ private extension TableViewController {
     }
 
     func compose(inReplyToViewModel: StatusViewModel?, redraft: Status?) {
-        let newStatusViewModel = rootViewModel.newStatusViewModel(
+        rootViewModel.navigationViewModel?.presentedNewStatusViewModel = rootViewModel.newStatusViewModel(
             identityContext: viewModel.identityContext,
             inReplyTo: inReplyToViewModel,
             redraft: redraft)
-        let newStatusViewController =  NewStatusViewController(viewModel: newStatusViewModel)
-        let navigationController = UINavigationController(rootViewController: newStatusViewController)
-
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            navigationController.modalPresentationStyle = .overFullScreen
-        } else {
-            navigationController.isModalInPresentation = true
-        }
-
-        present(navigationController, animated: true)
     }
 
     func confirmDelete(statusViewModel: StatusViewModel, redraft: Bool) {

@@ -10,6 +10,7 @@ public final class NavigationViewModel: ObservableObject {
     public let navigations: AnyPublisher<Navigation, Never>
 
     @Published public private(set) var recentIdentities = [Identity]()
+    @Published public var presentedNewStatusViewModel: NewStatusViewModel?
     @Published public var presentingSecondaryNavigation = false
     @Published public var alertItem: AlertItem?
 
@@ -108,6 +109,10 @@ public extension NavigationViewModel {
         navigationsSubject.send(.collection(identityContext.service.service(
                                                 accountList: .followRequests,
                                                 titleComponents: ["follow-requests"])))
+    }
+
+    func navigate(pushNotification: PushNotification) {
+        // TODO
     }
 
     func viewModel(timeline: Timeline) -> CollectionItemsViewModel {

@@ -30,7 +30,7 @@ class ShareExtensionNavigationViewController: UINavigationController {
         }
 
         setViewControllers(
-            [NewStatusViewController(viewModel: newStatusViewModel)],
+            [NewStatusViewController(viewModel: newStatusViewModel, rootViewModel: nil)],
             animated: false)
     }
 }

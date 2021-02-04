@@ -11,6 +11,7 @@ import ViewModels
 // swiftlint:disable file_length
 final class NewStatusViewController: UIViewController {
     private let viewModel: NewStatusViewModel
+    private let rootViewModel: RootViewModel?
     private let scrollView = UIScrollView()
     private let stackView = UIStackView()
     private let activityIndicatorView = UIActivityIndicatorView(style: .large)
@@ -24,8 +25,9 @@ final class NewStatusViewController: UIViewController {
     private let documentPickerResuls = PassthroughSubject<[URL]?, Never>()
     private var cancellables = Set<AnyCancellable>()
 
-    init(viewModel: NewStatusViewModel) {
+    init(viewModel: NewStatusViewModel, rootViewModel: RootViewModel?) {
         self.viewModel = viewModel
+        self.rootViewModel = rootViewModel
 
         super.init(nibName: nil, bundle: nil)
 
@@ -241,7 +243,7 @@ private extension NewStatusViewController {
         if let extensionContext = extensionContext {
             extensionContext.completeRequest(returningItems: nil)
         } else {
-            presentingViewController?.dismiss(animated: true)
+            rootViewModel?.navigationViewModel?.presentedNewStatusViewModel = nil
         }
     }
 

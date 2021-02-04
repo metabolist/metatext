@@ -24,6 +24,15 @@ final class MainNavigationViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        viewModel.$presentedNewStatusViewModel.sink { [weak self] in
+            if let newStatusViewModel = $0 {
+                self?.presentNewStatus(newStatusViewModel: newStatusViewModel)
+            } else {
+                self?.dismissNewStatus()
+            }
+        }
+        .store(in: &cancellables)
+
         viewModel.$presentingSecondaryNavigation.sink { [weak self] in
             if $0 {
                 self?.presentSecondaryNavigation()
@@ -56,6 +65,7 @@ final class MainNavigationViewController: UITabBarController {
 
 private extension MainNavigationViewController {
     static let secondaryNavigationViewTag = UUID().hashValue
+    static let newStatusViewTag = UUID().hashValue
 
     func setupViewControllers(pending: Bool) {
         var controllers: [UIViewController] = [
@@ -96,18 +106,9 @@ private extension MainNavigationViewController {
     func setupNewStatusButton() {
         let newStatusButtonView = NewStatusButtonView(primaryAction: UIAction { [weak self] _ in
             guard let self = self else { return }
-            let newStatusViewModel = self.rootViewModel.newStatusViewModel(
-                identityContext: self.viewModel.identityContext)
-            let newStatusViewController = NewStatusViewController(viewModel: newStatusViewModel)
-            let newStatusNavigationController = UINavigationController(rootViewController: newStatusViewController)
 
-            if UIDevice.current.userInterfaceIdiom == .phone {
-                newStatusNavigationController.modalPresentationStyle = .fullScreen
-            } else {
-                newStatusNavigationController.isModalInPresentation = true
-            }
-
-            self.present(newStatusNavigationController, animated: true)
+            self.viewModel.presentedNewStatusViewModel =
+                self.rootViewModel.newStatusViewModel(identityContext: self.viewModel.identityContext)
         })
 
         view.addSubview(newStatusButtonView)
@@ -154,6 +155,28 @@ private extension MainNavigationViewController {
 
     func dismissSecondaryNavigation() {
         if presentedViewController?.view.tag == Self.secondaryNavigationViewTag {
+            dismiss(animated: true)
+        }
+    }
+
+    func presentNewStatus(newStatusViewModel: NewStatusViewModel) {
+        let newStatusViewController =  NewStatusViewController(viewModel: newStatusViewModel,
+                                                               rootViewModel: rootViewModel)
+        let navigationController = UINavigationController(rootViewController: newStatusViewController)
+
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            navigationController.modalPresentationStyle = .overFullScreen
+        } else {
+            navigationController.isModalInPresentation = true
+        }
+
+        navigationController.view.tag = Self.newStatusViewTag
+
+        present(navigationController, animated: true)
+    }
+
+    func dismissNewStatus() {
+        if presentedViewController?.view.tag == Self.newStatusViewTag {
             dismiss(animated: true)
         }
     }
