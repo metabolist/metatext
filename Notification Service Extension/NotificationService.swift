@@ -39,6 +39,7 @@ final class NotificationService: UNNotificationServiceExtension {
             return
         }
 
+        bestAttemptContent.userInfo[PushNotificationParsingService.pushNotificationUserInfoKey] = decryptedJSON
         bestAttemptContent.title = pushNotification.title
         bestAttemptContent.body = XMLUnescaper(string: pushNotification.body).unescape()
 

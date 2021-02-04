@@ -7,20 +7,30 @@ import ServiceLayer
 
 public final class RootViewModel: ObservableObject {
     @Published public private(set) var navigationViewModel: NavigationViewModel?
+    public var registerForRemoteNotifications: (() -> AnyPublisher<Data, Error>)? {
+        didSet {
+            guard let registerForRemoteNotifications = registerForRemoteNotifications else { return }
+
+            userNotificationService.isAuthorized(request: false)
+                .filter { $0 }
+                .zip(registerForRemoteNotifications())
+                .map { $1 }
+                .flatMap(allIdentitiesService.updatePushSubscriptions(deviceToken:))
+                .sink { _ in } receiveValue: { _ in }
+                .store(in: &cancellables)
+        }
+    }
 
     @Published private var mostRecentlyUsedIdentityId: Identity.Id?
     private let environment: AppEnvironment
     private let allIdentitiesService: AllIdentitiesService
     private let userNotificationService: UserNotificationService
-    private let registerForRemoteNotifications: () -> AnyPublisher<Data, Error>
     private var cancellables = Set<AnyCancellable>()
 
-    public init(environment: AppEnvironment,
-                registerForRemoteNotifications: @escaping () -> AnyPublisher<Data, Error>) throws {
+    public init(environment: AppEnvironment) throws {
         self.environment = environment
         allIdentitiesService = try AllIdentitiesService(environment: environment)
         userNotificationService = UserNotificationService(environment: environment)
-        self.registerForRemoteNotifications = registerForRemoteNotifications
 
         allIdentitiesService.immediateMostRecentlyUsedIdentityIdPublisher()
             .replaceError(with: nil)
@@ -30,14 +40,6 @@ public final class RootViewModel: ObservableObject {
 
         allIdentitiesService.identitiesCreated
             .sink { [weak self] in self?.identitySelected(id: $0) }
-            .store(in: &cancellables)
-
-        userNotificationService.isAuthorized(request: false)
-            .filter { $0 }
-            .zip(registerForRemoteNotifications())
-            .map { $1 }
-            .flatMap(allIdentitiesService.updatePushSubscriptions(deviceToken:))
-            .sink { _ in } receiveValue: { _ in }
             .store(in: &cancellables)
 
         userNotificationService.events
@@ -116,10 +118,12 @@ private extension RootViewModel {
                     .sink { _ in } receiveValue: { _ in }
                     .store(in: &self.cancellables)
 
-                if identityContext.identity.authenticated && !identityContext.identity.pending {
+                if identityContext.identity.authenticated,
+                   !identityContext.identity.pending,
+                   let registerForRemoteNotifications = self.registerForRemoteNotifications {
                     self.userNotificationService.isAuthorized(request: true)
                         .filter { $0 }
-                        .zip(self.registerForRemoteNotifications())
+                        .zip(registerForRemoteNotifications())
                         .filter { identityContext.identity.lastRegisteredDeviceToken != $1 }
                         .map { ($1, identityContext.identity.pushSubscriptionAlerts) }
                         .flatMap(identityContext.service.createPushSubscription(deviceToken:alerts:))
@@ -136,8 +140,23 @@ private extension RootViewModel {
         switch event {
         case let .willPresentNotification(_, completionHandler):
             completionHandler(.banner)
+        case let .didReceiveResponse(response, completionHandler):
+            let userInfo = response.notification.request.content.userInfo
+
+            if let identityIdString = userInfo[PushNotificationParsingService.identityIdUserInfoKey] as? String,
+               let identityId = Identity.Id(uuidString: identityIdString),
+               let pushNotificationJSON = userInfo[PushNotificationParsingService.pushNotificationUserInfoKey] as? Data,
+               let pushNotification = try? MastodonDecoder().decode(PushNotification.self, from: pushNotificationJSON) {
+                handle(pushNotification: pushNotification, identityId: identityId)
+            }
+
+            completionHandler()
         default:
             break
         }
+    }
+
+    func handle(pushNotification: PushNotification, identityId: Identity.Id) {
+        // TODO
     }
 }

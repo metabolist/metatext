@@ -19,6 +19,9 @@ public struct PushNotificationParsingService {
 }
 
 public extension PushNotificationParsingService {
+    static let identityIdUserInfoKey = "i"
+    static let pushNotificationUserInfoKey = "com.metabolist.metatext.push-notification-user-info-key"
+
     func extractAndDecrypt(userInfo: [AnyHashable: Any]) throws -> (Data, Identity.Id) {
         guard let identityIdString = userInfo[Self.identityIdUserInfoKey] as? String,
               let identityId = Identity.Id(uuidString: identityIdString),
@@ -48,7 +51,6 @@ public extension PushNotificationParsingService {
 }
 
 private extension PushNotificationParsingService {
-    static let identityIdUserInfoKey = "i"
     static let encryptedMessageUserInfoKey = "m"
     static let saltUserInfoKey = "s"
     static let serverPublicKeyUserInfoKey = "k"

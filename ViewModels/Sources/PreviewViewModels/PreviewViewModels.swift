@@ -70,7 +70,7 @@ public extension Instance {
 }
 
 public extension RootViewModel {
-    static let preview = try! RootViewModel(environment: environment) { Empty().eraseToAnyPublisher() }
+    static let preview = try! RootViewModel(environment: environment)
 }
 
 public extension IdentityContext {

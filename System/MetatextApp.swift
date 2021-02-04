@@ -9,28 +9,27 @@ import ViewModels
 @main
 struct MetatextApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
-    private let environment = AppEnvironment.live(
-        userNotificationCenter: .current(),
-        reduceMotion: { UIAccessibility.isReduceMotionEnabled })
+    // swiftlint:disable:next force_try
+    private let viewModel = try! RootViewModel(environment: Self.environment)
 
     init() {
         try? AVAudioSession.sharedInstance().setCategory(.ambient, mode: .default)
-        try? ImageCacheConfiguration(environment: environment).configure()
+        try? ImageCacheConfiguration(environment: Self.environment).configure()
     }
 
     var body: some Scene {
-        WindowGroup {
-            RootView(
-                // swiftlint:disable force_try
-                viewModel: try! RootViewModel(
-                    environment: environment,
-                    registerForRemoteNotifications: appDelegate.registerForRemoteNotifications))
-                // swiftlint:enable force_try
+        viewModel.registerForRemoteNotifications = appDelegate.registerForRemoteNotifications
+
+        return WindowGroup {
+            RootView(viewModel: viewModel)
         }
     }
 }
 
 private extension MetatextApp {
+    static let environment = AppEnvironment.live(
+        userNotificationCenter: .current(),
+        reduceMotion: { UIAccessibility.isReduceMotionEnabled })
     static let imageCacheName = "Images"
     static let imageCacheDirectoryURL = FileManager.default.containerURL(
         forSecurityApplicationGroupIdentifier: AppEnvironment.appGroup)?
