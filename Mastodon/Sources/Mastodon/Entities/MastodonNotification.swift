@@ -38,3 +38,7 @@ public extension MastodonNotification {
         public static var unknownCase: Self { .unknown }
     }
 }
+
+extension MastodonNotification.NotificationType: Identifiable {
+    public var id: Self { self }
+}

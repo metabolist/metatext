@@ -186,6 +186,10 @@
 "preferences.notification-types.mention" = "Mention";
 "preferences.notification-types.poll" = "Poll";
 "preferences.notification-types.status" = "Status";
+"preferences.notifications" = "Notifications";
+"preferences.notifications.include-account-name" = "Include account name";
+"preferences.notifications.include-pictures" = "Include pictures";
+"preferences.notifications.sounds" = "Sounds";
 "preferences.muted-users" = "Muted Users";
 "preferences.home-timeline-position-on-startup" = "Home timeline position on startup";
 "preferences.notifications-position-on-startup" = "Notifications position on startup";

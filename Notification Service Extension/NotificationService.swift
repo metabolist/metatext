@@ -29,9 +29,11 @@ final class NotificationService: UNNotificationServiceExtension {
         guard let bestAttemptContent = bestAttemptContent else { return }
 
         let pushNotification: PushNotification
+        let decryptedJSON: Data
+        let identityId: Identity.Id
 
         do {
-            let decryptedJSON = try Self.extractAndDecrypt(userInfo: request.content.userInfo)
+            (decryptedJSON, identityId) = try Self.extractAndDecrypt(userInfo: request.content.userInfo)
 
             pushNotification = try MastodonDecoder().decode(PushNotification.self, from: decryptedJSON)
         } catch {
@@ -43,35 +45,23 @@ final class NotificationService: UNNotificationServiceExtension {
         bestAttemptContent.title = pushNotification.title
         bestAttemptContent.body = XMLUnescaper(string: pushNotification.body).unescape()
 
-        let fileName = pushNotification.icon.lastPathComponent
-        let fileURL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true).appendingPathComponent(fileName)
+        let appPreferences = AppPreferences(environment: environment)
 
-        KingfisherManager.shared.retrieveImage(with: pushNotification.icon) {
-            switch $0 {
-            case let .success(result):
-                let format: ImageFormat
+        if appPreferences.notificationSounds.contains(pushNotification.notificationType) {
+            bestAttemptContent.sound = .default
+        }
 
-                switch fileURL.pathExtension.lowercased() {
-                case "jpg", "jpeg":
-                    format = .JPEG
-                case "gif":
-                    format = .GIF
-                case "png":
-                    format = .PNG
-                default:
-                    format = .unknown
-                }
+        if appPreferences.notificationAccountName,
+           let accountName = try? AllIdentitiesService(environment: environment).identity(id: identityId)?.handle {
+            bestAttemptContent.subtitle = accountName
+        }
 
-                do {
-                    try result.image.kf.data(format: format)?.write(to: fileURL)
-                    bestAttemptContent.attachments = [try UNNotificationAttachment(identifier: fileName, url: fileURL)]
-                    contentHandler(bestAttemptContent)
-                } catch {
-                    contentHandler(bestAttemptContent)
-                }
-            case .failure:
-                contentHandler(bestAttemptContent)
-            }
+        if appPreferences.notificationPictures {
+            Self.addImage(pushNotification: pushNotification,
+                          bestAttemptContent: bestAttemptContent,
+                          contentHandler: contentHandler)
+        } else {
+            contentHandler(bestAttemptContent)
         }
     }
 
@@ -106,10 +96,10 @@ private extension NotificationService {
         }
     }
 
-    static func extractAndDecrypt(userInfo: [AnyHashable: Any]) throws -> Data {
+    static func extractAndDecrypt(userInfo: [AnyHashable: Any]) throws -> (Data, Identity.Id) {
         guard
             let identityIdString = userInfo[identityIdUserInfoKey] as? String,
-            let identityId = UUID(uuidString: identityIdString),
+            let identityId = Identity.Id(uuidString: identityIdString),
             let encryptedMessageBase64 = (userInfo[encryptedMessageUserInfoKey] as? String)?.URLSafeBase64ToBase64(),
             let encryptedMessage = Data(base64Encoded: encryptedMessageBase64),
             let saltBase64 = (userInfo[saltUserInfoKey] as? String)?.URLSafeBase64ToBase64(),
@@ -125,11 +115,12 @@ private extension NotificationService {
             let pushKey = try secretsService.getPushKey()
         else { throw NotificationServiceError.keychainDataAbsent }
 
-        return try decrypt(encryptedMessage: encryptedMessage,
+        return (try decrypt(encryptedMessage: encryptedMessage,
                            privateKeyData: pushKey,
                            serverPublicKeyData: serverPublicKeyData,
                            auth: auth,
-                           salt: salt)
+                           salt: salt),
+                identityId)
     }
 
     static func decrypt(encryptedMessage: Data,
@@ -178,6 +169,43 @@ private extension NotificationService {
         let unpadded = decrypted.suffix(from: paddedByteCount)
 
         return Data(unpadded)
+    }
+
+    static func addImage(pushNotification: PushNotification,
+                         bestAttemptContent: UNMutableNotificationContent,
+                         contentHandler: @escaping (UNNotificationContent) -> Void) {
+        let fileName = pushNotification.icon.lastPathComponent
+        let fileURL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
+            .appendingPathComponent(fileName)
+
+        KingfisherManager.shared.retrieveImage(with: pushNotification.icon) {
+            switch $0 {
+            case let .success(result):
+                let format: ImageFormat
+
+                switch fileURL.pathExtension.lowercased() {
+                case "jpg", "jpeg":
+                    format = .JPEG
+                case "gif":
+                    format = .GIF
+                case "png":
+                    format = .PNG
+                default:
+                    format = .unknown
+                }
+
+                do {
+                    try result.image.kf.data(format: format)?.write(to: fileURL)
+                    bestAttemptContent.attachments =
+                        [try UNNotificationAttachment(identifier: fileName, url: fileURL)]
+                    contentHandler(bestAttemptContent)
+                } catch {
+                    contentHandler(bestAttemptContent)
+                }
+            case .failure:
+                contentHandler(bestAttemptContent)
+            }
+        }
     }
 }
 

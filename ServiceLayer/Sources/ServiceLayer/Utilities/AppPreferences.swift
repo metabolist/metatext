@@ -140,6 +140,15 @@ public extension AppPreferences {
         set { self[.defaultEmojiSkinTone] = newValue?.rawValue }
     }
 
+    var notificationSounds: Set<MastodonNotification.NotificationType> {
+        get {
+            Set((self[.notificationSounds] as [String]?)?.compactMap {
+                MastodonNotification.NotificationType(rawValue: $0)
+            } ?? MastodonNotification.NotificationType.allCasesExceptUnknown)
+        }
+        set { self[.notificationSounds] = newValue.map { $0.rawValue } }
+    }
+
     var shouldReduceMotion: Bool {
         systemReduceMotion() && useSystemReduceMotionForMedia
     }
@@ -167,6 +176,16 @@ public extension AppPreferences {
         get { self[.requireDoubleTapToFavorite] ?? false }
         set { self[.requireDoubleTapToFavorite] = newValue }
     }
+
+    var notificationPictures: Bool {
+        get { self[.notificationPictures] ?? true }
+        set { self[.notificationPictures] = newValue }
+    }
+
+    var notificationAccountName: Bool {
+        get { self[.notificationAccountName] ?? false }
+        set { self[.notificationAccountName] = newValue }
+    }
 }
 
 private extension AppPreferences {
@@ -183,6 +202,9 @@ private extension AppPreferences {
         case notificationsTabBehavior
         case defaultEmojiSkinTone
         case showReblogAndFavoriteCounts
+        case notificationPictures
+        case notificationAccountName
+        case notificationSounds
     }
 
     subscript<T>(index: Item) -> T? {

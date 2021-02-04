@@ -63,6 +63,8 @@ struct PreferencesView: View {
                             && viewModel.identityContext.identity.authenticated)
             }
             Section(header: Text("preferences.app")) {
+                NavigationLink("preferences.notifications",
+                               destination: NotificationPreferencesView(viewModel: viewModel))
                 Picker("preferences.status-word",
                        selection: $identityContext.appPreferences.statusWord) {
                     ForEach(AppPreferences.StatusWord.allCases) { option in

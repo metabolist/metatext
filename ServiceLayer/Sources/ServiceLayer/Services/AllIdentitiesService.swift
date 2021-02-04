@@ -136,6 +136,11 @@ public extension AllIdentitiesService {
             .ignoreOutput()
             .eraseToAnyPublisher()
     }
+
+    // Only for use in notification extension
+    func identity(id: Identity.Id) throws -> Identity? {
+        try database.identity(id: id)
+    }
 }
 
 private extension AllIdentitiesService.IdentityCreation {

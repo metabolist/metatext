@@ -106,6 +106,7 @@
 		D08B8D72254246E200B1EBEF /* PollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08B8D71254246E200B1EBEF /* PollView.swift */; };
 		D08B8D822544D80000B1EBEF /* PollOptionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08B8D812544D80000B1EBEF /* PollOptionButton.swift */; };
 		D08B8D8D2544E6EC00B1EBEF /* PollResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08B8D8C2544E6EC00B1EBEF /* PollResultView.swift */; };
+		D08B9F1025CB8E060062D040 /* NotificationPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08B9F0F25CB8E060062D040 /* NotificationPreferencesView.swift */; };
 		D08E512125786A6600FA2C5F /* UIButton+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08E512025786A6600FA2C5F /* UIButton+Extensions.swift */; };
 		D08E52612579D2E100FA2C5F /* DomainBlocksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08E52602579D2E100FA2C5F /* DomainBlocksView.swift */; };
 		D08E5276257C36CA00FA2C5F /* Share Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D08E526C257C36CA00FA2C5F /* Share Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -297,6 +298,7 @@
 		D08B8D71254246E200B1EBEF /* PollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollView.swift; sourceTree = "<group>"; };
 		D08B8D812544D80000B1EBEF /* PollOptionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollOptionButton.swift; sourceTree = "<group>"; };
 		D08B8D8C2544E6EC00B1EBEF /* PollResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollResultView.swift; sourceTree = "<group>"; };
+		D08B9F0F25CB8E060062D040 /* NotificationPreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPreferencesView.swift; sourceTree = "<group>"; };
 		D08E512025786A6600FA2C5F /* UIButton+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extensions.swift"; sourceTree = "<group>"; };
 		D08E52602579D2E100FA2C5F /* DomainBlocksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DomainBlocksView.swift; sourceTree = "<group>"; };
 		D08E526C257C36CA00FA2C5F /* Share Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Share Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -469,6 +471,7 @@
 				D0BEB21024FA2A90001B0F04 /* EditFilterView.swift */,
 				D0BEB20424FA1107001B0F04 /* FiltersView.swift */,
 				D0BEB1FE24F9E5BB001B0F04 /* ListsView.swift */,
+				D08B9F0F25CB8E060062D040 /* NotificationPreferencesView.swift */,
 				D0C7D42D24F76169001EBDBB /* NotificationTypesPreferencesView.swift */,
 				D0C7D42624F76169001EBDBB /* PreferencesView.swift */,
 				D0B32F4F250B373600311912 /* RegistrationView.swift */,
@@ -1003,6 +1006,7 @@
 				D08B8D42253F92B600B1EBEF /* ImagePageViewController.swift in Sources */,
 				D01F41D924F880C400D55A2D /* TouchFallthroughTextView.swift in Sources */,
 				D0C7D4D624F7616A001EBDBB /* NSMutableAttributedString+Extensions.swift in Sources */,
+				D08B9F1025CB8E060062D040 /* NotificationPreferencesView.swift in Sources */,
 				D0E9F9AA258450B300EF503D /* CompositionInputAccessoryView.swift in Sources */,
 				D021A60A25C36B32008A0C0D /* IdentityTableViewCell.swift in Sources */,
 				D0849C7F25903C4900A5EBCC /* Status+Extensions.swift in Sources */,
