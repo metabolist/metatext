@@ -10,16 +10,22 @@ public struct UserNotificationClient {
         case openSettingsForNotification(UNNotification?)
     }
 
-    public var getNotificationSettings: (@escaping (UNNotificationSettings) -> Void) -> Void
-    public var requestAuthorization: (UNAuthorizationOptions, @escaping (Bool, Error?) -> Void) -> Void
-    public var delegateEvents: AnyPublisher<DelegateEvent, Never>
+    public let getNotificationSettings: (@escaping (UNNotificationSettings) -> Void) -> Void
+    public let requestAuthorization: (UNAuthorizationOptions, @escaping (Bool, Error?) -> Void) -> Void
+    public let add: (UNNotificationRequest, ((Error?) -> Void)?) -> Void
+    public let removeDeliveredNotifications: ([String]) -> Void
+    public let delegateEvents: AnyPublisher<DelegateEvent, Never>
 
     public init(
         getNotificationSettings: @escaping (@escaping (UNNotificationSettings) -> Void) -> Void,
         requestAuthorization: @escaping (UNAuthorizationOptions, @escaping (Bool, Error?) -> Void) -> Void,
+        add: @escaping (UNNotificationRequest, ((Error?) -> Void)?) -> Void,
+        removeDeliveredNotifications: @escaping ([String]) -> Void,
         delegateEvents: AnyPublisher<DelegateEvent, Never>) {
         self.getNotificationSettings = getNotificationSettings
         self.requestAuthorization = requestAuthorization
+        self.add = add
+        self.removeDeliveredNotifications = removeDeliveredNotifications
         self.delegateEvents = delegateEvents
     }
 }
@@ -59,6 +65,8 @@ extension UserNotificationClient {
         return UserNotificationClient(
             getNotificationSettings: userNotificationCenter.getNotificationSettings,
             requestAuthorization: userNotificationCenter.requestAuthorization,
+            add: userNotificationCenter.add(_:withCompletionHandler:),
+            removeDeliveredNotifications: userNotificationCenter.removeDeliveredNotifications(withIdentifiers:),
             delegateEvents: subject
                 .handleEvents(receiveCancel: { delegate = nil })
                 .eraseToAnyPublisher())

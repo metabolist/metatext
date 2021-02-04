@@ -17,6 +17,10 @@ public struct UserNotificationService {
 
 public extension UserNotificationService {
     typealias Event = UserNotificationClient.DelegateEvent
+    typealias Content = UNNotificationContent
+    typealias MutableContent = UNMutableNotificationContent
+    typealias Trigger = UNNotificationTrigger
+    typealias Request = UNNotificationRequest
 
     func isAuthorized(request: Bool) -> AnyPublisher<Bool, Error> {
         getNotificationSettings()
@@ -31,6 +35,24 @@ public extension UserNotificationService {
                     .eraseToAnyPublisher()
             }
             .eraseToAnyPublisher()
+    }
+
+    func add(request: Request) -> AnyPublisher<Never, Error> {
+        Future<Void, Error> { promise in
+            userNotificationClient.add(request) { error in
+                if let error = error {
+                    promise(.failure(error))
+                } else {
+                    promise(.success(()))
+                }
+            }
+        }
+        .ignoreOutput()
+        .eraseToAnyPublisher()
+    }
+
+    func removeDeliveredNotifications(withIdentifiers identifiers: [String]) {
+        userNotificationClient.removeDeliveredNotifications(identifiers)
     }
 }
 

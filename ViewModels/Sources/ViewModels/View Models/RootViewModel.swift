@@ -36,7 +36,7 @@ public final class RootViewModel: ObservableObject {
             .replaceError(with: nil)
             .assign(to: &$mostRecentlyUsedIdentityId)
 
-        identitySelected(id: mostRecentlyUsedIdentityId, immediate: true)
+        identitySelected(id: mostRecentlyUsedIdentityId, immediate: true, notify: false)
 
         allIdentitiesService.identitiesCreated
             .sink { [weak self] in self?.identitySelected(id: $0) }
@@ -50,7 +50,7 @@ public final class RootViewModel: ObservableObject {
 
 public extension RootViewModel {
     func identitySelected(id: Identity.Id?) {
-        identitySelected(id: id, immediate: false)
+        identitySelected(id: id, immediate: false, notify: false)
     }
 
     func deleteIdentity(id: Identity.Id) {
@@ -80,7 +80,12 @@ public extension RootViewModel {
 }
 
 private extension RootViewModel {
-    func identitySelected(id: Identity.Id?, immediate: Bool) {
+    static let identityChangeNotificationUserInfoKey =
+        "com.metabolist.metatext.identity-change-notification-user-info-key"
+    static let removeIdentityChangeNotificationAfter = DispatchTimeInterval.seconds(10)
+
+    // swiftlint:disable:next function_body_length
+    func identitySelected(id: Identity.Id?, immediate: Bool, notify: Bool) {
         navigationViewModel?.presentingSecondaryNavigation = false
 
         guard
@@ -95,7 +100,9 @@ private extension RootViewModel {
             .catch { [weak self] _ -> Empty<Identity, Never> in
                 DispatchQueue.main.async {
                     if self?.navigationViewModel?.identityContext.identity.id == id {
-                        self?.identitySelected(id: self?.mostRecentlyUsedIdentityId, immediate: false)
+                        self?.identitySelected(id: self?.mostRecentlyUsedIdentityId,
+                                               immediate: false,
+                                               notify: true)
                     }
                 }
 
@@ -131,6 +138,10 @@ private extension RootViewModel {
                         .store(in: &self.cancellables)
                 }
 
+                if notify {
+                    self.notifyIdentityChange(identityContext: identityContext)
+                }
+
                 return NavigationViewModel(identityContext: identityContext)
             }
             .assign(to: &$navigationViewModel)
@@ -138,8 +149,15 @@ private extension RootViewModel {
 
     func handle(event: UserNotificationService.Event) {
         switch event {
-        case let .willPresentNotification(_, completionHandler):
+        case let .willPresentNotification(notification, completionHandler):
             completionHandler(.banner)
+
+            if notification.request.content.userInfo[Self.identityChangeNotificationUserInfoKey] as? Bool == true {
+                DispatchQueue.main.asyncAfter(deadline: .now() + Self.removeIdentityChangeNotificationAfter) {
+                    self.userNotificationService.removeDeliveredNotifications(
+                        withIdentifiers: [notification.request.identifier])
+                }
+            }
         case let .didReceiveResponse(response, completionHandler):
             let userInfo = response.notification.request.content.userInfo
 
@@ -157,6 +175,23 @@ private extension RootViewModel {
     }
 
     func handle(pushNotification: PushNotification, identityId: Identity.Id) {
-        // TODO
+        if identityId != navigationViewModel?.identityContext.identity.id {
+            identitySelected(id: identityId, immediate: false, notify: true)
+        }
+    }
+
+    func notifyIdentityChange(identityContext: IdentityContext) {
+        let content = UserNotificationService.MutableContent()
+
+        content.body = String.localizedStringWithFormat(
+            NSLocalizedString("notification.signed-in-as-%@", comment: ""),
+            identityContext.identity.handle)
+        content.userInfo[Self.identityChangeNotificationUserInfoKey] = true
+
+        let request = UserNotificationService.Request(identifier: UUID().uuidString, content: content, trigger: nil)
+
+        userNotificationService.add(request: request)
+            .sink { _ in } receiveValue: { _ in }
+            .store(in: &cancellables)
     }
 }

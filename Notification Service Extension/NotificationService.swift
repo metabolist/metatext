@@ -55,7 +55,7 @@ final class NotificationService: UNNotificationServiceExtension {
         }
 
         if appPreferences.notificationPictures {
-            Self.addImage(pushNotification: pushNotification,
+            Self.addImage(url: pushNotification.icon,
                           bestAttemptContent: bestAttemptContent,
                           contentHandler: contentHandler)
         } else {
@@ -71,14 +71,14 @@ final class NotificationService: UNNotificationServiceExtension {
 }
 
 private extension NotificationService {
-    static func addImage(pushNotification: PushNotification,
+    static func addImage(url: URL,
                          bestAttemptContent: UNMutableNotificationContent,
                          contentHandler: @escaping (UNNotificationContent) -> Void) {
-        let fileName = pushNotification.icon.lastPathComponent
+        let fileName = url.lastPathComponent
         let fileURL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
             .appendingPathComponent(fileName)
 
-        KingfisherManager.shared.retrieveImage(with: pushNotification.icon) {
+        KingfisherManager.shared.retrieveImage(with: url) {
             switch $0 {
             case let .success(result):
                 let format: ImageFormat

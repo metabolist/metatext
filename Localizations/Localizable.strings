@@ -145,6 +145,7 @@
 "main-navigation.notifications" = "Notifications";
 "main-navigation.conversations" = "Messages";
 "metatext" = "Metatext";
+"notification.signed-in-as-%@" = "Signed in as %@";
 "notifications.all" = "All";
 "notifications.mentions" = "Mentions";
 "ok" = "OK";
