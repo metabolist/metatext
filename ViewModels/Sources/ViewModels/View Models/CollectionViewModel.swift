@@ -19,7 +19,7 @@ public protocol CollectionViewModel {
     func viewedAtTop(indexPath: IndexPath)
     func select(indexPath: IndexPath)
     func canSelect(indexPath: IndexPath) -> Bool
-    func viewModel(indexPath: IndexPath) -> CollectionItemViewModel
+    func viewModel(indexPath: IndexPath) -> Any
     func toggleExpandAll()
     func applyAccountListEdit(viewModel: AccountViewModel, edit: CollectionItemEvent.AccountListEdit)
 }

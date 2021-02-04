@@ -5,18 +5,19 @@ import Foundation
 import Mastodon
 import ServiceLayer
 
-public final class AccountViewModel: CollectionItemViewModel, ObservableObject {
-    public let events: AnyPublisher<AnyPublisher<CollectionItemEvent, Error>, Never>
+public final class AccountViewModel: ObservableObject {
     public let identityContext: IdentityContext
     public internal(set) var configuration = CollectionItem.AccountConfiguration.withNote
 
     private let accountService: AccountService
-    private let eventsSubject = PassthroughSubject<AnyPublisher<CollectionItemEvent, Error>, Never>()
+    private let eventsSubject: PassthroughSubject<AnyPublisher<CollectionItemEvent, Error>, Never>
 
-    init(accountService: AccountService, identityContext: IdentityContext) {
+    init(accountService: AccountService,
+         identityContext: IdentityContext,
+         eventsSubject: PassthroughSubject<AnyPublisher<CollectionItemEvent, Error>, Never>) {
         self.accountService = accountService
         self.identityContext = identityContext
-        events = eventsSubject.eraseToAnyPublisher()
+        self.eventsSubject = eventsSubject
     }
 }
 

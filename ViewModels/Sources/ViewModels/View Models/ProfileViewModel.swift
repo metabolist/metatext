@@ -13,6 +13,7 @@ final public class ProfileViewModel {
 
     private let profileService: ProfileService
     private let collectionViewModel: CurrentValueSubject<CollectionItemsViewModel, Never>
+    private let accountEventsSubject: PassthroughSubject<AnyPublisher<CollectionItemEvent, Error>, Never>
     private let imagePresentationsSubject = PassthroughSubject<URL, Never>()
     private var cancellables = Set<AnyCancellable>()
 
@@ -25,8 +26,16 @@ final public class ProfileViewModel {
                 collectionService: profileService.timelineService(profileCollection: .statuses),
                 identityContext: identityContext))
 
+        let accountEventsSubject = PassthroughSubject<AnyPublisher<CollectionItemEvent, Error>, Never>()
+
+        self.accountEventsSubject = accountEventsSubject
+
         profileService.accountServicePublisher
-            .map { AccountViewModel(accountService: $0, identityContext: identityContext) }
+            .map {
+                AccountViewModel(accountService: $0,
+                                 identityContext: identityContext,
+                                 eventsSubject: accountEventsSubject)
+            }
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$accountViewModel)
 
@@ -102,10 +111,12 @@ extension ProfileViewModel: CollectionViewModel {
     }
 
     public var events: AnyPublisher<CollectionItemEvent, Never> {
-        $accountViewModel.compactMap { $0 }
-            .flatMap(\.events)
-            .flatMap { $0 }
-            .assignErrorsToAlertItem(to: \.alertItem, on: self)
+        accountEventsSubject
+            .flatMap { [weak self] eventPublisher -> AnyPublisher<CollectionItemEvent, Never> in
+                guard let self = self else { return Empty().eraseToAnyPublisher() }
+
+                return eventPublisher.assignErrorsToAlertItem(to: \.alertItem, on: self).eraseToAnyPublisher()
+            }
             .merge(with: collectionViewModel.flatMap(\.events))
             .eraseToAnyPublisher()
     }
@@ -143,7 +154,7 @@ extension ProfileViewModel: CollectionViewModel {
         collectionViewModel.value.canSelect(indexPath: indexPath)
     }
 
-    public func viewModel(indexPath: IndexPath) -> CollectionItemViewModel {
+    public func viewModel(indexPath: IndexPath) -> Any {
         collectionViewModel.value.viewModel(indexPath: indexPath)
     }
 

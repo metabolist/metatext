@@ -3,15 +3,11 @@
 import Combine
 import ServiceLayer
 
-public final class MoreResultsViewModel: ObservableObject, CollectionItemViewModel {
-    public var events: AnyPublisher<AnyPublisher<CollectionItemEvent, Error>, Never>
-
+public final class MoreResultsViewModel: ObservableObject {
     private let moreResults: MoreResults
-    private let eventsSubject = PassthroughSubject<AnyPublisher<CollectionItemEvent, Error>, Never>()
 
     init(moreResults: MoreResults) {
         self.moreResults = moreResults
-        events = eventsSubject.eraseToAnyPublisher()
     }
 }
 

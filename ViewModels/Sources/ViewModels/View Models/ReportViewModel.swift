@@ -22,7 +22,9 @@ public final class ReportViewModel: ObservableObject {
         events = eventsSubject.eraseToAnyPublisher()
 
         if let statusService = statusService {
-            statusViewModel = StatusViewModel(statusService: statusService, identityContext: identityContext)
+            statusViewModel = StatusViewModel(statusService: statusService,
+                                              identityContext: identityContext,
+                                              eventsSubject: .init())
             elements.statusIds.insert(statusService.status.displayStatus.id)
         } else {
             statusViewModel = nil

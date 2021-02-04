@@ -5,7 +5,7 @@ import Foundation
 import Mastodon
 import ServiceLayer
 
-public final class StatusViewModel: CollectionItemViewModel, AttachmentsRenderingViewModel, ObservableObject {
+public final class StatusViewModel: AttachmentsRenderingViewModel, ObservableObject {
     public let content: NSAttributedString
     public let contentEmojis: [Emoji]
     public let displayName: String
@@ -18,15 +18,17 @@ public final class StatusViewModel: CollectionItemViewModel, AttachmentsRenderin
     public let pollEmojis: [Emoji]
     @Published public var pollOptionSelections = Set<Int>()
     public var configuration = CollectionItem.StatusConfiguration.default
-    public let events: AnyPublisher<AnyPublisher<CollectionItemEvent, Error>, Never>
     public let identityContext: IdentityContext
 
     private let statusService: StatusService
-    private let eventsSubject = PassthroughSubject<AnyPublisher<CollectionItemEvent, Error>, Never>()
+    private let eventsSubject: PassthroughSubject<AnyPublisher<CollectionItemEvent, Error>, Never>
 
-    init(statusService: StatusService, identityContext: IdentityContext) {
+    init(statusService: StatusService,
+         identityContext: IdentityContext,
+         eventsSubject: PassthroughSubject<AnyPublisher<CollectionItemEvent, Error>, Never>) {
         self.statusService = statusService
         self.identityContext = identityContext
+        self.eventsSubject = eventsSubject
         content = statusService.status.displayStatus.content.attributed
         contentEmojis = statusService.status.displayStatus.emojis
         displayName = statusService.status.displayStatus.account.displayName.isEmpty
@@ -42,7 +44,6 @@ public final class StatusViewModel: CollectionItemViewModel, AttachmentsRenderin
         attachmentViewModels = statusService.status.displayStatus.mediaAttachments
             .map { AttachmentViewModel(attachment: $0, identityContext: identityContext, status: statusService.status) }
         pollEmojis = statusService.status.displayStatus.poll?.emojis ?? []
-        events = eventsSubject.eraseToAnyPublisher()
     }
 }
 
@@ -221,7 +222,9 @@ public extension StatusViewModel {
     }
 
     func reply() {
-        let replyViewModel = Self(statusService: statusService, identityContext: identityContext)
+        let replyViewModel = Self(statusService: statusService,
+                                  identityContext: identityContext,
+                                  eventsSubject: .init())
 
         replyViewModel.configuration = configuration.reply()
 
@@ -292,7 +295,8 @@ public extension StatusViewModel {
                     if let inReplyToStatusService = inReplyToStatusService {
                         inReplyToViewModel = Self(
                             statusService: inReplyToStatusService,
-                            identityContext: identityContext)
+                            identityContext: identityContext,
+                            eventsSubject: .init())
                         inReplyToViewModel?.configuration = CollectionItem.StatusConfiguration.default.reply()
                     } else {
                         inReplyToViewModel = nil

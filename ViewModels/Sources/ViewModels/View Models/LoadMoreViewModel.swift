@@ -3,17 +3,17 @@
 import Combine
 import ServiceLayer
 
-public final class LoadMoreViewModel: ObservableObject, CollectionItemViewModel {
+public final class LoadMoreViewModel: ObservableObject {
     public var direction = LoadMore.Direction.up
     @Published public private(set) var loading = false
-    public let events: AnyPublisher<AnyPublisher<CollectionItemEvent, Error>, Never>
 
     private let loadMoreService: LoadMoreService
-    private let eventsSubject = PassthroughSubject<AnyPublisher<CollectionItemEvent, Error>, Never>()
+    private let eventsSubject: PassthroughSubject<AnyPublisher<CollectionItemEvent, Error>, Never>
 
-    init(loadMoreService: LoadMoreService) {
+    init(loadMoreService: LoadMoreService,
+         eventsSubject: PassthroughSubject<AnyPublisher<CollectionItemEvent, Error>, Never>) {
         self.loadMoreService = loadMoreService
-        events = eventsSubject.eraseToAnyPublisher()
+        self.eventsSubject = eventsSubject
     }
 }
 

@@ -13,8 +13,8 @@ public class CollectionItemsViewModel: ObservableObject {
 
     @Published private var lastUpdate = CollectionUpdate.empty
     private let collectionService: CollectionService
-    private var viewModelCache = [CollectionItem: (viewModel: CollectionItemViewModel, events: AnyCancellable)]()
-    private let eventsSubject = PassthroughSubject<CollectionItemEvent, Never>()
+    private var viewModelCache = [CollectionItem: Any]()
+    private let eventsSubject = PassthroughSubject<AnyPublisher<CollectionItemEvent, Error>, Never>()
     private let loadingSubject = PassthroughSubject<Bool, Never>()
     private let expandAllSubject: CurrentValueSubject<ExpandAllState, Never>
     private var topVisibleIndexPath = IndexPath(item: 0, section: 0)
@@ -83,7 +83,14 @@ extension CollectionItemsViewModel: CollectionViewModel {
 
     public var loading: AnyPublisher<Bool, Never> { loadingSubject.eraseToAnyPublisher() }
 
-    public var events: AnyPublisher<CollectionItemEvent, Never> { eventsSubject.eraseToAnyPublisher() }
+    public var events: AnyPublisher<CollectionItemEvent, Never> {
+        eventsSubject.flatMap { [weak self] eventPublisher -> AnyPublisher<CollectionItemEvent, Never> in
+            guard let self = self else { return Empty().eraseToAnyPublisher() }
+
+            return eventPublisher.assignErrorsToAlertItem(to: \.alertItem, on: self).eraseToAnyPublisher()
+        }
+        .eraseToAnyPublisher()
+    }
 
     public var canRefresh: Bool { collectionService.canRefresh }
 
@@ -128,44 +135,38 @@ extension CollectionItemsViewModel: CollectionViewModel {
 
         switch item {
         case let .status(status, _):
-            eventsSubject.send(
-                .navigation(.collection(collectionService
-                                            .navigationService
-                                            .contextService(id: status.displayStatus.id))))
+            send(event: .navigation(.collection(collectionService
+                                                    .navigationService
+                                                    .contextService(id: status.displayStatus.id))))
         case let .loadMore(loadMore):
             lastSelectedLoadMore = loadMore
             (viewModel(indexPath: indexPath) as? LoadMoreViewModel)?.loadMore()
         case let .account(account, _):
-            eventsSubject.send(
-                .navigation(.profile(collectionService
-                                        .navigationService
-                                        .profileService(account: account))))
+            send(event: .navigation(.profile(collectionService
+                                                .navigationService
+                                                .profileService(account: account))))
         case let .notification(notification, _):
             if let status = notification.status {
-                eventsSubject.send(
-                    .navigation(.collection(collectionService
-                                                .navigationService
-                                                .contextService(id: status.displayStatus.id))))
+                send(event: .navigation(.collection(collectionService
+                                                        .navigationService
+                                                        .contextService(id: status.displayStatus.id))))
             } else {
-                eventsSubject.send(
-                    .navigation(.profile(collectionService
-                                            .navigationService
-                                            .profileService(account: notification.account))))
+                send(event: .navigation(.profile(collectionService
+                                                    .navigationService
+                                                    .profileService(account: notification.account))))
             }
         case let .conversation(conversation):
             guard let status = conversation.lastStatus else { break }
 
-            eventsSubject.send(
-                .navigation(.collection(collectionService
-                                            .navigationService
-                                            .contextService(id: status.displayStatus.id))))
+            send(event: .navigation(.collection(collectionService
+                                                    .navigationService
+                                                    .contextService(id: status.displayStatus.id))))
         case let .tag(tag):
-            eventsSubject.send(
-                .navigation(.collection(collectionService
-                                            .navigationService
-                                            .timelineService(timeline: .tag(tag.name)))))
+            send(event: .navigation(.collection(collectionService
+                                                    .navigationService
+                                                    .timelineService(timeline: .tag(tag.name)))))
         case let .moreResults(moreResults):
-            eventsSubject.send(.navigation(.searchScope(moreResults.scope)))
+            send(event: .navigation(.searchScope(moreResults.scope)))
         }
     }
 
@@ -191,9 +192,9 @@ extension CollectionItemsViewModel: CollectionViewModel {
     }
 
     // swiftlint:disable:next function_body_length cyclomatic_complexity
-    public func viewModel(indexPath: IndexPath) -> CollectionItemViewModel {
+    public func viewModel(indexPath: IndexPath) -> Any {
         let item = lastUpdate.sections[indexPath.section].items[indexPath.item]
-        let cachedViewModel = viewModelCache[item]?.viewModel
+        let cachedViewModel = viewModelCache[item]
 
         switch item {
         case let .status(status, configuration):
@@ -204,8 +205,9 @@ extension CollectionItemsViewModel: CollectionViewModel {
             } else {
                 viewModel = .init(
                     statusService: collectionService.navigationService.statusService(status: status),
-                    identityContext: identityContext)
-                cache(viewModel: viewModel, forItem: item)
+                    identityContext: identityContext,
+                    eventsSubject: eventsSubject)
+                viewModelCache[item] = viewModel
             }
 
             viewModel.configuration = configuration
@@ -217,9 +219,10 @@ extension CollectionItemsViewModel: CollectionViewModel {
             }
 
             let viewModel = LoadMoreViewModel(
-                loadMoreService: collectionService.navigationService.loadMoreService(loadMore: loadMore))
+                loadMoreService: collectionService.navigationService.loadMoreService(loadMore: loadMore),
+                eventsSubject: eventsSubject)
 
-            cache(viewModel: viewModel, forItem: item)
+            viewModelCache[item] = viewModel
 
             return viewModel
         case let .account(account, configuration):
@@ -230,31 +233,34 @@ extension CollectionItemsViewModel: CollectionViewModel {
             } else {
                 viewModel = AccountViewModel(
                     accountService: collectionService.navigationService.accountService(account: account),
-                    identityContext: identityContext)
-                cache(viewModel: viewModel, forItem: item)
+                    identityContext: identityContext,
+                    eventsSubject: eventsSubject)
+                viewModelCache[item] = viewModel
             }
 
             viewModel.configuration = configuration
 
             return viewModel
         case let .notification(notification, statusConfiguration):
-            let viewModel: CollectionItemViewModel
+            let viewModel: Any
 
             if let cachedViewModel = cachedViewModel {
                 viewModel = cachedViewModel
             } else if let status = notification.status, let statusConfiguration = statusConfiguration {
                 let statusViewModel = StatusViewModel(
                     statusService: collectionService.navigationService.statusService(status: status),
-                    identityContext: identityContext)
+                    identityContext: identityContext,
+                    eventsSubject: eventsSubject)
                 statusViewModel.configuration = statusConfiguration
                 viewModel = statusViewModel
-                cache(viewModel: viewModel, forItem: item)
+                viewModelCache[item] = viewModel
             } else {
                 viewModel = NotificationViewModel(
                     notificationService: collectionService.navigationService.notificationService(
                         notification: notification),
-                    identityContext: identityContext)
-                cache(viewModel: viewModel, forItem: item)
+                    identityContext: identityContext,
+                    eventsSubject: eventsSubject)
+                viewModelCache[item] = viewModel
             }
 
             return viewModel
@@ -268,7 +274,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
                     conversation: conversation),
                 identityContext: identityContext)
 
-            cache(viewModel: viewModel, forItem: item)
+            viewModelCache[item] = viewModel
 
             return viewModel
         case let .tag(tag):
@@ -278,7 +284,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
 
             let viewModel = TagViewModel(tag: tag, identityContext: identityContext)
 
-            cache(viewModel: viewModel, forItem: item)
+            viewModelCache[item] = viewModel
 
             return viewModel
         case let .moreResults(moreResults):
@@ -288,7 +294,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
 
             let viewModel = MoreResultsViewModel(moreResults: moreResults)
 
-            cache(viewModel: viewModel, forItem: item)
+            viewModelCache[item] = viewModel
 
             return viewModel
         }
@@ -335,19 +341,12 @@ extension CollectionItemsViewModel: CollectionViewModel {
 private extension CollectionItemsViewModel {
     private static let lastReadIdDebounceInterval: TimeInterval = 0.5
 
-    var lastUpdateWasContextParentOnly: Bool {
-        collectionService is ContextService && lastUpdate.sections.map(\.items).map(\.count) == [0, 1, 0]
+    func send(event: CollectionItemEvent) {
+        eventsSubject.send(Just(event).setFailureType(to: Error.self).eraseToAnyPublisher())
     }
 
-    func cache(viewModel: CollectionItemViewModel, forItem item: CollectionItem) {
-        viewModelCache[item] = (viewModel, viewModel.events
-                                    .flatMap { [weak self] events -> AnyPublisher<CollectionItemEvent, Never> in
-                                        guard let self = self else { return Empty().eraseToAnyPublisher() }
-
-                                        return events.assignErrorsToAlertItem(to: \.alertItem, on: self)
-                                            .eraseToAnyPublisher()
-                                    }
-                                    .sink { [weak self] in self?.eventsSubject.send($0) })
+    var lastUpdateWasContextParentOnly: Bool {
+        collectionService is ContextService && lastUpdate.sections.map(\.items).map(\.count) == [0, 1, 0]
     }
 
     func process(sections: [CollectionSection]) {
@@ -402,7 +401,7 @@ private extension CollectionItemsViewModel {
                     if case let .remove(_, item, _) = removal,
                        case let .loadMore(loadMore) = item,
                        loadMore == lastSelectedLoadMore,
-                       let direction = (viewModelCache[item]?.viewModel as? LoadMoreViewModel)?.direction,
+                       let direction = (viewModelCache[item] as? LoadMoreViewModel)?.direction,
                        direction == .up,
                        let statusAfterLoadMore = items.first(where: {
                         guard case let .status(status, _) = $0 else { return false }

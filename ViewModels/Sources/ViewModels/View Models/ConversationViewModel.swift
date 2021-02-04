@@ -5,32 +5,31 @@ import Foundation
 import Mastodon
 import ServiceLayer
 
-public final class ConversationViewModel: CollectionItemViewModel, ObservableObject {
+public final class ConversationViewModel: ObservableObject {
     public let accountViewModels: [AccountViewModel]
     public let statusViewModel: StatusViewModel?
-    public let events: AnyPublisher<AnyPublisher<CollectionItemEvent, Error>, Never>
     public let identityContext: IdentityContext
 
     private let conversationService: ConversationService
-    private let eventsSubject = PassthroughSubject<AnyPublisher<CollectionItemEvent, Error>, Never>()
 
     init(conversationService: ConversationService, identityContext: IdentityContext) {
         accountViewModels = conversationService.conversation.accounts.map {
             AccountViewModel(
                 accountService: conversationService.navigationService.accountService(account: $0),
-                identityContext: identityContext)
+                identityContext: identityContext,
+                eventsSubject: .init())
         }
 
         if let status = conversationService.conversation.lastStatus {
             statusViewModel = StatusViewModel(
                 statusService: conversationService.navigationService.statusService(status: status),
-                identityContext: identityContext)
+                identityContext: identityContext,
+                eventsSubject: .init())
         } else {
             statusViewModel = nil
         }
 
         self.conversationService = conversationService
         self.identityContext = identityContext
-        self.events = eventsSubject.eraseToAnyPublisher()
     }
 }

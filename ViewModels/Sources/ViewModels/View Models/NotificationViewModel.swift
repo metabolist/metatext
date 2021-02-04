@@ -5,32 +5,34 @@ import Foundation
 import Mastodon
 import ServiceLayer
 
-public final class NotificationViewModel: CollectionItemViewModel, ObservableObject {
+public final class NotificationViewModel: ObservableObject {
     public let accountViewModel: AccountViewModel
     public let statusViewModel: StatusViewModel?
-    public let events: AnyPublisher<AnyPublisher<CollectionItemEvent, Error>, Never>
     public let identityContext: IdentityContext
 
     private let notificationService: NotificationService
-    private let eventsSubject = PassthroughSubject<AnyPublisher<CollectionItemEvent, Error>, Never>()
+    private let eventsSubject: PassthroughSubject<AnyPublisher<CollectionItemEvent, Error>, Never>
 
-    init(notificationService: NotificationService, identityContext: IdentityContext) {
+    init(notificationService: NotificationService,
+         identityContext: IdentityContext,
+         eventsSubject: PassthroughSubject<AnyPublisher<CollectionItemEvent, Error>, Never>) {
         self.notificationService = notificationService
         self.identityContext = identityContext
+        self.eventsSubject = eventsSubject
         self.accountViewModel = AccountViewModel(
             accountService: notificationService.navigationService.accountService(
                 account: notificationService.notification.account),
-            identityContext: identityContext)
+            identityContext: identityContext,
+            eventsSubject: eventsSubject)
 
         if let status = notificationService.notification.status {
             statusViewModel = StatusViewModel(
                 statusService: notificationService.navigationService.statusService(status: status),
-                identityContext: identityContext)
+                identityContext: identityContext,
+                eventsSubject: eventsSubject)
         } else {
             statusViewModel = nil
         }
-
-        self.events = eventsSubject.eraseToAnyPublisher()
     }
 }
 
