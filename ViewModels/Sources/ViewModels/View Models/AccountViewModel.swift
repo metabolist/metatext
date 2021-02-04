@@ -64,7 +64,7 @@ public extension AccountViewModel {
     func avatarURL(profile: Bool = false) -> URL {
         if !identityContext.appPreferences.shouldReduceMotion,
            (identityContext.appPreferences.animateAvatars == .everywhere
-                || identityContext.appPreferences.animateAvatars == .profiles && profile) {
+                || (identityContext.appPreferences.animateAvatars == .profiles && profile)) {
             return accountService.account.avatar
         } else {
             return accountService.account.avatarStatic

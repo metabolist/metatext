@@ -65,8 +65,12 @@ private extension SecondaryNavigationTitleView {
     }
 
     func applyViewModel() {
-        avatarImageView.kf.setImage(with: viewModel.identityContext.identity.image)
-        avatarImageView.autoPlayAnimatedImage = viewModel.identityContext.appPreferences.animateAvatars == .everywhere
+        let avatarURL = viewModel.identityContext.appPreferences.animateAvatars == .everywhere
+            && !viewModel.identityContext.appPreferences.shouldReduceMotion
+            ? viewModel.identityContext.identity.account?.avatar
+            : viewModel.identityContext.identity.account?.avatarStatic
+
+        avatarImageView.kf.setImage(with: avatarURL)
 
         if let displayName = viewModel.identityContext.identity.account?.displayName,
            !displayName.isEmpty {

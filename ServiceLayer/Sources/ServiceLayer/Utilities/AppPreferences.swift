@@ -70,7 +70,7 @@ public extension AppPreferences {
                 return value
             }
 
-            return .profiles
+            return .everywhere
         }
         set { self[.animateAvatars] = newValue.rawValue }
     }

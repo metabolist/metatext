@@ -187,12 +187,17 @@ private extension CompositionView {
             }
             .store(in: &cancellables)
 
-        parentViewModel.$identityContext.map(\.identity)
+        parentViewModel.$identityContext
             .sink { [weak self] in
                 guard let self = self else { return }
 
-                self.avatarImageView.kf.setImage(with: $0.image)
-                self.changeIdentityButton.accessibilityLabel = $0.handle
+                let avatarURL = $0.appPreferences.animateAvatars == .everywhere
+                    && !$0.appPreferences.shouldReduceMotion
+                    ? $0.identity.account?.avatar
+                    : $0.identity.account?.avatarStatic
+
+                self.avatarImageView.kf.setImage(with: avatarURL)
+                self.changeIdentityButton.accessibilityLabel = $0.identity.handle
                 self.changeIdentityButton.accessibilityHint =
                     NSLocalizedString("compose.change-identity-button.accessibility-hint", comment: "")
             }

@@ -4,12 +4,13 @@ import Kingfisher
 import UIKit
 import ViewModels
 
+// swiftlint:disable file_length
 final class AccountHeaderView: UIView {
     let headerImageBackgroundView = UIView()
     let headerImageView = AnimatedImageView()
     let headerButton = UIButton()
     let avatarBackgroundView = UIView()
-    let avatarImageView = UIImageView()
+    let avatarImageView = AnimatedImageView()
     let avatarButton = UIButton()
     let relationshipButtonsStackView = UIStackView()
     let followButton = UIButton(type: .system)
@@ -405,3 +406,4 @@ private extension AccountHeaderView {
         ])
     }
 }
+// swiftlint:enable file_length
