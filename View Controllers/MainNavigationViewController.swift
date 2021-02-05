@@ -33,7 +33,7 @@ final class MainNavigationViewController: UITabBarController {
         }
         .store(in: &cancellables)
 
-        viewModel.$presentingSecondaryNavigation.removeDuplicates().sink { [weak self] in
+        viewModel.$presentingSecondaryNavigation.sink { [weak self] in
             if $0 {
                 self?.presentSecondaryNavigation()
             } else {
@@ -137,6 +137,14 @@ private extension MainNavigationViewController {
     }
 
     func presentSecondaryNavigation() {
+        if let presentedViewController = presentedViewController {
+            if presentedViewController.view.tag == Self.secondaryNavigationViewTag {
+                return
+            } else {
+                dismiss(animated: true)
+            }
+        }
+
         let secondaryNavigationView = SecondaryNavigationView(viewModel: viewModel)
             .environmentObject(rootViewModel)
         let hostingController = UIHostingController(rootView: secondaryNavigationView)
@@ -160,6 +168,14 @@ private extension MainNavigationViewController {
     }
 
     func presentNewStatus(newStatusViewModel: NewStatusViewModel) {
+        if let presentedViewController = presentedViewController {
+            if presentedViewController.view.tag == Self.newStatusViewTag {
+                return
+            } else {
+                dismiss(animated: true)
+            }
+        }
+
         let newStatusViewController =  NewStatusViewController(viewModel: newStatusViewModel,
                                                                rootViewModel: rootViewModel)
         let navigationController = UINavigationController(rootViewController: newStatusViewController)
