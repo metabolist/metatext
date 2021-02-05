@@ -195,6 +195,48 @@ extension TableViewController {
             }
         }
     }
+
+    func handle(navigation: Navigation) {
+        switch navigation {
+        case let .collection(collectionService):
+            let vc = TableViewController(
+                viewModel: CollectionItemsViewModel(
+                    collectionService: collectionService,
+                    identityContext: viewModel.identityContext),
+                rootViewModel: rootViewModel,
+                parentNavigationController: parentNavigationController)
+
+            if let parentNavigationController = parentNavigationController {
+                parentNavigationController.pushViewController(vc, animated: true)
+            } else {
+                show(vc, sender: self)
+            }
+        case let .profile(profileService):
+            let vc = ProfileViewController(
+                viewModel: ProfileViewModel(
+                    profileService: profileService,
+                    identityContext: viewModel.identityContext),
+                rootViewModel: rootViewModel,
+                identityContext: viewModel.identityContext,
+                parentNavigationController: parentNavigationController)
+
+            if let parentNavigationController = parentNavigationController {
+                parentNavigationController.pushViewController(vc, animated: true)
+            } else {
+                show(vc, sender: self)
+            }
+        case let .notification(notificationService):
+            navigate(toNotification: notificationService.notification)
+        case let .url(url):
+            present(SFSafariViewController(url: url), animated: true)
+        case .searchScope:
+            break
+        case .webfingerStart:
+            webfingerIndicatorView.startAnimating()
+        case .webfingerEnd:
+            webfingerIndicatorView.stopAnimating()
+        }
+    }
 }
 
 extension TableViewController: UITableViewDataSourcePrefetching {
@@ -374,44 +416,18 @@ private extension TableViewController {
         }
     }
 
-    func handle(navigation: Navigation) {
-        switch navigation {
-        case let .collection(collectionService):
-            let vc = TableViewController(
-                viewModel: CollectionItemsViewModel(
-                    collectionService: collectionService,
-                    identityContext: viewModel.identityContext),
-                rootViewModel: rootViewModel,
-                parentNavigationController: parentNavigationController)
+    func navigate(toNotification: MastodonNotification) {
+        guard let item = dataSource.snapshot().itemIdentifiers.first(where: {
+            guard case let .notification(notification, _) = $0 else { return false }
 
-            if let parentNavigationController = parentNavigationController {
-                parentNavigationController.pushViewController(vc, animated: true)
-            } else {
-                show(vc, sender: self)
-            }
-        case let .profile(profileService):
-            let vc = ProfileViewController(
-                viewModel: ProfileViewModel(
-                    profileService: profileService,
-                    identityContext: viewModel.identityContext),
-                rootViewModel: rootViewModel,
-                identityContext: viewModel.identityContext,
-                parentNavigationController: parentNavigationController)
+            return notification.id == toNotification.id
+        }),
+        let indexPath = dataSource.indexPath(for: item)
+        else { return }
 
-            if let parentNavigationController = parentNavigationController {
-                parentNavigationController.pushViewController(vc, animated: true)
-            } else {
-                show(vc, sender: self)
-            }
-        case let .url(url):
-            present(SFSafariViewController(url: url), animated: true)
-        case .searchScope:
-            break
-        case .webfingerStart:
-            webfingerIndicatorView.startAnimating()
-        case .webfingerEnd:
-            webfingerIndicatorView.stopAnimating()
-        }
+        tableView.scrollToRow(at: indexPath, at: .none, animated: !UIAccessibility.isReduceMotionEnabled)
+
+        viewModel.select(indexPath: indexPath)
     }
 
     func present(attachmentViewModel: AttachmentViewModel, statusViewModel: StatusViewModel) {

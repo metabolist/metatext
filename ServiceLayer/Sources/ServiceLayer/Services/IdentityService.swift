@@ -247,6 +247,21 @@ public extension IdentityService {
         mastodonAPIClient.request(StatusEndpoint.post(statusComponents)).map(\.id).eraseToAnyPublisher()
     }
 
+    func notificationService(pushNotification: PushNotification) -> AnyPublisher<NotificationService, Error> {
+        mastodonAPIClient.request(NotificationEndpoint.notification(id: .init(pushNotification.notificationId)))
+            .flatMap { notification in
+                contentDatabase.insert(notifications: [notification])
+                    .collect()
+                    .map { _ in
+                        NotificationService(
+                            notification: notification,
+                            mastodonAPIClient: mastodonAPIClient,
+                            contentDatabase: contentDatabase)
+                    }
+            }
+            .eraseToAnyPublisher()
+    }
+
     func service(accountList: AccountsEndpoint, titleComponents: [String]? = nil) -> AccountListService {
         AccountListService(
             endpoint: accountList,

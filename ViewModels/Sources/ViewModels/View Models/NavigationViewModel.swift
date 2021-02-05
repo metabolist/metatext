@@ -95,24 +95,39 @@ public extension NavigationViewModel {
 
     func navigateToProfile(id: Account.Id) {
         presentingSecondaryNavigation = false
+        presentedNewStatusViewModel = nil
         navigationsSubject.send(.profile(identityContext.service.navigationService.profileService(id: id)))
     }
 
     func navigate(timeline: Timeline) {
         presentingSecondaryNavigation = false
+        presentedNewStatusViewModel = nil
         navigationsSubject.send(
             .collection(identityContext.service.navigationService.timelineService(timeline: timeline)))
     }
 
     func navigateToFollowerRequests() {
         presentingSecondaryNavigation = false
+        presentedNewStatusViewModel = nil
         navigationsSubject.send(.collection(identityContext.service.service(
                                                 accountList: .followRequests,
                                                 titleComponents: ["follow-requests"])))
     }
 
     func navigate(pushNotification: PushNotification) {
-        // TODO
+        switch pushNotification.notificationType {
+        case .followRequest:
+            navigateToFollowerRequests()
+        default:
+            identityContext.service.notificationService(pushNotification: pushNotification)
+                .assignErrorsToAlertItem(to: \.alertItem, on: self)
+                .sink { [weak self] in
+                    self?.presentingSecondaryNavigation = false
+                    self?.presentedNewStatusViewModel = nil
+                    self?.navigationsSubject.send(.notification($0))
+                }
+                .store(in: &cancellables)
+        }
     }
 
     func viewModel(timeline: Timeline) -> CollectionItemsViewModel {

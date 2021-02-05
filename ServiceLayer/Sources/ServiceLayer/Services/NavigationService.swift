@@ -10,6 +10,7 @@ public enum Navigation {
     case url(URL)
     case collection(CollectionService)
     case profile(ProfileService)
+    case notification(NotificationService)
     case searchScope(SearchScope)
     case webfingerStart
     case webfingerEnd

@@ -71,6 +71,21 @@ final class NotificationsViewController: UIPageViewController {
     }
 }
 
+extension NotificationsViewController {
+    func handle(navigation: Navigation) {
+        switch navigation {
+        case .notification:
+            guard let firstViewController = notificationViewControllers.first else { return }
+
+            segmentedControl.selectedSegmentIndex = 0
+            setViewControllers([firstViewController], direction: .reverse, animated: false)
+            firstViewController.handle(navigation: navigation)
+        default:
+            break
+        }
+    }
+}
+
 extension NotificationsViewController: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController,
                             viewControllerAfter viewController: UIViewController) -> UIViewController? {

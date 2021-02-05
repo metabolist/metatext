@@ -33,7 +33,7 @@ final class MainNavigationViewController: UITabBarController {
         }
         .store(in: &cancellables)
 
-        viewModel.$presentingSecondaryNavigation.sink { [weak self] in
+        viewModel.$presentingSecondaryNavigation.removeDuplicates().sink { [weak self] in
             if $0 {
                 self?.presentSecondaryNavigation()
             } else {
@@ -182,27 +182,40 @@ private extension MainNavigationViewController {
     }
 
     func handle(navigation: Navigation) {
-        let vc: UIViewController
-
         switch navigation {
         case let .collection(collectionService):
-            vc = TableViewController(
+            let vc = TableViewController(
                 viewModel: CollectionItemsViewModel(
                     collectionService: collectionService,
                     identityContext: viewModel.identityContext),
                 rootViewModel: rootViewModel)
+
+            selectedViewController?.show(vc, sender: self)
         case let .profile(profileService):
-            vc = ProfileViewController(
+            let vc = ProfileViewController(
                 viewModel: ProfileViewModel(
                     profileService: profileService,
                     identityContext: viewModel.identityContext),
                 rootViewModel: rootViewModel,
                 identityContext: viewModel.identityContext,
                 parentNavigationController: nil)
-        default:
-            return
-        }
 
-        selectedViewController?.show(vc, sender: self)
+            selectedViewController?.show(vc, sender: self)
+        case .notification:
+            let index = NavigationViewModel.Tab.notifications.rawValue
+
+            guard let viewControllers = viewControllers,
+                  viewControllers.count > index,
+                let notificationsNavigationController = viewControllers[index] as? UINavigationController,
+                let notificationsViewController =
+                    notificationsNavigationController.viewControllers.first as? NotificationsViewController
+            else { break }
+
+            selectedIndex = index
+            notificationsNavigationController.popToRootViewController(animated: false)
+            notificationsViewController.handle(navigation: navigation)
+        default:
+            break
+        }
     }
 }
