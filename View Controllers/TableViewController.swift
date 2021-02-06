@@ -321,7 +321,9 @@ private extension TableViewController {
         }
         .store(in: &cancellables)
 
-        viewModel.updates.sink { [weak self] in self?.update($0) }.store(in: &cancellables)
+        viewModel.updates.receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.update($0) }
+            .store(in: &cancellables)
 
         viewModel.events.receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.handle(event: $0) }
@@ -370,13 +372,21 @@ private extension TableViewController {
 
     func update(_ update: CollectionUpdate) {
         let positionMaintenanceOffset: CGFloat
+        let preUpdateContentOffsetY = tableView.contentOffset.y
+        var setPreviousOffset = false
 
         if let itemId = update.maintainScrollPositionItemId,
            let indexPath = dataSource.indexPath(itemId: itemId) {
             positionMaintenanceOffset = tableView.rectForRow(at: indexPath).origin.y
-                - tableView.safeAreaInsets.top - tableView.contentOffset.y
+                - tableView.safeAreaInsets.top - preUpdateContentOffsetY
         } else {
             positionMaintenanceOffset = 0
+        }
+
+        if let headerView = tableView.tableHeaderView,
+           let headerViewWindowFrame = view.window?.convert(headerView.frame, from: headerView),
+           headerViewWindowFrame.maxY > 0 {
+            setPreviousOffset = true
         }
 
         self.dataSource.apply(update.sections.snapshot(), animatingDifferences: false) { [weak self] in
@@ -395,6 +405,8 @@ private extension TableViewController {
 
                 self.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
                 self.tableView.contentOffset.y -= positionMaintenanceOffset
+            } else if setPreviousOffset {
+                self.tableView.contentOffset.y = preUpdateContentOffsetY
             }
         }
     }
