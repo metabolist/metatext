@@ -25,6 +25,7 @@
 "account.mute" = "Mute";
 "account.reject-follow-request-button.accessibility-label" = "Reject follow request";
 "account.request" = "Request";
+"account.request.cancel" = "Cancel follow request";
 "account.statuses.post" = "Posts";
 "account.statuses.toot" = "Toots";
 "account.statuses-and-replies.post" = "Posts & Replies";

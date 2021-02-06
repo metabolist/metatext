@@ -53,8 +53,13 @@ final class AccountHeaderView: UIView {
                             accountViewModel.isLocked ? "account.request" : "account.follow",
                             comment: ""),
                         for: .normal)
-                    followButton.isHidden = relationship.following
-                    unfollowButton.isHidden = !relationship.following
+                    followButton.isHidden = relationship.following || relationship.requested
+                    unfollowButton.isHidden = !(relationship.following || relationship.requested)
+                    unfollowButton.setTitle(
+                        NSLocalizedString(
+                            relationship.requested ? "account.request.cancel" : "account.unfollow",
+                            comment: ""),
+                        for: .normal)
 
                     relationshipButtonsStackView.isHidden = false
                     unavailableLabel.isHidden = !relationship.blockedBy
@@ -269,7 +274,7 @@ private extension AccountHeaderView {
             guard let accountViewModel = self?.viewModel.accountViewModel else { return }
 
             let unfollowAction = UIAction(
-                title: NSLocalizedString("account.unfollow", comment: ""),
+                title: self?.unfollowButton.title(for: .normal) ?? "",
                 image: UIImage(systemName: "person.badge.minus"),
                 attributes: .destructive) { _ in
                 accountViewModel.unfollow()
