@@ -58,7 +58,8 @@ private extension ZoomAnimator {
 
         fromReferenceView.isHidden = true
 
-        let finalTransitionSize = (fromReferenceView as? ZoomAnimatableView)?.frame(inView: toVC.view) ?? .zero
+        let referenceViewFrame = (fromReferenceView as? ZoomAnimatableView)?.frame(inView: toVC.view) ?? .zero
+        let finalTransitionFrame = referenceViewFrame.containsNaN ? .zero : referenceViewFrame
 
         UIView.animate(
             withDuration: transitionDuration(using: transitionContext),
@@ -66,7 +67,7 @@ private extension ZoomAnimator {
             usingSpringWithDamping: 0.8,
             initialSpringVelocity: 0,
             options: [.transitionCrossDissolve]) {
-            self.transitionView?.frame = finalTransitionSize
+            self.transitionView?.frame = finalTransitionFrame
             self.transitionView?.layer.contentsRect = .defaultContentsRect
             self.transitionView?.layer.cornerRadius = 0
             toVC.view.alpha = 1.0

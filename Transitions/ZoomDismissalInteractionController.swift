@@ -138,10 +138,11 @@ extension ZoomDismissalInteractionController: UIViewControllerInteractiveTransit
         guard
             let fromVC = transitionContext.viewController(forKey: .from),
             let toVC = transitionContext.viewController(forKey: .to),
-            let fromReferenceViewFrame = animator.fromDelegate?.referenceViewFrameInTransitioningView(for: animator),
+            var fromReferenceViewFrame = animator.fromDelegate?.referenceViewFrameInTransitioningView(for: animator),
             let fromReferenceView = animator.fromDelegate?.referenceView(for: animator)
             else { return }
 
+        fromReferenceViewFrame = fromReferenceViewFrame.containsNaN ? .zero : fromReferenceViewFrame
         self.fromReferenceViewFrame = fromReferenceViewFrame
         toReferenceViewFrame = animator.toDelegate?.referenceViewFrameInTransitioningView(for: animator)
 
