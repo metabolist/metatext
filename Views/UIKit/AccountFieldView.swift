@@ -7,6 +7,8 @@ import UIKit
 final class AccountFieldView: UIView {
     let nameLabel = UILabel()
     let valueTextView = TouchFallthroughTextView()
+    let checkButton = UIButton()
+    private var valueTextViewTrailingConstraint: NSLayoutConstraint?
     private var cancellables = Set<AnyCancellable>()
 
     // swiftlint:disable:next function_body_length
@@ -77,8 +79,6 @@ final class AccountFieldView: UIView {
         valueTextView.attributedText = mutableValue
         valueTextView.textAlignment = .center
 
-        let checkButton = UIButton()
-
         checkButton.setImage(
             UIImage(
                 systemName: "checkmark",
@@ -108,6 +108,9 @@ final class AccountFieldView: UIView {
         let valueTextViewBottomConstraint = valueTextView.bottomAnchor.constraint(
             lessThanOrEqualTo: bottomAnchor,
             constant: -.defaultSpacing)
+        valueTextViewTrailingConstraint = valueTextView.trailingAnchor.constraint(
+            equalTo: trailingAnchor,
+            constant: -.defaultSpacing)
 
         for constraint in [nameLabelBottomConstraint, valueTextViewBottomConstraint] {
             constraint.priority = .justBelowMax
@@ -126,7 +129,7 @@ final class AccountFieldView: UIView {
                 equalTo: verifiedAt == nil ? dividerView.trailingAnchor : checkButton.trailingAnchor,
                 constant: .defaultSpacing),
             valueTextView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: .defaultSpacing),
-            valueTextView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -.defaultSpacing),
+            valueTextViewTrailingConstraint!,
             valueTextViewBottomConstraint,
             nameLabel.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1 / 3),
             checkButton.centerYAnchor.constraint(equalTo: valueTextView.centerYAnchor),
@@ -140,8 +143,6 @@ final class AccountFieldView: UIView {
             valueBackgroundView.trailingAnchor.constraint(equalTo: trailingAnchor),
             valueBackgroundView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
-
-//        isAccessibilityElement = true
 
         let accessibilityAttributedLabel = NSMutableAttributedString(attributedString: mutableName)
 
@@ -190,6 +191,14 @@ final class AccountFieldView: UIView {
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        if !checkButton.isHidden {
+            valueTextViewTrailingConstraint?.constant = -.defaultSpacing * 2 - checkButton.frame.width
+        }
     }
 }
 
