@@ -1,6 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import AVKit
+import Combine
 import Kingfisher
 import UIKit
 import ViewModels
@@ -28,7 +29,7 @@ final class AttachmentView: UIView {
 
     private let viewModel: AttachmentViewModel
     private let parentViewModel: AttachmentsRenderingViewModel
-    private var playerLooper: AVPlayerLooper?
+    private var playerCancellable: AnyCancellable?
 
     init(viewModel: AttachmentViewModel, parentViewModel: AttachmentsRenderingViewModel) {
         self.viewModel = viewModel
@@ -64,11 +65,15 @@ extension AttachmentView {
     func play() {
         let player = PlayerCache.shared.player(url: viewModel.attachment.url)
 
-        if let cachedPlayerLooper = Self.playerLooperCache[player] {
-            playerLooper = cachedPlayerLooper
-        } else if let item = player.currentItem {
-            playerLooper = AVPlayerLooper(player: player, templateItem: item)
-            Self.playerLooperCache[player] = playerLooper
+        playerCancellable = NotificationCenter.default.publisher(
+            for: .AVPlayerItemDidPlayToEndTime,
+            object: player.currentItem)
+            .sink { _ in
+                player.currentItem?.seek(to: .zero) { success in
+                    guard success else { return }
+
+                    player.play()
+                }
         }
 
         player.isMuted = true
@@ -94,8 +99,6 @@ extension AttachmentView {
 }
 
 private extension AttachmentView {
-    static var playerLooperCache = [AVQueuePlayer: AVPlayerLooper]()
-
     // swiftlint:disable:next function_body_length
     func initialSetup() {
         addSubview(imageView)
