@@ -228,15 +228,7 @@ extension TableViewController {
         case let .notification(notificationService):
             navigate(toNotification: notificationService.notification)
         case let .url(url):
-            if viewModel.identityContext.appPreferences.useUniversalLinks {
-                UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { success in
-                    if !success {
-                        self.open(url: url)
-                    }
-                }
-            } else {
-                open(url: url)
-            }
+            open(url: url)
         case .searchScope:
             break
         case .webfingerStart:
@@ -458,10 +450,22 @@ private extension TableViewController {
     }
 
     func open(url: URL) {
-        if viewModel.identityContext.appPreferences.openLinksInDefaultBrowser {
-            UIApplication.shared.open(url)
+        func openWithRegardToBrowserSetting(url: URL) {
+            if viewModel.identityContext.appPreferences.openLinksInDefaultBrowser {
+                UIApplication.shared.open(url)
+            } else {
+                present(SFSafariViewController(url: url), animated: true)
+            }
+        }
+
+        if viewModel.identityContext.appPreferences.useUniversalLinks {
+            UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { success in
+                if !success {
+                    openWithRegardToBrowserSetting(url: url)
+                }
+            }
         } else {
-            present(SFSafariViewController(url: url), animated: true)
+            openWithRegardToBrowserSetting(url: url)
         }
     }
 
