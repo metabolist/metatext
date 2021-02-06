@@ -36,6 +36,7 @@ final class ProfileViewController: TableViewController {
                 self.sizeTableHeaderFooterViews()
 
                 if let accountViewModel = $0,
+                   accountViewModel.id != self.viewModel.identityContext.identity.account?.id,
                    let relationship = accountViewModel.relationship {
                     self.navigationItem.rightBarButtonItem = UIBarButtonItem(
                         image: UIImage(systemName: "ellipsis.circle"),
