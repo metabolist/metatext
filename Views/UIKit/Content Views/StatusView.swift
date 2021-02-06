@@ -341,7 +341,7 @@ private extension StatusView {
     func applyStatusConfiguration() {
         let viewModel = statusConfiguration.viewModel
         let isContextParent = viewModel.configuration.isContextParent
-        let mutableDisplayName = NSMutableAttributedString(string: viewModel.displayName)
+        let mutableDisplayName = NSMutableAttributedString(string: viewModel.accountViewModel.displayName)
         let isAuthenticated = viewModel.identityContext.identity.authenticated
             && !viewModel.identityContext.identity.pending
 
@@ -350,7 +350,7 @@ private extension StatusView {
         avatarImageView.kf.setImage(with: viewModel.avatarURL)
         avatarButton.accessibilityLabel = String.localizedStringWithFormat(
             NSLocalizedString("account.avatar.accessibility-label-%@", comment: ""),
-            viewModel.displayName)
+            viewModel.accountViewModel.displayName)
 
         sideStackView.isHidden = isContextParent
         avatarImageView.removeFromSuperview()
@@ -406,7 +406,7 @@ private extension StatusView {
             infoIcon.isHidden = true
         }
 
-        mutableDisplayName.insert(emojis: viewModel.displayNameEmojis, view: displayNameLabel)
+        mutableDisplayName.insert(emojis: viewModel.accountViewModel.emojis, view: displayNameLabel)
         mutableDisplayName.resizeAttachments(toLineHeight: displayNameLabel.font.lineHeight)
         displayNameLabel.attributedText = mutableDisplayName
 

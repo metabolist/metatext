@@ -6,10 +6,9 @@ import Mastodon
 import ServiceLayer
 
 public final class StatusViewModel: AttachmentsRenderingViewModel, ObservableObject {
+    public let accountViewModel: AccountViewModel
     public let content: NSAttributedString
     public let contentEmojis: [Emoji]
-    public let displayName: String
-    public let displayNameEmojis: [Emoji]
     public let spoilerText: String
     public let isReblog: Bool
     public let rebloggedByDisplayName: String
@@ -29,12 +28,13 @@ public final class StatusViewModel: AttachmentsRenderingViewModel, ObservableObj
         self.statusService = statusService
         self.identityContext = identityContext
         self.eventsSubject = eventsSubject
+        accountViewModel = AccountViewModel(
+            accountService: statusService.navigationService
+                .accountService(account: statusService.status.displayStatus.account),
+            identityContext: identityContext,
+            eventsSubject: eventsSubject)
         content = statusService.status.displayStatus.content.attributed
         contentEmojis = statusService.status.displayStatus.emojis
-        displayName = statusService.status.displayStatus.account.displayName.isEmpty
-            ? statusService.status.displayStatus.account.username
-            : statusService.status.displayStatus.account.displayName
-        displayNameEmojis = statusService.status.displayStatus.account.emojis
         spoilerText = statusService.status.displayStatus.spoilerText
         isReblog = statusService.status.reblog != nil
         rebloggedByDisplayName = statusService.status.account.displayName.isEmpty
