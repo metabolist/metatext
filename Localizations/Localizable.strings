@@ -37,7 +37,7 @@
 "account.unblock.confirm-%@" = "Unblock %@?";
 "account.unfollow" = "Unfollow";
 "account.unmute" = "Unmute";
-"activity.open-in-safari" = "Open in Safari";
+"activity.open-in-default-browser" = "Open in default browser";
 "add" = "Add";
 "apns-default-message" = "New notification";
 "add-identity.instance-url" = "Instance URL";
@@ -180,6 +180,8 @@
 "preferences.expand-media.hide-all" = "Hide all";
 "preferences.reading-expand-spoilers" = "Always expand content warnings";
 "preferences.filters" = "Filters";
+"preferences.links.open-in-default-browser" = "Open links in default browser";
+"preferences.links.use-universal-links" = "Open links in other apps when available";
 "preferences.notification-types" = "Notification Types";
 "preferences.notification-types.follow" = "Follow";
 "preferences.notification-types.favourite" = "Favorite";

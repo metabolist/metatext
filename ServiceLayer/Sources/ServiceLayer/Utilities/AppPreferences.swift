@@ -186,6 +186,16 @@ public extension AppPreferences {
         get { self[.notificationAccountName] ?? false }
         set { self[.notificationAccountName] = newValue }
     }
+
+    var openLinksInDefaultBrowser: Bool {
+        get { self[.openLinksInDefaultBrowser] ?? false }
+        set { self[.openLinksInDefaultBrowser] = newValue }
+    }
+
+    var useUniversalLinks: Bool {
+        get { self[.useUniversalLinks] ?? true }
+        set { self[.useUniversalLinks] = newValue }
+    }
 }
 
 private extension AppPreferences {
@@ -205,6 +215,8 @@ private extension AppPreferences {
         case notificationPictures
         case notificationAccountName
         case notificationSounds
+        case openLinksInDefaultBrowser
+        case useUniversalLinks
     }
 
     subscript<T>(index: Item) -> T? {

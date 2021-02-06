@@ -61,7 +61,7 @@
 		D036EBC2259FE2AD00EC1CFC /* UIVIewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E7AD3825870B13005F5E2D /* UIVIewController+Extensions.swift */; };
 		D03D87F425C23C44004DCBB2 /* SecondaryNavigationTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03D87F325C23C44004DCBB2 /* SecondaryNavigationTitleView.swift */; };
 		D0477F1525C68BAC005C5368 /* PrefetchRequestModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0477F1425C68BAC005C5368 /* PrefetchRequestModifier.swift */; };
-		D0477F2C25C6EBAD005C5368 /* OpenInSafariActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0477F2B25C6EBAD005C5368 /* OpenInSafariActivity.swift */; };
+		D0477F2C25C6EBAD005C5368 /* OpenInDefaultBrowserActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0477F2B25C6EBAD005C5368 /* OpenInDefaultBrowserActivity.swift */; };
 		D0477F4625C72E50005C5368 /* FollowsYouLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0477F4525C72E50005C5368 /* FollowsYouLabel.swift */; };
 		D04F9E8E259E9C950081B0C9 /* ViewModels in Frameworks */ = {isa = PBXBuildFile; productRef = D04F9E8D259E9C950081B0C9 /* ViewModels */; };
 		D05936CF25A8D79800754FDF /* EditAttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05936CE25A8D79800754FDF /* EditAttachmentViewController.swift */; };
@@ -263,7 +263,7 @@
 		D036AA16254CA823009094DF /* StatusBodyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBodyView.swift; sourceTree = "<group>"; };
 		D03D87F325C23C44004DCBB2 /* SecondaryNavigationTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondaryNavigationTitleView.swift; sourceTree = "<group>"; };
 		D0477F1425C68BAC005C5368 /* PrefetchRequestModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefetchRequestModifier.swift; sourceTree = "<group>"; };
-		D0477F2B25C6EBAD005C5368 /* OpenInSafariActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenInSafariActivity.swift; sourceTree = "<group>"; };
+		D0477F2B25C6EBAD005C5368 /* OpenInDefaultBrowserActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenInDefaultBrowserActivity.swift; sourceTree = "<group>"; };
 		D0477F4525C72E50005C5368 /* FollowsYouLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowsYouLabel.swift; sourceTree = "<group>"; };
 		D047FA8C24C3E21200AF17C5 /* Metatext.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Metatext.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D05936CE25A8D79800754FDF /* EditAttachmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAttachmentViewController.swift; sourceTree = "<group>"; };
@@ -570,7 +570,7 @@
 		D0477F2A25C6EB90005C5368 /* Activities */ = {
 			isa = PBXGroup;
 			children = (
-				D0477F2B25C6EBAD005C5368 /* OpenInSafariActivity.swift */,
+				D0477F2B25C6EBAD005C5368 /* OpenInDefaultBrowserActivity.swift */,
 			);
 			path = Activities;
 			sourceTree = "<group>";
@@ -998,7 +998,7 @@
 				D0C7D49A24F7616A001EBDBB /* TableView.swift in Sources */,
 				D08B8D622540DE3B00B1EBEF /* ZoomTransitionController.swift in Sources */,
 				D0F0B12E251A97E400942152 /* TableViewController.swift in Sources */,
-				D0477F2C25C6EBAD005C5368 /* OpenInSafariActivity.swift in Sources */,
+				D0477F2C25C6EBAD005C5368 /* OpenInDefaultBrowserActivity.swift in Sources */,
 				D0DD50CB256B1F24004A04F7 /* ReportView.swift in Sources */,
 				D0477F1525C68BAC005C5368 /* PrefetchRequestModifier.swift in Sources */,
 				D097F41B25BE3E1A00859F2C /* SearchScope+Extensions.swift in Sources */,

@@ -75,6 +75,12 @@ struct PreferencesView: View {
                        isOn: $identityContext.appPreferences.requireDoubleTapToReblog)
                 Toggle("preferences.require-double-tap-to-favorite",
                        isOn: $identityContext.appPreferences.requireDoubleTapToFavorite)
+                Toggle("preferences.links.open-in-default-browser",
+                       isOn: $identityContext.appPreferences.openLinksInDefaultBrowser)
+                if !identityContext.appPreferences.openLinksInDefaultBrowser {
+                    Toggle("preferences.links.use-universal-links",
+                           isOn: $identityContext.appPreferences.useUniversalLinks)
+                }
                 if accessibilityReduceMotion {
                     Toggle("preferences.media.use-system-reduce-motion",
                            isOn: $identityContext.appPreferences.useSystemReduceMotionForMedia)

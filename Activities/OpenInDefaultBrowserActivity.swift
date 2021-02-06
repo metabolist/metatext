@@ -2,7 +2,7 @@
 
 import UIKit
 
-final class OpenInSafariActivity: UIActivity {
+final class OpenInDefaultBrowserActivity: UIActivity {
     private var url: URL?
 
     override var activityType: UIActivity.ActivityType? {
@@ -10,7 +10,7 @@ final class OpenInSafariActivity: UIActivity {
     }
 
     override var activityTitle: String? {
-        NSLocalizedString("Open in Safari", comment: "")
+        NSLocalizedString("activity.open-in-default-browser", comment: "")
     }
 
     override var activityImage: UIImage? {

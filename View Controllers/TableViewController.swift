@@ -228,7 +228,15 @@ extension TableViewController {
         case let .notification(notificationService):
             navigate(toNotification: notificationService.notification)
         case let .url(url):
-            present(SFSafariViewController(url: url), animated: true)
+            if viewModel.identityContext.appPreferences.useUniversalLinks {
+                UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { success in
+                    if !success {
+                        self.open(url: url)
+                    }
+                }
+            } else {
+                open(url: url)
+            }
         case .searchScope:
             break
         case .webfingerStart:
@@ -449,6 +457,14 @@ private extension TableViewController {
         viewModel.select(indexPath: indexPath)
     }
 
+    func open(url: URL) {
+        if viewModel.identityContext.appPreferences.openLinksInDefaultBrowser {
+            UIApplication.shared.open(url)
+        } else {
+            present(SFSafariViewController(url: url), animated: true)
+        }
+    }
+
     func present(attachmentViewModel: AttachmentViewModel, statusViewModel: StatusViewModel) {
         switch attachmentViewModel.attachment.type {
         case .audio, .video:
@@ -552,7 +568,7 @@ private extension TableViewController {
     func share(url: URL) {
         let activityViewController = UIActivityViewController(
             activityItems: [url],
-            applicationActivities: [OpenInSafariActivity()])
+            applicationActivities: [OpenInDefaultBrowserActivity()])
 
         if UIDevice.current.userInterfaceIdiom == .pad {
             guard let sourceView = tableView.viewWithTag(url.hashValue) else { return }
