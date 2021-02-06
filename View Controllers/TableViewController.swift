@@ -309,6 +309,7 @@ private extension TableViewController {
 
     var bottomInset: CGFloat { insetBottom ? Self.bottomInset : 0 }
 
+    // swiftlint:disable:next function_body_length
     func setupViewModelBindings() {
         viewModel.title.sink { [weak self] in self?.navigationItem.title = $0 }.store(in: &cancellables)
 
