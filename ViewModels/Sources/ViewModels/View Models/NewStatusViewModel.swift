@@ -65,7 +65,17 @@ public final class NewStatusViewModel: ObservableObject {
         }
 
         if let inReplyTo = inReplyTo, redraft == nil {
-            compositionViewModel.text = inReplyTo.accountName.appending(" ")
+            var mentions = Set<String>()
+
+            if !inReplyTo.isMine {
+                mentions.insert(inReplyTo.accountName)
+            }
+
+            mentions.formUnion(inReplyTo.mentions.map(\.acct)
+                                .filter { $0 != identityContext.identity.account?.username }
+                                .map("@".appending))
+
+            compositionViewModel.text = mentions.joined(separator: " ").appending(" ")
         }
 
         compositionViewModels = [compositionViewModel]

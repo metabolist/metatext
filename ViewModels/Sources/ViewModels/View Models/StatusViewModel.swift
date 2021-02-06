@@ -108,6 +108,8 @@ public extension StatusViewModel {
         return URL(string: website)
     }
 
+    var mentions: [Mention] { statusService.status.displayStatus.mentions }
+
     var visibility: Status.Visibility { statusService.status.displayStatus.visibility }
 
     var repliesCount: Int { statusService.status.displayStatus.repliesCount }
