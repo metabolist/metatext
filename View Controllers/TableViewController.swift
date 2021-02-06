@@ -297,6 +297,12 @@ extension TableViewController: ZoomAnimatorDelegate {
     }
 }
 
+extension TableViewController: ScrollableToTop {
+    func scrollToTop(animated: Bool) {
+        tableView.scrollToTop(animated: animated)
+    }
+}
+
 private extension TableViewController {
     static let bottomInset: CGFloat = .newStatusButtonDimension + .defaultSpacing * 4
     static let loadingFooterDebounceInterval: TimeInterval = 0.75

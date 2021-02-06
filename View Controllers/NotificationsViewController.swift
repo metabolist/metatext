@@ -122,3 +122,9 @@ extension NotificationsViewController: UIPageViewControllerDelegate {
         segmentedControl.selectedSegmentIndex = index
     }
 }
+
+extension NotificationsViewController: ScrollableToTop {
+    func scrollToTop(animated: Bool) {
+        (viewControllers?.first as? TableViewController)?.scrollToTop(animated: animated)
+    }
+}

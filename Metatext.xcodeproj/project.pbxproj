@@ -107,6 +107,8 @@
 		D08B8D822544D80000B1EBEF /* PollOptionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08B8D812544D80000B1EBEF /* PollOptionButton.swift */; };
 		D08B8D8D2544E6EC00B1EBEF /* PollResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08B8D8C2544E6EC00B1EBEF /* PollResultView.swift */; };
 		D08B9F1025CB8E060062D040 /* NotificationPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08B9F0F25CB8E060062D040 /* NotificationPreferencesView.swift */; };
+		D08DFAF725CE20EA0005DA98 /* ScrollableToTop.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08DFAF625CE20EA0005DA98 /* ScrollableToTop.swift */; };
+		D08DFB0125CE228E0005DA98 /* UIScrollView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08DFB0025CE228E0005DA98 /* UIScrollView+Extensions.swift */; };
 		D08E512125786A6600FA2C5F /* UIButton+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08E512025786A6600FA2C5F /* UIButton+Extensions.swift */; };
 		D08E52612579D2E100FA2C5F /* DomainBlocksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08E52602579D2E100FA2C5F /* DomainBlocksView.swift */; };
 		D08E5276257C36CA00FA2C5F /* Share Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D08E526C257C36CA00FA2C5F /* Share Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -299,6 +301,8 @@
 		D08B8D812544D80000B1EBEF /* PollOptionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollOptionButton.swift; sourceTree = "<group>"; };
 		D08B8D8C2544E6EC00B1EBEF /* PollResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollResultView.swift; sourceTree = "<group>"; };
 		D08B9F0F25CB8E060062D040 /* NotificationPreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPreferencesView.swift; sourceTree = "<group>"; };
+		D08DFAF625CE20EA0005DA98 /* ScrollableToTop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollableToTop.swift; sourceTree = "<group>"; };
+		D08DFB0025CE228E0005DA98 /* UIScrollView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+Extensions.swift"; sourceTree = "<group>"; };
 		D08E512025786A6600FA2C5F /* UIButton+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extensions.swift"; sourceTree = "<group>"; };
 		D08E52602579D2E100FA2C5F /* DomainBlocksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DomainBlocksView.swift; sourceTree = "<group>"; };
 		D08E526C257C36CA00FA2C5F /* Share Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Share Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -452,6 +456,7 @@
 				D08B8D812544D80000B1EBEF /* PollOptionButton.swift */,
 				D08B8D8C2544E6EC00B1EBEF /* PollResultView.swift */,
 				D08B8D71254246E200B1EBEF /* PollView.swift */,
+				D08DFAF625CE20EA0005DA98 /* ScrollableToTop.swift */,
 				D035F8C625B96A4000DC75ED /* SecondaryNavigationButton.swift */,
 				D03D87F325C23C44004DCBB2 /* SecondaryNavigationTitleView.swift */,
 				D036AA16254CA823009094DF /* StatusBodyView.swift */,
@@ -737,6 +742,7 @@
 				D035F8B225B9616000DC75ED /* Timeline+Extensions.swift */,
 				D08E512025786A6600FA2C5F /* UIButton+Extensions.swift */,
 				D0C7D46C24F76169001EBDBB /* UIColor+Extensions.swift */,
+				D08DFB0025CE228E0005DA98 /* UIScrollView+Extensions.swift */,
 				D05936F325AA66A600754FDF /* UIView+Extensions.swift */,
 				D0E7AD3825870B13005F5E2D /* UIVIewController+Extensions.swift */,
 				D0030981250C6C8500EACB32 /* URL+Extensions.swift */,
@@ -1024,6 +1030,7 @@
 				D0C7D4DA24F7616A001EBDBB /* View+Extensions.swift in Sources */,
 				D07EC81125B232C2006DF726 /* SystemEmoji+Extensions.swift in Sources */,
 				D035F87D25B7F61600DC75ED /* TimelinesViewController.swift in Sources */,
+				D08DFAF725CE20EA0005DA98 /* ScrollableToTop.swift in Sources */,
 				D059373325AAEA7000754FDF /* CompositionPollView.swift in Sources */,
 				D08B8D8D2544E6EC00B1EBEF /* PollResultView.swift in Sources */,
 				D0C7D4D524F7616A001EBDBB /* String+Extensions.swift in Sources */,
@@ -1090,6 +1097,7 @@
 				D0C7D49B24F7616A001EBDBB /* PreferencesView.swift in Sources */,
 				D09D972225C65682007E6394 /* SeparatorConfiguredCollectionViewListCell.swift in Sources */,
 				D088406D25AFBBE200BB749B /* EmojiPickerViewController.swift in Sources */,
+				D08DFB0125CE228E0005DA98 /* UIScrollView+Extensions.swift in Sources */,
 				D07EC7FD25B16994006DF726 /* EmojiCategoryHeaderView.swift in Sources */,
 				D0C7D4D724F7616A001EBDBB /* UIColor+Extensions.swift in Sources */,
 				D09D971825C64682007E6394 /* InstanceCollectionViewCell.swift in Sources */,

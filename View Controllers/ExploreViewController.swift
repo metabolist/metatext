@@ -122,6 +122,12 @@ extension ExploreViewController: UISearchResultsUpdating {
     }
 }
 
+extension ExploreViewController: ScrollableToTop {
+    func scrollToTop(animated: Bool) {
+        collectionView.scrollToTop(animated: animated)
+    }
+}
+
 private extension ExploreViewController {
     static let bottomInset: CGFloat = .newStatusButtonDimension + .defaultSpacing * 4
 

@@ -107,3 +107,9 @@ extension TimelinesViewController: UIPageViewControllerDelegate {
         segmentedControl.selectedSegmentIndex = index
     }
 }
+
+extension TimelinesViewController: ScrollableToTop {
+    func scrollToTop(animated: Bool) {
+        (viewControllers?.first as? TableViewController)?.scrollToTop(animated: animated)
+    }
+}

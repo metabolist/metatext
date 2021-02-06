@@ -24,6 +24,8 @@ final class MainNavigationViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        delegate = self
+
         viewModel.$presentedNewStatusViewModel.sink { [weak self] in
             if let newStatusViewModel = $0 {
                 self?.presentNewStatus(newStatusViewModel: newStatusViewModel)
@@ -60,6 +62,19 @@ final class MainNavigationViewController: UITabBarController {
         super.viewWillAppear(animated)
 
         viewModel.refreshIdentity()
+    }
+}
+
+extension MainNavigationViewController: UITabBarControllerDelegate {
+    func tabBarController(_ tabBarController: UITabBarController,
+                          shouldSelect viewController: UIViewController) -> Bool {
+        if viewController === selectedViewController,
+           let navigationController = viewController as? UINavigationController,
+           navigationController.viewControllers.count == 1 {
+            (navigationController.viewControllers.first as? ScrollableToTop)?.scrollToTop(animated: true)
+        }
+
+        return true
     }
 }
 
