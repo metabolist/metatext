@@ -12,6 +12,7 @@ final class StatusView: UIView {
     let avatarButton = UIButton()
     let infoIcon = UIImageView()
     let infoLabel = UILabel()
+    let rebloggerButton = UIButton()
     let displayNameLabel = UILabel()
     let accountLabel = UILabel()
     let timeLabel = UILabel()
@@ -44,6 +45,7 @@ final class StatusView: UIView {
     private let inReplyToView = UIView()
     private let hasReplyFollowingView = UIView()
     private var statusConfiguration: StatusContentConfiguration
+    private var infoIconCenterYConstraint: NSLayoutConstraint?
     private var cancellables = Set<AnyCancellable>()
 
     init(configuration: StatusContentConfiguration) {
@@ -135,6 +137,7 @@ private extension StatusView {
         containerStackView.spacing = .defaultSpacing
 
         infoIcon.tintColor = .secondaryLabel
+        infoIcon.contentMode = .scaleAspectFit
         infoIcon.setContentCompressionResistancePriority(.required, for: .vertical)
 
         sideStackView.axis = .vertical
@@ -153,6 +156,16 @@ private extension StatusView {
         infoLabel.adjustsFontForContentSizeCategory = true
         infoLabel.setContentHuggingPriority(.required, for: .vertical)
         mainStackView.addArrangedSubview(infoLabel)
+
+        rebloggerButton.setTitleColor(.secondaryLabel, for: .normal)
+        rebloggerButton.titleLabel?.font = .preferredFont(forTextStyle: .caption1)
+        rebloggerButton.titleLabel?.adjustsFontForContentSizeCategory = true
+        rebloggerButton.contentHorizontalAlignment = .leading
+        rebloggerButton.setContentHuggingPriority(.required, for: .vertical)
+        mainStackView.addArrangedSubview(rebloggerButton)
+        rebloggerButton.addAction(
+            UIAction { [weak self] _ in self?.statusConfiguration.viewModel.rebloggerAccountSelected() },
+            for: .touchUpInside)
 
         displayNameLabel.font = .preferredFont(forTextStyle: .headline)
         displayNameLabel.adjustsFontForContentSizeCategory = true
@@ -322,7 +335,6 @@ private extension StatusView {
             avatarImageView.widthAnchor.constraint(equalToConstant: .avatarDimension),
             avatarHeightConstraint,
             sideStackView.widthAnchor.constraint(equalToConstant: .avatarDimension),
-            infoIcon.centerYAnchor.constraint(equalTo: infoLabel.centerYAnchor),
             avatarButton.leadingAnchor.constraint(equalTo: avatarImageView.leadingAnchor),
             avatarButton.topAnchor.constraint(equalTo: avatarImageView.topAnchor),
             avatarButton.bottomAnchor.constraint(equalTo: avatarImageView.bottomAnchor),
@@ -373,16 +385,31 @@ private extension StatusView {
         inReplyToView.isHidden = !viewModel.configuration.isReplyInContext
         hasReplyFollowingView.isHidden = !viewModel.configuration.hasReplyFollowing
 
-        if viewModel.isReblog {
-            infoLabel.attributedText = "status.reblogged-by".localizedBolding(
+        if viewModel.isReblog, let titleLabel = rebloggerButton.titleLabel {
+            let attributedTitle = "status.reblogged-by".localizedBolding(
                 displayName: viewModel.rebloggedByDisplayName,
                 emojis: viewModel.rebloggedByDisplayNameEmojis,
-                label: infoLabel)
+                label: titleLabel)
+            let highlightedAttributedTitle = NSMutableAttributedString(attributedString: attributedTitle)
+
+            highlightedAttributedTitle.addAttribute(
+                .foregroundColor,
+                value: UIColor.tertiaryLabel,
+                range: .init(location: 0, length: highlightedAttributedTitle.length))
+            rebloggerButton.setAttributedTitle(
+                attributedTitle,
+                for: .normal)
+            rebloggerButton.setAttributedTitle(
+                highlightedAttributedTitle,
+                for: .highlighted)
+
+            infoIcon.centerYAnchor.constraint(equalTo: rebloggerButton.centerYAnchor).isActive = true
             infoIcon.image = UIImage(
                 systemName: "arrow.2.squarepath",
                 withConfiguration: UIImage.SymbolConfiguration(scale: .small))
-            infoLabel.isHidden = false
+            infoLabel.isHidden = true
             infoIcon.isHidden = false
+            rebloggerButton.isHidden = false
         } else if viewModel.configuration.isPinned {
             let pinnedText: String
 
@@ -394,16 +421,21 @@ private extension StatusView {
             }
 
             infoLabel.text = pinnedText
+            infoIcon.centerYAnchor.constraint(equalTo: infoLabel.centerYAnchor).isActive = true
             infoIcon.image = UIImage(
                 systemName: "pin",
                 withConfiguration: UIImage.SymbolConfiguration(scale: .small))
             infoLabel.isHidden = false
             infoIcon.isHidden = false
+            rebloggerButton.isHidden = true
         } else {
             infoLabel.text = nil
             infoIcon.image = nil
             infoLabel.isHidden = true
             infoIcon.isHidden = true
+            rebloggerButton.setTitle(nil, for: .normal)
+            rebloggerButton.setImage(nil, for: .normal)
+            rebloggerButton.isHidden = true
         }
 
         mutableDisplayName.insert(emojis: viewModel.accountViewModel.emojis, view: displayNameLabel)
@@ -495,6 +527,11 @@ private extension StatusView {
         isAccessibilityElement = !viewModel.configuration.isContextParent
 
         let accessibilityAttributedLabel = NSMutableAttributedString(string: "")
+
+        if !rebloggerButton.isHidden,
+           let rebloggerAttributedText = rebloggerButton.attributedTitle(for: .normal) {
+            accessibilityAttributedLabel.appendWithSeparator(rebloggerAttributedText)
+        }
 
         if !infoLabel.isHidden, let infoText = infoLabel.attributedText {
             accessibilityAttributedLabel.appendWithSeparator(infoText)
@@ -754,6 +791,17 @@ private extension StatusView {
 
                 return true
             })
+
+        if viewModel.isReblog {
+            actions.append(
+                UIAccessibilityCustomAction(
+                    name: NSLocalizedString("status.accessibility.view-reblogger-profile",
+                                            comment: "")) { [weak self] _ in
+                    self?.statusConfiguration.viewModel.rebloggerAccountSelected()
+
+                    return true
+                })
+        }
 
         actions.append(
             UIAccessibilityCustomAction(

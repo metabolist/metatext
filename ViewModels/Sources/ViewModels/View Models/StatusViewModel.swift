@@ -88,6 +88,15 @@ public extension StatusViewModel {
         }
     }
 
+    var rebloggerAvatarURL: URL {
+        if !identityContext.appPreferences.shouldReduceMotion,
+           identityContext.appPreferences.animateAvatars == .everywhere {
+            return statusService.status.account.avatar
+        } else {
+            return statusService.status.account.avatarStatic
+        }
+    }
+
     var time: String? { statusService.status.displayStatus.createdAt.timeAgo }
 
     var accessibilityTime: String? { statusService.status.displayStatus.createdAt.accessibilityTimeAgo }
@@ -205,6 +214,16 @@ public extension StatusViewModel {
                     .profile(
                         statusService.navigationService.profileService(
                             account: statusService.status.displayStatus.account))))
+                .setFailureType(to: Error.self)
+                .eraseToAnyPublisher())
+    }
+
+    func rebloggerAccountSelected() {
+        eventsSubject.send(
+            Just(.navigation(
+                    .profile(
+                        statusService.navigationService.profileService(
+                            account: statusService.status.account))))
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher())
     }

@@ -248,6 +248,7 @@
 "search.scope.tags" = "Hashtags";
 "share-extension-error.no-account-found" = "No account found";
 "status.accessibility.view-author-profile" = "View author's profile";
+"status.accessibility.view-reblogger-profile" = "View booster's profile";
 "status.bookmark" = "Bookmark";
 "status.content-warning-abbreviation" = "CW";
 "status.content-warning.accessibility" = "Content warning";
