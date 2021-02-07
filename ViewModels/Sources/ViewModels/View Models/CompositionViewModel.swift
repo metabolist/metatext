@@ -171,6 +171,35 @@ public extension CompositionViewModel {
         pollOptions.removeAll { $0 === pollOption }
     }
 
+    func attach(itemProvider: NSItemProvider, parentViewModel: NewStatusViewModel) {
+        attachmentUploadCancellable = MediaProcessingService.dataAndMimeType(itemProvider: itemProvider)
+            .flatMap { [weak self] data, mimeType -> AnyPublisher<Attachment, Error> in
+                guard let self = self else { return Empty().eraseToAnyPublisher() }
+
+                let progress = Progress(totalUnitCount: 1)
+
+                DispatchQueue.main.async {
+                    self.attachmentUpload = AttachmentUpload(progress: progress, data: data, mimeType: mimeType)
+                }
+
+                return parentViewModel.identityContext.service.uploadAttachment(
+                    data: data,
+                    mimeType: mimeType,
+                    progress: progress)
+            }
+            .receive(on: DispatchQueue.main)
+            .assignErrorsToAlertItem(to: \.alertItem, on: parentViewModel)
+            .handleEvents(receiveCancel: { [weak self] in self?.attachmentUpload = nil })
+            .sink { [weak self] _ in
+                self?.attachmentUpload = nil
+            } receiveValue: { [weak self] in
+                self?.attachmentViewModels.append(
+                    AttachmentViewModel(
+                        attachment: $0,
+                        identityContext: parentViewModel.identityContext))
+            }
+    }
+
     func cancelUpload() {
         attachmentUploadCancellable?.cancel()
     }
@@ -201,37 +230,6 @@ public extension CompositionViewModel.PollOption {
     static let maxCharacters = 25
 
     typealias Id = UUID
-}
-
-extension CompositionViewModel {
-    func attach(itemProvider: NSItemProvider, parentViewModel: NewStatusViewModel) {
-        attachmentUploadCancellable = MediaProcessingService.dataAndMimeType(itemProvider: itemProvider)
-            .flatMap { [weak self] data, mimeType -> AnyPublisher<Attachment, Error> in
-                guard let self = self else { return Empty().eraseToAnyPublisher() }
-
-                let progress = Progress(totalUnitCount: 1)
-
-                DispatchQueue.main.async {
-                    self.attachmentUpload = AttachmentUpload(progress: progress, data: data, mimeType: mimeType)
-                }
-
-                return parentViewModel.identityContext.service.uploadAttachment(
-                    data: data,
-                    mimeType: mimeType,
-                    progress: progress)
-            }
-            .receive(on: DispatchQueue.main)
-            .assignErrorsToAlertItem(to: \.alertItem, on: parentViewModel)
-            .handleEvents(receiveCancel: { [weak self] in self?.attachmentUpload = nil })
-            .sink { [weak self] _ in
-                self?.attachmentUpload = nil
-            } receiveValue: { [weak self] in
-                self?.attachmentViewModels.append(
-                    AttachmentViewModel(
-                        attachment: $0,
-                        identityContext: parentViewModel.identityContext))
-            }
-    }
 }
 
 private extension CompositionViewModel {

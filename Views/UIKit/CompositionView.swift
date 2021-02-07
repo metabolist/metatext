@@ -9,7 +9,7 @@ final class CompositionView: UIView {
     let avatarImageView = AnimatedImageView()
     let changeIdentityButton = UIButton()
     let spoilerTextField = UITextField()
-    let textView = UITextView()
+    let textView = ImagePastableTextView()
     let textViewPlaceholder = UILabel()
     let removeButton = UIButton(type: .close)
     let inReplyToView = UIView()
@@ -219,6 +219,18 @@ private extension CompositionView {
                 }
             }
             .store(in: &cancellables)
+
+        viewModel.$canAddAttachment
+            .sink { [weak self] in self?.textView.canPasteImage = $0 }
+            .store(in: &cancellables)
+
+        textView.pastedImagesPublisher.sink { [weak self] in
+            guard let self = self else { return }
+
+            self.viewModel.attach(itemProvider: NSItemProvider(object: $0),
+                                  parentViewModel: self.parentViewModel)
+        }
+        .store(in: &cancellables)
 
         viewModel.$displayPoll
             .throttle(for: .seconds(TimeInterval.zeroIfReduceMotion(.shortAnimationDuration)),
