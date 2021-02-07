@@ -181,6 +181,7 @@ private extension StatusView {
         displayNameLabel.font = .preferredFont(forTextStyle: .headline)
         displayNameLabel.adjustsFontForContentSizeCategory = true
         displayNameLabel.setContentHuggingPriority(.required, for: .horizontal)
+        displayNameLabel.setContentHuggingPriority(.required, for: .vertical)
         displayNameLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
         nameAccountTimeStackView.addArrangedSubview(displayNameLabel)
 
@@ -188,6 +189,7 @@ private extension StatusView {
         accountLabel.adjustsFontForContentSizeCategory = true
         accountLabel.textColor = .secondaryLabel
         accountLabel.setContentHuggingPriority(.required, for: .horizontal)
+        accountLabel.setContentHuggingPriority(.required, for: .vertical)
         nameAccountTimeStackView.addArrangedSubview(accountLabel)
 
         timeLabel.font = .preferredFont(forTextStyle: .subheadline)
@@ -195,6 +197,7 @@ private extension StatusView {
         timeLabel.textColor = .secondaryLabel
         timeLabel.textAlignment = .right
         timeLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+        timeLabel.setContentHuggingPriority(.required, for: .vertical)
         nameAccountTimeStackView.addArrangedSubview(timeLabel)
 
         nameAccountContainerStackView.spacing = .defaultSpacing
