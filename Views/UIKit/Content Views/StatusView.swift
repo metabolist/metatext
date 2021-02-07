@@ -15,6 +15,7 @@ final class StatusView: UIView {
     let rebloggerButton = UIButton()
     let displayNameLabel = UILabel()
     let accountLabel = UILabel()
+    let nameButton = UIButton()
     let timeLabel = UILabel()
     let bodyView = StatusBodyView()
     let contextParentTimeLabel = UILabel()
@@ -176,18 +177,44 @@ private extension StatusView {
         accountLabel.font = .preferredFont(forTextStyle: .subheadline)
         accountLabel.adjustsFontForContentSizeCategory = true
         accountLabel.textColor = .secondaryLabel
+        accountLabel.setContentHuggingPriority(.required, for: .horizontal)
         nameAccountTimeStackView.addArrangedSubview(accountLabel)
 
         timeLabel.font = .preferredFont(forTextStyle: .subheadline)
         timeLabel.adjustsFontForContentSizeCategory = true
         timeLabel.textColor = .secondaryLabel
+        timeLabel.textAlignment = .right
         timeLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
-        timeLabel.setContentHuggingPriority(.required, for: .horizontal)
         nameAccountTimeStackView.addArrangedSubview(timeLabel)
 
         nameAccountContainerStackView.spacing = .defaultSpacing
         nameAccountContainerStackView.addArrangedSubview(nameAccountTimeStackView)
         mainStackView.addArrangedSubview(nameAccountContainerStackView)
+
+        nameButton.translatesAutoresizingMaskIntoConstraints = false
+        nameButton.addAction(
+            UIAction { [weak self] _ in
+                self?.displayNameLabel.alpha = 1
+                self?.accountLabel.alpha = 1
+                self?.statusConfiguration.viewModel.accountSelected()
+            },
+            for: .touchUpInside)
+        nameButton.addAction(
+            UIAction { [weak self] _ in
+                self?.displayNameLabel.alpha = 0.5
+                self?.accountLabel.alpha = 0.5
+            },
+            for: .touchDown)
+
+        let unhighlightAction = UIAction { [weak self] _ in
+            self?.displayNameLabel.alpha = 1
+            self?.accountLabel.alpha = 1
+        }
+
+        nameButton.addAction(unhighlightAction, for: .touchUpOutside)
+        nameButton.addAction(unhighlightAction, for: .touchCancel)
+        nameButton.addAction(unhighlightAction, for: .touchDragOutside)
+        nameAccountContainerStackView.addSubview(nameButton)
 
         mainStackView.addArrangedSubview(bodyView)
 
@@ -339,6 +366,10 @@ private extension StatusView {
             avatarButton.topAnchor.constraint(equalTo: avatarImageView.topAnchor),
             avatarButton.bottomAnchor.constraint(equalTo: avatarImageView.bottomAnchor),
             avatarButton.trailingAnchor.constraint(equalTo: avatarImageView.trailingAnchor),
+            nameButton.leadingAnchor.constraint(equalTo: displayNameLabel.leadingAnchor),
+            nameButton.topAnchor.constraint(equalTo: displayNameLabel.topAnchor),
+            nameButton.trailingAnchor.constraint(equalTo: accountLabel.trailingAnchor),
+            nameButton.bottomAnchor.constraint(equalTo: accountLabel.bottomAnchor),
             contextParentTimeApplicationStackView.heightAnchor.constraint(
                 greaterThanOrEqualToConstant: .minimumButtonDimension / 2),
             interactionsStackView.heightAnchor.constraint(greaterThanOrEqualToConstant: .minimumButtonDimension)
@@ -441,6 +472,12 @@ private extension StatusView {
         mutableDisplayName.insert(emojis: viewModel.accountViewModel.emojis, view: displayNameLabel)
         mutableDisplayName.resizeAttachments(toLineHeight: displayNameLabel.font.lineHeight)
         displayNameLabel.attributedText = mutableDisplayName
+        accountLabel.text = viewModel.accountName
+
+        let nameButtonAccessibilityAttributedLabel = mutableDisplayName
+
+        nameButtonAccessibilityAttributedLabel.appendWithSeparator(viewModel.accountName)
+        nameButton.accessibilityAttributedLabel = nameButtonAccessibilityAttributedLabel
 
         nameAccountTimeStackView.axis = isContextParent ? .vertical : .horizontal
         nameAccountTimeStackView.alignment = isContextParent ? .leading : .fill
@@ -456,7 +493,6 @@ private extension StatusView {
                 .constraint(equalTo: contextParentBottomNameAccountSpacingView.heightAnchor).isActive = true
         }
 
-        accountLabel.text = viewModel.accountName
         timeLabel.text = viewModel.time
         timeLabel.accessibilityLabel = viewModel.accessibilityTime
         timeLabel.isHidden = isContextParent
