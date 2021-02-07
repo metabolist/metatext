@@ -62,6 +62,16 @@ final class StatusView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    override func accessibilityActivate() -> Bool {
+        if !statusConfiguration.viewModel.shouldShowContent {
+            statusConfiguration.viewModel.toggleShowContent()
+
+            return true
+        } else {
+            return super.accessibilityActivate()
+        }
+    }
 }
 
 extension StatusView {
