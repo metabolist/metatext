@@ -683,9 +683,23 @@ private extension StatusView {
     }
 
     func setButtonImages(scale: UIImage.SymbolScale) {
+        let visibility = statusConfiguration.viewModel.visibility
+        let reblogSystemImageName: String
+
+        if statusConfiguration.viewModel.configuration.isContextParent {
+            reblogSystemImageName = "arrow.2.squarepath"
+        } else {
+            switch visibility {
+            case .public, .unlisted:
+                reblogSystemImageName = "arrow.2.squarepath"
+            default:
+                reblogSystemImageName = visibility.systemImageName
+            }
+        }
+
         replyButton.setImage(UIImage(systemName: "bubble.right",
                                      withConfiguration: UIImage.SymbolConfiguration(scale: scale)), for: .normal)
-        reblogButton.setImage(UIImage(systemName: "arrow.2.squarepath",
+        reblogButton.setImage(UIImage(systemName: reblogSystemImageName,
                                       withConfiguration: UIImage.SymbolConfiguration(scale: scale)), for: .normal)
         favoriteButton.setImage(UIImage(systemName: statusConfiguration.viewModel.favorited ? "star.fill" : "star",
                                         withConfiguration: UIImage.SymbolConfiguration(scale: scale)), for: .normal)
