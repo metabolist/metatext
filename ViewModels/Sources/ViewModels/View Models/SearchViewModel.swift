@@ -17,7 +17,7 @@ public final class SearchViewModel: CollectionItemsViewModel {
         super.init(collectionService: searchService, identityContext: identityContext)
 
         $query.removeDuplicates()
-            .throttle(for: .seconds(Self.throttleInterval), scheduler: DispatchQueue.global(), latest: true)
+            .debounce(for: .seconds(Self.debounceInterval), scheduler: DispatchQueue.global())
             .combineLatest($scope.removeDuplicates())
             .sink { [weak self] in
                 self?.request(
@@ -26,13 +26,6 @@ public final class SearchViewModel: CollectionItemsViewModel {
                     search: .init(query: $0, type: $1.type, limit: $1.limit))
             }
             .store(in: &cancellables)
-    }
-
-    public override var updates: AnyPublisher<CollectionUpdate, Never> {
-        // Since results are processed through the DB to determine CW expansion state etc they can arrive erratically
-        super.updates
-            .throttle(for: .seconds(Self.throttleInterval), scheduler: DispatchQueue.global(), latest: true)
-            .eraseToAnyPublisher()
     }
 
     public override func requestNextPage(fromIndexPath indexPath: IndexPath) {
@@ -46,7 +39,7 @@ public final class SearchViewModel: CollectionItemsViewModel {
 }
 
 private extension SearchViewModel {
-    static let throttleInterval: TimeInterval = 0.5
+    static let debounceInterval: TimeInterval = 0.25
 }
 
 private extension SearchScope {
