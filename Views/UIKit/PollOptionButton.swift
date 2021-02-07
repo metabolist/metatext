@@ -12,7 +12,6 @@ final class PollOptionButton: UIButton {
         titleLabel?.numberOfLines = 0
         titleLabel?.lineBreakMode = .byWordWrapping
         contentHorizontalAlignment = .leading
-        titleEdgeInsets = Self.titleEdgeInsets
 
         let attributedTitle = NSMutableAttributedString(string: title)
 
@@ -32,6 +31,10 @@ final class PollOptionButton: UIButton {
 
         setContentCompressionResistancePriority(.required, for: .vertical)
 
+        imageView?.translatesAutoresizingMaskIntoConstraints = false
+        imageView?.widthAnchor.constraint(greaterThanOrEqualToConstant: .minimumButtonDimension).isActive = true
+        imageView?.contentMode = .scaleAspectFit
+
         heightAnchor.constraint(equalTo: titleLabel!.heightAnchor).isActive = true
     }
 
@@ -45,8 +48,4 @@ extension PollOptionButton {
     static func estimatedHeight(width: CGFloat, title: String) -> CGFloat {
         title.height(width: width, font: .preferredFont(forTextStyle: .callout))
     }
-}
-
-private extension PollOptionButton {
-    static let titleEdgeInsets = UIEdgeInsets(top: 0, left: .defaultSpacing, bottom: 0, right: .compactSpacing)
 }
