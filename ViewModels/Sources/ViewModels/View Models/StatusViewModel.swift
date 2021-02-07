@@ -329,7 +329,11 @@ public extension StatusViewModel {
     }
 
     func attachmentSelected(viewModel: AttachmentViewModel) {
-        eventsSubject.send(Just(.attachment(viewModel, self)).setFailureType(to: Error.self).eraseToAnyPublisher())
+        if viewModel.attachment.type == .unknown, let remoteUrl = viewModel.attachment.remoteUrl {
+            urlSelected(remoteUrl)
+        } else {
+            eventsSubject.send(Just(.attachment(viewModel, self)).setFailureType(to: Error.self).eraseToAnyPublisher())
+        }
     }
 
     func shareStatus() {

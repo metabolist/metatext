@@ -177,8 +177,10 @@ private extension AttachmentView {
             playImageView.image = UIImage(systemName: "waveform.circle",
                                           withConfiguration: UIImage.SymbolConfiguration(textStyle: .largeTitle))
             backgroundColor = .secondarySystemBackground
-        default:
-            break
+        case .unknown:
+            playImageView.image = UIImage(systemName: "link",
+                                          withConfiguration: UIImage.SymbolConfiguration(textStyle: .largeTitle))
+            backgroundColor = .secondarySystemBackground
         }
 
         NSLayoutConstraint.activate([
