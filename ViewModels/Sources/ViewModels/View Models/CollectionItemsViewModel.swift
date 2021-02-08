@@ -54,7 +54,11 @@ public class CollectionItemsViewModel: ObservableObject {
                 markerScrollPositionItemId = identityContext.service.getLocalLastReadId(timeline: timeline)
             }
 
-            lastReadId.compactMap { $0 }
+            lastReadId
+                .filter { _ in
+                    identityContext.appPreferences.positionBehavior(timeline: timeline) == .localRememberPosition
+                }
+                .compactMap { $0 }
                 .removeDuplicates()
                 .debounce(for: .seconds(Self.lastReadIdDebounceInterval), scheduler: DispatchQueue.global())
                 .flatMap { identityContext.service.setLocalLastReadId($0, timeline: timeline) }

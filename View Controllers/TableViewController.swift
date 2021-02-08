@@ -451,7 +451,7 @@ private extension TableViewController {
 
     func open(url: URL) {
         func openWithRegardToBrowserSetting(url: URL) {
-            if viewModel.identityContext.appPreferences.openLinksInDefaultBrowser {
+            if viewModel.identityContext.appPreferences.openLinksInDefaultBrowser || !url.isHTTPURL {
                 UIApplication.shared.open(url)
             } else {
                 present(SFSafariViewController(url: url), animated: true)
