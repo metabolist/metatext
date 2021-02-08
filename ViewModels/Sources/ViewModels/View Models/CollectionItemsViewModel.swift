@@ -336,6 +336,8 @@ extension CollectionItemsViewModel: CollectionViewModel {
 
     public func applyAccountListEdit(viewModel: AccountViewModel, edit: CollectionItemEvent.AccountListEdit) {
         (collectionService as? AccountListService)?.remove(id: viewModel.id)
+            .sink { _ in } receiveValue: { _ in }
+            .store(in: &cancellables)
 
         switch edit {
         case .acceptFollowRequest, .rejectFollowRequest:

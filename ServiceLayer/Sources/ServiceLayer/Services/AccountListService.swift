@@ -13,7 +13,7 @@ public struct AccountListService {
     public let navigationService: NavigationService
     public let canRefresh = false
 
-    private let accountsSubject = CurrentValueSubject<[Account], Error>([])
+    private let listId = UUID().uuidString
     private let endpoint: AccountsEndpoint
     private let mastodonAPIClient: MastodonAPIClient
     private let contentDatabase: ContentDatabase
@@ -29,10 +29,7 @@ public struct AccountListService {
         self.mastodonAPIClient = mastodonAPIClient
         self.contentDatabase = contentDatabase
         self.titleComponents = titleComponents
-        sections = accountsSubject
-            .map { [.init(items: $0.map { CollectionItem.account($0, endpoint.configuration, nil) })] } // TODO: revisit
-            .removeDuplicates()
-            .eraseToAnyPublisher()
+        sections = contentDatabase.accountListPublisher(id: listId, configuration: endpoint.configuration)
         nextPageMaxId = nextPageMaxIdSubject.eraseToAnyPublisher()
         accountIdsForRelationships = accountIdsForRelationshipsSubject.eraseToAnyPublisher()
         navigationService = NavigationService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
@@ -40,8 +37,8 @@ public struct AccountListService {
 }
 
 public extension AccountListService {
-    func remove(id: Account.Id) {
-        accountsSubject.value.removeAll { $0.id == id }
+    func remove(id: Account.Id) -> AnyPublisher<Never, Error> {
+        contentDatabase.remove(id: id, from: listId)
     }
 }
 
@@ -49,15 +46,13 @@ extension AccountListService: CollectionService {
     public func request(maxId: String?, minId: String?, search: Search?) -> AnyPublisher<Never, Error> {
         mastodonAPIClient.pagedRequest(endpoint, maxId: maxId, minId: minId)
             .handleEvents(receiveOutput: {
-                let presentIds = Set(accountsSubject.value.map(\.id))
-                accountsSubject.value.append(contentsOf: $0.result.filter { !presentIds.contains($0.id) })
+                accountIdsForRelationshipsSubject.send(Set($0.result.map(\.id)))
 
                 guard let maxId = $0.info.maxId else { return }
 
                 nextPageMaxIdSubject.send(maxId)
-                accountIdsForRelationshipsSubject.send(Set($0.result.map(\.id)))
             })
-            .flatMap { contentDatabase.insert(accounts: $0.result) }
+            .flatMap { contentDatabase.insert(accounts: $0.result, listId: listId) }
             .ignoreOutput()
             .eraseToAnyPublisher()
     }

@@ -269,12 +269,39 @@ public extension ContentDatabase {
             .eraseToAnyPublisher()
     }
 
-    func insert(accounts: [Account]) -> AnyPublisher<Never, Error> {
+    func insert(accounts: [Account], listId: AccountList.Id? = nil) -> AnyPublisher<Never, Error> {
         databaseWriter.writePublisher {
+            var order: Int?
+
+            if let listId = listId {
+                try AccountList(id: listId).save($0)
+                order = try Int.fetchOne(
+                    $0,
+                    AccountListJoin.filter(AccountListJoin.Columns.accountListId == listId)
+                        .select(max(AccountListJoin.Columns.order)))
+                ?? 0
+            }
+
             for account in accounts {
                 try account.save($0)
+
+                if let listId = listId, let presentOrder = order {
+                    try AccountListJoin(accountListId: listId, accountId: account.id, order: presentOrder).save($0)
+
+                    order = presentOrder + 1
+                }
             }
         }
+        .ignoreOutput()
+        .eraseToAnyPublisher()
+    }
+
+    func remove(id: Account.Id, from listId: AccountList.Id) -> AnyPublisher<Never, Error> {
+        databaseWriter.writePublisher(
+            updates: AccountListJoin.filter(
+                AccountListJoin.Columns.accountId == id
+                    && AccountListJoin.Columns.accountListId == listId)
+                .deleteAll)
         .ignoreOutput()
         .eraseToAnyPublisher()
     }
@@ -491,6 +518,19 @@ public extension ContentDatabase {
             .combineLatest(activeFiltersPublisher)
             .map { $0?.items(filters: $1) }
             .replaceNil(with: [])
+            .eraseToAnyPublisher()
+    }
+
+    func accountListPublisher(
+        id: AccountList.Id,
+        configuration: CollectionItem.AccountConfiguration) -> AnyPublisher<[CollectionSection], Error> {
+        ValueObservation.tracking(
+            AccountListItemsInfo.request(AccountList.filter(AccountList.Columns.id == id)).fetchOne)
+            .removeDuplicates()
+            .publisher(in: databaseWriter)
+            .map { $0?.accountInfos.map { CollectionItem.account(.init(info: $0), configuration, nil) } }
+            .replaceNil(with: [])
+            .map { [CollectionSection(items: $0)] }
             .eraseToAnyPublisher()
     }
 
