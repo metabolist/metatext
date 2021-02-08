@@ -284,6 +284,12 @@ extension ContentDatabase {
             try db.rename(table: "new_accountListJoin", to: "accountListJoin")
         }
 
+        migrator.registerMigration("1.0.0-lridr-column-rename") { db in
+            try db.alter(table: "lastReadIdRecord") { t in
+                t.rename(column: "markerTimeline", to: "timelineId")
+            }
+        }
+
         return migrator
     }
 }

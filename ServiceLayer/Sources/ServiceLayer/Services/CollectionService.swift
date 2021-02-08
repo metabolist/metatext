@@ -12,7 +12,7 @@ public protocol CollectionService {
     var title: AnyPublisher<String, Never> { get }
     var titleLocalizationComponents: AnyPublisher<[String], Never> { get }
     var navigationService: NavigationService { get }
-    var markerTimeline: Marker.Timeline? { get }
+    var positionTimeline: Timeline? { get }
     func request(maxId: String?, minId: String?, search: Search?) -> AnyPublisher<Never, Error>
 }
 
@@ -29,5 +29,5 @@ extension CollectionService {
 
     public var titleLocalizationComponents: AnyPublisher<[String], Never> { Empty().eraseToAnyPublisher() }
 
-    public var markerTimeline: Marker.Timeline? { nil }
+    public var positionTimeline: Timeline? { nil }
 }

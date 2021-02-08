@@ -50,17 +50,10 @@ public struct TimelineService {
 }
 
 extension TimelineService: CollectionService {
+    public var positionTimeline: Timeline? { timeline }
+
     public var preferLastPresentIdOverNextPageMaxId: Bool {
         !timeline.ordered
-    }
-
-    public var markerTimeline: Marker.Timeline? {
-        switch timeline {
-        case .home:
-            return .home
-        default:
-            return nil
-        }
     }
 
     public func request(maxId: String?, minId: String?, search: Search?) -> AnyPublisher<Never, Error> {

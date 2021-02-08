@@ -39,7 +39,7 @@ public extension AppPreferences {
     }
 
     enum PositionBehavior: String, CaseIterable, Identifiable {
-        case rememberPosition
+        case localRememberPosition
         case newest
 
         public var id: String { rawValue }
@@ -110,7 +110,7 @@ public extension AppPreferences {
                 return value
             }
 
-            return .rememberPosition
+            return .localRememberPosition
         }
         set { self[.homeTimelineBehavior] = newValue.rawValue }
     }
@@ -140,11 +140,11 @@ public extension AppPreferences {
         systemReduceMotion() && useSystemReduceMotionForMedia
     }
 
-    func positionBehavior(markerTimeline: Marker.Timeline) -> PositionBehavior {
-        switch markerTimeline {
+    func positionBehavior(timeline: Timeline) -> PositionBehavior {
+        switch timeline {
         case .home:
             return homeTimelineBehavior
-        case .notifications:
+        default:
             return .newest
         }
     }

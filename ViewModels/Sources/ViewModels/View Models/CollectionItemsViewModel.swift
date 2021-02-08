@@ -49,15 +49,15 @@ public class CollectionItemsViewModel: ObservableObject {
             .sink { _ in }
             .store(in: &cancellables)
 
-        if let markerTimeline = collectionService.markerTimeline {
-            if identityContext.appPreferences.positionBehavior(markerTimeline: markerTimeline) == .rememberPosition {
-                markerScrollPositionItemId = identityContext.service.getLocalLastReadId(markerTimeline)
+        if let timeline = collectionService.positionTimeline {
+            if identityContext.appPreferences.positionBehavior(timeline: timeline) == .localRememberPosition {
+                markerScrollPositionItemId = identityContext.service.getLocalLastReadId(timeline: timeline)
             }
 
             lastReadId.compactMap { $0 }
                 .removeDuplicates()
                 .debounce(for: .seconds(Self.lastReadIdDebounceInterval), scheduler: DispatchQueue.global())
-                .flatMap { identityContext.service.setLastReadId($0, forMarker: markerTimeline) }
+                .flatMap { identityContext.service.setLocalLastReadId($0, timeline: timeline) }
                 .sink { _ in } receiveValue: { _ in }
                 .store(in: &cancellables)
         }
@@ -351,8 +351,8 @@ private extension CollectionItemsViewModel {
     func realMaxId(maxId: String?) -> String? {
         guard let maxId = maxId else { return nil }
 
-        guard let markerTimeline = collectionService.markerTimeline,
-              identityContext.appPreferences.positionBehavior(markerTimeline: markerTimeline) == .rememberPosition,
+        guard let timeline = collectionService.positionTimeline,
+              identityContext.appPreferences.positionBehavior(timeline: timeline) == .localRememberPosition,
               let lastItemId = lastUpdate.sections.last?.items.last?.itemId
         else { return maxId }
 

@@ -399,8 +399,8 @@ public extension ContentDatabase {
             .eraseToAnyPublisher()
     }
 
-    func setLastReadId(_ id: String, markerTimeline: Marker.Timeline) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher(updates: LastReadIdRecord(markerTimeline: markerTimeline, id: id).save)
+    func setLastReadId(_ id: String, timelineId: Timeline.Id) -> AnyPublisher<Never, Error> {
+        databaseWriter.writePublisher(updates: LastReadIdRecord(timelineId: timelineId, id: id).save)
             .ignoreOutput()
             .eraseToAnyPublisher()
     }
@@ -685,11 +685,11 @@ public extension ContentDatabase {
             .eraseToAnyPublisher()
     }
 
-    func lastReadId(_ markerTimeline: Marker.Timeline) -> String? {
+    func lastReadId(timelineId: Timeline.Id) -> String? {
         try? databaseWriter.read {
             try String.fetchOne(
                 $0,
-                LastReadIdRecord.filter(LastReadIdRecord.Columns.markerTimeline == markerTimeline.rawValue)
+                LastReadIdRecord.filter(LastReadIdRecord.Columns.timelineId == timelineId)
                     .select(LastReadIdRecord.Columns.id))
         }
     }
@@ -704,7 +704,6 @@ private extension ContentDatabase {
         try FileManager.default.databaseDirectoryURL(name: id.uuidString, appGroup: appGroup)
     }
 
-    // swiftlint:disable:next function_body_length
     static func clean(_ databaseWriter: DatabaseWriter,
                       useHomeTimelineLastReadId: Bool) throws {
         try databaseWriter.write {
@@ -723,7 +722,7 @@ private extension ContentDatabase {
 
                 if let lastReadId = try Status.Id.fetchOne(
                     $0,
-                    LastReadIdRecord.filter(LastReadIdRecord.Columns.markerTimeline == Marker.Timeline.home.rawValue)
+                    LastReadIdRecord.filter(LastReadIdRecord.Columns.timelineId == Timeline.home.id)
                         .select(LastReadIdRecord.Columns.id))
                     ?? statusIds.first,
                    let index = statusIds.firstIndex(of: lastReadId) {

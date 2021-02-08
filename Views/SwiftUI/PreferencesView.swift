@@ -175,7 +175,7 @@ extension AppPreferences.Autoplay {
 extension AppPreferences.PositionBehavior {
     var localizedStringKey: LocalizedStringKey {
         switch self {
-        case .rememberPosition:
+        case .localRememberPosition:
             return "preferences.position.remember-position"
         case .newest:
             return "preferences.position.newest"

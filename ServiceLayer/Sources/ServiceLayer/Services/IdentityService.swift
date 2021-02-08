@@ -33,7 +33,7 @@ public struct IdentityService {
 
         contentDatabase = try ContentDatabase(
             id: id,
-            useHomeTimelineLastReadId: appPreferences.homeTimelineBehavior == .rememberPosition,
+            useHomeTimelineLastReadId: appPreferences.homeTimelineBehavior == .localRememberPosition,
             inMemory: environment.inMemoryContent,
             appGroup: AppEnvironment.appGroup,
             keychain: environment.keychain)
@@ -125,17 +125,12 @@ public extension IdentityService {
             .eraseToAnyPublisher()
     }
 
-    func getLocalLastReadId(_ markerTimeline: Marker.Timeline) -> String? {
-        contentDatabase.lastReadId(markerTimeline)
+    func getLocalLastReadId(timeline: Timeline) -> String? {
+        contentDatabase.lastReadId(timelineId: timeline.id)
     }
 
-    func setLastReadId(_ id: String, forMarker markerTimeline: Marker.Timeline) -> AnyPublisher<Never, Error> {
-        switch AppPreferences(environment: environment).positionBehavior(markerTimeline: markerTimeline) {
-        case .rememberPosition:
-            return contentDatabase.setLastReadId(id, markerTimeline: markerTimeline)
-        case .newest:
-            return Empty().eraseToAnyPublisher()
-        }
+    func setLocalLastReadId(_ id: String, timeline: Timeline) -> AnyPublisher<Never, Error> {
+        contentDatabase.setLastReadId(id, timelineId: timeline.id)
     }
 
     func identityPublisher(immediate: Bool) -> AnyPublisher<Identity, Error> {
