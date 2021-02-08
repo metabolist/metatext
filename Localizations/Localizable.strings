@@ -198,7 +198,6 @@
 "preferences.home-timeline-position-on-startup" = "Home timeline position on startup";
 "preferences.notifications-position-on-startup" = "Notifications position on startup";
 "preferences.position.remember-position" = "Remember position";
-"preferences.position.sync-position" = "Sync position with web and other devices";
 "preferences.position.newest" = "Load newest";
 "preferences.require-double-tap-to-reblog" = "Require double tap to reblog";
 "preferences.require-double-tap-to-favorite" = "Require double tap to favorite";

@@ -51,7 +51,6 @@ extension ContentDatabase {
     static let preview = try! ContentDatabase(
         id: identityId,
         useHomeTimelineLastReadId: false,
-        useNotificationsLastReadId: false,
         inMemory: true,
         appGroup: "group.metabolist.metatext",
         keychain: MockKeychain.self)

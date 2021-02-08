@@ -121,12 +121,6 @@ struct PreferencesView: View {
                             Text(option.localizedStringKey).tag(option)
                         }
                     }
-                    Picker("preferences.notifications-position-on-startup",
-                           selection: $identityContext.appPreferences.notificationsTabBehavior) {
-                        ForEach(AppPreferences.PositionBehavior.allCases) { option in
-                            Text(option.localizedStringKey).tag(option)
-                        }
-                    }
                 }
             }
         }
@@ -183,8 +177,6 @@ extension AppPreferences.PositionBehavior {
         switch self {
         case .rememberPosition:
             return "preferences.position.remember-position"
-        case .syncPosition:
-            return "preferences.position.sync-position"
         case .newest:
             return "preferences.position.newest"
         }

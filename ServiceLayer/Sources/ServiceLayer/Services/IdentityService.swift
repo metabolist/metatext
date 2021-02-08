@@ -34,7 +34,6 @@ public struct IdentityService {
         contentDatabase = try ContentDatabase(
             id: id,
             useHomeTimelineLastReadId: appPreferences.homeTimelineBehavior == .rememberPosition,
-            useNotificationsLastReadId: appPreferences.notificationsTabBehavior == .rememberPosition,
             inMemory: environment.inMemoryContent,
             appGroup: AppEnvironment.appGroup,
             keychain: environment.keychain)
@@ -134,10 +133,6 @@ public extension IdentityService {
         switch AppPreferences(environment: environment).positionBehavior(markerTimeline: markerTimeline) {
         case .rememberPosition:
             return contentDatabase.setLastReadId(id, markerTimeline: markerTimeline)
-        case .syncPosition:
-            return mastodonAPIClient.request(MarkersEndpoint.post([markerTimeline: id]))
-                .ignoreOutput()
-                .eraseToAnyPublisher()
         case .newest:
             return Empty().eraseToAnyPublisher()
         }

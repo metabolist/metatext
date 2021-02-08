@@ -21,7 +21,7 @@ public class CollectionItemsViewModel: ObservableObject {
     private let lastReadId = CurrentValueSubject<String?, Never>(nil)
     private var lastSelectedLoadMore: LoadMore?
     private var hasRequestedUsingMarker = false
-    private var shouldRestorePositionOfLocalLastReadId = false
+    private var markerScrollPositionItemId: CollectionItem.Id?
     private var cancellables = Set<AnyCancellable>()
 
     public init(collectionService: CollectionService, identityContext: IdentityContext) {
@@ -50,8 +50,10 @@ public class CollectionItemsViewModel: ObservableObject {
             .store(in: &cancellables)
 
         if let markerTimeline = collectionService.markerTimeline {
-            shouldRestorePositionOfLocalLastReadId =
-                identityContext.appPreferences.positionBehavior(markerTimeline: markerTimeline) == .rememberPosition
+            if identityContext.appPreferences.positionBehavior(markerTimeline: markerTimeline) == .rememberPosition {
+                markerScrollPositionItemId = identityContext.service.getLocalLastReadId(markerTimeline)
+            }
+
             lastReadId.compactMap { $0 }
                 .removeDuplicates()
                 .debounce(for: .seconds(Self.lastReadIdDebounceInterval), scheduler: DispatchQueue.global())
@@ -102,32 +104,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
     public var canRefresh: Bool { collectionService.canRefresh }
 
     public func request(maxId: String? = nil, minId: String? = nil, search: Search?) {
-        let publisher: AnyPublisher<Never, Error>
-
-        if let markerTimeline = collectionService.markerTimeline,
-           identityContext.appPreferences.positionBehavior(markerTimeline: markerTimeline) == .syncPosition,
-           !hasRequestedUsingMarker {
-            publisher = identityContext.service.getMarker(markerTimeline)
-                .flatMap { [weak self] in
-                    self?.collectionService.request(maxId: $0.lastReadId, minId: nil, search: nil)
-                        ?? Empty().eraseToAnyPublisher()
-                }
-                .catch { [weak self] _ in
-                    self?.collectionService.request(maxId: nil, minId: nil, search: nil)
-                        ?? Empty().eraseToAnyPublisher()
-                }
-                .collect()
-                .flatMap { [weak self] _ in
-                    self?.collectionService.request(maxId: nil, minId: nil, search: nil)
-                        ?? Empty().eraseToAnyPublisher()
-                }
-                .eraseToAnyPublisher()
-            self.hasRequestedUsingMarker = true
-        } else {
-            publisher = collectionService.request(maxId: realMaxId(maxId: maxId), minId: minId, search: search)
-        }
-
-        publisher
+        collectionService.request(maxId: realMaxId(maxId: maxId), minId: minId, search: search)
             .receive(on: DispatchQueue.main)
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .handleEvents(
@@ -180,8 +157,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
     public func viewedAtTop(indexPath: IndexPath) {
         topVisibleIndexPath = indexPath
 
-        if !shouldRestorePositionOfLocalLastReadId,
-           lastUpdate.sections.count > indexPath.section,
+        if lastUpdate.sections.count > indexPath.section,
            lastUpdate.sections[indexPath.section].items.count > indexPath.item {
             lastReadId.send(lastUpdate.sections[indexPath.section].items[indexPath.item].itemId)
         }
@@ -387,13 +363,11 @@ private extension CollectionItemsViewModel {
         let items = lastUpdate.sections.map(\.items).reduce([], +)
         let newItems = newSections.map(\.items).reduce([], +)
 
-        if shouldRestorePositionOfLocalLastReadId,
-           let markerTimeline = collectionService.markerTimeline,
-           let localLastReadId = identityContext.service.getLocalLastReadId(markerTimeline),
-           newItems.contains(where: { $0.itemId == localLastReadId }) {
-            shouldRestorePositionOfLocalLastReadId = false
+        if let itemId = markerScrollPositionItemId,
+           newItems.contains(where: { $0.itemId == itemId }) {
+            markerScrollPositionItemId = nil
 
-            return localLastReadId
+            return itemId
         }
 
         if collectionService is ContextService,

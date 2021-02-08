@@ -40,7 +40,6 @@ public extension AppPreferences {
 
     enum PositionBehavior: String, CaseIterable, Identifiable {
         case rememberPosition
-        case syncPosition
         case newest
 
         public var id: String { rawValue }
@@ -116,18 +115,6 @@ public extension AppPreferences {
         set { self[.homeTimelineBehavior] = newValue.rawValue }
     }
 
-    var notificationsTabBehavior: PositionBehavior {
-        get {
-            if let rawValue = self[.notificationsTabBehavior] as String?,
-               let value = PositionBehavior(rawValue: rawValue) {
-                return value
-            }
-
-            return .newest
-        }
-        set { self[.notificationsTabBehavior] = newValue.rawValue }
-    }
-
     var defaultEmojiSkinTone: SystemEmoji.SkinTone? {
         get {
             if let rawValue = self[.defaultEmojiSkinTone] as Int?,
@@ -158,7 +145,7 @@ public extension AppPreferences {
         case .home:
             return homeTimelineBehavior
         case .notifications:
-            return notificationsTabBehavior
+            return .newest
         }
     }
 
