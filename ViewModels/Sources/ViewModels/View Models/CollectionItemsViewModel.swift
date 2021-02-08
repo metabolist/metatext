@@ -42,6 +42,13 @@ public class CollectionItemsViewModel: ObservableObject {
             .sink { [weak self] in self?.nextPageMaxId = $0 }
             .store(in: &cancellables)
 
+        collectionService.accountIdsForRelationships
+            .filter { !$0.isEmpty }
+            .flatMap(identityContext.service.requestRelationships(ids:))
+            .catch { _ in Empty().setFailureType(to: Never.self) }
+            .sink { _ in }
+            .store(in: &cancellables)
+
         if let markerTimeline = collectionService.markerTimeline {
             shouldRestorePositionOfLocalLastReadId =
                 identityContext.appPreferences.positionBehavior(markerTimeline: markerTimeline) == .rememberPosition
@@ -134,14 +141,14 @@ extension CollectionItemsViewModel: CollectionViewModel {
         let item = lastUpdate.sections[indexPath.section].items[indexPath.item]
 
         switch item {
-        case let .status(status, _):
+        case let .status(status, _, relationship):
             send(event: .navigation(.collection(collectionService
                                                     .navigationService
                                                     .contextService(id: status.displayStatus.id))))
         case let .loadMore(loadMore):
             lastSelectedLoadMore = loadMore
             (viewModel(indexPath: indexPath) as? LoadMoreViewModel)?.loadMore()
-        case let .account(account, _):
+        case let .account(account, _, relationship):
             send(event: .navigation(.profile(collectionService
                                                 .navigationService
                                                 .profileService(account: account))))
@@ -182,7 +189,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
 
     public func canSelect(indexPath: IndexPath) -> Bool {
         switch lastUpdate.sections[indexPath.section].items[indexPath.item] {
-        case let .status(_, configuration):
+        case let .status(_, configuration, _):
             return !configuration.isContextParent
         case .loadMore:
             return !((viewModel(indexPath: indexPath) as? LoadMoreViewModel)?.loading ?? false)
@@ -197,7 +204,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
         let cachedViewModel = viewModelCache[item]
 
         switch item {
-        case let .status(status, configuration):
+        case let .status(status, configuration, relationship):
             let viewModel: StatusViewModel
 
             if let cachedViewModel = cachedViewModel as? StatusViewModel {
@@ -211,6 +218,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
             }
 
             viewModel.configuration = configuration
+            viewModel.accountViewModel.relationship = relationship
 
             return viewModel
         case let .loadMore(loadMore):
@@ -225,7 +233,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
             viewModelCache[item] = viewModel
 
             return viewModel
-        case let .account(account, configuration):
+        case let .account(account, configuration, relationship):
             let viewModel: AccountViewModel
 
             if let cachedViewModel = cachedViewModel as? AccountViewModel {
@@ -239,6 +247,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
             }
 
             viewModel.configuration = configuration
+            viewModel.relationship = relationship
 
             return viewModel
         case let .notification(notification, statusConfiguration):
@@ -302,7 +311,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
 
     public func toggleExpandAll() {
         let statusIds = Set(lastUpdate.sections.map(\.items).reduce([], +).compactMap { item -> Status.Id? in
-            guard case let .status(status, _) = item else { return nil }
+            guard case let .status(status, _, _) = item else { return nil }
 
             return status.id
         })
@@ -388,7 +397,7 @@ private extension CollectionItemsViewModel {
         if collectionService is ContextService,
            lastUpdate.sections.isEmpty || lastUpdate.sections.map(\.items.count) == [0, 1, 0],
            let contextParent = newItems.first(where: {
-            guard case let .status(_, configuration) = $0 else { return false }
+            guard case let .status(_, configuration, _) = $0 else { return false }
 
             return configuration.isContextParent // Maintain scroll position of parent after initial load of context
            }) {
@@ -404,7 +413,7 @@ private extension CollectionItemsViewModel {
                        let direction = (viewModelCache[item] as? LoadMoreViewModel)?.direction,
                        direction == .up,
                        let statusAfterLoadMore = items.first(where: {
-                        guard case let .status(status, _) = $0 else { return false }
+                        guard case let .status(status, _, _) = $0 else { return false }
 
                         return status.id == loadMore.beforeStatusId
                        }) {

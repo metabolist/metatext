@@ -10,6 +10,7 @@ public struct TimelineService {
     public let sections: AnyPublisher<[CollectionSection], Error>
     public let navigationService: NavigationService
     public let nextPageMaxId: AnyPublisher<String, Never>
+    public let accountIdsForRelationships: AnyPublisher<Set<Account.Id>, Never>
     public let title: AnyPublisher<String, Never>
     public let titleLocalizationComponents: AnyPublisher<[String], Never>
 
@@ -17,6 +18,7 @@ public struct TimelineService {
     private let mastodonAPIClient: MastodonAPIClient
     private let contentDatabase: ContentDatabase
     private let nextPageMaxIdSubject = PassthroughSubject<String, Never>()
+    private let accountIdsForRelationshipsSubject = PassthroughSubject<Set<Account.Id>, Never>()
 
     init(timeline: Timeline, mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
         self.timeline = timeline
@@ -25,6 +27,7 @@ public struct TimelineService {
         sections = contentDatabase.timelinePublisher(timeline)
         navigationService = NavigationService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
         nextPageMaxId = nextPageMaxIdSubject.eraseToAnyPublisher()
+        accountIdsForRelationships = accountIdsForRelationshipsSubject.eraseToAnyPublisher()
 
         switch timeline {
         case let .list(list):
@@ -66,6 +69,10 @@ extension TimelineService: CollectionService {
                 if let maxId = $0.info.maxId {
                     nextPageMaxIdSubject.send(maxId)
                 }
+
+                accountIdsForRelationshipsSubject.send(
+                    Set($0.result.map(\.account.id))
+                        .union(Set($0.result.compactMap(\.reblog?.account.id))))
             })
             .flatMap { contentDatabase.insert(statuses: $0.result, timeline: timeline) }
             .eraseToAnyPublisher()

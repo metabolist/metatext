@@ -72,6 +72,9 @@ extension StatusRecord {
 
 extension StatusRecord {
     static let account = belongsTo(AccountRecord.self)
+    static let relationship = hasOne(Relationship.self,
+                                     through: Self.account,
+                                     using: AccountRecord.relationship)
     static let accountMoved = hasOne(AccountRecord.self,
                                      through: Self.account,
                                      using: AccountRecord.moved)
@@ -82,6 +85,10 @@ extension StatusRecord {
                                            through: Self.reblogAccount,
                                            using: AccountRecord.moved)
     static let reblog = belongsTo(StatusRecord.self)
+    static let reblogRelationship = hasOne(
+        Relationship.self,
+        through: Self.reblog,
+        using: Self.relationship)
     static let showContentToggle = hasOne(StatusShowContentToggle.self)
     static let reblogShowContentToggle = hasOne(
         StatusShowContentToggle.self,

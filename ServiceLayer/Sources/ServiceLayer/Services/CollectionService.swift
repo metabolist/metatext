@@ -6,6 +6,7 @@ import Mastodon
 public protocol CollectionService {
     var sections: AnyPublisher<[CollectionSection], Error> { get }
     var nextPageMaxId: AnyPublisher<String, Never> { get }
+    var accountIdsForRelationships: AnyPublisher<Set<Account.Id>, Never> { get }
     var preferLastPresentIdOverNextPageMaxId: Bool { get }
     var canRefresh: Bool { get }
     var title: AnyPublisher<String, Never> { get }
@@ -17,6 +18,8 @@ public protocol CollectionService {
 
 extension CollectionService {
     public var nextPageMaxId: AnyPublisher<String, Never> { Empty().eraseToAnyPublisher() }
+
+    public var accountIdsForRelationships: AnyPublisher<Set<Account.Id>, Never> { Empty().eraseToAnyPublisher() }
 
     public var preferLastPresentIdOverNextPageMaxId: Bool { false }
 

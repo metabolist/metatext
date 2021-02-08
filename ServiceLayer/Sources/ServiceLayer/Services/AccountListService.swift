@@ -9,6 +9,7 @@ import MastodonAPI
 public struct AccountListService {
     public let sections: AnyPublisher<[CollectionSection], Error>
     public let nextPageMaxId: AnyPublisher<String, Never>
+    public let accountIdsForRelationships: AnyPublisher<Set<Account.Id>, Never>
     public let navigationService: NavigationService
     public let canRefresh = false
 
@@ -18,6 +19,7 @@ public struct AccountListService {
     private let contentDatabase: ContentDatabase
     private let titleComponents: [String]?
     private let nextPageMaxIdSubject = PassthroughSubject<String, Never>()
+    private let accountIdsForRelationshipsSubject = PassthroughSubject<Set<Account.Id>, Never>()
 
     init(endpoint: AccountsEndpoint,
          mastodonAPIClient: MastodonAPIClient,
@@ -28,9 +30,11 @@ public struct AccountListService {
         self.contentDatabase = contentDatabase
         self.titleComponents = titleComponents
         sections = accountsSubject
-            .map { [.init(items: $0.map { CollectionItem.account($0, endpoint.configuration) })] }
+            .map { [.init(items: $0.map { CollectionItem.account($0, endpoint.configuration, nil) })] } // TODO: revisit
+            .removeDuplicates()
             .eraseToAnyPublisher()
         nextPageMaxId = nextPageMaxIdSubject.eraseToAnyPublisher()
+        accountIdsForRelationships = accountIdsForRelationshipsSubject.eraseToAnyPublisher()
         navigationService = NavigationService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }
 }
@@ -51,6 +55,7 @@ extension AccountListService: CollectionService {
                 guard let maxId = $0.info.maxId else { return }
 
                 nextPageMaxIdSubject.send(maxId)
+                accountIdsForRelationshipsSubject.send(Set($0.result.map(\.id)))
             })
             .flatMap { contentDatabase.insert(accounts: $0.result) }
             .ignoreOutput()

@@ -8,6 +8,9 @@ import ServiceLayer
 public final class AccountViewModel: ObservableObject {
     public let identityContext: IdentityContext
     public internal(set) var configuration = CollectionItem.AccountConfiguration.withNote
+    public internal(set) var relationship: Relationship?
+    public internal(set) var identityProofs = [IdentityProof]()
+    public internal(set) var featuredTags = [FeaturedTag]()
 
     private let accountService: AccountService
     private let eventsSubject: PassthroughSubject<AnyPublisher<CollectionItemEvent, Error>, Never>
@@ -43,12 +46,6 @@ public extension AccountViewModel {
     var accountName: String { "@".appending(accountService.account.acct) }
 
     var isLocked: Bool { accountService.account.locked }
-
-    var relationship: Relationship? { accountService.relationship }
-
-    var identityProofs: [IdentityProof] { accountService.identityProofs }
-
-    var featuredTags: [FeaturedTag] { accountService.featuredTags }
 
     var fields: [Account.Field] { accountService.account.fields }
 

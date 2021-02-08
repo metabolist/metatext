@@ -40,12 +40,13 @@ extension TimelineItemsInfo {
                 CollectionItem.status(
                     .init(info: $0),
                     .init(showContentToggled: $0.showContentToggled,
-                          showAttachmentsToggled: $0.showAttachmentsToggled))
+                          showAttachmentsToggled: $0.showAttachmentsToggled),
+                    $0.reblogRelationship ?? $0.relationship)
             }
 
         for loadMoreRecord in loadMoreRecords {
             guard let index = timelineItems.firstIndex(where: {
-                guard case let .status(status, _) = $0 else { return false }
+                guard case let .status(status, _, _) = $0 else { return false }
 
                 return loadMoreRecord.afterStatusId > status.id
             }) else { continue }
@@ -66,7 +67,8 @@ extension TimelineItemsInfo {
                                 .init(info: $0),
                                 .init(showContentToggled: $0.showContentToggled,
                                       showAttachmentsToggled: $0.showAttachmentsToggled,
-                                      isPinned: true))
+                                      isPinned: true),
+                                $0.reblogRelationship ?? $0.relationship)
                         }),
                     .init(items: timelineItems)]
         } else {

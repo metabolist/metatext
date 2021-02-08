@@ -544,7 +544,7 @@ public extension ContentDatabase {
                     accountIds.firstIndex(of: $0.record.id) ?? 0
                         < accountIds.firstIndex(of: $1.record.id) ?? 0
                 }
-                .map { CollectionItem.account(.init(info: $0), .withoutNote) }
+                .map { CollectionItem.account(.init(info: $0), .withoutNote, nil) } // TODO: revisit
 
                 if let limit = limit, accounts.count >= limit {
                     accounts.append(.moreResults(.init(scope: .accounts)))
@@ -568,7 +568,8 @@ public extension ContentDatabase {
                     CollectionItem.status(
                         .init(info: $0),
                         .init(showContentToggled: $0.showContentToggled,
-                              showAttachmentsToggled: $0.showAttachmentsToggled))
+                              showAttachmentsToggled: $0.showAttachmentsToggled),
+                        $0.reblogRelationship ?? $0.relationship)
                 }
 
                 if let limit = limit, statuses.count >= limit {

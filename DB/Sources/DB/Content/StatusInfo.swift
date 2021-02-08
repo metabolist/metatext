@@ -2,12 +2,15 @@
 
 import Foundation
 import GRDB
+import Mastodon
 
 struct StatusInfo: Codable, Hashable, FetchableRecord {
     let record: StatusRecord
     let accountInfo: AccountInfo
+    let relationship: Relationship?
     let reblogAccountInfo: AccountInfo?
     let reblogRecord: StatusRecord?
+    let reblogRelationship: Relationship?
     let showContentToggle: StatusShowContentToggle?
     let reblogShowContentToggle: StatusShowContentToggle?
     let showAttachmentsToggle: StatusShowAttachmentsToggle?
@@ -50,7 +53,9 @@ private extension StatusInfo {
     static func addingOptionalIncludes<T: DerivableRequest>(_ request: T) -> T where T.RowDecoder == StatusRecord {
         request.including(optional: AccountInfo.addingIncludes(StatusRecord.reblogAccount)
                             .forKey(CodingKeys.reblogAccountInfo))
+            .including(optional: StatusRecord.relationship.forKey(CodingKeys.relationship))
             .including(optional: StatusRecord.reblog.forKey(CodingKeys.reblogRecord))
+            .including(optional: StatusRecord.reblogRelationship.forKey(CodingKeys.reblogRelationship))
             .including(optional: StatusRecord.showContentToggle.forKey(CodingKeys.showContentToggle))
             .including(optional: StatusRecord.reblogShowContentToggle.forKey(CodingKeys.reblogShowContentToggle))
             .including(optional: StatusRecord.showAttachmentsToggle.forKey(CodingKeys.showAttachmentsToggle))

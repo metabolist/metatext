@@ -3,9 +3,9 @@
 import Mastodon
 
 public enum CollectionItem: Hashable {
-    case status(Status, StatusConfiguration)
+    case status(Status, StatusConfiguration, Relationship?)
     case loadMore(LoadMore)
-    case account(Account, AccountConfiguration)
+    case account(Account, AccountConfiguration, Relationship?)
     case notification(MastodonNotification, StatusConfiguration?)
     case conversation(Conversation)
     case tag(Tag)
@@ -46,11 +46,11 @@ public extension CollectionItem {
 
     var itemId: Id? {
         switch  self {
-        case let .status(status, _):
+        case let .status(status, _, _):
             return status.id
         case .loadMore:
             return nil
-        case let .account(account, _):
+        case let .account(account, _, _):
             return account.id
         case let .notification(notification, _):
             return notification.id

@@ -30,11 +30,19 @@ final public class ProfileViewModel {
 
         self.accountEventsSubject = accountEventsSubject
 
-        profileService.accountServicePublisher
+        profileService.profilePublisher
             .map {
-                AccountViewModel(accountService: $0,
+                let vm = AccountViewModel(accountService: identityContext.service
+                                    .navigationService
+                                    .accountService(account: $0.account),
                                  identityContext: identityContext,
                                  eventsSubject: accountEventsSubject)
+
+                vm.relationship = $0.relationship
+                vm.identityProofs = $0.identityProofs
+                vm.featuredTags = $0.featuredTags
+
+                return vm
             }
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$accountViewModel)

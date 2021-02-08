@@ -35,13 +35,13 @@ extension CollectionItem {
 
     func estimatedHeight(width: CGFloat, identityContext: IdentityContext) -> CGFloat {
         switch self {
-        case let .status(status, configuration):
+        case let .status(status, configuration, _):
             return StatusView.estimatedHeight(
                 width: width,
                 identityContext: identityContext,
                 status: status,
                 configuration: configuration)
-        case let .account(account, configuration):
+        case let .account(account, configuration, _):
             return AccountView.estimatedHeight(width: width, account: account, configuration: configuration)
         case .loadMore:
             return LoadMoreView.estimatedHeight
@@ -65,9 +65,9 @@ extension CollectionItem {
 
     func mediaPrefetchURLs(identityContext: IdentityContext) -> Set<URL> {
         switch self {
-        case let .status(status, _):
+        case let .status(status, _, _):
             return status.mediaPrefetchURLs(identityContext: identityContext)
-        case let .account(account, _):
+        case let .account(account, _, _):
             return account.mediaPrefetchURLs(identityContext: identityContext)
         case let .notification(notification, _):
             var urls = notification.account.mediaPrefetchURLs(identityContext: identityContext)

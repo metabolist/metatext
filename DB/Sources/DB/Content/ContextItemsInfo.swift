@@ -49,7 +49,8 @@ extension ContextItemsInfo {
                               showAttachmentsToggled: statusInfo.showAttachmentsToggled,
                               isContextParent: isContextParent,
                               isReplyInContext: isReplyInContext,
-                              hasReplyFollowing: hasReplyFollowing))
+                              hasReplyFollowing: hasReplyFollowing),
+                        statusInfo.reblogRelationship ?? statusInfo.relationship)
                 }
         }
         .map { CollectionSection(items: $0) }

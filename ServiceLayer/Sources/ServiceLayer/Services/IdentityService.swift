@@ -114,6 +114,12 @@ public extension IdentityService {
             .eraseToAnyPublisher()
     }
 
+    func requestRelationships(ids: Set<Account.Id>) -> AnyPublisher<Never, Error> {
+        mastodonAPIClient.request(RelationshipsEndpoint.relationships(ids: Array(ids)))
+            .flatMap(contentDatabase.insert(relationships:))
+            .eraseToAnyPublisher()
+    }
+
     func getMarker(_ markerTimeline: Marker.Timeline) -> AnyPublisher<Marker, Error> {
         mastodonAPIClient.request(MarkersEndpoint.get([markerTimeline]))
             .compactMap { $0[markerTimeline.rawValue] }

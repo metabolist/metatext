@@ -7,7 +7,7 @@ import Mastodon
 import MastodonAPI
 
 public struct ProfileService {
-    public let accountServicePublisher: AnyPublisher<AccountService, Error>
+    public let profilePublisher: AnyPublisher<Profile, Error>
 
     private let id: Account.Id
     private let mastodonAPIClient: MastodonAPIClient
@@ -34,26 +34,16 @@ public struct ProfileService {
         self.mastodonAPIClient = mastodonAPIClient
         self.contentDatabase = contentDatabase
 
-        var accountPublisher = contentDatabase.profilePublisher(id: id)
+        var profilePublisher = contentDatabase.profilePublisher(id: id)
 
         if let account = account {
-            accountPublisher = accountPublisher
+            profilePublisher = profilePublisher
                 .merge(with: Just(Profile(account: account)).setFailureType(to: Error.self))
                 .removeDuplicates()
                 .eraseToAnyPublisher()
         }
 
-        accountServicePublisher = accountPublisher
-            .map {
-                AccountService(
-                    account: $0.account,
-                    relationship: $0.relationship,
-                    identityProofs: $0.identityProofs,
-                    featuredTags: $0.featuredTags,
-                    mastodonAPIClient: mastodonAPIClient,
-                    contentDatabase: contentDatabase)
-            }
-            .eraseToAnyPublisher()
+        self.profilePublisher = profilePublisher
     }
 }
 
