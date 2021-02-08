@@ -268,6 +268,22 @@ extension ContentDatabase {
             }
         }
 
+        migrator.registerMigration("1.0.0-pk-fix") { db in
+            try db.create(table: "new_accountListJoin") { t in
+                t.column("accountListId", .text).indexed().notNull()
+                    .references("accountList", onDelete: .cascade)
+                t.column("accountId", .text).indexed().notNull()
+                    .references("accountRecord", onDelete: .cascade)
+                t.column("order", .integer).notNull()
+
+                t.primaryKey(["accountListId", "accountId"], onConflict: .replace)
+            }
+
+            try db.execute(sql: "INSERT INTO new_accountListJoin SELECT * FROM accountListJoin")
+            try db.drop(table: "accountListJoin")
+            try db.rename(table: "new_accountListJoin", to: "accountListJoin")
+        }
+
         return migrator
     }
 }
