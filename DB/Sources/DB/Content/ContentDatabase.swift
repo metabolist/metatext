@@ -717,6 +717,7 @@ private extension ContentDatabase {
             try ConversationRecord.deleteAll($0)
             try StatusAncestorJoin.deleteAll($0)
             try StatusDescendantJoin.deleteAll($0)
+            try AccountList.deleteAll($0)
 
             if useNotificationsLastReadId {
                 var notificationIds = try MastodonNotification.Id.fetchAll(
