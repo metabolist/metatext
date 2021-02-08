@@ -572,72 +572,59 @@ public extension ContentDatabase {
             .eraseToAnyPublisher()
     }
 
-    // swiftlint:disable:next function_body_length
     func publisher(results: Results, limit: Int?) -> AnyPublisher<[CollectionSection], Error> {
         let accountIds = results.accounts.map(\.id)
         let statusIds = results.statuses.map(\.id)
 
-        let accountsPublisher = ValueObservation.tracking(
-            AccountAndRelationshipInfo.request(
+        return ValueObservation.tracking { db -> ([AccountAndRelationshipInfo], [StatusInfo]) in
+            (try AccountAndRelationshipInfo.request(
                 AccountRecord.filter(accountIds.contains(AccountRecord.Columns.id)))
-                .fetchAll)
-            .removeDuplicates()
-            .publisher(in: databaseWriter)
-            .map { infos -> [CollectionItem] in
-                var accounts = infos.sorted {
-                    accountIds.firstIndex(of: $0.accountInfo.record.id) ?? 0
-                        < accountIds.firstIndex(of: $1.accountInfo.record.id) ?? 0
-                }
-                .map { CollectionItem.account(.init(info: $0.accountInfo), .withoutNote, $0.relationship) }
-
-                if let limit = limit, accounts.count >= limit {
-                    accounts.append(.moreResults(.init(scope: .accounts)))
-                }
-
-                return accounts
-            }
-
-        let statusesPublisher = ValueObservation.tracking(
-            StatusInfo.request(
+                .fetchAll(db),
+            try StatusInfo.request(
                 StatusRecord.filter(statusIds.contains(StatusRecord.Columns.id)))
-                .fetchAll)
-            .removeDuplicates()
-            .publisher(in: databaseWriter)
-            .map { infos -> [CollectionItem] in
-                var statuses = infos.sorted {
-                    statusIds.firstIndex(of: $0.record.id) ?? 0
-                        < statusIds.firstIndex(of: $1.record.id) ?? 0
-                }
-                .map {
-                    CollectionItem.status(
-                        .init(info: $0),
-                        .init(showContentToggled: $0.showContentToggled,
-                              showAttachmentsToggled: $0.showAttachmentsToggled),
-                        $0.reblogRelationship ?? $0.relationship)
-                }
-
-                if let limit = limit, statuses.count >= limit {
-                    statuses.append(.moreResults(.init(scope: .statuses)))
-                }
-
-                return statuses
-            }
-
-        var hashtags = results.hashtags.map(CollectionItem.tag)
-
-        if let limit = limit, hashtags.count >= limit {
-            hashtags.append(.moreResults(.init(scope: .tags)))
+                .fetchAll(db))
         }
-
-        return accountsPublisher.combineLatest(statusesPublisher)
-            .map { accounts, statuses in
-                [.init(items: accounts, searchScope: .accounts),
-                 .init(items: statuses, searchScope: .statuses),
-                 .init(items: hashtags, searchScope: .tags)]
-                    .filter { !$0.items.isEmpty }
+        .publisher(in: databaseWriter)
+        .map { accountAndRelationshipInfos, statusInfos in
+            var accounts = accountAndRelationshipInfos.sorted {
+                accountIds.firstIndex(of: $0.accountInfo.record.id) ?? 0
+                    < accountIds.firstIndex(of: $1.accountInfo.record.id) ?? 0
             }
-            .removeDuplicates()
-            .eraseToAnyPublisher()
+            .map { CollectionItem.account(.init(info: $0.accountInfo), .withoutNote, $0.relationship) }
+
+            if let limit = limit, accounts.count >= limit {
+                accounts.append(.moreResults(.init(scope: .accounts)))
+            }
+
+            var statuses = statusInfos.sorted {
+                statusIds.firstIndex(of: $0.record.id) ?? 0
+                    < statusIds.firstIndex(of: $1.record.id) ?? 0
+            }
+            .map {
+                CollectionItem.status(
+                    .init(info: $0),
+                    .init(showContentToggled: $0.showContentToggled,
+                          showAttachmentsToggled: $0.showAttachmentsToggled),
+                    $0.reblogRelationship ?? $0.relationship)
+            }
+
+            if let limit = limit, statuses.count >= limit {
+                statuses.append(.moreResults(.init(scope: .statuses)))
+            }
+
+            var hashtags = results.hashtags.map(CollectionItem.tag)
+
+            if let limit = limit, hashtags.count >= limit {
+                hashtags.append(.moreResults(.init(scope: .tags)))
+            }
+
+            return [.init(items: accounts, searchScope: .accounts),
+                    .init(items: statuses, searchScope: .statuses),
+                    .init(items: hashtags, searchScope: .tags)]
+                .filter { !$0.items.isEmpty }
+        }
+        .removeDuplicates()
+        .eraseToAnyPublisher()
     }
 
     func notificationsPublisher(
