@@ -13,21 +13,30 @@ public struct ProfileService {
     private let mastodonAPIClient: MastodonAPIClient
     private let contentDatabase: ContentDatabase
 
-    init(account: Account, mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
+    init(account: Account,
+         relationship: Relationship?,
+         mastodonAPIClient: MastodonAPIClient,
+         contentDatabase: ContentDatabase) {
         self.init(
             id: account.id,
             account: account,
+            relationship: relationship,
             mastodonAPIClient: mastodonAPIClient,
             contentDatabase: contentDatabase)
     }
 
     init(id: Account.Id, mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
-        self.init(id: id, account: nil, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+        self.init(id: id,
+                  account: nil,
+                  relationship: nil,
+                  mastodonAPIClient: mastodonAPIClient,
+                  contentDatabase: contentDatabase)
     }
 
     private init(
         id: Account.Id,
         account: Account?,
+        relationship: Relationship?,
         mastodonAPIClient: MastodonAPIClient,
         contentDatabase: ContentDatabase) {
         self.id = id
@@ -38,7 +47,7 @@ public struct ProfileService {
 
         if let account = account {
             profilePublisher = profilePublisher
-                .merge(with: Just(Profile(account: account)).setFailureType(to: Error.self))
+                .merge(with: Just(Profile(account: account, relationship: relationship)).setFailureType(to: Error.self))
                 .removeDuplicates()
                 .eraseToAnyPublisher()
         }

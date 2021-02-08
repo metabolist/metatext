@@ -59,8 +59,11 @@ public extension NavigationService {
         ProfileService(id: id, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }
 
-    func profileService(account: Account) -> ProfileService {
-        ProfileService(account: account, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+    func profileService(account: Account, relationship: Relationship? = nil) -> ProfileService {
+        ProfileService(account: account,
+                       relationship: relationship,
+                       mastodonAPIClient: mastodonAPIClient,
+                       contentDatabase: contentDatabase)
     }
 
     func statusService(status: Status) -> StatusService {

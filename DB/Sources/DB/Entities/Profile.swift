@@ -9,9 +9,9 @@ public struct Profile: Codable, Hashable {
     public let identityProofs: [IdentityProof]
     public let featuredTags: [FeaturedTag]
 
-    public init(account: Account) {
+    public init(account: Account, relationship: Relationship?) {
         self.account = account
-        self.relationship = nil
+        self.relationship = relationship
         self.identityProofs = []
         self.featuredTags = []
     }

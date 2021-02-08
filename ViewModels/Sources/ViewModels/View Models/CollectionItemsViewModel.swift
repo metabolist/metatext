@@ -141,7 +141,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
         let item = lastUpdate.sections[indexPath.section].items[indexPath.item]
 
         switch item {
-        case let .status(status, _, relationship):
+        case let .status(status, _, _):
             send(event: .navigation(.collection(collectionService
                                                     .navigationService
                                                     .contextService(id: status.displayStatus.id))))
@@ -151,7 +151,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
         case let .account(account, _, relationship):
             send(event: .navigation(.profile(collectionService
                                                 .navigationService
-                                                .profileService(account: account))))
+                                                .profileService(account: account, relationship: relationship))))
         case let .notification(notification, _):
             if let status = notification.status {
                 send(event: .navigation(.collection(collectionService

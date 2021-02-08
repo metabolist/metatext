@@ -528,7 +528,11 @@ public extension ContentDatabase {
             AccountListItemsInfo.request(AccountList.filter(AccountList.Columns.id == id)).fetchOne)
             .removeDuplicates()
             .publisher(in: databaseWriter)
-            .map { $0?.accountInfos.map { CollectionItem.account(.init(info: $0), configuration, nil) } }
+            .map {
+                $0?.accountAndRelationshipInfos.map {
+                    CollectionItem.account(.init(info: $0.accountInfo), configuration, $0.relationship)
+                }
+            }
             .replaceNil(with: [])
             .map { [CollectionSection(items: $0)] }
             .eraseToAnyPublisher()
@@ -574,17 +578,17 @@ public extension ContentDatabase {
         let statusIds = results.statuses.map(\.id)
 
         let accountsPublisher = ValueObservation.tracking(
-            AccountInfo.request(
+            AccountAndRelationshipInfo.request(
                 AccountRecord.filter(accountIds.contains(AccountRecord.Columns.id)))
                 .fetchAll)
             .removeDuplicates()
             .publisher(in: databaseWriter)
             .map { infos -> [CollectionItem] in
                 var accounts = infos.sorted {
-                    accountIds.firstIndex(of: $0.record.id) ?? 0
-                        < accountIds.firstIndex(of: $1.record.id) ?? 0
+                    accountIds.firstIndex(of: $0.accountInfo.record.id) ?? 0
+                        < accountIds.firstIndex(of: $1.accountInfo.record.id) ?? 0
                 }
-                .map { CollectionItem.account(.init(info: $0), .withoutNote, nil) } // TODO: revisit
+                .map { CollectionItem.account(.init(info: $0.accountInfo), .withoutNote, $0.relationship) }
 
                 if let limit = limit, accounts.count >= limit {
                     accounts.append(.moreResults(.init(scope: .accounts)))
