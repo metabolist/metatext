@@ -134,6 +134,8 @@
 		D0BE97D725D0863E0057E161 /* ImagePastableTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BE97D625D0863E0057E161 /* ImagePastableTextView.swift */; };
 		D0BE97E025D086F80057E161 /* ImagePastableTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BE97D625D0863E0057E161 /* ImagePastableTextView.swift */; };
 		D0BE980425D229D50057E161 /* SeparatorConfiguredTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BE980325D229D50057E161 /* SeparatorConfiguredTableViewCell.swift */; };
+		D0BE980E25D241CE0057E161 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BE980D25D241CE0057E161 /* UIImage+Extensions.swift */; };
+		D0BE981725D242EB0057E161 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BE980D25D241CE0057E161 /* UIImage+Extensions.swift */; };
 		D0BEB1F324F8EE8C001B0F04 /* AttachmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB1F224F8EE8C001B0F04 /* AttachmentView.swift */; };
 		D0BEB1F724F9A84B001B0F04 /* LoadingTableFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB1F624F9A84B001B0F04 /* LoadingTableFooterView.swift */; };
 		D0BEB1FF24F9E5BB001B0F04 /* ListsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BEB1FE24F9E5BB001B0F04 /* ListsView.swift */; };
@@ -332,6 +334,7 @@
 		D0BE97A225CF44310057E161 /* CGRect+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+Extensions.swift"; sourceTree = "<group>"; };
 		D0BE97D625D0863E0057E161 /* ImagePastableTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePastableTextView.swift; sourceTree = "<group>"; };
 		D0BE980325D229D50057E161 /* SeparatorConfiguredTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorConfiguredTableViewCell.swift; sourceTree = "<group>"; };
+		D0BE980D25D241CE0057E161 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		D0BEB1F224F8EE8C001B0F04 /* AttachmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentView.swift; sourceTree = "<group>"; };
 		D0BEB1F624F9A84B001B0F04 /* LoadingTableFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingTableFooterView.swift; sourceTree = "<group>"; };
 		D0BEB1FE24F9E5BB001B0F04 /* ListsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsView.swift; sourceTree = "<group>"; };
@@ -752,6 +755,7 @@
 				D035F8B225B9616000DC75ED /* Timeline+Extensions.swift */,
 				D08E512025786A6600FA2C5F /* UIButton+Extensions.swift */,
 				D0C7D46C24F76169001EBDBB /* UIColor+Extensions.swift */,
+				D0BE980D25D241CE0057E161 /* UIImage+Extensions.swift */,
 				D08DFB0025CE228E0005DA98 /* UIScrollView+Extensions.swift */,
 				D05936F325AA66A600754FDF /* UIView+Extensions.swift */,
 				D0E7AD3825870B13005F5E2D /* UIVIewController+Extensions.swift */,
@@ -999,6 +1003,7 @@
 				D0E569E0252931B100FA1D72 /* LoadMoreContentConfiguration.swift in Sources */,
 				D0DDA77525C5F73F00FA0F91 /* TagCollectionViewCell.swift in Sources */,
 				D0FE1C9825368A9D003EF1EB /* PlayerCache.swift in Sources */,
+				D0BE980E25D241CE0057E161 /* UIImage+Extensions.swift in Sources */,
 				D05936DE25A937EC00754FDF /* EditThumbnailView.swift in Sources */,
 				D0F0B136251AA12700942152 /* CollectionItem+Extensions.swift in Sources */,
 				D007023E25562A2800F38136 /* ConversationAvatarsView.swift in Sources */,
@@ -1144,6 +1149,7 @@
 				D0CE9F88258B076900E3A6B6 /* AttachmentUploadView.swift in Sources */,
 				D07EC81225B232C2006DF726 /* SystemEmoji+Extensions.swift in Sources */,
 				D08E52C7257C7AEE00FA2C5F /* ShareErrorViewController.swift in Sources */,
+				D0BE981725D242EB0057E161 /* UIImage+Extensions.swift in Sources */,
 				D059370025AA94EA00754FDF /* MarkAttachmentsSensitiveView.swift in Sources */,
 				D015B14425A812F6006D88A8 /* PlayerCache.swift in Sources */,
 				D05936F525AA66A600754FDF /* UIView+Extensions.swift in Sources */,

@@ -224,10 +224,10 @@ private extension CompositionView {
             .sink { [weak self] in self?.textView.canPasteImage = $0 }
             .store(in: &cancellables)
 
-        textView.pastedImagesPublisher.sink { [weak self] in
+        textView.pastedItemProviders.sink { [weak self] in
             guard let self = self else { return }
 
-            self.viewModel.attach(itemProvider: NSItemProvider(object: $0),
+            self.viewModel.attach(itemProvider: $0,
                                   parentViewModel: self.parentViewModel)
         }
         .store(in: &cancellables)
