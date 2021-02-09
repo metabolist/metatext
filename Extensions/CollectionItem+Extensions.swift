@@ -12,7 +12,7 @@ extension CollectionItem {
         NotificationTableViewCell.self,
         ConversationTableViewCell.self,
         TagTableViewCell.self,
-        UITableViewCell.self]
+        SeparatorConfiguredTableViewCell.self]
 
     var cellClass: AnyClass {
         switch self {
@@ -29,7 +29,7 @@ extension CollectionItem {
         case .tag:
             return TagTableViewCell.self
         case .moreResults:
-            return UITableViewCell.self
+            return SeparatorConfiguredTableViewCell.self
         }
     }
 

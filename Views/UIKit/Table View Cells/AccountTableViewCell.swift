@@ -3,7 +3,7 @@
 import UIKit
 import ViewModels
 
-final class AccountTableViewCell: UITableViewCell {
+final class AccountTableViewCell: SeparatorConfiguredTableViewCell {
     var viewModel: AccountViewModel?
 
     override func updateConfiguration(using state: UICellConfigurationState) {
@@ -11,17 +11,5 @@ final class AccountTableViewCell: UITableViewCell {
 
         contentConfiguration = AccountContentConfiguration(viewModel: viewModel).updated(for: state)
         accessibilityElements = [contentView]
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            separatorInset.left = 0
-            separatorInset.right = 0
-        } else {
-            separatorInset.left = layoutMargins.left
-            separatorInset.right = layoutMargins.right
-        }
     }
 }

@@ -3,7 +3,7 @@
 import UIKit
 import ViewModels
 
-final class NotificationTableViewCell: UITableViewCell {
+final class NotificationTableViewCell: SeparatorConfiguredTableViewCell {
     var viewModel: NotificationViewModel?
 
     override func updateConfiguration(using state: UICellConfigurationState) {
@@ -11,17 +11,5 @@ final class NotificationTableViewCell: UITableViewCell {
 
         contentConfiguration = NotificationContentConfiguration(viewModel: viewModel).updated(for: state)
         accessibilityElements = [contentView]
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            separatorInset.left = 0
-            separatorInset.right = 0
-        } else {
-            separatorInset.left = layoutMargins.left
-            separatorInset.right = layoutMargins.right
-        }
     }
 }

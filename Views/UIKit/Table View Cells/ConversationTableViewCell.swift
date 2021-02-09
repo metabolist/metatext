@@ -3,7 +3,7 @@
 import UIKit
 import ViewModels
 
-final class ConversationTableViewCell: UITableViewCell {
+final class ConversationTableViewCell: SeparatorConfiguredTableViewCell {
     var viewModel: ConversationViewModel?
 
     override func updateConfiguration(using state: UICellConfigurationState) {
@@ -11,17 +11,5 @@ final class ConversationTableViewCell: UITableViewCell {
 
         contentConfiguration = ConversationContentConfiguration(viewModel: viewModel).updated(for: state)
         accessibilityElements = [contentView]
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            separatorInset.left = 0
-            separatorInset.right = 0
-        } else {
-            separatorInset.left = layoutMargins.left
-            separatorInset.right = layoutMargins.right
-        }
     }
 }
