@@ -129,6 +129,10 @@ extension ProfileViewModel: CollectionViewModel {
             .eraseToAnyPublisher()
     }
 
+    public var searchScopeChanges: AnyPublisher<SearchScope, Never> {
+        collectionViewModel.flatMap(\.searchScopeChanges).eraseToAnyPublisher()
+    }
+
     public var nextPageMaxId: String? {
         collectionViewModel.value.nextPageMaxId
     }

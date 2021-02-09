@@ -26,7 +26,7 @@ public struct SearchService {
 
             return (search.offset == nil ? results : $0.0.appending(results), search.limit)
         }
-        .flatMap(contentDatabase.publisher(results:limit:)).eraseToAnyPublisher()
+        .map(contentDatabase.publisher(results:limit:)).switchToLatest().eraseToAnyPublisher()
     }
 }
 

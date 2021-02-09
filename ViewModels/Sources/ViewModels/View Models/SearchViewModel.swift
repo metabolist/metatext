@@ -16,8 +16,9 @@ public final class SearchViewModel: CollectionItemsViewModel {
 
         super.init(collectionService: searchService, identityContext: identityContext)
 
-        $query.removeDuplicates()
+        $query.dropFirst()
             .debounce(for: .seconds(Self.debounceInterval), scheduler: DispatchQueue.global())
+            .removeDuplicates()
             .combineLatest($scope.removeDuplicates())
             .sink { [weak self] in
                 self?.request(
@@ -39,7 +40,7 @@ public final class SearchViewModel: CollectionItemsViewModel {
 }
 
 private extension SearchViewModel {
-    static let debounceInterval: TimeInterval = 0.25
+    static let debounceInterval: TimeInterval = 0.5
 }
 
 private extension SearchScope {

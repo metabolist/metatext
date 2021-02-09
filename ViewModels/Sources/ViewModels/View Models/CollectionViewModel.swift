@@ -12,6 +12,7 @@ public protocol CollectionViewModel {
     var alertItems: AnyPublisher<AlertItem, Never> { get }
     var loading: AnyPublisher<Bool, Never> { get }
     var events: AnyPublisher<CollectionItemEvent, Never> { get }
+    var searchScopeChanges: AnyPublisher<SearchScope, Never> { get }
     var nextPageMaxId: String? { get }
     var canRefresh: Bool { get }
     func request(maxId: String?, minId: String?, search: Search?)

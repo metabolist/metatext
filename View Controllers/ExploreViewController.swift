@@ -79,12 +79,9 @@ final class ExploreViewController: UICollectionViewController {
         }
         .store(in: &cancellables)
 
-        viewModel.searchViewModel.events.sink { [weak self] in
-            if case let .navigation(navigation) = $0,
-               case let .searchScope(scope) = navigation {
-                searchController.searchBar.selectedScopeButtonIndex = scope.rawValue
-                self?.updateSearchResults(for: searchController)
-            }
+        viewModel.searchViewModel.searchScopeChanges.sink { [weak self] in
+            searchController.searchBar.selectedScopeButtonIndex = $0.rawValue
+            self?.updateSearchResults(for: searchController)
         }
         .store(in: &cancellables)
     }

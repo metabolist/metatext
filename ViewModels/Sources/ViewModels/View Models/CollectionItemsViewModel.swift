@@ -17,6 +17,7 @@ public class CollectionItemsViewModel: ObservableObject {
     private let eventsSubject = PassthroughSubject<AnyPublisher<CollectionItemEvent, Error>, Never>()
     private let loadingSubject = PassthroughSubject<Bool, Never>()
     private let expandAllSubject: CurrentValueSubject<ExpandAllState, Never>
+    private let searchScopeChangesSubject = PassthroughSubject<SearchScope, Never>()
     private var topVisibleIndexPath = IndexPath(item: 0, section: 0)
     private let lastReadId = CurrentValueSubject<String?, Never>(nil)
     private var lastSelectedLoadMore: LoadMore?
@@ -105,6 +106,8 @@ extension CollectionItemsViewModel: CollectionViewModel {
         .eraseToAnyPublisher()
     }
 
+    public var searchScopeChanges: AnyPublisher<SearchScope, Never> { searchScopeChangesSubject.eraseToAnyPublisher() }
+
     public var canRefresh: Bool { collectionService.canRefresh }
 
     public func request(maxId: String? = nil, minId: String? = nil, search: Search?) {
@@ -154,7 +157,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
                                                     .navigationService
                                                     .timelineService(timeline: .tag(tag.name)))))
         case let .moreResults(moreResults):
-            send(event: .navigation(.searchScope(moreResults.scope)))
+            searchScopeChangesSubject.send(moreResults.scope)
         }
     }
 
