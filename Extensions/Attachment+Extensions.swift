@@ -18,10 +18,6 @@ extension Attachment.AttachmentType {
     }
 
     func accessibilityNames(count: Int) -> String {
-        if count == 1 {
-            return accessibilityName
-        }
-
         let format: String
 
         switch self {

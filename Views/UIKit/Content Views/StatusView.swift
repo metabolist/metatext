@@ -487,7 +487,7 @@ private extension StatusView {
         displayNameLabel.attributedText = mutableDisplayName
         accountLabel.text = viewModel.accountName
 
-        let nameButtonAccessibilityAttributedLabel = mutableDisplayName
+        let nameButtonAccessibilityAttributedLabel = NSMutableAttributedString(attributedString: mutableDisplayName)
 
         nameButtonAccessibilityAttributedLabel.appendWithSeparator(viewModel.accountName)
         nameButton.accessibilityAttributedLabel = nameButtonAccessibilityAttributedLabel

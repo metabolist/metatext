@@ -98,5 +98,69 @@
 			<string>%ld Followers</string>
 		</dict>
 	</dict>
+	<key>attachment.type.images-%ld</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@images@</string>
+		<key>images</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld image</string>
+			<key>other</key>
+			<string>%ld images</string>
+		</dict>
+	</dict>
+	<key>attachment.type.audios-%ld</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@audios@</string>
+		<key>audios</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld audio file</string>
+			<key>other</key>
+			<string>%ld audio files</string>
+		</dict>
+	</dict>
+	<key>attachment.type.videos-%ld</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@videos@</string>
+		<key>videos</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld video file</string>
+			<key>other</key>
+			<string>%ld video files</string>
+		</dict>
+	</dict>
+	<key>attachment.type.unknowns-%ld</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@unknowns@</string>
+		<key>unknowns</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld attachment</string>
+			<key>other</key>
+			<string>%ld attachments</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

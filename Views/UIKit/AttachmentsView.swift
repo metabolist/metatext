@@ -82,7 +82,18 @@ final class AttachmentsView: UIView {
                     type = .unknown
                 }
 
-                accessibilityLabel = type.accessibilityNames(count: viewModel.attachmentViewModels.count)
+                var accessibilityLabel = type.accessibilityNames(count: viewModel.attachmentViewModels.count)
+
+                for attachmentViewModel in viewModel.attachmentViewModels {
+                    guard let description = attachmentViewModel.attachment.description,
+                          !description.isEmpty
+                    else { continue }
+
+                    accessibilityLabel.appendWithSeparator(attachmentViewModel.attachment.type.accessibilityName)
+                    accessibilityLabel.appendWithSeparator(description)
+                }
+
+                self.accessibilityLabel = accessibilityLabel
             } else {
                 accessibilityLabel = curtainButton.title(for: .normal)
             }
