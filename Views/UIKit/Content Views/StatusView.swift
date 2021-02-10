@@ -625,10 +625,11 @@ private extension StatusView {
 
         accessibilityCustomActions = accessibilityCustomActions(viewModel: viewModel)
     }
-    // swiftlint:enable function_body_length
 
     func menu(viewModel: StatusViewModel) -> UIMenu {
-        var menuItems = [
+        var sections = [UIMenu]()
+
+        var firstSectionItems = [
             UIAction(
                 title: viewModel.bookmarked
                     ? NSLocalizedString("status.unbookmark", comment: "")
@@ -639,7 +640,7 @@ private extension StatusView {
         ]
 
         if let pinned = viewModel.pinned {
-            menuItems.append(UIAction(
+            firstSectionItems.append(UIAction(
                 title: pinned
                     ? NSLocalizedString("status.unpin", comment: "")
                     : NSLocalizedString("status.pin", comment: ""),
@@ -648,8 +649,12 @@ private extension StatusView {
             })
         }
 
+        sections.append(UIMenu(options: .displayInline, children: firstSectionItems))
+
+        var secondSectionItems = [UIAction]()
+
         if viewModel.isMine {
-            menuItems += [
+            secondSectionItems += [
                 UIAction(
                     title: viewModel.muted
                         ? NSLocalizedString("status.unmute", comment: "")
@@ -671,16 +676,80 @@ private extension StatusView {
                 }
             ]
         } else {
-            menuItems.append(UIAction(
+            if let relationship = viewModel.accountViewModel.relationship {
+                if relationship.muting {
+                    secondSectionItems.append(UIAction(
+                        title: NSLocalizedString("account.unmute", comment: ""),
+                        image: UIImage(systemName: "speaker")) { _ in
+                        viewModel.accountViewModel.unmute()
+                    })
+                } else {
+                    secondSectionItems.append(UIAction(
+                        title: NSLocalizedString("account.mute", comment: ""),
+                        image: UIImage(systemName: "speaker.slash")) { _ in
+                        viewModel.accountViewModel.mute()
+                    })
+                }
+
+                if relationship.blocking {
+                    secondSectionItems.append(UIAction(
+                        title: NSLocalizedString("account.unblock", comment: ""),
+                        image: UIImage(systemName: "slash.circle"),
+                        attributes: .destructive) { _ in
+//                        viewModel.accountViewModel.unblock()
+                        viewModel.accountViewModel.confirmUnblock()
+                        })
+                } else {
+                    secondSectionItems.append(UIAction(
+                        title: NSLocalizedString("account.block", comment: ""),
+                        image: UIImage(systemName: "slash.circle"),
+                        attributes: .destructive) { _ in
+                        viewModel.accountViewModel.confirmBlock()
+                    })
+                }
+            }
+
+            secondSectionItems.append(UIAction(
                 title: NSLocalizedString("report", comment: ""),
                 image: UIImage(systemName: "flag"),
                 attributes: .destructive) { _ in
                 viewModel.reportStatus()
             })
+
+            sections.append(UIMenu(options: .displayInline, children: secondSectionItems))
+
+            if !viewModel.accountViewModel.isLocal,
+               let domain = viewModel.accountViewModel.domain,
+               let relationship = viewModel.accountViewModel.relationship {
+                let domainBlockAction: UIAction
+
+                if relationship.domainBlocking {
+                    domainBlockAction = UIAction(
+                        title: String.localizedStringWithFormat(
+                            NSLocalizedString("account.domain-unblock-%@", comment: ""),
+                            domain),
+                        image: UIImage(systemName: "slash.circle"),
+                        attributes: .destructive) { _ in
+                        viewModel.accountViewModel.confirmDomainUnblock(domain: domain)
+                    }
+                } else {
+                    domainBlockAction = UIAction(
+                        title: String.localizedStringWithFormat(
+                            NSLocalizedString("account.domain-block-%@", comment: ""),
+                            domain),
+                        image: UIImage(systemName: "slash.circle"),
+                        attributes: .destructive) { _ in
+                        viewModel.accountViewModel.confirmDomainBlock(domain: domain)
+                    }
+                }
+
+                sections.append(UIMenu(options: .displayInline, children: [domainBlockAction]))
+            }
         }
 
-        return UIMenu(children: menuItems)
+        return UIMenu(children: sections)
     }
+    // swiftlint:enable function_body_length
 
     func setButtonImages(scale: UIImage.SymbolScale) {
         let visibility = statusConfiguration.viewModel.visibility

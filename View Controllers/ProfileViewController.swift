@@ -105,6 +105,22 @@ private extension ProfileViewController {
             })
         }
 
+        if relationship.blocking {
+            actions.append(UIAction(
+                title: NSLocalizedString("account.unblock", comment: ""),
+                image: UIImage(systemName: "slash.circle"),
+                attributes: .destructive) { _ in
+                accountViewModel.confirmUnblock()
+            })
+        } else {
+            actions.append(UIAction(
+                title: NSLocalizedString("account.block", comment: ""),
+                image: UIImage(systemName: "slash.circle"),
+                attributes: .destructive) { _ in
+                accountViewModel.confirmBlock()
+            })
+        }
+
         actions.append(UIAction(
             title: NSLocalizedString("report", comment: ""),
             image: UIImage(systemName: "flag"),
@@ -116,30 +132,6 @@ private extension ProfileViewController {
             self.report(reportViewModel: reportViewModel)
         })
 
-        if relationship.blocking {
-            actions.append(UIAction(
-                title: NSLocalizedString("account.unblock", comment: ""),
-                image: UIImage(systemName: "slash.circle"),
-                attributes: .destructive) { [weak self] _ in
-                self?.confirm(message: String.localizedStringWithFormat(
-                                NSLocalizedString("account.unblock.confirm-%@", comment: ""),
-                                accountViewModel.accountName)) {
-                    accountViewModel.unblock()
-                }
-                })
-        } else {
-            actions.append(UIAction(
-                title: NSLocalizedString("account.block", comment: ""),
-                image: UIImage(systemName: "slash.circle"),
-                attributes: .destructive) { [weak self] _ in
-                self?.confirm(message: String.localizedStringWithFormat(
-                                NSLocalizedString("account.block.confirm-%@", comment: ""),
-                                accountViewModel.accountName)) {
-                    accountViewModel.block()
-                }
-                })
-        }
-
         if !accountViewModel.isLocal, let domain = accountViewModel.domain {
             if relationship.domainBlocking {
                 actions.append(UIAction(
@@ -147,12 +139,8 @@ private extension ProfileViewController {
                         NSLocalizedString("account.domain-unblock-%@", comment: ""),
                         domain),
                     image: UIImage(systemName: "slash.circle"),
-                    attributes: .destructive) { [weak self] _ in
-                    self?.confirm(message: String.localizedStringWithFormat(
-                                    NSLocalizedString("account.domain-unblock.confirm-%@", comment: ""),
-                                    domain)) {
-                        accountViewModel.domainUnblock()
-                    }
+                    attributes: .destructive) { _ in
+                    accountViewModel.confirmDomainUnblock(domain: domain)
                 })
             } else {
                 actions.append(UIAction(
@@ -160,30 +148,12 @@ private extension ProfileViewController {
                         NSLocalizedString("account.domain-block-%@", comment: ""),
                         domain),
                     image: UIImage(systemName: "slash.circle"),
-                    attributes: .destructive) { [weak self] _ in
-                    self?.confirm(message: String.localizedStringWithFormat(
-                                    NSLocalizedString("account.domain-block.confirm-%@", comment: ""),
-                                    domain)) {
-                        accountViewModel.domainBlock()
-                    }
-                    })
+                    attributes: .destructive) { _ in
+                    accountViewModel.confirmDomainBlock(domain: domain)
+                })
             }
         }
 
         return UIMenu(children: actions)
-    }
-
-    func confirm(message: String, action: @escaping () -> Void) {
-        let alertController = UIAlertController(title: nil, message: message, preferredStyle: .alert)
-
-        let cancelAction = UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil)
-        let okAction = UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .destructive) { _ in
-            action()
-        }
-
-        alertController.addAction(cancelAction)
-        alertController.addAction(okAction)
-
-        present(alertController, animated: true)
     }
 }

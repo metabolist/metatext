@@ -8,6 +8,7 @@
 "account.accept-follow-request-button.accessibility-label" = "Accept follow request";
 "account.avatar.accessibility-label-%@" = "Avatar: %@";
 "account.block" = "Block";
+"account.block-and-report" = "Block & report";
 "account.block.confirm-%@" = "Block %@?";
 "account.domain-block-%@" = "Block domain %@";
 "account.domain-block.confirm-%@" = "Block domain %@?";

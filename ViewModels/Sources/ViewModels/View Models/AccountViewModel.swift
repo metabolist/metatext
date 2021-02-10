@@ -111,8 +111,16 @@ public extension AccountViewModel {
         ignorableOutputEvent(accountService.showReblogs())
     }
 
+    func confirmBlock() {
+        eventsSubject.send(Just(.confirmBlock(self)).setFailureType(to: Error.self).eraseToAnyPublisher())
+    }
+
     func block() {
         ignorableOutputEvent(accountService.block())
+    }
+
+    func confirmUnblock() {
+        eventsSubject.send(Just(.confirmUnblock(self)).setFailureType(to: Error.self).eraseToAnyPublisher())
     }
 
     func unblock() {
@@ -147,8 +155,16 @@ public extension AccountViewModel {
         accountListEdit(accountService.rejectFollowRequest(), event: .rejectFollowRequest)
     }
 
+    func confirmDomainBlock(domain: String) {
+        eventsSubject.send(Just(.confirmDomainBlock(self)).setFailureType(to: Error.self).eraseToAnyPublisher())
+    }
+
     func domainBlock() {
         ignorableOutputEvent(accountService.domainBlock())
+    }
+
+    func confirmDomainUnblock(domain: String) {
+        eventsSubject.send(Just(.confirmDomainUnblock(self)).setFailureType(to: Error.self).eraseToAnyPublisher())
     }
 
     func domainUnblock() {

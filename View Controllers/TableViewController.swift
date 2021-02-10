@@ -158,6 +158,20 @@ class TableViewController: UITableViewController {
 }
 
 extension TableViewController {
+    func confirm(message: String, style: UIAlertAction.Style = .default, action: @escaping () -> Void) {
+        let alertController = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+
+        let cancelAction = UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil)
+        let okAction = UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: style) { _ in
+            action()
+        }
+
+        alertController.addAction(cancelAction)
+        alertController.addAction(okAction)
+
+        present(alertController, animated: true)
+    }
+
     func report(reportViewModel: ReportViewModel) {
         let reportViewController = ReportViewController(viewModel: reportViewModel)
         let navigationController = UINavigationController(rootViewController: reportViewController)
@@ -412,6 +426,7 @@ private extension TableViewController {
         }
     }
 
+    // swiftlint:disable:next cyclomatic_complexity
     func handle(event: CollectionItemEvent) {
         switch event {
         case .ignorableOutput:
@@ -428,6 +443,14 @@ private extension TableViewController {
             compose(inReplyToViewModel: inReplyToViewModel, redraft: redraft)
         case let .confirmDelete(statusViewModel, redraft):
             confirmDelete(statusViewModel: statusViewModel, redraft: redraft)
+        case let .confirmBlock(accountViewModel):
+            confirmBlock(accountViewModel: accountViewModel)
+        case let .confirmUnblock(accountViewModel):
+            confirmUnblock(accountViewModel: accountViewModel)
+        case let .confirmDomainBlock(accountViewModel):
+            confirmDomainBlock(accountViewModel: accountViewModel)
+        case let .confirmDomainUnblock(accountViewModel):
+            confirmDomainUnblock(accountViewModel: accountViewModel)
         case let .report(reportViewModel):
             report(reportViewModel: reportViewModel)
         case let .accountListEdit(accountViewModel, edit):
@@ -546,6 +569,59 @@ private extension TableViewController {
         alertController.addAction(cancelAction)
 
         present(alertController, animated: true)
+    }
+
+    func confirmBlock(accountViewModel: AccountViewModel) {
+        let alertController = UIAlertController(
+            title: nil,
+            message: String.localizedStringWithFormat(
+                NSLocalizedString("account.block.confirm-%@", comment: ""),
+                accountViewModel.accountName), preferredStyle: .alert)
+        let blockAction = UIAlertAction(title: NSLocalizedString("account.block", comment: ""),
+                                        style: .destructive) { _ in
+            accountViewModel.block()
+        }
+        let blockAndReportAction = UIAlertAction(title: NSLocalizedString("account.block-and-report", comment: ""),
+                                                 style: .destructive) { [weak self] _ in
+            accountViewModel.block()
+            self?.report(reportViewModel: accountViewModel.reportViewModel())
+        }
+        let cancelAction = UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel) { _ in }
+
+        alertController.addAction(blockAction)
+        alertController.addAction(blockAndReportAction)
+        alertController.addAction(cancelAction)
+
+        present(alertController, animated: true)
+    }
+
+    func confirmUnblock(accountViewModel: AccountViewModel) {
+        confirm(message: String.localizedStringWithFormat(
+                    NSLocalizedString("account.unblock.confirm-%@", comment: ""),
+                    accountViewModel.accountName)) {
+            accountViewModel.unblock()
+        }
+    }
+
+    func confirmDomainBlock(accountViewModel: AccountViewModel) {
+        guard let domain = accountViewModel.domain else { return }
+
+        confirm(message: String.localizedStringWithFormat(
+                    NSLocalizedString("account.domain-block.confirm-%@", comment: ""),
+                    domain),
+                style: .destructive) {
+            accountViewModel.domainBlock()
+        }
+    }
+
+    func confirmDomainUnblock(accountViewModel: AccountViewModel) {
+        guard let domain = accountViewModel.domain else { return }
+
+        confirm(message: String.localizedStringWithFormat(
+                    NSLocalizedString("account.domain-unblock.confirm-%@", comment: ""),
+                    domain)) {
+            accountViewModel.domainUnblock()
+        }
     }
 
     func accountListEdit(accountViewModel: AccountViewModel, edit: CollectionItemEvent.AccountListEdit) {
