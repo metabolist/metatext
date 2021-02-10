@@ -95,13 +95,13 @@ private extension ProfileViewController {
             actions.append(UIAction(
                 title: NSLocalizedString("account.unmute", comment: ""),
                 image: UIImage(systemName: "speaker")) { _ in
-                accountViewModel.unmute()
+                accountViewModel.confirmUnmute()
             })
         } else {
             actions.append(UIAction(
                 title: NSLocalizedString("account.mute", comment: ""),
                 image: UIImage(systemName: "speaker.slash")) { _ in
-                accountViewModel.mute()
+                accountViewModel.confirmMute()
             })
         }
 

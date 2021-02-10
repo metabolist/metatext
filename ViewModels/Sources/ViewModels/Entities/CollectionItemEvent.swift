@@ -11,6 +11,8 @@ public enum CollectionItemEvent {
     case attachment(AttachmentViewModel, StatusViewModel)
     case compose(inReplyTo: StatusViewModel?, redraft: Status?)
     case confirmDelete(StatusViewModel, redraft: Bool)
+    case confirmMute(AccountViewModel)
+    case confirmUnmute(AccountViewModel)
     case confirmBlock(AccountViewModel)
     case confirmUnblock(AccountViewModel)
     case confirmDomainBlock(AccountViewModel)

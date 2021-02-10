@@ -95,6 +95,10 @@ public extension AccountViewModel {
         ReportViewModel(accountService: accountService, identityContext: identityContext)
     }
 
+    func muteViewModel() -> MuteViewModel {
+        MuteViewModel(accountService: accountService, identityContext: identityContext)
+    }
+
     func follow() {
         ignorableOutputEvent(accountService.follow())
     }
@@ -127,8 +131,12 @@ public extension AccountViewModel {
         ignorableOutputEvent(accountService.unblock())
     }
 
-    func mute() {
-        ignorableOutputEvent(accountService.mute())
+    func confirmMute() {
+        eventsSubject.send(Just(.confirmMute(self)).setFailureType(to: Error.self).eraseToAnyPublisher())
+    }
+
+    func confirmUnmute() {
+        eventsSubject.send(Just(.confirmUnmute(self)).setFailureType(to: Error.self).eraseToAnyPublisher())
     }
 
     func unmute() {

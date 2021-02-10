@@ -9,7 +9,7 @@ public enum RelationshipEndpoint {
     case accountsUnfollow(id: Account.Id)
     case accountsBlock(id: Account.Id)
     case accountsUnblock(id: Account.Id)
-    case accountsMute(id: Account.Id)
+    case accountsMute(id: Account.Id, notifications: Bool = true, duration: Int = 0)
     case accountsUnmute(id: Account.Id)
     case accountsPin(id: Account.Id)
     case accountsUnpin(id: Account.Id)
@@ -40,7 +40,7 @@ extension RelationshipEndpoint: Endpoint {
             return [id, "block"]
         case let .accountsUnblock(id):
             return [id, "unblock"]
-        case let .accountsMute(id):
+        case let .accountsMute(id, _, _):
             return [id, "mute"]
         case let .accountsUnmute(id):
             return [id, "unmute"]
@@ -72,6 +72,8 @@ extension RelationshipEndpoint: Endpoint {
 
     public var jsonBody: [String: Any]? {
         switch self {
+        case let .accountsMute(_, notifications, duration):
+            return ["notifications": notifications, "duration": duration]
         case let .note(note, _):
             return ["comment": note]
         default:

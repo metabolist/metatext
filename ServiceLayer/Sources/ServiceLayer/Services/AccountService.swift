@@ -62,8 +62,8 @@ public extension AccountService {
         relationshipAction(.accountsUnblock(id: account.id))
     }
 
-    func mute() -> AnyPublisher<Never, Error> {
-        relationshipAction(.accountsMute(id: account.id))
+    func mute(notifications: Bool, duration: Int) -> AnyPublisher<Never, Error> {
+        relationshipAction(.accountsMute(id: account.id, notifications: notifications, duration: duration))
             .collect()
             .flatMap { _ in contentDatabase.mute(id: account.id) }
             .eraseToAnyPublisher()

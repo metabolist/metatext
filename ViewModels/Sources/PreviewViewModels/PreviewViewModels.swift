@@ -85,6 +85,15 @@ public extension ReportViewModel {
         identityContext: .preview)
 }
 
+public extension MuteViewModel {
+    static let preview = MuteViewModel(
+        accountService: AccountService(
+            account: .preview,
+            mastodonAPIClient: .preview,
+            contentDatabase: .preview),
+        identityContext: .preview)
+}
+
 public extension DomainBlocksViewModel {
     static let preview = DomainBlocksViewModel(service: .init(mastodonAPIClient: .preview))
 }

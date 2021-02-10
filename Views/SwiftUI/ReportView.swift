@@ -52,10 +52,8 @@ struct ReportView: View {
         .navigationTitle("report.target-\(viewModel.accountName)")
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
-                Button {
+                Button("cancel") {
                     dismiss()
-                } label: {
-                    Image(systemName: "xmark.circle.fill")
                 }
             }
         }
@@ -75,7 +73,7 @@ private extension ReportView {
     }
 }
 
-class ReportViewController: UIHostingController<ReportView> {
+final class ReportViewController: UIHostingController<ReportView> {
     init(viewModel: ReportViewModel) {
         super.init(rootView: ReportView(viewModel: viewModel))
 

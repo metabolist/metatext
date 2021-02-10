@@ -681,13 +681,13 @@ private extension StatusView {
                     secondSectionItems.append(UIAction(
                         title: NSLocalizedString("account.unmute", comment: ""),
                         image: UIImage(systemName: "speaker")) { _ in
-                        viewModel.accountViewModel.unmute()
+                        viewModel.accountViewModel.confirmUnmute()
                     })
                 } else {
                     secondSectionItems.append(UIAction(
                         title: NSLocalizedString("account.mute", comment: ""),
                         image: UIImage(systemName: "speaker.slash")) { _ in
-                        viewModel.accountViewModel.mute()
+                        viewModel.accountViewModel.confirmMute()
                     })
                 }
 

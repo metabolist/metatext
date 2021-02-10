@@ -92,6 +92,7 @@
 		D07EC7FE25B16994006DF726 /* EmojiCategoryHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07EC7FC25B16994006DF726 /* EmojiCategoryHeaderView.swift */; };
 		D07EC81125B232C2006DF726 /* SystemEmoji+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07EC81025B232C2006DF726 /* SystemEmoji+Extensions.swift */; };
 		D07EC81225B232C2006DF726 /* SystemEmoji+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07EC81025B232C2006DF726 /* SystemEmoji+Extensions.swift */; };
+		D07F4D9825D493E300F61133 /* MuteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07F4D9725D493E300F61133 /* MuteView.swift */; };
 		D0849C7F25903C4900A5EBCC /* Status+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0849C7E25903C4900A5EBCC /* Status+Extensions.swift */; };
 		D087671625BAA8C0001FDD43 /* ExploreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D087671525BAA8C0001FDD43 /* ExploreViewController.swift */; };
 		D088406D25AFBBE200BB749B /* EmojiPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D088406C25AFBBE200BB749B /* EmojiPickerViewController.swift */; };
@@ -292,6 +293,7 @@
 		D07EC7F125B13E57006DF726 /* EmojiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiView.swift; sourceTree = "<group>"; };
 		D07EC7FC25B16994006DF726 /* EmojiCategoryHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCategoryHeaderView.swift; sourceTree = "<group>"; };
 		D07EC81025B232C2006DF726 /* SystemEmoji+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SystemEmoji+Extensions.swift"; sourceTree = "<group>"; };
+		D07F4D9725D493E300F61133 /* MuteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuteView.swift; sourceTree = "<group>"; };
 		D0849C7E25903C4900A5EBCC /* Status+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Status+Extensions.swift"; sourceTree = "<group>"; };
 		D085C3BB25008DEC008A6C5E /* DB */ = {isa = PBXFileReference; lastKnownFileType = folder; path = DB; sourceTree = "<group>"; };
 		D087671525BAA8C0001FDD43 /* ExploreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreViewController.swift; sourceTree = "<group>"; };
@@ -487,6 +489,7 @@
 				D0BEB21024FA2A90001B0F04 /* EditFilterView.swift */,
 				D0BEB20424FA1107001B0F04 /* FiltersView.swift */,
 				D0BEB1FE24F9E5BB001B0F04 /* ListsView.swift */,
+				D07F4D9725D493E300F61133 /* MuteView.swift */,
 				D08B9F0F25CB8E060062D040 /* NotificationPreferencesView.swift */,
 				D0C7D42D24F76169001EBDBB /* NotificationTypesPreferencesView.swift */,
 				D0C7D42624F76169001EBDBB /* PreferencesView.swift */,
@@ -1015,6 +1018,7 @@
 				D0F0B12E251A97E400942152 /* TableViewController.swift in Sources */,
 				D0477F2C25C6EBAD005C5368 /* OpenInDefaultBrowserActivity.swift in Sources */,
 				D0DD50CB256B1F24004A04F7 /* ReportView.swift in Sources */,
+				D07F4D9825D493E300F61133 /* MuteView.swift in Sources */,
 				D0477F1525C68BAC005C5368 /* PrefetchRequestModifier.swift in Sources */,
 				D097F41B25BE3E1A00859F2C /* SearchScope+Extensions.swift in Sources */,
 				D035F8B325B9616000DC75ED /* Timeline+Extensions.swift in Sources */,

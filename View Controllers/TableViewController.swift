@@ -443,6 +443,10 @@ private extension TableViewController {
             compose(inReplyToViewModel: inReplyToViewModel, redraft: redraft)
         case let .confirmDelete(statusViewModel, redraft):
             confirmDelete(statusViewModel: statusViewModel, redraft: redraft)
+        case let .confirmMute(accountViewModel):
+            confirmMute(muteViewModel: accountViewModel.muteViewModel())
+        case let .confirmUnmute(accountViewModel):
+            confirmUnmute(accountViewModel: accountViewModel)
         case let .confirmBlock(accountViewModel):
             confirmBlock(accountViewModel: accountViewModel)
         case let .confirmUnblock(accountViewModel):
@@ -569,6 +573,21 @@ private extension TableViewController {
         alertController.addAction(cancelAction)
 
         present(alertController, animated: true)
+    }
+
+    func confirmMute(muteViewModel: MuteViewModel) {
+        let muteViewController = MuteViewController(viewModel: muteViewModel)
+        let navigationController = UINavigationController(rootViewController: muteViewController)
+
+        present(navigationController, animated: true)
+    }
+
+    func confirmUnmute(accountViewModel: AccountViewModel) {
+        confirm(message: String.localizedStringWithFormat(
+                    NSLocalizedString("account.unmute.confirm-%@", comment: ""),
+                    accountViewModel.accountName)) {
+            accountViewModel.unmute()
+        }
     }
 
     func confirmBlock(accountViewModel: AccountViewModel) {
