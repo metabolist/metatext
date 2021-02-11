@@ -675,6 +675,8 @@ private extension StatusView {
                     viewModel.confirmDelete(redraft: true)
                 }
             ]
+
+            sections.append(UIMenu(options: .displayInline, children: secondSectionItems))
         } else {
             if let relationship = viewModel.accountViewModel.relationship {
                 if relationship.muting {
