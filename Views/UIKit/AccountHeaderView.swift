@@ -19,7 +19,9 @@ final class AccountHeaderView: UIView {
     let accountStackView = UIStackView()
     let accountLabel = UILabel()
     let lockedImageView = UIImageView()
-    let followsYouLabel = FollowsYouLabel()
+    let followsYouLabel = CapsuleLabel()
+    let mutedLabel = CapsuleLabel()
+    let blockedLabel = CapsuleLabel()
     let fieldsStackView = UIStackView()
     let noteTextView = TouchFallthroughTextView()
     let followStackView = UIStackView()
@@ -48,6 +50,8 @@ final class AccountHeaderView: UIView {
 
                 if !accountViewModel.isSelf, let relationship = accountViewModel.relationship {
                     followsYouLabel.isHidden = !relationship.followedBy
+                    mutedLabel.isHidden = !relationship.muting
+                    blockedLabel.isHidden = !relationship.blocking
                     followButton.setTitle(
                         NSLocalizedString(
                             accountViewModel.isLocked ? "account.request" : "account.follow",
@@ -315,6 +319,14 @@ private extension AccountHeaderView {
         accountStackView.addArrangedSubview(followsYouLabel)
         followsYouLabel.text = NSLocalizedString("account.follows-you", comment: "")
         followsYouLabel.isHidden = true
+
+        accountStackView.addArrangedSubview(mutedLabel)
+        mutedLabel.text = NSLocalizedString("account.muted", comment: "")
+        mutedLabel.isHidden = true
+
+        accountStackView.addArrangedSubview(blockedLabel)
+        blockedLabel.text = NSLocalizedString("account.blocked", comment: "")
+        blockedLabel.isHidden = true
 
         accountStackView.addArrangedSubview(UIView())
 

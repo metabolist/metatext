@@ -114,6 +114,22 @@ public extension NavigationViewModel {
                                                 titleComponents: ["follow-requests"])))
     }
 
+    func navigateToMutedUsers() {
+        presentingSecondaryNavigation = false
+        presentedNewStatusViewModel = nil
+        navigationsSubject.send(.collection(identityContext.service.service(
+                                                accountList: .mutes,
+                                                titleComponents: ["preferences.muted-users"])))
+    }
+
+    func navigateToBlockedUsers() {
+        presentingSecondaryNavigation = false
+        presentedNewStatusViewModel = nil
+        navigationsSubject.send(.collection(identityContext.service.service(
+                                                accountList: .blocks,
+                                                titleComponents: ["preferences.blocked-users"])))
+    }
+
     func navigate(pushNotification: PushNotification) {
         switch pushNotification.notificationType {
         case .followRequest:

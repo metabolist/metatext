@@ -10,6 +10,7 @@
 "account.block" = "Block";
 "account.block-and-report" = "Block & report";
 "account.block.confirm-%@" = "Block %@?";
+"account.blocked" = "Blocked";
 "account.domain-block-%@" = "Block domain %@";
 "account.domain-block.confirm-%@" = "Block domain %@?";
 "account.domain-unblock-%@" = "Unblock domain %@";
@@ -30,6 +31,7 @@
 "account.mute.confirm.hide-notifications" = "Hide notifications from this user?";
 "account.mute.confirm.duration" = "Duration";
 "account.mute.target-%@" = "Muting %@";
+"account.muted" = "Muted";
 "account.reject-follow-request-button.accessibility-label" = "Reject follow request";
 "account.request" = "Request";
 "account.request.cancel" = "Cancel follow request";

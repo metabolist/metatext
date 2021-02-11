@@ -42,6 +42,8 @@ public extension CollectionItem {
         case withNote
         case withoutNote
         case followRequest
+        case mute
+        case block
     }
 
     var itemId: Id? {

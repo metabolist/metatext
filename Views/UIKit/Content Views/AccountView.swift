@@ -12,6 +12,10 @@ final class AccountView: UIView {
     let noteTextView = TouchFallthroughTextView()
     let acceptFollowRequestButton = UIButton()
     let rejectFollowRequestButton = UIButton()
+    let muteButton = UIButton(type: .system)
+    let unmuteButton = UIButton(type: .system)
+    let blockButton = UIButton(type: .system)
+    let unblockButton = UIButton(type: .system)
 
     private var accountConfiguration: AccountContentConfiguration
 
@@ -135,6 +139,38 @@ private extension AccountView {
             UIAction { [weak self] _ in self?.accountConfiguration.viewModel.rejectFollowRequest() },
             for: .touchUpInside)
 
+        stackView.addArrangedSubview(muteButton)
+        muteButton.setTitle(NSLocalizedString("account.mute", comment: ""), for: .normal)
+        muteButton.titleLabel?.adjustsFontForContentSizeCategory = true
+        muteButton.titleLabel?.font = .preferredFont(forTextStyle: .callout)
+        muteButton.addAction(
+            UIAction { [weak self] _ in self?.accountConfiguration.viewModel.confirmMute() },
+            for: .touchUpInside)
+
+        stackView.addArrangedSubview(unmuteButton)
+        unmuteButton.setTitle(NSLocalizedString("account.unmute", comment: ""), for: .normal)
+        unmuteButton.titleLabel?.adjustsFontForContentSizeCategory = true
+        unmuteButton.titleLabel?.font = .preferredFont(forTextStyle: .callout)
+        unmuteButton.addAction(
+            UIAction { [weak self] _ in self?.accountConfiguration.viewModel.confirmUnmute() },
+            for: .touchUpInside)
+
+        stackView.addArrangedSubview(blockButton)
+        blockButton.setTitle(NSLocalizedString("account.block", comment: ""), for: .normal)
+        blockButton.titleLabel?.adjustsFontForContentSizeCategory = true
+        blockButton.titleLabel?.font = .preferredFont(forTextStyle: .callout)
+        blockButton.addAction(
+            UIAction { [weak self] _ in self?.accountConfiguration.viewModel.confirmBlock() },
+            for: .touchUpInside)
+
+        stackView.addArrangedSubview(unblockButton)
+        unblockButton.setTitle(NSLocalizedString("account.unblock", comment: ""), for: .normal)
+        unblockButton.titleLabel?.adjustsFontForContentSizeCategory = true
+        unblockButton.titleLabel?.font = .preferredFont(forTextStyle: .callout)
+        unblockButton.addAction(
+            UIAction { [weak self] _ in self?.accountConfiguration.viewModel.confirmUnblock() },
+            for: .touchUpInside)
+
         NSLayoutConstraint.activate([
             avatarImageView.widthAnchor.constraint(equalToConstant: .avatarDimension),
             avatarImageView.heightAnchor.constraint(equalToConstant: .avatarDimension),
@@ -142,6 +178,10 @@ private extension AccountView {
             acceptFollowRequestButton.heightAnchor.constraint(greaterThanOrEqualToConstant: .avatarDimension),
             rejectFollowRequestButton.widthAnchor.constraint(greaterThanOrEqualToConstant: .avatarDimension),
             rejectFollowRequestButton.heightAnchor.constraint(greaterThanOrEqualToConstant: .avatarDimension),
+            muteButton.heightAnchor.constraint(greaterThanOrEqualToConstant: .avatarDimension),
+            unmuteButton.heightAnchor.constraint(greaterThanOrEqualToConstant: .avatarDimension),
+            blockButton.heightAnchor.constraint(greaterThanOrEqualToConstant: .avatarDimension),
+            unblockButton.heightAnchor.constraint(greaterThanOrEqualToConstant: .avatarDimension),
             stackView.leadingAnchor.constraint(equalTo: readableContentGuide.leadingAnchor),
             stackView.topAnchor.constraint(equalTo: readableContentGuide.topAnchor),
             stackView.bottomAnchor.constraint(equalTo: readableContentGuide.bottomAnchor),
@@ -190,6 +230,25 @@ private extension AccountView {
 
         acceptFollowRequestButton.isHidden = !isFollowRequest
         rejectFollowRequestButton.isHidden = !isFollowRequest
+
+        if let relationship = viewModel.relationship {
+            if viewModel.configuration == .mute {
+                muteButton.isHidden = relationship.muting
+                unmuteButton.isHidden = !relationship.muting
+                blockButton.isHidden = true
+                unblockButton.isHidden = true
+            } else if viewModel.configuration == .block {
+                muteButton.isHidden = true
+                unmuteButton.isHidden = true
+                blockButton.isHidden = relationship.blocking
+                unblockButton.isHidden = !relationship.blocking
+            }
+        } else {
+            muteButton.isHidden = true
+            unmuteButton.isHidden = true
+            blockButton.isHidden = true
+            unblockButton.isHidden = true
+        }
 
         let accessibilityAttributedLabel = NSMutableAttributedString(string: "")
 

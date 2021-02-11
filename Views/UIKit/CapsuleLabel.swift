@@ -2,7 +2,7 @@
 
 import UIKit
 
-final class FollowsYouLabel: UILabel {
+final class CapsuleLabel: UILabel {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -34,7 +34,7 @@ final class FollowsYouLabel: UILabel {
     }
 }
 
-private extension FollowsYouLabel {
+private extension CapsuleLabel {
     var inset: CGFloat { bounds.height / 2 }
 
     func initialSetup() {

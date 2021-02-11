@@ -7,6 +7,7 @@ import ViewModels
 struct PreferencesView: View {
     @StateObject var viewModel: PreferencesViewModel
     @StateObject var identityContext: IdentityContext
+    @EnvironmentObject var rootViewModel: RootViewModel
     @Environment(\.accessibilityReduceMotion) var accessibilityReduceMotion
 
     init(viewModel: PreferencesViewModel) {
@@ -27,12 +28,14 @@ struct PreferencesView: View {
                                        destination: NotificationTypesPreferencesView(
                                         viewModel: .init(identityContext: viewModel.identityContext)))
                     }
-                    NavigationLink("preferences.muted-users",
-                                   destination: TableView(viewModelClosure: viewModel.mutedUsersViewModel)
-                                    .navigationTitle(Text("preferences.muted-users")))
-                    NavigationLink("preferences.blocked-users",
-                                   destination: TableView(viewModelClosure: viewModel.blockedUsersViewModel)
-                                    .navigationTitle(Text("preferences.blocked-users")))
+                    Button("preferences.muted-users") {
+                        rootViewModel.navigationViewModel?.navigateToMutedUsers()
+                    }
+                    .foregroundColor(.primary)
+                    Button("preferences.blocked-users") {
+                        rootViewModel.navigationViewModel?.navigateToBlockedUsers()
+                    }
+                    .foregroundColor(.primary)
                     NavigationLink("preferences.blocked-domains",
                                    destination: DomainBlocksView(viewModel: viewModel.domainBlocksViewModel()))
                     Toggle("preferences.use-preferences-from-server",
