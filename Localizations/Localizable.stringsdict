@@ -82,6 +82,38 @@
 			<string>%ld Replies</string>
 		</dict>
 	</dict>
+	<key>statuses.count.post-%ld</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@posts@</string>
+		<key>posts</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld Post</string>
+			<key>other</key>
+			<string>%ld Posts</string>
+		</dict>
+	</dict>
+	<key>statuses.count.toot-%ld</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@toots@</string>
+		<key>toots</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>ld</string>
+			<key>one</key>
+			<string>%ld Toot</string>
+			<key>other</key>
+			<string>%ld Toots</string>
+		</dict>
+	</dict>
 	<key>account.followers-count</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>

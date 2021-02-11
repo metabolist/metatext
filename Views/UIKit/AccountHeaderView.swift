@@ -22,6 +22,10 @@ final class AccountHeaderView: UIView {
     let followsYouLabel = CapsuleLabel()
     let mutedLabel = CapsuleLabel()
     let blockedLabel = CapsuleLabel()
+    let statusCountJoinedStackView = UIStackView()
+    let statusCountLabel = UILabel()
+    let statusCountJoinedSeparatorLabel = UILabel()
+    let joinedLabel = UILabel()
     let fieldsStackView = UIStackView()
     let noteTextView = TouchFallthroughTextView()
     let followStackView = UIStackView()
@@ -97,6 +101,22 @@ final class AccountHeaderView: UIView {
                 }
 
                 accountStackView.accessibilityLabel = accountStackViewAccessibilityLabel
+
+                let statusCountFormat: String
+
+                switch viewModel.identityContext.appPreferences.statusWord {
+                case .toot:
+                    statusCountFormat = NSLocalizedString("statuses.count.toot-%ld", comment: "")
+                case .post:
+                    statusCountFormat = NSLocalizedString("statuses.count.post-%ld", comment: "")
+                }
+
+                statusCountLabel.text = String.localizedStringWithFormat(
+                    statusCountFormat,
+                    accountViewModel.statusesCount)
+                joinedLabel.text = String.localizedStringWithFormat(
+                    NSLocalizedString("account.joined-%@", comment: ""),
+                    Self.joinedDateFormatter.string(from: accountViewModel.joined))
 
                 for view in fieldsStackView.arrangedSubviews {
                     fieldsStackView.removeArrangedSubview(view)
@@ -204,6 +224,13 @@ extension AccountHeaderView: UITextViewDelegate {
 private extension AccountHeaderView {
     static let avatarDimension = CGFloat.avatarDimension * 2
     static let missingHeaderImageSize = CGSize(width: 1, height: 1)
+    static let joinedDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+
+        formatter.dateStyle = .short
+
+        return formatter
+    }()
 
     // swiftlint:disable:next function_body_length
     func initialSetup() {
@@ -319,6 +346,34 @@ private extension AccountHeaderView {
         blockedLabel.isHidden = true
 
         accountStackView.addArrangedSubview(UIView())
+
+        baseStackView.addArrangedSubview(statusCountJoinedStackView)
+        statusCountJoinedStackView.spacing = .compactSpacing
+
+        statusCountJoinedStackView.addArrangedSubview(statusCountLabel)
+        statusCountLabel.font = .preferredFont(forTextStyle: .footnote)
+        statusCountLabel.adjustsFontForContentSizeCategory = true
+        statusCountLabel.textColor = .tertiaryLabel
+        statusCountLabel.setContentHuggingPriority(.required, for: .horizontal)
+        statusCountLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+
+        statusCountJoinedStackView.addArrangedSubview(statusCountJoinedSeparatorLabel)
+        statusCountJoinedSeparatorLabel.font = .preferredFont(forTextStyle: .footnote)
+        statusCountJoinedSeparatorLabel.adjustsFontForContentSizeCategory = true
+        statusCountJoinedSeparatorLabel.textColor = .tertiaryLabel
+        statusCountJoinedSeparatorLabel.setContentHuggingPriority(.required, for: .horizontal)
+        statusCountJoinedSeparatorLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+        statusCountJoinedSeparatorLabel.text = "•"
+        statusCountJoinedSeparatorLabel.isAccessibilityElement = false
+
+        statusCountJoinedStackView.addArrangedSubview(joinedLabel)
+        joinedLabel.font = .preferredFont(forTextStyle: .footnote)
+        joinedLabel.adjustsFontForContentSizeCategory = true
+        joinedLabel.textColor = .tertiaryLabel
+        joinedLabel.setContentHuggingPriority(.required, for: .horizontal)
+        joinedLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+
+        statusCountJoinedStackView.addArrangedSubview(UIView())
 
         baseStackView.addArrangedSubview(fieldsStackView)
         fieldsStackView.axis = .vertical

@@ -24,6 +24,7 @@
 "account.header.accessibility-label-%@" = "Header image: %@";
 "account.hide-reblogs" = "Hide boosts";
 "account.hide-reblogs.confirm-%@" = "Hide boosts from %@?";
+"account.joined-%@" = "Joined %@";
 "account.locked.accessibility-label" = "Locked account";
 "account.mute" = "Mute";
 "account.mute.indefinite" = "Indefnite";

@@ -47,6 +47,10 @@ public extension AccountViewModel {
 
     var isLocked: Bool { accountService.account.locked }
 
+    var statusesCount: Int { accountService.account.statusesCount }
+
+    var joined: Date { accountService.account.createdAt }
+
     var fields: [Account.Field] { accountService.account.fields }
 
     var note: NSAttributedString { accountService.account.note.attributed }
