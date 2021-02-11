@@ -103,12 +103,30 @@ public extension AccountViewModel {
         ignorableOutputEvent(accountService.follow())
     }
 
+    func confirmUnfollow() {
+        eventsSubject.send(Just(.confirmUnfollow(self)).setFailureType(to: Error.self).eraseToAnyPublisher())
+    }
+
     func unfollow() {
         ignorableOutputEvent(accountService.unfollow())
     }
 
+    func share() {
+        guard let url = URL(string: accountService.account.url) else { return }
+
+        eventsSubject.send(Just(.share(url)).setFailureType(to: Error.self).eraseToAnyPublisher())
+    }
+
+    func confirmHideReblogs() {
+        eventsSubject.send(Just(.confirmHideReblogs(self)).setFailureType(to: Error.self).eraseToAnyPublisher())
+    }
+
     func hideReblogs() {
         ignorableOutputEvent(accountService.hideReblogs())
+    }
+
+    func confirmShowReblogs() {
+        eventsSubject.send(Just(.confirmShowReblogs(self)).setFailureType(to: Error.self).eraseToAnyPublisher())
     }
 
     func showReblogs() {

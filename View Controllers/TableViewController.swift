@@ -443,6 +443,12 @@ private extension TableViewController {
             compose(inReplyToViewModel: inReplyToViewModel, redraft: redraft)
         case let .confirmDelete(statusViewModel, redraft):
             confirmDelete(statusViewModel: statusViewModel, redraft: redraft)
+        case let .confirmUnfollow(accountViewModel):
+            confirmUnfollow(accountViewModel: accountViewModel)
+        case let .confirmHideReblogs(accountViewModel):
+            confirmHideReblogs(accountViewModel: accountViewModel)
+        case let .confirmShowReblogs(accountViewModel):
+            confirmShowReblogs(accountViewModel: accountViewModel)
         case let .confirmMute(accountViewModel):
             confirmMute(muteViewModel: accountViewModel.muteViewModel())
         case let .confirmUnmute(accountViewModel):
@@ -573,6 +579,30 @@ private extension TableViewController {
         alertController.addAction(cancelAction)
 
         present(alertController, animated: true)
+    }
+
+    func confirmUnfollow(accountViewModel: AccountViewModel) {
+        confirm(message: String.localizedStringWithFormat(
+                    NSLocalizedString("account.unfollow.confirm-%@", comment: ""),
+                    accountViewModel.accountName)) {
+            accountViewModel.unfollow()
+        }
+    }
+
+    func confirmHideReblogs(accountViewModel: AccountViewModel) {
+        confirm(message: String.localizedStringWithFormat(
+                    NSLocalizedString("account.hide-reblogs.confirm-%@", comment: ""),
+                    accountViewModel.accountName)) {
+            accountViewModel.hideReblogs()
+        }
+    }
+
+    func confirmShowReblogs(accountViewModel: AccountViewModel) {
+        confirm(message: String.localizedStringWithFormat(
+                    NSLocalizedString("account.show-reblogs.confirm-%@", comment: ""),
+                    accountViewModel.accountName)) {
+            accountViewModel.showReblogs()
+        }
     }
 
     func confirmMute(muteViewModel: MuteViewModel) {

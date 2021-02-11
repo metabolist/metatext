@@ -23,6 +23,7 @@
 "account.follows-you" = "Follows you";
 "account.header.accessibility-label-%@" = "Header image: %@";
 "account.hide-reblogs" = "Hide boosts";
+"account.hide-reblogs.confirm-%@" = "Hide boosts from %@?";
 "account.locked.accessibility-label" = "Locked account";
 "account.mute" = "Mute";
 "account.mute.indefinite" = "Indefnite";
@@ -41,10 +42,12 @@
 "account.statuses-and-replies.toot" = "Toots & Replies";
 "account.media" = "Media";
 "account.show-reblogs" = "Show boosts";
+"account.show-reblogs.confirm-%@" = "Show boosts from %@?";
 "account.unavailable" = "Profile unavailable";
 "account.unblock" = "Unblock";
 "account.unblock.confirm-%@" = "Unblock %@?";
 "account.unfollow" = "Unfollow";
+"account.unfollow.confirm-%@" = "Unfollow %@?";
 "account.unmute" = "Unmute";
 "account.unmute.confirm-%@" = "Unmute %@?";
 "activity.open-in-default-browser" = "Open in default browser";
@@ -251,6 +254,7 @@
 "search.scope.statuses.post" = "Posts";
 "search.scope.statuses.toot" = "Toots";
 "search.scope.tags" = "Hashtags";
+"share" = "Share";
 "share-extension-error.no-account-found" = "No account found";
 "status.accessibility.view-author-profile" = "View author's profile";
 "status.accessibility.view-reblogger-profile" = "View booster's profile";

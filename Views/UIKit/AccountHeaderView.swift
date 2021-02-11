@@ -272,20 +272,10 @@ private extension AccountHeaderView {
                 systemName: "checkmark",
                 withConfiguration: UIImage.SymbolConfiguration(scale: .small)),
             for: .normal)
-        unfollowButton.setTitle(NSLocalizedString("account.following", comment: ""), for: .normal)
-        unfollowButton.showsMenuAsPrimaryAction = true
-        unfollowButton.menu = UIMenu(children: [UIDeferredMenuElement { [weak self] completion in
-            guard let accountViewModel = self?.viewModel.accountViewModel else { return }
-
-            let unfollowAction = UIAction(
-                title: self?.unfollowButton.title(for: .normal) ?? "",
-                image: UIImage(systemName: "person.badge.minus"),
-                attributes: .destructive) { _ in
-                accountViewModel.unfollow()
-            }
-
-            completion([unfollowAction])
-        }])
+        unfollowButton.setTitle(NSLocalizedString("account.unfollow", comment: ""), for: .normal)
+        unfollowButton.addAction(
+            UIAction { [weak self] _ in self?.viewModel.accountViewModel?.confirmUnfollow() },
+            for: .touchUpInside)
 
         addSubview(baseStackView)
         baseStackView.translatesAutoresizingMaskIntoConstraints = false

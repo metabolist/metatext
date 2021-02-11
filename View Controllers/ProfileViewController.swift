@@ -73,20 +73,24 @@ final class ProfileViewController: TableViewController {
 private extension ProfileViewController {
     // swiftlint:disable:next function_body_length
     func menu(accountViewModel: AccountViewModel, relationship: Relationship) -> UIMenu {
-        var actions = [UIAction]()
+        var actions = [UIAction(
+            title: NSLocalizedString("share", comment: ""),
+            image: UIImage(systemName: "square.and.arrow.up")) { _ in
+            accountViewModel.share()
+        }]
 
         if relationship.following {
             if relationship.showingReblogs {
                 actions.append(UIAction(
                     title: NSLocalizedString("account.hide-reblogs", comment: ""),
                     image: UIImage(systemName: "arrow.2.squarepath")) { _ in
-                    accountViewModel.hideReblogs()
+                    accountViewModel.confirmHideReblogs()
                 })
             } else {
                 actions.append(UIAction(
                     title: NSLocalizedString("account.show-reblogs", comment: ""),
                     image: UIImage(systemName: "arrow.2.squarepath")) { _ in
-                    accountViewModel.showReblogs()
+                    accountViewModel.confirmShowReblogs()
                 })
             }
         }
