@@ -146,6 +146,7 @@ private extension AccountView {
         muteButton.addAction(
             UIAction { [weak self] _ in self?.accountConfiguration.viewModel.confirmMute() },
             for: .touchUpInside)
+        muteButton.isHidden = true
 
         stackView.addArrangedSubview(unmuteButton)
         unmuteButton.setTitle(NSLocalizedString("account.unmute", comment: ""), for: .normal)
@@ -154,6 +155,7 @@ private extension AccountView {
         unmuteButton.addAction(
             UIAction { [weak self] _ in self?.accountConfiguration.viewModel.confirmUnmute() },
             for: .touchUpInside)
+        unmuteButton.isHidden = true
 
         stackView.addArrangedSubview(blockButton)
         blockButton.setTitle(NSLocalizedString("account.block", comment: ""), for: .normal)
@@ -162,6 +164,7 @@ private extension AccountView {
         blockButton.addAction(
             UIAction { [weak self] _ in self?.accountConfiguration.viewModel.confirmBlock() },
             for: .touchUpInside)
+        blockButton.isHidden = true
 
         stackView.addArrangedSubview(unblockButton)
         unblockButton.setTitle(NSLocalizedString("account.unblock", comment: ""), for: .normal)
@@ -170,6 +173,7 @@ private extension AccountView {
         unblockButton.addAction(
             UIAction { [weak self] _ in self?.accountConfiguration.viewModel.confirmUnblock() },
             for: .touchUpInside)
+        unblockButton.isHidden = true
 
         NSLayoutConstraint.activate([
             avatarImageView.widthAnchor.constraint(equalToConstant: .avatarDimension),
@@ -191,7 +195,7 @@ private extension AccountView {
         isAccessibilityElement = true
     }
 
-    // swiftlint:disable:next function_body_length
+    // swiftlint:disable:next function_body_length cyclomatic_complexity
     func applyAccountConfiguration() {
         let viewModel = accountConfiguration.viewModel
 
@@ -283,6 +287,50 @@ private extension AccountView {
 
                         return true
                     }]
+        } else if viewModel.configuration == .mute, let relationship = viewModel.relationship {
+            if relationship.muting {
+                accessibilityCustomActions = [
+                    UIAccessibilityCustomAction(
+                        name: NSLocalizedString(
+                            "account.unmute",
+                            comment: "")) { [weak self] _ in
+                            self?.accountConfiguration.viewModel.confirmUnmute()
+
+                            return true
+                        }]
+            } else {
+                accessibilityCustomActions = [
+                    UIAccessibilityCustomAction(
+                        name: NSLocalizedString(
+                            "account.mute",
+                            comment: "")) { [weak self] _ in
+                            self?.accountConfiguration.viewModel.confirmMute()
+
+                            return true
+                        }]
+            }
+        } else if viewModel.configuration == .block, let relationship = viewModel.relationship {
+            if relationship.blocking {
+                accessibilityCustomActions = [
+                    UIAccessibilityCustomAction(
+                        name: NSLocalizedString(
+                            "account.unblock",
+                            comment: "")) { [weak self] _ in
+                            self?.accountConfiguration.viewModel.confirmUnblock()
+
+                            return true
+                        }]
+            } else {
+                accessibilityCustomActions = [
+                    UIAccessibilityCustomAction(
+                        name: NSLocalizedString(
+                            "account.block",
+                            comment: "")) { [weak self] _ in
+                            self?.accountConfiguration.viewModel.confirmBlock()
+
+                            return true
+                        }]
+            }
         } else {
             accessibilityCustomActions = []
         }
