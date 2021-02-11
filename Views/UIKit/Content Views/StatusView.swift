@@ -696,7 +696,6 @@ private extension StatusView {
                         title: NSLocalizedString("account.unblock", comment: ""),
                         image: UIImage(systemName: "slash.circle"),
                         attributes: .destructive) { _ in
-//                        viewModel.accountViewModel.unblock()
                         viewModel.accountViewModel.confirmUnblock()
                         })
                 } else {
@@ -871,7 +870,7 @@ private extension StatusView {
             || statusConfiguration.viewModel.configuration.isContextParent
     }
 
-    // swiftlint:disable:next function_body_length
+    // swiftlint:disable:next function_body_length cyclomatic_complexity
     func accessibilityCustomActions(viewModel: StatusViewModel) -> [UIAccessibilityCustomAction] {
         guard !viewModel.configuration.isContextParent else {
             return []
@@ -991,12 +990,70 @@ private extension StatusView {
                     }
                 ]
             } else {
+                if let relationship = viewModel.accountViewModel.relationship {
+                    if relationship.muting {
+                        actions.append(UIAccessibilityCustomAction(
+                            name: NSLocalizedString("account.unmute", comment: "")) { _ in
+                            viewModel.accountViewModel.confirmUnmute()
+
+                            return true
+                        })
+                    } else {
+                        actions.append(UIAccessibilityCustomAction(
+                            name: NSLocalizedString("account.mute", comment: "")) { _ in
+                            viewModel.accountViewModel.confirmMute()
+
+                            return true
+                        })
+                    }
+
+                    if relationship.blocking {
+                        actions.append(UIAccessibilityCustomAction(
+                            name: NSLocalizedString("account.unblock", comment: "")) { _ in
+                            viewModel.accountViewModel.confirmUnblock()
+
+                            return true
+                        })
+                    } else {
+                        actions.append(UIAccessibilityCustomAction(
+                            name: NSLocalizedString("account.block", comment: "")) { _ in
+                            viewModel.accountViewModel.confirmBlock()
+
+                            return true
+                        })
+                    }
+                }
                 actions.append(UIAccessibilityCustomAction(
                     name: NSLocalizedString("report", comment: "")) { _ in
                     viewModel.reportStatus()
 
                     return true
                 })
+
+                if !viewModel.accountViewModel.isLocal,
+                   let domain = viewModel.accountViewModel.domain,
+                   let relationship = viewModel.accountViewModel.relationship {
+
+                    if relationship.domainBlocking {
+                        actions.append(UIAccessibilityCustomAction(
+                            name: String.localizedStringWithFormat(
+                                NSLocalizedString("account.domain-unblock-%@", comment: ""),
+                                domain)) { _ in
+                            viewModel.accountViewModel.confirmDomainUnblock(domain: domain)
+
+                            return true
+                        })
+                    } else {
+                        actions.append(UIAccessibilityCustomAction(
+                            name: String.localizedStringWithFormat(
+                                NSLocalizedString("account.domain-block-%@", comment: ""),
+                                domain)) { _ in
+                            viewModel.accountViewModel.confirmDomainBlock(domain: domain)
+
+                            return true
+                        })
+                    }
+                }
             }
         }
 
