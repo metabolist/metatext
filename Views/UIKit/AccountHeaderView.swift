@@ -338,6 +338,7 @@ private extension AccountHeaderView {
         fieldsStackView.layer.borderColor = UIColor.separator.cgColor
         fieldsStackView.layer.borderWidth = .hairline
         fieldsStackView.layer.cornerRadius = .defaultCornerRadius
+        fieldsStackView.isHidden = true
 
         baseStackView.addArrangedSubview(noteTextView)
         noteTextView.delegate = self
