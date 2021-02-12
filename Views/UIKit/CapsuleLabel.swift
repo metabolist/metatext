@@ -38,7 +38,7 @@ private extension CapsuleLabel {
     var inset: CGFloat { bounds.height / 2 }
 
     func initialSetup() {
-        backgroundColor = .tertiarySystemBackground
+        backgroundColor = .secondarySystemBackground
         textColor = .secondaryLabel
         font = UIFont.preferredFont(forTextStyle: .footnote)
         adjustsFontForContentSizeCategory = true
