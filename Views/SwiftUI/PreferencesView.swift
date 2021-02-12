@@ -74,6 +74,8 @@ struct PreferencesView: View {
                         Text(option.localizedStringKey).tag(option)
                     }
                 }
+                Toggle("preferences.show-reblog-and-favorite-counts",
+                       isOn: $identityContext.appPreferences.showReblogAndFavoriteCounts)
                 Toggle("preferences.require-double-tap-to-reblog",
                        isOn: $identityContext.appPreferences.requireDoubleTapToReblog)
                 Toggle("preferences.require-double-tap-to-favorite",
@@ -114,8 +116,6 @@ struct PreferencesView: View {
                         .disabled(reduceMotion)
                 }
                 .disabled(reduceMotion)
-                Toggle("preferences.show-reblog-and-favorite-counts",
-                       isOn: $identityContext.appPreferences.showReblogAndFavoriteCounts)
                 if viewModel.identityContext.identity.authenticated
                     && !viewModel.identityContext.identity.pending {
                     Picker("preferences.home-timeline-position-on-startup",
