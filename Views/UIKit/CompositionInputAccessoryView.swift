@@ -11,11 +11,15 @@ final class CompositionInputAccessoryView: UIToolbar {
 
     private let viewModel: CompositionViewModel
     private let parentViewModel: NewStatusViewModel
+    private let autocompleteQueryPublisher: AnyPublisher<String?, Never>
     private var cancellables = Set<AnyCancellable>()
 
-    init(viewModel: CompositionViewModel, parentViewModel: NewStatusViewModel) {
+    init(viewModel: CompositionViewModel,
+         parentViewModel: NewStatusViewModel,
+         autocompleteQueryPublisher: AnyPublisher<String?, Never>) {
         self.viewModel = viewModel
         self.parentViewModel = parentViewModel
+        self.autocompleteQueryPublisher = autocompleteQueryPublisher
 
         super.init(
             frame: .init(
@@ -168,6 +172,11 @@ private extension CompositionInputAccessoryView {
 
         viewModel.$isPostable
             .sink { addButton.isEnabled = $0 }
+            .store(in: &cancellables)
+
+        autocompleteQueryPublisher
+            .print()
+            .sink { _ in /* TODO */ }
             .store(in: &cancellables)
 
         parentViewModel.$visibility

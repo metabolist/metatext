@@ -10,12 +10,16 @@ public final class CompositionViewModel: AttachmentsRenderingViewModel, Observab
     public let id = Id()
     public var isPosted = false
     @Published public var text = ""
+    @Published public var textToSelectedRange = ""
     @Published public var contentWarning = ""
+    @Published public var contentWarningTextToSelectedRange = ""
     @Published public var displayContentWarning = false
     @Published public var sensitive = false
     @Published public var displayPoll = false
     @Published public var pollMultipleChoice = false
     @Published public var pollExpiresIn = PollExpiry.oneDay
+    @Published public private(set) var autocompleteQuery: String?
+    @Published public private(set) var contentWarningAutocompleteQuery: String?
     @Published public private(set) var pollOptions = [PollOption(text: ""), PollOption(text: "")]
     @Published public private(set) var attachmentViewModels = [AttachmentViewModel]()
     @Published public private(set) var attachmentUpload: AttachmentUpload?
@@ -38,11 +42,14 @@ public final class CompositionViewModel: AttachmentsRenderingViewModel, Observab
                 textPresent || attachmentPresent
             }
             .assign(to: &$isPostable)
+
         $attachmentViewModels
             .combineLatest($attachmentUpload, $displayPoll)
             .map { $0.count < Self.maxAttachmentCount && $1 == nil && !$2 }
             .assign(to: &$canAddAttachment)
+
         $attachmentViewModels.map(\.isEmpty).assign(to: &$canAddNonImageAttachment)
+
         $text.map {
             let tokens = $0.components(separatedBy: " ")
 
@@ -51,7 +58,18 @@ public final class CompositionViewModel: AttachmentsRenderingViewModel, Observab
         .combineLatest($displayContentWarning, $contentWarning)
         .map { Self.maxCharacters - ($0 + ($1 ? $2.count : 0)) }
         .assign(to: &$remainingCharacters)
+
         $displayContentWarning.filter { $0 }.assign(to: &$sensitive)
+
+        $textToSelectedRange
+            .map { Self.extractAutocompleteQuery(textToSelectedRange: $0, emojiOnly: false) }
+            .removeDuplicates()
+            .assign(to: &$autocompleteQuery)
+
+        $contentWarningTextToSelectedRange
+            .map { Self.extractAutocompleteQuery(textToSelectedRange: $0, emojiOnly: true) }
+            .removeDuplicates()
+            .assign(to: &$contentWarningAutocompleteQuery)
     }
 
     public func attachmentSelected(viewModel: AttachmentViewModel) {
@@ -86,11 +104,17 @@ public extension CompositionViewModel {
     class PollOption: ObservableObject {
         public let id = Id()
         @Published public var text: String
+        @Published public var textToSelectedRange = ""
         @Published public private(set) var remainingCharacters = CompositionViewModel.maxCharacters
+        @Published public private(set) var autocompleteQuery: String?
 
         public init(text: String) {
             self.text = text
             $text.map { Self.maxCharacters - $0.count }.assign(to: &$remainingCharacters)
+            $textToSelectedRange
+                .map { CompositionViewModel.extractAutocompleteQuery(textToSelectedRange: $0, emojiOnly: true) }
+                .removeDuplicates()
+                .assign(to: &$autocompleteQuery)
         }
     }
 
@@ -234,6 +258,18 @@ public extension CompositionViewModel.PollOption {
 
 private extension CompositionViewModel {
     static let maxAttachmentCount = 4
+    static let autocompleteQueryRegularExpression = #"([@#:]\S+)\z"#
+    static let emojiOnlyAutocompleteQueryRegularExpression = #"(:\S+)\z"#
+
+    static func extractAutocompleteQuery(textToSelectedRange: String, emojiOnly: Bool) -> String? {
+        guard let range = textToSelectedRange.range(
+                of: emojiOnly ? emojiOnlyAutocompleteQueryRegularExpression: autocompleteQueryRegularExpression,
+                options: .regularExpression,
+                locale: .current)
+        else { return nil }
+
+        return String(textToSelectedRange[range])
+    }
 }
 
 private extension String {

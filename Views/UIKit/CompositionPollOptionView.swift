@@ -46,12 +46,20 @@ private extension CompositionPollOptionView {
         textField.font = .preferredFont(forTextStyle: .body)
         let textInputAccessoryView = CompositionInputAccessoryView(
             viewModel: viewModel,
-            parentViewModel: parentViewModel)
+            parentViewModel: parentViewModel,
+            autocompleteQueryPublisher: option.$autocompleteQuery.eraseToAnyPublisher())
         textField.inputAccessoryView = textInputAccessoryView
         textField.tag = textInputAccessoryView.tagForInputView
         textField.addAction(
             UIAction { [weak self] _ in
-                self?.option.text = self?.textField.text ?? "" },
+                guard let self = self, let text = self.textField.text  else { return }
+
+                self.option.text = text
+
+                if let textToSelectedRange = self.textField.textToSelectedRange {
+                    self.option.textToSelectedRange = textToSelectedRange
+                }
+            },
             for: .editingChanged)
         textField.text = option.text
 

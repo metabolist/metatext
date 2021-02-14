@@ -171,6 +171,8 @@
 		D0DDA77F25C6058300FA0F91 /* ExploreSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DDA77E25C6058300FA0F91 /* ExploreSectionHeaderView.swift */; };
 		D0E1F583251F13EC00D45315 /* WebfingerIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E1F582251F13EC00D45315 /* WebfingerIndicatorView.swift */; };
 		D0E2C1D124FD97F000854680 /* ViewModels in Frameworks */ = {isa = PBXBuildFile; productRef = D0E2C1D024FD97F000854680 /* ViewModels */; };
+		D0E39AB425D8BF88009C10F8 /* UITextInput+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E39AB325D8BF88009C10F8 /* UITextInput+Extensions.swift */; };
+		D0E39ABD25D8C046009C10F8 /* UITextInput+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E39AB325D8BF88009C10F8 /* UITextInput+Extensions.swift */; };
 		D0E5361C24E3EB4D00FB1CE1 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E5361B24E3EB4D00FB1CE1 /* NotificationService.swift */; };
 		D0E5362024E3EB4D00FB1CE1 /* Notification Service Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D0E5361924E3EB4D00FB1CE1 /* Notification Service Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D0E569DB2529319100FA1D72 /* LoadMoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E569DA2529319100FA1D72 /* LoadMoreView.swift */; };
@@ -378,6 +380,7 @@
 		D0E0F1E424FC49FC002C04BF /* Mastodon */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Mastodon; sourceTree = "<group>"; };
 		D0E1F582251F13EC00D45315 /* WebfingerIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebfingerIndicatorView.swift; sourceTree = "<group>"; };
 		D0E2C1CF24FD8BA400854680 /* ViewModels */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ViewModels; sourceTree = "<group>"; };
+		D0E39AB325D8BF88009C10F8 /* UITextInput+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextInput+Extensions.swift"; sourceTree = "<group>"; };
 		D0E5361924E3EB4D00FB1CE1 /* Notification Service Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Notification Service Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0E5361B24E3EB4D00FB1CE1 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		D0E5361D24E3EB4D00FB1CE1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -760,6 +763,7 @@
 				D0C7D46C24F76169001EBDBB /* UIColor+Extensions.swift */,
 				D0BE980D25D241CE0057E161 /* UIImage+Extensions.swift */,
 				D08DFB0025CE228E0005DA98 /* UIScrollView+Extensions.swift */,
+				D0E39AB325D8BF88009C10F8 /* UITextInput+Extensions.swift */,
 				D05936F325AA66A600754FDF /* UIView+Extensions.swift */,
 				D0E7AD3825870B13005F5E2D /* UIVIewController+Extensions.swift */,
 				D0030981250C6C8500EACB32 /* URL+Extensions.swift */,
@@ -1010,6 +1014,7 @@
 				D05936DE25A937EC00754FDF /* EditThumbnailView.swift in Sources */,
 				D0F0B136251AA12700942152 /* CollectionItem+Extensions.swift in Sources */,
 				D007023E25562A2800F38136 /* ConversationAvatarsView.swift in Sources */,
+				D0E39AB425D8BF88009C10F8 /* UITextInput+Extensions.swift in Sources */,
 				D0E7AD3925870B13005F5E2D /* UIVIewController+Extensions.swift in Sources */,
 				D0625E5D250F0B5C00502611 /* StatusContentConfiguration.swift in Sources */,
 				D0BEB1F324F8EE8C001B0F04 /* AttachmentView.swift in Sources */,
@@ -1166,6 +1171,7 @@
 				D07EC7D025B13921006DF726 /* PickerEmoji+Extensions.swift in Sources */,
 				D0FCC106259C4E62000B67DF /* NewStatusViewController.swift in Sources */,
 				D036EBB3259FE28800EC1CFC /* UIColor+Extensions.swift in Sources */,
+				D0E39ABD25D8C046009C10F8 /* UITextInput+Extensions.swift in Sources */,
 				D088406E25AFBBE200BB749B /* EmojiPickerViewController.swift in Sources */,
 				D00CB23325C92F2D008EF267 /* Attachment+Extensions.swift in Sources */,
 				D025B14725C4D26B001C69A8 /* ImageCacheSerializer.swift in Sources */,

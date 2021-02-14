@@ -49,6 +49,10 @@ extension CompositionView {
 extension CompositionView: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         viewModel.text = textView.text
+
+        if let textToSelectedRange = textView.textToSelectedRange {
+            viewModel.textToSelectedRange = textToSelectedRange
+        }
     }
 }
 
@@ -81,7 +85,8 @@ private extension CompositionView {
 
         let spoilerTextinputAccessoryView = CompositionInputAccessoryView(
             viewModel: viewModel,
-            parentViewModel: parentViewModel)
+            parentViewModel: parentViewModel,
+            autocompleteQueryPublisher: viewModel.$contentWarningAutocompleteQuery.eraseToAnyPublisher())
 
         stackView.addArrangedSubview(spoilerTextField)
         spoilerTextField.borderStyle = .roundedRect
@@ -95,13 +100,18 @@ private extension CompositionView {
                 guard let self = self, let text = self.spoilerTextField.text else { return }
 
                 self.viewModel.contentWarning = text
+
+                if let textToSelectedRange = self.spoilerTextField.textToSelectedRange {
+                    self.viewModel.contentWarningTextToSelectedRange = textToSelectedRange
+                }
             },
             for: .editingChanged)
 
         let textViewFont = UIFont.preferredFont(forTextStyle: .body)
         let textInputAccessoryView = CompositionInputAccessoryView(
             viewModel: viewModel,
-            parentViewModel: parentViewModel)
+            parentViewModel: parentViewModel,
+            autocompleteQueryPublisher: viewModel.$autocompleteQuery.eraseToAnyPublisher())
 
         stackView.addArrangedSubview(textView)
         textView.keyboardType = .twitter
