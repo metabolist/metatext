@@ -96,15 +96,7 @@ private extension CompositionView {
         spoilerTextField.inputAccessoryView = spoilerTextinputAccessoryView
         spoilerTextField.tag = spoilerTextinputAccessoryView.tagForInputView
         spoilerTextField.addAction(
-            UIAction { [weak self] _ in
-                guard let self = self, let text = self.spoilerTextField.text else { return }
-
-                self.viewModel.contentWarning = text
-
-                if let textToSelectedRange = self.spoilerTextField.textToSelectedRange {
-                    self.viewModel.contentWarningTextToSelectedRange = textToSelectedRange
-                }
-            },
+            UIAction { [weak self] _ in self?.spoilerTextFieldEditingChanged() },
             for: .editingChanged)
 
         let textViewFont = UIFont.preferredFont(forTextStyle: .body)
@@ -257,6 +249,14 @@ private extension CompositionView {
             }
             .store(in: &cancellables)
 
+        textInputAccessoryView.autocompleteSelections
+            .sink { [weak self] in self?.autocompleteSelected($0) }
+            .store(in: &cancellables)
+
+        spoilerTextinputAccessoryView.autocompleteSelections
+            .sink { [weak self] in self?.spoilerTextAutocompleteSelected($0) }
+            .store(in: &cancellables)
+
         let guide = UIDevice.current.userInterfaceIdiom == .pad ? readableContentGuide : layoutMarginsGuide
         let constraints = [
             avatarImageView.heightAnchor.constraint(equalToConstant: .avatarDimension),
@@ -313,5 +313,51 @@ private extension CompositionView {
                 }
             }
         })
+    }
+
+    func spoilerTextFieldEditingChanged() {
+        guard let text = spoilerTextField.text else { return }
+
+        viewModel.contentWarning = text
+
+        if let textToSelectedRange = spoilerTextField.textToSelectedRange {
+            viewModel.contentWarningTextToSelectedRange = textToSelectedRange
+        }
+    }
+
+    func autocompleteSelected(_ autocompleteText: String) {
+        guard let autocompleteQuery = viewModel.autocompleteQuery,
+              let queryRange = viewModel.textToSelectedRange.range(of: autocompleteQuery, options: .backwards),
+              let textToSelectedRangeRange = viewModel.text.range(of: viewModel.textToSelectedRange)
+        else { return }
+
+        let replaced = viewModel.textToSelectedRange.replacingOccurrences(
+            of: autocompleteQuery,
+            with: autocompleteText.appending(" "),
+            range: queryRange)
+
+        textView.text = viewModel.text.replacingOccurrences(
+            of: viewModel.textToSelectedRange,
+            with: replaced,
+            range: textToSelectedRangeRange)
+        textViewDidChange(textView)
+    }
+
+    func spoilerTextAutocompleteSelected(_ autocompleteText: String) {
+        guard let autocompleteQuery = viewModel.contentWarningAutocompleteQuery,
+              let queryRange = viewModel.contentWarningTextToSelectedRange.range(of: autocompleteQuery, options: .backwards),
+              let textToSelectedRangeRange = viewModel.contentWarning.range(of: viewModel.contentWarningTextToSelectedRange)
+        else { return }
+
+        let replaced = viewModel.contentWarningTextToSelectedRange.replacingOccurrences(
+            of: autocompleteQuery,
+            with: autocompleteText.appending(" "),
+            range: queryRange)
+
+        spoilerTextField.text = viewModel.contentWarning.replacingOccurrences(
+            of: viewModel.contentWarningTextToSelectedRange,
+            with: replaced,
+            range: textToSelectedRangeRange)
+        spoilerTextFieldEditingChanged()
     }
 }

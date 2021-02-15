@@ -81,6 +81,12 @@ final class AutocompleteDataSource: UICollectionViewDiffableDataSource<Autocompl
     }
 }
 
+extension AutocompleteDataSource {
+    func updateUse(emoji: PickerEmoji) {
+        emojiPickerViewModel.updateUse(emoji: emoji)
+    }
+}
+
 private extension AutocompleteDataSource {
     static func combine(query: String, searchViewModel: SearchViewModel, emojiPickerViewModel: EmojiPickerViewModel) {
         if query.starts(with: ":") {

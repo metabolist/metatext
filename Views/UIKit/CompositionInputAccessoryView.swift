@@ -8,6 +8,7 @@ import ViewModels
 
 final class CompositionInputAccessoryView: UIView {
     let tagForInputView = UUID().hashValue
+    let autocompleteSelections: AnyPublisher<String, Never>
 
     private let viewModel: CompositionViewModel
     private let parentViewModel: NewStatusViewModel
@@ -17,6 +18,7 @@ final class CompositionInputAccessoryView: UIView {
         collectionViewLayout: CompositionInputAccessoryView.autocompleteLayout())
     private let autocompleteDataSource: AutocompleteDataSource
     private let autocompleteCollectionViewHeightConstraint: NSLayoutConstraint
+    private let autocompleteSelectionsSubject = PassthroughSubject<String, Never>()
     private var cancellables = Set<AnyCancellable>()
 
     init(viewModel: CompositionViewModel,
@@ -29,7 +31,8 @@ final class CompositionInputAccessoryView: UIView {
             queryPublisher: autocompleteQueryPublisher,
             parentViewModel: parentViewModel)
         autocompleteCollectionViewHeightConstraint =
-            autocompleteCollectionView.heightAnchor.constraint(equalToConstant: .minimumButtonDimension)
+            autocompleteCollectionView.heightAnchor.constraint(equalToConstant: .hairline)
+        autocompleteSelections = autocompleteSelectionsSubject.eraseToAnyPublisher()
 
         super.init(
             frame: .init(
@@ -42,6 +45,12 @@ final class CompositionInputAccessoryView: UIView {
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+
+        layoutIfNeeded()
     }
 }
 
@@ -241,6 +250,46 @@ private extension CompositionInputAccessoryView {
 extension CompositionInputAccessoryView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
+
+        guard let item = autocompleteDataSource.itemIdentifier(for: indexPath) else { return }
+
+        switch item {
+        case let .account(account):
+            autocompleteSelectionsSubject.send("@".appending(account.acct))
+        case let .tag(tag):
+            autocompleteSelectionsSubject.send("#".appending(tag.name))
+        case let .emoji(emoji):
+            let escaped = emoji.applyingDefaultSkinTone(identityContext: parentViewModel.identityContext).escaped
+
+            autocompleteSelectionsSubject.send(escaped)
+            autocompleteDataSource.updateUse(emoji: emoji)
+        }
+
+        UISelectionFeedbackGenerator().selectionChanged()
+
+        // To dismiss without waiting for the throttle
+        UIView.animate(withDuration: .zeroIfReduceMotion(.shortAnimationDuration)) {
+            self.setAutocompleteCollectionViewHeight(.hairline)
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        contextMenuConfigurationForItemAt indexPath: IndexPath,
+                        point: CGPoint) -> UIContextMenuConfiguration? {
+        guard let item = autocompleteDataSource.itemIdentifier(for: indexPath),
+              case let .emoji(emojiItem) = item,
+              case let .system(emoji, _) = emojiItem,
+              !emoji.skinToneVariations.isEmpty
+        else { return nil }
+
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            UIMenu(children: ([emoji] + emoji.skinToneVariations).map { skinToneVariation in
+                UIAction(title: skinToneVariation.emoji) { [weak self] _ in
+                    self?.autocompleteSelectionsSubject.send(skinToneVariation.emoji)
+                    self?.autocompleteDataSource.updateUse(emoji: emojiItem)
+                }
+            })
+        }
     }
 }
 

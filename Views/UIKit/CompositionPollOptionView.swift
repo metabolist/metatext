@@ -51,15 +51,7 @@ private extension CompositionPollOptionView {
         textField.inputAccessoryView = textInputAccessoryView
         textField.tag = textInputAccessoryView.tagForInputView
         textField.addAction(
-            UIAction { [weak self] _ in
-                guard let self = self, let text = self.textField.text  else { return }
-
-                self.option.text = text
-
-                if let textToSelectedRange = self.textField.textToSelectedRange {
-                    self.option.textToSelectedRange = textToSelectedRange
-                }
-            },
+            UIAction { [weak self] _ in self?.textFieldEditingChanged() },
             for: .editingChanged)
         textField.text = option.text
 
@@ -96,5 +88,37 @@ private extension CompositionPollOptionView {
                 remainingCharactersLabel.textColor = $0 < 0 ? .systemRed : .label
             }
             .store(in: &cancellables)
+
+        textInputAccessoryView.autocompleteSelections
+            .sink { [weak self] in self?.autocompleteSelected($0) }
+            .store(in: &cancellables)
+    }
+
+    func textFieldEditingChanged() {
+        guard let text = textField.text  else { return }
+
+        option.text = text
+
+        if let textToSelectedRange = textField.textToSelectedRange {
+            option.textToSelectedRange = textToSelectedRange
+        }
+    }
+
+    func autocompleteSelected(_ autocompleteText: String) {
+        guard let autocompleteQuery = option.autocompleteQuery,
+              let queryRange = option.textToSelectedRange.range(of: autocompleteQuery, options: .backwards),
+              let textToSelectedRangeRange = option.text.range(of: option.textToSelectedRange)
+        else { return }
+
+        let replaced = option.textToSelectedRange.replacingOccurrences(
+            of: autocompleteQuery,
+            with: autocompleteText.appending(" "),
+            range: queryRange)
+
+        textField.text = option.text.replacingOccurrences(
+            of: option.textToSelectedRange,
+            with: replaced,
+            range: textToSelectedRangeRange)
+        textFieldEditingChanged()
     }
 }
