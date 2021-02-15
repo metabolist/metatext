@@ -6,12 +6,17 @@ import Mastodon
 import UIKit
 import ViewModels
 
-final class CompositionInputAccessoryView: UIToolbar {
+final class CompositionInputAccessoryView: UIView {
     let tagForInputView = UUID().hashValue
 
     private let viewModel: CompositionViewModel
     private let parentViewModel: NewStatusViewModel
-    private let autocompleteQueryPublisher: AnyPublisher<String?, Never>
+    private let toolbar = UIToolbar()
+    private let autocompleteCollectionView = UICollectionView(
+        frame: .zero,
+        collectionViewLayout: CompositionInputAccessoryView.autocompleteLayout())
+    private let autocompleteDataSource: AutocompleteDataSource
+    private let autocompleteCollectionViewHeightConstraint: NSLayoutConstraint
     private var cancellables = Set<AnyCancellable>()
 
     init(viewModel: CompositionViewModel,
@@ -19,7 +24,12 @@ final class CompositionInputAccessoryView: UIToolbar {
          autocompleteQueryPublisher: AnyPublisher<String?, Never>) {
         self.viewModel = viewModel
         self.parentViewModel = parentViewModel
-        self.autocompleteQueryPublisher = autocompleteQueryPublisher
+        autocompleteDataSource = AutocompleteDataSource(
+            collectionView: autocompleteCollectionView,
+            queryPublisher: autocompleteQueryPublisher,
+            parentViewModel: parentViewModel)
+        autocompleteCollectionViewHeightConstraint =
+            autocompleteCollectionView.heightAnchor.constraint(equalToConstant: .minimumButtonDimension)
 
         super.init(
             frame: .init(
@@ -36,11 +46,42 @@ final class CompositionInputAccessoryView: UIToolbar {
 }
 
 private extension CompositionInputAccessoryView {
+    static let autocompleteCollectionViewMaxHeight: CGFloat = 150
+
+    var heightConstraint: NSLayoutConstraint? {
+        superview?.constraints.first(where: { $0.identifier == "accessoryHeight" })
+    }
+
     // swiftlint:disable:next function_body_length
     func initialSetup() {
         autoresizingMask = .flexibleHeight
 
-        heightAnchor.constraint(equalToConstant: .minimumButtonDimension).isActive = true
+        addSubview(autocompleteCollectionView)
+        autocompleteCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        autocompleteCollectionView.alwaysBounceVertical = false
+        autocompleteCollectionView.backgroundColor = .clear
+        autocompleteCollectionView.layer.cornerRadius = .defaultCornerRadius
+        autocompleteCollectionView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+
+        let autocompleteBackgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterial))
+
+        autocompleteCollectionView.backgroundView = autocompleteBackgroundView
+
+        addSubview(toolbar)
+        toolbar.translatesAutoresizingMaskIntoConstraints = false
+        toolbar.setContentCompressionResistancePriority(.required, for: .vertical)
+
+        NSLayoutConstraint.activate([
+            autocompleteCollectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            autocompleteCollectionView.topAnchor.constraint(equalTo: topAnchor),
+            autocompleteCollectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            autocompleteCollectionView.bottomAnchor.constraint(equalTo: toolbar.topAnchor),
+            toolbar.leadingAnchor.constraint(equalTo: leadingAnchor),
+            toolbar.trailingAnchor.constraint(equalTo: trailingAnchor),
+            toolbar.bottomAnchor.constraint(equalTo: bottomAnchor),
+            toolbar.heightAnchor.constraint(equalToConstant: .minimumButtonDimension),
+            autocompleteCollectionViewHeightConstraint
+        ])
 
         var attachmentActions = [
             UIAction(
@@ -129,15 +170,11 @@ private extension CompositionInputAccessoryView {
                 NSLocalizedString("compose.add-button-accessibility-label.post", comment: "")
         }
 
-        let charactersLabel = UILabel()
+        let charactersBarItem = UIBarButtonItem()
 
-        charactersLabel.font = .preferredFont(forTextStyle: .callout)
-        charactersLabel.adjustsFontForContentSizeCategory = true
-        charactersLabel.adjustsFontSizeToFitWidth = true
+        charactersBarItem.isEnabled = false
 
-        let charactersBarItem = UIBarButtonItem(customView: charactersLabel)
-
-        items = [
+        toolbar.items = [
             attachmentButton,
             UIBarButtonItem.fixedSpace(.defaultSpacing),
             pollButton,
@@ -162,9 +199,11 @@ private extension CompositionInputAccessoryView {
             .store(in: &cancellables)
 
         viewModel.$remainingCharacters.sink {
-            charactersLabel.text = String($0)
-            charactersLabel.textColor = $0 < 0 ? .systemRed : .label
-            charactersLabel.accessibilityLabel = String.localizedStringWithFormat(
+            charactersBarItem.title = String($0)
+            charactersBarItem.setTitleTextAttributes(
+                [.foregroundColor: $0 < 0 ? UIColor.systemRed : UIColor.label],
+                for: .disabled)
+            charactersBarItem.accessibilityHint = String.localizedStringWithFormat(
                 NSLocalizedString("compose.characters-remaining-accessibility-label-%ld", comment: ""),
                 $0)
         }
@@ -174,9 +213,15 @@ private extension CompositionInputAccessoryView {
             .sink { addButton.isEnabled = $0 }
             .store(in: &cancellables)
 
-        autocompleteQueryPublisher
-            .print()
-            .sink { _ in /* TODO */ }
+        self.autocompleteCollectionView.publisher(for: \.contentSize)
+            .map(\.height)
+            .removeDuplicates()
+            .throttle(for: .seconds(TimeInterval.shortAnimationDuration), scheduler: DispatchQueue.main, latest: true)
+            .sink { [weak self] height in
+                UIView.animate(withDuration: .zeroIfReduceMotion(.shortAnimationDuration)) {
+                    self?.setAutocompleteCollectionViewHeight(height)
+                }
+            }
             .store(in: &cancellables)
 
         parentViewModel.$visibility
@@ -192,6 +237,41 @@ private extension CompositionInputAccessoryView {
 }
 
 private extension CompositionInputAccessoryView {
+    static func autocompleteLayout() -> UICollectionViewLayout {
+        var listConfig = UICollectionLayoutListConfiguration(appearance: .plain)
+
+        listConfig.backgroundColor = .clear
+
+        return UICollectionViewCompositionalLayout { index, environment -> NSCollectionLayoutSection? in
+            guard let autocompleteSection = AutocompleteSection(rawValue: index) else { return nil }
+
+            switch autocompleteSection {
+            case .search:
+                return .list(using: listConfig, layoutEnvironment: environment)
+            case .emoji:
+                let itemSize = NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1.0),
+                    heightDimension: .fractionalHeight(1.0))
+                let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                let groupSize = NSCollectionLayoutSize(
+                    widthDimension: .absolute(.minimumButtonDimension),
+                    heightDimension: .absolute(.minimumButtonDimension))
+                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+                let section = NSCollectionLayoutSection(group: group)
+
+                section.interGroupSpacing = .defaultSpacing
+                section.orthogonalScrollingBehavior = .continuous
+                section.contentInsets = NSDirectionalEdgeInsets(
+                    top: .compactSpacing,
+                    leading: .compactSpacing,
+                    bottom: .compactSpacing,
+                    trailing: .compactSpacing)
+
+                return section
+            }
+        }
+    }
+
     func visibilityMenu(selectedVisibility: Status.Visibility) -> UIMenu {
         UIMenu(children: Status.Visibility.allCasesExceptUnknown.reversed().map { visibility in
             UIAction(
@@ -202,5 +282,16 @@ private extension CompositionInputAccessoryView {
                 self?.parentViewModel.visibility = visibility
             }
         })
+    }
+
+    func setAutocompleteCollectionViewHeight(_ height: CGFloat) {
+        let autocompleteCollectionViewHeight = min(max(height, .hairline), Self.autocompleteCollectionViewMaxHeight)
+
+        autocompleteCollectionViewHeightConstraint.constant = autocompleteCollectionViewHeight
+        autocompleteCollectionView.alpha = autocompleteCollectionViewHeightConstraint.constant == .hairline ? 0 : 1
+
+        heightConstraint?.constant = .minimumButtonDimension + autocompleteCollectionViewHeight
+        updateConstraints()
+        superview?.superview?.layoutIfNeeded()
     }
 }

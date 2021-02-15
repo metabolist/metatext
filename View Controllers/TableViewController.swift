@@ -13,7 +13,7 @@ class TableViewController: UITableViewController {
     var transitionViewTag = -1
 
     private let viewModel: CollectionViewModel
-    private let rootViewModel: RootViewModel
+    private let rootViewModel: RootViewModel?
     private let loadingTableFooterView = LoadingTableFooterView()
     private let webfingerIndicatorView = WebfingerIndicatorView()
     @Published private var loading = false
@@ -29,7 +29,7 @@ class TableViewController: UITableViewController {
     }()
 
     init(viewModel: CollectionViewModel,
-         rootViewModel: RootViewModel,
+         rootViewModel: RootViewModel? = nil,
          insetBottom: Bool = true,
          parentNavigationController: UINavigationController? = nil) {
         self.viewModel = viewModel
@@ -540,7 +540,7 @@ private extension TableViewController {
     }
 
     func compose(inReplyToViewModel: StatusViewModel?, redraft: Status?) {
-        rootViewModel.navigationViewModel?.presentedNewStatusViewModel = rootViewModel.newStatusViewModel(
+        rootViewModel?.navigationViewModel?.presentedNewStatusViewModel = rootViewModel?.newStatusViewModel(
             identityContext: viewModel.identityContext,
             inReplyTo: inReplyToViewModel,
             redraft: redraft)

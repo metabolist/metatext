@@ -20,10 +20,6 @@ public struct ExploreService {
 }
 
 public extension ExploreService {
-    func searchService() -> SearchService {
-        SearchService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
-    }
-
     func instanceServicePublisher(uri: String) -> AnyPublisher<InstanceService, Error> {
         contentDatabase.instancePublisher(uri: uri)
             .map { InstanceService(instance: $0, mastodonAPIClient: mastodonAPIClient) }

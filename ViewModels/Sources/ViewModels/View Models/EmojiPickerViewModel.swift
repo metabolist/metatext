@@ -20,7 +20,7 @@ final public class EmojiPickerViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
 
     // swiftlint:disable:next function_body_length
-    public init(identityContext: IdentityContext) {
+    public init(identityContext: IdentityContext, queryOnly: Bool = false) {
         self.identityContext = identityContext
         emojiPickerService = identityContext.service.emojiPickerService()
 
@@ -67,12 +67,16 @@ final public class EmojiPickerViewModel: ObservableObject {
                             }
                         }
                     }
+                } else if queryOnly {
+                    return [:]
                 }
 
-                emojis[.frequentlyUsed] = emojiUses.compactMap { use in
-                    emojis.values.reduce([], +)
-                        .first { use.system == $0.system && use.emoji == $0.name }
-                        .map(\.inFrequentlyUsed)
+                if !queryOnly {
+                    emojis[.frequentlyUsed] = emojiUses.compactMap { use in
+                        emojis.values.reduce([], +)
+                            .first { use.system == $0.system && use.emoji == $0.name }
+                            .map(\.inFrequentlyUsed)
+                    }
                 }
 
                 return emojis.filter { !$0.value.isEmpty }

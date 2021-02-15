@@ -11,7 +11,7 @@ final class ProfileViewController: TableViewController {
 
     required init(
         viewModel: ProfileViewModel,
-        rootViewModel: RootViewModel,
+        rootViewModel: RootViewModel?,
         identityContext: IdentityContext,
         parentNavigationController: UINavigationController?) {
         self.viewModel = viewModel

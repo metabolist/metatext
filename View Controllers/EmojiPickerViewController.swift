@@ -20,7 +20,9 @@ final class EmojiPickerViewController: UICollectionViewController {
     private lazy var dataSource: UICollectionViewDiffableDataSource<PickerEmoji.Category, PickerEmoji> = {
         let cellRegistration = UICollectionView.CellRegistration
         <EmojiCollectionViewCell, PickerEmoji> { [weak self] in
-            $0.emoji = self?.applyingDefaultSkinTone(emoji: $2) ?? $2
+            guard let self = self else { return }
+
+            $0.emoji = $2.applyingDefaultSkinTone(identityContext: self.viewModel.identityContext)
         }
 
         let headerRegistration = UICollectionView.SupplementaryRegistration
@@ -149,9 +151,11 @@ final class EmojiPickerViewController: UICollectionViewController {
     }
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+
         guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
 
-        select(emoji: applyingDefaultSkinTone(emoji: item))
+        select(item.applyingDefaultSkinTone(identityContext: viewModel.identityContext))
         viewModel.updateUse(emoji: item)
     }
 
@@ -233,14 +237,5 @@ private extension EmojiPickerViewController {
 
         snapshot.reloadItems(visibleItems)
         dataSource.apply(snapshot)
-    }
-
-    func applyingDefaultSkinTone(emoji: PickerEmoji) -> PickerEmoji {
-        if case let .system(systemEmoji, inFrequentlyUsed) = emoji,
-           let defaultEmojiSkinTone = viewModel.identityContext.appPreferences.defaultEmojiSkinTone {
-            return .system(systemEmoji.applying(skinTone: defaultEmojiSkinTone), inFrequentlyUsed: inFrequentlyUsed)
-        } else {
-            return emoji
-        }
     }
 }

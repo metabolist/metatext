@@ -270,6 +270,10 @@ public extension IdentityService {
         ExploreService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }
 
+    func searchService() -> SearchService {
+        SearchService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+    }
+
     func notificationsService(excludeTypes: Set<MastodonNotification.NotificationType>) -> NotificationsService {
         NotificationsService(excludeTypes: excludeTypes,
                              mastodonAPIClient: mastodonAPIClient,

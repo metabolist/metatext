@@ -11,8 +11,8 @@ public final class SearchViewModel: CollectionItemsViewModel {
     private let searchService: SearchService
     private var cancellables = Set<AnyCancellable>()
 
-    public init(searchService: SearchService, identityContext: IdentityContext) {
-        self.searchService = searchService
+    public init(identityContext: IdentityContext) {
+        self.searchService = identityContext.service.searchService()
 
         super.init(collectionService: searchService, identityContext: identityContext)
 
@@ -40,7 +40,7 @@ public final class SearchViewModel: CollectionItemsViewModel {
 }
 
 private extension SearchViewModel {
-    static let debounceInterval: TimeInterval = 0.5
+    static let debounceInterval: TimeInterval = 0.2
 }
 
 private extension SearchScope {

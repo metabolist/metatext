@@ -4,7 +4,7 @@ import Kingfisher
 import UIKit
 
 final class EmojiView: UIView {
-    private let imageView = UIImageView()
+    private let imageView = AnimatedImageView()
     private let emojiLabel = UILabel()
     private var emojiConfiguration: EmojiContentConfiguration
 

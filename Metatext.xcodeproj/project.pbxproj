@@ -165,6 +165,13 @@
 		D0D2AC4D25BCD2A9003D5DF2 /* TagTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D2AC4C25BCD2A9003D5DF2 /* TagTableViewCell.swift */; };
 		D0D2AC5325BCD2BA003D5DF2 /* TagContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D2AC5225BCD2BA003D5DF2 /* TagContentConfiguration.swift */; };
 		D0D2AC6725BD0484003D5DF2 /* LineChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D2AC6625BD0484003D5DF2 /* LineChartView.swift */; };
+		D0D93EBA25D9C70400C622ED /* AutocompleteItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D93EB925D9C70400C622ED /* AutocompleteItemView.swift */; };
+		D0D93EC025D9C71D00C622ED /* AutocompleteItemContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D93EBF25D9C71D00C622ED /* AutocompleteItemContentConfiguration.swift */; };
+		D0D93EC525D9C75E00C622ED /* AutocompleteItemContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D93EBF25D9C71D00C622ED /* AutocompleteItemContentConfiguration.swift */; };
+		D0D93ECA25D9C76500C622ED /* AutocompleteItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D93EB925D9C70400C622ED /* AutocompleteItemView.swift */; };
+		D0D93ED025D9C9ED00C622ED /* AutocompleteItemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D93ECF25D9C9ED00C622ED /* AutocompleteItemCollectionViewCell.swift */; };
+		D0D93ED925D9CBE200C622ED /* AutocompleteItemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D93ECF25D9C9ED00C622ED /* AutocompleteItemCollectionViewCell.swift */; };
+		D0D93EDE25DA014700C622ED /* SeparatorConfiguredCollectionViewListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09D972125C65682007E6394 /* SeparatorConfiguredCollectionViewListCell.swift */; };
 		D0DD50CB256B1F24004A04F7 /* ReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DD50CA256B1F24004A04F7 /* ReportView.swift */; };
 		D0DDA76B25C5F20800FA0F91 /* ExploreDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DDA76A25C5F20800FA0F91 /* ExploreDataSource.swift */; };
 		D0DDA77525C5F73F00FA0F91 /* TagCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DDA77425C5F73F00FA0F91 /* TagCollectionViewCell.swift */; };
@@ -173,6 +180,8 @@
 		D0E2C1D124FD97F000854680 /* ViewModels in Frameworks */ = {isa = PBXBuildFile; productRef = D0E2C1D024FD97F000854680 /* ViewModels */; };
 		D0E39AB425D8BF88009C10F8 /* UITextInput+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E39AB325D8BF88009C10F8 /* UITextInput+Extensions.swift */; };
 		D0E39ABD25D8C046009C10F8 /* UITextInput+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E39AB325D8BF88009C10F8 /* UITextInput+Extensions.swift */; };
+		D0E39B7E25D9AF23009C10F8 /* AutocompleteDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E39B7D25D9AF23009C10F8 /* AutocompleteDataSource.swift */; };
+		D0E39B8725D9B7FD009C10F8 /* AutocompleteDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E39B7D25D9AF23009C10F8 /* AutocompleteDataSource.swift */; };
 		D0E5361C24E3EB4D00FB1CE1 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E5361B24E3EB4D00FB1CE1 /* NotificationService.swift */; };
 		D0E5362024E3EB4D00FB1CE1 /* Notification Service Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D0E5361924E3EB4D00FB1CE1 /* Notification Service Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D0E569DB2529319100FA1D72 /* LoadMoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E569DA2529319100FA1D72 /* LoadMoreView.swift */; };
@@ -373,6 +382,9 @@
 		D0D2AC5225BCD2BA003D5DF2 /* TagContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagContentConfiguration.swift; sourceTree = "<group>"; };
 		D0D2AC6625BD0484003D5DF2 /* LineChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineChartView.swift; sourceTree = "<group>"; };
 		D0D7C013250440610039AD6F /* CodableBloomFilter */ = {isa = PBXFileReference; lastKnownFileType = folder; path = CodableBloomFilter; sourceTree = "<group>"; };
+		D0D93EB925D9C70400C622ED /* AutocompleteItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompleteItemView.swift; sourceTree = "<group>"; };
+		D0D93EBF25D9C71D00C622ED /* AutocompleteItemContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompleteItemContentConfiguration.swift; sourceTree = "<group>"; };
+		D0D93ECF25D9C9ED00C622ED /* AutocompleteItemCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompleteItemCollectionViewCell.swift; sourceTree = "<group>"; };
 		D0DD50CA256B1F24004A04F7 /* ReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportView.swift; sourceTree = "<group>"; };
 		D0DDA76A25C5F20800FA0F91 /* ExploreDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreDataSource.swift; sourceTree = "<group>"; };
 		D0DDA77425C5F73F00FA0F91 /* TagCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -381,6 +393,7 @@
 		D0E1F582251F13EC00D45315 /* WebfingerIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebfingerIndicatorView.swift; sourceTree = "<group>"; };
 		D0E2C1CF24FD8BA400854680 /* ViewModels */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ViewModels; sourceTree = "<group>"; };
 		D0E39AB325D8BF88009C10F8 /* UITextInput+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextInput+Extensions.swift"; sourceTree = "<group>"; };
+		D0E39B7D25D9AF23009C10F8 /* AutocompleteDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompleteDataSource.swift; sourceTree = "<group>"; };
 		D0E5361924E3EB4D00FB1CE1 /* Notification Service Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Notification Service Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0E5361B24E3EB4D00FB1CE1 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		D0E5361D24E3EB4D00FB1CE1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -537,6 +550,7 @@
 		D021A66F25C3E1F9008A0C0D /* Collection View Cells */ = {
 			isa = PBXGroup;
 			children = (
+				D0D93ECF25D9C9ED00C622ED /* AutocompleteItemCollectionViewCell.swift */,
 				D07EC7DB25B13DBB006DF726 /* EmojiCollectionViewCell.swift */,
 				D09D971725C64682007E6394 /* InstanceCollectionViewCell.swift */,
 				D09D972125C65682007E6394 /* SeparatorConfiguredCollectionViewListCell.swift */,
@@ -549,6 +563,7 @@
 			isa = PBXGroup;
 			children = (
 				D0F0B112251A86A000942152 /* AccountContentConfiguration.swift */,
+				D0D93EBF25D9C71D00C622ED /* AutocompleteItemContentConfiguration.swift */,
 				D00702352555F4C500F38136 /* ConversationContentConfiguration.swift */,
 				D07EC7E225B13DD3006DF726 /* EmojiContentConfiguration.swift */,
 				D07EC7F125B13E57006DF726 /* EmojiView.swift */,
@@ -566,6 +581,7 @@
 			isa = PBXGroup;
 			children = (
 				D0F0B10D251A868200942152 /* AccountView.swift */,
+				D0D93EB925D9C70400C622ED /* AutocompleteItemView.swift */,
 				D00702302555F4AE00F38136 /* ConversationView.swift */,
 				D021A61325C36BFB008A0C0D /* IdentityView.swift */,
 				D09D970725C64522007E6394 /* InstanceView.swift */,
@@ -677,6 +693,7 @@
 		D0A1F4F5252E7D2A004435BF /* Data Sources */ = {
 			isa = PBXGroup;
 			children = (
+				D0E39B7D25D9AF23009C10F8 /* AutocompleteDataSource.swift */,
 				D0DDA76A25C5F20800FA0F91 /* ExploreDataSource.swift */,
 				D021A5FF25C3478F008A0C0D /* IdentitiesDataSource.swift */,
 				D0A1F4F6252E7D4B004435BF /* TableViewDataSource.swift */,
@@ -1031,6 +1048,7 @@
 				D0CE9F87258B076900E3A6B6 /* AttachmentUploadView.swift in Sources */,
 				D0F0B113251A86A000942152 /* AccountContentConfiguration.swift in Sources */,
 				D05E688525B55AE8001FB2C6 /* AVURLAsset+Extensions.swift in Sources */,
+				D0D93EC025D9C71D00C622ED /* AutocompleteItemContentConfiguration.swift in Sources */,
 				D09D970E25C64539007E6394 /* InstanceContentConfiguration.swift in Sources */,
 				D036AA02254B6101009094DF /* NotificationTableViewCell.swift in Sources */,
 				D08B8D42253F92B600B1EBEF /* ImagePageViewController.swift in Sources */,
@@ -1069,6 +1087,7 @@
 				D021A61425C36BFB008A0C0D /* IdentityView.swift in Sources */,
 				D06BC5E625202AD90079541D /* ProfileViewController.swift in Sources */,
 				D0D2AC4D25BCD2A9003D5DF2 /* TagTableViewCell.swift in Sources */,
+				D0D93ED025D9C9ED00C622ED /* AutocompleteItemCollectionViewCell.swift in Sources */,
 				D00CB22A25C92C0F008EF267 /* Attachment+Extensions.swift in Sources */,
 				D0D2AC5325BCD2BA003D5DF2 /* TagContentConfiguration.swift in Sources */,
 				D08B8D72254246E200B1EBEF /* PollView.swift in Sources */,
@@ -1077,6 +1096,7 @@
 				D0F0B10E251A868200942152 /* AccountView.swift in Sources */,
 				D0BEB1FF24F9E5BB001B0F04 /* ListsView.swift in Sources */,
 				D021A60025C3478F008A0C0D /* IdentitiesDataSource.swift in Sources */,
+				D0E39B7E25D9AF23009C10F8 /* AutocompleteDataSource.swift in Sources */,
 				D0C7D49724F7616A001EBDBB /* IdentitiesView.swift in Sources */,
 				D025B14D25C4E482001C69A8 /* ImageCacheConfiguration.swift in Sources */,
 				D01EF22425182B1F00650C6B /* AccountHeaderView.swift in Sources */,
@@ -1107,6 +1127,7 @@
 				D0BE980425D229D50057E161 /* SeparatorConfiguredTableViewCell.swift in Sources */,
 				D0A1F4F7252E7D4B004435BF /* TableViewDataSource.swift in Sources */,
 				D025B17E25C500BC001C69A8 /* CapsuleButton.swift in Sources */,
+				D0D93EBA25D9C70400C622ED /* AutocompleteItemView.swift in Sources */,
 				D0C7D4C424F7616A001EBDBB /* AppDelegate.swift in Sources */,
 				D0C7D49924F7616A001EBDBB /* AddIdentityView.swift in Sources */,
 				D0DDA77F25C6058300FA0F91 /* ExploreSectionHeaderView.swift in Sources */,
@@ -1143,8 +1164,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0D93EDE25DA014700C622ED /* SeparatorConfiguredCollectionViewListCell.swift in Sources */,
 				D08E52A6257C61C000FA2C5F /* ShareExtensionNavigationViewController.swift in Sources */,
 				D00CB23825C93047008EF267 /* String+Extensions.swift in Sources */,
+				D0D93EC525D9C75E00C622ED /* AutocompleteItemContentConfiguration.swift in Sources */,
 				D059373425AAEA7000754FDF /* CompositionPollView.swift in Sources */,
 				D021A67B25C3E32A008A0C0D /* PlayerView.swift in Sources */,
 				D021A69025C3E4B8008A0C0D /* EmojiContentConfiguration.swift in Sources */,
@@ -1173,10 +1196,13 @@
 				D036EBB3259FE28800EC1CFC /* UIColor+Extensions.swift in Sources */,
 				D0E39ABD25D8C046009C10F8 /* UITextInput+Extensions.swift in Sources */,
 				D088406E25AFBBE200BB749B /* EmojiPickerViewController.swift in Sources */,
+				D0E39B8725D9B7FD009C10F8 /* AutocompleteDataSource.swift in Sources */,
 				D00CB23325C92F2D008EF267 /* Attachment+Extensions.swift in Sources */,
+				D0D93ECA25D9C76500C622ED /* AutocompleteItemView.swift in Sources */,
 				D025B14725C4D26B001C69A8 /* ImageCacheSerializer.swift in Sources */,
 				D036EBB8259FE29800EC1CFC /* Status+Extensions.swift in Sources */,
 				D021A6A625C3E584008A0C0D /* EditAttachmentView.swift in Sources */,
+				D0D93ED925D9CBE200C622ED /* AutocompleteItemCollectionViewCell.swift in Sources */,
 				D0BE97E025D086F80057E161 /* ImagePastableTextView.swift in Sources */,
 				D05936DF25A937EC00754FDF /* EditThumbnailView.swift in Sources */,
 				D021A69525C3E4C1008A0C0D /* EmojiView.swift in Sources */,

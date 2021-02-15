@@ -3,19 +3,21 @@
 import UIKit
 import ViewModels
 
-final class EmojiCollectionViewCell: UICollectionViewCell {
-    var emoji: PickerEmoji?
+final class AutocompleteItemCollectionViewCell: SeparatorConfiguredCollectionViewListCell {
+    var item: AutocompleteItem?
+    var identityContext: IdentityContext?
 
     override func updateConfiguration(using state: UICellConfigurationState) {
-        guard let emoji = emoji else { return }
+        guard let item = item, let identityContext = identityContext else { return }
 
-        contentConfiguration = EmojiContentConfiguration(emoji: emoji)
+        contentConfiguration = AutocompleteItemContentConfiguration(item: item, identityContext: identityContext)
 
         var backgroundConfiguration = UIBackgroundConfiguration.listPlainCell()
 
         backgroundConfiguration.backgroundColor = state.isHighlighted || state.isSelected ? nil : .clear
-        backgroundConfiguration.cornerRadius = .defaultCornerRadius
 
         self.backgroundConfiguration = backgroundConfiguration
+
+        accessibilityElements = [contentView]
     }
 }
