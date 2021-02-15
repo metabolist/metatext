@@ -19,25 +19,25 @@ struct ReportView: View {
             }
             Section {
                 Text("report.hint")
-                ZStack(alignment: .leading) {
-                    if viewModel.elements.comment.isEmpty {
-                        Text("report.placeholder").foregroundColor(.secondary)
-                    }
-                    TextEditor(text: $viewModel.elements.comment)
-                }
-                if !viewModel.isLocalAccount {
+            }
+            Section(header: Text("report.additional-comments")) {
+                TextEditor(text: $viewModel.elements.comment)
+                    .accessibility(label: Text("report.additional-comments"))
+            }
+            if !viewModel.isLocalAccount {
+                Section {
                     VStack(alignment: .leading) {
                         Text("report.forward.hint")
                         Toggle("report.forward-\(viewModel.accountHost)", isOn: $viewModel.elements.forward)
                     }
                 }
-                Group {
-                    if viewModel.loading {
-                        ProgressView()
-                    } else {
-                        Button("submit") {
-                            viewModel.report()
-                        }
+            }
+            Section {
+                if viewModel.loading {
+                    ProgressView()
+                } else {
+                    Button("report.target-\(viewModel.accountName)") {
+                        viewModel.report()
                     }
                 }
             }

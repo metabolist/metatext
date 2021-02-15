@@ -27,12 +27,12 @@
 "account.joined-%@" = "Joined %@";
 "account.locked.accessibility-label" = "Locked account";
 "account.mute" = "Mute";
-"account.mute.indefinite" = "Indefnite";
+"account.mute.indefinite" = "Indefinite";
 "account.mute.confirm-%@" = "Are you sure you want to mute %@?";
 "account.mute.confirm.explanation" = "This will hide posts from them and posts mentioning them, but it will still allow them to see your posts and follow you.";
 "account.mute.confirm.hide-notifications" = "Hide notifications from this user?";
 "account.mute.confirm.duration" = "Duration";
-"account.mute.target-%@" = "Muting %@";
+"account.mute.target-%@" = "Mute %@";
 "account.muted" = "Muted";
 "account.reject-follow-request-button.accessibility-label" = "Reject follow request";
 "account.request" = "Request";
@@ -245,9 +245,9 @@
 "notifications.unknown" = "Notification from %@";
 "remove" = "Remove";
 "report" = "Report";
+"report.additional-comments" = "Additional comments";
 "report.hint" = "The report will be sent to your server moderators. You can provide an explanation of why you are reporting this account below:";
-"report.placeholder" = "Additional comments";
-"report.target-%@" = "Reporting %@";
+"report.target-%@" = "Report %@";
 "report.forward.hint" = "The account is from another server. Send an anonymized copy of the report there as well?";
 "report.forward-%@" = "Forward report to %@";
 "search.scope.all" = "All";
@@ -302,7 +302,6 @@
 "status.visibility.unlisted.description" = "Visible for all, but not in public timelines";
 "status.visibility.private.description" = "Visible for followers only";
 "status.visibility.direct.description" = "Visible for mentioned users only";
-"submit" = "Submit";
 "tag.accessibility-recent-uses-%ld" = "%ld recent uses";
 "tag.accessibility-hint.post" = "View posts associated with trend";
 "tag.accessibility-hint.toot" = "View toots associated with trend";

@@ -17,6 +17,7 @@ struct ReportStatusView: UIViewRepresentable {
         view.buttonsStackView.isHidden = true
         view.translatesAutoresizingMaskIntoConstraints = false
         view.isUserInteractionEnabled = false
+        view.accessibilityLabel = view.accessibilityAttributedLabel?.string
 
         return view
     }

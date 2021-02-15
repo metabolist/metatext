@@ -11,21 +11,23 @@ struct MuteView: View {
 
     var body: some View {
         Form {
-            VStack(alignment: .leading, spacing: .defaultSpacing) {
-                Text("account.mute.confirm-\(viewModel.accountName)")
-                Text("account.mute.confirm.explanation")
-            }
-            Toggle("account.mute.confirm.hide-notifications", isOn: $viewModel.notifications)
-            Picker("account.mute.confirm.duration", selection: $viewModel.duration) {
-                ForEach(MuteViewModel.Duration.allCases) { duration in
-                    Text(verbatim: duration.title).tag(duration)
+            Section {
+                VStack(alignment: .leading, spacing: .defaultSpacing) {
+                    Text("account.mute.confirm-\(viewModel.accountName)")
+                    Text("account.mute.confirm.explanation")
+                }
+                Toggle("account.mute.confirm.hide-notifications", isOn: $viewModel.notifications)
+                Picker("account.mute.confirm.duration", selection: $viewModel.duration) {
+                    ForEach(MuteViewModel.Duration.allCases) { duration in
+                        Text(verbatim: duration.title).tag(duration)
+                    }
                 }
             }
-            Group {
+            Section {
                 if viewModel.loading {
                     ProgressView()
                 } else {
-                    Button("account.mute") {
+                    Button("account.mute.target-\(viewModel.accountName)") {
                         viewModel.mute()
                     }
                 }
