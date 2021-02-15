@@ -12,9 +12,11 @@ final class AutocompleteItemCollectionViewCell: SeparatorConfiguredCollectionVie
 
         contentConfiguration = AutocompleteItemContentConfiguration(item: item, identityContext: identityContext)
 
-        var backgroundConfiguration = UIBackgroundConfiguration.listPlainCell()
+        var backgroundConfiguration = UIBackgroundConfiguration.listPlainCell().updated(for: state)
 
-        backgroundConfiguration.backgroundColor = state.isHighlighted || state.isSelected ? nil : .clear
+        if !state.isHighlighted && !state.isSelected {
+            backgroundConfiguration.backgroundColor = .clear
+        }
 
         self.backgroundConfiguration = backgroundConfiguration
 

@@ -62,6 +62,8 @@ private extension CompositionInputAccessoryView {
         autocompleteCollectionView.backgroundColor = .clear
         autocompleteCollectionView.layer.cornerRadius = .defaultCornerRadius
         autocompleteCollectionView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+        autocompleteCollectionView.dataSource = autocompleteDataSource
+        autocompleteCollectionView.delegate = self
 
         let autocompleteBackgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterial))
 
@@ -233,6 +235,12 @@ private extension CompositionInputAccessoryView {
                     $0.title ?? "")
             }
             .store(in: &cancellables)
+    }
+}
+
+extension CompositionInputAccessoryView: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
     }
 }
 

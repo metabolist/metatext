@@ -155,7 +155,7 @@ final class EmojiPickerViewController: UICollectionViewController {
 
         guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
 
-        select(item.applyingDefaultSkinTone(identityContext: viewModel.identityContext))
+        select(emoji: item.applyingDefaultSkinTone(identityContext: viewModel.identityContext))
         viewModel.updateUse(emoji: item)
     }
 

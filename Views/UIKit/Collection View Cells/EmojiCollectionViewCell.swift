@@ -11,9 +11,12 @@ final class EmojiCollectionViewCell: UICollectionViewCell {
 
         contentConfiguration = EmojiContentConfiguration(emoji: emoji)
 
-        var backgroundConfiguration = UIBackgroundConfiguration.listPlainCell()
+        var backgroundConfiguration = UIBackgroundConfiguration.listPlainCell().updated(for: state)
 
-        backgroundConfiguration.backgroundColor = state.isHighlighted || state.isSelected ? nil : .clear
+        if !state.isHighlighted && !state.isSelected {
+            backgroundConfiguration.backgroundColor = .clear
+        }
+
         backgroundConfiguration.cornerRadius = .defaultCornerRadius
 
         self.backgroundConfiguration = backgroundConfiguration
