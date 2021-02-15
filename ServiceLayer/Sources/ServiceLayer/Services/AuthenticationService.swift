@@ -66,7 +66,7 @@ private extension AuthenticationService {
         static let callbackURLScheme = "metatext"
         static let authorizationCallbackURL = URL(string: "\(callbackURLScheme)://oauth.callback")!
         static let registrationCallbackURL = URL(string: "https://metatext.link/confirmation")!
-        static let website = URL(string: "https://metabolist.com/metatext")!
+        static let website = URL(string: "https://metabolist.org/metatext")!
     }
 
     enum OAuthError: Error {

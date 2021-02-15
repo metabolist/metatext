@@ -295,8 +295,8 @@ public extension IdentityService {
 
 private extension IdentityService {
     #if DEBUG
-    static let pushSubscriptionEndpointURL = URL(string: "https://metatext-apns.metabolist.com/push?sandbox=true")!
+    static let pushSubscriptionEndpointURL = URL(string: "https://metatext-apns.metabolist.org/push?sandbox=true")!
     #else
-    static let pushSubscriptionEndpointURL = URL(string: "https://metatext-apns.metabolist.com/push")!
+    static let pushSubscriptionEndpointURL = URL(string: "https://metatext-apns.metabolist.org/push")!
     #endif
 }
