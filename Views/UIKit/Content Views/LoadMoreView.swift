@@ -110,17 +110,32 @@ private extension LoadMoreView {
 
         isAccessibilityElement = true
         accessibilityLabel = NSLocalizedString("load-more", comment: "")
+
+        let aboveAccessibilityActionName: String
+        let belowAccessibilityActionName: String
+
+        switch loadMoreConfiguration.viewModel.identityContext.appPreferences.statusWord {
+        case .toot:
+            aboveAccessibilityActionName = NSLocalizedString("load-more.above.accessibility-label.toot", comment: "")
+            belowAccessibilityActionName = NSLocalizedString("load-more.below.accessibility-label.toot", comment: "")
+        case .post:
+            aboveAccessibilityActionName = NSLocalizedString("load-more.above.accessibility-label.post", comment: "")
+            belowAccessibilityActionName = NSLocalizedString("load-more.below.accessibility-label.post", comment: "")
+        }
+
         accessibilityCustomActions = [
             UIAccessibilityCustomAction(
-                name: NSLocalizedString("load-more.older.accessibility-label", comment: "")) { [weak self] _ in
-                self?.loadMoreConfiguration.viewModel.direction = .down
+                name: aboveAccessibilityActionName) { [weak self] _ in
+                self?.directionChange = -Self.directionChangeMax
+                self?.updateDirectionChange(animated: false)
                 self?.loadMoreConfiguration.viewModel.loadMore()
 
                 return true
             },
             UIAccessibilityCustomAction(
-                name: NSLocalizedString("load-more.newer.accessibility-label", comment: "")) { [weak self] _ in
-                self?.loadMoreConfiguration.viewModel.direction = .up
+                name: belowAccessibilityActionName) { [weak self] _ in
+                self?.directionChange = Self.directionChangeMax
+                self?.updateDirectionChange(animated: false)
                 self?.loadMoreConfiguration.viewModel.loadMore()
 
                 return true

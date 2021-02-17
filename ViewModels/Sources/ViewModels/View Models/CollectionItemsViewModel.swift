@@ -211,7 +211,8 @@ extension CollectionItemsViewModel: CollectionViewModel {
 
             let viewModel = LoadMoreViewModel(
                 loadMoreService: collectionService.navigationService.loadMoreService(loadMore: loadMore),
-                eventsSubject: eventsSubject)
+                eventsSubject: eventsSubject,
+                identityContext: identityContext)
 
             viewModelCache[item] = viewModel
 
