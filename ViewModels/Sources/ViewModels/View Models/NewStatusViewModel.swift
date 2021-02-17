@@ -200,7 +200,7 @@ public extension NewStatusViewModel {
 
 private extension NewStatusViewModel {
     // swiftlint:disable:next force_try
-    static let mentionsRegularExpression = try! NSRegularExpression(pattern: #"@\w+"#)
+    static let mentionsRegularExpression = try! NSRegularExpression(pattern: #"@\S+"#)
 
     func handle(event: CompositionViewModel.Event) {
         switch event {
