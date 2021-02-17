@@ -345,8 +345,10 @@ private extension CompositionView {
 
     func spoilerTextAutocompleteSelected(_ autocompleteText: String) {
         guard let autocompleteQuery = viewModel.contentWarningAutocompleteQuery,
-              let queryRange = viewModel.contentWarningTextToSelectedRange.range(of: autocompleteQuery, options: .backwards),
-              let textToSelectedRangeRange = viewModel.contentWarning.range(of: viewModel.contentWarningTextToSelectedRange)
+              let queryRange =
+                viewModel.contentWarningTextToSelectedRange.range(of: autocompleteQuery, options: .backwards),
+              let textToSelectedRangeRange =
+                viewModel.contentWarning.range(of: viewModel.contentWarningTextToSelectedRange)
         else { return }
 
         let replaced = viewModel.contentWarningTextToSelectedRange.replacingOccurrences(
