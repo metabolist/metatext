@@ -163,6 +163,19 @@ public extension NewStatusViewModel {
         newViewModel.contentWarning = after.contentWarning
         newViewModel.displayContentWarning = after.displayContentWarning
 
+        let mentions = Self.mentionsRegularExpression.matches(
+            in: after.text,
+            range: NSRange(location: 0, length: after.text.count))
+            .compactMap { result -> String? in
+                guard let range = Range(result.range, in: after.text) else { return nil }
+
+                return String(after.text[range])
+            }
+
+        if !mentions.isEmpty {
+            newViewModel.text = mentions.joined(separator: " ").appending(" ")
+        }
+
         if index >= compositionViewModels.count - 1 {
             compositionViewModels.append(newViewModel)
         } else {
@@ -186,6 +199,9 @@ public extension NewStatusViewModel {
 }
 
 private extension NewStatusViewModel {
+    // swiftlint:disable:next force_try
+    static let mentionsRegularExpression = try! NSRegularExpression(pattern: #"@\w+"#)
+
     func handle(event: CompositionViewModel.Event) {
         switch event {
         case let .editAttachment(attachmentViewModel, compositionViewModel):
@@ -194,6 +210,7 @@ private extension NewStatusViewModel {
             publisher.assignErrorsToAlertItem(to: \.alertItem, on: self).sink { _ in }.store(in: &cancellables)
         }
     }
+
     func post(viewModel: CompositionViewModel, inReplyToId: Status.Id?) {
         postingState = .posting
         identityContext.service.post(statusComponents: viewModel.components(
