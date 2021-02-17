@@ -57,6 +57,7 @@ final class ExploreViewController: UICollectionViewController {
         let searchController = UISearchController(searchResultsController: searchResultsController)
 
         searchController.searchResultsUpdater = self
+        searchController.searchBar.keyboardType = .twitter
         navigationItem.searchController = searchController
 
         viewModel.identityContext.$appPreferences.sink { appPreferences in
