@@ -383,6 +383,18 @@ private extension TableViewController {
             .merge(with: NotificationCenter.default.publisher(for: NewStatusViewController.newStatusPostedNotification))
             .sink { [weak self] _ in self?.refreshIfAble() }
             .store(in: &cancellables)
+
+        NotificationCenter.default.publisher(for: LoadMoreView.accessibilityCustomAction)
+            .sink { [weak self] notification in
+                guard let self = self,
+                      let loadMoreView = notification.object as? LoadMoreView,
+                      let cell = self.tableView.visibleCells.first(where: { $0.contentView === loadMoreView }),
+                      let indexPath = self.tableView.indexPath(for: cell)
+                      else { return }
+
+                self.tableView(self.tableView, didSelectRowAt: indexPath)
+            }
+            .store(in: &cancellables)
     }
 
     func update(_ update: CollectionUpdate) {

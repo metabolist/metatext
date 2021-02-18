@@ -28,6 +28,9 @@ final class LoadMoreView: UIView {
 }
 
 extension LoadMoreView {
+    static let accessibilityCustomAction =
+        Notification.Name("com.metabolist.metatext.load-more-view.accessibility-custom-action")
+
     static var estimatedHeight: CGFloat {
         .defaultSpacing * 2 + UIFont.preferredFont(forTextStyle: .title2).lineHeight
     }
@@ -128,7 +131,7 @@ private extension LoadMoreView {
                 name: aboveAccessibilityActionName) { [weak self] _ in
                 self?.directionChange = -Self.directionChangeMax
                 self?.updateDirectionChange(animated: false)
-                self?.loadMoreConfiguration.viewModel.loadMore()
+                NotificationCenter.default.post(name: Self.accessibilityCustomAction, object: self)
 
                 return true
             },
@@ -136,7 +139,7 @@ private extension LoadMoreView {
                 name: belowAccessibilityActionName) { [weak self] _ in
                 self?.directionChange = Self.directionChangeMax
                 self?.updateDirectionChange(animated: false)
-                self?.loadMoreConfiguration.viewModel.loadMore()
+                NotificationCenter.default.post(name: Self.accessibilityCustomAction, object: self)
 
                 return true
             }
