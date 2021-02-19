@@ -420,9 +420,7 @@ private extension TableViewController {
             guard let self = self else { return }
 
             if let itemId = update.maintainScrollPositionItemId,
-               let indexPath = self.dataSource.indexPath(itemId: itemId),
-               !self.tableView.isDragging,
-               !self.tableView.isDecelerating {
+               let indexPath = self.dataSource.indexPath(itemId: itemId) {
                 if update.shouldAdjustContentInset {
                     self.tableView.contentInset.bottom = max(
                         self.tableView.safeAreaLayoutGuide.layoutFrame.height
