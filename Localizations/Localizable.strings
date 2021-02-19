@@ -149,10 +149,10 @@
 "identities.pending" = "Pending";
 "lists.new-list-title" = "New List Title";
 "load-more" = "Load More";
-"load-more.above.accessibility-label.post" = "Load posts from post above";
-"load-more.above.accessibility-label.toot" = "Load toots from toot above";
-"load-more.below.accessibility-label.post" = "Load posts from post below";
-"load-more.below.accessibility-label.toot" = "Load toots from toot below";
+"load-more.above.accessibility.post" = "Load from post above";
+"load-more.above.accessibility.toot" = "Load from toot above";
+"load-more.below.accessibility.post" = "Load from post below";
+"load-more.below.accessibility.toot" = "Load from toot below";
 "main-navigation.timelines" = "Timelines";
 "main-navigation.explore" = "Explore";
 "main-navigation.notifications" = "Notifications";

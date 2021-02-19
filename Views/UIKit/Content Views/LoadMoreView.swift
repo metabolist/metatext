@@ -119,11 +119,11 @@ private extension LoadMoreView {
 
         switch loadMoreConfiguration.viewModel.identityContext.appPreferences.statusWord {
         case .toot:
-            aboveAccessibilityActionName = NSLocalizedString("load-more.above.accessibility-label.toot", comment: "")
-            belowAccessibilityActionName = NSLocalizedString("load-more.below.accessibility-label.toot", comment: "")
+            aboveAccessibilityActionName = NSLocalizedString("load-more.above.accessibility.toot", comment: "")
+            belowAccessibilityActionName = NSLocalizedString("load-more.below.accessibility.toot", comment: "")
         case .post:
-            aboveAccessibilityActionName = NSLocalizedString("load-more.above.accessibility-label.post", comment: "")
-            belowAccessibilityActionName = NSLocalizedString("load-more.below.accessibility-label.post", comment: "")
+            aboveAccessibilityActionName = NSLocalizedString("load-more.above.accessibility.post", comment: "")
+            belowAccessibilityActionName = NSLocalizedString("load-more.below.accessibility.post", comment: "")
         }
 
         accessibilityCustomActions = [
