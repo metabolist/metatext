@@ -149,6 +149,10 @@ extension CollectionItemsViewModel: CollectionViewModel {
         case let .conversation(conversation):
             guard let status = conversation.lastStatus else { break }
 
+            (collectionService as? ConversationsService)?.markConversationAsRead(id: conversation.id)
+                .sink { _ in } receiveValue: { _ in }
+                .store(in: &cancellables)
+
             send(event: .navigation(.collection(collectionService
                                                     .navigationService
                                                     .contextService(id: status.displayStatus.id))))

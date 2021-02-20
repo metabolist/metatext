@@ -26,6 +26,14 @@ public struct ConversationsService {
     }
 }
 
+public extension ConversationsService {
+    func markConversationAsRead(id: Conversation.Id) -> AnyPublisher<Never, Error> {
+        mastodonAPIClient.request(ConversationEndpoint.read(id: id))
+            .flatMap { contentDatabase.insert(conversations: [$0]) }
+            .eraseToAnyPublisher()
+    }
+}
+
 extension ConversationsService: CollectionService {
     public func request(maxId: String?, minId: String?, search: Search?) -> AnyPublisher<Never, Error> {
         mastodonAPIClient.pagedRequest(ConversationsEndpoint.conversations, maxId: maxId, minId: minId)

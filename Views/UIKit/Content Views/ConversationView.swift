@@ -7,6 +7,9 @@ import ViewModels
 final class ConversationView: UIView {
     let avatarsView = ConversationAvatarsView()
     let displayNamesLabel = UILabel()
+    let unreadIndicator = UIImageView(image: UIImage(
+                                        systemName: "circlebadge.fill",
+                                        withConfiguration: UIImage.SymbolConfiguration(scale: .small)))
     let timeLabel = UILabel()
     let statusBodyView = StatusBodyView()
 
@@ -78,6 +81,7 @@ private extension ConversationView {
         namesTimeStackView.spacing = .compactSpacing
         namesTimeStackView.alignment = .top
         namesTimeStackView.addArrangedSubview(displayNamesLabel)
+        namesTimeStackView.addArrangedSubview(unreadIndicator)
         namesTimeStackView.addArrangedSubview(timeLabel)
 
         mainStackView.axis = .vertical
@@ -89,6 +93,9 @@ private extension ConversationView {
         displayNamesLabel.font = .preferredFont(forTextStyle: .headline)
         displayNamesLabel.adjustsFontForContentSizeCategory = true
         displayNamesLabel.numberOfLines = 0
+
+        unreadIndicator.contentMode = .scaleAspectFit
+        unreadIndicator.setContentHuggingPriority(.required, for: .horizontal)
 
         timeLabel.font = .preferredFont(forTextStyle: .subheadline)
         timeLabel.adjustsFontForContentSizeCategory = true
@@ -126,6 +133,7 @@ private extension ConversationView {
             view: displayNamesLabel)
         mutableDisplayNames.resizeAttachments(toLineHeight: displayNamesLabel.font.lineHeight)
 
+        unreadIndicator.isHidden = !viewModel.isUnread
         displayNamesLabel.attributedText = mutableDisplayNames
         timeLabel.text = viewModel.statusViewModel?.time
         timeLabel.accessibilityLabel = viewModel.statusViewModel?.accessibilityTime
@@ -133,6 +141,10 @@ private extension ConversationView {
         avatarsView.viewModel = viewModel
 
         let accessibilityAttributedLabel = NSMutableAttributedString(attributedString: mutableDisplayNames)
+
+        if viewModel.isUnread {
+            accessibilityAttributedLabel.appendWithSeparator(NSLocalizedString("conversation.unread", comment: ""))
+        }
 
         if let statusBodyAccessibilityAttributedLabel = statusBodyView.accessibilityAttributedLabel {
             accessibilityAttributedLabel.appendWithSeparator(statusBodyAccessibilityAttributedLabel)

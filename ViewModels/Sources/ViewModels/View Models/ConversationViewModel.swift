@@ -33,3 +33,7 @@ public final class ConversationViewModel: ObservableObject {
         self.identityContext = identityContext
     }
 }
+
+public extension ConversationViewModel {
+    var isUnread: Bool { conversationService.conversation.unread }
+}
