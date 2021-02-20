@@ -119,12 +119,6 @@ public extension IdentityService {
             .eraseToAnyPublisher()
     }
 
-    func getMarker(_ markerTimeline: Marker.Timeline) -> AnyPublisher<Marker, Error> {
-        mastodonAPIClient.request(MarkersEndpoint.get([markerTimeline]))
-            .compactMap { $0[markerTimeline.rawValue] }
-            .eraseToAnyPublisher()
-    }
-
     func getLocalLastReadId(timeline: Timeline) -> String? {
         contentDatabase.lastReadId(timelineId: timeline.id)
     }

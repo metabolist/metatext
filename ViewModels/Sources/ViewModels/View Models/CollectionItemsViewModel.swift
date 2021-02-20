@@ -21,10 +21,11 @@ public class CollectionItemsViewModel: ObservableObject {
     private var topVisibleIndexPath = IndexPath(item: 0, section: 0)
     private let lastReadId = CurrentValueSubject<String?, Never>(nil)
     private var lastSelectedLoadMore: LoadMore?
-    private var hasRequestedUsingMarker = false
-    private var markerScrollPositionItemId: CollectionItem.Id?
+    private var localLastReadId: CollectionItem.Id?
+    private var markerLastReadId: CollectionItem.Id?
     private var cancellables = Set<AnyCancellable>()
 
+    // swiftlint:disable:next function_body_length
     public init(collectionService: CollectionService, identityContext: IdentityContext) {
         self.collectionService = collectionService
         self.identityContext = identityContext
@@ -50,18 +51,32 @@ public class CollectionItemsViewModel: ObservableObject {
             .sink { _ in }
             .store(in: &cancellables)
 
+        let debouncedLastReadId = lastReadId
+            .compactMap { $0 }
+            .removeDuplicates()
+            .debounce(for: .seconds(Self.lastReadIdDebounceInterval), scheduler: DispatchQueue.global())
+            .share()
+
+        debouncedLastReadId
+            .filter { [weak self] in
+                guard let markerLastReadId = self?.markerLastReadId else { return false }
+
+                return $0 > markerLastReadId
+            }
+            .flatMap { collectionService.setMarkerLastReadId($0) }
+            .receive(on: DispatchQueue.main)
+            .sink { _ in } receiveValue: { [weak self] in self?.markerLastReadId = $0 }
+            .store(in: &cancellables)
+
         if let timeline = collectionService.positionTimeline {
             if identityContext.appPreferences.positionBehavior(timeline: timeline) == .localRememberPosition {
-                markerScrollPositionItemId = identityContext.service.getLocalLastReadId(timeline: timeline)
+                localLastReadId = identityContext.service.getLocalLastReadId(timeline: timeline)
             }
 
-            lastReadId
+            debouncedLastReadId
                 .filter { _ in
                     identityContext.appPreferences.positionBehavior(timeline: timeline) == .localRememberPosition
                 }
-                .compactMap { $0 }
-                .removeDuplicates()
-                .debounce(for: .seconds(Self.lastReadIdDebounceInterval), scheduler: DispatchQueue.global())
                 .flatMap { identityContext.service.setLocalLastReadId($0, timeline: timeline) }
                 .sink { _ in } receiveValue: { _ in }
                 .store(in: &cancellables)
@@ -119,6 +134,10 @@ extension CollectionItemsViewModel: CollectionViewModel {
                 receiveCompletion: { [weak self] _ in self?.loadingSubject.send(false) })
             .sink { _ in }
             .store(in: &cancellables)
+        collectionService.requestMarkerLastReadId()
+            .sink { _ in } receiveValue: { [weak self] in self?.markerLastReadId = $0 }
+            .store(in: &cancellables)
+
     }
 
     public func select(indexPath: IndexPath) {
@@ -375,9 +394,9 @@ private extension CollectionItemsViewModel {
         let items = lastUpdate.sections.map(\.items).reduce([], +)
         let newItems = newSections.map(\.items).reduce([], +)
 
-        if let itemId = markerScrollPositionItemId,
+        if let itemId = localLastReadId,
            newItems.contains(where: { $0.itemId == itemId }) {
-            markerScrollPositionItemId = nil
+            localLastReadId = nil
 
             return itemId
         }

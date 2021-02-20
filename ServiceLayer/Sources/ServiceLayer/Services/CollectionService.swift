@@ -14,6 +14,8 @@ public protocol CollectionService {
     var navigationService: NavigationService { get }
     var positionTimeline: Timeline? { get }
     func request(maxId: String?, minId: String?, search: Search?) -> AnyPublisher<Never, Error>
+    func requestMarkerLastReadId() -> AnyPublisher<CollectionItem.Id, Error>
+    func setMarkerLastReadId(_ id: CollectionItem.Id) -> AnyPublisher<CollectionItem.Id, Error>
 }
 
 extension CollectionService {
@@ -30,4 +32,10 @@ extension CollectionService {
     public var titleLocalizationComponents: AnyPublisher<[String], Never> { Empty().eraseToAnyPublisher() }
 
     public var positionTimeline: Timeline? { nil }
+
+    public func requestMarkerLastReadId() -> AnyPublisher<CollectionItem.Id, Error> { Empty().eraseToAnyPublisher() }
+
+    public func setMarkerLastReadId(_ id: CollectionItem.Id) -> AnyPublisher<CollectionItem.Id, Error> {
+        Empty().eraseToAnyPublisher()
+    }
 }

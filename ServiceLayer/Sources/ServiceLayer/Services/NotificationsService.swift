@@ -55,4 +55,16 @@ extension NotificationsService: CollectionService {
             .flatMap { contentDatabase.insert(notifications: $0.result) }
             .eraseToAnyPublisher()
     }
+
+    public func requestMarkerLastReadId() -> AnyPublisher<CollectionItem.Id, Error> {
+        mastodonAPIClient.request(MarkersEndpoint.get([.notifications]))
+            .compactMap { $0.values.first?.lastReadId }
+            .eraseToAnyPublisher()
+    }
+
+    public func setMarkerLastReadId(_ id: CollectionItem.Id) -> AnyPublisher<CollectionItem.Id, Error> {
+        mastodonAPIClient.request(MarkersEndpoint.post([.notifications: id]))
+            .compactMap { $0.values.first?.lastReadId }
+            .eraseToAnyPublisher()
+    }
 }
