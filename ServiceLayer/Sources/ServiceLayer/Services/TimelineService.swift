@@ -13,6 +13,7 @@ public struct TimelineService {
     public let accountIdsForRelationships: AnyPublisher<Set<Account.Id>, Never>
     public let title: AnyPublisher<String, Never>
     public let titleLocalizationComponents: AnyPublisher<[String], Never>
+    public let announcesNewItems = true
 
     private let timeline: Timeline
     private let mastodonAPIClient: MastodonAPIClient

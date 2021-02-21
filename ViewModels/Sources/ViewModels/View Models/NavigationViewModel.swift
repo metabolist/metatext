@@ -167,7 +167,9 @@ public extension NavigationViewModel {
             collectionService: identityContext.service.notificationsService(excludeTypes: excludeTypes),
             identityContext: identityContext)
 
-        viewModel.request(maxId: nil, minId: nil, search: nil)
+        if excludeTypes.isEmpty {
+            viewModel.request(maxId: nil, minId: nil, search: nil)
+        }
 
         return viewModel
     }

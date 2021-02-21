@@ -125,6 +125,8 @@ extension CollectionItemsViewModel: CollectionViewModel {
 
     public var canRefresh: Bool { collectionService.canRefresh }
 
+    public var announcesNewItems: Bool { collectionService.announcesNewItems }
+
     public func request(maxId: String? = nil, minId: String? = nil, search: Search?) {
         collectionService.request(maxId: realMaxId(maxId: maxId), minId: minId, search: search)
             .receive(on: DispatchQueue.main)
@@ -409,7 +411,7 @@ private extension CollectionItemsViewModel {
             return configuration.isContextParent // Maintain scroll position of parent after initial load of context
            }) {
             return contextParent.itemId
-        } else if collectionService is TimelineService {
+        } else if collectionService is TimelineService || collectionService is NotificationsService {
             let difference = newItems.difference(from: items)
 
             if let lastSelectedLoadMore = lastSelectedLoadMore {

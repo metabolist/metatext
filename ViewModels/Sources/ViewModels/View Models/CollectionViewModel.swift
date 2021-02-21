@@ -15,6 +15,7 @@ public protocol CollectionViewModel {
     var searchScopeChanges: AnyPublisher<SearchScope, Never> { get }
     var nextPageMaxId: String? { get }
     var canRefresh: Bool { get }
+    var announcesNewItems: Bool { get }
     func request(maxId: String?, minId: String?, search: Search?)
     func requestNextPage(fromIndexPath indexPath: IndexPath)
     func viewedAtTop(indexPath: IndexPath)

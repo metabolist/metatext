@@ -16,11 +16,14 @@ class TableViewController: UITableViewController {
     private let rootViewModel: RootViewModel?
     private let loadingTableFooterView = LoadingTableFooterView()
     private let webfingerIndicatorView = WebfingerIndicatorView()
+    private let newItemsView = NewItemsView()
     @Published private var loading = false
     private var visibleLoadMoreViews = Set<LoadMoreView>()
     private var cancellables = Set<AnyCancellable>()
     private var cellHeightCaches = [CGFloat: [CollectionItem: CGFloat]]()
     private var shouldKeepPlayingVideoAfterDismissal = false
+    private var newItemsViewHiddenConstraint: NSLayoutConstraint?
+    private var newItemsViewVisibleConstraint: NSLayoutConstraint?
     private let insetBottom: Bool
     private weak var parentNavigationController: UINavigationController?
 
@@ -67,10 +70,26 @@ class TableViewController: UITableViewController {
         view.addSubview(webfingerIndicatorView)
         webfingerIndicatorView.translatesAutoresizingMaskIntoConstraints = false
 
+        view.addSubview(newItemsView)
+        newItemsView.translatesAutoresizingMaskIntoConstraints = false
+        newItemsView.alpha = 0
+
+        newItemsViewHiddenConstraint = newItemsView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+        newItemsViewHiddenConstraint?.isActive = true
+        newItemsViewVisibleConstraint = newItemsView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
+                                                                          constant: .defaultSpacing)
+
         NSLayoutConstraint.activate([
             webfingerIndicatorView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            webfingerIndicatorView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor)
+            webfingerIndicatorView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
+            newItemsView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor)
         ])
+
+        newItemsView.button.addAction(UIAction { [weak self] _ in
+            self?.newItemsTapped()
+            self?.hideNewItemsView()
+        },
+        for: .touchUpInside)
 
         setupViewModelBindings()
 
@@ -90,6 +109,10 @@ class TableViewController: UITableViewController {
 
         for loadMoreView in visibleLoadMoreViews {
             loadMoreView.directionChanged(up: up)
+        }
+
+        if up, newItemsView.alpha > 0 {
+            hideNewItemsView()
         }
     }
 
@@ -313,7 +336,9 @@ extension TableViewController: ZoomAnimatorDelegate {
 
 extension TableViewController: ScrollableToTop {
     func scrollToTop(animated: Bool) {
-        tableView.scrollToTop(animated: animated)
+        guard !dataSource.snapshot().itemIdentifiers.isEmpty else { return }
+
+        tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
     }
 }
 
@@ -401,6 +426,7 @@ private extension TableViewController {
         let positionMaintenanceOffset: CGFloat
         let preUpdateContentOffsetY = tableView.contentOffset.y
         var setPreviousOffset = false
+        let firstItemId = dataSource.snapshot().itemIdentifiers.first?.itemId
 
         if let itemId = update.maintainScrollPositionItemId,
            let indexPath = dataSource.indexPath(itemId: itemId) {
@@ -430,6 +456,16 @@ private extension TableViewController {
 
                 self.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
                 self.tableView.contentOffset.y -= positionMaintenanceOffset
+
+                if self.viewModel.announcesNewItems,
+                   let firstItemId = firstItemId,
+                   let newFirstItem = self.dataSource.snapshot().itemIdentifiers.first,
+                   let newFirstItemId = newFirstItem.itemId,
+                   newFirstItemId > firstItemId {
+                    DispatchQueue.main.async {
+                        self.announceNewItems(newestItem: newFirstItem)
+                    }
+                }
             } else if setPreviousOffset {
                 self.tableView.contentOffset.y = preUpdateContentOffsetY
             }
@@ -721,6 +757,50 @@ private extension TableViewController {
     func refreshIfAble() {
         if viewModel.canRefresh {
             viewModel.request(maxId: nil, minId: nil, search: nil)
+        }
+    }
+
+    func newItemsTapped() {
+        scrollToTop(animated: true)
+    }
+
+    func announceNewItems(newestItem: CollectionItem) {
+        switch newestItem {
+        case .status:
+            switch viewModel.identityContext.appPreferences.statusWord {
+            case .toot:
+                newItemsView.title = NSLocalizedString("status.new-items.toot", comment: "")
+            case .post:
+                newItemsView.title = NSLocalizedString("status.new-items.post", comment: "")
+            }
+        case .notification:
+            newItemsView.title = NSLocalizedString("notification.new-items", comment: "")
+        default:
+            return
+        }
+
+        newItemsView.layoutIfNeeded()
+
+        UIView.animate(withDuration: .zeroIfReduceMotion(.defaultAnimationDuration),
+                       delay: 0,
+                       usingSpringWithDamping: 0.5,
+                       initialSpringVelocity: 5,
+                       options: .curveEaseInOut) {
+            self.newItemsView.alpha = 1
+            self.newItemsViewHiddenConstraint?.isActive = false
+            self.newItemsViewVisibleConstraint?.isActive = true
+            self.view.layoutIfNeeded()
+        } completion: { _ in
+
+        }
+    }
+
+    func hideNewItemsView() {
+        UIView.animate(withDuration: .zeroIfReduceMotion(.defaultAnimationDuration)) {
+            self.newItemsView.alpha = 0
+            self.newItemsViewHiddenConstraint?.isActive = true
+            self.newItemsViewVisibleConstraint?.isActive = false
+            self.view.layoutIfNeeded()
         }
     }
 }

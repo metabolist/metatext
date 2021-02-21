@@ -10,6 +10,7 @@ public struct NotificationsService {
     public let sections: AnyPublisher<[CollectionSection], Error>
     public let nextPageMaxId: AnyPublisher<String, Never>
     public let navigationService: NavigationService
+    public let announcesNewItems = true
 
     private let excludeTypes: Set<MastodonNotification.NotificationType>
     private let mastodonAPIClient: MastodonAPIClient

@@ -160,6 +160,7 @@
 		D0C7D4DA24F7616A001EBDBB /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D46F24F76169001EBDBB /* View+Extensions.swift */; };
 		D0CE9F87258B076900E3A6B6 /* AttachmentUploadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CE9F86258B076900E3A6B6 /* AttachmentUploadView.swift */; };
 		D0CE9F88258B076900E3A6B6 /* AttachmentUploadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CE9F86258B076900E3A6B6 /* AttachmentUploadView.swift */; };
+		D0CEC0E125E0BB9700FEF5A6 /* NewItemsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CEC0E025E0BB9700FEF5A6 /* NewItemsView.swift */; };
 		D0D2AC3925BBEC0F003D5DF2 /* CollectionSection+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D2AC3825BBEC0F003D5DF2 /* CollectionSection+Extensions.swift */; };
 		D0D2AC4725BCD289003D5DF2 /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D2AC4625BCD289003D5DF2 /* TagView.swift */; };
 		D0D2AC4D25BCD2A9003D5DF2 /* TagTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D2AC4C25BCD2A9003D5DF2 /* TagTableViewCell.swift */; };
@@ -376,6 +377,7 @@
 		D0C7D46C24F76169001EBDBB /* UIColor+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
 		D0C7D46F24F76169001EBDBB /* View+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		D0CE9F86258B076900E3A6B6 /* AttachmentUploadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentUploadView.swift; sourceTree = "<group>"; };
+		D0CEC0E025E0BB9700FEF5A6 /* NewItemsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewItemsView.swift; sourceTree = "<group>"; };
 		D0D2AC3825BBEC0F003D5DF2 /* CollectionSection+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CollectionSection+Extensions.swift"; sourceTree = "<group>"; };
 		D0D2AC4625BCD289003D5DF2 /* TagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagView.swift; sourceTree = "<group>"; };
 		D0D2AC4C25BCD2A9003D5DF2 /* TagTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagTableViewCell.swift; sourceTree = "<group>"; };
@@ -463,6 +465,7 @@
 				D0CE9F86258B076900E3A6B6 /* AttachmentUploadView.swift */,
 				D0BEB1F224F8EE8C001B0F04 /* AttachmentView.swift */,
 				D025B17D25C500BC001C69A8 /* CapsuleButton.swift */,
+				D0477F4525C72E50005C5368 /* CapsuleLabel.swift */,
 				D0EA593F2522AC8700804347 /* CardView.swift */,
 				D021A66F25C3E1F9008A0C0D /* Collection View Cells */,
 				D0E9F9A9258450B300EF503D /* CompositionInputAccessoryView.swift */,
@@ -475,11 +478,11 @@
 				D05936DD25A937EC00754FDF /* EditThumbnailView.swift */,
 				D07EC7FC25B16994006DF726 /* EmojiCategoryHeaderView.swift */,
 				D0DDA77E25C6058300FA0F91 /* ExploreSectionHeaderView.swift */,
-				D0477F4525C72E50005C5368 /* CapsuleLabel.swift */,
 				D0BE97D625D0863E0057E161 /* ImagePastableTextView.swift */,
 				D0D2AC6625BD0484003D5DF2 /* LineChartView.swift */,
 				D0BEB1F624F9A84B001B0F04 /* LoadingTableFooterView.swift */,
 				D05936FE25AA94EA00754FDF /* MarkAttachmentsSensitiveView.swift */,
+				D0CEC0E025E0BB9700FEF5A6 /* NewItemsView.swift */,
 				D035F8A825B9155900DC75ED /* NewStatusButtonView.swift */,
 				D0FE1C8E253686F9003EF1EB /* PlayerView.swift */,
 				D08B8D812544D80000B1EBEF /* PollOptionButton.swift */,
@@ -1138,6 +1141,7 @@
 				D0C7D4C324F7616A001EBDBB /* MetatextApp.swift in Sources */,
 				D097F4C125BFA04C00859F2C /* NotificationsViewController.swift in Sources */,
 				D0E1F583251F13EC00D45315 /* WebfingerIndicatorView.swift in Sources */,
+				D0CEC0E125E0BB9700FEF5A6 /* NewItemsView.swift in Sources */,
 				D0BEB20524FA1107001B0F04 /* FiltersView.swift in Sources */,
 				D0DDA76B25C5F20800FA0F91 /* ExploreDataSource.swift in Sources */,
 				D0477F4625C72E50005C5368 /* CapsuleLabel.swift in Sources */,

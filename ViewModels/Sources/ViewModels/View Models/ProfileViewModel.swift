@@ -139,6 +139,8 @@ extension ProfileViewModel: CollectionViewModel {
 
     public var canRefresh: Bool { collectionViewModel.value.canRefresh }
 
+    public var announcesNewItems: Bool { collectionViewModel.value.canRefresh }
+
     public func request(maxId: String?, minId: String?, search: Search?) {
         if case .statuses = collection, maxId == nil {
             profileService.fetchPinnedStatuses()

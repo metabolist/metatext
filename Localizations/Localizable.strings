@@ -160,6 +160,7 @@
 "main-navigation.conversations" = "Messages";
 "metatext" = "Metatext";
 "notification.signed-in-as-%@" = "Logged in as %@";
+"notification.new-items" = "New notifications";
 "notifications.all" = "All";
 "notifications.mentions" = "Mentions";
 "ok" = "OK";
@@ -274,6 +275,8 @@
 "status.delete-and-redraft.confirm.post" = "Are you sure you want to delete this post and re-draft it? Favorites and boosts will be lost, and replies to the original post will be orphaned.";
 "status.delete-and-redraft.confirm.toot" = "Are you sure you want to delete this toot and re-draft it? Favorites and boosts will be lost, and replies to the original toot will be orphaned.";
 "status.mute" = "Mute conversation";
+"status.new-items.post" = "New posts";
+"status.new-items.toot" = "New toots";
 "status.pin" = "Pin on profile";
 "status.pinned.post" = "Pinned post";
 "status.pinned.toot" = "Pinned toot";

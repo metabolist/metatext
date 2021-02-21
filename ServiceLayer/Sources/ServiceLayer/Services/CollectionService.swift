@@ -11,6 +11,7 @@ public protocol CollectionService {
     var canRefresh: Bool { get }
     var title: AnyPublisher<String, Never> { get }
     var titleLocalizationComponents: AnyPublisher<[String], Never> { get }
+    var announcesNewItems: Bool { get }
     var navigationService: NavigationService { get }
     var positionTimeline: Timeline? { get }
     func request(maxId: String?, minId: String?, search: Search?) -> AnyPublisher<Never, Error>
@@ -30,6 +31,8 @@ extension CollectionService {
     public var title: AnyPublisher<String, Never> { Empty().eraseToAnyPublisher() }
 
     public var titleLocalizationComponents: AnyPublisher<[String], Never> { Empty().eraseToAnyPublisher() }
+
+    public var announcesNewItems: Bool { false }
 
     public var positionTimeline: Timeline? { nil }
 
