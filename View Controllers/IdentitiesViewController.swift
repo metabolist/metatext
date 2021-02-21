@@ -10,8 +10,7 @@ final class IdentitiesViewController: UITableViewController {
     private lazy var dataSource: IdentitiesDataSource = {
         .init(tableView: tableView,
               publisher: viewModel.$identities.eraseToAnyPublisher(),
-              viewModelProvider: viewModel.viewModel(identity:),
-              deleteAction: { [weak self] in self?.rootViewModel.deleteIdentity(id: $0.id) })
+              viewModelProvider: viewModel.viewModel(identity:))
     }()
 
     init(viewModel: IdentitiesViewModel, rootViewModel: RootViewModel) {
@@ -59,5 +58,27 @@ final class IdentitiesViewController: UITableViewController {
         case let .identitiy(identityViewModel):
             rootViewModel.identitySelected(id: identityViewModel.id)
         }
+    }
+
+    override func tableView(
+        _ tableView: UITableView,
+        trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        guard dataSource.itemIdentifier(for: indexPath) != .add else { return nil }
+
+        let logOutAction = UIContextualAction(
+            style: .destructive,
+            title: NSLocalizedString("identities.log-out", comment: "")) { [weak self] _, _, completionHandler in
+            guard let self = self, case let .identitiy(identity) = self.dataSource.itemIdentifier(for: indexPath) else {
+                completionHandler(false)
+
+                return
+            }
+
+            self.rootViewModel.deleteIdentity(id: identity.id)
+
+            completionHandler(true)
+        }
+
+        return UISwipeActionsConfiguration(actions: [logOutAction])
     }
 }

@@ -18,13 +18,10 @@ final class IdentitiesDataSource: UITableViewDiffableDataSource<IdentitiesSectio
     private let updateQueue =
         DispatchQueue(label: "com.metabolist.metatext.identities-data-source.update-queue")
     private var cancellables = Set<AnyCancellable>()
-    private let deleteAction: (Identity) -> Void
 
     init(tableView: UITableView,
          publisher: AnyPublisher<[Identity], Never>,
-         viewModelProvider: @escaping (Identity) -> IdentityViewModel,
-         deleteAction: @escaping (Identity) -> Void) {
-        self.deleteAction = deleteAction
+         viewModelProvider: @escaping (Identity) -> IdentityViewModel) {
 
         tableView.register(UITableViewCell.self,
                            forCellReuseIdentifier: String(describing: UITableViewCell.self))
@@ -78,16 +75,6 @@ final class IdentitiesDataSource: UITableViewDiffableDataSource<IdentitiesSectio
 
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         itemIdentifier(for: indexPath) != .add
-    }
-
-    override func tableView(_ tableView: UITableView,
-                            commit editingStyle: UITableViewCell.EditingStyle,
-                            forRowAt indexPath: IndexPath) {
-        guard editingStyle == .delete,
-              case let .identitiy(identity) = itemIdentifier(for: indexPath)
-        else { return }
-
-        deleteAction(identity)
     }
 }
 
