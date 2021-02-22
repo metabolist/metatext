@@ -79,6 +79,11 @@ public extension AppPreferences {
         set { self[.animateHeaders] = newValue }
     }
 
+    var animateCustomEmojis: Bool {
+        get { self[.animateCustomEmojis] ?? true }
+        set { self[.animateCustomEmojis] = newValue }
+    }
+
     var autoplayGIFs: Autoplay {
         get {
             if let rawValue = self[.autoplayGIFs] as String?,
@@ -193,6 +198,7 @@ private extension AppPreferences {
         case useSystemReduceMotionForMedia
         case animateAvatars
         case animateHeaders
+        case animateCustomEmojis
         case autoplayGIFs
         case autoplayVideos
         case homeTimelineBehavior

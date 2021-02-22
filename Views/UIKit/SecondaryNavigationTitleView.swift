@@ -7,7 +7,7 @@ import ViewModels
 final class SecondaryNavigationTitleView: UIView {
     private let viewModel: NavigationViewModel
     private let avatarImageView = AnimatedImageView()
-    private let displayNameLabel = UILabel()
+    private let displayNameLabel = AnimatedAttachmentLabel()
     private let accountLabel = UILabel()
     private let stackView = UIStackView()
 
@@ -77,7 +77,9 @@ private extension SecondaryNavigationTitleView {
             let mutableDisplayName = NSMutableAttributedString(string: displayName)
 
             if let emojis = viewModel.identityContext.identity.account?.emojis {
-                mutableDisplayName.insert(emojis: emojis, view: displayNameLabel)
+                mutableDisplayName.insert(emojis: emojis,
+                                          view: displayNameLabel,
+                                          identityContext: viewModel.identityContext)
                 mutableDisplayName.resizeAttachments(toLineHeight: displayNameLabel.font.lineHeight)
             }
 

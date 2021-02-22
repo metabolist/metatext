@@ -114,6 +114,9 @@ struct PreferencesView: View {
                     Toggle("preferences.media.headers.animate",
                            isOn: reduceMotion ? .constant(false) : $identityContext.appPreferences.animateHeaders)
                         .disabled(reduceMotion)
+                    Toggle("preferences.media.custom-emojis.animate",
+                           isOn: reduceMotion ? .constant(false) : $identityContext.appPreferences.animateCustomEmojis)
+                        .disabled(reduceMotion)
                 }
                 .disabled(reduceMotion)
                 if viewModel.identityContext.identity.authenticated

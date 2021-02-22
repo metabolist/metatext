@@ -5,7 +5,7 @@ import UIKit
 
 final class AutocompleteItemView: UIView {
     private let imageView = AnimatedImageView()
-    private let primaryLabel = UILabel()
+    private let primaryLabel = AnimatedAttachmentLabel()
     private let secondaryLabel = UILabel()
     private let stackView = UIStackView()
     private var autocompleteItemConfiguration: AutocompleteItemContentConfiguration
@@ -83,7 +83,9 @@ private extension AutocompleteItemView {
 
             let mutableDisplayName = NSMutableAttributedString(string: account.displayName)
 
-            mutableDisplayName.insert(emojis: account.emojis, view: primaryLabel)
+            mutableDisplayName.insert(emojis: account.emojis,
+                                      view: primaryLabel,
+                                      identityContext: autocompleteItemConfiguration.identityContext)
             mutableDisplayName.resizeAttachments(toLineHeight: primaryLabel.font.lineHeight)
             primaryLabel.attributedText = mutableDisplayName
             primaryLabel.isHidden = account.displayName.isEmpty

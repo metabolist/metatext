@@ -9,9 +9,9 @@ final class NotificationView: UIView {
     private let iconImageView = UIImageView()
     private let avatarImageView = AnimatedImageView()
     private let avatarButton = UIButton()
-    private let typeLabel = UILabel()
+    private let typeLabel = AnimatedAttachmentLabel()
     private let timeLabel = UILabel()
-    private let displayNameLabel = UILabel()
+    private let displayNameLabel = AnimatedAttachmentLabel()
     private let accountLabel = UILabel()
     private let statusBodyView = StatusBodyView()
     private var notificationConfiguration: NotificationContentConfiguration
@@ -173,19 +173,22 @@ private extension NotificationView {
             typeLabel.attributedText = "notifications.followed-you".localizedBolding(
                 displayName: viewModel.accountViewModel.displayName,
                 emojis: viewModel.accountViewModel.emojis,
-                label: typeLabel)
+                label: typeLabel,
+                identityContext: viewModel.identityContext)
             iconImageView.tintColor = nil
         case .reblog:
             typeLabel.attributedText = "notifications.reblogged-your-status".localizedBolding(
                 displayName: viewModel.accountViewModel.displayName,
                 emojis: viewModel.accountViewModel.emojis,
-                label: typeLabel)
+                label: typeLabel,
+                identityContext: viewModel.identityContext)
             iconImageView.tintColor = .systemGreen
         case .favourite:
             typeLabel.attributedText = "notifications.favourited-your-status".localizedBolding(
                 displayName: viewModel.accountViewModel.displayName,
                 emojis: viewModel.accountViewModel.emojis,
-                label: typeLabel)
+                label: typeLabel,
+                identityContext: viewModel.identityContext)
             iconImageView.tintColor = .systemYellow
         case .poll:
             typeLabel.text = NSLocalizedString(
@@ -198,14 +201,17 @@ private extension NotificationView {
             typeLabel.attributedText = "notifications.unknown".localizedBolding(
                 displayName: viewModel.accountViewModel.displayName,
                 emojis: viewModel.accountViewModel.emojis,
-                label: typeLabel)
+                label: typeLabel,
+                identityContext: viewModel.identityContext)
             iconImageView.tintColor = nil
         }
 
         if viewModel.statusViewModel == nil {
             let mutableDisplayName = NSMutableAttributedString(string: viewModel.accountViewModel.displayName)
 
-            mutableDisplayName.insert(emojis: viewModel.accountViewModel.emojis, view: displayNameLabel)
+            mutableDisplayName.insert(emojis: viewModel.accountViewModel.emojis,
+                                      view: displayNameLabel,
+                                      identityContext: viewModel.identityContext)
             mutableDisplayName.resizeAttachments(toLineHeight: displayNameLabel.font.lineHeight)
             displayNameLabel.attributedText = mutableDisplayName
             accountLabel.text = viewModel.accountViewModel.accountName

@@ -2,14 +2,22 @@
 
 import UIKit
 
-final class TouchFallthroughTextView: UITextView {
+final class TouchFallthroughTextView: UITextView, EmojiInsertable {
     var shouldFallthrough: Bool = true
 
     private var linkHighlightView: UIView?
 
     override init(frame: CGRect, textContainer: NSTextContainer?) {
-        super.init(frame: frame, textContainer: textContainer)
+        let textStorage = NSTextStorage()
+        let layoutManager = AnimatingLayoutManager()
+        let presentTextContainer = textContainer ?? NSTextContainer(size: .zero)
 
+        layoutManager.addTextContainer(presentTextContainer)
+        textStorage.addLayoutManager(layoutManager)
+
+        super.init(frame: frame, textContainer: presentTextContainer)
+
+        layoutManager.view = self
         clipsToBounds = false
         textDragInteraction?.isEnabled = false
         isEditable = false

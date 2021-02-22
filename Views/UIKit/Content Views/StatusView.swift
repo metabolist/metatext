@@ -11,9 +11,9 @@ final class StatusView: UIView {
     let avatarImageView = AnimatedImageView()
     let avatarButton = UIButton()
     let infoIcon = UIImageView()
-    let infoLabel = UILabel()
+    let infoLabel = AnimatedAttachmentLabel()
     let rebloggerButton = UIButton()
-    let displayNameLabel = UILabel()
+    let displayNameLabel = AnimatedAttachmentLabel()
     let accountLabel = UILabel()
     let nameButton = UIButton()
     let timeLabel = UILabel()
@@ -165,18 +165,27 @@ private extension StatusView {
         infoLabel.font = .preferredFont(forTextStyle: .caption1)
         infoLabel.textColor = .secondaryLabel
         infoLabel.adjustsFontForContentSizeCategory = true
+        infoLabel.isUserInteractionEnabled = true
         infoLabel.setContentHuggingPriority(.required, for: .vertical)
         mainStackView.addArrangedSubview(infoLabel)
 
-        rebloggerButton.setTitleColor(.secondaryLabel, for: .normal)
-        rebloggerButton.titleLabel?.font = .preferredFont(forTextStyle: .caption1)
-        rebloggerButton.titleLabel?.adjustsFontForContentSizeCategory = true
-        rebloggerButton.contentHorizontalAlignment = .leading
-        rebloggerButton.setContentHuggingPriority(.required, for: .vertical)
-        mainStackView.addArrangedSubview(rebloggerButton)
+        infoLabel.addSubview(rebloggerButton)
+        rebloggerButton.translatesAutoresizingMaskIntoConstraints = false
         rebloggerButton.addAction(
             UIAction { [weak self] _ in self?.statusConfiguration.viewModel.rebloggerAccountSelected() },
             for: .touchUpInside)
+
+        let rebloggerTouchStartAction = UIAction { [weak self] _ in self?.infoLabel.alpha = 0.75 }
+
+        rebloggerButton.addAction(rebloggerTouchStartAction, for: .touchDown)
+        rebloggerButton.addAction(rebloggerTouchStartAction, for: .touchDragEnter)
+
+        let rebloggerTouchEnd = UIAction { [weak self] _ in self?.infoLabel.alpha = 1 }
+
+        rebloggerButton.addAction(rebloggerTouchEnd, for: .touchDragExit)
+        rebloggerButton.addAction(rebloggerTouchEnd, for: .touchUpInside)
+        rebloggerButton.addAction(rebloggerTouchEnd, for: .touchUpOutside)
+        rebloggerButton.addAction(rebloggerTouchEnd, for: .touchCancel)
 
         displayNameLabel.font = .preferredFont(forTextStyle: .headline)
         displayNameLabel.adjustsFontForContentSizeCategory = true
@@ -379,13 +388,18 @@ private extension StatusView {
             avatarButton.topAnchor.constraint(equalTo: avatarImageView.topAnchor),
             avatarButton.bottomAnchor.constraint(equalTo: avatarImageView.bottomAnchor),
             avatarButton.trailingAnchor.constraint(equalTo: avatarImageView.trailingAnchor),
+            infoIcon.centerYAnchor.constraint(equalTo: infoLabel.centerYAnchor),
             nameButton.leadingAnchor.constraint(equalTo: displayNameLabel.leadingAnchor),
             nameButton.topAnchor.constraint(equalTo: displayNameLabel.topAnchor),
             nameButton.trailingAnchor.constraint(equalTo: accountLabel.trailingAnchor),
             nameButton.bottomAnchor.constraint(equalTo: accountLabel.bottomAnchor),
             contextParentTimeApplicationStackView.heightAnchor.constraint(
                 greaterThanOrEqualToConstant: .minimumButtonDimension / 2),
-            interactionsStackView.heightAnchor.constraint(greaterThanOrEqualToConstant: .minimumButtonDimension)
+            interactionsStackView.heightAnchor.constraint(greaterThanOrEqualToConstant: .minimumButtonDimension),
+            rebloggerButton.leadingAnchor.constraint(equalTo: infoLabel.leadingAnchor),
+            rebloggerButton.topAnchor.constraint(equalTo: infoLabel.topAnchor),
+            rebloggerButton.trailingAnchor.constraint(equalTo: infoLabel.trailingAnchor),
+            rebloggerButton.bottomAnchor.constraint(equalTo: infoLabel.bottomAnchor)
         ])
 
         NotificationCenter.default.publisher(for: UIAccessibility.voiceOverStatusDidChangeNotification)
@@ -429,29 +443,24 @@ private extension StatusView {
         inReplyToView.isHidden = !viewModel.configuration.isReplyInContext
         hasReplyFollowingView.isHidden = !viewModel.configuration.hasReplyFollowing
 
-        if viewModel.isReblog, let titleLabel = rebloggerButton.titleLabel {
+        if viewModel.isReblog {
             let attributedTitle = "status.reblogged-by".localizedBolding(
                 displayName: viewModel.rebloggedByDisplayName,
                 emojis: viewModel.rebloggedByDisplayNameEmojis,
-                label: titleLabel)
+                label: infoLabel,
+                identityContext: viewModel.identityContext)
             let highlightedAttributedTitle = NSMutableAttributedString(attributedString: attributedTitle)
 
             highlightedAttributedTitle.addAttribute(
                 .foregroundColor,
                 value: UIColor.tertiaryLabel,
                 range: .init(location: 0, length: highlightedAttributedTitle.length))
-            rebloggerButton.setAttributedTitle(
-                attributedTitle,
-                for: .normal)
-            rebloggerButton.setAttributedTitle(
-                highlightedAttributedTitle,
-                for: .highlighted)
 
-            infoIcon.centerYAnchor.constraint(equalTo: rebloggerButton.centerYAnchor).isActive = true
+            infoLabel.attributedText = attributedTitle
             infoIcon.image = UIImage(
                 systemName: "arrow.2.squarepath",
                 withConfiguration: UIImage.SymbolConfiguration(scale: .small))
-            infoLabel.isHidden = true
+            infoLabel.isHidden = false
             infoIcon.isHidden = false
             rebloggerButton.isHidden = false
         } else if viewModel.configuration.isPinned {
@@ -482,7 +491,9 @@ private extension StatusView {
             rebloggerButton.isHidden = true
         }
 
-        mutableDisplayName.insert(emojis: viewModel.accountViewModel.emojis, view: displayNameLabel)
+        mutableDisplayName.insert(emojis: viewModel.accountViewModel.emojis,
+                                  view: displayNameLabel,
+                                  identityContext: viewModel.identityContext)
         mutableDisplayName.resizeAttachments(toLineHeight: displayNameLabel.font.lineHeight)
         displayNameLabel.attributedText = mutableDisplayName
         accountLabel.text = viewModel.accountName
@@ -577,16 +588,15 @@ private extension StatusView {
 
         let accessibilityAttributedLabel = NSMutableAttributedString(string: "")
 
-        if !rebloggerButton.isHidden,
-           let rebloggerAttributedText = rebloggerButton.attributedTitle(for: .normal) {
-            accessibilityAttributedLabel.appendWithSeparator(rebloggerAttributedText)
-        }
-
         if !infoLabel.isHidden, let infoText = infoLabel.attributedText {
             accessibilityAttributedLabel.appendWithSeparator(infoText)
         }
 
-        accessibilityAttributedLabel.append(mutableDisplayName)
+        if accessibilityAttributedLabel.string.isEmpty {
+            accessibilityAttributedLabel.append(mutableDisplayName)
+        } else {
+            accessibilityAttributedLabel.appendWithSeparator(mutableDisplayName)
+        }
 
         if let bodyAccessibilityAttributedLabel = bodyView.accessibilityAttributedLabel {
             accessibilityAttributedLabel.appendWithSeparator(bodyAccessibilityAttributedLabel)

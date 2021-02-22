@@ -3,17 +3,26 @@
 import Kingfisher
 import Mastodon
 import UIKit
+import ViewModels
 
 extension NSMutableAttributedString {
-    func insert(emojis: [Emoji], view: UIView) {
+    func insert(emojis: [Emoji], view: UIView & EmojiInsertable, identityContext: IdentityContext) {
         for emoji in emojis {
             let token = ":\(emoji.shortcode):"
 
             while let tokenRange = string.range(of: token) {
-                let attachment = NSTextAttachment()
+                let attachment = AnimatedTextAttachment()
+                let url: URL
+
+                if !identityContext.appPreferences.shouldReduceMotion,
+                   identityContext.appPreferences.animateCustomEmojis {
+                    url = emoji.url
+                } else {
+                    url = emoji.staticUrl
+                }
 
                 attachment.accessibilityLabel = emoji.shortcode
-                attachment.kf.setImage(with: emoji.url, attributedView: view)
+                attachment.kf.setImage(with: url, attributedView: view)
                 replaceCharacters(in: NSRange(tokenRange, in: string), with: NSAttributedString(attachment: attachment))
             }
         }

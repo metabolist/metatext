@@ -3,16 +3,21 @@
 import Combine
 import Mastodon
 import UIKit
+import ViewModels
 
 final class AccountFieldView: UIView {
-    let nameLabel = UILabel()
+    let nameLabel = AnimatedAttachmentLabel()
     let valueTextView = TouchFallthroughTextView()
     let checkButton = UIButton()
     private var valueTextViewTrailingConstraint: NSLayoutConstraint?
     private var cancellables = Set<AnyCancellable>()
 
     // swiftlint:disable:next function_body_length
-    init(name: String, value: NSAttributedString, verifiedAt: Date?, emojis: [Emoji]) {
+    init(name: String,
+         value: NSAttributedString,
+         verifiedAt: Date?,
+         emojis: [Emoji],
+         identityContext: IdentityContext) {
         super.init(frame: .zero)
 
         NotificationCenter.default.publisher(for: UIAccessibility.voiceOverStatusDidChangeNotification)
@@ -44,7 +49,7 @@ final class AccountFieldView: UIView {
 
         let mutableName = NSMutableAttributedString(string: name)
 
-        mutableName.insert(emojis: emojis, view: nameLabel)
+        mutableName.insert(emojis: emojis, view: nameLabel, identityContext: identityContext)
         mutableName.resizeAttachments(toLineHeight: nameLabel.font.lineHeight)
         nameLabel.attributedText = mutableName
 
@@ -73,7 +78,7 @@ final class AccountFieldView: UIView {
             [.font: valueFont as Any,
              .foregroundColor: UIColor.label],
             range: valueRange)
-        mutableValue.insert(emojis: emojis, view: valueTextView)
+        mutableValue.insert(emojis: emojis, view: valueTextView, identityContext: identityContext)
         mutableValue.resizeAttachments(toLineHeight: valueFont.lineHeight)
 
         valueTextView.attributedText = mutableValue

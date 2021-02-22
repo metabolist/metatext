@@ -6,7 +6,7 @@ import ViewModels
 
 final class ConversationView: UIView {
     let avatarsView = ConversationAvatarsView()
-    let displayNamesLabel = UILabel()
+    let displayNamesLabel = AnimatedAttachmentLabel()
     let unreadIndicator = UIImageView(image: UIImage(
                                         systemName: "circlebadge.fill",
                                         withConfiguration: UIImage.SymbolConfiguration(scale: .small)))
@@ -130,7 +130,8 @@ private extension ConversationView {
 
         mutableDisplayNames.insert(
             emojis: viewModel.accountViewModels.map(\.emojis).reduce([], +),
-            view: displayNamesLabel)
+            view: displayNamesLabel,
+            identityContext: viewModel.identityContext)
         mutableDisplayNames.resizeAttachments(toLineHeight: displayNamesLabel.font.lineHeight)
 
         unreadIndicator.isHidden = !viewModel.isUnread

@@ -15,7 +15,7 @@ final class AccountHeaderView: UIView {
     let relationshipButtonsStackView = UIStackView()
     let followButton = UIButton(type: .system)
     let unfollowButton = UIButton(type: .system)
-    let displayNameLabel = UILabel()
+    let displayNameLabel = AnimatedAttachmentLabel()
     let accountStackView = UIStackView()
     let accountLabel = UILabel()
     let lockedImageView = UIImageView()
@@ -81,7 +81,9 @@ final class AccountHeaderView: UIView {
                 } else {
                     let mutableDisplayName = NSMutableAttributedString(string: accountViewModel.displayName)
 
-                    mutableDisplayName.insert(emojis: accountViewModel.emojis, view: displayNameLabel)
+                    mutableDisplayName.insert(emojis: accountViewModel.emojis,
+                                              view: displayNameLabel,
+                                              identityContext: viewModel.identityContext)
                     mutableDisplayName.resizeAttachments(toLineHeight: displayNameLabel.font.lineHeight)
                     displayNameLabel.attributedText = mutableDisplayName
                 }
@@ -130,7 +132,8 @@ final class AccountHeaderView: UIView {
                             string: identityProof.providerUsername,
                             attributes: [.link: identityProof.profileUrl]),
                         verifiedAt: identityProof.updatedAt,
-                        emojis: [])
+                        emojis: [],
+                        identityContext: viewModel.identityContext)
 
                     fieldView.valueTextView.delegate = self
 
@@ -142,7 +145,8 @@ final class AccountHeaderView: UIView {
                         name: field.name,
                         value: field.value.attributed,
                         verifiedAt: field.verifiedAt,
-                        emojis: accountViewModel.emojis)
+                        emojis: accountViewModel.emojis,
+                        identityContext: viewModel.identityContext)
 
                     fieldView.valueTextView.delegate = self
 
@@ -159,7 +163,9 @@ final class AccountHeaderView: UIView {
                     [.font: noteFont as Any,
                      .foregroundColor: UIColor.label],
                     range: noteRange)
-                mutableNote.insert(emojis: accountViewModel.emojis, view: noteTextView)
+                mutableNote.insert(emojis: accountViewModel.emojis,
+                                   view: noteTextView,
+                                   identityContext: viewModel.identityContext)
                 mutableNote.resizeAttachments(toLineHeight: noteFont.lineHeight)
                 noteTextView.attributedText = mutableNote
                 noteTextView.isHidden = false

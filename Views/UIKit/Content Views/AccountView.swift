@@ -7,7 +7,7 @@ import ViewModels
 
 final class AccountView: UIView {
     let avatarImageView = AnimatedImageView()
-    let displayNameLabel = UILabel()
+    let displayNameLabel = AnimatedAttachmentLabel()
     let accountLabel = UILabel()
     let noteTextView = TouchFallthroughTextView()
     let acceptFollowRequestButton = UIButton()
@@ -203,7 +203,9 @@ private extension AccountView {
 
         let mutableDisplayName = NSMutableAttributedString(string: viewModel.displayName)
 
-        mutableDisplayName.insert(emojis: viewModel.emojis, view: displayNameLabel)
+        mutableDisplayName.insert(emojis: viewModel.emojis,
+                                  view: displayNameLabel,
+                                  identityContext: viewModel.identityContext)
         mutableDisplayName.resizeAttachments(toLineHeight: displayNameLabel.font.lineHeight)
         displayNameLabel.attributedText = mutableDisplayName
 
@@ -221,7 +223,7 @@ private extension AccountView {
                 [.font: noteFont as Any,
                  .foregroundColor: UIColor.label],
                 range: noteRange)
-            mutableNote.insert(emojis: viewModel.emojis, view: noteTextView)
+            mutableNote.insert(emojis: viewModel.emojis, view: noteTextView, identityContext: viewModel.identityContext)
             mutableNote.resizeAttachments(toLineHeight: noteFont.lineHeight)
 
             noteTextView.attributedText = mutableNote

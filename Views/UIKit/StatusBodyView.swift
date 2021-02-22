@@ -5,7 +5,7 @@ import UIKit
 import ViewModels
 
 final class StatusBodyView: UIView {
-    let spoilerTextLabel = UILabel()
+    let spoilerTextLabel = AnimatedAttachmentLabel()
     let toggleShowContentButton = CapsuleButton()
     let contentTextView = TouchFallthroughTextView()
     let attachmentsView = AttachmentsView()
@@ -28,12 +28,16 @@ final class StatusBodyView: UIView {
             mutableContent.addAttributes(
                 [.font: contentFont, .foregroundColor: UIColor.label],
                 range: contentRange)
-            mutableContent.insert(emojis: viewModel.contentEmojis, view: contentTextView)
+            mutableContent.insert(emojis: viewModel.contentEmojis,
+                                  view: contentTextView,
+                                  identityContext: viewModel.identityContext)
             mutableContent.resizeAttachments(toLineHeight: contentFont.lineHeight)
             contentTextView.attributedText = mutableContent
             contentTextView.isHidden = contentTextView.text.isEmpty
 
-            mutableSpoilerText.insert(emojis: viewModel.contentEmojis, view: spoilerTextLabel)
+            mutableSpoilerText.insert(emojis: viewModel.contentEmojis,
+                                      view: spoilerTextLabel,
+                                      identityContext: viewModel.identityContext)
             mutableSpoilerText.resizeAttachments(toLineHeight: spoilerTextLabel.font.lineHeight)
             spoilerTextLabel.font = contentFont
             spoilerTextLabel.attributedText = mutableSpoilerText

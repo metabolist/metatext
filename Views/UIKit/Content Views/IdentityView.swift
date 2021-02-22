@@ -5,7 +5,7 @@ import UIKit
 
 final class IdentityView: UIView {
     let imageView = AnimatedImageView()
-    let nameLabel = UILabel()
+    let nameLabel = AnimatedAttachmentLabel()
     let secondaryLabel = UILabel()
 
     private var identityConfiguration: IdentityContentConfiguration
@@ -92,7 +92,7 @@ private extension IdentityView {
             let mutableName = NSMutableAttributedString(string: displayName)
 
             if let emojis = viewModel.identity.account?.emojis {
-                mutableName.insert(emojis: emojis, view: nameLabel)
+                mutableName.insert(emojis: emojis, view: nameLabel, identityContext: viewModel.identityContext)
                 mutableName.resizeAttachments(toLineHeight: nameLabel.font.lineHeight)
             }
 

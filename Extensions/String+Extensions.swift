@@ -2,6 +2,7 @@
 
 import Mastodon
 import UIKit
+import ViewModels
 
 extension String {
     static var separator: Self {
@@ -36,7 +37,10 @@ extension String {
         return attributed
     }
 
-    func localizedBolding(displayName: String, emojis: [Emoji], label: UILabel) -> NSAttributedString {
+    func localizedBolding(displayName: String,
+                          emojis: [Emoji],
+                          label: AnimatedAttachmentLabel,
+                          identityContext: IdentityContext) -> NSAttributedString {
         let mutableString = NSMutableAttributedString(
             string: String.localizedStringWithFormat(
                 NSLocalizedString(self, comment: ""),
@@ -51,7 +55,7 @@ extension String {
             mutableString.setAttributes([NSAttributedString.Key.font: boldFont], range: range)
         }
 
-        mutableString.insert(emojis: emojis, view: label)
+        mutableString.insert(emojis: emojis, view: label, identityContext: identityContext)
         mutableString.resizeAttachments(toLineHeight: label.font.lineHeight)
 
         return mutableString

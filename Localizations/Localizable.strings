@@ -178,6 +178,7 @@
 "preferences.media.avatars.animate.everywhere" = "Everywhere";
 "preferences.media.avatars.animate.profiles" = "In profiles";
 "preferences.media.avatars.animate.never" = "Never";
+"preferences.media.custom-emojis.animate" = "Animate custom emoji";
 "preferences.media.headers" = "Headers";
 "preferences.media.headers.animate" = "Animate headers";
 "preferences.media.autoplay" = "Autoplay";

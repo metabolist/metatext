@@ -2,15 +2,21 @@
 
 import Mastodon
 import UIKit
+import ViewModels
 
 final class PollResultView: UIView {
-    let titleLabel = UILabel()
+    let titleLabel = AnimatedAttachmentLabel()
     let percentLabel = UILabel()
     private let verticalStackView = UIStackView()
     private let horizontalStackView = UIStackView()
     private let percentView = UIProgressView()
 
-    init(option: Poll.Option, emojis: [Emoji], selected: Bool, multipleSelection: Bool, votersCount: Int) {
+    init(option: Poll.Option,
+         emojis: [Emoji],
+         selected: Bool,
+         multipleSelection: Bool,
+         votersCount: Int,
+         identityContext: IdentityContext) {
         super.init(frame: .zero)
 
         addSubview(verticalStackView)
@@ -29,6 +35,7 @@ final class PollResultView: UIView {
                     systemName: multipleSelection ? "checkmark.square" : "checkmark.circle",
                     withConfiguration: UIImage.SymbolConfiguration(scale: .medium)))
 
+            imageView.contentMode = .scaleAspectFit
             imageView.setContentHuggingPriority(.required, for: .horizontal)
             horizontalStackView.addArrangedSubview(imageView)
         }
@@ -45,7 +52,7 @@ final class PollResultView: UIView {
 
         let attributedTitle = NSMutableAttributedString(string: option.title)
 
-        attributedTitle.insert(emojis: emojis, view: titleLabel)
+        attributedTitle.insert(emojis: emojis, view: titleLabel, identityContext: identityContext)
         attributedTitle.resizeAttachments(toLineHeight: titleLabel.font.lineHeight)
         titleLabel.attributedText = attributedTitle
 

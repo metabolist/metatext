@@ -37,9 +37,10 @@ final class PollView: UIView {
                     let button = PollOptionButton(
                         title: option.title,
                         emojis: viewModel.pollEmojis,
-                        multipleSelection: viewModel.isPollMultipleSelection)
+                        multipleSelection: viewModel.isPollMultipleSelection,
+                        identityContext: viewModel.identityContext)
 
-                    button.addAction(
+                    button.button.addAction(
                         UIAction { _ in
                             if viewModel.pollOptionSelections.contains(index) {
                                 viewModel.pollOptionSelections.remove(index)
@@ -60,7 +61,8 @@ final class PollView: UIView {
                         emojis: viewModel.pollEmojis,
                         selected: viewModel.pollOwnVotes.contains(index),
                         multipleSelection: viewModel.isPollMultipleSelection,
-                        votersCount: viewModel.pollVotersCount)
+                        votersCount: viewModel.pollVotersCount,
+                        identityContext: viewModel.identityContext)
 
                     stackView.addArrangedSubview(resultView)
                 }
@@ -74,7 +76,7 @@ final class PollView: UIView {
                     index + 1)
 
                 if let optionView = view as? PollOptionButton,
-                   let attributedTitle = optionView.attributedTitle(for: .normal) {
+                   let attributedTitle = optionView.button.accessibilityAttributedLabel {
                     title = attributedTitle
 
                     let optionAccessibilityAttributedLabel = NSMutableAttributedString(string: indexLabel)
@@ -108,7 +110,7 @@ final class PollView: UIView {
                     guard let self = self else { return }
 
                     for (index, view) in self.stackView.arrangedSubviews.enumerated() {
-                        (view as? UIButton)?.isSelected = $0.contains(index)
+                        (view as? PollOptionButton)?.isSelected = $0.contains(index)
                     }
 
                     self.voteButton.isEnabled = !$0.isEmpty
