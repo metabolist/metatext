@@ -25,7 +25,7 @@ final class ZoomDismissalInteractionController: NSObject {
         fromReferenceView.isHidden = true
 
         let anchorPoint = CGPoint(x: fromReferenceViewFrame.midX, y: fromReferenceViewFrame.midY)
-        let dismissThreshold = fromReferenceViewFrame.height / 8
+        let dismissThreshold = fromReferenceViewFrame.height / 10
         let translatedPoint = gestureRecognizer.translation(in: fromReferenceView)
 
         let backgroundAlpha = backgroundAlphaFor(view: fromVC.view, withPanningVerticalDelta: translatedPoint.y)
