@@ -59,7 +59,8 @@ private final class HTMLParser: NSObject {
 
     init(string: String) {
         rawString = Self.openingContainerTag
-            .appending(string.replacingOccurrences(of: "<br>", with: "<br/>"))
+            .appending(string.replacingOccurrences(of: "<br>", with: "<br/>")
+                        .replacingOccurrences(of: "&nbsp;", with: " "))
             .appending(Self.closingContainerTag)
         parser = XMLParser(data: Data(rawString.utf8))
         parseStopColumn = rawString.count - Self.closingContainerTag.count
