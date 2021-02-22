@@ -1,10 +1,11 @@
 // Copyright © 2021 Metabolist. All rights reserved.
 
-import Kingfisher
+import SDWebImage
 import UIKit
 
 final class AnimatedTextAttachment: NSTextAttachment {
-    var imageView = AnimatedImageView()
+    var imageURL: URL?
+    var imageView = SDAnimatedImageView()
     var imageBounds: CGRect?
 
     override func image(forBounds imageBounds: CGRect,

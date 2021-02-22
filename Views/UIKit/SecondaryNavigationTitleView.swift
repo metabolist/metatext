@@ -1,12 +1,12 @@
 // Copyright © 2021 Metabolist. All rights reserved.
 
-import Kingfisher
+import SDWebImage
 import UIKit
 import ViewModels
 
 final class SecondaryNavigationTitleView: UIView {
     private let viewModel: NavigationViewModel
-    private let avatarImageView = AnimatedImageView()
+    private let avatarImageView = SDAnimatedImageView()
     private let displayNameLabel = AnimatedAttachmentLabel()
     private let accountLabel = UILabel()
     private let stackView = UIStackView()
@@ -70,7 +70,7 @@ private extension SecondaryNavigationTitleView {
             ? viewModel.identityContext.identity.account?.avatar
             : viewModel.identityContext.identity.account?.avatarStatic
 
-        avatarImageView.kf.setImage(with: avatarURL)
+        avatarImageView.sd_setImage(with: avatarURL)
 
         if let displayName = viewModel.identityContext.identity.account?.displayName,
            !displayName.isEmpty {

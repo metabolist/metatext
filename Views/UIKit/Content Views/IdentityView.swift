@@ -1,10 +1,10 @@
 // Copyright © 2021 Metabolist. All rights reserved.
 
-import Kingfisher
+import SDWebImage
 import UIKit
 
 final class IdentityView: UIView {
-    let imageView = AnimatedImageView()
+    let imageView = SDAnimatedImageView()
     let nameLabel = AnimatedAttachmentLabel()
     let secondaryLabel = UILabel()
 
@@ -84,7 +84,7 @@ private extension IdentityView {
     func applyIdentityConfiguration() {
         let viewModel = identityConfiguration.viewModel
 
-        imageView.kf.setImage(with: viewModel.identity.image)
+        imageView.sd_setImage(with: viewModel.identity.image)
         imageView.autoPlayAnimatedImage = viewModel.identityContext.appPreferences.animateAvatars == .everywhere
 
         if let displayName = viewModel.identity.account?.displayName,

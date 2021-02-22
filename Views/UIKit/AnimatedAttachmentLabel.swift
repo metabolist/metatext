@@ -1,6 +1,6 @@
 // Copyright © 2021 Metabolist. All rights reserved.
 
-import Kingfisher
+import SDWebImage
 import UIKit
 
 final class AnimatedAttachmentLabel: UILabel, EmojiInsertable {
@@ -18,7 +18,7 @@ final class AnimatedAttachmentLabel: UILabel, EmojiInsertable {
 
         guard let attributedText = attributedText else { return }
 
-        var attachmentImageViews = Set<AnimatedImageView>()
+        var attachmentImageViews = Set<SDAnimatedImageView>()
 
         attributedText.enumerateAttribute(
             .attachment,
@@ -29,7 +29,7 @@ final class AnimatedAttachmentLabel: UILabel, EmojiInsertable {
         }
 
         for subview in subviews {
-            guard let attachmentImageView = subview as? AnimatedImageView else { continue }
+            guard let attachmentImageView = subview as? SDAnimatedImageView else { continue }
 
             if !attachmentImageViews.contains(attachmentImageView) {
                 attachmentImageView.removeFromSuperview()
@@ -49,6 +49,7 @@ final class AnimatedAttachmentLabel: UILabel, EmojiInsertable {
             animatedAttachment.imageView.image = animatedAttachment.image
             animatedAttachment.imageView.contentMode = .scaleAspectFit
             animatedAttachment.imageView.center.y = center.y
+            animatedAttachment.imageView.sd_setImage(with: animatedAttachment.imageURL)
 
             if animatedAttachment.imageView.superview != self {
                 addSubview(animatedAttachment.imageView)

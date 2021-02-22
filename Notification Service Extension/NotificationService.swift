@@ -1,17 +1,15 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
-import Kingfisher
 import Mastodon
+import SDWebImage
 import ServiceLayer
 import UserNotifications
 
 final class NotificationService: UNNotificationServiceExtension {
-    private let environment = AppEnvironment.live(
-        userNotificationCenter: .current(),
-        reduceMotion: { false })
-
     override init() {
         super.init()
+
+        try? ImageCacheConfiguration(environment: Self.environment).configure()
     }
 
     var contentHandler: ((UNNotificationContent) -> Void)?
@@ -25,7 +23,7 @@ final class NotificationService: UNNotificationServiceExtension {
 
         guard let bestAttemptContent = bestAttemptContent else { return }
 
-        let parsingService = PushNotificationParsingService(environment: environment)
+        let parsingService = PushNotificationParsingService(environment: Self.environment)
         let decryptedJSON: Data
         let identityId: Identity.Id
         let pushNotification: PushNotification
@@ -43,14 +41,14 @@ final class NotificationService: UNNotificationServiceExtension {
         bestAttemptContent.title = pushNotification.title
         bestAttemptContent.body = XMLUnescaper(string: pushNotification.body).unescape()
 
-        let appPreferences = AppPreferences(environment: environment)
+        let appPreferences = AppPreferences(environment: Self.environment)
 
         if appPreferences.notificationSounds.contains(pushNotification.notificationType) {
             bestAttemptContent.sound = .default
         }
 
         if appPreferences.notificationAccountName,
-           let accountName = try? AllIdentitiesService(environment: environment).identity(id: identityId)?.handle {
+           let accountName = try? AllIdentitiesService(environment: Self.environment).identity(id: identityId)?.handle {
             bestAttemptContent.subtitle = accountName
         }
 
@@ -71,6 +69,10 @@ final class NotificationService: UNNotificationServiceExtension {
 }
 
 private extension NotificationService {
+    private static let environment = AppEnvironment.live(
+        userNotificationCenter: .current(),
+        reduceMotion: { false })
+
     static func addImage(url: URL,
                          bestAttemptContent: UNMutableNotificationContent,
                          contentHandler: @escaping (UNNotificationContent) -> Void) {
@@ -78,31 +80,17 @@ private extension NotificationService {
         let fileURL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
             .appendingPathComponent(fileName)
 
-        KingfisherManager.shared.retrieveImage(with: url) {
-            switch $0 {
-            case let .success(result):
-                let format: ImageFormat
-
-                switch fileURL.pathExtension.lowercased() {
-                case "jpg", "jpeg":
-                    format = .JPEG
-                case "gif":
-                    format = .GIF
-                case "png":
-                    format = .PNG
-                default:
-                    format = .unknown
-                }
-
+        SDWebImageManager.shared.loadImage(with: url, options: [], progress: nil) { _, data, _, _, _, _ in
+            if let data = data {
                 do {
-                    try result.image.kf.data(format: format)?.write(to: fileURL)
+                    try data.write(to: fileURL)
                     bestAttemptContent.attachments =
                         [try UNNotificationAttachment(identifier: fileName, url: fileURL)]
                     contentHandler(bestAttemptContent)
                 } catch {
                     contentHandler(bestAttemptContent)
                 }
-            case .failure:
+            } else {
                 contentHandler(bestAttemptContent)
             }
         }

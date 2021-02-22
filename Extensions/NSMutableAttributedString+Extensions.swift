@@ -1,6 +1,5 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
-import Kingfisher
 import Mastodon
 import UIKit
 import ViewModels
@@ -12,17 +11,15 @@ extension NSMutableAttributedString {
 
             while let tokenRange = string.range(of: token) {
                 let attachment = AnimatedTextAttachment()
-                let url: URL
 
                 if !identityContext.appPreferences.shouldReduceMotion,
                    identityContext.appPreferences.animateCustomEmojis {
-                    url = emoji.url
+                    attachment.imageURL = emoji.url
                 } else {
-                    url = emoji.staticUrl
+                    attachment.imageURL = emoji.staticUrl
                 }
 
                 attachment.accessibilityLabel = emoji.shortcode
-                attachment.kf.setImage(with: url, attributedView: view)
                 replaceCharacters(in: NSRange(tokenRange, in: string), with: NSAttributedString(attachment: attachment))
             }
         }

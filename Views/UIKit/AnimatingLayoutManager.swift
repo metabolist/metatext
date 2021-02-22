@@ -1,6 +1,6 @@
 // Copyright © 2021 Metabolist. All rights reserved.
 
-import Kingfisher
+import SDWebImage
 import UIKit
 
 final class AnimatingLayoutManager: NSLayoutManager {
@@ -13,7 +13,7 @@ final class AnimatingLayoutManager: NSLayoutManager {
             return
         }
 
-        var attachmentImageViews = Set<AnimatedImageView>()
+        var attachmentImageViews = Set<SDAnimatedImageView>()
 
         textStorage.enumerateAttribute(
             .attachment,
@@ -24,7 +24,7 @@ final class AnimatingLayoutManager: NSLayoutManager {
         }
 
         for subview in view?.subviews ?? [] {
-            guard let attachmentImageView = subview as? AnimatedImageView else { continue }
+            guard let attachmentImageView = subview as? SDAnimatedImageView else { continue }
 
             if !attachmentImageViews.contains(attachmentImageView) {
                 attachmentImageView.removeFromSuperview()
@@ -42,6 +42,7 @@ final class AnimatingLayoutManager: NSLayoutManager {
             animatedAttachment.imageView.frame = boundingRect(forGlyphRange: range, in: textContainer)
             animatedAttachment.imageView.image = animatedAttachment.image
             animatedAttachment.imageView.contentMode = .scaleAspectFit
+            animatedAttachment.imageView.sd_setImage(with: animatedAttachment.imageURL)
 
             if animatedAttachment.imageView.superview != view {
                 view?.addSubview(animatedAttachment.imageView)

@@ -2,7 +2,6 @@
 
 import AVFoundation
 import Combine
-import Kingfisher
 import PhotosUI
 import SwiftUI
 import UniformTypeIdentifiers

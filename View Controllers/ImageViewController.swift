@@ -1,14 +1,14 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import AVFoundation
-import Kingfisher
 import Mastodon
+import SDWebImage
 import UIKit
 import ViewModels
 
 final class ImageViewController: UIViewController {
     let scrollView = UIScrollView()
-    let imageView = AnimatedImageView()
+    let imageView = SDAnimatedImageView()
     let playerView = PlayerView()
 
     private let viewModel: AttachmentViewModel?
@@ -55,7 +55,8 @@ final class ImageViewController: UIViewController {
         contentView.addSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
-        imageView.kf.indicatorType = .activity
+        imageView.sd_imageIndicator = SDWebImageActivityIndicator.large
+        imageView.autoPlayAnimatedImage = false
 
         contentView.addSubview(playerView)
         playerView.translatesAutoresizingMaskIntoConstraints = false
@@ -109,20 +110,11 @@ final class ImageViewController: UIViewController {
             case .image:
                 imageView.tag = viewModel.tag
                 playerView.isHidden = true
-                imageView.kf.setImage(
-                    with: viewModel.attachment.previewUrl,
-                    options: [.onlyFromCache],
-                    completionHandler: { [weak self] in
-                        guard let self = self else { return }
 
-                        if case .success = $0 {
-                            self.imageView.kf.indicatorType = .none
-                        }
+                let placeholderKey = viewModel.attachment.previewUrl?.absoluteString
+                let placeholderImage = SDImageCache.shared.imageFromCache(forKey: placeholderKey)
 
-                        self.imageView.kf.setImage(
-                            with: viewModel.attachment.url,
-                            options: [.keepCurrentImageWhileLoading])
-                    })
+                imageView.sd_setImage(with: viewModel.attachment.url, placeholderImage: placeholderImage)
             case .gifv:
                 playerView.tag = viewModel.tag
                 imageView.isHidden = true
@@ -143,7 +135,7 @@ final class ImageViewController: UIViewController {
         } else if let imageURL = imageURL {
             imageView.tag = imageURL.hashValue
             playerView.isHidden = true
-            imageView.kf.setImage(with: imageURL)
+            imageView.sd_setImage(with: imageURL)
         }
 
         contentView.accessibilityLabel = viewModel?.attachment.type.accessibilityName

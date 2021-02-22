@@ -1,10 +1,10 @@
 // Copyright © 2021 Metabolist. All rights reserved.
 
-import Kingfisher
+import SDWebImage
 import UIKit
 
 final class AutocompleteItemView: UIView {
-    private let imageView = AnimatedImageView()
+    private let imageView = SDAnimatedImageView()
     private let primaryLabel = AnimatedAttachmentLabel()
     private let secondaryLabel = UILabel()
     private let stackView = UIStackView()
@@ -78,7 +78,7 @@ private extension AutocompleteItemView {
                 ? account.avatar
                 : account.avatarStatic
 
-            imageView.kf.setImage(with: avatarURL)
+            imageView.sd_setImage(with: avatarURL)
             imageView.isHidden = false
 
             let mutableDisplayName = NSMutableAttributedString(string: account.displayName)

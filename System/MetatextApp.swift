@@ -1,7 +1,6 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import AVKit
-import Kingfisher
 import ServiceLayer
 import SwiftUI
 import ViewModels
@@ -30,9 +29,4 @@ private extension MetatextApp {
     static let environment = AppEnvironment.live(
         userNotificationCenter: .current(),
         reduceMotion: { UIAccessibility.isReduceMotionEnabled })
-    static let imageCacheName = "Images"
-    static let imageCacheDirectoryURL = FileManager.default.containerURL(
-        forSecurityApplicationGroupIdentifier: AppEnvironment.appGroup)?
-        .appendingPathComponent("Library")
-        .appendingPathComponent("Caches")
 }

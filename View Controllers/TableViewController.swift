@@ -2,9 +2,9 @@
 
 import AVKit
 import Combine
-import Kingfisher
 import Mastodon
 import SafariServices
+import SDWebImage
 import SwiftUI
 import ViewModels
 
@@ -280,13 +280,8 @@ extension TableViewController: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         let urls = indexPaths.compactMap(dataSource.itemIdentifier(for:))
             .reduce(Set<URL>()) { $0.union($1.mediaPrefetchURLs(identityContext: viewModel.identityContext)) }
-        var imageOptions = KingfisherManager.shared.defaultOptions
 
-        imageOptions.append(.requestModifier(PrefetchRequestModifier()))
-
-        for url in urls {
-            KingfisherManager.shared.retrieveImage(with: url, completionHandler: nil)
-        }
+        SDWebImagePrefetcher.shared.prefetchURLs(Array(urls))
     }
 }
 

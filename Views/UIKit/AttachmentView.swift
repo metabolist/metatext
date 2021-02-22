@@ -2,13 +2,13 @@
 
 import AVKit
 import Combine
-import Kingfisher
+import SDWebImage
 import UIKit
 import ViewModels
 
 final class AttachmentView: UIView {
     let playerView = PlayerView()
-    let imageView = AnimatedImageView()
+    let imageView = SDAnimatedImageView()
     let removeButton = UIButton(type: .close)
     let editIcon = UIImageView()
     let selectionButton = UIButton()
@@ -105,6 +105,7 @@ private extension AttachmentView {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
+        imageView.autoPlayAnimatedImage = false
         imageView.tag = viewModel.tag
 
         let blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
@@ -168,11 +169,9 @@ private extension AttachmentView {
 
         switch viewModel.attachment.type {
         case .image, .video, .gifv:
-            imageView.kf.setImage(
-                with: viewModel.attachment.previewUrl,
-                completionHandler: { [weak self] _ in
-                    self?.layoutSubviews()
-                })
+            imageView.sd_setImage(with: viewModel.attachment.previewUrl) { [weak self] _, _, _, _ in
+                self?.layoutSubviews()
+            }
         case .audio:
             playImageView.image = UIImage(systemName: "waveform.circle",
                                           withConfiguration: UIImage.SymbolConfiguration(textStyle: .largeTitle))

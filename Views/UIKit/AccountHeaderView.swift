@@ -1,16 +1,16 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
-import Kingfisher
+import SDWebImage
 import UIKit
 import ViewModels
 
 // swiftlint:disable file_length
 final class AccountHeaderView: UIView {
     let headerImageBackgroundView = UIView()
-    let headerImageView = AnimatedImageView()
+    let headerImageView = SDAnimatedImageView()
     let headerButton = UIButton()
     let avatarBackgroundView = UIView()
-    let avatarImageView = AnimatedImageView()
+    let avatarImageView = SDAnimatedImageView()
     let avatarButton = UIButton()
     let relationshipButtonsStackView = UIStackView()
     let followButton = UIButton(type: .system)
@@ -37,8 +37,8 @@ final class AccountHeaderView: UIView {
     var viewModel: ProfileViewModel {
         didSet {
             if let accountViewModel = viewModel.accountViewModel {
-                headerImageView.kf.setImage(with: accountViewModel.headerURL) { [weak self] in
-                    if case let .success(result) = $0, result.image.size != Self.missingHeaderImageSize {
+                headerImageView.sd_setImage(with: accountViewModel.headerURL) { [weak self] image, _, _, _ in
+                    if let image = image, image.size != Self.missingHeaderImageSize {
                         self?.headerButton.isEnabled = true
                     }
                 }
@@ -46,7 +46,7 @@ final class AccountHeaderView: UIView {
                 headerButton.accessibilityLabel = String.localizedStringWithFormat(
                     NSLocalizedString("account.header.accessibility-label-%@", comment: ""),
                     accountViewModel.displayName)
-                avatarImageView.kf.setImage(with: accountViewModel.avatarURL(profile: true))
+                avatarImageView.sd_setImage(with: accountViewModel.avatarURL(profile: true))
                 avatarImageView.tag = accountViewModel.avatarURL(profile: true).hashValue
                 avatarButton.accessibilityLabel = String.localizedStringWithFormat(
                     NSLocalizedString("account.avatar.accessibility-label-%@", comment: ""),

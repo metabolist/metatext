@@ -1,12 +1,12 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import Combine
-import Kingfisher
+import SDWebImage
 import UIKit
 import ViewModels
 
 final class CompositionView: UIView {
-    let avatarImageView = AnimatedImageView()
+    let avatarImageView = SDAnimatedImageView()
     let changeIdentityButton = UIButton()
     let spoilerTextField = UITextField()
     let textView = ImagePastableTextView()
@@ -199,7 +199,7 @@ private extension CompositionView {
                     ? $0.identity.account?.avatar
                     : $0.identity.account?.avatarStatic
 
-                self.avatarImageView.kf.setImage(with: avatarURL)
+                self.avatarImageView.sd_setImage(with: avatarURL)
                 self.changeIdentityButton.accessibilityLabel = $0.identity.handle
                 self.changeIdentityButton.accessibilityHint =
                     NSLocalizedString("compose.change-identity-button.accessibility-hint", comment: "")
@@ -290,10 +290,11 @@ private extension CompositionView {
     }
 
     func changeIdentityMenu(identities: [Identity]) -> UIMenu {
-        let processor = RoundCornerImageProcessor(radius: .widthFraction(0.5))
-        var imageOptions = KingfisherManager.shared.defaultOptions
-
-        imageOptions.append(.processor(processor))
+        let imageTransformer = SDImageRoundCornerTransformer(
+            radius: .greatestFiniteMagnitude,
+            corners: .allCorners,
+            borderWidth: 0,
+            borderColor: nil)
 
         return UIMenu(children: identities.map { identity in
             UIDeferredMenuElement { completion in
@@ -302,10 +303,12 @@ private extension CompositionView {
                 }
 
                 if let image = identity.image {
-                    KingfisherManager.shared.retrieveImage(with: image, options: imageOptions) {
-                        if case let .success(value) = $0 {
-                            action.image = value.image
-                        }
+                    SDWebImageManager.shared.loadImage(
+                        with: image,
+                        options: [.transformAnimatedImage],
+                        context: [.imageTransformer: imageTransformer],
+                        progress: nil) { (image, _, _, _, _, _) in
+                        action.image = image
 
                         completion([action])
                     }

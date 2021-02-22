@@ -1,13 +1,13 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
-import Kingfisher
 import Mastodon
+import SDWebImage
 import UIKit
 import ViewModels
 
 final class NotificationView: UIView {
     private let iconImageView = UIImageView()
-    private let avatarImageView = AnimatedImageView()
+    private let avatarImageView = SDAnimatedImageView()
     private let avatarButton = UIButton()
     private let typeLabel = AnimatedAttachmentLabel()
     private let timeLabel = UILabel()
@@ -166,7 +166,7 @@ private extension NotificationView {
     func applyNotificationConfiguration() {
         let viewModel = notificationConfiguration.viewModel
 
-        avatarImageView.kf.setImage(with: viewModel.accountViewModel.avatarURL())
+        avatarImageView.sd_setImage(with: viewModel.accountViewModel.avatarURL())
 
         switch viewModel.type {
         case .follow:

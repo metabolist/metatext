@@ -1,12 +1,12 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
-import Kingfisher
 import Mastodon
+import SDWebImage
 import UIKit
 import ViewModels
 
 final class AccountView: UIView {
-    let avatarImageView = AnimatedImageView()
+    let avatarImageView = SDAnimatedImageView()
     let displayNameLabel = AnimatedAttachmentLabel()
     let accountLabel = UILabel()
     let noteTextView = TouchFallthroughTextView()
@@ -199,7 +199,7 @@ private extension AccountView {
     func applyAccountConfiguration() {
         let viewModel = accountConfiguration.viewModel
 
-        avatarImageView.kf.setImage(with: viewModel.avatarURL(profile: false))
+        avatarImageView.sd_setImage(with: viewModel.avatarURL(profile: false))
 
         let mutableDisplayName = NSMutableAttributedString(string: viewModel.displayName)
 

@@ -1,9 +1,9 @@
 // Copyright © 2021 Metabolist. All rights reserved.
 
 import Combine
-import Kingfisher
 import Mastodon
 import SafariServices
+import SDWebImage
 import SwiftUI
 import ViewModels
 
@@ -18,7 +18,7 @@ final class AddIdentityViewController: UIViewController {
     private let welcomeLabel = UILabel()
     private let instanceAndButtonsStackView = UIStackView()
     private let instanceStackView = UIStackView()
-    private let instanceImageView = AnimatedImageView()
+    private let instanceImageView = SDAnimatedImageView()
     private let instanceTitleLabel = UILabel()
     private let instanceURLLabel = UILabel()
     private let buttonsStackView = UIStackView()
@@ -110,7 +110,7 @@ private extension AddIdentityViewController {
         instanceImageView.contentMode = .scaleAspectFill
         instanceImageView.layer.cornerRadius = .defaultCornerRadius
         instanceImageView.clipsToBounds = true
-        instanceImageView.kf.indicatorType = .activity
+        instanceImageView.sd_imageIndicator = SDWebImageActivityIndicator.large
 
         buttonsStackView.axis = .vertical
         buttonsStackView.spacing = .defaultSpacing
@@ -259,7 +259,7 @@ private extension AddIdentityViewController {
             if let instance = instance {
                 self.instanceTitleLabel.text = instance.title
                 self.instanceURLLabel.text = instance.uri
-                self.instanceImageView.kf.setImage(with: instance.thumbnail)
+                self.instanceImageView.sd_setImage(with: instance.thumbnail)
                 self.instanceStackView.isHidden_stackViewSafe = false
 
                 if instance.registrations {

@@ -2,13 +2,13 @@
 
 // swiftlint:disable file_length
 import Combine
-import Kingfisher
 import Mastodon
+import SDWebImage
 import UIKit
 import ViewModels
 
 final class StatusView: UIView {
-    let avatarImageView = AnimatedImageView()
+    let avatarImageView = SDAnimatedImageView()
     let avatarButton = UIButton()
     let infoIcon = UIImageView()
     let infoLabel = AnimatedAttachmentLabel()
@@ -417,7 +417,7 @@ private extension StatusView {
 
         menuButton.menu = menu(viewModel: viewModel)
 
-        avatarImageView.kf.setImage(with: viewModel.avatarURL)
+        avatarImageView.sd_setImage(with: viewModel.avatarURL)
         avatarButton.accessibilityLabel = String.localizedStringWithFormat(
             NSLocalizedString("account.avatar.accessibility-label-%@", comment: ""),
             viewModel.accountViewModel.displayName)

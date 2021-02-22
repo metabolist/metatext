@@ -1,14 +1,14 @@
 // Copyright © 2021 Metabolist. All rights reserved.
 
 import Combine
-import Kingfisher
+import SDWebImage
 import UIKit
 import ViewModels
 
 final class EditThumbnailView: UIView {
     let playerView = PlayerView()
-    let imageView = UIImageView()
-    let previewImageView = UIImageView()
+    let imageView = SDAnimatedImageView()
+    let previewImageView = SDAnimatedImageView()
     let promptBackgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterial))
     let thumbnailPromptLabel = UILabel()
 
@@ -94,7 +94,7 @@ private extension EditThumbnailView {
         addSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
-        imageView.kf.indicatorType = .activity
+        imageView.sd_imageIndicator = SDWebImageActivityIndicator.large
 
         addSubview(playerView)
         playerView.translatesAutoresizingMaskIntoConstraints = false
@@ -137,25 +137,16 @@ private extension EditThumbnailView {
         previewImageView.contentMode = .scaleAspectFill
         previewImageView.clipsToBounds = true
         previewImageView.layer.cornerRadius = .defaultCornerRadius
-        previewImageView.kf.setImage(with: viewModel.attachment.previewUrl)
+        previewImageView.sd_setImage(with: viewModel.attachment.previewUrl)
 
         switch viewModel.attachment.type {
         case .image:
             playerView.isHidden = true
-            imageView.kf.setImage(
-                with: viewModel.attachment.previewUrl,
-                options: [.onlyFromCache],
-                completionHandler: { [weak self] in
-                    guard let self = self else { return }
 
-                    if case .success = $0 {
-                        self.imageView.kf.indicatorType = .none
-                    }
+            let placeholderKey = viewModel.attachment.previewUrl?.absoluteString
+            let placeholderImage = SDImageCache.shared.imageFromCache(forKey: placeholderKey)
 
-                    self.imageView.kf.setImage(
-                        with: self.viewModel.attachment.url,
-                        options: [.keepCurrentImageWhileLoading])
-                })
+            imageView.sd_setImage(with: viewModel.attachment.url, placeholderImage: placeholderImage)
         case .gifv:
             imageView.isHidden = true
             let player = PlayerCache.shared.player(url: viewModel.attachment.url)

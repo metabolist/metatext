@@ -1,6 +1,6 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
-import Kingfisher
+import SDWebImage
 import UIKit
 import ViewModels
 
@@ -23,11 +23,11 @@ final class ConversationAvatarsView: UIView {
             rightStackView.isHidden = accountCount == 1
 
             for (index, accountViewModel) in accountViewModels.enumerated() {
-                let imageView = AnimatedImageView()
+                let imageView = SDAnimatedImageView()
 
                 imageView.contentMode = .scaleAspectFill
                 imageView.clipsToBounds = true
-                imageView.kf.setImage(with: accountViewModel.avatarURL())
+                imageView.sd_setImage(with: accountViewModel.avatarURL())
 
                 if accountCount == 2 && index == 1
                     || accountCount == 3 && index != 0

@@ -1,7 +1,7 @@
 // Copyright © 2021 Metabolist. All rights reserved.
 
 import Combine
-import Kingfisher
+import SDWebImage
 import UIKit
 import ViewModels
 
@@ -28,17 +28,18 @@ final class SecondaryNavigationButton: UIBarButtonItem {
         ])
 
         viewModel.identityContext.$identity.sink {
-            button.kf.setImage(
+            button.sd_setImage(
                 with: $0.image,
                 for: .normal,
-                placeholder: UIImage(systemName: "line.horizontal.3"))
+                placeholderImage: UIImage(systemName: "line.horizontal.3"))
         }
         .store(in: &cancellables)
 
-        let processor = RoundCornerImageProcessor(radius: .widthFraction(0.5))
-        var imageOptions = KingfisherManager.shared.defaultOptions
-
-        imageOptions.append(.processor(processor))
+        let imageTransformer = SDImageRoundCornerTransformer(
+            radius: .greatestFiniteMagnitude,
+            corners: .allCorners,
+            borderWidth: 0,
+            borderColor: nil)
 
         viewModel.$recentIdentities.sink { identities in
             button.menu = UIMenu(children: identities.map { identity in
@@ -48,10 +49,12 @@ final class SecondaryNavigationButton: UIBarButtonItem {
                     }
 
                     if let image = identity.image {
-                        KingfisherManager.shared.retrieveImage(with: image, options: imageOptions) {
-                            if case let .success(value) = $0 {
-                                action.image = value.image
-                            }
+                        SDWebImageManager.shared.loadImage(
+                            with: image,
+                            options: [.transformAnimatedImage],
+                            context: [.imageTransformer: imageTransformer],
+                            progress: nil) { (image, _, _, _, _, _) in
+                            action.image = image
 
                             completion([action])
                         }

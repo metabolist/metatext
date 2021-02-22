@@ -1,10 +1,10 @@
 // Copyright © 2021 Metabolist. All rights reserved.
 
-import Kingfisher
+import SDWebImage
 import UIKit
 
 final class EmojiView: UIView {
-    private let imageView = AnimatedImageView()
+    private let imageView = SDAnimatedImageView()
     private let emojiLabel = UILabel()
     private var emojiConfiguration: EmojiContentConfiguration
 
@@ -74,7 +74,8 @@ private extension EmojiView {
             imageView.isHidden = false
             emojiLabel.isHidden = true
 
-            imageView.kf.setImage(with: emoji.url)
+            // TODO: Use static URL if emoji animation preference is false
+            imageView.sd_setImage(with: emoji.url)
             accessibilityLabel = emoji.shortcode
         } else {
             imageView.isHidden = true

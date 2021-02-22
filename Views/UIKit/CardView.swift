@@ -1,7 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
-import Kingfisher
 import Mastodon
+import SDWebImage
 import UIKit
 import ViewModels
 
@@ -20,7 +20,7 @@ final class CardView: UIView {
                 .appendingWithSeparator(viewModel.title)
 
             imageView.isHidden = viewModel.imageURL == nil
-            imageView.kf.setImage(with: viewModel.imageURL)
+            imageView.sd_setImage(with: viewModel.imageURL)
 
             titleLabel.text = viewModel.title
             descriptionLabel.text = viewModel.description

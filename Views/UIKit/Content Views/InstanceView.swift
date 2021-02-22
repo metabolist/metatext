@@ -1,10 +1,10 @@
 // Copyright © 2021 Metabolist. All rights reserved.
 
-import Kingfisher
+import SDWebImage
 import UIKit
 
 final class InstanceView: UIView {
-    private let imageView = AnimatedImageView()
+    private let imageView = SDAnimatedImageView()
     private let titleLabel = UILabel()
     private let uriLabel = UILabel()
     private var instanceConfiguration: InstanceContentConfiguration
@@ -77,7 +77,8 @@ private extension InstanceView {
     func applyInstanceConfiguration() {
         let viewModel = instanceConfiguration.viewModel
 
-        imageView.kf.setImage(with: viewModel.instance.thumbnail)
+        imageView.sd_setImage(with: viewModel.instance.thumbnail)
+        imageView.autoPlayAnimatedImage = !UIAccessibility.isReduceMotionEnabled
 
         titleLabel.text = viewModel.instance.title
         uriLabel.text = viewModel.instance.uri
