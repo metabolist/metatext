@@ -111,11 +111,11 @@ struct PreferencesView: View {
                             Text(option.localizedStringKey).tag(option)
                         }
                     }
-                    Toggle("preferences.media.headers.animate",
-                           isOn: reduceMotion ? .constant(false) : $identityContext.appPreferences.animateHeaders)
-                        .disabled(reduceMotion)
                     Toggle("preferences.media.custom-emojis.animate",
                            isOn: reduceMotion ? .constant(false) : $identityContext.appPreferences.animateCustomEmojis)
+                        .disabled(reduceMotion)
+                    Toggle("preferences.media.headers.animate",
+                           isOn: reduceMotion ? .constant(false) : $identityContext.appPreferences.animateHeaders)
                         .disabled(reduceMotion)
                 }
                 .disabled(reduceMotion)
