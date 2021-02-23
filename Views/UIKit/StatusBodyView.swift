@@ -63,29 +63,13 @@ final class StatusBodyView: UIView {
 
             let accessibilityAttributedLabel = NSMutableAttributedString(string: "")
 
-            if !spoilerTextLabel.isHidden {
-                accessibilityAttributedLabel.append(mutableSpoilerText)
-            }
-
-            if !toggleShowContentButton.isHidden {
+            if !spoilerTextLabel.isHidden, !viewModel.shouldShowContent {
                 accessibilityAttributedLabel.appendWithSeparator(
                     NSLocalizedString("status.content-warning.accessibility", comment: ""))
 
-                if viewModel.shouldShowContent {
-                    accessibilityAttributedLabel.appendWithSeparator(
-                        NSLocalizedString("status.content-warning.accessibility.opened", comment: ""))
-                } else {
-                    accessibilityAttributedLabel.appendWithSeparator(
-                        NSLocalizedString("status.content-warning.accessibility.closed", comment: ""))
-                }
-            }
-
-            if !contentTextView.isHidden {
-                if spoilerTextLabel.isHidden {
-                    accessibilityAttributedLabel.append(mutableContent)
-                } else {
-                    accessibilityAttributedLabel.appendWithSeparator(mutableContent)
-                }
+                accessibilityAttributedLabel.appendWithSeparator(mutableSpoilerText)
+            } else if !contentTextView.isHidden {
+                accessibilityAttributedLabel.append(mutableContent)
             }
 
             for view in [attachmentsView, pollView, cardView] where !view.isHidden {

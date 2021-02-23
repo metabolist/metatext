@@ -67,6 +67,8 @@ final class StatusView: UIView {
         if !statusConfiguration.viewModel.shouldShowContent {
             statusConfiguration.viewModel.toggleShowContent()
 
+            UIAccessibility.post(notification: .screenChanged, argument: self)
+
             return true
         } else {
             return super.accessibilityActivate()

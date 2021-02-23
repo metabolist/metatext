@@ -268,8 +268,6 @@
 "status.bookmark" = "Bookmark";
 "status.content-warning-abbreviation" = "CW";
 "status.content-warning.accessibility" = "Content warning";
-"status.content-warning.accessibility.closed" = "Closed";
-"status.content-warning.accessibility.opened" = "Opened";
 "status.delete" = "Delete";
 "status.delete.confirm.post" = "Are you sure you want to delete this post?";
 "status.delete.confirm.toot" = "Are you sure you want to delete this toot?";
