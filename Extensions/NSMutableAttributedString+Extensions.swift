@@ -1,6 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import Mastodon
+import SDWebImage
 import UIKit
 import ViewModels
 
@@ -11,12 +12,21 @@ extension NSMutableAttributedString {
 
             while let tokenRange = string.range(of: token) {
                 let attachment = AnimatedTextAttachment()
+                let imageURL: URL
 
                 if !identityContext.appPreferences.shouldReduceMotion,
                    identityContext.appPreferences.animateCustomEmojis {
-                    attachment.imageURL = emoji.url
+                    imageURL = emoji.url
                 } else {
-                    attachment.imageURL = emoji.staticUrl
+                    imageURL = emoji.staticUrl
+                }
+
+                attachment.imageView.sd_setImage(with: imageURL) { image, _, _, _ in
+                    attachment.image = image
+
+                    DispatchQueue.main.async {
+                        view.setNeedsDisplay()
+                    }
                 }
 
                 attachment.accessibilityLabel = emoji.shortcode

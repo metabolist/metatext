@@ -22,22 +22,6 @@ final class AnimatedAttachmentLabel: UILabel, EmojiInsertable {
 
         attributedText.enumerateAttribute(
             .attachment,
-            in: NSRange(location: 0, length: attributedText.length)) { attachment, _, _ in
-            guard let attachmentImageView = (attachment as? AnimatedTextAttachment)?.imageView else { return }
-
-            attachmentImageViews.insert(attachmentImageView)
-        }
-
-        for subview in subviews {
-            guard let attachmentImageView = subview as? SDAnimatedImageView else { continue }
-
-            if !attachmentImageViews.contains(attachmentImageView) {
-                attachmentImageView.removeFromSuperview()
-            }
-        }
-
-        attributedText.enumerateAttribute(
-            .attachment,
             in: NSRange(location: 0, length: attributedText.length),
             options: .longestEffectiveRangeNotRequired) { attachment, _, _ in
             guard let animatedAttachment = attachment as? AnimatedTextAttachment,
@@ -45,12 +29,20 @@ final class AnimatedAttachmentLabel: UILabel, EmojiInsertable {
             else { return }
 
             animatedAttachment.imageView.frame = imageBounds
-            animatedAttachment.imageView.image = animatedAttachment.image
             animatedAttachment.imageView.contentMode = .scaleAspectFit
-            animatedAttachment.imageView.sd_setImage(with: animatedAttachment.imageURL)
 
             if animatedAttachment.imageView.superview != self {
                 addSubview(animatedAttachment.imageView)
+            }
+
+            attachmentImageViews.insert(animatedAttachment.imageView)
+        }
+
+        for subview in subviews {
+            guard let attachmentImageView = subview as? SDAnimatedImageView else { continue }
+
+            if !attachmentImageViews.contains(attachmentImageView) {
+                attachmentImageView.removeFromSuperview()
             }
         }
     }

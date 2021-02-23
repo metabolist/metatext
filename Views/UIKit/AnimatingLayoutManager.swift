@@ -18,9 +18,18 @@ final class AnimatingLayoutManager: NSLayoutManager {
         textStorage.enumerateAttribute(
             .attachment,
             in: NSRange(location: 0, length: textStorage.length)) { attachment, _, _ in
-            guard let attachmentImageView = (attachment as? AnimatedTextAttachment)?.imageView else { return }
+            guard let animatedAttachment = attachment as? AnimatedTextAttachment,
+                  let imageBounds = animatedAttachment.imageBounds
+            else { return }
 
-            attachmentImageViews.insert(attachmentImageView)
+            animatedAttachment.imageView.frame = imageBounds
+            animatedAttachment.imageView.contentMode = .scaleAspectFit
+
+            if animatedAttachment.imageView.superview != view {
+                view?.addSubview(animatedAttachment.imageView)
+            }
+
+            attachmentImageViews.insert(animatedAttachment.imageView)
         }
 
         for subview in view?.subviews ?? [] {
@@ -28,24 +37,6 @@ final class AnimatingLayoutManager: NSLayoutManager {
 
             if !attachmentImageViews.contains(attachmentImageView) {
                 attachmentImageView.removeFromSuperview()
-            }
-        }
-
-        textStorage.enumerateAttribute(
-            .attachment,
-            in: glyphsToShow,
-            options: .longestEffectiveRangeNotRequired) { attachment, range, _ in
-            guard let animatedAttachment = attachment as? AnimatedTextAttachment,
-                  let textContainer = textContainer(forGlyphAt: range.location, effectiveRange: nil)
-            else { return }
-
-            animatedAttachment.imageView.frame = boundingRect(forGlyphRange: range, in: textContainer)
-            animatedAttachment.imageView.image = animatedAttachment.image
-            animatedAttachment.imageView.contentMode = .scaleAspectFit
-            animatedAttachment.imageView.sd_setImage(with: animatedAttachment.imageURL)
-
-            if animatedAttachment.imageView.superview != view {
-                view?.addSubview(animatedAttachment.imageView)
             }
         }
 
