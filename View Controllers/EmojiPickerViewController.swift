@@ -22,7 +22,7 @@ final class EmojiPickerViewController: UICollectionViewController {
         <EmojiCollectionViewCell, PickerEmoji> { [weak self] in
             guard let self = self else { return }
 
-            $0.emoji = $2.applyingDefaultSkinTone(identityContext: self.viewModel.identityContext)
+            $0.viewModel = EmojiViewModel(emoji: $2, identityContext: self.viewModel.identityContext)
         }
 
         let headerRegistration = UICollectionView.SupplementaryRegistration

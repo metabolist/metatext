@@ -4,7 +4,7 @@ import UIKit
 import ViewModels
 
 struct EmojiContentConfiguration {
-    let emoji: PickerEmoji
+    let viewModel: EmojiViewModel
 }
 
 extension EmojiContentConfiguration: UIContentConfiguration {

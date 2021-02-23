@@ -36,7 +36,7 @@ final class AutocompleteDataSource: UICollectionViewDiffableDataSource<Autocompl
         }
 
         let emojiRegistration = UICollectionView.CellRegistration<EmojiCollectionViewCell, PickerEmoji> {
-            $0.emoji = $2.applyingDefaultSkinTone(identityContext: parentViewModel.identityContext)
+            $0.viewModel = EmojiViewModel(emoji: $2, identityContext: parentViewModel.identityContext)
         }
 
         super.init(collectionView: collectionView) {

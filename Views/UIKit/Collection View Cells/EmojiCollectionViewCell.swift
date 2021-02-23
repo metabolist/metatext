@@ -4,12 +4,12 @@ import UIKit
 import ViewModels
 
 final class EmojiCollectionViewCell: UICollectionViewCell {
-    var emoji: PickerEmoji?
+    var viewModel: EmojiViewModel?
 
     override func updateConfiguration(using state: UICellConfigurationState) {
-        guard let emoji = emoji else { return }
+        guard let viewModel = viewModel else { return }
 
-        contentConfiguration = EmojiContentConfiguration(emoji: emoji)
+        contentConfiguration = EmojiContentConfiguration(viewModel: viewModel)
 
         var backgroundConfiguration = UIBackgroundConfiguration.listPlainCell().updated(for: state)
 

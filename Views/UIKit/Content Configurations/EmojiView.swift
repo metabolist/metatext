@@ -68,22 +68,18 @@ private extension EmojiView {
     }
 
     func applyEmojiConfiguration() {
-        imageView.isHidden = emojiConfiguration.emoji.system
-
-        if case let .custom(emoji, _) = emojiConfiguration.emoji {
-            imageView.isHidden = false
-            emojiLabel.isHidden = true
-
-            // TODO: Use static URL if emoji animation preference is false
-            imageView.sd_setImage(with: emoji.url)
-            accessibilityLabel = emoji.shortcode
-        } else {
-            imageView.isHidden = true
+        if emojiConfiguration.viewModel.system {
             emojiLabel.isHidden = false
-
-            emojiLabel.text = emojiConfiguration.emoji.name
-            accessibilityLabel = emojiConfiguration.emoji.name
+            emojiLabel.text = emojiConfiguration.viewModel.name
+            imageView.isHidden = true
+        } else {
+            emojiLabel.isHidden = true
+            emojiLabel.text = nil
+            imageView.isHidden = false
+            imageView.sd_setImage(with: emojiConfiguration.viewModel.url)
         }
+
+        accessibilityLabel = emojiConfiguration.viewModel.name
     }
 
     func setupAccessibility() {
