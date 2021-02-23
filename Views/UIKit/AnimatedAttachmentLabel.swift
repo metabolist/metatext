@@ -45,10 +45,8 @@ final class AnimatedAttachmentLabel: UILabel, EmojiInsertable {
             else { return }
 
             animatedAttachment.imageView.frame = imageBounds
-
             animatedAttachment.imageView.image = animatedAttachment.image
             animatedAttachment.imageView.contentMode = .scaleAspectFit
-            animatedAttachment.imageView.center.y = center.y
             animatedAttachment.imageView.sd_setImage(with: animatedAttachment.imageURL)
 
             if animatedAttachment.imageView.superview != self {
