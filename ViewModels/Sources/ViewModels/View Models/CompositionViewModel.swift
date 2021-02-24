@@ -148,28 +148,30 @@ public extension CompositionViewModel {
                      parentViewModel: NewStatusViewModel) {
         self.init(eventsSubject: eventsSubject)
 
-        guard let inputItem = extensionContext.inputItems.first as? NSExtensionItem,
-              let itemProvider = inputItem.attachments?.first
-        else { return }
+        guard let inputItem = extensionContext.inputItems.first as? NSExtensionItem else { return }
 
-        if itemProvider.hasItemConformingToTypeIdentifier(UTType.plainText.identifier) {
-            itemProvider.loadItem(forTypeIdentifier: UTType.plainText.identifier, options: nil) { result, _ in
-                guard let text = result as? String else { return }
-
-                self.text = text
-            }
-        } else if itemProvider.hasItemConformingToTypeIdentifier(UTType.url.identifier) {
-            itemProvider.loadItem(forTypeIdentifier: UTType.url.identifier, options: nil) { result, _ in
+        if let urlItemProvider = inputItem.attachments?.first(where: {
+            $0.hasItemConformingToTypeIdentifier(UTType.url.identifier)
+        }) {
+            urlItemProvider.loadItem(forTypeIdentifier: UTType.url.identifier, options: nil) { result, _ in
                 guard let url = result as? URL else { return }
 
-                if let contentText = inputItem.attributedContentText?.string {
+                if let contentText = inputItem.attributedContentText?.string, !contentText.isEmpty {
                     self.text.append(contentText)
                     self.text.append("\n\n")
                 }
 
                 self.text.append(url.absoluteString)
             }
-        } else {
+        } else if let plainTextItemProvider = inputItem.attachments?.first(where: {
+            $0.hasItemConformingToTypeIdentifier(UTType.plainText.identifier)
+        }) {
+            plainTextItemProvider.loadItem(forTypeIdentifier: UTType.plainText.identifier, options: nil) { result, _ in
+                guard let text = result as? String else { return }
+
+                self.text = text
+            }
+        } else if let itemProvider = inputItem.attachments?.first {
             attach(itemProvider: itemProvider, parentViewModel: parentViewModel)
         }
     }
