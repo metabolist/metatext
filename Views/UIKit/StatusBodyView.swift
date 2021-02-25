@@ -61,24 +61,7 @@ final class StatusBodyView: UIView {
             cardView.viewModel = viewModel.cardViewModel
             cardView.isHidden = viewModel.cardViewModel == nil
 
-            let accessibilityAttributedLabel = NSMutableAttributedString(string: "")
-
-            if !spoilerTextLabel.isHidden, !viewModel.shouldShowContent {
-                accessibilityAttributedLabel.appendWithSeparator(
-                    NSLocalizedString("status.content-warning.accessibility", comment: ""))
-
-                accessibilityAttributedLabel.appendWithSeparator(mutableSpoilerText)
-            } else if !contentTextView.isHidden {
-                accessibilityAttributedLabel.append(mutableContent)
-            }
-
-            for view in [attachmentsView, pollView, cardView] where !view.isHidden {
-                guard let viewAccessibilityLabel = view.accessibilityLabel else { continue }
-
-                accessibilityAttributedLabel.appendWithSeparator(viewAccessibilityLabel)
-            }
-
-            self.accessibilityAttributedLabel = accessibilityAttributedLabel
+            accessibilityAttributedLabel = accessibilityAttributedLabel(forceShowContent: false)
 
             var accessibilityCustomActions = [UIAccessibilityCustomAction]()
 
@@ -176,6 +159,31 @@ extension StatusBodyView {
         }
 
         return height
+    }
+
+    func accessibilityAttributedLabel(forceShowContent: Bool) -> NSAttributedString {
+        let accessibilityAttributedLabel = NSMutableAttributedString(string: "")
+
+        if !spoilerTextLabel.isHidden,
+           let spoilerText = spoilerTextLabel.attributedText,
+           let viewModel = viewModel,
+           !viewModel.shouldShowContent,
+           !forceShowContent {
+            accessibilityAttributedLabel.appendWithSeparator(
+                NSLocalizedString("status.content-warning.accessibility", comment: ""))
+
+            accessibilityAttributedLabel.appendWithSeparator(spoilerText)
+        } else if (!contentTextView.isHidden || forceShowContent), let content = contentTextView.attributedText {
+            accessibilityAttributedLabel.append(content)
+        }
+
+        for view in [attachmentsView, pollView, cardView] where !view.isHidden {
+            guard let viewAccessibilityLabel = view.accessibilityLabel else { continue }
+
+            accessibilityAttributedLabel.appendWithSeparator(viewAccessibilityLabel)
+        }
+
+        return accessibilityAttributedLabel
     }
 }
 

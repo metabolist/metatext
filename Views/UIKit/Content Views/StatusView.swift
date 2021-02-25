@@ -66,8 +66,7 @@ final class StatusView: UIView {
     override func accessibilityActivate() -> Bool {
         if !statusConfiguration.viewModel.shouldShowContent {
             statusConfiguration.viewModel.toggleShowContent()
-
-            UIAccessibility.post(notification: .screenChanged, argument: self)
+            accessibilityAttributedLabel = accessibilityAttributedLabel(forceShowContent: true)
 
             return true
         } else {
@@ -409,7 +408,6 @@ private extension StatusView {
             .store(in: &cancellables)
     }
 
-    // swiftlint:disable:next cyclomatic_complexity
     func applyStatusConfiguration() {
         let viewModel = statusConfiguration.viewModel
         let isContextParent = viewModel.configuration.isContextParent
@@ -588,50 +586,7 @@ private extension StatusView {
 
         isAccessibilityElement = !viewModel.configuration.isContextParent
 
-        let accessibilityAttributedLabel = NSMutableAttributedString(string: "")
-
-        if !infoLabel.isHidden, let infoText = infoLabel.attributedText {
-            accessibilityAttributedLabel.appendWithSeparator(infoText)
-        }
-
-        if accessibilityAttributedLabel.string.isEmpty {
-            accessibilityAttributedLabel.append(mutableDisplayName)
-        } else {
-            accessibilityAttributedLabel.appendWithSeparator(mutableDisplayName)
-        }
-
-        if let bodyAccessibilityAttributedLabel = bodyView.accessibilityAttributedLabel {
-            accessibilityAttributedLabel.appendWithSeparator(bodyAccessibilityAttributedLabel)
-        }
-
-        if let accessibilityTime = viewModel.accessibilityTime {
-            accessibilityAttributedLabel.appendWithSeparator(accessibilityTime)
-        }
-
-        if viewModel.repliesCount > 0 {
-            accessibilityAttributedLabel.appendWithSeparator(
-                String.localizedStringWithFormat(
-                    NSLocalizedString("status.replies-count", comment: ""),
-                    viewModel.repliesCount))
-        }
-
-        if viewModel.identityContext.appPreferences.showReblogAndFavoriteCounts {
-            if viewModel.reblogsCount > 0 {
-                accessibilityAttributedLabel.appendWithSeparator(
-                    String.localizedStringWithFormat(
-                        NSLocalizedString("status.reblogs-count", comment: ""),
-                        viewModel.reblogsCount))
-            }
-
-            if viewModel.favoritesCount > 0 {
-                accessibilityAttributedLabel.appendWithSeparator(
-                    String.localizedStringWithFormat(
-                        NSLocalizedString("status.favorites-count", comment: ""),
-                        viewModel.favoritesCount))
-            }
-        }
-
-        self.accessibilityAttributedLabel = accessibilityAttributedLabel
+        accessibilityAttributedLabel = accessibilityAttributedLabel(forceShowContent: false)
 
         configureUserInteractionEnabledForAccessibility()
 
@@ -763,6 +718,54 @@ private extension StatusView {
         return UIMenu(children: sections)
     }
     // swiftlint:enable function_body_length
+
+    func accessibilityAttributedLabel(forceShowContent: Bool) -> NSAttributedString {
+        let accessibilityAttributedLabel = NSMutableAttributedString(string: "")
+
+        if !infoLabel.isHidden, let infoText = infoLabel.attributedText {
+            accessibilityAttributedLabel.appendWithSeparator(infoText)
+        }
+
+        if let displayName = displayNameLabel.attributedText {
+            if accessibilityAttributedLabel.string.isEmpty {
+                accessibilityAttributedLabel.append(displayName)
+            } else {
+                accessibilityAttributedLabel.appendWithSeparator(displayName)
+            }
+        }
+
+        accessibilityAttributedLabel.appendWithSeparator(
+            bodyView.accessibilityAttributedLabel(forceShowContent: forceShowContent))
+
+        if let accessibilityTime = statusConfiguration.viewModel.accessibilityTime {
+            accessibilityAttributedLabel.appendWithSeparator(accessibilityTime)
+        }
+
+        if statusConfiguration.viewModel.repliesCount > 0 {
+            accessibilityAttributedLabel.appendWithSeparator(
+                String.localizedStringWithFormat(
+                    NSLocalizedString("status.replies-count", comment: ""),
+                    statusConfiguration.viewModel.repliesCount))
+        }
+
+        if statusConfiguration.viewModel.identityContext.appPreferences.showReblogAndFavoriteCounts {
+            if statusConfiguration.viewModel.reblogsCount > 0 {
+                accessibilityAttributedLabel.appendWithSeparator(
+                    String.localizedStringWithFormat(
+                        NSLocalizedString("status.reblogs-count", comment: ""),
+                        statusConfiguration.viewModel.reblogsCount))
+            }
+
+            if statusConfiguration.viewModel.favoritesCount > 0 {
+                accessibilityAttributedLabel.appendWithSeparator(
+                    String.localizedStringWithFormat(
+                        NSLocalizedString("status.favorites-count", comment: ""),
+                        statusConfiguration.viewModel.favoritesCount))
+            }
+        }
+
+        return accessibilityAttributedLabel
+    }
 
     func setButtonImages(scale: UIImage.SymbolScale) {
         let visibility = statusConfiguration.viewModel.visibility
