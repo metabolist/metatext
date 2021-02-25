@@ -90,6 +90,11 @@ class TableViewController: UITableViewController {
             self?.hideNewItemsView()
         },
         for: .touchUpInside)
+        newItemsView.button.accessibilityCustomActions = [
+            UIAccessibilityCustomAction(name: NSLocalizedString("dismiss", comment: "")) { [weak self] _ in
+                self?.hideNewItemsView()
+                return true
+        }]
 
         setupViewModelBindings()
 
@@ -111,7 +116,7 @@ class TableViewController: UITableViewController {
             loadMoreView.directionChanged(up: up)
         }
 
-        if up, newItemsView.alpha > 0 {
+        if newItemsView.alpha > 0 {
             hideNewItemsView()
         }
     }
