@@ -1,8 +1,10 @@
 // Copyright © 2021 Metabolist. All rights reserved.
 
+import Combine
 import CryptoKit
 import Foundation
 import Mastodon
+import MastodonAPI
 import Secrets
 
 enum NotificationExtensionServiceError: Error {
@@ -47,6 +49,53 @@ public extension PushNotificationParsingService {
                                  auth: auth,
                                  salt: salt),
                 identityId)
+    }
+
+    func title(pushNotification: PushNotification,
+               identityId: Identity.Id,
+               accountId: Account.Id?) -> AnyPublisher<String, Error> {
+        switch pushNotification.notificationType {
+        case .poll, .status:
+            let secrets = Secrets(identityId: identityId, keychain: environment.keychain)
+            let instanceURL: URL
+
+            do {
+                instanceURL = try secrets.getInstanceURL()
+            } catch {
+                return Fail(error: error).eraseToAnyPublisher()
+            }
+
+            let mastodonAPIClient = MastodonAPIClient(session: .shared, instanceURL: instanceURL)
+
+            mastodonAPIClient.accessToken = pushNotification.accessToken
+
+            let endpoint = NotificationEndpoint.notification(id: String(pushNotification.notificationId))
+
+            return mastodonAPIClient.request(endpoint)
+                .map {
+                    switch pushNotification.notificationType {
+                    case .status:
+                        return String.localizedStringWithFormat(
+                            NSLocalizedString("notification.status-%@", comment: ""),
+                            $0.account.displayName)
+                    case .poll:
+                        switch accountId ?? (try? AllIdentitiesService(environment: environment)
+                                                .identity(id: identityId)?.account?.id) {
+                        case .some($0.account.id):
+                            return NSLocalizedString("notification.poll.own", comment: "")
+                        case .some:
+                            return NSLocalizedString("notification.poll", comment: "")
+                        default:
+                            return NSLocalizedString("notification.poll.unknown", comment: "")
+                        }
+                    default:
+                        return pushNotification.title
+                    }
+                }
+                .eraseToAnyPublisher()
+        default:
+            return Just(pushNotification.title).setFailureType(to: Error.self).eraseToAnyPublisher()
+        }
     }
 }
 

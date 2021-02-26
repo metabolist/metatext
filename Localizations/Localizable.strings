@@ -163,6 +163,10 @@
 "metatext" = "Metatext";
 "notification.signed-in-as-%@" = "Logged in as %@";
 "notification.new-items" = "New notifications";
+"notification.poll" = "A poll you have voted in has ended";
+"notification.poll.own" = "Your poll has ended";
+"notification.poll.unknown" = "A poll has ended";
+"notification.status-%@" = "%@ just posted";
 "notifications.all" = "All";
 "notifications.mentions" = "Mentions";
 "ok" = "OK";

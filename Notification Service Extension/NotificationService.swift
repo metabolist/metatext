@@ -1,5 +1,6 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
+import Combine
 import Mastodon
 import SDWebImage
 import ServiceLayer
@@ -14,6 +15,7 @@ final class NotificationService: UNNotificationServiceExtension {
 
     var contentHandler: ((UNNotificationContent) -> Void)?
     var bestAttemptContent: UNMutableNotificationContent?
+    var cancellables = Set<AnyCancellable>()
 
     override func didReceive(
         _ request: UNNotificationRequest,
@@ -47,18 +49,27 @@ final class NotificationService: UNNotificationServiceExtension {
             bestAttemptContent.sound = .default
         }
 
-        if appPreferences.notificationAccountName,
-           let accountName = try? AllIdentitiesService(environment: Self.environment).identity(id: identityId)?.handle {
-            bestAttemptContent.subtitle = accountName
+        var identity: Identity?
+
+        if appPreferences.notificationAccountName {
+            identity = try? AllIdentitiesService(environment: Self.environment).identity(id: identityId)
+
+            if let handle = identity?.handle {
+                bestAttemptContent.subtitle = handle
+            }
         }
 
-        if appPreferences.notificationPictures {
-            Self.addImage(url: pushNotification.icon,
-                          bestAttemptContent: bestAttemptContent,
-                          contentHandler: contentHandler)
-        } else {
-            contentHandler(bestAttemptContent)
-        }
+        Self.attachment(imageURL: pushNotification.icon)
+            .map { [$0] }
+            .replaceError(with: [])
+            .handleEvents(receiveOutput: { bestAttemptContent.attachments = $0 })
+            .zip(parsingService.title(pushNotification: pushNotification,
+                                      identityId: identityId,
+                                      accountId: identity?.account?.id)
+                    .replaceError(with: pushNotification.title)
+                    .handleEvents(receiveOutput: { bestAttemptContent.title = $0 }))
+            .sink { _ in contentHandler(bestAttemptContent) }
+            .store(in: &cancellables)
     }
 
     override func serviceExtensionTimeWillExpire() {
@@ -73,26 +84,32 @@ private extension NotificationService {
         userNotificationCenter: .current(),
         reduceMotion: { false })
 
-    static func addImage(url: URL,
-                         bestAttemptContent: UNMutableNotificationContent,
-                         contentHandler: @escaping (UNNotificationContent) -> Void) {
-        let fileName = url.lastPathComponent
+    enum ImageError: Error {
+        case dataMissing
+    }
+
+    static func attachment(imageURL: URL) -> AnyPublisher<UNNotificationAttachment, Error> {
+        let fileName = imageURL.lastPathComponent
         let fileURL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
             .appendingPathComponent(fileName)
 
-        SDWebImageManager.shared.loadImage(with: url, options: [], progress: nil) { _, data, _, _, _, _ in
-            if let data = data {
-                do {
-                    try data.write(to: fileURL)
-                    bestAttemptContent.attachments =
-                        [try UNNotificationAttachment(identifier: fileName, url: fileURL)]
-                    contentHandler(bestAttemptContent)
-                } catch {
-                    contentHandler(bestAttemptContent)
+        return Future<UNNotificationAttachment, Error> { promise in
+            SDWebImageManager.shared.loadImage(with: imageURL, options: [], progress: nil) { _, data, error, _, _, _ in
+                if let error = error {
+                    promise(.failure(error))
+                } else if let data = data {
+                    let result = Result<UNNotificationAttachment, Error> {
+                        try data.write(to: fileURL)
+
+                        return try UNNotificationAttachment(identifier: fileName, url: fileURL)
+                    }
+
+                    promise(result)
+                } else {
+                    promise(.failure(ImageError.dataMissing))
                 }
-            } else {
-                contentHandler(bestAttemptContent)
             }
         }
+        .eraseToAnyPublisher()
     }
 }
