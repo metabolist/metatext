@@ -253,22 +253,3 @@ private extension NotificationView {
     }
     // swiftlint:enable function_body_length
 }
-
-extension MastodonNotification.NotificationType {
-    var systemImageName: String {
-        switch self {
-        case .follow, .followRequest:
-            return "person.badge.plus"
-        case .reblog:
-            return "arrow.2.squarepath"
-        case .favourite:
-            return "star.fill"
-        case .poll:
-            return "chart.bar.doc.horizontal"
-        case .status:
-            return "house"
-        case .mention, .unknown:
-            return "at"
-        }
-    }
-}

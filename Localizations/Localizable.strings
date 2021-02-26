@@ -209,7 +209,7 @@
 "preferences.notification-types.reblog" = "Reblog";
 "preferences.notification-types.mention" = "Mention";
 "preferences.notification-types.poll" = "Poll";
-"preferences.notification-types.status" = "Status";
+"preferences.notification-types.status" = "Subscription";
 "preferences.notifications" = "Notifications";
 "preferences.notifications.include-account-name" = "Include account name";
 "preferences.notifications.include-pictures" = "Include pictures";

@@ -23,7 +23,7 @@ struct NotificationPreferencesView: View {
             }
             Section(header: Text("preferences.notifications.sounds")) {
                 ForEach(MastodonNotification.NotificationType.allCasesExceptUnknown) { type in
-                    Toggle(type.localizedStringKey, isOn: .init {
+                    Toggle(isOn: .init {
                         viewModel.identityContext.appPreferences.notificationSounds.contains(type)
                     } set: {
                         if $0 {
@@ -31,7 +31,9 @@ struct NotificationPreferencesView: View {
                         } else {
                             viewModel.identityContext.appPreferences.notificationSounds.remove(type)
                         }
-                    })
+                    }) {
+                        Label(type.localizedStringKey, systemImage: type.systemImageName)
+                    }
                 }
             }
         }
@@ -58,6 +60,25 @@ extension MastodonNotification.NotificationType {
             return "preferences.notification-types.status"
         case .unknown:
             return ""
+        }
+    }
+
+    var systemImageName: String {
+        switch self {
+        case .follow, .followRequest:
+            return "person.badge.plus"
+        case .mention:
+            return "at"
+        case .reblog:
+            return "arrow.2.squarepath"
+        case .favourite:
+            return "star.fill"
+        case .poll:
+            return "chart.bar.xaxis"
+        case .status:
+            return "bell.fill"
+        case .unknown:
+            return "app.badge"
         }
     }
 }
