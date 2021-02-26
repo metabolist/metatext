@@ -183,6 +183,14 @@ class TableViewController: UITableViewController {
 
         sizeTableHeaderFooterViews()
     }
+
+    override func accessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
+        if newItemsView.alpha > 0 {
+            hideNewItemsView()
+        }
+
+        return super.accessibilityScroll(direction)
+    }
 }
 
 extension TableViewController {
