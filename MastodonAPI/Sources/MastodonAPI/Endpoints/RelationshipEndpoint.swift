@@ -5,7 +5,7 @@ import HTTP
 import Mastodon
 
 public enum RelationshipEndpoint {
-    case accountsFollow(id: Account.Id, showReblogs: Bool? = nil)
+    case accountsFollow(id: Account.Id, showReblogs: Bool? = nil, notify: Bool? = nil)
     case accountsUnfollow(id: Account.Id)
     case accountsBlock(id: Account.Id)
     case accountsUnblock(id: Account.Id)
@@ -32,7 +32,7 @@ extension RelationshipEndpoint: Endpoint {
 
     public var pathComponentsInContext: [String] {
         switch self {
-        case let .accountsFollow(id, _):
+        case let .accountsFollow(id, _, _):
             return [id, "follow"]
         case let .accountsUnfollow(id):
             return [id, "unfollow"]
@@ -59,12 +59,18 @@ extension RelationshipEndpoint: Endpoint {
 
     public var queryParameters: [URLQueryItem] {
         switch self {
-        case let .accountsFollow(_, showReblogs):
+        case let .accountsFollow(_, showReblogs, notify):
+            var params = [URLQueryItem]()
+
             if let showReblogs = showReblogs {
-                return [URLQueryItem(name: "reblogs", value: String(showReblogs))]
-            } else {
-                return []
+                params.append(URLQueryItem(name: "reblogs", value: String(showReblogs)))
             }
+
+            if let notify = notify {
+                params.append(URLQueryItem(name: "notify", value: String(notify)))
+            }
+
+            return params
         default:
             return []
         }

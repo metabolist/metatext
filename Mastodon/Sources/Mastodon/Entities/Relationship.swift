@@ -11,6 +11,7 @@ public struct Relationship: Codable, Hashable {
     public let muting: Bool
     @DecodableDefault.False public private(set) var mutingNotifications: Bool
     @DecodableDefault.False public private(set) var showingReblogs: Bool
+    public let notifying: Bool?
     public let blocking: Bool
     public let domainBlocking: Bool
     @DecodableDefault.False public private(set) var blockedBy: Bool

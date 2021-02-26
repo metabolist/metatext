@@ -137,6 +137,14 @@ public extension AccountViewModel {
         ignorableOutputEvent(accountService.showReblogs())
     }
 
+    func notify() {
+        ignorableOutputEvent(accountService.notify())
+    }
+
+    func unnotify() {
+        ignorableOutputEvent(accountService.unnotify())
+    }
+
     func confirmBlock() {
         eventsSubject.send(Just(.confirmBlock(self)).setFailureType(to: Error.self).eraseToAnyPublisher())
     }

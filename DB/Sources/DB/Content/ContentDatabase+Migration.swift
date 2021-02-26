@@ -290,6 +290,12 @@ extension ContentDatabase {
             }
         }
 
+        migrator.registerMigration("1.0.0-notifying") { db in
+            try db.alter(table: "relationship") { t in
+                t.add(column: "notifying", .boolean)
+            }
+        }
+
         return migrator
     }
 }

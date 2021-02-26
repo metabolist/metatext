@@ -34,6 +34,7 @@
 "account.mute.confirm.duration" = "Duration";
 "account.mute.target-%@" = "Mute %@";
 "account.muted" = "Muted";
+"account.notify" = "Turn on notifications";
 "account.reject-follow-request-button.accessibility-label" = "Reject follow request";
 "account.request" = "Request";
 "account.request.cancel" = "Cancel follow request";
@@ -51,6 +52,7 @@
 "account.unfollow.confirm-%@" = "Unfollow %@?";
 "account.unmute" = "Unmute";
 "account.unmute.confirm-%@" = "Unmute %@?";
+"account.unnotify" = "Turn off notifications";
 "activity.open-in-default-browser" = "Open in default browser";
 "add" = "Add";
 "apns-default-message" = "New notification";

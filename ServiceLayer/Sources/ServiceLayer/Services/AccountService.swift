@@ -51,6 +51,14 @@ public extension AccountService {
         relationshipAction(.accountsFollow(id: account.id, showReblogs: true))
     }
 
+    func notify() -> AnyPublisher<Never, Error> {
+        relationshipAction(.accountsFollow(id: account.id, notify: true))
+    }
+
+    func unnotify() -> AnyPublisher<Never, Error> {
+        relationshipAction(.accountsFollow(id: account.id, notify: false))
+    }
+
     func block() -> AnyPublisher<Never, Error> {
         relationshipAction(.accountsBlock(id: account.id))
             .collect()

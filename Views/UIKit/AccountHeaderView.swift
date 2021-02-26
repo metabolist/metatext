@@ -15,6 +15,8 @@ final class AccountHeaderView: UIView {
     let relationshipButtonsStackView = UIStackView()
     let followButton = UIButton(type: .system)
     let unfollowButton = UIButton(type: .system)
+    let notifyButton = UIButton()
+    let unnotifyButton = UIButton()
     let displayNameLabel = AnimatedAttachmentLabel()
     let accountStackView = UIStackView()
     let accountLabel = UILabel()
@@ -68,6 +70,19 @@ final class AccountHeaderView: UIView {
                             relationship.requested ? "account.request.cancel" : "account.unfollow",
                             comment: ""),
                         for: .normal)
+
+                    if relationship.following, let notifying = relationship.notifying {
+                        if notifying {
+                            notifyButton.isHidden = true
+                            unnotifyButton.isHidden = false
+                        } else {
+                            notifyButton.isHidden = false
+                            unnotifyButton.isHidden = true
+                        }
+                    } else {
+                        notifyButton.isHidden = true
+                        unnotifyButton.isHidden = true
+                    }
 
                     relationshipButtonsStackView.isHidden = false
                     unavailableLabel.isHidden = !relationship.blockedBy
@@ -201,7 +216,7 @@ final class AccountHeaderView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        for button in [followButton, unfollowButton] {
+        for button in [followButton, unfollowButton, notifyButton, unnotifyButton] {
             let inset = (followButton.bounds.height - (button.titleLabel?.bounds.height ?? 0)) / 2
 
             button.contentEdgeInsets = .init(top: 0, left: inset, bottom: 0, right: inset)
@@ -284,7 +299,7 @@ private extension AccountHeaderView {
         relationshipButtonsStackView.spacing = .defaultSpacing
         relationshipButtonsStackView.addArrangedSubview(UIView())
 
-        for button in [followButton, unfollowButton] {
+        for button in [followButton, unfollowButton, notifyButton, unnotifyButton] {
             relationshipButtonsStackView.addArrangedSubview(button)
             button.titleLabel?.font = .preferredFont(forTextStyle: .headline)
             button.titleLabel?.adjustsFontForContentSizeCategory = true
@@ -296,6 +311,7 @@ private extension AccountHeaderView {
                 systemName: "person.badge.plus",
                 withConfiguration: UIImage.SymbolConfiguration(scale: .small)),
             for: .normal)
+        followButton.isHidden = true
         followButton.addAction(
             UIAction { [weak self] _ in self?.viewModel.accountViewModel?.follow() },
             for: .touchUpInside)
@@ -306,8 +322,30 @@ private extension AccountHeaderView {
                 withConfiguration: UIImage.SymbolConfiguration(scale: .small)),
             for: .normal)
         unfollowButton.setTitle(NSLocalizedString("account.unfollow", comment: ""), for: .normal)
+        unfollowButton.isHidden = true
         unfollowButton.addAction(
             UIAction { [weak self] _ in self?.viewModel.accountViewModel?.confirmUnfollow() },
+            for: .touchUpInside)
+
+        notifyButton.setImage(
+            UIImage(systemName: "bell",
+                    withConfiguration: UIImage.SymbolConfiguration(scale: .large)),
+            for: .normal)
+        notifyButton.accessibilityLabel = NSLocalizedString("account.notify", comment: "")
+        notifyButton.tintColor = .secondaryLabel
+        notifyButton.isHidden = true
+        notifyButton.addAction(
+            UIAction { [weak self] _ in self?.viewModel.accountViewModel?.notify() },
+            for: .touchUpInside)
+
+        unnotifyButton.setImage(
+            UIImage(systemName: "bell.fill",
+                    withConfiguration: UIImage.SymbolConfiguration(scale: .large)),
+            for: .normal)
+        unnotifyButton.accessibilityLabel = NSLocalizedString("account.unnotify", comment: "")
+        unnotifyButton.isHidden = true
+        unnotifyButton.addAction(
+            UIAction { [weak self] _ in self?.viewModel.accountViewModel?.unnotify() },
             for: .touchUpInside)
 
         addSubview(baseStackView)
