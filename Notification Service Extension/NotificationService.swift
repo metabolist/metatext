@@ -49,23 +49,16 @@ final class NotificationService: UNNotificationServiceExtension {
             bestAttemptContent.sound = .default
         }
 
-        var identity: Identity?
-
-        if appPreferences.notificationAccountName {
-            identity = try? AllIdentitiesService(environment: Self.environment).identity(id: identityId)
-
-            if let handle = identity?.handle {
-                bestAttemptContent.subtitle = handle
-            }
+        if appPreferences.notificationAccountName,
+           case let .success(handle) = parsingService.handle(identityId: identityId) {
+            bestAttemptContent.subtitle = handle
         }
 
         Self.attachment(imageURL: pushNotification.icon)
             .map { [$0] }
             .replaceError(with: [])
             .handleEvents(receiveOutput: { bestAttemptContent.attachments = $0 })
-            .zip(parsingService.title(pushNotification: pushNotification,
-                                      identityId: identityId,
-                                      accountId: identity?.account?.id)
+            .zip(parsingService.title(pushNotification: pushNotification, identityId: identityId)
                     .replaceError(with: pushNotification.title)
                     .handleEvents(receiveOutput: { bestAttemptContent.title = $0 }))
             .sink { _ in contentHandler(bestAttemptContent) }

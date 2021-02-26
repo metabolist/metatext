@@ -51,9 +51,13 @@ public extension PushNotificationParsingService {
                 identityId)
     }
 
-    func title(pushNotification: PushNotification,
-               identityId: Identity.Id,
-               accountId: Account.Id?) -> AnyPublisher<String, Error> {
+    func handle(identityId: Identity.Id) -> Result<String, Error> {
+        let secrets = Secrets(identityId: identityId, keychain: environment.keychain)
+
+        return Result { try secrets.getUsername().appending("@").appending(secrets.getInstanceURL().host ?? "") }
+    }
+
+    func title(pushNotification: PushNotification, identityId: Identity.Id) -> AnyPublisher<String, Error> {
         switch pushNotification.notificationType {
         case .poll, .status:
             let secrets = Secrets(identityId: identityId, keychain: environment.keychain)
@@ -79,14 +83,14 @@ public extension PushNotificationParsingService {
                             NSLocalizedString("notification.status-%@", comment: ""),
                             $0.account.displayName)
                     case .poll:
-                        switch accountId ?? (try? AllIdentitiesService(environment: environment)
-                                                .identity(id: identityId)?.account?.id) {
-                        case .some($0.account.id):
-                            return NSLocalizedString("notification.poll.own", comment: "")
-                        case .some:
-                            return NSLocalizedString("notification.poll", comment: "")
-                        default:
+                        guard let accountId = try? secrets.getAccountId() else {
                             return NSLocalizedString("notification.poll.unknown", comment: "")
+                        }
+
+                        if $0.account.id == accountId {
+                            return NSLocalizedString("notification.poll.own", comment: "")
+                        } else {
+                            return NSLocalizedString("notification.poll", comment: "")
                         }
                     default:
                         return pushNotification.title

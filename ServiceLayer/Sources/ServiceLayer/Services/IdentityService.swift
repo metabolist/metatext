@@ -51,6 +51,10 @@ public extension IdentityService {
 
     func verifyCredentials() -> AnyPublisher<Never, Error> {
         mastodonAPIClient.request(AccountEndpoint.verifyCredentials)
+            .handleEvents(receiveOutput: {
+                try? secrets.setAccountId($0.id)
+                try? secrets.setUsername($0.username)
+            })
             .flatMap { identityDatabase.updateAccount($0, id: id) }
             .eraseToAnyPublisher()
     }

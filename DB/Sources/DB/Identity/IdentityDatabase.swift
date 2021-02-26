@@ -228,16 +228,6 @@ public extension IdentityDatabase {
 
         return Identity(info: info)
     }
-
-    // Only for use in notification extension
-    func identity(id: Identity.Id) throws -> Identity? {
-        guard let info = try databaseWriter.read(
-                IdentityInfo.request(IdentityRecord.filter(IdentityRecord.Columns.id == id))
-                    .fetchOne)
-        else { return nil }
-
-        return Identity(info: info)
-    }
 }
 
 private extension IdentityDatabase {

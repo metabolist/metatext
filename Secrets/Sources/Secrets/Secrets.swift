@@ -35,6 +35,8 @@ public extension Secrets {
         case databaseKey
         case imageCacheKey
         case identityDatabaseName
+        case accountId
+        case username
     }
 }
 
@@ -163,6 +165,22 @@ public extension Secrets {
 
     func setAccessToken(_ accessToken: String) throws {
         try set(accessToken, forItem: .accessToken)
+    }
+
+    func getAccountId() throws -> String {
+        try item(.accountId)
+    }
+
+    func setAccountId(_ accountId: String) throws {
+        try set(accountId, forItem: .accountId)
+    }
+
+    func getUsername() throws -> String {
+        try item(.username)
+    }
+
+    func setUsername(_ username: String) throws {
+        try set(username, forItem: .username)
     }
 
     func generatePushKeyAndReturnPublicKey() throws -> Data {
