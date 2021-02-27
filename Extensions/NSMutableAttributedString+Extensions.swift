@@ -17,9 +17,9 @@ extension NSMutableAttributedString {
                 if !identityContext.appPreferences.shouldReduceMotion,
                    identityContext.appPreferences.animateCustomEmojis,
                    let urlString = emoji.url {
-                    imageURL = URL(string: urlString)
+                    imageURL = URL(stringEscapingPath: urlString)
                 } else if let staticURLString = emoji.staticUrl {
-                    imageURL = URL(string: staticURLString)
+                    imageURL = URL(stringEscapingPath: staticURLString)
                 } else {
                     imageURL = nil
                 }

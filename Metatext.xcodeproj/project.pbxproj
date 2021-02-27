@@ -65,6 +65,7 @@
 		D04F34BC25E42ADC00714251 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = D04F34BB25E42ADC00714251 /* SDWebImage */; };
 		D04F34C225E42AE500714251 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = D04F34C125E42AE500714251 /* SDWebImage */; };
 		D04F9E8E259E9C950081B0C9 /* ViewModels in Frameworks */ = {isa = PBXBuildFile; productRef = D04F9E8D259E9C950081B0C9 /* ViewModels */; };
+		D052DBDD25EAF01800FFB628 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0030981250C6C8500EACB32 /* URL+Extensions.swift */; };
 		D05936CF25A8D79800754FDF /* EditAttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05936CE25A8D79800754FDF /* EditAttachmentViewController.swift */; };
 		D05936D025A8D79800754FDF /* EditAttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05936CE25A8D79800754FDF /* EditAttachmentViewController.swift */; };
 		D05936DE25A937EC00754FDF /* EditThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05936DD25A937EC00754FDF /* EditThumbnailView.swift */; };
@@ -1193,6 +1194,7 @@
 				D0D93EC525D9C75E00C622ED /* AutocompleteItemContentConfiguration.swift in Sources */,
 				D059373425AAEA7000754FDF /* CompositionPollView.swift in Sources */,
 				D021A67B25C3E32A008A0C0D /* PlayerView.swift in Sources */,
+				D052DBDD25EAF01800FFB628 /* URL+Extensions.swift in Sources */,
 				D021A69025C3E4B8008A0C0D /* EmojiContentConfiguration.swift in Sources */,
 				D08E52D2257C811200FA2C5F /* ShareExtensionError+Extensions.swift in Sources */,
 				D00CB23D25C9305D008EF267 /* NSMutableAttributedString+Extensions.swift in Sources */,

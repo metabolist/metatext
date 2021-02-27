@@ -8,6 +8,18 @@ extension URL {
 
         return scheme == "http" || scheme == "https"
     }
+
+    init?(stringEscapingPath: String) {
+        guard let pathEscaped = stringEscapingPath.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)
+        else { return nil }
+
+        let httpsColonUnescaped = pathEscaped.replacingOccurrences(
+            of: "https%3A",
+            with: "https:",
+            range: pathEscaped.range(of: "https%3A"))
+
+        self.init(string: httpsColonUnescaped)
+    }
 }
 
 extension URL: Identifiable {
