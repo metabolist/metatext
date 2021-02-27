@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "Base16",
+        "repositoryURL": "https://github.com/metabolist/base16.git",
+        "state": {
+          "branch": null,
+          "revision": "913e1e7ef4a79c5f64e550a40d9a032ad173a21f",
+          "version": "1.0.0"
+        }
+      },
+      {
         "package": "CombineExpectations",
         "repositoryURL": "https://github.com/groue/CombineExpectations.git",
         "state": {

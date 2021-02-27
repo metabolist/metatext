@@ -350,7 +350,6 @@
 		D09D972125C65682007E6394 /* SeparatorConfiguredCollectionViewListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorConfiguredCollectionViewListCell.swift; sourceTree = "<group>"; };
 		D0A1F4F6252E7D4B004435BF /* TableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewDataSource.swift; sourceTree = "<group>"; };
 		D0A7AC7225748BFF00E4E8AB /* ReportStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportStatusView.swift; sourceTree = "<group>"; };
-		D0AD03552505814D0085A466 /* Base16 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Base16; sourceTree = "<group>"; };
 		D0B32F4F250B373600311912 /* RegistrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationView.swift; sourceTree = "<group>"; };
 		D0B5FE9A251583DB00478838 /* ProfileCollection+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileCollection+Extensions.swift"; sourceTree = "<group>"; };
 		D0B8510B25259E56004E0744 /* LoadMoreTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreTableViewCell.swift; sourceTree = "<group>"; };
@@ -635,7 +634,6 @@
 			children = (
 				D0477F2A25C6EB90005C5368 /* Activities */,
 				D0C7D45224F76169001EBDBB /* Assets.xcassets */,
-				D0AD03552505814D0085A466 /* Base16 */,
 				D0FE1C9625368A15003EF1EB /* Caches */,
 				D0D7C013250440610039AD6F /* CodableBloomFilter */,
 				D0A1F4F5252E7D2A004435BF /* Data Sources */,

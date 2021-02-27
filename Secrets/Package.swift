@@ -14,8 +14,8 @@ let package = Package(
             targets: ["Secrets"])
     ],
     dependencies: [
-        .package(path: "Base16"),
-        .package(path: "Keychain")
+        .package(path: "Keychain"),
+        .package(name: "Base16", url: "https://github.com/metabolist/base16.git", .upToNextMajor(from: "1.0.0"))
     ],
     targets: [
         .target(
