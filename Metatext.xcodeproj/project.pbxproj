@@ -66,6 +66,7 @@
 		D04F34C225E42AE500714251 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = D04F34C125E42AE500714251 /* SDWebImage */; };
 		D04F9E8E259E9C950081B0C9 /* ViewModels in Frameworks */ = {isa = PBXBuildFile; productRef = D04F9E8D259E9C950081B0C9 /* ViewModels */; };
 		D052DBDD25EAF01800FFB628 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0030981250C6C8500EACB32 /* URL+Extensions.swift */; };
+		D052DBE325EAFDE800FFB628 /* HTTPError+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D052DBE225EAFDE800FFB628 /* HTTPError+Extensions.swift */; };
 		D05936CF25A8D79800754FDF /* EditAttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05936CE25A8D79800754FDF /* EditAttachmentViewController.swift */; };
 		D05936D025A8D79800754FDF /* EditAttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05936CE25A8D79800754FDF /* EditAttachmentViewController.swift */; };
 		D05936DE25A937EC00754FDF /* EditThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05936DD25A937EC00754FDF /* EditThumbnailView.swift */; };
@@ -293,6 +294,7 @@
 		D0477F2B25C6EBAD005C5368 /* OpenInDefaultBrowserActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenInDefaultBrowserActivity.swift; sourceTree = "<group>"; };
 		D0477F4525C72E50005C5368 /* CapsuleLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleLabel.swift; sourceTree = "<group>"; };
 		D047FA8C24C3E21200AF17C5 /* Metatext.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Metatext.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D052DBE225EAFDE800FFB628 /* HTTPError+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HTTPError+Extensions.swift"; sourceTree = "<group>"; };
 		D05936CE25A8D79800754FDF /* EditAttachmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAttachmentViewController.swift; sourceTree = "<group>"; };
 		D05936DD25A937EC00754FDF /* EditThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditThumbnailView.swift; sourceTree = "<group>"; };
 		D05936E825AA3F3D00754FDF /* EditAttachmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAttachmentView.swift; sourceTree = "<group>"; };
@@ -786,6 +788,7 @@
 				D0BE97A225CF44310057E161 /* CGRect+Extensions.swift */,
 				D0F0B135251AA12700942152 /* CollectionItem+Extensions.swift */,
 				D0D2AC3825BBEC0F003D5DF2 /* CollectionSection+Extensions.swift */,
+				D052DBE225EAFDE800FFB628 /* HTTPError+Extensions.swift */,
 				D035F88625B8016000DC75ED /* NavigationViewModel+Extensions.swift */,
 				D0C7D46B24F76169001EBDBB /* NSMutableAttributedString+Extensions.swift */,
 				D07EC7CE25B13921006DF726 /* PickerEmoji+Extensions.swift */,
@@ -1106,6 +1109,7 @@
 				D021A62C25C38570008A0C0D /* AboutView.swift in Sources */,
 				D00702362555F4C500F38136 /* ConversationContentConfiguration.swift in Sources */,
 				D0BEB1F724F9A84B001B0F04 /* LoadingTableFooterView.swift in Sources */,
+				D052DBE325EAFDE800FFB628 /* HTTPError+Extensions.swift in Sources */,
 				D021A61425C36BFB008A0C0D /* IdentityView.swift in Sources */,
 				D06BC5E625202AD90079541D /* ProfileViewController.swift in Sources */,
 				D0D2AC4D25BCD2A9003D5DF2 /* TagTableViewCell.swift in Sources */,

@@ -148,6 +148,8 @@
 "secondary-navigation.my-profile" = "My Profile";
 "secondary-navigation.preferences" = "Preferences";
 "secondary-navigation-button.accessibility-title" = "Account Menu";
+"http-error.non-http-response" = "HTTP Error: Non-HTTP response";
+"http-error.status-code-%ld" = "HTTP Error: %ld";
 "identities.accounts" = "Accounts";
 "identities.browsing" = "Browsing";
 "identities.log-out" = "Log out";
