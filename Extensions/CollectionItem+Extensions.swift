@@ -89,7 +89,10 @@ extension CollectionItem {
 
 private extension Account {
     func mediaPrefetchURLs(identityContext: IdentityContext) -> Set<URL> {
-        var urls = Set(emojis.map(\.url))
+        var urls = Set(emojis.compactMap {
+            identityContext.appPreferences.animateCustomEmojis ? $0.url : $0.staticUrl
+        }
+        .compactMap(URL.init(string:)))
 
         if !identityContext.appPreferences.shouldReduceMotion
             && identityContext.appPreferences.animateAvatars == .everywhere {
@@ -106,6 +109,9 @@ private extension Status {
     func mediaPrefetchURLs(identityContext: IdentityContext) -> Set<URL> {
         displayStatus.account.mediaPrefetchURLs(identityContext: identityContext)
             .union(displayStatus.mediaAttachments.compactMap(\.previewUrl))
-            .union(displayStatus.emojis.map(\.url))
+            .union(displayStatus.emojis.compactMap {
+                identityContext.appPreferences.animateCustomEmojis ? $0.url : $0.staticUrl
+            }
+            .compactMap(URL.init(string:)))
     }
 }

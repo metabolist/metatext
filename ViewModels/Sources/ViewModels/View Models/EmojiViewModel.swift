@@ -21,10 +21,12 @@ public extension EmojiViewModel {
     var url: URL? {
         guard case let .custom(emoji, _) = emoji else { return nil }
 
-        if identityContext.appPreferences.animateCustomEmojis {
-            return emoji.url
-        } else {
-            return emoji.staticUrl
+        if identityContext.appPreferences.animateCustomEmojis, let urlString = emoji.url {
+            return URL(string: urlString)
+        } else if let staticURLString = emoji.staticUrl {
+            return URL(string: staticURLString)
         }
+
+        return nil
     }
 }
