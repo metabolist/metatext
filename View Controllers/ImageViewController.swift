@@ -114,6 +114,10 @@ final class ImageViewController: UIViewController {
                 let placeholderKey = viewModel.attachment.previewUrl?.absoluteString
                 let placeholderImage = SDImageCache.shared.imageFromCache(forKey: placeholderKey)
 
+                if placeholderImage != nil {
+                    imageView.sd_imageIndicator = nil
+                }
+
                 imageView.sd_setImage(with: viewModel.attachment.url, placeholderImage: placeholderImage)
             case .gifv:
                 playerView.tag = viewModel.tag
