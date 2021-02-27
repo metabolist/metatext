@@ -115,10 +115,6 @@ class TableViewController: UITableViewController {
         for loadMoreView in visibleLoadMoreViews {
             loadMoreView.directionChanged(up: up)
         }
-
-        if newItemsView.alpha > 0 {
-            hideNewItemsView()
-        }
     }
 
     override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
@@ -182,14 +178,6 @@ class TableViewController: UITableViewController {
         super.viewDidLayoutSubviews()
 
         sizeTableHeaderFooterViews()
-    }
-
-    override func accessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
-        if newItemsView.alpha > 0 {
-            hideNewItemsView()
-        }
-
-        return super.accessibilityScroll(direction)
     }
 }
 
@@ -408,8 +396,20 @@ private extension TableViewController {
             .store(in: &cancellables)
 
         tableView.publisher(for: \.contentOffset)
+            .removeDuplicates()
+            .handleEvents(receiveOutput: { [weak self] _ in
+                guard let self = self else { return }
+
+                if (self.newItemsView.layer.animationKeys() ?? []).isEmpty, self.newItemsView.alpha > 0 {
+                    self.hideNewItemsView()
+                }
+            })
             .compactMap { [weak self] _ in self?.tableView.indexPathsForVisibleRows?.first }
-            .sink { [weak self] in self?.viewModel.viewedAtTop(indexPath: $0) }
+            .sink { [weak self] in
+                guard let self = self else { return }
+
+                self.viewModel.viewedAtTop(indexPath: $0)
+            }
             .store(in: &cancellables)
 
         NotificationCenter.default.publisher(for: UIScene.willEnterForegroundNotification)
@@ -477,6 +477,8 @@ private extension TableViewController {
             } else if setPreviousOffset {
                 self.tableView.contentOffset.y = preUpdateContentOffsetY
             }
+
+            self.tableView.layoutIfNeeded()
         }
     }
 
@@ -799,7 +801,7 @@ private extension TableViewController {
             self.newItemsViewVisibleConstraint?.isActive = true
             self.view.layoutIfNeeded()
         } completion: { _ in
-
+            self.view.layoutIfNeeded()
         }
     }
 
@@ -808,6 +810,8 @@ private extension TableViewController {
             self.newItemsView.alpha = 0
             self.newItemsViewHiddenConstraint?.isActive = true
             self.newItemsViewVisibleConstraint?.isActive = false
+            self.view.layoutIfNeeded()
+        } completion: { _ in
             self.view.layoutIfNeeded()
         }
     }
