@@ -39,6 +39,7 @@ final class NewItemsView: UIView {
 
         layer.cornerRadius = cornerRadius
         blurView.layer.cornerRadius = cornerRadius
+        layer.shadowPath = UIBezierPath(roundedRect: layer.bounds, cornerRadius: cornerRadius).cgPath
     }
 }
 
