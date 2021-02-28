@@ -11,6 +11,15 @@
         }
       },
       {
+        "package": "CodableBloomFilter",
+        "repositoryURL": "https://github.com/metabolist/codable-bloom-filter.git",
+        "state": {
+          "branch": null,
+          "revision": "53f80465056a95253df797f1d8a9199f8b1c0543",
+          "version": "1.0.0"
+        }
+      },
+      {
         "package": "CombineExpectations",
         "repositoryURL": "https://github.com/groue/CombineExpectations.git",
         "state": {

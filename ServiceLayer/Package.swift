@@ -18,7 +18,9 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/groue/CombineExpectations.git", .upToNextMajor(from: "0.7.0")),
-        .package(path: "CodableBloomFilter"),
+        .package(name: "CodableBloomFilter",
+                 url: "https://github.com/metabolist/codable-bloom-filter.git",
+                 .upToNextMajor(from: "1.0.0")),
         .package(path: "DB"),
         .package(path: "Keychain"),
         .package(path: "MastodonAPI"),

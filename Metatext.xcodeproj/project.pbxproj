@@ -396,7 +396,6 @@
 		D0D2AC4C25BCD2A9003D5DF2 /* TagTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagTableViewCell.swift; sourceTree = "<group>"; };
 		D0D2AC5225BCD2BA003D5DF2 /* TagContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagContentConfiguration.swift; sourceTree = "<group>"; };
 		D0D2AC6625BD0484003D5DF2 /* LineChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineChartView.swift; sourceTree = "<group>"; };
-		D0D7C013250440610039AD6F /* CodableBloomFilter */ = {isa = PBXFileReference; lastKnownFileType = folder; path = CodableBloomFilter; sourceTree = "<group>"; };
 		D0D93EB925D9C70400C622ED /* AutocompleteItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompleteItemView.swift; sourceTree = "<group>"; };
 		D0D93EBF25D9C71D00C622ED /* AutocompleteItemContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompleteItemContentConfiguration.swift; sourceTree = "<group>"; };
 		D0D93ECF25D9C9ED00C622ED /* AutocompleteItemCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompleteItemCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -635,7 +634,6 @@
 				D0477F2A25C6EB90005C5368 /* Activities */,
 				D0C7D45224F76169001EBDBB /* Assets.xcassets */,
 				D0FE1C9625368A15003EF1EB /* Caches */,
-				D0D7C013250440610039AD6F /* CodableBloomFilter */,
 				D0A1F4F5252E7D2A004435BF /* Data Sources */,
 				D085C3BB25008DEC008A6C5E /* DB */,
 				D0C7D46824F76169001EBDBB /* Extensions */,
