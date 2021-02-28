@@ -423,11 +423,10 @@ private extension StatusView {
             viewModel.accountViewModel.displayName)
 
         sideStackView.isHidden = isContextParent
-        avatarImageView.removeFromSuperview()
 
-        if isContextParent {
+        if isContextParent, avatarImageView.superview !== nameAccountContainerStackView {
             nameAccountContainerStackView.insertArrangedSubview(avatarImageView, at: 0)
-        } else {
+        } else if avatarImageView.superview !== sideStackView {
             sideStackView.insertArrangedSubview(avatarImageView, at: 1)
         }
 
