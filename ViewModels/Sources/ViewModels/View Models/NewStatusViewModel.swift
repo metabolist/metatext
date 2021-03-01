@@ -35,7 +35,9 @@ public final class NewStatusViewModel: ObservableObject {
         self.environment = environment
         inReplyToViewModel = inReplyTo
         events = eventsSubject.eraseToAnyPublisher()
-        visibility = inReplyTo?.visibility ?? identityContext.identity.preferences.postingDefaultVisibility
+        visibility = redraft?.visibility
+            ?? inReplyTo?.visibility
+            ?? identityContext.identity.preferences.postingDefaultVisibility
 
         if let inReplyTo = inReplyTo {
             switch inReplyTo.visibility {
