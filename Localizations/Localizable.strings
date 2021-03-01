@@ -48,7 +48,6 @@
 "account.unavailable" = "Profile unavailable";
 "account.unblock" = "Unblock";
 "account.unblock.confirm-%@" = "Unblock %@?";
-"account.unfollow" = "Unfollow";
 "account.unfollow.confirm-%@" = "Unfollow %@?";
 "account.unmute" = "Unmute";
 "account.unmute.confirm-%@" = "Unmute %@?";

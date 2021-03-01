@@ -67,7 +67,7 @@ final class AccountHeaderView: UIView {
                     unfollowButton.isHidden = !(relationship.following || relationship.requested)
                     unfollowButton.setTitle(
                         NSLocalizedString(
-                            relationship.requested ? "account.request.cancel" : "account.unfollow",
+                            relationship.requested ? "account.request.cancel" : "account.following",
                             comment: ""),
                         for: .normal)
 
@@ -321,7 +321,7 @@ private extension AccountHeaderView {
                 systemName: "checkmark",
                 withConfiguration: UIImage.SymbolConfiguration(scale: .small)),
             for: .normal)
-        unfollowButton.setTitle(NSLocalizedString("account.unfollow", comment: ""), for: .normal)
+        unfollowButton.setTitle(NSLocalizedString("account.following", comment: ""), for: .normal)
         unfollowButton.isHidden = true
         unfollowButton.addAction(
             UIAction { [weak self] _ in self?.viewModel.accountViewModel?.confirmUnfollow() },
