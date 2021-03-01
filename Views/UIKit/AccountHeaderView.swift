@@ -19,7 +19,7 @@ final class AccountHeaderView: UIView {
     let unnotifyButton = UIButton()
     let displayNameLabel = AnimatedAttachmentLabel()
     let accountStackView = UIStackView()
-    let accountLabel = UILabel()
+    let accountLabel = CopyableLabel()
     let lockedImageView = UIImageView()
     let followsYouLabel = CapsuleLabel()
     let mutedLabel = CapsuleLabel()
