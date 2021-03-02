@@ -76,6 +76,12 @@ public extension ProfileViewModel {
     func fetchProfile() -> AnyPublisher<Never, Never> {
         profileService.fetchProfile().assignErrorsToAlertItem(to: \.alertItem, on: self)
     }
+
+    func sendDirectMessage() {
+        guard let accountViewModel = accountViewModel else { return }
+
+        collectionViewModel.value.sendDirectMessage(accountViewModel: accountViewModel)
+    }
 }
 
 extension ProfileViewModel: CollectionViewModel {

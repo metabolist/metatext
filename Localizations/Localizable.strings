@@ -11,6 +11,7 @@
 "account.block-and-report" = "Block & report";
 "account.block.confirm-%@" = "Block %@?";
 "account.blocked" = "Blocked";
+"account.direct-message" = "Direct message";
 "account.domain-block-%@" = "Block domain %@";
 "account.domain-block.confirm-%@" = "Block domain %@?";
 "account.domain-unblock-%@" = "Unblock domain %@";

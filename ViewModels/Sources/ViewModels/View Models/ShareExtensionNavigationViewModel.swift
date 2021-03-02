@@ -39,6 +39,7 @@ public extension ShareExtensionNavigationViewModel {
             environment: environment,
             inReplyTo: nil,
             redraft: nil,
+            directMessageTo: nil,
             extensionContext: extensionContext)
     }
 }

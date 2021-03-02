@@ -250,7 +250,7 @@ public extension StatusViewModel {
         replyViewModel.configuration = configuration.reply()
 
         eventsSubject.send(
-            Just(.compose(inReplyTo: replyViewModel, redraft: nil))
+            Just(.compose(inReplyTo: replyViewModel))
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher())
     }

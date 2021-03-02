@@ -13,6 +13,7 @@ final class AccountHeaderView: UIView {
     let avatarImageView = SDAnimatedImageView()
     let avatarButton = UIButton()
     let relationshipButtonsStackView = UIStackView()
+    let directMessageButton = UIButton()
     let followButton = UIButton(type: .system)
     let unfollowButton = UIButton(type: .system)
     let notifyButton = UIButton()
@@ -216,10 +217,18 @@ final class AccountHeaderView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        for button in [followButton, unfollowButton, notifyButton, unnotifyButton] {
-            let inset = (followButton.bounds.height - (button.titleLabel?.bounds.height ?? 0)) / 2
+        if let pointSize = followingButton.titleLabel?.font.pointSize {
+            relationshipButtonsStackView.heightAnchor
+                .constraint(equalToConstant: pointSize + .defaultSpacing * 2).isActive = true
+        }
+
+        for button in [followButton, unfollowButton] {
+            let inset = (button.bounds.height - (button.titleLabel?.bounds.height ?? 0))
 
             button.contentEdgeInsets = .init(top: 0, left: inset, bottom: 0, right: inset)
+        }
+
+        for button in [directMessageButton, followButton, unfollowButton, notifyButton, unnotifyButton] {
             button.layer.cornerRadius = button.bounds.height / 2
         }
     }
@@ -299,12 +308,22 @@ private extension AccountHeaderView {
         relationshipButtonsStackView.spacing = .defaultSpacing
         relationshipButtonsStackView.addArrangedSubview(UIView())
 
-        for button in [followButton, unfollowButton, notifyButton, unnotifyButton] {
+        for button in [directMessageButton, notifyButton, unnotifyButton, followButton, unfollowButton] {
             relationshipButtonsStackView.addArrangedSubview(button)
             button.titleLabel?.font = .preferredFont(forTextStyle: .headline)
             button.titleLabel?.adjustsFontForContentSizeCategory = true
             button.backgroundColor = .secondarySystemBackground
         }
+
+        directMessageButton.setImage(
+            UIImage(
+                systemName: "envelope",
+                withConfiguration: UIImage.SymbolConfiguration(scale: .small)),
+            for: .normal)
+        directMessageButton.accessibilityLabel = NSLocalizedString("account.direct-message", comment: "")
+        directMessageButton.addAction(
+            UIAction { [weak self] _ in self?.viewModel.sendDirectMessage() },
+            for: .touchUpInside)
 
         followButton.setImage(
             UIImage(
@@ -312,6 +331,7 @@ private extension AccountHeaderView {
                 withConfiguration: UIImage.SymbolConfiguration(scale: .small)),
             for: .normal)
         followButton.isHidden = true
+        followButton.titleLabel?.adjustsFontSizeToFitWidth = true
         followButton.addAction(
             UIAction { [weak self] _ in self?.viewModel.accountViewModel?.follow() },
             for: .touchUpInside)
@@ -323,14 +343,16 @@ private extension AccountHeaderView {
             for: .normal)
         unfollowButton.setTitle(NSLocalizedString("account.following", comment: ""), for: .normal)
         unfollowButton.isHidden = true
+        unfollowButton.titleLabel?.adjustsFontSizeToFitWidth = true
         unfollowButton.addAction(
             UIAction { [weak self] _ in self?.viewModel.accountViewModel?.confirmUnfollow() },
             for: .touchUpInside)
 
         notifyButton.setImage(
             UIImage(systemName: "bell",
-                    withConfiguration: UIImage.SymbolConfiguration(scale: .large)),
+                    withConfiguration: UIImage.SymbolConfiguration(scale: .medium)),
             for: .normal)
+        notifyButton.imageView?.contentMode = .scaleAspectFit
         notifyButton.accessibilityLabel = NSLocalizedString("account.notify", comment: "")
         notifyButton.tintColor = .secondaryLabel
         notifyButton.isHidden = true
@@ -340,7 +362,7 @@ private extension AccountHeaderView {
 
         unnotifyButton.setImage(
             UIImage(systemName: "bell.fill",
-                    withConfiguration: UIImage.SymbolConfiguration(scale: .large)),
+                    withConfiguration: UIImage.SymbolConfiguration(scale: .medium)),
             for: .normal)
         unnotifyButton.accessibilityLabel = NSLocalizedString("account.unnotify", comment: "")
         unnotifyButton.isHidden = true
@@ -505,7 +527,9 @@ private extension AccountHeaderView {
                 equalTo: headerImageView.bottomAnchor,
                 constant: .defaultSpacing),
             relationshipButtonsStackView.trailingAnchor.constraint(equalTo: readableContentGuide.trailingAnchor),
-            relationshipButtonsStackView.bottomAnchor.constraint(equalTo: avatarBackgroundView.bottomAnchor),
+            directMessageButton.widthAnchor.constraint(equalTo: directMessageButton.heightAnchor),
+            notifyButton.widthAnchor.constraint(equalTo: notifyButton.heightAnchor),
+            unnotifyButton.widthAnchor.constraint(equalTo: unnotifyButton.heightAnchor),
             baseStackView.topAnchor.constraint(equalTo: avatarBackgroundView.bottomAnchor, constant: .defaultSpacing),
             baseStackView.leadingAnchor.constraint(equalTo: readableContentGuide.leadingAnchor),
             baseStackView.trailingAnchor.constraint(equalTo: readableContentGuide.trailingAnchor),

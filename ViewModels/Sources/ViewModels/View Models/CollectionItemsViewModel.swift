@@ -358,6 +358,15 @@ extension CollectionItemsViewModel: CollectionViewModel {
     }
 }
 
+extension CollectionItemsViewModel {
+    func sendDirectMessage(accountViewModel: AccountViewModel) {
+        eventsSubject.send(
+            Just(.compose(directMessageTo: accountViewModel))
+                .setFailureType(to: Error.self)
+                .eraseToAnyPublisher())
+    }
+}
+
 private extension CollectionItemsViewModel {
     private static let lastReadIdDebounceInterval: TimeInterval = 0.5
 

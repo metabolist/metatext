@@ -29,6 +29,7 @@ public final class NewStatusViewModel: ObservableObject {
                 environment: AppEnvironment,
                 inReplyTo: StatusViewModel?,
                 redraft: Status?,
+                directMessageTo: AccountViewModel?,
                 extensionContext: NSExtensionContext?) {
         self.allIdentitiesService = allIdentitiesService
         self.identityContext = identityContext
@@ -78,6 +79,9 @@ public final class NewStatusViewModel: ObservableObject {
                                 .map("@".appending))
 
             compositionViewModel.text = mentions.joined(separator: " ").appending(" ")
+        } else if let directMessageTo = directMessageTo {
+            compositionViewModel.text = directMessageTo.accountName.appending(" ")
+            visibility = .direct
         }
 
         compositionViewModels = [compositionViewModel]

@@ -9,7 +9,7 @@ public enum CollectionItemEvent {
     case refresh
     case navigation(Navigation)
     case attachment(AttachmentViewModel, StatusViewModel)
-    case compose(inReplyTo: StatusViewModel?, redraft: Status?)
+    case compose(inReplyTo: StatusViewModel? = nil, redraft: Status? = nil, directMessageTo: AccountViewModel? = nil)
     case confirmDelete(StatusViewModel, redraft: Bool)
     case confirmUnfollow(AccountViewModel)
     case confirmHideReblogs(AccountViewModel)
