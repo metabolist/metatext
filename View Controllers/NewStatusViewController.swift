@@ -2,6 +2,7 @@
 
 import AVFoundation
 import Combine
+import Mastodon
 import PhotosUI
 import SwiftUI
 import UniformTypeIdentifiers
@@ -78,14 +79,9 @@ final class NewStatusViewController: UIViewController {
             primaryAction: UIAction { [weak self] _ in self?.dismiss() })
         navigationItem.rightBarButtonItem = postButton
 
-        let postActionTitle: String
-
-        switch viewModel.identityContext.appPreferences.statusWord {
-        case .toot:
-            postActionTitle = NSLocalizedString("toot", comment: "")
-        case .post:
-            postActionTitle = NSLocalizedString("post", comment: "")
-        }
+        let postActionTitle = self.postActionTitle(
+            statusWord: viewModel.identityContext.appPreferences.statusWord,
+            visibility: viewModel.visibility)
 
         postButton.primaryAction = UIAction(title: postActionTitle) { [weak self] _ in
             self?.viewModel.post()
@@ -273,6 +269,18 @@ private extension NewStatusViewController {
                 }
             }
             .store(in: &cancellables)
+        viewModel.$visibility.removeDuplicates().sink { [weak self] in
+            guard let self = self else { return }
+
+            let postActionTitle = self.postActionTitle(
+                statusWord: self.viewModel.identityContext.appPreferences.statusWord,
+                visibility: $0)
+
+            self.postButton.primaryAction = UIAction(title: postActionTitle) { [weak self] _ in
+                self?.viewModel.post()
+            }
+        }
+        .store(in: &cancellables)
     }
 
     func presentMediaPicker(compositionViewModel: CompositionViewModel) {
@@ -467,6 +475,17 @@ private extension NewStatusViewController {
 
         self.scrollView.contentInset.bottom = contentInsetBottom
         self.scrollView.verticalScrollIndicatorInsets.bottom = contentInsetBottom
+    }
+
+    func postActionTitle(statusWord: AppPreferences.StatusWord, visibility: Status.Visibility) -> String {
+        switch (statusWord, visibility) {
+        case (_, .direct):
+            return NSLocalizedString("send", comment: "")
+        case (.toot, _):
+            return NSLocalizedString("toot", comment: "")
+        case (.post, _):
+            return NSLocalizedString("post", comment: "")
+        }
     }
 }
 // swiftlint:enable file_length

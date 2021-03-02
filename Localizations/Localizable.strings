@@ -269,6 +269,7 @@
 "search.scope.statuses.post" = "Posts";
 "search.scope.statuses.toot" = "Toots";
 "search.scope.tags" = "Hashtags";
+"send" = "Send";
 "share" = "Share";
 "share-extension-error.no-account-found" = "No account found";
 "status.accessibility.view-author-profile" = "View author's profile";
