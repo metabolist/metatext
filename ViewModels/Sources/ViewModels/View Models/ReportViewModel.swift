@@ -5,36 +5,44 @@ import Foundation
 import Mastodon
 import ServiceLayer
 
-public final class ReportViewModel: ObservableObject {
+public final class ReportViewModel: CollectionItemsViewModel {
     @Published public var elements: ReportElements
-    public let events: AnyPublisher<Event, Never>
-    public let statusViewModel: StatusViewModel?
-    @Published public private(set) var loading = false
-    @Published public var alertItem: AlertItem?
+    @Published public private(set) var reportingState = ReportingState.composing
 
     private let accountService: AccountService
-    private let eventsSubject = PassthroughSubject<Event, Never>()
     private var cancellables = Set<AnyCancellable>()
 
-    public init(accountService: AccountService, statusService: StatusService? = nil, identityContext: IdentityContext) {
+    public init(accountService: AccountService, statusId: Status.Id? = nil, identityContext: IdentityContext) {
         self.accountService = accountService
         elements = ReportElements(accountId: accountService.account.id)
-        events = eventsSubject.eraseToAnyPublisher()
 
-        if let statusService = statusService {
-            statusViewModel = StatusViewModel(statusService: statusService,
-                                              identityContext: identityContext,
-                                              eventsSubject: .init())
-            elements.statusIds.insert(statusService.status.displayStatus.id)
-        } else {
-            statusViewModel = nil
+        super.init(
+            collectionService: identityContext.service.navigationService.timelineService(
+                timeline: .profile(accountId: accountService.account.id, profileCollection: .statusesAndReplies)),
+            identityContext: identityContext)
+
+        if let statusId = statusId {
+            elements.statusIds.insert(statusId)
         }
+    }
+
+    public override func viewModel(indexPath: IndexPath) -> Any {
+        let viewModel = super.viewModel(indexPath: indexPath)
+
+        if let statusViewModel = viewModel as? StatusViewModel {
+            statusViewModel.showReportSelectionToggle = true
+            statusViewModel.selectedForReport = elements.statusIds.contains(statusViewModel.id)
+        }
+
+        return viewModel
     }
 }
 
 public extension ReportViewModel {
-    enum Event {
-        case reported
+    enum ReportingState {
+        case composing
+        case reporting
+        case done
     }
 
     var accountName: String { "@".appending(accountService.account.acct) }
@@ -48,15 +56,16 @@ public extension ReportViewModel {
     func report() {
         accountService.report(elements)
             .receive(on: DispatchQueue.main)
-            .handleEvents(receiveSubscription: { [weak self] _ in self?.loading = true })
-            .assignErrorsToAlertItem(to: \.alertItem, on: self)
+            .handleEvents(receiveSubscription: { [weak self] _ in self?.reportingState = .reporting })
             .sink { [weak self] in
                 guard let self = self else { return }
 
-                self.loading = false
-
-                if $0 == .finished {
-                    self.eventsSubject.send(.reported)
+                switch $0 {
+                case .finished:
+                    self.reportingState = .done
+                case let .failure(error):
+                    self.alertItem = AlertItem(error: error)
+                    self.reportingState = .composing
                 }
             } receiveValue: { _ in }
             .store(in: &cancellables)

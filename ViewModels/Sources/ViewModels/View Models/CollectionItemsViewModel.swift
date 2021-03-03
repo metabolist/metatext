@@ -95,116 +95,6 @@ public class CollectionItemsViewModel: ObservableObject {
 
         request(maxId: maxId, minId: nil, search: nil)
     }
-}
-
-extension CollectionItemsViewModel: CollectionViewModel {
-    public var title: AnyPublisher<String, Never> { collectionService.title }
-
-    public var titleLocalizationComponents: AnyPublisher<[String], Never> {
-        collectionService.titleLocalizationComponents
-    }
-
-    public var expandAll: AnyPublisher<ExpandAllState, Never> {
-        expandAllSubject.eraseToAnyPublisher()
-    }
-
-    public var alertItems: AnyPublisher<AlertItem, Never> { $alertItem.compactMap { $0 }.eraseToAnyPublisher() }
-
-    public var loading: AnyPublisher<Bool, Never> { loadingSubject.eraseToAnyPublisher() }
-
-    public var events: AnyPublisher<CollectionItemEvent, Never> {
-        eventsSubject.flatMap { [weak self] eventPublisher -> AnyPublisher<CollectionItemEvent, Never> in
-            guard let self = self else { return Empty().eraseToAnyPublisher() }
-
-            return eventPublisher.assignErrorsToAlertItem(to: \.alertItem, on: self).eraseToAnyPublisher()
-        }
-        .eraseToAnyPublisher()
-    }
-
-    public var searchScopeChanges: AnyPublisher<SearchScope, Never> { searchScopeChangesSubject.eraseToAnyPublisher() }
-
-    public var canRefresh: Bool { collectionService.canRefresh }
-
-    public var announcesNewItems: Bool { collectionService.announcesNewItems }
-
-    public func request(maxId: String? = nil, minId: String? = nil, search: Search?) {
-        collectionService.request(maxId: realMaxId(maxId: maxId), minId: minId, search: search)
-            .receive(on: DispatchQueue.main)
-            .assignErrorsToAlertItem(to: \.alertItem, on: self)
-            .handleEvents(
-                receiveSubscription: { [weak self] _ in self?.loadingSubject.send(true) },
-                receiveCompletion: { [weak self] _ in self?.loadingSubject.send(false) })
-            .sink { _ in }
-            .store(in: &cancellables)
-        collectionService.requestMarkerLastReadId()
-            .sink { _ in } receiveValue: { [weak self] in self?.markerLastReadId = $0 }
-            .store(in: &cancellables)
-
-    }
-
-    public func select(indexPath: IndexPath) {
-        let item = lastUpdate.sections[indexPath.section].items[indexPath.item]
-
-        switch item {
-        case let .status(status, _, _):
-            send(event: .navigation(.collection(collectionService
-                                                    .navigationService
-                                                    .contextService(id: status.displayStatus.id))))
-        case let .loadMore(loadMore):
-            lastSelectedLoadMore = loadMore
-            (viewModel(indexPath: indexPath) as? LoadMoreViewModel)?.loadMore()
-        case let .account(account, _, relationship):
-            send(event: .navigation(.profile(collectionService
-                                                .navigationService
-                                                .profileService(account: account, relationship: relationship))))
-        case let .notification(notification, _):
-            if let status = notification.status {
-                send(event: .navigation(.collection(collectionService
-                                                        .navigationService
-                                                        .contextService(id: status.displayStatus.id))))
-            } else {
-                send(event: .navigation(.profile(collectionService
-                                                    .navigationService
-                                                    .profileService(account: notification.account))))
-            }
-        case let .conversation(conversation):
-            guard let status = conversation.lastStatus else { break }
-
-            (collectionService as? ConversationsService)?.markConversationAsRead(id: conversation.id)
-                .sink { _ in } receiveValue: { _ in }
-                .store(in: &cancellables)
-
-            send(event: .navigation(.collection(collectionService
-                                                    .navigationService
-                                                    .contextService(id: status.displayStatus.id))))
-        case let .tag(tag):
-            send(event: .navigation(.collection(collectionService
-                                                    .navigationService
-                                                    .timelineService(timeline: .tag(tag.name)))))
-        case let .moreResults(moreResults):
-            searchScopeChangesSubject.send(moreResults.scope)
-        }
-    }
-
-    public func viewedAtTop(indexPath: IndexPath) {
-        topVisibleIndexPath = indexPath
-
-        if lastUpdate.sections.count > indexPath.section,
-           lastUpdate.sections[indexPath.section].items.count > indexPath.item {
-            lastReadId.send(lastUpdate.sections[indexPath.section].items[indexPath.item].itemId)
-        }
-    }
-
-    public func canSelect(indexPath: IndexPath) -> Bool {
-        switch lastUpdate.sections[indexPath.section].items[indexPath.item] {
-        case let .status(_, configuration, _):
-            return !configuration.isContextParent
-        case .loadMore:
-            return !((viewModel(indexPath: indexPath) as? LoadMoreViewModel)?.loading ?? false)
-        default:
-            return true
-        }
-    }
 
     // swiftlint:disable:next function_body_length cyclomatic_complexity
     public func viewModel(indexPath: IndexPath) -> Any {
@@ -315,6 +205,116 @@ extension CollectionItemsViewModel: CollectionViewModel {
             viewModelCache[item] = viewModel
 
             return viewModel
+        }
+    }
+}
+
+extension CollectionItemsViewModel: CollectionViewModel {
+    public var title: AnyPublisher<String, Never> { collectionService.title }
+
+    public var titleLocalizationComponents: AnyPublisher<[String], Never> {
+        collectionService.titleLocalizationComponents
+    }
+
+    public var expandAll: AnyPublisher<ExpandAllState, Never> {
+        expandAllSubject.eraseToAnyPublisher()
+    }
+
+    public var alertItems: AnyPublisher<AlertItem, Never> { $alertItem.compactMap { $0 }.eraseToAnyPublisher() }
+
+    public var loading: AnyPublisher<Bool, Never> { loadingSubject.eraseToAnyPublisher() }
+
+    public var events: AnyPublisher<CollectionItemEvent, Never> {
+        eventsSubject.flatMap { [weak self] eventPublisher -> AnyPublisher<CollectionItemEvent, Never> in
+            guard let self = self else { return Empty().eraseToAnyPublisher() }
+
+            return eventPublisher.assignErrorsToAlertItem(to: \.alertItem, on: self).eraseToAnyPublisher()
+        }
+        .eraseToAnyPublisher()
+    }
+
+    public var searchScopeChanges: AnyPublisher<SearchScope, Never> { searchScopeChangesSubject.eraseToAnyPublisher() }
+
+    public var canRefresh: Bool { collectionService.canRefresh }
+
+    public var announcesNewItems: Bool { collectionService.announcesNewItems }
+
+    public func request(maxId: String? = nil, minId: String? = nil, search: Search?) {
+        collectionService.request(maxId: realMaxId(maxId: maxId), minId: minId, search: search)
+            .receive(on: DispatchQueue.main)
+            .assignErrorsToAlertItem(to: \.alertItem, on: self)
+            .handleEvents(
+                receiveSubscription: { [weak self] _ in self?.loadingSubject.send(true) },
+                receiveCompletion: { [weak self] _ in self?.loadingSubject.send(false) })
+            .sink { _ in }
+            .store(in: &cancellables)
+        collectionService.requestMarkerLastReadId()
+            .sink { _ in } receiveValue: { [weak self] in self?.markerLastReadId = $0 }
+            .store(in: &cancellables)
+
+    }
+
+    public func select(indexPath: IndexPath) {
+        let item = lastUpdate.sections[indexPath.section].items[indexPath.item]
+
+        switch item {
+        case let .status(status, _, _):
+            send(event: .navigation(.collection(collectionService
+                                                    .navigationService
+                                                    .contextService(id: status.displayStatus.id))))
+        case let .loadMore(loadMore):
+            lastSelectedLoadMore = loadMore
+            (viewModel(indexPath: indexPath) as? LoadMoreViewModel)?.loadMore()
+        case let .account(account, _, relationship):
+            send(event: .navigation(.profile(collectionService
+                                                .navigationService
+                                                .profileService(account: account, relationship: relationship))))
+        case let .notification(notification, _):
+            if let status = notification.status {
+                send(event: .navigation(.collection(collectionService
+                                                        .navigationService
+                                                        .contextService(id: status.displayStatus.id))))
+            } else {
+                send(event: .navigation(.profile(collectionService
+                                                    .navigationService
+                                                    .profileService(account: notification.account))))
+            }
+        case let .conversation(conversation):
+            guard let status = conversation.lastStatus else { break }
+
+            (collectionService as? ConversationsService)?.markConversationAsRead(id: conversation.id)
+                .sink { _ in } receiveValue: { _ in }
+                .store(in: &cancellables)
+
+            send(event: .navigation(.collection(collectionService
+                                                    .navigationService
+                                                    .contextService(id: status.displayStatus.id))))
+        case let .tag(tag):
+            send(event: .navigation(.collection(collectionService
+                                                    .navigationService
+                                                    .timelineService(timeline: .tag(tag.name)))))
+        case let .moreResults(moreResults):
+            searchScopeChangesSubject.send(moreResults.scope)
+        }
+    }
+
+    public func viewedAtTop(indexPath: IndexPath) {
+        topVisibleIndexPath = indexPath
+
+        if lastUpdate.sections.count > indexPath.section,
+           lastUpdate.sections[indexPath.section].items.count > indexPath.item {
+            lastReadId.send(lastUpdate.sections[indexPath.section].items[indexPath.item].itemId)
+        }
+    }
+
+    public func canSelect(indexPath: IndexPath) -> Bool {
+        switch lastUpdate.sections[indexPath.section].items[indexPath.item] {
+        case let .status(_, configuration, _):
+            return !configuration.isContextParent
+        case .loadMore:
+            return !((viewModel(indexPath: indexPath) as? LoadMoreViewModel)?.loading ?? false)
+        default:
+            return true
         }
     }
 

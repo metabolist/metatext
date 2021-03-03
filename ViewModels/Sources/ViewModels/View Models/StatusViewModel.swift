@@ -17,6 +17,8 @@ public final class StatusViewModel: AttachmentsRenderingViewModel, ObservableObj
     public let pollEmojis: [Emoji]
     @Published public var pollOptionSelections = Set<Int>()
     public var configuration = CollectionItem.StatusConfiguration.default
+    public var showReportSelectionToggle = false
+    public var selectedForReport = false
     public let identityContext: IdentityContext
 
     private let statusService: StatusService
@@ -349,7 +351,7 @@ public extension StatusViewModel {
             Just(.report(ReportViewModel(
                             accountService: statusService.navigationService.accountService(
                                 account: statusService.status.displayStatus.account),
-                            statusService: statusService,
+                            statusId: statusService.status.displayStatus.id,
                             identityContext: identityContext)))
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher())

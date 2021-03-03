@@ -265,11 +265,14 @@
 "report.target-%@" = "Report %@";
 "report.forward.hint" = "The account is from another server. Send an anonymized copy of the report there as well?";
 "report.forward-%@" = "Forward report to %@";
+"report.select-additional.hint.post" = "Select additional posts to report:";
+"report.select-additional.hint.toot" = "Select additional toots to report:";
 "search.scope.all" = "All";
 "search.scope.accounts" = "People";
 "search.scope.statuses.post" = "Posts";
 "search.scope.statuses.toot" = "Toots";
 "search.scope.tags" = "Hashtags";
+"selected" = "Selected";
 "send" = "Send";
 "share" = "Share";
 "share-extension-error.no-account-found" = "No account found";

@@ -179,6 +179,23 @@ class TableViewController: UITableViewController {
 
         sizeTableHeaderFooterViews()
     }
+
+    func configureRightBarButtonItem(expandAllState: ExpandAllState) {
+        switch expandAllState {
+        case .hidden:
+            navigationItem.rightBarButtonItem = nil
+        case .expand:
+            navigationItem.rightBarButtonItem = UIBarButtonItem(
+                title: NSLocalizedString("status.show-more-all-button.accessibilty-label", comment: ""),
+                image: UIImage(systemName: "eye"),
+                primaryAction: UIAction { [weak self] _ in self?.viewModel.toggleExpandAll() })
+        case .collapse:
+            navigationItem.rightBarButtonItem = UIBarButtonItem(
+                title: NSLocalizedString("status.show-less-all-button.accessibilty-label", comment: ""),
+                image: UIImage(systemName: "eye.slash"),
+                primaryAction: UIAction { [weak self] _ in self?.viewModel.toggleExpandAll() })
+        }
+    }
 }
 
 extension TableViewController {
@@ -373,7 +390,7 @@ private extension TableViewController {
             .store(in: &cancellables)
 
         viewModel.expandAll.receive(on: DispatchQueue.main)
-            .sink { [weak self] in self?.set(expandAllState: $0) }
+            .sink { [weak self] in self?.configureRightBarButtonItem(expandAllState: $0) }
             .store(in: &cancellables)
 
         viewModel.loading.receive(on: DispatchQueue.main).assign(to: &$loading)
@@ -739,23 +756,6 @@ private extension TableViewController {
 
     func accountListEdit(accountViewModel: AccountViewModel, edit: CollectionItemEvent.AccountListEdit) {
         viewModel.applyAccountListEdit(viewModel: accountViewModel, edit: edit)
-    }
-
-    func set(expandAllState: ExpandAllState) {
-        switch expandAllState {
-        case .hidden:
-            navigationItem.rightBarButtonItem = nil
-        case .expand:
-            navigationItem.rightBarButtonItem = UIBarButtonItem(
-                title: NSLocalizedString("status.show-more-all-button.accessibilty-label", comment: ""),
-                image: UIImage(systemName: "eye"),
-                primaryAction: UIAction { [weak self] _ in self?.viewModel.toggleExpandAll() })
-        case .collapse:
-            navigationItem.rightBarButtonItem = UIBarButtonItem(
-                title: NSLocalizedString("status.show-less-all-button.accessibilty-label", comment: ""),
-                image: UIImage(systemName: "eye.slash"),
-                primaryAction: UIAction { [weak self] _ in self?.viewModel.toggleExpandAll() })
-        }
     }
 
     func share(url: URL) {

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		D0030982250C6C8500EACB32 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0030981250C6C8500EACB32 /* URL+Extensions.swift */; };
+		D005A1D825EF189A008B2E63 /* ReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D005A1D725EF189A008B2E63 /* ReportViewController.swift */; };
+		D005A1E625EF3D11008B2E63 /* ReportHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D005A1E525EF3D11008B2E63 /* ReportHeaderView.swift */; };
 		D00702292555E51200F38136 /* ConversationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00702282555E51200F38136 /* ConversationTableViewCell.swift */; };
 		D00702312555F4AE00F38136 /* ConversationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00702302555F4AE00F38136 /* ConversationView.swift */; };
 		D00702362555F4C500F38136 /* ConversationContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00702352555F4C500F38136 /* ConversationContentConfiguration.swift */; };
@@ -132,7 +134,6 @@
 		D09D971825C64682007E6394 /* InstanceCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09D971725C64682007E6394 /* InstanceCollectionViewCell.swift */; };
 		D09D972225C65682007E6394 /* SeparatorConfiguredCollectionViewListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09D972125C65682007E6394 /* SeparatorConfiguredCollectionViewListCell.swift */; };
 		D0A1F4F7252E7D4B004435BF /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A1F4F6252E7D4B004435BF /* TableViewDataSource.swift */; };
-		D0A7AC7325748BFF00E4E8AB /* ReportStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A7AC7225748BFF00E4E8AB /* ReportStatusView.swift */; };
 		D0B325EB25E88ADC00C24BEA /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D0C7D45724F76169001EBDBB /* Localizable.strings */; };
 		D0B32F50250B373600311912 /* RegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B32F4F250B373600311912 /* RegistrationView.swift */; };
 		D0B5FE9B251583DB00478838 /* ProfileCollection+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B5FE9A251583DB00478838 /* ProfileCollection+Extensions.swift */; };
@@ -187,7 +188,6 @@
 		D0D93ED025D9C9ED00C622ED /* AutocompleteItemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D93ECF25D9C9ED00C622ED /* AutocompleteItemCollectionViewCell.swift */; };
 		D0D93ED925D9CBE200C622ED /* AutocompleteItemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D93ECF25D9C9ED00C622ED /* AutocompleteItemCollectionViewCell.swift */; };
 		D0D93EDE25DA014700C622ED /* SeparatorConfiguredCollectionViewListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09D972125C65682007E6394 /* SeparatorConfiguredCollectionViewListCell.swift */; };
-		D0DD50CB256B1F24004A04F7 /* ReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DD50CA256B1F24004A04F7 /* ReportView.swift */; };
 		D0DDA76B25C5F20800FA0F91 /* ExploreDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DDA76A25C5F20800FA0F91 /* ExploreDataSource.swift */; };
 		D0DDA77525C5F73F00FA0F91 /* TagCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DDA77425C5F73F00FA0F91 /* TagCollectionViewCell.swift */; };
 		D0DDA77F25C6058300FA0F91 /* ExploreSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DDA77E25C6058300FA0F91 /* ExploreSectionHeaderView.swift */; };
@@ -260,6 +260,8 @@
 
 /* Begin PBXFileReference section */
 		D0030981250C6C8500EACB32 /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
+		D005A1D725EF189A008B2E63 /* ReportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportViewController.swift; sourceTree = "<group>"; };
+		D005A1E525EF3D11008B2E63 /* ReportHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportHeaderView.swift; sourceTree = "<group>"; };
 		D00702282555E51200F38136 /* ConversationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationTableViewCell.swift; sourceTree = "<group>"; };
 		D00702302555F4AE00F38136 /* ConversationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationView.swift; sourceTree = "<group>"; };
 		D00702352555F4C500F38136 /* ConversationContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationContentConfiguration.swift; sourceTree = "<group>"; };
@@ -353,7 +355,6 @@
 		D09D971725C64682007E6394 /* InstanceCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstanceCollectionViewCell.swift; sourceTree = "<group>"; };
 		D09D972125C65682007E6394 /* SeparatorConfiguredCollectionViewListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorConfiguredCollectionViewListCell.swift; sourceTree = "<group>"; };
 		D0A1F4F6252E7D4B004435BF /* TableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewDataSource.swift; sourceTree = "<group>"; };
-		D0A7AC7225748BFF00E4E8AB /* ReportStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportStatusView.swift; sourceTree = "<group>"; };
 		D0B32F4F250B373600311912 /* RegistrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationView.swift; sourceTree = "<group>"; };
 		D0B5FE9A251583DB00478838 /* ProfileCollection+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileCollection+Extensions.swift"; sourceTree = "<group>"; };
 		D0B8510B25259E56004E0744 /* LoadMoreTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreTableViewCell.swift; sourceTree = "<group>"; };
@@ -403,7 +404,6 @@
 		D0D93EB925D9C70400C622ED /* AutocompleteItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompleteItemView.swift; sourceTree = "<group>"; };
 		D0D93EBF25D9C71D00C622ED /* AutocompleteItemContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompleteItemContentConfiguration.swift; sourceTree = "<group>"; };
 		D0D93ECF25D9C9ED00C622ED /* AutocompleteItemCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompleteItemCollectionViewCell.swift; sourceTree = "<group>"; };
-		D0DD50CA256B1F24004A04F7 /* ReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportView.swift; sourceTree = "<group>"; };
 		D0DDA76A25C5F20800FA0F91 /* ExploreDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreDataSource.swift; sourceTree = "<group>"; };
 		D0DDA77425C5F73F00FA0F91 /* TagCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagCollectionViewCell.swift; sourceTree = "<group>"; };
 		D0DDA77E25C6058300FA0F91 /* ExploreSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreSectionHeaderView.swift; sourceTree = "<group>"; };
@@ -509,6 +509,7 @@
 				D08B8D812544D80000B1EBEF /* PollOptionButton.swift */,
 				D08B8D8C2544E6EC00B1EBEF /* PollResultView.swift */,
 				D08B8D71254246E200B1EBEF /* PollView.swift */,
+				D005A1E525EF3D11008B2E63 /* ReportHeaderView.swift */,
 				D08DFAF625CE20EA0005DA98 /* ScrollableToTop.swift */,
 				D035F8C625B96A4000DC75ED /* SecondaryNavigationButton.swift */,
 				D03D87F325C23C44004DCBB2 /* SecondaryNavigationTitleView.swift */,
@@ -535,7 +536,6 @@
 				D0C7D42D24F76169001EBDBB /* NotificationTypesPreferencesView.swift */,
 				D0C7D42624F76169001EBDBB /* PreferencesView.swift */,
 				D0B32F4F250B373600311912 /* RegistrationView.swift */,
-				D0DD50CA256B1F24004A04F7 /* ReportView.swift */,
 				D0C7D42724F76169001EBDBB /* RootView.swift */,
 				D0C7D42924F76169001EBDBB /* SecondaryNavigationView.swift */,
 				D021A66925C3E19D008A0C0D /* View Controller Representables */,
@@ -621,7 +621,6 @@
 		D021A67225C3E2C8008A0C0D /* View Repesentables */ = {
 			isa = PBXGroup;
 			children = (
-				D0A7AC7225748BFF00E4E8AB /* ReportStatusView.swift */,
 			);
 			path = "View Repesentables";
 			sourceTree = "<group>";
@@ -758,6 +757,7 @@
 				D0FCC104259C4E61000B67DF /* NewStatusViewController.swift */,
 				D097F4C025BFA04C00859F2C /* NotificationsViewController.swift */,
 				D06BC5E525202AD90079541D /* ProfileViewController.swift */,
+				D005A1D725EF189A008B2E63 /* ReportViewController.swift */,
 				D0F0B12D251A97E400942152 /* TableViewController.swift */,
 				D035F87C25B7F61600DC75ED /* TimelinesViewController.swift */,
 			);
@@ -1063,7 +1063,6 @@
 				D08B8D622540DE3B00B1EBEF /* ZoomTransitionController.swift in Sources */,
 				D0F0B12E251A97E400942152 /* TableViewController.swift in Sources */,
 				D0477F2C25C6EBAD005C5368 /* OpenInDefaultBrowserActivity.swift in Sources */,
-				D0DD50CB256B1F24004A04F7 /* ReportView.swift in Sources */,
 				D07F4D9825D493E300F61133 /* MuteView.swift in Sources */,
 				D02D338D25EDA593000A35CC /* CopyableLabel.swift in Sources */,
 				D097F41B25BE3E1A00859F2C /* SearchScope+Extensions.swift in Sources */,
@@ -1075,6 +1074,7 @@
 				D0CEC11025E3462B00FEF5A6 /* AnimatedAttachmentLabel.swift in Sources */,
 				D05E688525B55AE8001FB2C6 /* AVURLAsset+Extensions.swift in Sources */,
 				D0D93EC025D9C71D00C622ED /* AutocompleteItemContentConfiguration.swift in Sources */,
+				D005A1E625EF3D11008B2E63 /* ReportHeaderView.swift in Sources */,
 				D09D970E25C64539007E6394 /* InstanceContentConfiguration.swift in Sources */,
 				D036AA02254B6101009094DF /* NotificationTableViewCell.swift in Sources */,
 				D08B8D42253F92B600B1EBEF /* ImagePageViewController.swift in Sources */,
@@ -1094,6 +1094,7 @@
 				D021A61A25C36C1A008A0C0D /* IdentityContentConfiguration.swift in Sources */,
 				D0C7D49E24F7616A001EBDBB /* SecondaryNavigationView.swift in Sources */,
 				D08B8D602540DE3B00B1EBEF /* ZoomAnimator.swift in Sources */,
+				D005A1D825EF189A008B2E63 /* ReportViewController.swift in Sources */,
 				D08B8D672540DEB200B1EBEF /* ZoomAnimatableView.swift in Sources */,
 				D0CEC0F725E3303200FEF5A6 /* AnimatingLayoutManager.swift in Sources */,
 				D08B8D822544D80000B1EBEF /* PollOptionButton.swift in Sources */,
@@ -1163,7 +1164,6 @@
 				D0FCC105259C4E61000B67DF /* NewStatusViewController.swift in Sources */,
 				D087671625BAA8C0001FDD43 /* ExploreViewController.swift in Sources */,
 				D0D2AC6725BD0484003D5DF2 /* LineChartView.swift in Sources */,
-				D0A7AC7325748BFF00E4E8AB /* ReportStatusView.swift in Sources */,
 				D0C7D4C324F7616A001EBDBB /* MetatextApp.swift in Sources */,
 				D097F4C125BFA04C00859F2C /* NotificationsViewController.swift in Sources */,
 				D02D33EF25EE04CC000A35CC /* AddRemoveFromListsView.swift in Sources */,

@@ -29,6 +29,7 @@ final class StatusView: UIView {
     let shareButton = UIButton()
     let menuButton = UIButton()
     let buttonsStackView = UIStackView()
+    let reportSelectionSwitch = UISwitch()
 
     private let containerStackView = UIStackView()
     private let sideStackView = UIStackView()
@@ -64,7 +65,7 @@ final class StatusView: UIView {
     }
 
     override func accessibilityActivate() -> Bool {
-        if !statusConfiguration.viewModel.shouldShowContent {
+        if reportSelectionSwitch.isHidden, !statusConfiguration.viewModel.shouldShowContent {
             statusConfiguration.viewModel.toggleShowContent()
             accessibilityAttributedLabel = accessibilityAttributedLabel(forceShowContent: true)
 
@@ -102,6 +103,10 @@ extension StatusView {
             + .compactSpacing
 
         return height
+    }
+
+    func refreshAccessibilityLabel() {
+        accessibilityAttributedLabel = accessibilityAttributedLabel(forceShowContent: false)
     }
 }
 
@@ -377,6 +382,11 @@ private extension StatusView {
             view.widthAnchor.constraint(equalToConstant: .hairline).isActive = true
         }
 
+        containerStackView.addArrangedSubview(reportSelectionSwitch)
+        reportSelectionSwitch.setContentCompressionResistancePriority(.required, for: .horizontal)
+        reportSelectionSwitch.setContentHuggingPriority(.required, for: .horizontal)
+        reportSelectionSwitch.isHidden = true
+
         NSLayoutConstraint.activate([
             containerStackView.topAnchor.constraint(equalTo: readableContentGuide.topAnchor),
             containerStackView.leadingAnchor.constraint(equalTo: readableContentGuide.leadingAnchor),
@@ -583,6 +593,8 @@ private extension StatusView {
 
         menuButton.isEnabled = isAuthenticated
 
+        reportSelectionSwitch.isOn = viewModel.selectedForReport
+
         isAccessibilityElement = !viewModel.configuration.isContextParent
 
         accessibilityAttributedLabel = accessibilityAttributedLabel(forceShowContent: false)
@@ -720,6 +732,10 @@ private extension StatusView {
 
     func accessibilityAttributedLabel(forceShowContent: Bool) -> NSAttributedString {
         let accessibilityAttributedLabel = NSMutableAttributedString(string: "")
+
+        if !reportSelectionSwitch.isHidden, reportSelectionSwitch.isOn {
+            accessibilityAttributedLabel.appendWithSeparator(NSLocalizedString("selected", comment: ""))
+        }
 
         if !infoLabel.isHidden, let infoText = infoLabel.attributedText {
             accessibilityAttributedLabel.appendWithSeparator(infoText)
@@ -888,7 +904,7 @@ private extension StatusView {
 
     // swiftlint:disable:next function_body_length cyclomatic_complexity
     func accessibilityCustomActions(viewModel: StatusViewModel) -> [UIAccessibilityCustomAction] {
-        guard !viewModel.configuration.isContextParent else {
+        guard !viewModel.configuration.isContextParent, reportSelectionSwitch.isHidden else {
             return []
         }
 
