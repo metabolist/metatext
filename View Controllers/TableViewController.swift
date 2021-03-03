@@ -3,7 +3,6 @@
 import AVKit
 import Combine
 import Mastodon
-import SafariServices
 import SDWebImage
 import SwiftUI
 import ViewModels
@@ -257,7 +256,9 @@ extension TableViewController {
             }
         }
     }
+}
 
+extension TableViewController: NavigationHandling {
     func handle(navigation: Navigation) {
         switch navigation {
         case let .collection(collectionService):
@@ -273,6 +274,8 @@ extension TableViewController {
             } else {
                 show(vc, sender: self)
             }
+
+            webfingerIndicatorView.stopAnimating()
         case let .profile(profileService):
             let vc = ProfileViewController(
                 viewModel: ProfileViewModel(
@@ -287,10 +290,13 @@ extension TableViewController {
             } else {
                 show(vc, sender: self)
             }
+
+            webfingerIndicatorView.stopAnimating()
         case let .notification(notificationService):
             navigate(toNotification: notificationService.notification)
         case let .url(url):
-            open(url: url)
+            open(url: url, identityContext: viewModel.identityContext)
+            webfingerIndicatorView.stopAnimating()
         case .searchScope:
             break
         case .webfingerStart:
@@ -560,26 +566,6 @@ private extension TableViewController {
         tableView.scrollToRow(at: indexPath, at: .none, animated: !UIAccessibility.isReduceMotionEnabled)
 
         viewModel.select(indexPath: indexPath)
-    }
-
-    func open(url: URL) {
-        func openWithRegardToBrowserSetting(url: URL) {
-            if viewModel.identityContext.appPreferences.openLinksInDefaultBrowser || !url.isHTTPURL {
-                UIApplication.shared.open(url)
-            } else {
-                present(SFSafariViewController(url: url), animated: true)
-            }
-        }
-
-        if viewModel.identityContext.appPreferences.useUniversalLinks {
-            UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { success in
-                if !success {
-                    openWithRegardToBrowserSetting(url: url)
-                }
-            }
-        } else {
-            openWithRegardToBrowserSetting(url: url)
-        }
     }
 
     func present(attachmentViewModel: AttachmentViewModel, statusViewModel: StatusViewModel) {

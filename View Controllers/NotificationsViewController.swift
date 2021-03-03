@@ -71,7 +71,7 @@ final class NotificationsViewController: UIPageViewController {
     }
 }
 
-extension NotificationsViewController {
+extension NotificationsViewController: NavigationHandling {
     func handle(navigation: Navigation) {
         switch navigation {
         case .notification:
@@ -81,7 +81,7 @@ extension NotificationsViewController {
             setViewControllers([firstViewController], direction: .reverse, animated: false)
             firstViewController.handle(navigation: navigation)
         default:
-            break
+            (viewControllers?.first as? TableViewController)?.handle(navigation: navigation)
         }
     }
 }

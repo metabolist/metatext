@@ -70,7 +70,7 @@ struct SecondaryNavigationView: View {
                     Label("secondary-navigation.preferences", systemImage: "gear")
                 }
                 NavigationLink(
-                    destination: AboutView()
+                    destination: AboutView(viewModel: viewModel)
                         .environmentObject(rootViewModel)) {
                     Label("secondary-navigation.about", systemImage: "info.circle")
                 }

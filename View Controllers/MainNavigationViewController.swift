@@ -50,6 +50,7 @@ final class MainNavigationViewController: UITabBarController {
             .store(in: &cancellables)
 
         viewModel.navigations
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.handle(navigation: $0) }
             .store(in: &cancellables)
 
@@ -75,6 +76,30 @@ extension MainNavigationViewController: UITabBarControllerDelegate {
         }
 
         return true
+    }
+}
+
+extension MainNavigationViewController: NavigationHandling {
+    func handle(navigation: Navigation) {
+        switch navigation {
+        case .notification:
+            let index = NavigationViewModel.Tab.notifications.rawValue
+
+            guard let viewControllers = viewControllers,
+                  viewControllers.count > index,
+                let notificationsNavigationController = viewControllers[index] as? UINavigationController,
+                let notificationsViewController =
+                    notificationsNavigationController.viewControllers.first as? NotificationsViewController
+            else { break }
+
+            selectedIndex = index
+            notificationsNavigationController.popToRootViewController(animated: false)
+            notificationsViewController.handle(navigation: navigation)
+        default:
+            ((selectedViewController as? UINavigationController)?
+                .topViewController as? NavigationHandling)?
+                .handle(navigation: navigation)
+        }
     }
 }
 
@@ -209,44 +234,6 @@ private extension MainNavigationViewController {
     func dismissNewStatus() {
         if presentedViewController?.view.tag == Self.newStatusViewTag {
             dismiss(animated: true)
-        }
-    }
-
-    func handle(navigation: Navigation) {
-        switch navigation {
-        case let .collection(collectionService):
-            let vc = TableViewController(
-                viewModel: CollectionItemsViewModel(
-                    collectionService: collectionService,
-                    identityContext: viewModel.identityContext),
-                rootViewModel: rootViewModel)
-
-            selectedViewController?.show(vc, sender: self)
-        case let .profile(profileService):
-            let vc = ProfileViewController(
-                viewModel: ProfileViewModel(
-                    profileService: profileService,
-                    identityContext: viewModel.identityContext),
-                rootViewModel: rootViewModel,
-                identityContext: viewModel.identityContext,
-                parentNavigationController: nil)
-
-            selectedViewController?.show(vc, sender: self)
-        case .notification:
-            let index = NavigationViewModel.Tab.notifications.rawValue
-
-            guard let viewControllers = viewControllers,
-                  viewControllers.count > index,
-                let notificationsNavigationController = viewControllers[index] as? UINavigationController,
-                let notificationsViewController =
-                    notificationsNavigationController.viewControllers.first as? NotificationsViewController
-            else { break }
-
-            selectedIndex = index
-            notificationsNavigationController.popToRootViewController(animated: false)
-            notificationsViewController.handle(navigation: navigation)
-        default:
-            break
         }
     }
 }

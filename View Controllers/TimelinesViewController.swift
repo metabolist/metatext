@@ -113,3 +113,9 @@ extension TimelinesViewController: ScrollableToTop {
         (viewControllers?.first as? TableViewController)?.scrollToTop(animated: animated)
     }
 }
+
+extension TimelinesViewController: NavigationHandling {
+    func handle(navigation: Navigation) {
+        (viewControllers?.first as? TableViewController)?.handle(navigation: navigation)
+    }
+}

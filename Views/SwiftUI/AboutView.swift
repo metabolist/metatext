@@ -1,8 +1,11 @@
 // Copyright © 2021 Metabolist. All rights reserved.
 
 import SwiftUI
+import ViewModels
 
 struct AboutView: View {
+    @StateObject var viewModel: NavigationViewModel
+
     var body: some View {
         Form {
             Section {
@@ -14,6 +17,24 @@ struct AboutView: View {
                 .padding()
             }
             .frame(maxWidth: .infinity, alignment: .center)
+            Section(header: Text("about.made-by-metabolist")) {
+                Button {
+                    viewModel.navigateToOfficialAccount()
+                } label: {
+                    Label {
+                        Text("about.official-account").foregroundColor(.primary)
+                    } icon: {
+                        Image(systemName: "checkmark.seal")
+                    }
+                }
+                Link(destination: Self.websiteURL) {
+                    Label {
+                        Text("about.website").foregroundColor(.primary)
+                    } icon: {
+                        Image(systemName: "link")
+                    }
+                }
+            }
             Section {
                 NavigationLink(
                     destination: AcknowledgmentsView()) {
@@ -26,6 +47,7 @@ struct AboutView: View {
 }
 
 private extension AboutView {
+    static let websiteURL = URL(string: "https://metabolist.org")!
     static var version: String {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
     }
@@ -40,7 +62,7 @@ import PreviewViewModels
 
 struct AboutView_Previews: PreviewProvider {
     static var previews: some View {
-        AboutView()
+        AboutView(viewModel: NavigationViewModel(identityContext: .preview))
     }
 }
 #endif

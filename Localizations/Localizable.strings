@@ -2,6 +2,9 @@
 
 "about" = "About";
 "about.acknowledgments" = "Acknowledgments";
+"about.made-by-metabolist" = "Made by Metabolist";
+"about.official-account" = "Official Account";
+"about.website" = "Website";
 "accessibility.activate-link-%@" = "Activate link: %@";
 "accessibility.copy-text" = "Copy text";
 "account.%@-followers" = "%@'s Followers";

@@ -1,5 +1,6 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
+import SafariServices
 import UIKit
 import ViewModels
 
@@ -16,4 +17,26 @@ extension UIViewController {
 
         present(alertController, animated: true)
     }
+
+    #if !IS_SHARE_EXTENSION
+    func open(url: URL, identityContext: IdentityContext) {
+        func openWithRegardToBrowserSetting(url: URL) {
+            if identityContext.appPreferences.openLinksInDefaultBrowser || !url.isHTTPURL {
+                UIApplication.shared.open(url)
+            } else {
+                present(SFSafariViewController(url: url), animated: true)
+            }
+        }
+
+        if identityContext.appPreferences.useUniversalLinks {
+            UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { success in
+                if !success {
+                    openWithRegardToBrowserSetting(url: url)
+                }
+            }
+        } else {
+            openWithRegardToBrowserSetting(url: url)
+        }
+    }
+    #endif
 }

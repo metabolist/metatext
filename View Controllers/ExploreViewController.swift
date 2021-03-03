@@ -5,6 +5,7 @@ import UIKit
 import ViewModels
 
 final class ExploreViewController: UICollectionViewController {
+    private let webfingerIndicatorView = WebfingerIndicatorView()
     private let viewModel: ExploreViewModel
     private let rootViewModel: RootViewModel
     private var cancellables = Set<AnyCancellable>()
@@ -30,6 +31,7 @@ final class ExploreViewController: UICollectionViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // swiftlint:disable:next function_body_length
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -60,12 +62,20 @@ final class ExploreViewController: UICollectionViewController {
         searchController.searchBar.keyboardType = .twitter
         navigationItem.searchController = searchController
 
+        view.addSubview(webfingerIndicatorView)
+        webfingerIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+
         viewModel.identityContext.$appPreferences.sink { appPreferences in
             searchController.searchBar.scopeButtonTitles = SearchScope.allCases.map {
                 $0.title(statusWord: appPreferences.statusWord)
             }
         }
         .store(in: &cancellables)
+
+        NSLayoutConstraint.activate([
+            webfingerIndicatorView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            webfingerIndicatorView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor)
+        ])
 
         viewModel.events.sink { [weak self] in self?.handle(event: $0) }.store(in: &cancellables)
 
@@ -126,6 +136,43 @@ extension ExploreViewController: ScrollableToTop {
     }
 }
 
+extension ExploreViewController: NavigationHandling {
+    func handle(navigation: Navigation) {
+        switch navigation {
+        case let .collection(collectionService):
+            let vc = TableViewController(
+                viewModel: CollectionItemsViewModel(
+                    collectionService: collectionService,
+                    identityContext: viewModel.identityContext),
+                rootViewModel: rootViewModel,
+                parentNavigationController: nil)
+
+            show(vc, sender: self)
+            webfingerIndicatorView.stopAnimating()
+        case let .profile(profileService):
+            let vc = ProfileViewController(
+                viewModel: ProfileViewModel(
+                    profileService: profileService,
+                    identityContext: viewModel.identityContext),
+                rootViewModel: rootViewModel,
+                identityContext: viewModel.identityContext,
+                parentNavigationController: nil)
+
+            show(vc, sender: self)
+            webfingerIndicatorView.stopAnimating()
+        case let .url(url):
+            open(url: url, identityContext: viewModel.identityContext)
+            webfingerIndicatorView.stopAnimating()
+        case .webfingerStart:
+            webfingerIndicatorView.startAnimating()
+        case .webfingerEnd:
+            webfingerIndicatorView.stopAnimating()
+        default:
+            break
+        }
+    }
+}
+
 private extension ExploreViewController {
     static let bottomInset: CGFloat = .newStatusButtonDimension + .defaultSpacing * 4
 
@@ -150,22 +197,6 @@ private extension ExploreViewController {
         switch event {
         case let .navigation(navigation):
             handle(navigation: navigation)
-        }
-    }
-
-    func handle(navigation: Navigation) {
-        switch navigation {
-        case let .collection(collectionService):
-            let vc = TableViewController(
-                viewModel: CollectionItemsViewModel(
-                    collectionService: collectionService,
-                    identityContext: viewModel.identityContext),
-                rootViewModel: rootViewModel,
-                parentNavigationController: nil)
-
-                show(vc, sender: self)
-        default:
-            break
         }
     }
 }
