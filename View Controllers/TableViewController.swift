@@ -203,6 +203,13 @@ extension TableViewController {
         present(navigationController, animated: true)
     }
 
+    func addRemoveFromLists(accountViewModel: AccountViewModel) {
+        let addRemoveFromListsView = AddRemoveFromListsView(viewModel: .init(accountViewModel: accountViewModel))
+        let addRemoveFromListsController = UIHostingController(rootView: addRemoveFromListsView)
+
+        show(addRemoveFromListsController, sender: self)
+    }
+
     func sizeTableHeaderFooterViews() {
         // https://useyourloaf.com/blog/variable-height-table-view-header/
         if let headerView = tableView.tableHeaderView {

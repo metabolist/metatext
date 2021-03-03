@@ -6,6 +6,8 @@ import Mastodon
 
 public enum EmptyEndpoint {
     case oauthRevoke(token: String, clientId: String, clientSecret: String)
+    case addAccountsToList(id: List.Id, accountIds: Set<Account.Id>)
+    case removeAccountsFromList(id: List.Id, accountIds: Set<Account.Id>)
     case deleteList(id: List.Id)
     case deleteFilter(id: Filter.Id)
     case blockDomain(String)
@@ -19,7 +21,7 @@ extension EmptyEndpoint: Endpoint {
         switch self {
         case .oauthRevoke:
             return ["oauth"]
-        case .deleteList:
+        case .addAccountsToList, .removeAccountsFromList, .deleteList:
             return defaultContext + ["lists"]
         case .deleteFilter:
             return defaultContext + ["filters"]
@@ -32,6 +34,8 @@ extension EmptyEndpoint: Endpoint {
         switch self {
         case .oauthRevoke:
             return ["revoke"]
+        case let .addAccountsToList(id, _), let .removeAccountsFromList(id, _):
+            return [id, "accounts"]
         case let .deleteList(id), let .deleteFilter(id):
             return [id]
         case .blockDomain, .unblockDomain:
@@ -41,9 +45,9 @@ extension EmptyEndpoint: Endpoint {
 
     public var method: HTTPMethod {
         switch self {
-        case .oauthRevoke, .blockDomain:
+        case .addAccountsToList, .oauthRevoke, .blockDomain:
             return .post
-        case .deleteList, .deleteFilter, .unblockDomain:
+        case .removeAccountsFromList, .deleteList, .deleteFilter, .unblockDomain:
             return .delete
         }
     }
@@ -52,6 +56,8 @@ extension EmptyEndpoint: Endpoint {
         switch self {
         case let .oauthRevoke(token, clientId, clientSecret):
             return ["token": token, "client_id": clientId, "client_secret": clientSecret]
+        case let .addAccountsToList(_, accountIds), let .removeAccountsFromList(_, accountIds):
+            return ["account_ids": Array(accountIds)]
         case let .blockDomain(domain), let .unblockDomain(domain):
             return ["domain": domain]
         case .deleteList, .deleteFilter:

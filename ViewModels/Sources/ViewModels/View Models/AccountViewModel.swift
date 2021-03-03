@@ -103,6 +103,18 @@ public extension AccountViewModel {
         MuteViewModel(accountService: accountService, identityContext: identityContext)
     }
 
+    func lists() -> AnyPublisher<[List], Error> {
+        accountService.lists()
+    }
+
+    func addToList(id: List.Id) -> AnyPublisher<Never, Error> {
+        accountService.addToList(id: id)
+    }
+
+    func removeFromList(id: List.Id) -> AnyPublisher<Never, Error> {
+        accountService.removeFromList(id: id)
+    }
+
     func follow() {
         ignorableOutputEvent(accountService.follow())
     }

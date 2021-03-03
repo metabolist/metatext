@@ -6,6 +6,7 @@
 "accessibility.copy-text" = "Copy text";
 "account.%@-followers" = "%@'s Followers";
 "account.accept-follow-request-button.accessibility-label" = "Accept follow request";
+"account.add-remove-lists" = "Add/remove from lists";
 "account.avatar.accessibility-label-%@" = "Avatar: %@";
 "account.block" = "Block";
 "account.block-and-report" = "Block & report";

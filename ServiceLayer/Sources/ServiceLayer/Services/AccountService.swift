@@ -32,6 +32,22 @@ public extension AccountService {
 
     var domain: String? { URL(string: account.url)?.host }
 
+    func lists() -> AnyPublisher<[List], Error> {
+        mastodonAPIClient.request(ListsEndpoint.listsWithAccount(id: account.id))
+    }
+
+    func addToList(id: List.Id) -> AnyPublisher<Never, Error> {
+        mastodonAPIClient.request(EmptyEndpoint.addAccountsToList(id: id, accountIds: [account.id]))
+            .ignoreOutput()
+            .eraseToAnyPublisher()
+    }
+
+    func removeFromList(id: List.Id) -> AnyPublisher<Never, Error> {
+        mastodonAPIClient.request(EmptyEndpoint.removeAccountsFromList(id: id, accountIds: [account.id]))
+            .ignoreOutput()
+            .eraseToAnyPublisher()
+    }
+
     func follow() -> AnyPublisher<Never, Error> {
         relationshipAction(.accountsFollow(id: account.id))
     }

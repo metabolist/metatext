@@ -41,6 +41,7 @@
 		D025B16A25C4EB18001C69A8 /* ServiceLayer in Frameworks */ = {isa = PBXBuildFile; productRef = D025B16925C4EB18001C69A8 /* ServiceLayer */; };
 		D025B17E25C500BC001C69A8 /* CapsuleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D025B17D25C500BC001C69A8 /* CapsuleButton.swift */; };
 		D02D338D25EDA593000A35CC /* CopyableLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02D338C25EDA593000A35CC /* CopyableLabel.swift */; };
+		D02D33EF25EE04CC000A35CC /* AddRemoveFromListsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02D33EE25EE04CC000A35CC /* AddRemoveFromListsView.swift */; };
 		D02E1F95250B13210071AD56 /* SafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02E1F94250B13210071AD56 /* SafariView.swift */; };
 		D035D8F925E4338D00E597C9 /* ImageDiskCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = D035D8F825E4338D00E597C9 /* ImageDiskCache.swift */; };
 		D035D8FE25E4339800E597C9 /* ImageDiskCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = D035D8F825E4338D00E597C9 /* ImageDiskCache.swift */; };
@@ -279,6 +280,7 @@
 		D025B14C25C4E482001C69A8 /* ImageCacheConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheConfiguration.swift; sourceTree = "<group>"; };
 		D025B17D25C500BC001C69A8 /* CapsuleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleButton.swift; sourceTree = "<group>"; };
 		D02D338C25EDA593000A35CC /* CopyableLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyableLabel.swift; sourceTree = "<group>"; };
+		D02D33EE25EE04CC000A35CC /* AddRemoveFromListsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddRemoveFromListsView.swift; sourceTree = "<group>"; };
 		D02E1F94250B13210071AD56 /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariView.swift; sourceTree = "<group>"; };
 		D035D8F825E4338D00E597C9 /* ImageDiskCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDiskCache.swift; sourceTree = "<group>"; };
 		D035F86825B7F2ED00DC75ED /* MainNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationViewController.swift; sourceTree = "<group>"; };
@@ -523,6 +525,7 @@
 			children = (
 				D021A62B25C38570008A0C0D /* AboutView.swift */,
 				D021A63525C38ADB008A0C0D /* AcknowledgmentsView.swift */,
+				D02D33EE25EE04CC000A35CC /* AddRemoveFromListsView.swift */,
 				D08E52602579D2E100FA2C5F /* DomainBlocksView.swift */,
 				D0BEB21024FA2A90001B0F04 /* EditFilterView.swift */,
 				D0BEB20424FA1107001B0F04 /* FiltersView.swift */,
@@ -1163,6 +1166,7 @@
 				D0A7AC7325748BFF00E4E8AB /* ReportStatusView.swift in Sources */,
 				D0C7D4C324F7616A001EBDBB /* MetatextApp.swift in Sources */,
 				D097F4C125BFA04C00859F2C /* NotificationsViewController.swift in Sources */,
+				D02D33EF25EE04CC000A35CC /* AddRemoveFromListsView.swift in Sources */,
 				D0E1F583251F13EC00D45315 /* WebfingerIndicatorView.swift in Sources */,
 				D0CEC0E125E0BB9700FEF5A6 /* NewItemsView.swift in Sources */,
 				D0BEB20524FA1107001B0F04 /* FiltersView.swift in Sources */,
