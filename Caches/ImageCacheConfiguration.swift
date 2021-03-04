@@ -17,6 +17,14 @@ extension ImageCacheConfiguration {
         SDImageCache.defaultDiskCacheDirectory = Self.imageCacheDirectoryURL?.path
         ImageDiskCache.service = try ImageSerializationService(environment: environment)
         SDImageCacheConfig.default.diskCacheClass = ImageDiskCache.self
+        SDWebImageManager.shared.optionsProcessor = SDWebImageOptionsProcessor { _, options, context in
+            var mutableOptions = options
+
+            mutableOptions.insert(.retryFailed)
+            mutableOptions.insert(.continueInBackground)
+
+            return SDWebImageOptionsResult(options: options, context: context)
+        }
 
         if let legacyImageCacheDirectoryURL = Self.legacyImageCacheDirectoryURL,
            FileManager.default.fileExists(atPath: legacyImageCacheDirectoryURL.path) {
