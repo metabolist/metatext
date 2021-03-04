@@ -66,29 +66,51 @@ struct PreferencesView: View {
                             && viewModel.identityContext.identity.authenticated)
             }
             Section(header: Text("preferences.app")) {
-                NavigationLink("preferences.notifications",
-                               destination: NotificationPreferencesView(viewModel: viewModel))
-                Picker("preferences.status-word",
-                       selection: $identityContext.appPreferences.statusWord) {
-                    ForEach(AppPreferences.StatusWord.allCases) { option in
-                        Text(option.localizedStringKey).tag(option)
+                Group {
+                    if UIApplication.shared.supportsAlternateIcons {
+                        NavigationLink(destination: AppIconPreferencesView(viewModel: viewModel)) {
+                            HStack {
+                                Text("preferences.app-icon")
+                                Spacer()
+                                if let appIcon = AppIcon.current {
+                                    if let image = appIcon.image {
+                                        image
+                                            .resizable()
+                                            .frame(
+                                                width: UIFont.preferredFont(forTextStyle: .body).lineHeight,
+                                                height: UIFont.preferredFont(forTextStyle: .body).lineHeight)
+                                            .cornerRadius(.defaultCornerRadius / 2)
+                                    }
+                                    Text(appIcon.nameLocalizedStringKey)
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+                        }
                     }
-                }
-                Toggle("preferences.show-reblog-and-favorite-counts",
-                       isOn: $identityContext.appPreferences.showReblogAndFavoriteCounts)
-                Toggle("preferences.require-double-tap-to-reblog",
-                       isOn: $identityContext.appPreferences.requireDoubleTapToReblog)
-                Toggle("preferences.require-double-tap-to-favorite",
-                       isOn: $identityContext.appPreferences.requireDoubleTapToFavorite)
-                Toggle("preferences.links.open-in-default-browser",
-                       isOn: $identityContext.appPreferences.openLinksInDefaultBrowser)
-                if !identityContext.appPreferences.openLinksInDefaultBrowser {
-                    Toggle("preferences.links.use-universal-links",
-                           isOn: $identityContext.appPreferences.useUniversalLinks)
-                }
-                if accessibilityReduceMotion {
-                    Toggle("preferences.media.use-system-reduce-motion",
-                           isOn: $identityContext.appPreferences.useSystemReduceMotionForMedia)
+                    NavigationLink("preferences.notifications",
+                                   destination: NotificationPreferencesView(viewModel: viewModel))
+                    Picker("preferences.status-word",
+                           selection: $identityContext.appPreferences.statusWord) {
+                        ForEach(AppPreferences.StatusWord.allCases) { option in
+                            Text(option.localizedStringKey).tag(option)
+                        }
+                    }
+                    Toggle("preferences.show-reblog-and-favorite-counts",
+                           isOn: $identityContext.appPreferences.showReblogAndFavoriteCounts)
+                    Toggle("preferences.require-double-tap-to-reblog",
+                           isOn: $identityContext.appPreferences.requireDoubleTapToReblog)
+                    Toggle("preferences.require-double-tap-to-favorite",
+                           isOn: $identityContext.appPreferences.requireDoubleTapToFavorite)
+                    Toggle("preferences.links.open-in-default-browser",
+                           isOn: $identityContext.appPreferences.openLinksInDefaultBrowser)
+                    if !identityContext.appPreferences.openLinksInDefaultBrowser {
+                        Toggle("preferences.links.use-universal-links",
+                               isOn: $identityContext.appPreferences.useUniversalLinks)
+                    }
+                    if accessibilityReduceMotion {
+                        Toggle("preferences.media.use-system-reduce-motion",
+                               isOn: $identityContext.appPreferences.useSystemReduceMotionForMedia)
+                    }
                 }
                 Group {
                     Picker("preferences.media.autoplay.gifs",

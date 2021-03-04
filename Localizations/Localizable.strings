@@ -60,6 +60,10 @@
 "activity.open-in-default-browser" = "Open in default browser";
 "add" = "Add";
 "apns-default-message" = "New notification";
+"app-icon.brutalist" = "Brutalist";
+"app-icon.rainbow-brutalist" = "Rainbow Brutalist";
+"app-icon.classic" = "Classic";
+"app-icon.rainbow" = "Rainbow";
 "add-identity.instance-url" = "Instance URL";
 "add-identity.log-in" = "Log in";
 "add-identity.browse" = "Browse";
@@ -182,6 +186,7 @@
 "post" = "Post";
 "preferences" = "Preferences";
 "preferences.app" = "App Preferences";
+"preferences.app-icon" = "App Icon";
 "preferences.blocked-domains" = "Blocked Domains";
 "preferences.blocked-users" = "Blocked Users";
 "preferences.media" = "Media";
