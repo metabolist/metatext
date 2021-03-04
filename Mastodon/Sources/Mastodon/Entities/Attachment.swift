@@ -37,9 +37,9 @@ public struct Attachment: Codable, Hashable {
     public let url: URL
     public let remoteUrl: URL?
     public let previewUrl: URL?
-    public let textUrl: URL?
     public let meta: Meta?
     public let description: String?
+    public let blurhash: String?
 }
 
 public extension Attachment {

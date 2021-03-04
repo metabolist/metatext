@@ -21,6 +21,10 @@ extension Float {
     static let defaultShadowOpacity: Self = 0.25
 }
 
+extension CGSize {
+    static let blurHashSize = Self(width: 32, height: 32)
+}
+
 extension CGRect {
     static let defaultContentsRect = Self(origin: .zero, size: .init(width: 1, height: 1))
 }

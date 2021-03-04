@@ -91,6 +91,7 @@
 		D0625E59250F092900502611 /* StatusTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0625E58250F092900502611 /* StatusTableViewCell.swift */; };
 		D0625E5D250F0B5C00502611 /* StatusContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0625E5C250F0B5C00502611 /* StatusContentConfiguration.swift */; };
 		D06BC5E625202AD90079541D /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06BC5E525202AD90079541D /* ProfileViewController.swift */; };
+		D06FA32725F0659600C9639A /* BlurHash in Frameworks */ = {isa = PBXBuildFile; productRef = D06FA32625F0659600C9639A /* BlurHash */; };
 		D07EC7CF25B13921006DF726 /* PickerEmoji+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07EC7CE25B13921006DF726 /* PickerEmoji+Extensions.swift */; };
 		D07EC7D025B13921006DF726 /* PickerEmoji+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07EC7CE25B13921006DF726 /* PickerEmoji+Extensions.swift */; };
 		D07EC7DC25B13DBB006DF726 /* EmojiCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07EC7DB25B13DBB006DF726 /* EmojiCollectionViewCell.swift */; };
@@ -183,6 +184,7 @@
 		D0D2AC4D25BCD2A9003D5DF2 /* TagTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D2AC4C25BCD2A9003D5DF2 /* TagTableViewCell.swift */; };
 		D0D2AC5325BCD2BA003D5DF2 /* TagContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D2AC5225BCD2BA003D5DF2 /* TagContentConfiguration.swift */; };
 		D0D2AC6725BD0484003D5DF2 /* LineChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D2AC6625BD0484003D5DF2 /* LineChartView.swift */; };
+		D0D4301425F067D600BE5504 /* BlurHash in Frameworks */ = {isa = PBXBuildFile; productRef = D0D4301325F067D600BE5504 /* BlurHash */; };
 		D0D93EBA25D9C70400C622ED /* AutocompleteItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D93EB925D9C70400C622ED /* AutocompleteItemView.swift */; };
 		D0D93EC025D9C71D00C622ED /* AutocompleteItemContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D93EBF25D9C71D00C622ED /* AutocompleteItemContentConfiguration.swift */; };
 		D0D93EC525D9C75E00C622ED /* AutocompleteItemContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D93EBF25D9C71D00C622ED /* AutocompleteItemContentConfiguration.swift */; };
@@ -442,6 +444,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0E2C1D124FD97F000854680 /* ViewModels in Frameworks */,
+				D06FA32725F0659600C9639A /* BlurHash in Frameworks */,
 				D04F34B625E42ABE00714251 /* SDWebImage in Frameworks */,
 				D0FE7C8025C4C79F00203957 /* PreviewViewModels in Frameworks */,
 			);
@@ -458,6 +461,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0D4301425F067D600BE5504 /* BlurHash in Frameworks */,
 				D04F34BC25E42ADC00714251 /* SDWebImage in Frameworks */,
 				D04F9E8E259E9C950081B0C9 /* ViewModels in Frameworks */,
 			);
@@ -862,6 +866,7 @@
 				D0E2C1D024FD97F000854680 /* ViewModels */,
 				D0FE7C7F25C4C79F00203957 /* PreviewViewModels */,
 				D04F34B525E42ABE00714251 /* SDWebImage */,
+				D06FA32625F0659600C9639A /* BlurHash */,
 			);
 			productName = "Metatext (iOS)";
 			productReference = D047FA8C24C3E21200AF17C5 /* Metatext.app */;
@@ -903,6 +908,7 @@
 			packageProductDependencies = (
 				D04F9E8D259E9C950081B0C9 /* ViewModels */,
 				D04F34BB25E42ADC00714251 /* SDWebImage */,
+				D0D4301325F067D600BE5504 /* BlurHash */,
 			);
 			productName = "Share Extension";
 			productReference = D08E526C257C36CA00FA2C5F /* Share Extension.appex */;
@@ -966,6 +972,7 @@
 			mainGroup = D047FA7F24C3E21000AF17C5;
 			packageReferences = (
 				D04F34B425E42ABE00714251 /* XCRemoteSwiftPackageReference "SDWebImage" */,
+				D06FA32525F0659600C9639A /* XCRemoteSwiftPackageReference "blurhash" */,
 			);
 			productRefGroup = D047FA8D24C3E21200AF17C5 /* Products */;
 			projectDirPath = "";
@@ -1664,6 +1671,14 @@
 				minimumVersion = 5.10.4;
 			};
 		};
+		D06FA32525F0659600C9639A /* XCRemoteSwiftPackageReference "blurhash" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/metabolist/blurhash.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1689,6 +1704,16 @@
 		D04F9E8D259E9C950081B0C9 /* ViewModels */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ViewModels;
+		};
+		D06FA32625F0659600C9639A /* BlurHash */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D06FA32525F0659600C9639A /* XCRemoteSwiftPackageReference "blurhash" */;
+			productName = BlurHash;
+		};
+		D0D4301325F067D600BE5504 /* BlurHash */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D06FA32525F0659600C9639A /* XCRemoteSwiftPackageReference "blurhash" */;
+			productName = BlurHash;
 		};
 		D0E2C1D024FD97F000854680 /* ViewModels */ = {
 			isa = XCSwiftPackageProductDependency;

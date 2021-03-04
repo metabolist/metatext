@@ -11,6 +11,15 @@
         }
       },
       {
+        "package": "BlurHash",
+        "repositoryURL": "https://github.com/metabolist/blurhash.git",
+        "state": {
+          "branch": null,
+          "revision": "4d86c470d866b2d8989adc5a65b121221e40df54",
+          "version": "1.0.0"
+        }
+      },
+      {
         "package": "CodableBloomFilter",
         "repositoryURL": "https://github.com/metabolist/codable-bloom-filter.git",
         "state": {

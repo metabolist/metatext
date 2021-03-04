@@ -1,6 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import AVKit
+import BlurHash
 import Combine
 import SDWebImage
 import UIKit
@@ -169,7 +170,17 @@ private extension AttachmentView {
 
         switch viewModel.attachment.type {
         case .image, .video, .gifv:
-            imageView.sd_setImage(with: viewModel.attachment.previewUrl) { [weak self] _, _, _, _ in
+            let placeholderImage: UIImage?
+
+            if let blurHash = viewModel.attachment.blurhash {
+                placeholderImage = UIImage(blurHash: blurHash, size: .blurHashSize)
+            } else {
+                placeholderImage = nil
+            }
+
+            imageView.sd_setImage(
+                with: viewModel.attachment.previewUrl,
+                placeholderImage: placeholderImage) { [weak self] _, _, _, _ in
                 self?.layoutSubviews()
             }
         case .audio:

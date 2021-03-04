@@ -1,6 +1,7 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
 import AVFoundation
+import BlurHash
 import Mastodon
 import SDWebImage
 import UIKit
@@ -111,11 +112,16 @@ final class ImageViewController: UIViewController {
                 imageView.tag = viewModel.tag
                 playerView.isHidden = true
 
-                let placeholderKey = viewModel.attachment.previewUrl?.absoluteString
-                let placeholderImage = SDImageCache.shared.imageFromCache(forKey: placeholderKey)
+                let placeholderImage: UIImage?
+                let cachedImageKey = viewModel.attachment.previewUrl?.absoluteString
+                let cachedImage = SDImageCache.shared.imageFromCache(forKey: cachedImageKey)
 
-                if placeholderImage != nil {
-                    imageView.sd_imageIndicator = nil
+                if cachedImage != nil {
+                    placeholderImage = cachedImage
+                } else if let blurHash = viewModel.attachment.blurhash {
+                    placeholderImage = UIImage(blurHash: blurHash, size: .blurHashSize)
+                } else {
+                    placeholderImage = nil
                 }
 
                 imageView.sd_setImage(with: viewModel.attachment.url, placeholderImage: placeholderImage)

@@ -1,5 +1,6 @@
 // Copyright © 2021 Metabolist. All rights reserved.
 
+import BlurHash
 import Combine
 import SDWebImage
 import UIKit
@@ -142,15 +143,15 @@ private extension EditThumbnailView {
         switch viewModel.attachment.type {
         case .image:
             playerView.isHidden = true
+            let placeholderImage: UIImage?
 
-            let placeholderKey = viewModel.attachment.previewUrl?.absoluteString
-            let placeholderImage = SDImageCache.shared.imageFromCache(forKey: placeholderKey)
-
-            if placeholderImage != nil {
-                imageView.sd_imageIndicator = nil
+            if let blurHash = viewModel.attachment.blurhash {
+                placeholderImage = UIImage(blurHash: blurHash, size: .blurHashSize)
+            } else {
+                placeholderImage = nil
             }
 
-            imageView.sd_setImage(with: viewModel.attachment.url, placeholderImage: placeholderImage)
+            imageView.sd_setImage(with: viewModel.attachment.previewUrl, placeholderImage: placeholderImage)
         case .gifv:
             imageView.isHidden = true
             let player = PlayerCache.shared.player(url: viewModel.attachment.url)

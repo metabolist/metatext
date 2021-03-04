@@ -22,6 +22,7 @@ struct AcknowledgmentsView: View {
 
 private extension AcknowledgmentsView {
     enum Acknowledgment: CaseIterable {
+        case blurHash
         case combineExpectations
         case grdb
         case sdwebimage
@@ -32,6 +33,8 @@ private extension AcknowledgmentsView {
 extension AcknowledgmentsView.Acknowledgment {
     var name: String {
         switch self {
+        case .blurHash:
+            return "BlurHash"
         case .combineExpectations:
             return "CombineExpectations"
         case .grdb:
@@ -45,6 +48,8 @@ extension AcknowledgmentsView.Acknowledgment {
 
     var url: URL {
         switch self {
+        case .blurHash:
+            return URL(string: "https://github.com/woltapp/blurhash")!
         case .combineExpectations:
             return URL(string: "https://github.com/groue/CombineExpectations")!
         case .grdb:
@@ -59,6 +64,16 @@ extension AcknowledgmentsView.Acknowledgment {
 // swiftlint:disable line_length
     var license: String {
         switch self {
+        case .blurHash:
+            return """
+Copyright (c) 2018 Wolt Enterprises
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+"""
         case .combineExpectations:
             return """
 Copyright (C) 2019 Gwendal Roué
