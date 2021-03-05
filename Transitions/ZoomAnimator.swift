@@ -45,6 +45,7 @@ private extension ZoomAnimator {
             else { return }
 
         toVC.view.alpha = 0
+        toVC.view.frame = transitionContext.finalFrame(for: toVC)
         toReferenceView.isHidden = true
         transitionContext.containerView.addSubview(toVC.view)
 
