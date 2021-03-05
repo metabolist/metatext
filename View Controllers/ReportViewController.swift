@@ -5,11 +5,7 @@ import UIKit
 import ViewModels
 
 final class ReportViewController: TableViewController {
-    private let reportButton = UIBarButtonItem(
-        title: nil,
-        style: .done,
-        target: nil,
-        action: nil)
+    private let reportButton = UIBarButtonItem(title: nil, style: .done, target: nil, action: nil)
     private let activityIndicatorView = UIActivityIndicatorView(style: .large)
     private let viewModel: ReportViewModel
     private var cancellables = Set<AnyCancellable>()

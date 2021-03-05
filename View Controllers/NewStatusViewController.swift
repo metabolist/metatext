@@ -15,11 +15,7 @@ final class NewStatusViewController: UIViewController {
     private let scrollView = UIScrollView()
     private let stackView = UIStackView()
     private let activityIndicatorView = UIActivityIndicatorView(style: .large)
-    private let postButton = UIBarButtonItem(
-        title: nil,
-        style: .done,
-        target: nil,
-        action: nil)
+    private let postButton = UIBarButtonItem(title: nil, style: .done, target: nil, action: nil)
     private let mediaSelections = PassthroughSubject<[PHPickerResult], Never>()
     private let imagePickerResults = PassthroughSubject<[UIImagePickerController.InfoKey: Any]?, Never>()
     private let documentPickerResuls = PassthroughSubject<[URL]?, Never>()
