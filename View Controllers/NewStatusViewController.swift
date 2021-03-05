@@ -109,21 +109,24 @@ extension NewStatusViewController {
 
 extension NewStatusViewController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        mediaSelections.send(results)
-        dismiss(animated: true)
+        dismiss(animated: true) {
+            self.mediaSelections.send(results)
+        }
     }
 }
 
 extension NewStatusViewController: UIImagePickerControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-        imagePickerResults.send(info)
-        dismiss(animated: true)
+        dismiss(animated: true) {
+            self.imagePickerResults.send(info)
+        }
     }
 
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        imagePickerResults.send(nil)
-        dismiss(animated: true)
+        dismiss(animated: true) {
+            self.imagePickerResults.send(nil)
+        }
     }
 }
 
