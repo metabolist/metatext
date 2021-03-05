@@ -35,11 +35,13 @@ public extension MediaProcessingService {
                     if let error = error {
                         promise(.failure(error))
                     } else if let url = url {
-                        if uniformType.conforms(to: .image) && uniformType != .gif {
-                            promise(imageData(url: url, type: uniformType))
-                        } else {
-                            promise(Result { try Data(contentsOf: url) })
-                        }
+                        promise(Result {
+                            if uniformType.conforms(to: .image) && uniformType != .gif {
+                                return try imageData(url: url, type: uniformType)
+                            } else {
+                                return try Data(contentsOf: url)
+                            }
+                        })
                     } else {
                         promise(.failure(MediaProcessingError.fileURLNotFound))
                     }
@@ -53,16 +55,14 @@ public extension MediaProcessingService {
                     if let error = error {
                         promise(.failure(error))
                     } else if let image = item as? UIImage, let data = image.pngData() {
-                        do {
+                        promise(Result {
                             let url = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
                                 .appendingPathComponent(UUID().uuidString)
 
                             try data.write(to: url)
 
-                            promise(imageData(url: url, type: .png))
-                        } catch {
-                            promise(.failure(error))
-                        }
+                            return try imageData(url: url, type: .png)
+                        })
                     } else {
                         promise(.failure(MediaProcessingError.fileURLNotFound))
                     }
@@ -95,24 +95,24 @@ private extension MediaProcessingService {
         kCGImageSourceThumbnailMaxPixelSize: 1280
     ] as CFDictionary
 
-    static func imageData(url: URL, type: UTType) -> Result<Data, Error> {
+    static func imageData(url: URL, type: UTType) throws -> Data {
         guard let source = CGImageSourceCreateWithURL(url as CFURL, Self.imageSourceOptions) else {
-            return .failure(MediaProcessingError.unableToCreateImageSource)
+            throw MediaProcessingError.unableToCreateImageSource
         }
 
         guard let image = CGImageSourceCreateThumbnailAtIndex(source, 0, thumbnailOptions) else {
-            return .failure(MediaProcessingError.unableToDownsample)
+            throw MediaProcessingError.unableToDownsample
         }
 
         let data = NSMutableData()
 
         guard let imageDestination = CGImageDestinationCreateWithData(data, type.identifier as CFString, 1, nil) else {
-            return .failure(MediaProcessingError.unableToCreateImageDataDestination)
+            throw MediaProcessingError.unableToCreateImageDataDestination
         }
 
         CGImageDestinationAddImage(imageDestination, image, nil)
         CGImageDestinationFinalize(imageDestination)
 
-        return .success(data as Data)
+        return data as Data
     }
 }
