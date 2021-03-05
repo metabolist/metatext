@@ -320,8 +320,8 @@ extension TableViewController: AVPlayerViewControllerDelegate {
     func playerViewController(
         _ playerViewController: AVPlayerViewController,
         willEndFullScreenPresentationWithAnimationCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        try? AVAudioSession.sharedInstance().setCategory(.ambient, mode: .default)
         playerViewController.player?.isMuted = true
+        AVAudioSession.decrementPresentedPlayerViewControllerCount()
 
         coordinator.animate(alongsideTransition: nil) { _ in
             if self.shouldKeepPlayingVideoAfterDismissal {
@@ -586,7 +586,7 @@ private extension TableViewController {
             shouldKeepPlayingVideoAfterDismissal = attachmentViewModel.shouldAutoplay
 
             present(playerViewController, animated: true) {
-                try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+                AVAudioSession.incrementPresentedPlayerViewControllerCount()
                 player.isMuted = false
                 player.play()
             }

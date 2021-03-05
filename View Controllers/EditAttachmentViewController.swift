@@ -1,5 +1,6 @@
 // Copyright © 2021 Metabolist. All rights reserved.
 
+import AVKit
 import Combine
 import UIKit
 import ViewModels
@@ -21,16 +22,47 @@ final class EditAttachmentViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    deinit {
+        if let playerViewController =
+            children.first(where: { $0 is AVPlayerViewController }) as? AVPlayerViewController {
+            playerViewController.player?.isMuted = true
+            AVAudioSession.decrementPresentedPlayerViewControllerCount()
+        }
+    }
+
     // swiftlint:disable:next function_body_length
     override func viewDidLoad() {
         super.viewDidLoad()
 
         view.backgroundColor = .systemBackground
 
-        let editThumbnailView = EditThumbnailView(viewModel: viewModel)
+        let trailingView: UIView
 
-        view.addSubview(editThumbnailView)
-        editThumbnailView.translatesAutoresizingMaskIntoConstraints = false
+        switch viewModel.attachment.type {
+        case .image, .gifv:
+            trailingView = EditThumbnailView(viewModel: viewModel)
+            view.addSubview(trailingView)
+        default:
+            let playerViewController = AVPlayerViewController()
+            let player: AVPlayer
+
+            if viewModel.attachment.type == .video {
+                player = PlayerCache.shared.player(url: viewModel.attachment.url)
+            } else {
+                player = AVPlayer(url: viewModel.attachment.url)
+            }
+
+            player.isMuted = false
+            playerViewController.player = player
+
+            trailingView = playerViewController.view
+            addChild(playerViewController)
+            view.addSubview(trailingView)
+            playerViewController.didMove(toParent: self)
+            AVAudioSession.incrementPresentedPlayerViewControllerCount()
+        }
+
+        trailingView.translatesAutoresizingMaskIntoConstraints = false
 
         let stackView = UIStackView()
 
@@ -76,14 +108,14 @@ final class EditAttachmentViewController: UIViewController {
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
             stackView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: .defaultSpacing),
-            editThumbnailView.leadingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: .defaultSpacing),
+            trailingView.leadingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: .defaultSpacing),
             stackView.bottomAnchor.constraint(
                 equalTo: view.layoutMarginsGuide.bottomAnchor,
                 constant: -.defaultSpacing),
-            editThumbnailView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            editThumbnailView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            editThumbnailView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            editThumbnailView.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 3 / 2)
+            trailingView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            trailingView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            trailingView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            trailingView.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 3 / 2)
         ])
 
         viewModel.$descriptionRemainingCharacters

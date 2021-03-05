@@ -142,6 +142,8 @@
 		D0B5FE9B251583DB00478838 /* ProfileCollection+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B5FE9A251583DB00478838 /* ProfileCollection+Extensions.swift */; };
 		D0B8510C25259E56004E0744 /* LoadMoreTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B8510B25259E56004E0744 /* LoadMoreTableViewCell.swift */; };
 		D0BE633125F2C409001139FA /* CapsuleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0477F4525C72E50005C5368 /* CapsuleLabel.swift */; };
+		D0BE633725F2D95E001139FA /* AVAudioSession+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BE633625F2D95E001139FA /* AVAudioSession+Extensions.swift */; };
+		D0BE634025F2DB98001139FA /* AVAudioSession+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BE633625F2D95E001139FA /* AVAudioSession+Extensions.swift */; };
 		D0BE97A325CF44310057E161 /* CGRect+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BE97A225CF44310057E161 /* CGRect+Extensions.swift */; };
 		D0BE97D725D0863E0057E161 /* ImagePastableTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BE97D625D0863E0057E161 /* ImagePastableTextView.swift */; };
 		D0BE97E025D086F80057E161 /* ImagePastableTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BE97D625D0863E0057E161 /* ImagePastableTextView.swift */; };
@@ -376,6 +378,7 @@
 		D0B5FE9A251583DB00478838 /* ProfileCollection+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileCollection+Extensions.swift"; sourceTree = "<group>"; };
 		D0B8510B25259E56004E0744 /* LoadMoreTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreTableViewCell.swift; sourceTree = "<group>"; };
 		D0BDF66524FD7A6400C7FA1C /* ServiceLayer */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ServiceLayer; sourceTree = "<group>"; };
+		D0BE633625F2D95E001139FA /* AVAudioSession+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVAudioSession+Extensions.swift"; sourceTree = "<group>"; };
 		D0BE97A225CF44310057E161 /* CGRect+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+Extensions.swift"; sourceTree = "<group>"; };
 		D0BE97D625D0863E0057E161 /* ImagePastableTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePastableTextView.swift; sourceTree = "<group>"; };
 		D0BE980325D229D50057E161 /* SeparatorConfiguredTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorConfiguredTableViewCell.swift; sourceTree = "<group>"; };
@@ -819,6 +822,7 @@
 			isa = PBXGroup;
 			children = (
 				D00CB22925C92C0F008EF267 /* Attachment+Extensions.swift */,
+				D0BE633625F2D95E001139FA /* AVAudioSession+Extensions.swift */,
 				D05E688425B55AE8001FB2C6 /* AVURLAsset+Extensions.swift */,
 				D0BE97A225CF44310057E161 /* CGRect+Extensions.swift */,
 				D0F0B135251AA12700942152 /* CollectionItem+Extensions.swift */,
@@ -1125,6 +1129,7 @@
 				D0C7D49A24F7616A001EBDBB /* TableView.swift in Sources */,
 				D08B8D622540DE3B00B1EBEF /* ZoomTransitionController.swift in Sources */,
 				D0F0B12E251A97E400942152 /* TableViewController.swift in Sources */,
+				D0BE633725F2D95E001139FA /* AVAudioSession+Extensions.swift in Sources */,
 				D0477F2C25C6EBAD005C5368 /* OpenInDefaultBrowserActivity.swift in Sources */,
 				D07F4D9825D493E300F61133 /* MuteView.swift in Sources */,
 				D02D338D25EDA593000A35CC /* CopyableLabel.swift in Sources */,
@@ -1278,6 +1283,7 @@
 				D05936D025A8D79800754FDF /* EditAttachmentViewController.swift in Sources */,
 				D0CEC10A25E3381500FEF5A6 /* AnimatedTextAttachment.swift in Sources */,
 				D08E52EF257D757100FA2C5F /* CompositionView.swift in Sources */,
+				D0BE634025F2DB98001139FA /* AVAudioSession+Extensions.swift in Sources */,
 				D07EC7FE25B16994006DF726 /* EmojiCategoryHeaderView.swift in Sources */,
 				D0CE9F88258B076900E3A6B6 /* AttachmentUploadView.swift in Sources */,
 				D0CEC11A25E34BFE00FEF5A6 /* AnimatingLayoutManager.swift in Sources */,
