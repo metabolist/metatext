@@ -97,6 +97,7 @@
 "compose.attachment.cancel-upload.accessibility-label" = "Cancel uploading attachment";
 "compose.attachment.edit" = "Edit attachment";
 "compose.attachment.remove" = "Remove attachment";
+"compose.attachment.uncaptioned" = "Uncaptioned";
 "compose.attachment.uploading" = "Uploading";
 "compose.attachments-button.accessibility-label" = "Add attachment";
 "compose.attachments-will-be-discarded" = "Attachments will be discarded when changing accounts";

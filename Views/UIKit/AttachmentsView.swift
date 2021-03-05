@@ -33,7 +33,6 @@ final class AttachmentsView: UIView {
                 let attachmentView = AttachmentView(viewModel: attachmentViewModel, parentViewModel: viewModel)
                 attachmentView.playing = viewModel.shouldShowAttachments && attachmentViewModel.shouldAutoplay
                 attachmentView.removeButton.isHidden = !viewModel.canRemoveAttachments
-                attachmentView.editIcon.isHidden = !viewModel.canRemoveAttachments
                 attachmentView.isAccessibilityElement = !viewModel.canRemoveAttachments
 
                 if viewModel.attachmentViewModels.count == 2 && index == 1

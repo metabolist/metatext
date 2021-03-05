@@ -17,25 +17,29 @@ final class CapsuleLabel: UILabel {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        layer.cornerRadius = inset
+        layer.cornerRadius = bounds.height / 2
         invalidateIntrinsicContentSize()
     }
 
     override func drawText(in rect: CGRect) {
-        super.drawText(in: rect.inset(by: .init(top: 0, left: inset, bottom: 0, right: inset)))
+        super.drawText(in: rect.inset(by: .init(
+                                        top: .compactSpacing,
+                                        left: .defaultSpacing,
+                                        bottom: .compactSpacing,
+                                        right: .defaultSpacing)))
     }
 
     override var intrinsicContentSize: CGSize {
         var size = super.intrinsicContentSize
 
-        size.width += inset * 2
+        size.width += .defaultSpacing * 2
+        size.height += .compactSpacing * 2
 
         return size
     }
 }
 
 private extension CapsuleLabel {
-    var inset: CGFloat { bounds.height / 2 }
 
     func initialSetup() {
         backgroundColor = .secondarySystemBackground

@@ -11,7 +11,7 @@ final class AttachmentView: UIView {
     let playerView = PlayerView()
     let imageView = SDAnimatedImageView()
     let removeButton = UIButton(type: .close)
-    let editIcon = UIImageView()
+    let uncaptionedLabel = CapsuleLabel()
     let selectionButton = UIButton()
 
     var playing: Bool = false {
@@ -159,14 +159,11 @@ private extension AttachmentView {
                     self.parentViewModel.removeAttachment(viewModel: self.viewModel)
                 }])
 
-        addSubview(editIcon)
-        editIcon.translatesAutoresizingMaskIntoConstraints = false
-        editIcon.image = UIImage(
-            systemName: "pencil",
-            withConfiguration: UIImage.SymbolConfiguration(scale: .large))
-        editIcon.layer.shadowOffset = .zero
-        editIcon.layer.shadowRadius = .defaultShadowRadius
-        editIcon.layer.shadowOpacity = .defaultShadowOpacity
+        addSubview(uncaptionedLabel)
+        uncaptionedLabel.translatesAutoresizingMaskIntoConstraints = false
+        uncaptionedLabel.text = NSLocalizedString("compose.attachment.uncaptioned", comment: "")
+        uncaptionedLabel.isHidden = !(parentViewModel.canRemoveAttachments
+                                        && (viewModel.attachment.description?.isEmpty ?? true))
 
         switch viewModel.attachment.type {
         case .image, .video, .gifv:
@@ -224,8 +221,8 @@ private extension AttachmentView {
             selectionButton.bottomAnchor.constraint(equalTo: bottomAnchor),
             removeButton.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
             removeButton.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
-            editIcon.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
-            editIcon.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
+            uncaptionedLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+            uncaptionedLabel.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
         ])
 
         var accessibilityLabel = viewModel.attachment.type.accessibilityName
