@@ -347,7 +347,6 @@ private extension NewStatusViewController {
         let picker = UIImagePickerController()
 
         picker.sourceType = .camera
-        picker.allowsEditing = true
         picker.modalPresentationStyle = .overFullScreen
         picker.delegate = self
 
