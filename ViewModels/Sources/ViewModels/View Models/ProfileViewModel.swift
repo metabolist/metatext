@@ -158,6 +158,10 @@ extension ProfileViewModel: CollectionViewModel {
         collectionViewModel.value.request(maxId: maxId, minId: minId, search: nil)
     }
 
+    public func cancelRequests() {
+        collectionViewModel.value.cancelRequests()
+    }
+
     public func requestNextPage(fromIndexPath indexPath: IndexPath) {
         collectionViewModel.value.requestNextPage(fromIndexPath: indexPath)
     }

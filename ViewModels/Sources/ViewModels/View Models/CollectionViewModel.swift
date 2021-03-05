@@ -18,6 +18,7 @@ public protocol CollectionViewModel {
     var announcesNewItems: Bool { get }
     func request(maxId: String?, minId: String?, search: Search?)
     func requestNextPage(fromIndexPath indexPath: IndexPath)
+    func cancelRequests()
     func viewedAtTop(indexPath: IndexPath)
     func select(indexPath: IndexPath)
     func canSelect(indexPath: IndexPath) -> Bool

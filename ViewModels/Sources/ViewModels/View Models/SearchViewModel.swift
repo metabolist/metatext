@@ -21,6 +21,7 @@ public final class SearchViewModel: CollectionItemsViewModel {
             .removeDuplicates()
             .combineLatest($scope.removeDuplicates())
             .sink { [weak self] in
+                self?.cancelRequests()
                 self?.request(
                     maxId: nil,
                     minId: nil,

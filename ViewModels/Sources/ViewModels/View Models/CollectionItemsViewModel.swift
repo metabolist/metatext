@@ -24,6 +24,7 @@ public class CollectionItemsViewModel: ObservableObject {
     private var localLastReadId: CollectionItem.Id?
     private var markerLastReadId: CollectionItem.Id?
     private var cancellables = Set<AnyCancellable>()
+    private var requestCancellables = Set<AnyCancellable>()
 
     // swiftlint:disable:next function_body_length
     public init(collectionService: CollectionService, identityContext: IdentityContext) {
@@ -247,11 +248,17 @@ extension CollectionItemsViewModel: CollectionViewModel {
                 receiveSubscription: { [weak self] _ in self?.loadingSubject.send(true) },
                 receiveCompletion: { [weak self] _ in self?.loadingSubject.send(false) })
             .sink { _ in }
-            .store(in: &cancellables)
+            .store(in: &requestCancellables)
         collectionService.requestMarkerLastReadId()
             .sink { _ in } receiveValue: { [weak self] in self?.markerLastReadId = $0 }
             .store(in: &cancellables)
 
+    }
+
+    public func cancelRequests() {
+        for cancellable in requestCancellables {
+            cancellable.cancel()
+        }
     }
 
     public func select(indexPath: IndexPath) {
