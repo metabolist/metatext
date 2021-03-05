@@ -69,7 +69,8 @@ public extension Instance {
 }
 
 public extension RootViewModel {
-    static let preview = try! RootViewModel(environment: environment)
+    static let preview = try! RootViewModel(environment: environment,
+                                            registerForRemoteNotifications: { Empty().eraseToAnyPublisher() })
 }
 
 public extension IdentityContext {

@@ -8,8 +8,6 @@ import ViewModels
 @main
 struct MetatextApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
-    // swiftlint:disable:next force_try
-    private let viewModel = try! RootViewModel(environment: Self.environment)
 
     init() {
         try? AVAudioSession.sharedInstance().setCategory(.ambient, mode: .default)
@@ -17,10 +15,11 @@ struct MetatextApp: App {
     }
 
     var body: some Scene {
-        viewModel.registerForRemoteNotifications = appDelegate.registerForRemoteNotifications
-
-        return WindowGroup {
-            RootView(viewModel: viewModel)
+        WindowGroup {
+            // swiftlint:disable:next force_try
+            RootView(viewModel: try! RootViewModel(
+                        environment: Self.environment,
+                        registerForRemoteNotifications: appDelegate.registerForRemoteNotifications))
         }
     }
 }
