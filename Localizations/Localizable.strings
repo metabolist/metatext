@@ -162,6 +162,7 @@
 "identities.browsing" = "Browsing";
 "identities.log-out" = "Log out";
 "identities.pending" = "Pending";
+"image-error.unable-to-load" = "Unable to load image";
 "lists.new-list-title" = "New List Title";
 "load-more" = "Load More";
 "load-more.above.accessibility.post" = "Load from post above";

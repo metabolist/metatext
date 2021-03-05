@@ -7,6 +7,19 @@ import SDWebImage
 import UIKit
 import ViewModels
 
+enum ImageError: Error {
+    case unableToLoad
+}
+
+extension ImageError: LocalizedError {
+    var errorDescription: String? {
+        switch self {
+        case .unableToLoad:
+            return NSLocalizedString("image-error.unable-to-load", comment: "")
+        }
+    }
+}
+
 final class ImageViewController: UIViewController {
     let scrollView = UIScrollView()
     let imageView = SDAnimatedImageView()
@@ -124,7 +137,14 @@ final class ImageViewController: UIViewController {
                     placeholderImage = nil
                 }
 
-                imageView.sd_setImage(with: viewModel.attachment.url, placeholderImage: placeholderImage)
+                imageView.sd_setImage(with: viewModel.attachment.url,
+                                      placeholderImage: placeholderImage) { _, error, _, _ in
+                    if error != nil {
+                        let alertItem = AlertItem(error: ImageError.unableToLoad)
+
+                        self.present(alertItem: alertItem)
+                    }
+                }
             case .gifv:
                 playerView.tag = viewModel.tag
                 imageView.isHidden = true
