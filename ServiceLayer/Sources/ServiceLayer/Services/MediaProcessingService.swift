@@ -9,6 +9,7 @@ import UniformTypeIdentifiers
 enum MediaProcessingError: Error {
     case invalidMimeType
     case fileURLNotFound
+    case imageNotFound
     case unsupportedType
     case unableToCreateImageSource
     case unableToDownsample
@@ -24,51 +25,16 @@ public extension MediaProcessingService {
         let mimeType: String
         let dataPublisher: AnyPublisher<Data, Error>
 
-        if let uniformType = registeredTypes.first(where: {
+        if let type = registeredTypes.first(where: {
             guard let mimeType = $0.preferredMIMEType else { return false }
 
-            return Self.uploadableMimeTypes.contains(mimeType)
-        }), let preferredMIMEType = uniformType.preferredMIMEType {
+            return uploadableMimeTypes.contains(mimeType)
+        }), let preferredMIMEType = type.preferredMIMEType {
             mimeType = preferredMIMEType
-            dataPublisher = Future<Data, Error> { promise in
-                itemProvider.loadFileRepresentation(forTypeIdentifier: uniformType.identifier) { url, error in
-                    if let error = error {
-                        promise(.failure(error))
-                    } else if let url = url {
-                        promise(Result {
-                            if uniformType.conforms(to: .image) && uniformType != .gif {
-                                return try imageData(url: url, type: uniformType)
-                            } else {
-                                return try Data(contentsOf: url)
-                            }
-                        })
-                    } else {
-                        promise(.failure(MediaProcessingError.fileURLNotFound))
-                    }
-                }
-            }
-            .eraseToAnyPublisher()
+            dataPublisher = fileRepresentationDataPublisher(itemProvider: itemProvider, type: type)
         } else if registeredTypes == [UTType.image], let pngMIMEType = UTType.png.preferredMIMEType { // screenshot
             mimeType = pngMIMEType
-            dataPublisher = Future<Data, Error> { promise in
-                itemProvider.loadItem(forTypeIdentifier: UTType.image.identifier, options: nil) { item, error in
-                    if let error = error {
-                        promise(.failure(error))
-                    } else if let image = item as? UIImage, let data = image.pngData() {
-                        promise(Result {
-                            let url = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
-                                .appendingPathComponent(UUID().uuidString)
-
-                            try data.write(to: url)
-
-                            return try imageData(url: url, type: .png)
-                        })
-                    } else {
-                        promise(.failure(MediaProcessingError.fileURLNotFound))
-                    }
-                }
-            }
-            .eraseToAnyPublisher()
+            dataPublisher = UIImagePNGDataPublisher(itemProvider: itemProvider)
         } else {
             return Fail(error: MediaProcessingError.invalidMimeType).eraseToAnyPublisher()
         }
@@ -94,6 +60,50 @@ private extension MediaProcessingService {
         kCGImageSourceCreateThumbnailWithTransform: true,
         kCGImageSourceThumbnailMaxPixelSize: 1280
     ] as CFDictionary
+
+    static func fileRepresentationDataPublisher(itemProvider: NSItemProvider,
+                                                type: UTType) -> AnyPublisher<Data, Error> {
+        Future<Data, Error> { promise in
+            itemProvider.loadFileRepresentation(forTypeIdentifier: type.identifier) { url, error in
+                if let error = error {
+                    promise(.failure(error))
+                } else if let url = url {
+                    promise(Result {
+                        if type.conforms(to: .image) && type != .gif {
+                            return try imageData(url: url, type: type)
+                        } else {
+                            return try Data(contentsOf: url)
+                        }
+                    })
+                } else {
+                    promise(.failure(MediaProcessingError.fileURLNotFound))
+                }
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+
+    static func UIImagePNGDataPublisher(itemProvider: NSItemProvider) -> AnyPublisher<Data, Error> {
+        Future<Data, Error> { promise in
+            itemProvider.loadItem(forTypeIdentifier: UTType.image.identifier, options: nil) { item, error in
+                if let error = error {
+                    promise(.failure(error))
+                } else if let image = item as? UIImage, let data = image.pngData() {
+                    promise(Result {
+                        let url = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
+                            .appendingPathComponent(UUID().uuidString)
+
+                        try data.write(to: url)
+
+                        return try imageData(url: url, type: .png)
+                    })
+                } else {
+                    promise(.failure(MediaProcessingError.imageNotFound))
+                }
+            }
+        }
+        .eraseToAnyPublisher()
+    }
 
     static func imageData(url: URL, type: UTType) throws -> Data {
         guard let source = CGImageSourceCreateWithURL(url as CFURL, Self.imageSourceOptions) else {
