@@ -9,6 +9,7 @@ import ViewModels
 
 final class StatusView: UIView {
     let avatarImageView = SDAnimatedImageView()
+    let rebloggerAvatarImageView = SDAnimatedImageView()
     let avatarButton = UIButton()
     let infoIcon = UIImageView()
     let infoLabel = AnimatedAttachmentLabel()
@@ -34,6 +35,7 @@ final class StatusView: UIView {
     private let containerStackView = UIStackView()
     private let sideStackView = UIStackView()
     private let mainStackView = UIStackView()
+    private let avatarContainerView = UIView()
     private let nameAccountContainerStackView = UIStackView()
     private let nameAccountTimeStackView = UIStackView()
     private let contextParentTimeApplicationStackView = UIStackView()
@@ -47,11 +49,16 @@ final class StatusView: UIView {
     private let inReplyToView = UIView()
     private let hasReplyFollowingView = UIView()
     private var statusConfiguration: StatusContentConfiguration
-    private var infoIconCenterYConstraint: NSLayoutConstraint?
+    private let avatarWidthConstraint: NSLayoutConstraint
+    private let avatarHeightConstraint: NSLayoutConstraint
     private var cancellables = Set<AnyCancellable>()
 
     init(configuration: StatusContentConfiguration) {
         self.statusConfiguration = configuration
+
+        avatarWidthConstraint = avatarImageView.widthAnchor.constraint(equalToConstant: .avatarDimension)
+        avatarHeightConstraint = avatarImageView.heightAnchor.constraint(equalToConstant: .avatarDimension)
+        avatarHeightConstraint.priority = .justBelowMax
 
         super.init(frame: .zero)
 
@@ -142,6 +149,7 @@ extension StatusView: UITextViewDelegate {
 
 private extension StatusView {
     static let actionButtonTitleEdgeInsets = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: 0)
+    static let reblogAvatarDimension: CGFloat = .avatarDimension * 7 / 8
 
     var actionButtons: [UIButton] {
         [replyButton, reblogButton, favoriteButton, shareButton, menuButton]
@@ -359,12 +367,10 @@ private extension StatusView {
         buttonsStackView.distribution = .equalSpacing
         mainStackView.addArrangedSubview(buttonsStackView)
 
+        avatarContainerView.addSubview(avatarImageView)
+        avatarImageView.translatesAutoresizingMaskIntoConstraints = false
         avatarImageView.layer.cornerRadius = .avatarDimension / 2
         avatarImageView.clipsToBounds = true
-
-        let avatarHeightConstraint = avatarImageView.heightAnchor.constraint(equalToConstant: .avatarDimension)
-
-        avatarHeightConstraint.priority = .justBelowMax
 
         avatarButton.translatesAutoresizingMaskIntoConstraints = false
         avatarImageView.addSubview(avatarButton)
@@ -374,6 +380,12 @@ private extension StatusView {
         avatarButton.addAction(
             UIAction { [weak self] _ in self?.statusConfiguration.viewModel.accountSelected() },
             for: .touchUpInside)
+
+        avatarContainerView.addSubview(rebloggerAvatarImageView)
+        rebloggerAvatarImageView.translatesAutoresizingMaskIntoConstraints = false
+        rebloggerAvatarImageView.layer.cornerRadius = .avatarDimension / 4
+        rebloggerAvatarImageView.clipsToBounds = true
+        rebloggerAvatarImageView.isHidden = true
 
         for view in [inReplyToView, hasReplyFollowingView] {
             addSubview(view)
@@ -392,8 +404,16 @@ private extension StatusView {
             containerStackView.leadingAnchor.constraint(equalTo: readableContentGuide.leadingAnchor),
             containerStackView.trailingAnchor.constraint(equalTo: readableContentGuide.trailingAnchor),
             containerStackView.bottomAnchor.constraint(equalTo: readableContentGuide.bottomAnchor),
-            avatarImageView.widthAnchor.constraint(equalToConstant: .avatarDimension),
+            avatarContainerView.widthAnchor.constraint(equalToConstant: .avatarDimension),
+            avatarContainerView.heightAnchor.constraint(equalToConstant: .avatarDimension),
+            avatarWidthConstraint,
             avatarHeightConstraint,
+            avatarImageView.topAnchor.constraint(equalTo: avatarContainerView.topAnchor),
+            avatarImageView.leadingAnchor.constraint(equalTo: avatarContainerView.leadingAnchor),
+            rebloggerAvatarImageView.widthAnchor.constraint(equalToConstant: .avatarDimension / 2),
+            rebloggerAvatarImageView.heightAnchor.constraint(equalToConstant: .avatarDimension / 2),
+            rebloggerAvatarImageView.trailingAnchor.constraint(equalTo: avatarContainerView.trailingAnchor),
+            rebloggerAvatarImageView.bottomAnchor.constraint(equalTo: avatarContainerView.bottomAnchor),
             sideStackView.widthAnchor.constraint(equalToConstant: .avatarDimension),
             avatarButton.leadingAnchor.constraint(equalTo: avatarImageView.leadingAnchor),
             avatarButton.topAnchor.constraint(equalTo: avatarImageView.topAnchor),
@@ -434,10 +454,18 @@ private extension StatusView {
 
         sideStackView.isHidden = isContextParent
 
-        if isContextParent, avatarImageView.superview !== nameAccountContainerStackView {
-            nameAccountContainerStackView.insertArrangedSubview(avatarImageView, at: 0)
-        } else if avatarImageView.superview !== sideStackView {
-            sideStackView.insertArrangedSubview(avatarImageView, at: 1)
+        let avatarDimension = viewModel.isReblog ? Self.reblogAvatarDimension : .avatarDimension
+
+        avatarWidthConstraint.constant = avatarDimension
+        avatarHeightConstraint.constant = avatarDimension
+        avatarImageView.layer.cornerRadius = avatarDimension / 2
+        rebloggerAvatarImageView.isHidden = !viewModel.isReblog
+        rebloggerAvatarImageView.sd_setImage(with: viewModel.isReblog ? viewModel.rebloggerAvatarURL : nil)
+
+        if isContextParent, avatarContainerView.superview !== nameAccountContainerStackView {
+            nameAccountContainerStackView.insertArrangedSubview(avatarContainerView, at: 0)
+        } else if avatarContainerView.superview !== sideStackView {
+            sideStackView.insertArrangedSubview(avatarContainerView, at: 1)
         }
 
         NSLayoutConstraint.activate([
