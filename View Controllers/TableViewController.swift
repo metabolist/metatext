@@ -422,7 +422,11 @@ private extension TableViewController {
 
         viewModel.alertItems
             .compactMap { $0 }
-            .sink { [weak self] in self?.present(alertItem: $0) }
+            .sink { [weak self] in
+                guard let self = self, self.isVisible else { return }
+
+                self.present(alertItem: $0)
+            }
             .store(in: &cancellables)
 
         tableView.publisher(for: \.contentOffset)
@@ -444,7 +448,11 @@ private extension TableViewController {
 
         NotificationCenter.default.publisher(for: UIScene.willEnterForegroundNotification)
             .merge(with: NotificationCenter.default.publisher(for: NewStatusViewController.newStatusPostedNotification))
-            .sink { [weak self] _ in self?.refreshIfAble() }
+            .sink { [weak self] _ in
+                guard let self = self, self.isVisible else { return }
+
+                self.refreshIfAble()
+            }
             .store(in: &cancellables)
 
         NotificationCenter.default.publisher(for: LoadMoreView.accessibilityCustomAction)
