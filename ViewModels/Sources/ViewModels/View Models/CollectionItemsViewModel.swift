@@ -250,6 +250,7 @@ extension CollectionItemsViewModel: CollectionViewModel {
             .sink { _ in }
             .store(in: &requestCancellables)
         collectionService.requestMarkerLastReadId()
+            .receive(on: DispatchQueue.main)
             .sink { _ in } receiveValue: { [weak self] in self?.markerLastReadId = $0 }
             .store(in: &cancellables)
 
