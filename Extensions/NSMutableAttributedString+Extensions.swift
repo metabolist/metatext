@@ -14,8 +14,7 @@ extension NSMutableAttributedString {
                 let attachment = AnimatedTextAttachment()
                 let imageURL: URL?
 
-                if !identityContext.appPreferences.shouldReduceMotion,
-                   identityContext.appPreferences.animateCustomEmojis,
+                if identityContext.appPreferences.animateCustomEmojis,
                    let urlString = emoji.url {
                     imageURL = URL(stringEscapingPath: urlString)
                 } else if let staticURLString = emoji.staticUrl {

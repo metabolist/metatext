@@ -1,5 +1,6 @@
 // Copyright © 2020 Metabolist. All rights reserved.
 
+import Combine
 import Mastodon
 import SwiftUI
 import ViewModels
@@ -107,40 +108,31 @@ struct PreferencesView: View {
                         Toggle("preferences.links.use-universal-links",
                                isOn: $identityContext.appPreferences.useUniversalLinks)
                     }
-                    if accessibilityReduceMotion {
-                        Toggle("preferences.media.use-system-reduce-motion",
-                               isOn: $identityContext.appPreferences.useSystemReduceMotionForMedia)
-                    }
                 }
                 Group {
                     Picker("preferences.media.autoplay.gifs",
-                           selection: reduceMotion ? .constant(.never) : $identityContext.appPreferences.autoplayGIFs) {
+                           selection: $identityContext.appPreferences.autoplayGIFs) {
                         ForEach(AppPreferences.Autoplay.allCases) { option in
                             Text(option.localizedStringKey).tag(option)
                         }
                     }
                     Picker("preferences.media.autoplay.videos",
-                           selection: reduceMotion
-                            ? .constant(.never) : $identityContext.appPreferences.autoplayVideos) {
+                           selection: $identityContext.appPreferences.autoplayVideos) {
                         ForEach(AppPreferences.Autoplay.allCases) { option in
                             Text(option.localizedStringKey).tag(option)
                         }
                     }
                     Picker("preferences.media.avatars.animate",
-                           selection: reduceMotion
-                            ? .constant(.never) : $identityContext.appPreferences.animateAvatars) {
+                           selection: $identityContext.appPreferences.animateAvatars) {
                         ForEach(AppPreferences.AnimateAvatars.allCases) { option in
                             Text(option.localizedStringKey).tag(option)
                         }
                     }
                     Toggle("preferences.media.custom-emojis.animate",
-                           isOn: reduceMotion ? .constant(false) : $identityContext.appPreferences.animateCustomEmojis)
-                        .disabled(reduceMotion)
+                           isOn: $identityContext.appPreferences.animateCustomEmojis)
                     Toggle("preferences.media.headers.animate",
-                           isOn: reduceMotion ? .constant(false) : $identityContext.appPreferences.animateHeaders)
-                        .disabled(reduceMotion)
+                           isOn: $identityContext.appPreferences.animateHeaders)
                 }
-                .disabled(reduceMotion)
                 if viewModel.identityContext.identity.authenticated
                     && !viewModel.identityContext.identity.pending {
                     Picker("preferences.home-timeline-position-on-startup",
@@ -154,12 +146,10 @@ struct PreferencesView: View {
         }
         .navigationTitle("preferences")
         .alertItem($viewModel.alertItem)
-    }
-}
-
-private extension PreferencesView {
-    var reduceMotion: Bool {
-        identityContext.appPreferences.shouldReduceMotion
+        .onReceive(NotificationCenter.default.publisher(
+                    for: UIAccessibility.videoAutoplayStatusDidChangeNotification)) { _ in
+            viewModel.objectWillChange.send()
+        }
     }
 }
 

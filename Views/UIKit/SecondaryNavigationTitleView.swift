@@ -66,7 +66,6 @@ private extension SecondaryNavigationTitleView {
 
     func applyViewModel() {
         let avatarURL = viewModel.identityContext.appPreferences.animateAvatars == .everywhere
-            && !viewModel.identityContext.appPreferences.shouldReduceMotion
             ? viewModel.identityContext.identity.account?.avatar
             : viewModel.identityContext.identity.account?.avatarStatic
 

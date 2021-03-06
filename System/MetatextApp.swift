@@ -27,5 +27,6 @@ struct MetatextApp: App {
 private extension MetatextApp {
     static let environment = AppEnvironment.live(
         userNotificationCenter: .current(),
-        reduceMotion: { UIAccessibility.isReduceMotionEnabled })
+        reduceMotion: { UIAccessibility.isReduceMotionEnabled },
+        autoplayVideos: { UIAccessibility.isVideoAutoplayEnabled })
 }

@@ -7,10 +7,12 @@ import Mastodon
 public struct AppPreferences {
     private let userDefaults: UserDefaults
     private let systemReduceMotion: () -> Bool
+    private let systemAutoplayVideos: () -> Bool
 
     public init(environment: AppEnvironment) {
         self.userDefaults = environment.userDefaults
         self.systemReduceMotion = environment.reduceMotion
+        self.systemAutoplayVideos = environment.autoplayVideos
     }
 }
 
@@ -45,11 +47,6 @@ public extension AppPreferences {
         public var id: String { rawValue }
     }
 
-    var useSystemReduceMotionForMedia: Bool {
-        get { self[.useSystemReduceMotionForMedia] ?? true }
-        set { self[.useSystemReduceMotionForMedia] = newValue }
-    }
-
     var statusWord: StatusWord {
         get {
             if let rawValue = self[.statusWord] as String?,
@@ -69,18 +66,18 @@ public extension AppPreferences {
                 return value
             }
 
-            return .everywhere
+            return systemReduceMotion() ? .never : .everywhere
         }
         set { self[.animateAvatars] = newValue.rawValue }
     }
 
     var animateHeaders: Bool {
-        get { self[.animateHeaders] ?? true }
+        get { self[.animateHeaders] ?? !systemReduceMotion() }
         set { self[.animateHeaders] = newValue }
     }
 
     var animateCustomEmojis: Bool {
-        get { self[.animateCustomEmojis] ?? true }
+        get { self[.animateCustomEmojis] ?? !systemReduceMotion() }
         set { self[.animateCustomEmojis] = newValue }
     }
 
@@ -91,7 +88,7 @@ public extension AppPreferences {
                 return value
             }
 
-            return .always
+            return (!systemAutoplayVideos() || systemReduceMotion()) ? .never : .always
         }
         set { self[.autoplayGIFs] = newValue.rawValue }
     }
@@ -103,7 +100,7 @@ public extension AppPreferences {
                 return value
             }
 
-            return .wifi
+            return (!systemAutoplayVideos() || systemReduceMotion()) ? .never : .wifi
         }
         set { self[.autoplayVideos] = newValue.rawValue }
     }
@@ -139,10 +136,6 @@ public extension AppPreferences {
             } ?? MastodonNotification.NotificationType.allCasesExceptUnknown)
         }
         set { self[.notificationSounds] = newValue.map { $0.rawValue } }
-    }
-
-    var shouldReduceMotion: Bool {
-        systemReduceMotion() && useSystemReduceMotionForMedia
     }
 
     func positionBehavior(timeline: Timeline) -> PositionBehavior {
@@ -195,7 +188,6 @@ private extension AppPreferences {
         case statusWord
         case requireDoubleTapToReblog
         case requireDoubleTapToFavorite
-        case useSystemReduceMotionForMedia
         case animateAvatars
         case animateHeaders
         case animateCustomEmojis

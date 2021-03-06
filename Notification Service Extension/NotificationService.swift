@@ -75,7 +75,8 @@ final class NotificationService: UNNotificationServiceExtension {
 private extension NotificationService {
     private static let environment = AppEnvironment.live(
         userNotificationCenter: .current(),
-        reduceMotion: { false })
+        reduceMotion: { false },
+        autoplayVideos: { true })
 
     enum ImageError: Error {
         case dataMissing

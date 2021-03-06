@@ -10,7 +10,8 @@ import ViewModels
 class ShareExtensionNavigationViewController: UINavigationController {
     private let environment = AppEnvironment.live(
         userNotificationCenter: .current(),
-        reduceMotion: { UIAccessibility.isReduceMotionEnabled })
+        reduceMotion: { UIAccessibility.isReduceMotionEnabled },
+        autoplayVideos: { UIAccessibility.isVideoAutoplayEnabled })
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -195,7 +195,6 @@ private extension CompositionView {
                 guard let self = self else { return }
 
                 let avatarURL = $0.appPreferences.animateAvatars == .everywhere
-                    && !$0.appPreferences.shouldReduceMotion
                     ? $0.identity.account?.avatar
                     : $0.identity.account?.avatarStatic
 

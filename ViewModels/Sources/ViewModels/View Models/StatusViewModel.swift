@@ -82,8 +82,7 @@ public extension StatusViewModel {
     var accountName: String { "@".appending(statusService.status.displayStatus.account.acct) }
 
     var avatarURL: URL {
-        if !identityContext.appPreferences.shouldReduceMotion,
-           identityContext.appPreferences.animateAvatars == .everywhere {
+        if identityContext.appPreferences.animateAvatars == .everywhere {
             return statusService.status.displayStatus.account.avatar
         } else {
             return statusService.status.displayStatus.account.avatarStatic
@@ -91,8 +90,7 @@ public extension StatusViewModel {
     }
 
     var rebloggerAvatarURL: URL {
-        if !identityContext.appPreferences.shouldReduceMotion,
-           identityContext.appPreferences.animateAvatars == .everywhere {
+        if identityContext.appPreferences.animateAvatars == .everywhere {
             return statusService.status.account.avatar
         } else {
             return statusService.status.account.avatarStatic

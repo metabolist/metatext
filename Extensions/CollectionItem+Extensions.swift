@@ -94,8 +94,7 @@ private extension Account {
         }
         .compactMap(URL.init(string:)))
 
-        if !identityContext.appPreferences.shouldReduceMotion
-            && identityContext.appPreferences.animateAvatars == .everywhere {
+        if identityContext.appPreferences.animateAvatars == .everywhere {
             urls.insert(avatar)
         } else {
             urls.insert(avatarStatic)

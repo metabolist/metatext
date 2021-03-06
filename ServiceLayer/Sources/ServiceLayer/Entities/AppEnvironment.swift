@@ -14,6 +14,7 @@ public struct AppEnvironment {
     let userDefaults: UserDefaults
     let userNotificationClient: UserNotificationClient
     let reduceMotion: () -> Bool
+    let autoplayVideos: () -> Bool
     let uuid: () -> UUID
     let inMemoryContent: Bool
     let fixtureDatabase: IdentityDatabase?
@@ -24,6 +25,7 @@ public struct AppEnvironment {
                 userDefaults: UserDefaults,
                 userNotificationClient: UserNotificationClient,
                 reduceMotion: @escaping () -> Bool,
+                autoplayVideos: @escaping () -> Bool,
                 uuid: @escaping () -> UUID,
                 inMemoryContent: Bool,
                 fixtureDatabase: IdentityDatabase?) {
@@ -33,6 +35,7 @@ public struct AppEnvironment {
         self.userDefaults = userDefaults
         self.userNotificationClient = userNotificationClient
         self.reduceMotion = reduceMotion
+        self.autoplayVideos = autoplayVideos
         self.uuid = uuid
         self.inMemoryContent = inMemoryContent
         self.fixtureDatabase = fixtureDatabase
@@ -42,7 +45,9 @@ public struct AppEnvironment {
 public extension AppEnvironment {
     static let appGroup = "group.metabolist.metatext"
 
-    static func live(userNotificationCenter: UNUserNotificationCenter, reduceMotion: @escaping () -> Bool) -> Self {
+    static func live(userNotificationCenter: UNUserNotificationCenter,
+                     reduceMotion: @escaping () -> Bool,
+                     autoplayVideos: @escaping () -> Bool) -> Self {
         Self(
             session: URLSession.shared,
             webAuthSessionType: LiveWebAuthSession.self,
@@ -50,6 +55,7 @@ public extension AppEnvironment {
             userDefaults: UserDefaults(suiteName: appGroup)!,
             userNotificationClient: .live(userNotificationCenter),
             reduceMotion: reduceMotion,
+            autoplayVideos: autoplayVideos,
             uuid: UUID.init,
             inMemoryContent: false,
             fixtureDatabase: nil)

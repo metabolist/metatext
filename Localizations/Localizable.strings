@@ -192,7 +192,6 @@
 "preferences.blocked-domains" = "Blocked Domains";
 "preferences.blocked-users" = "Blocked Users";
 "preferences.media" = "Media";
-"preferences.media.use-system-reduce-motion" = "Use system reduce motion setting";
 "preferences.media.avatars" = "Avatars";
 "preferences.media.avatars.animate" = "Animate avatars";
 "preferences.media.avatars.animate.everywhere" = "Everywhere";

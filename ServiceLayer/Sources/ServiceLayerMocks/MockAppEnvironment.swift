@@ -24,6 +24,7 @@ public extension AppEnvironment {
             userDefaults: userDefaults,
             userNotificationClient: userNotificationClient,
             reduceMotion: { false },
+            autoplayVideos: { true },
             uuid: uuid,
             inMemoryContent: inMemoryContent,
             fixtureDatabase: fixtureDatabase)

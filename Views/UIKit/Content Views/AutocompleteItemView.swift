@@ -73,10 +73,7 @@ private extension AutocompleteItemView {
         switch autocompleteItemConfiguration.item {
         case let .account(account):
             let appPreferences = autocompleteItemConfiguration.identityContext.appPreferences
-            let avatarURL = appPreferences.animateAvatars == .everywhere
-                && !appPreferences.shouldReduceMotion
-                ? account.avatar
-                : account.avatarStatic
+            let avatarURL = appPreferences.animateAvatars == .everywhere ? account.avatar : account.avatarStatic
 
             imageView.sd_setImage(with: avatarURL)
             imageView.isHidden = false
