@@ -80,6 +80,7 @@ private extension LoadMoreView {
                 systemName: "arrow.up",
                 withConfiguration: UIImage.SymbolConfiguration(
                     pointSize: UIFont.preferredFont(forTextStyle: .title2).pointSize))
+            arrowImageView.contentMode = .scaleAspectFit
             arrowImageView.setContentHuggingPriority(.required, for: .horizontal)
         }
 
@@ -97,16 +98,20 @@ private extension LoadMoreView {
         activityIndicatorView.hidesWhenStopped = true
 
         NSLayoutConstraint.activate([
+            heightAnchor.constraint(greaterThanOrEqualToConstant: .minimumButtonDimension * 2),
             leadingArrowImageView.leadingAnchor.constraint(equalTo: readableContentGuide.leadingAnchor),
-            leadingArrowImageView.topAnchor.constraint(equalTo: readableContentGuide.topAnchor),
-            leadingArrowImageView.bottomAnchor.constraint(equalTo: readableContentGuide.bottomAnchor),
+            leadingArrowImageView.topAnchor.constraint(greaterThanOrEqualTo: readableContentGuide.topAnchor),
+            leadingArrowImageView.bottomAnchor.constraint(greaterThanOrEqualTo: readableContentGuide.bottomAnchor),
+            leadingArrowImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
             label.leadingAnchor.constraint(equalTo: leadingArrowImageView.trailingAnchor),
             label.topAnchor.constraint(greaterThanOrEqualTo: readableContentGuide.topAnchor),
             label.bottomAnchor.constraint(greaterThanOrEqualTo: readableContentGuide.bottomAnchor),
             label.trailingAnchor.constraint(equalTo: trailingArrowImageView.leadingAnchor),
-            trailingArrowImageView.topAnchor.constraint(equalTo: readableContentGuide.topAnchor),
-            trailingArrowImageView.bottomAnchor.constraint(equalTo: readableContentGuide.bottomAnchor),
+            label.centerYAnchor.constraint(equalTo: centerYAnchor),
+            trailingArrowImageView.topAnchor.constraint(greaterThanOrEqualTo: readableContentGuide.topAnchor),
+            trailingArrowImageView.bottomAnchor.constraint(greaterThanOrEqualTo: readableContentGuide.bottomAnchor),
             trailingArrowImageView.trailingAnchor.constraint(equalTo: readableContentGuide.trailingAnchor),
+            trailingArrowImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
             activityIndicatorView.centerXAnchor.constraint(equalTo: centerXAnchor),
             activityIndicatorView.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
