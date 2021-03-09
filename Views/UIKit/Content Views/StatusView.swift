@@ -397,6 +397,7 @@ private extension StatusView {
         containerStackView.addArrangedSubview(reportSelectionSwitch)
         reportSelectionSwitch.setContentCompressionResistancePriority(.required, for: .horizontal)
         reportSelectionSwitch.setContentHuggingPriority(.required, for: .horizontal)
+        reportSelectionSwitch.setContentHuggingPriority(.defaultLow, for: .vertical)
         reportSelectionSwitch.isHidden = true
 
         NSLayoutConstraint.activate([
