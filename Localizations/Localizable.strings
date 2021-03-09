@@ -175,6 +175,7 @@
 "main-navigation.notifications" = "Notifications";
 "main-navigation.conversations" = "Messages";
 "metatext" = "Metatext";
+"notification.accessibility.view-profile" = "View profile";
 "notification.signed-in-as-%@" = "Logged in as %@";
 "notification.new-items" = "New notifications";
 "notification.poll" = "A poll you have voted in has ended";

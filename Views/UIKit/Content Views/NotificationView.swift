@@ -250,6 +250,15 @@ private extension NotificationView {
         }
 
         self.accessibilityAttributedLabel = accessibilityAttributedLabel
+
+        accessibilityCustomActions = [
+            UIAccessibilityCustomAction(
+                name: NSLocalizedString("notification.accessibility.view-profile", comment: "")) { [weak self] _ in
+                self?.notificationConfiguration.viewModel.accountSelected()
+
+                return true
+            }
+        ]
     }
     // swiftlint:enable function_body_length
 }
