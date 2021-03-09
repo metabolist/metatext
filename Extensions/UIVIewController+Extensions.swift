@@ -5,7 +5,7 @@ import UIKit
 import ViewModels
 
 extension UIViewController {
-    var isVisible: Bool { isViewLoaded && view.window != nil && presentedViewController == nil }
+    var isVisible: Bool { isViewLoaded && view.window != nil }
 
     func present(alertItem: AlertItem) {
         let alertController = UIAlertController(

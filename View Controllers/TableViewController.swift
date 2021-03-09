@@ -423,7 +423,7 @@ private extension TableViewController {
         viewModel.alertItems
             .compactMap { $0 }
             .sink { [weak self] in
-                guard let self = self, self.isVisible else { return }
+                guard let self = self, self.isVisible, self.presentedViewController == nil else { return }
 
                 self.present(alertItem: $0)
             }
