@@ -79,6 +79,8 @@ public final class NewStatusViewModel: ObservableObject {
                                 .map("@".appending))
 
             compositionViewModel.text = mentions.joined(separator: " ").appending(" ")
+            compositionViewModel.contentWarning = inReplyTo.spoilerText
+            compositionViewModel.displayContentWarning = !inReplyTo.spoilerText.isEmpty
         } else if let directMessageTo = directMessageTo {
             compositionViewModel.text = directMessageTo.accountName.appending(" ")
             visibility = .direct
