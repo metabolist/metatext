@@ -111,6 +111,7 @@ final class ImageViewController: UIViewController {
             descriptionBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             descriptionBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             descriptionBackgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            descriptionTextView.heightAnchor.constraint(lessThanOrEqualTo: view.heightAnchor, multiplier: 1 / 4),
             descriptionTextView.leadingAnchor.constraint(
                 equalTo: descriptionBackgroundView.layoutMarginsGuide.leadingAnchor),
             descriptionTextView.topAnchor.constraint(equalTo: descriptionBackgroundView.topAnchor),
@@ -171,6 +172,15 @@ final class ImageViewController: UIViewController {
         contentView.accessibilityLabel = viewModel?.attachment.type.accessibilityName
             ?? Attachment.AttachmentType.image.accessibilityName
         contentView.isAccessibilityElement = true
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        let textHeight = descriptionTextView.sizeThatFits(.init(
+                                                            width: descriptionTextView.frame.width,
+                                                            height: .greatestFiniteMagnitude)).height
+        descriptionTextView.isScrollEnabled = textHeight > descriptionTextView.frame.height
     }
 }
 
