@@ -98,6 +98,7 @@ final class EditAttachmentViewController: UIViewController {
         textView.layer.cornerRadius = .defaultCornerRadius
         textView.delegate = self
         textView.text = viewModel.editingDescription
+        textView.accessibilityLabel = describeLabel.text
 
         let remainingCharactersLabel = UILabel()
 

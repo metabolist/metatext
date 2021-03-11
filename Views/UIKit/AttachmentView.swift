@@ -135,7 +135,6 @@ private extension AttachmentView {
         addSubview(selectionButton)
         selectionButton.translatesAutoresizingMaskIntoConstraints = false
         selectionButton.setBackgroundImage(.highlightedButtonBackground, for: .highlighted)
-        selectionButton.accessibilityLabel = NSLocalizedString("compose.attachment.edit", comment: "")
         selectionButton.addAction(
             UIAction { [weak self] _ in
                 guard let self = self else { return }
@@ -143,6 +142,11 @@ private extension AttachmentView {
                 self.parentViewModel.attachmentSelected(viewModel: self.viewModel)
             },
             for: .touchUpInside)
+        selectionButton.accessibilityLabel = NSLocalizedString("compose.attachment.edit", comment: "")
+
+        if let description = viewModel.attachment.description, !description.isEmpty {
+            selectionButton.accessibilityLabel?.appendWithSeparator(description)
+        }
 
         addSubview(removeButton)
         removeButton.translatesAutoresizingMaskIntoConstraints = false
