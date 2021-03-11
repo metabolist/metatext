@@ -132,6 +132,7 @@ final class ImageViewController: UIViewController {
 
                 if cachedImage != nil {
                     placeholderImage = cachedImage
+                    imageView.sd_imageIndicator = nil
                 } else if let blurHash = viewModel.attachment.blurhash {
                     placeholderImage = UIImage(blurHash: blurHash, size: .blurHashSize)
                 } else {
