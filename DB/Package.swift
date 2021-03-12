@@ -14,7 +14,7 @@ let package = Package(
             targets: ["DB"])
     ],
     dependencies: [
-        .package(name: "GRDB", url: "https://github.com/metabolist/GRDB.swift.git", .revision("186a111")),
+        .package(name: "GRDB", url: "https://github.com/metabolist/GRDB.swift.git", .revision("d826b27")),
         .package(path: "Mastodon"),
         .package(path: "Secrets")
     ],
