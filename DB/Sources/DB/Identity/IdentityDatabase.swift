@@ -32,7 +32,7 @@ public struct IdentityDatabase {
 
 public extension IdentityDatabase {
     func createIdentity(id: Identity.Id, url: URL, authenticated: Bool, pending: Bool) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher(
+        databaseWriter.mutatingPublisher(
             updates: IdentityRecord(
                 id: id,
                 url: url,
@@ -44,28 +44,22 @@ public extension IdentityDatabase {
                 lastRegisteredDeviceToken: nil,
                 pushSubscriptionAlerts: .initial)
                 .save)
-            .ignoreOutput()
-            .eraseToAnyPublisher()
     }
 
     func deleteIdentity(id: Identity.Id) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher(updates: IdentityRecord.filter(IdentityRecord.Columns.id == id).deleteAll)
-            .ignoreOutput()
-            .eraseToAnyPublisher()
+        databaseWriter.mutatingPublisher(updates: IdentityRecord.filter(IdentityRecord.Columns.id == id).deleteAll)
     }
 
     func updateLastUsedAt(id: Identity.Id) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher {
+        databaseWriter.mutatingPublisher {
             try IdentityRecord
                 .filter(IdentityRecord.Columns.id == id)
                 .updateAll($0, IdentityRecord.Columns.lastUsedAt.set(to: Date()))
         }
-        .ignoreOutput()
-        .eraseToAnyPublisher()
     }
 
     func updateInstance(_ instance: Instance, id: Identity.Id) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher {
+        databaseWriter.mutatingPublisher {
             try Identity.Instance(
                 uri: instance.uri,
                 streamingAPI: instance.urls.streamingApi,
@@ -78,12 +72,10 @@ public extension IdentityDatabase {
                 .filter(IdentityRecord.Columns.id == id)
                 .updateAll($0, IdentityRecord.Columns.instanceURI.set(to: instance.uri))
         }
-        .ignoreOutput()
-        .eraseToAnyPublisher()
     }
 
     func updateAccount(_ account: Account, id: Identity.Id) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher(
+        databaseWriter.mutatingPublisher(
             updates: Identity.Account(
                 id: account.id,
                 identityId: id,
@@ -97,22 +89,18 @@ public extension IdentityDatabase {
                 emojis: account.emojis,
                 followRequestCount: account.source?.followRequestsCount ?? 0)
                 .save)
-            .ignoreOutput()
-            .eraseToAnyPublisher()
     }
 
     func confirmIdentity(id: Identity.Id) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher {
+        databaseWriter.mutatingPublisher {
             try IdentityRecord
                 .filter(IdentityRecord.Columns.id == id)
                 .updateAll($0, IdentityRecord.Columns.pending.set(to: false))
         }
-        .ignoreOutput()
-        .eraseToAnyPublisher()
     }
 
     func updatePreferences(_ preferences: Mastodon.Preferences, id: Identity.Id) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher {
+        databaseWriter.mutatingPublisher {
             guard let storedPreferences = try IdentityRecord.filter(IdentityRecord.Columns.id == id)
                     .fetchOne($0)?
                     .preferences else {
@@ -121,20 +109,16 @@ public extension IdentityDatabase {
 
             try Self.writePreferences(storedPreferences.updated(from: preferences), id: id)($0)
         }
-        .ignoreOutput()
-        .eraseToAnyPublisher()
     }
 
     func updatePreferences(_ preferences: Identity.Preferences, id: Identity.Id) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher(updates: Self.writePreferences(preferences, id: id))
-            .ignoreOutput()
-            .eraseToAnyPublisher()
+        databaseWriter.mutatingPublisher(updates: Self.writePreferences(preferences, id: id))
     }
 
     func updatePushSubscription(alerts: PushSubscription.Alerts,
                                 deviceToken: Data? = nil,
                                 id: Identity.Id) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher {
+        databaseWriter.mutatingPublisher {
             let data = try IdentityRecord.databaseJSONEncoder(
                 for: IdentityRecord.Columns.pushSubscriptionAlerts.name)
                 .encode(alerts)
@@ -149,8 +133,6 @@ public extension IdentityDatabase {
                     .updateAll($0, IdentityRecord.Columns.lastRegisteredDeviceToken.set(to: deviceToken))
             }
         }
-        .ignoreOutput()
-        .eraseToAnyPublisher()
     }
 
     func identityPublisher(id: Identity.Id, immediate: Bool) -> AnyPublisher<Identity, Error> {

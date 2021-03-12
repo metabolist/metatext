@@ -51,9 +51,7 @@ public extension ContentDatabase {
     }
 
     func insert(status: Status) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher(updates: status.save)
-        .ignoreOutput()
-        .eraseToAnyPublisher()
+        databaseWriter.mutatingPublisher(updates: status.save)
     }
 
     // swiftlint:disable:next function_body_length
@@ -61,7 +59,7 @@ public extension ContentDatabase {
         statuses: [Status],
         timeline: Timeline,
         loadMoreAndDirection: (LoadMore, LoadMore.Direction)? = nil) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher {
+        databaseWriter.mutatingPublisher {
             let timelineRecord = TimelineRecord(timeline: timeline)
 
             try timelineRecord.save($0)
@@ -122,12 +120,10 @@ public extension ContentDatabase {
                 }
             }
         }
-        .ignoreOutput()
-        .eraseToAnyPublisher()
     }
 
     func insert(context: Context, parentId: Status.Id) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher {
+        databaseWriter.mutatingPublisher {
             for (index, status) in context.ancestors.enumerated() {
                 try status.save($0)
                 try StatusAncestorJoin(parentId: parentId, statusId: status.id, order: index).save($0)
@@ -148,12 +144,10 @@ public extension ContentDatabase {
                     && !context.descendants.map(\.id).contains(StatusDescendantJoin.Columns.statusId))
                 .deleteAll($0)
         }
-        .ignoreOutput()
-        .eraseToAnyPublisher()
     }
 
     func insert(pinnedStatuses: [Status], accountId: Account.Id) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher {
+        databaseWriter.mutatingPublisher {
             for (index, status) in pinnedStatuses.enumerated() {
                 try status.save($0)
                 try AccountPinnedStatusJoin(accountId: accountId, statusId: status.id, order: index).save($0)
@@ -164,12 +158,10 @@ public extension ContentDatabase {
                     && !pinnedStatuses.map(\.id).contains(AccountPinnedStatusJoin.Columns.statusId))
                 .deleteAll($0)
         }
-        .ignoreOutput()
-        .eraseToAnyPublisher()
     }
 
     func toggleShowContent(id: Status.Id) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher {
+        databaseWriter.mutatingPublisher {
             if let toggle = try StatusShowContentToggle
                 .filter(StatusShowContentToggle.Columns.statusId == id)
                 .fetchOne($0) {
@@ -178,12 +170,10 @@ public extension ContentDatabase {
                 try StatusShowContentToggle(statusId: id).save($0)
             }
         }
-        .ignoreOutput()
-        .eraseToAnyPublisher()
     }
 
     func toggleShowAttachments(id: Status.Id) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher {
+        databaseWriter.mutatingPublisher {
             if let toggle = try StatusShowAttachmentsToggle
                 .filter(StatusShowAttachmentsToggle.Columns.statusId == id)
                 .fetchOne($0) {
@@ -192,23 +182,19 @@ public extension ContentDatabase {
                 try StatusShowAttachmentsToggle(statusId: id).save($0)
             }
         }
-        .ignoreOutput()
-        .eraseToAnyPublisher()
     }
 
     func expand(ids: Set<Status.Id>) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher {
+        databaseWriter.mutatingPublisher {
             for id in ids {
                 try StatusShowContentToggle(statusId: id).save($0)
                 try StatusShowAttachmentsToggle(statusId: id).save($0)
             }
         }
-        .ignoreOutput()
-        .eraseToAnyPublisher()
     }
 
     func collapse(ids: Set<Status.Id>) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher {
+        databaseWriter.mutatingPublisher {
             try StatusShowContentToggle
                 .filter(ids.contains(StatusShowContentToggle.Columns.statusId))
                 .deleteAll($0)
@@ -216,29 +202,23 @@ public extension ContentDatabase {
                 .filter(ids.contains(StatusShowContentToggle.Columns.statusId))
                 .deleteAll($0)
         }
-        .ignoreOutput()
-        .eraseToAnyPublisher()
     }
 
     func update(id: Status.Id, poll: Poll) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher {
+        databaseWriter.mutatingPublisher {
             let data = try StatusRecord.databaseJSONEncoder(for: StatusRecord.Columns.poll.name).encode(poll)
 
             try StatusRecord.filter(StatusRecord.Columns.id == id)
                 .updateAll($0, StatusRecord.Columns.poll.set(to: data))
         }
-        .ignoreOutput()
-        .eraseToAnyPublisher()
     }
 
     func delete(id: Status.Id) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher(updates: StatusRecord.filter(StatusRecord.Columns.id == id).deleteAll)
-            .ignoreOutput()
-            .eraseToAnyPublisher()
+        databaseWriter.mutatingPublisher(updates: StatusRecord.filter(StatusRecord.Columns.id == id).deleteAll)
     }
 
     func unfollow(id: Account.Id) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher {
+        databaseWriter.mutatingPublisher {
             let statusIds = try Status.Id.fetchAll(
                 $0,
                 StatusRecord.filter(StatusRecord.Columns.accountId == id).select(StatusRecord.Columns.id))
@@ -248,27 +228,21 @@ public extension ContentDatabase {
                     && statusIds.contains(TimelineStatusJoin.Columns.statusId))
                 .deleteAll($0)
         }
-        .ignoreOutput()
-        .eraseToAnyPublisher()
     }
 
     func mute(id: Account.Id) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher {
+        databaseWriter.mutatingPublisher {
             try StatusRecord.filter(StatusRecord.Columns.accountId == id).deleteAll($0)
             try NotificationRecord.filter(NotificationRecord.Columns.accountId == id).deleteAll($0)
         }
-        .ignoreOutput()
-        .eraseToAnyPublisher()
     }
 
     func block(id: Account.Id) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher(updates: AccountRecord.filter(AccountRecord.Columns.id == id).deleteAll)
-            .ignoreOutput()
-            .eraseToAnyPublisher()
+        databaseWriter.mutatingPublisher(updates: AccountRecord.filter(AccountRecord.Columns.id == id).deleteAll)
     }
 
     func insert(accounts: [Account], listId: AccountList.Id? = nil) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher {
+        databaseWriter.mutatingPublisher {
             var order: Int?
 
             if let listId = listId {
@@ -290,22 +264,18 @@ public extension ContentDatabase {
                 }
             }
         }
-        .ignoreOutput()
-        .eraseToAnyPublisher()
     }
 
     func remove(id: Account.Id, from listId: AccountList.Id) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher(
+        databaseWriter.mutatingPublisher(
             updates: AccountListJoin.filter(
                 AccountListJoin.Columns.accountId == id
                     && AccountListJoin.Columns.accountListId == listId)
                 .deleteAll)
-        .ignoreOutput()
-        .eraseToAnyPublisher()
     }
 
     func insert(identityProofs: [IdentityProof], id: Account.Id) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher {
+        databaseWriter.mutatingPublisher {
             for identityProof in identityProofs {
                 try IdentityProofRecord(
                     accountId: id,
@@ -317,12 +287,10 @@ public extension ContentDatabase {
                     .save($0)
             }
         }
-        .ignoreOutput()
-        .eraseToAnyPublisher()
     }
 
     func insert(featuredTags: [FeaturedTag], id: Account.Id) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher {
+        databaseWriter.mutatingPublisher {
             for featuredTag in featuredTags {
                 try FeaturedTagRecord(
                     id: featuredTag.id,
@@ -334,22 +302,18 @@ public extension ContentDatabase {
                     .save($0)
             }
         }
-        .ignoreOutput()
-        .eraseToAnyPublisher()
     }
 
     func insert(relationships: [Relationship]) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher {
+        databaseWriter.mutatingPublisher {
             for relationship in relationships {
                 try relationship.save($0)
             }
         }
-        .ignoreOutput()
-        .eraseToAnyPublisher()
     }
 
     func setLists(_ lists: [List]) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher {
+        databaseWriter.mutatingPublisher {
             for list in lists {
                 try TimelineRecord(timeline: Timeline.list(list)).save($0)
             }
@@ -359,86 +323,66 @@ public extension ContentDatabase {
                             && TimelineRecord.Columns.listTitle != nil)
                 .deleteAll($0)
         }
-        .ignoreOutput()
-        .eraseToAnyPublisher()
     }
 
     func createList(_ list: List) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher(updates: TimelineRecord(timeline: Timeline.list(list)).save)
-            .ignoreOutput()
-            .eraseToAnyPublisher()
+        databaseWriter.mutatingPublisher(updates: TimelineRecord(timeline: Timeline.list(list)).save)
     }
 
     func deleteList(id: List.Id) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher(updates: TimelineRecord.filter(TimelineRecord.Columns.listId == id).deleteAll)
-            .ignoreOutput()
-            .eraseToAnyPublisher()
+        databaseWriter.mutatingPublisher(updates: TimelineRecord.filter(TimelineRecord.Columns.listId == id).deleteAll)
     }
 
     func setFilters(_ filters: [Filter]) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher {
+        databaseWriter.mutatingPublisher {
             for filter in filters {
                 try filter.save($0)
             }
 
             try Filter.filter(!filters.map(\.id).contains(Filter.Columns.id)).deleteAll($0)
         }
-        .ignoreOutput()
-        .eraseToAnyPublisher()
     }
 
     func createFilter(_ filter: Filter) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher(updates: filter.save)
-            .ignoreOutput()
-            .eraseToAnyPublisher()
+        databaseWriter.mutatingPublisher(updates: filter.save)
     }
 
     func deleteFilter(id: Filter.Id) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher(updates: Filter.filter(Filter.Columns.id == id).deleteAll)
-            .ignoreOutput()
-            .eraseToAnyPublisher()
+        databaseWriter.mutatingPublisher(updates: Filter.filter(Filter.Columns.id == id).deleteAll)
     }
 
     func setLastReadId(_ id: String, timelineId: Timeline.Id) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher(updates: LastReadIdRecord(timelineId: timelineId, id: id).save)
-            .ignoreOutput()
-            .eraseToAnyPublisher()
+        databaseWriter.mutatingPublisher(updates: LastReadIdRecord(timelineId: timelineId, id: id).save)
     }
 
     func insert(notifications: [MastodonNotification]) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher {
+        databaseWriter.mutatingPublisher {
             for notification in notifications {
                 try notification.save($0)
             }
         }
-        .ignoreOutput()
-        .eraseToAnyPublisher()
     }
 
     func insert(conversations: [Conversation]) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher {
+        databaseWriter.mutatingPublisher {
             for conversation in conversations {
                 try conversation.save($0)
             }
         }
-        .ignoreOutput()
-        .eraseToAnyPublisher()
     }
 
     func update(emojis: [Emoji]) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher {
+        databaseWriter.mutatingPublisher {
             for emoji in emojis {
                 try emoji.save($0)
             }
 
             try Emoji.filter(!emojis.map(\.shortcode).contains(Emoji.Columns.shortcode)).deleteAll($0)
         }
-        .ignoreOutput()
-        .eraseToAnyPublisher()
     }
 
     func updateUse(emoji: String, system: Bool) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher {
+        databaseWriter.mutatingPublisher {
             let count = try Int.fetchOne(
                 $0,
                 EmojiUse.filter(EmojiUse.Columns.system == system && EmojiUse.Columns.emoji == emoji)
@@ -446,24 +390,20 @@ public extension ContentDatabase {
 
             try EmojiUse(emoji: emoji, system: system, lastUse: Date(), count: (count ?? 0) + 1).save($0)
         }
-        .ignoreOutput()
-        .eraseToAnyPublisher()
     }
 
     func update(announcements: [Announcement]) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher {
+        databaseWriter.mutatingPublisher {
             for announcement in announcements {
                 try announcement.save($0)
             }
 
             try Announcement.filter(!announcements.map(\.id).contains(Announcement.Columns.id)).deleteAll($0)
         }
-        .ignoreOutput()
-        .eraseToAnyPublisher()
     }
 
     func insert(results: Results) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher {
+        databaseWriter.mutatingPublisher {
             for account in results.accounts {
                 try account.save($0)
             }
@@ -472,14 +412,10 @@ public extension ContentDatabase {
                 try status.save($0)
             }
         }
-        .ignoreOutput()
-        .eraseToAnyPublisher()
     }
 
     func insert(instance: Instance) -> AnyPublisher<Never, Error> {
-        databaseWriter.writePublisher(updates: instance.save)
-            .ignoreOutput()
-            .eraseToAnyPublisher()
+        databaseWriter.mutatingPublisher(updates: instance.save)
     }
 
     func timelinePublisher(_ timeline: Timeline) -> AnyPublisher<[CollectionSection], Error> {
@@ -697,7 +633,6 @@ public extension ContentDatabase {
 
 private extension ContentDatabase {
     static let cleanAfterLastReadIdCount = 40
-
     static let ephemeralTimelines = NSCountedSet()
 
     static func fileURL(id: Identity.Id, appGroup: String) throws -> URL {

@@ -20,6 +20,7 @@ extension DatabasePool {
 
                 configuration.busyMode = .timeout(5)
                 configuration.defaultTransactionKind = .immediate
+                configuration.observesSuspensionNotifications = true
                 configuration.prepareDatabase { db in
                     try db.usePassphrase(passphrase())
                     try db.execute(sql: "PRAGMA cipher_plaintext_header_size = 32")
