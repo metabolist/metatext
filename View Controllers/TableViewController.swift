@@ -803,7 +803,7 @@ private extension TableViewController {
             self.newItemsViewVisibleConstraint?.isActive = true
             self.view.layoutIfNeeded()
         } completion: { _ in
-            self.view.layoutIfNeeded()
+            self.reloadVisibleItems()
         }
     }
 
@@ -814,8 +814,18 @@ private extension TableViewController {
             self.newItemsViewVisibleConstraint?.isActive = false
             self.view.layoutIfNeeded()
         } completion: { _ in
-            self.view.layoutIfNeeded()
+            self.reloadVisibleItems()
         }
+    }
+
+    func reloadVisibleItems() {
+        guard let visibleItems = tableView.indexPathsForVisibleRows?.compactMap(dataSource.itemIdentifier(for:))
+        else { return }
+
+        var snapshot = dataSource.snapshot()
+
+        snapshot.reloadItems(visibleItems)
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
 }
 // swiftlint:enable file_length
