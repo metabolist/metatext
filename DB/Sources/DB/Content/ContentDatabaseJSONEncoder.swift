@@ -7,11 +7,12 @@ final class ContentDatabaseJSONEncoder: JSONEncoder {
     override init() {
         super.init()
 
-        let dateFormatter = DateFormatter()
-
-        dateFormatter.dateFormat = Constants.dateFormat
-        dateEncodingStrategy = .formatted(dateFormatter)
         keyEncodingStrategy = .convertToSnakeCase
         outputFormatting = .sortedKeys
+        dateEncodingStrategy = .custom { date, encoder in
+            var container = encoder.singleValueContainer()
+
+            try container.encode(MastodonDecoder.dateFormatter.string(from: date))
+        }
     }
 }
