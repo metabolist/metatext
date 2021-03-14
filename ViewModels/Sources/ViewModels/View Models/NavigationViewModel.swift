@@ -130,10 +130,10 @@ public extension NavigationViewModel {
                                                 titleComponents: ["preferences.blocked-users"])))
     }
 
-    func navigateToOfficialAccount() {
+    func navigateToURL(_ url: URL) {
         presentingSecondaryNavigation = false
         presentedNewStatusViewModel = nil
-        identityContext.service.navigationService.item(url: Self.officialAccountURL)
+        identityContext.service.navigationService.item(url: url)
             .sink { [weak self] in self?.navigationsSubject.send($0) }
             .store(in: &cancellables)
     }
@@ -191,8 +191,4 @@ public extension NavigationViewModel {
 
         return conversationsViewModel
     }
-}
-
-private extension NavigationViewModel {
-    static let officialAccountURL = URL(string: "https://mastodon.social/@metabolist")!
 }

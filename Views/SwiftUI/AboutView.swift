@@ -19,7 +19,7 @@ struct AboutView: View {
             .frame(maxWidth: .infinity, alignment: .center)
             Section(header: Text("about.made-by-metabolist")) {
                 Button {
-                    viewModel.navigateToOfficialAccount()
+                    viewModel.navigateToURL(Self.officialAccountURL)
                 } label: {
                     Label {
                         Text("about.official-account").foregroundColor(.primary)
@@ -32,6 +32,13 @@ struct AboutView: View {
                         Text("about.website").foregroundColor(.primary)
                     } icon: {
                         Image(systemName: "link")
+                    }
+                }
+                Link(destination: Self.sourceCodeAndIssueTrackerURL) {
+                    Label {
+                        Text("about.source-code-and-issue-tracker").foregroundColor(.primary)
+                    } icon: {
+                        Image(systemName: "wrench.and.screwdriver")
                     }
                 }
             }
@@ -48,6 +55,9 @@ struct AboutView: View {
 
 private extension AboutView {
     static let websiteURL = URL(string: "https://metabolist.org")!
+    static let officialAccountURL = URL(string: "https://mastodon.social/@metabolist")!
+    static let sourceCodeAndIssueTrackerURL = URL(string: "https://github.com/metabolist/metatext")!
+
     static var version: String {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
     }
