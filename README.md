@@ -2,7 +2,7 @@
 
 A free, open-source iOS Mastodon client.
 
-[Check out the beta on TestFlight](https://testflight.apple.com/join/lW1I3bE0)
+[![Download on the App Store](https://metabolist.org/assets/images/download_on_the_app_store.svg)](https://apps.apple.com/us/app/metatext/id1523996615?mt=8)
 
 ## Contributing Bug Reports
 
