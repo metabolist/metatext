@@ -74,17 +74,18 @@ private extension ProfileViewController {
     // swiftlint:disable:next function_body_length
     func menu(accountViewModel: AccountViewModel, relationship: Relationship) -> UIMenu {
         var actions = [UIAction(
-            title: NSLocalizedString("account.add-remove-lists", comment: ""),
-            image: UIImage(systemName: "scroll")) { [weak self] _ in
-            self?.addRemoveFromLists(accountViewModel: accountViewModel)
-        },
-        UIAction(
             title: NSLocalizedString("share", comment: ""),
             image: UIImage(systemName: "square.and.arrow.up")) { _ in
             accountViewModel.share()
         }]
 
         if relationship.following {
+            actions.append(UIAction(
+                title: NSLocalizedString("account.add-remove-lists", comment: ""),
+                image: UIImage(systemName: "scroll")) { [weak self] _ in
+                self?.addRemoveFromLists(accountViewModel: accountViewModel)
+            })
+
             if relationship.showingReblogs {
                 actions.append(UIAction(
                     title: NSLocalizedString("account.hide-reblogs", comment: ""),
