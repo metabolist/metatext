@@ -277,6 +277,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2805F2DF26044E8900670835 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		2805F2E026044E8900670835 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = de; path = de.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		D0030981250C6C8500EACB32 /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
 		D005A1D725EF189A008B2E63 /* ReportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportViewController.swift; sourceTree = "<group>"; };
 		D005A1E525EF3D11008B2E63 /* ReportHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportHeaderView.swift; sourceTree = "<group>"; };
@@ -1017,6 +1019,7 @@
 				en,
 				Base,
 				ja,
+				de,
 			);
 			mainGroup = D047FA7F24C3E21000AF17C5;
 			packageReferences = (
@@ -1358,6 +1361,7 @@
 			children = (
 				D9E658692601CF76007C426E /* en */,
 				D9E658762601CF94007C426E /* ja */,
+				2805F2DF26044E8900670835 /* de */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1367,6 +1371,7 @@
 			children = (
 				D9E658702601CF79007C426E /* en */,
 				D9E6587B2601CF94007C426E /* ja */,
+				2805F2E026044E8900670835 /* de */,
 			);
 			name = Localizable.stringsdict;
 			sourceTree = "<group>";
