@@ -30,7 +30,7 @@ public final class AddIdentityViewModel: ObservableObject {
             .throttle(for: .seconds(Self.textFieldThrottleInterval), scheduler: DispatchQueue.global(), latest: true)
             .removeDuplicates()
             .flatMap {
-                instanceURLService.url(text: $0).publisher
+                instanceURLService.url(text: $0.trimmingCharacters(in: .whitespacesAndNewlines)).publisher
                     .map { $0 as URL? }
                     .replaceError(with: nil)
             }
@@ -82,7 +82,7 @@ public extension AddIdentityViewModel {
 private extension AddIdentityViewModel {
     private static let textFieldThrottleInterval: TimeInterval = 0.5
     func addIdentity(kind: AllIdentitiesService.IdentityCreation) {
-        instanceURLService.url(text: urlFieldText).publisher
+        instanceURLService.url(text: urlFieldText.trimmingCharacters(in: .whitespacesAndNewlines)).publisher
             .map { ($0, kind) }
             .flatMap(allIdentitiesService.createIdentity(url:kind:))
             .receive(on: DispatchQueue.main)
