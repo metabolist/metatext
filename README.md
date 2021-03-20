@@ -10,11 +10,11 @@ GitHub is used for bug tracking. Please search [existing issues](https://github.
 
 ## Contributing Code
 
-See the [architecture section](#Architecture) for an overview of Metatext's code. Make sure you have [SwiftLint](https://github.com/realm/SwiftLint) installed and there are no warnings.
+See the [contribution guidelines](https://github.com/metabolist/metatext/blob/main/CONTRIBUTING.md).
 
-### Sign the Contributor License Agreement (CLA)
+## Contributing Ideas
 
-In order to publish Metatext's source code under the GNU General Public License and be able to dual-license Metatext to Apple for distribution on the App Store, Metabolist must be the sole copyright holder to Metatext's source code. You will need to [sign Metabolist's CLA](https://metabolist.org/cla/) before your pull request can be merged.
+Check out Metatext's [discussions on GitHub](https://github.com/metabolist/metatext/discussions).
 
 ## Building
 
