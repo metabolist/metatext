@@ -88,7 +88,8 @@ final class StatusBodyView: UIView {
                     })
             }
 
-            self.accessibilityCustomActions = accessibilityCustomActions
+            self.accessibilityCustomActions =
+                accessibilityCustomActions + attachmentsView.attachmentViewAccessibilityCustomActions
         }
     }
 

@@ -131,6 +131,18 @@ extension AttachmentsView {
 
         return viewModel.attachmentViewModels.allSatisfy(\.shouldAutoplay)
     }
+
+    var attachmentViewAccessibilityCustomActions: [UIAccessibilityCustomAction] {
+        attachmentViews.compactMap { attachmentView in
+            guard let accessibilityLabel = attachmentView.accessibilityLabel else { return nil }
+
+            return UIAccessibilityCustomAction(name: accessibilityLabel) { _ in
+                attachmentView.selectAttachment()
+
+                return true
+            }
+        }
+    }
 }
 
 private extension AttachmentsView {
