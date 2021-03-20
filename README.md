@@ -12,10 +12,6 @@ GitHub is used for bug tracking. Please search [existing issues](https://github.
 
 See the [contribution guidelines](https://github.com/metabolist/metatext/blob/main/CONTRIBUTING.md).
 
-## Contributing Ideas
-
-Check out Metatext's [discussions on GitHub](https://github.com/metabolist/metatext/discussions).
-
 ## Building
 
 To build Metatext:
