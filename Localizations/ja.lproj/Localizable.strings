@@ -6,7 +6,7 @@
 "about.official-account" = "公式アカウント";
 "about.source-code-and-issue-tracker" = "ソースコードと課題追跡システム";
 "about.website" = "ウェブサイト";
-"accessibility.activate-link-%@" = "アクティベートリンク: %@";
+"accessibility.activate-link-%@" = "リンク: %@";
 "accessibility.copy-text" = "テキストをコピー";
 "account.%@-followers" = "%@のフォロワー";
 "account.accept-follow-request-button.accessibility-label" = "フォローリクエストを承認";
