@@ -946,7 +946,7 @@ private extension StatusView {
             return []
         }
 
-        var actions = [UIAccessibilityCustomAction]()
+        var actions = bodyView.accessibilityCustomActions ?? []
 
         if replyButton.isEnabled {
             actions.append(UIAccessibilityCustomAction(
@@ -1012,8 +1012,6 @@ private extension StatusView {
 
                 return true
             })
-
-        actions.append(contentsOf: bodyView.accessibilityCustomActions ?? [])
 
         if menuButton.isEnabled {
             actions.append(UIAccessibilityCustomAction(
