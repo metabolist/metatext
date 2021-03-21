@@ -41,6 +41,13 @@ struct AboutView: View {
                         Image(systemName: "wrench.and.screwdriver")
                     }
                 }
+                Link(destination: Self.reviewURL) {
+                    Label {
+                        Text("about.review-on-the-app-store").foregroundColor(.primary)
+                    } icon: {
+                        Image(systemName: "star")
+                    }
+                }
             }
             Section {
                 NavigationLink(
@@ -57,6 +64,7 @@ private extension AboutView {
     static let websiteURL = URL(string: "https://metabolist.org")!
     static let officialAccountURL = URL(string: "https://mastodon.social/@metabolist")!
     static let sourceCodeAndIssueTrackerURL = URL(string: "https://github.com/metabolist/metatext")!
+    static let reviewURL = URL(string: "https://apps.apple.com/app/metatext/id1523996615?mt=8&action=write-review")!
 
     static var version: String {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
