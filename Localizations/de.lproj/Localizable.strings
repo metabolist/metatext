@@ -6,7 +6,7 @@
 "about.official-account" = "Offizieller Account";
 "about.source-code-and-issue-tracker" = "Quellcode & Fehler Tracker";
 "about.website" = "Webseite";
-"accessibility.activate-link-%@" = "Akitiverungslink: %@";
+"accessibility.activate-link-%@" = "Link: %@";
 "accessibility.copy-text" = "Kopiere Text";
 "account.%@-followers" = "%@'s Folgende";
 "account.accept-follow-request-button.accessibility-label" = "Folgeanfrage annehmen";

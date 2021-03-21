@@ -97,6 +97,10 @@ extension AttachmentView {
         playerView.player = nil
         playerView.isHidden = true
     }
+
+    func selectAttachment() {
+        parentViewModel.attachmentSelected(viewModel: viewModel)
+    }
 }
 
 private extension AttachmentView {
@@ -136,11 +140,7 @@ private extension AttachmentView {
         selectionButton.translatesAutoresizingMaskIntoConstraints = false
         selectionButton.setBackgroundImage(.highlightedButtonBackground, for: .highlighted)
         selectionButton.addAction(
-            UIAction { [weak self] _ in
-                guard let self = self else { return }
-
-                self.parentViewModel.attachmentSelected(viewModel: self.viewModel)
-            },
+            UIAction { [weak self] _ in self?.selectAttachment() },
             for: .touchUpInside)
         selectionButton.accessibilityLabel = NSLocalizedString("compose.attachment.edit", comment: "")
 

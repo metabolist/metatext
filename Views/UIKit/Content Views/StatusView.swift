@@ -599,7 +599,9 @@ private extension StatusView {
             }
         }
 
-        setButtonImages(scale: isContextParent ? .medium : .small)
+        setButtonImages(font: isContextParent
+                            ? .preferredFont(forTextStyle: .title3)
+                            : .preferredFont(forTextStyle: .subheadline))
 
         replyButton.setCountTitle(count: viewModel.repliesCount, isContextParent: isContextParent)
         replyButton.isEnabled = isAuthenticated
@@ -811,7 +813,7 @@ private extension StatusView {
         return accessibilityAttributedLabel
     }
 
-    func setButtonImages(scale: UIImage.SymbolScale) {
+    func setButtonImages(font: UIFont) {
         let visibility = statusConfiguration.viewModel.visibility
         let reblogSystemImageName: String
 
@@ -827,15 +829,22 @@ private extension StatusView {
         }
 
         replyButton.setImage(UIImage(systemName: "bubble.right",
-                                     withConfiguration: UIImage.SymbolConfiguration(scale: scale)), for: .normal)
+                                     withConfiguration: UIImage.SymbolConfiguration(pointSize: font.pointSize)),
+                             for: .normal)
         reblogButton.setImage(UIImage(systemName: reblogSystemImageName,
-                                      withConfiguration: UIImage.SymbolConfiguration(scale: scale)), for: .normal)
+                                      withConfiguration: UIImage.SymbolConfiguration(
+                                        pointSize: font.pointSize,
+                                        weight: statusConfiguration.viewModel.reblogged ? .bold : .regular)),
+                             for: .normal)
         favoriteButton.setImage(UIImage(systemName: statusConfiguration.viewModel.favorited ? "star.fill" : "star",
-                                        withConfiguration: UIImage.SymbolConfiguration(scale: scale)), for: .normal)
+                                        withConfiguration: UIImage.SymbolConfiguration(pointSize: font.pointSize)),
+                                for: .normal)
         shareButton.setImage(UIImage(systemName: "square.and.arrow.up",
-                                     withConfiguration: UIImage.SymbolConfiguration(scale: scale)), for: .normal)
+                                     withConfiguration: UIImage.SymbolConfiguration(pointSize: font.pointSize)),
+                             for: .normal)
         menuButton.setImage(UIImage(systemName: "ellipsis",
-                                    withConfiguration: UIImage.SymbolConfiguration(scale: scale)), for: .normal)
+                                    withConfiguration: UIImage.SymbolConfiguration(pointSize: font.pointSize)),
+                            for: .normal)
     }
 
     @objc func reblogButtonDoubleTap(sender: UIButton, event: UIEvent) {
@@ -937,7 +946,7 @@ private extension StatusView {
             return []
         }
 
-        var actions = [UIAccessibilityCustomAction]()
+        var actions = bodyView.accessibilityCustomActions ?? []
 
         if replyButton.isEnabled {
             actions.append(UIAccessibilityCustomAction(
@@ -1003,8 +1012,6 @@ private extension StatusView {
 
                 return true
             })
-
-        actions.append(contentsOf: bodyView.accessibilityCustomActions ?? [])
 
         if menuButton.isEnabled {
             actions.append(UIAccessibilityCustomAction(
