@@ -4,7 +4,6 @@ import SDWebImage
 import UIKit
 import ViewModels
 
-// swiftlint:disable file_length
 final class AccountHeaderView: UIView {
     let headerImageBackgroundView = UIView()
     let headerImageView = SDAnimatedImageView()
@@ -537,4 +536,3 @@ private extension AccountHeaderView {
         ])
     }
 }
-// swiftlint:enable file_length

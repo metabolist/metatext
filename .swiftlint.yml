@@ -3,3 +3,8 @@ disabled_rules:
   - type_name
 opt_in_rules:
   - sorted_imports
+
+file_length:
+  warning: 500
+  error: 1000
+  ignore_comment_only_lines: true

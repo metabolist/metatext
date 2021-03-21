@@ -5,7 +5,6 @@ import Foundation
 import Mastodon
 import ServiceLayer
 
-// swiftlint:disable file_length
 public class CollectionItemsViewModel: ObservableObject {
     public let identityContext: IdentityContext
     @Published public var alertItem: AlertItem?
@@ -464,4 +463,3 @@ private extension CollectionItemsViewModel {
         return nil
     }
 }
-// swiftlint:enable file_length

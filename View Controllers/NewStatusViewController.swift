@@ -8,7 +8,6 @@ import SwiftUI
 import UniformTypeIdentifiers
 import ViewModels
 
-// swiftlint:disable file_length
 final class NewStatusViewController: UIViewController {
     private let viewModel: NewStatusViewModel
     private let rootViewModel: RootViewModel?
@@ -486,4 +485,3 @@ private extension NewStatusViewController {
         }
     }
 }
-// swiftlint:enable file_length

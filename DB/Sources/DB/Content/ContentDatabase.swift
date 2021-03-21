@@ -7,7 +7,6 @@ import Keychain
 import Mastodon
 import Secrets
 
-// swiftlint:disable file_length
 public struct ContentDatabase {
     public let activeFiltersPublisher: AnyPublisher<[Filter], Error>
 
@@ -685,4 +684,3 @@ private extension ContentDatabase {
         }
     }
 }
-// swiftlint:enable file_length
