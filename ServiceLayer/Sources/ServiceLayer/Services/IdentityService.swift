@@ -39,6 +39,7 @@ public struct IdentityService {
             keychain: environment.keychain)
 
         navigationService = NavigationService(
+            environment: environment,
             mastodonAPIClient: mastodonAPIClient,
             contentDatabase: contentDatabase)
     }
@@ -96,6 +97,10 @@ public extension IdentityService {
 
     func recentIdentitiesPublisher() -> AnyPublisher<[Identity], Error> {
         identityDatabase.recentIdentitiesPublisher(excluding: id)
+    }
+
+    func otherAuthenticatedIdentitiesPublisher() -> AnyPublisher<[Identity], Error> {
+        identityDatabase.authenticatedIdentitiesPublisher(excluding: id)
     }
 
     func refreshLists() -> AnyPublisher<Never, Error> {
@@ -249,6 +254,7 @@ public extension IdentityService {
                     .map { _ in
                         NotificationService(
                             notification: notification,
+                            environment: environment,
                             mastodonAPIClient: mastodonAPIClient,
                             contentDatabase: contentDatabase)
                     }
@@ -259,27 +265,31 @@ public extension IdentityService {
     func service(accountList: AccountsEndpoint, titleComponents: [String]? = nil) -> AccountListService {
         AccountListService(
             endpoint: accountList,
+            environment: environment,
             mastodonAPIClient: mastodonAPIClient,
             contentDatabase: contentDatabase,
             titleComponents: titleComponents)
     }
 
     func exploreService() -> ExploreService {
-        ExploreService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+        ExploreService(environment: environment, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }
 
     func searchService() -> SearchService {
-        SearchService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+        SearchService(environment: environment, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
     }
 
     func notificationsService(excludeTypes: Set<MastodonNotification.NotificationType>) -> NotificationsService {
         NotificationsService(excludeTypes: excludeTypes,
+                             environment: environment,
                              mastodonAPIClient: mastodonAPIClient,
                              contentDatabase: contentDatabase)
     }
 
     func conversationsService() -> ConversationsService {
-        ConversationsService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+        ConversationsService(environment: environment,
+                             mastodonAPIClient: mastodonAPIClient,
+                             contentDatabase: contentDatabase)
     }
 
     func domainBlocksService() -> DomainBlocksService {

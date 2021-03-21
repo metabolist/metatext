@@ -9,7 +9,6 @@ public final class NewStatusViewModel: ObservableObject {
     @Published public var visibility: Status.Visibility
     @Published public private(set) var compositionViewModels = [CompositionViewModel]()
     @Published public private(set) var identityContext: IdentityContext
-    @Published public private(set) var authenticatedIdentities = [Identity]()
     @Published public var canPost = false
     @Published public var alertItem: AlertItem?
     @Published public private(set) var postingState = PostingState.composing
@@ -87,14 +86,6 @@ public final class NewStatusViewModel: ObservableObject {
         }
 
         compositionViewModels = [compositionViewModel]
-
-        allIdentitiesService.authenticatedIdentitiesPublisher()
-            .assignErrorsToAlertItem(to: \.alertItem, on: self)
-            .combineLatest($identityContext)
-            .map { authenticatedIdentities, currentIdentity in
-                authenticatedIdentities.filter { $0.id != currentIdentity.identity.id }
-            }
-            .assign(to: &$authenticatedIdentities)
         $compositionViewModels.flatMap { Publishers.MergeMany($0.map(\.$isPostable)) }
             .receive(on: DispatchQueue.main) // hack to punt to next run loop, consider refactoring
             .compactMap { [weak self] _ in self?.compositionViewModels.allSatisfy(\.isPostable) }

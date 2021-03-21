@@ -18,6 +18,7 @@ public struct NotificationsService {
     private let nextPageMaxIdSubject: CurrentValueSubject<String, Never>
 
     init(excludeTypes: Set<MastodonNotification.NotificationType>,
+         environment: AppEnvironment,
          mastodonAPIClient: MastodonAPIClient,
          contentDatabase: ContentDatabase) {
         self.excludeTypes = excludeTypes
@@ -37,7 +38,9 @@ public struct NotificationsService {
             })
             .eraseToAnyPublisher()
         nextPageMaxId = nextPageMaxIdSubject.eraseToAnyPublisher()
-        navigationService = NavigationService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+        navigationService = NavigationService(environment: environment,
+                                              mastodonAPIClient: mastodonAPIClient,
+                                              contentDatabase: contentDatabase)
     }
 }
 

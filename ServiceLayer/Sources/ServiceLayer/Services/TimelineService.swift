@@ -21,12 +21,17 @@ public struct TimelineService {
     private let nextPageMaxIdSubject = PassthroughSubject<String, Never>()
     private let accountIdsForRelationshipsSubject = PassthroughSubject<Set<Account.Id>, Never>()
 
-    init(timeline: Timeline, mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
+    init(timeline: Timeline,
+         environment: AppEnvironment,
+         mastodonAPIClient: MastodonAPIClient,
+         contentDatabase: ContentDatabase) {
         self.timeline = timeline
         self.mastodonAPIClient = mastodonAPIClient
         self.contentDatabase = contentDatabase
         sections = contentDatabase.timelinePublisher(timeline)
-        navigationService = NavigationService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+        navigationService = NavigationService(environment: environment,
+                                              mastodonAPIClient: mastodonAPIClient,
+                                              contentDatabase: contentDatabase)
         nextPageMaxId = nextPageMaxIdSubject.eraseToAnyPublisher()
         accountIdsForRelationships = accountIdsForRelationshipsSubject.eraseToAnyPublisher()
 

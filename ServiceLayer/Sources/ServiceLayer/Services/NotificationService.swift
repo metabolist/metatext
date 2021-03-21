@@ -12,9 +12,13 @@ public struct NotificationService {
     private let mastodonAPIClient: MastodonAPIClient
     private let contentDatabase: ContentDatabase
 
-    init(notification: MastodonNotification, mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
+    init(notification: MastodonNotification,
+         environment: AppEnvironment,
+         mastodonAPIClient: MastodonAPIClient,
+         contentDatabase: ContentDatabase) {
         self.notification = notification
         self.navigationService = NavigationService(
+            environment: environment,
             mastodonAPIClient: mastodonAPIClient,
             contentDatabase: contentDatabase,
             status: nil)

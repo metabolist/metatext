@@ -39,10 +39,6 @@ public extension AllIdentitiesService {
         database.immediateMostRecentlyUsedIdentityIdPublisher()
     }
 
-    func authenticatedIdentitiesPublisher() -> AnyPublisher<[Identity], Error> {
-        database.authenticatedIdentitiesPublisher()
-    }
-
     func mostRecentAuthenticatedIdentity() throws -> Identity? {
         try database.mostRecentAuthenticatedIdentity()
     }

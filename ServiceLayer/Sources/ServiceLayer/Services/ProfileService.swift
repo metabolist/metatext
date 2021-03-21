@@ -10,25 +10,32 @@ public struct ProfileService {
     public let profilePublisher: AnyPublisher<Profile, Error>
 
     private let id: Account.Id
+    private let environment: AppEnvironment
     private let mastodonAPIClient: MastodonAPIClient
     private let contentDatabase: ContentDatabase
 
     init(account: Account,
          relationship: Relationship?,
+         environment: AppEnvironment,
          mastodonAPIClient: MastodonAPIClient,
          contentDatabase: ContentDatabase) {
         self.init(
             id: account.id,
             account: account,
             relationship: relationship,
+            environment: environment,
             mastodonAPIClient: mastodonAPIClient,
             contentDatabase: contentDatabase)
     }
 
-    init(id: Account.Id, mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
+    init(id: Account.Id,
+         environment: AppEnvironment,
+         mastodonAPIClient: MastodonAPIClient,
+         contentDatabase: ContentDatabase) {
         self.init(id: id,
                   account: nil,
                   relationship: nil,
+                  environment: environment,
                   mastodonAPIClient: mastodonAPIClient,
                   contentDatabase: contentDatabase)
     }
@@ -37,9 +44,11 @@ public struct ProfileService {
         id: Account.Id,
         account: Account?,
         relationship: Relationship?,
+        environment: AppEnvironment,
         mastodonAPIClient: MastodonAPIClient,
         contentDatabase: ContentDatabase) {
         self.id = id
+        self.environment = environment
         self.mastodonAPIClient = mastodonAPIClient
         self.contentDatabase = contentDatabase
 
@@ -60,6 +69,7 @@ public extension ProfileService {
     func timelineService(profileCollection: ProfileCollection) -> TimelineService {
         TimelineService(
             timeline: .profile(accountId: id, profileCollection: profileCollection),
+            environment: environment,
             mastodonAPIClient: mastodonAPIClient,
             contentDatabase: contentDatabase)
     }

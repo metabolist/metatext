@@ -15,14 +15,17 @@ public struct ConversationsService {
     private let contentDatabase: ContentDatabase
     private let nextPageMaxIdSubject = PassthroughSubject<String, Never>()
 
-    init(mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
+    init(environment: AppEnvironment, mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
         self.mastodonAPIClient = mastodonAPIClient
         self.contentDatabase = contentDatabase
         sections = contentDatabase.conversationsPublisher()
             .map { [.init(items: $0.map(CollectionItem.conversation))] }
             .eraseToAnyPublisher()
         nextPageMaxId = nextPageMaxIdSubject.eraseToAnyPublisher()
-        navigationService = NavigationService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+        navigationService = NavigationService(
+            environment: environment,
+            mastodonAPIClient: mastodonAPIClient,
+            contentDatabase: contentDatabase)
     }
 }
 

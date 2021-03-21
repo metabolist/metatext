@@ -255,16 +255,16 @@ public extension StatusViewModel {
                 .eraseToAnyPublisher())
     }
 
-    func toggleReblogged() {
+    func toggleReblogged(identityId: Identity.Id? = nil) {
         eventsSubject.send(
-            statusService.toggleReblogged()
+            statusService.toggleReblogged(identityId: identityId)
                 .map { _ in .ignorableOutput }
                 .eraseToAnyPublisher())
     }
 
-    func toggleFavorited() {
+    func toggleFavorited(identityId: Identity.Id? = nil) {
         eventsSubject.send(
-            statusService.toggleFavorited()
+            statusService.toggleFavorited(identityId: identityId)
                 .map { _ in .ignorableOutput }
                 .eraseToAnyPublisher())
     }

@@ -9,3 +9,8 @@ public struct APIError: Error, Codable {
 extension APIError: LocalizedError {
     public var errorDescription: String? { error }
 }
+
+public extension APIError {
+    static let unableToFetchRemoteStatus =
+        Self(error: NSLocalizedString("api-error.unable-to-fetch-remote-status", comment: ""))
+}

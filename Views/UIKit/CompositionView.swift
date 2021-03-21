@@ -74,7 +74,8 @@ private extension CompositionView {
         avatarImageView.isUserInteractionEnabled = true
         changeIdentityButton.setBackgroundImage(.highlightedButtonBackground, for: .highlighted)
         changeIdentityButton.showsMenuAsPrimaryAction = true
-        changeIdentityButton.menu = changeIdentityMenu(identities: parentViewModel.authenticatedIdentities)
+        changeIdentityButton.menu =
+            changeIdentityMenu(identities: parentViewModel.identityContext.authenticatedOtherIdentities)
 
         let stackView = UIStackView()
 
@@ -205,7 +206,7 @@ private extension CompositionView {
             }
             .store(in: &cancellables)
 
-        parentViewModel.$authenticatedIdentities
+        parentViewModel.identityContext.$authenticatedOtherIdentities
             .sink { [weak self] in self?.changeIdentityButton.menu = self?.changeIdentityMenu(identities: $0) }
             .store(in: &cancellables)
 

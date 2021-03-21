@@ -17,11 +17,16 @@ public enum Navigation {
 }
 
 public struct NavigationService {
+    private let environment: AppEnvironment
     private let mastodonAPIClient: MastodonAPIClient
     private let contentDatabase: ContentDatabase
     private let status: Status?
 
-    init(mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase, status: Status? = nil) {
+    init(environment: AppEnvironment,
+         mastodonAPIClient: MastodonAPIClient,
+         contentDatabase: ContentDatabase,
+         status: Status? = nil) {
+        self.environment = environment
         self.mastodonAPIClient = mastodonAPIClient
         self.contentDatabase = contentDatabase
         self.status = status
@@ -35,6 +40,7 @@ public extension NavigationService {
                 .collection(
                     TimelineService(
                         timeline: .tag(tag),
+                        environment: environment,
                         mastodonAPIClient: mastodonAPIClient,
                         contentDatabase: contentDatabase)))
                 .eraseToAnyPublisher()
@@ -52,26 +58,38 @@ public extension NavigationService {
     }
 
     func contextService(id: Status.Id) -> ContextService {
-        ContextService(id: id, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+        ContextService(id: id, environment: environment,
+                       mastodonAPIClient: mastodonAPIClient,
+                       contentDatabase: contentDatabase)
     }
 
     func profileService(id: Account.Id) -> ProfileService {
-        ProfileService(id: id, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+        ProfileService(id: id,
+                       environment: environment,
+                       mastodonAPIClient: mastodonAPIClient,
+                       contentDatabase: contentDatabase)
     }
 
     func profileService(account: Account, relationship: Relationship? = nil) -> ProfileService {
         ProfileService(account: account,
                        relationship: relationship,
+                       environment: environment,
                        mastodonAPIClient: mastodonAPIClient,
                        contentDatabase: contentDatabase)
     }
 
     func statusService(status: Status) -> StatusService {
-        StatusService(status: status, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+        StatusService(environment: environment,
+                      status: status,
+                      mastodonAPIClient: mastodonAPIClient,
+                      contentDatabase: contentDatabase)
     }
 
     func accountService(account: Account) -> AccountService {
-        AccountService(account: account, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+        AccountService(account: account,
+                       environment: environment,
+                       mastodonAPIClient: mastodonAPIClient,
+                       contentDatabase: contentDatabase)
     }
 
     func loadMoreService(loadMore: LoadMore) -> LoadMoreService {
@@ -81,6 +99,7 @@ public extension NavigationService {
     func notificationService(notification: MastodonNotification) -> NotificationService {
         NotificationService(
             notification: notification,
+            environment: environment,
             mastodonAPIClient: mastodonAPIClient,
             contentDatabase: contentDatabase)
     }
@@ -88,12 +107,16 @@ public extension NavigationService {
     func conversationService(conversation: Conversation) -> ConversationService {
         ConversationService(
             conversation: conversation,
+            environment: environment,
             mastodonAPIClient: mastodonAPIClient,
             contentDatabase: contentDatabase)
     }
 
     func timelineService(timeline: Timeline) -> TimelineService {
-        TimelineService(timeline: timeline, mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+        TimelineService(timeline: timeline,
+                        environment: environment,
+                        mastodonAPIClient: mastodonAPIClient,
+                        contentDatabase: contentDatabase)
     }
 }
 
@@ -132,6 +155,7 @@ private extension NavigationService {
                     return .collection(
                         TimelineService(
                             timeline: .tag(tag.name),
+                            environment: environment,
                             mastodonAPIClient: mastodonAPIClient,
                             contentDatabase: contentDatabase))
                 } else if let account = results.accounts.first {

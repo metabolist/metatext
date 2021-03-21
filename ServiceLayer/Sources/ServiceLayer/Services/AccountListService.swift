@@ -22,6 +22,7 @@ public struct AccountListService {
     private let accountIdsForRelationshipsSubject = PassthroughSubject<Set<Account.Id>, Never>()
 
     init(endpoint: AccountsEndpoint,
+         environment: AppEnvironment,
          mastodonAPIClient: MastodonAPIClient,
          contentDatabase: ContentDatabase,
          titleComponents: [String]? = nil) {
@@ -32,7 +33,9 @@ public struct AccountListService {
         sections = contentDatabase.accountListPublisher(id: listId, configuration: endpoint.configuration)
         nextPageMaxId = nextPageMaxIdSubject.eraseToAnyPublisher()
         accountIdsForRelationships = accountIdsForRelationshipsSubject.eraseToAnyPublisher()
-        navigationService = NavigationService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+        navigationService = NavigationService(environment: environment,
+                                              mastodonAPIClient: mastodonAPIClient,
+                                              contentDatabase: contentDatabase)
     }
 }
 

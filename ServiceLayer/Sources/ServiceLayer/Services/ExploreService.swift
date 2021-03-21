@@ -12,10 +12,12 @@ public struct ExploreService {
     private let mastodonAPIClient: MastodonAPIClient
     private let contentDatabase: ContentDatabase
 
-    init(mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
+    init(environment: AppEnvironment, mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
         self.mastodonAPIClient = mastodonAPIClient
         self.contentDatabase = contentDatabase
-        navigationService = NavigationService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+        navigationService = NavigationService(environment: environment,
+                                              mastodonAPIClient: mastodonAPIClient,
+                                              contentDatabase: contentDatabase)
     }
 }
 

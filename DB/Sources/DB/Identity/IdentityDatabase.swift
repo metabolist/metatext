@@ -169,10 +169,12 @@ public extension IdentityDatabase {
             .eraseToAnyPublisher()
     }
 
-    func authenticatedIdentitiesPublisher() -> AnyPublisher<[Identity], Error> {
+    func authenticatedIdentitiesPublisher(excluding: Identity.Id) -> AnyPublisher<[Identity], Error> {
         ValueObservation.tracking(
             IdentityInfo.request(IdentityRecord.order(IdentityRecord.Columns.lastUsedAt.desc))
-                .filter(IdentityRecord.Columns.authenticated == true && IdentityRecord.Columns.pending == false)
+                .filter(IdentityRecord.Columns.authenticated == true
+                            && IdentityRecord.Columns.pending == false
+                            && IdentityRecord.Columns.id != excluding)
                 .fetchAll)
             .removeDuplicates()
             .publisher(in: databaseWriter)

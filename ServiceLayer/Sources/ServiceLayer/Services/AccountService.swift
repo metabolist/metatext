@@ -10,16 +10,21 @@ public struct AccountService {
     public let account: Account
     public let navigationService: NavigationService
 
+    private let environment: AppEnvironment
     private let mastodonAPIClient: MastodonAPIClient
     private let contentDatabase: ContentDatabase
 
     public init(account: Account,
                 identityProofs: [IdentityProof] = [],
                 featuredTags: [FeaturedTag] = [],
+                environment: AppEnvironment,
                 mastodonAPIClient: MastodonAPIClient,
                 contentDatabase: ContentDatabase) {
         self.account = account
-        navigationService = NavigationService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+        navigationService = NavigationService(environment: environment,
+                                              mastodonAPIClient: mastodonAPIClient,
+                                              contentDatabase: contentDatabase)
+        self.environment = environment
         self.mastodonAPIClient = mastodonAPIClient
         self.contentDatabase = contentDatabase
     }
@@ -136,6 +141,7 @@ public extension AccountService {
     func followingService() -> AccountListService {
         AccountListService(
             endpoint: .accountsFollowing(id: account.id),
+            environment: environment,
             mastodonAPIClient: mastodonAPIClient,
             contentDatabase: contentDatabase,
             titleComponents: ["account.followed-by-%@", "@".appending(account.acct)])
@@ -144,6 +150,7 @@ public extension AccountService {
     func followersService() -> AccountListService {
         AccountListService(
             endpoint: .accountsFollowers(id: account.id),
+            environment: environment,
             mastodonAPIClient: mastodonAPIClient,
             contentDatabase: contentDatabase,
             titleComponents: ["account.%@-followers", "@".appending(account.acct)])

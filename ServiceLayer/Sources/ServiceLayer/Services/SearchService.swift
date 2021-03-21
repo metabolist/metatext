@@ -16,11 +16,13 @@ public struct SearchService {
     private let nextPageMaxIdSubject = PassthroughSubject<String, Never>()
     private let resultsSubject = PassthroughSubject<(Results, Search), Error>()
 
-    init(mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
+    init(environment: AppEnvironment, mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
         self.mastodonAPIClient = mastodonAPIClient
         self.contentDatabase = contentDatabase
         nextPageMaxId = nextPageMaxIdSubject.eraseToAnyPublisher()
-        navigationService = NavigationService(mastodonAPIClient: mastodonAPIClient, contentDatabase: contentDatabase)
+        navigationService = NavigationService(environment: environment,
+                                              mastodonAPIClient: mastodonAPIClient,
+                                              contentDatabase: contentDatabase)
         sections = resultsSubject.scan((.empty, nil)) {
             let (results, search) = $1
 

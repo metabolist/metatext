@@ -12,9 +12,13 @@ public struct ConversationService {
     private let mastodonAPIClient: MastodonAPIClient
     private let contentDatabase: ContentDatabase
 
-    init(conversation: Conversation, mastodonAPIClient: MastodonAPIClient, contentDatabase: ContentDatabase) {
+    init(conversation: Conversation,
+         environment: AppEnvironment,
+         mastodonAPIClient: MastodonAPIClient,
+         contentDatabase: ContentDatabase) {
         self.conversation = conversation
         self.navigationService = NavigationService(
+            environment: environment,
             mastodonAPIClient: mastodonAPIClient,
             contentDatabase: contentDatabase)
         self.mastodonAPIClient = mastodonAPIClient
