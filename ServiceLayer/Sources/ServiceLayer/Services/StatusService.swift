@@ -146,11 +146,24 @@ public extension StatusService {
             .flatMap { contentDatabase.update(id: status.displayStatus.id, poll: $0) }
             .eraseToAnyPublisher()
     }
+
+    func asIdentity(id: Identity.Id) -> AnyPublisher<Self, Error> {
+        fetchAs(identityId: id).tryMap {
+            Self(environment: environment,
+                 status: $0,
+                 mastodonAPIClient: try MastodonAPIClient.forIdentity(id: id, environment: environment),
+                 contentDatabase: try ContentDatabase(
+                    id: id,
+                    useHomeTimelineLastReadId: true,
+                    inMemory: environment.inMemoryContent,
+                    appGroup: AppEnvironment.appGroup,
+                    keychain: environment.keychain)) }
+            .eraseToAnyPublisher()
+    }
 }
 
 private extension StatusService {
-    func request(identityId: Identity.Id,
-                 endpointClosure: @escaping (Status.Id) -> StatusEndpoint) -> AnyPublisher<Never, Error> {
+    func fetchAs(identityId: Identity.Id) -> AnyPublisher<Status, Error> {
         let client: MastodonAPIClient
 
         do {
@@ -162,11 +175,25 @@ private extension StatusService {
         return client
             .request(ResultsEndpoint.search(.init(query: status.displayStatus.uri, resolve: true, limit: 1)))
             .tryMap {
-                guard let id = $0.statuses.first?.id else { throw APIError.unableToFetchRemoteStatus }
+                guard let status = $0.statuses.first else { throw APIError.unableToFetchRemoteStatus }
 
-                return id
+                return status
             }
-            .flatMap { client.request(endpointClosure($0)) }
+            .eraseToAnyPublisher()
+    }
+
+    func request(identityId: Identity.Id,
+                 endpointClosure: @escaping (Status.Id) -> StatusEndpoint) -> AnyPublisher<Never, Error> {
+        let client: MastodonAPIClient
+
+        do {
+            client = try MastodonAPIClient.forIdentity(id: identityId, environment: environment)
+        } catch {
+            return Fail(error: error).eraseToAnyPublisher()
+        }
+
+        return fetchAs(identityId: identityId)
+            .flatMap { client.request(endpointClosure($0.id)) }
             .flatMap { _ in mastodonAPIClient.request(StatusEndpoint.status(id: status.displayStatus.id)) }
             .flatMap(contentDatabase.insert(status:))
             .eraseToAnyPublisher()

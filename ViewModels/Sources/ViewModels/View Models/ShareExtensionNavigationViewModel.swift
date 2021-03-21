@@ -37,6 +37,7 @@ public extension ShareExtensionNavigationViewModel {
             allIdentitiesService: allIdentitiesService,
             identityContext: identityContext,
             environment: environment,
+            identity: nil,
             inReplyTo: nil,
             redraft: nil,
             directMessageTo: nil,

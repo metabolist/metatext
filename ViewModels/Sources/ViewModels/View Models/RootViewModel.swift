@@ -65,6 +65,7 @@ public extension RootViewModel {
 
     func newStatusViewModel(
         identityContext: IdentityContext,
+        identity: Identity? = nil,
         inReplyTo: StatusViewModel? = nil,
         redraft: Status? = nil,
         directMessageTo: AccountViewModel? = nil) -> NewStatusViewModel {
@@ -72,6 +73,7 @@ public extension RootViewModel {
             allIdentitiesService: allIdentitiesService,
             identityContext: identityContext,
             environment: environment,
+            identity: identity,
             inReplyTo: inReplyTo,
             redraft: redraft,
             directMessageTo: directMessageTo,

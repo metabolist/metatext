@@ -605,6 +605,7 @@ private extension StatusView {
 
         replyButton.setCountTitle(count: viewModel.repliesCount, isContextParent: isContextParent)
         replyButton.isEnabled = isAuthenticated
+        replyButton.menu = authenticatedIdentitiesMenu { viewModel.reply(identity: $0) }
 
         if viewModel.identityContext.appPreferences.showReblogAndFavoriteCounts || isContextParent {
             reblogButton.setCountTitle(count: viewModel.reblogsCount, isContextParent: isContextParent)

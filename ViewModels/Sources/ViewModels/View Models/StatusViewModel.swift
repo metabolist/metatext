@@ -242,17 +242,33 @@ public extension StatusViewModel {
                 .eraseToAnyPublisher())
     }
 
-    func reply() {
-        let replyViewModel = Self(statusService: statusService,
-                                  identityContext: identityContext,
-                                  eventsSubject: .init())
+    func reply(identity: Identity? = nil) {
+        if let identity = identity {
+            let identityContext = self.identityContext
+            let configuration = self.configuration.reply()
 
-        replyViewModel.configuration = configuration.reply()
+            eventsSubject.send(statusService.asIdentity(id: identity.id).map {
+                let replyViewModel = Self(statusService: $0,
+                                          identityContext: identityContext,
+                                          eventsSubject: .init())
 
-        eventsSubject.send(
-            Just(.compose(inReplyTo: replyViewModel))
-                .setFailureType(to: Error.self)
-                .eraseToAnyPublisher())
+                replyViewModel.configuration = configuration
+
+                return CollectionItemEvent.compose(identity: identity, inReplyTo: replyViewModel)
+            }
+            .eraseToAnyPublisher())
+        } else {
+            let replyViewModel = Self(statusService: statusService,
+                                      identityContext: identityContext,
+                                      eventsSubject: .init())
+
+            replyViewModel.configuration = configuration.reply()
+
+            eventsSubject.send(
+                Just(.compose(inReplyTo: replyViewModel))
+                    .setFailureType(to: Error.self)
+                    .eraseToAnyPublisher())
+        }
     }
 
     func toggleReblogged(identityId: Identity.Id? = nil) {

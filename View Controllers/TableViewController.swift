@@ -533,8 +533,11 @@ private extension TableViewController {
             handle(navigation: navigation)
         case let .attachment(attachmentViewModel, statusViewModel):
             present(attachmentViewModel: attachmentViewModel, statusViewModel: statusViewModel)
-        case let .compose(inReplyToViewModel, redraft, directMessageTo):
-            compose(inReplyToViewModel: inReplyToViewModel, redraft: redraft, directMessageTo: directMessageTo)
+        case let .compose(identity, inReplyToViewModel, redraft, directMessageTo):
+            compose(identity: identity,
+                    inReplyToViewModel: inReplyToViewModel,
+                    redraft: redraft,
+                    directMessageTo: directMessageTo)
         case let .confirmDelete(statusViewModel, redraft):
             confirmDelete(statusViewModel: statusViewModel, redraft: redraft)
         case let .confirmUnfollow(accountViewModel):
@@ -613,9 +616,13 @@ private extension TableViewController {
         }
     }
 
-    func compose(inReplyToViewModel: StatusViewModel?, redraft: Status?, directMessageTo: AccountViewModel?) {
+    func compose(identity: Identity?,
+                 inReplyToViewModel: StatusViewModel?,
+                 redraft: Status?,
+                 directMessageTo: AccountViewModel?) {
         rootViewModel?.navigationViewModel?.presentedNewStatusViewModel = rootViewModel?.newStatusViewModel(
             identityContext: viewModel.identityContext,
+            identity: identity,
             inReplyTo: inReplyToViewModel,
             redraft: redraft,
             directMessageTo: directMessageTo)

@@ -26,6 +26,7 @@ public final class NewStatusViewModel: ObservableObject {
     public init(allIdentitiesService: AllIdentitiesService,
                 identityContext: IdentityContext,
                 environment: AppEnvironment,
+                identity: Identity?,
                 inReplyTo: StatusViewModel?,
                 redraft: Status?,
                 directMessageTo: AccountViewModel?,
@@ -37,7 +38,7 @@ public final class NewStatusViewModel: ObservableObject {
         events = eventsSubject.eraseToAnyPublisher()
         visibility = redraft?.visibility
             ?? inReplyTo?.visibility
-            ?? identityContext.identity.preferences.postingDefaultVisibility
+            ?? (identity ?? identityContext.identity).preferences.postingDefaultVisibility
 
         if let inReplyTo = inReplyTo {
             switch inReplyTo.visibility {
@@ -74,7 +75,7 @@ public final class NewStatusViewModel: ObservableObject {
             }
 
             mentions.formUnion(inReplyTo.mentions.map(\.acct)
-                                .filter { $0 != identityContext.identity.account?.username }
+                                .filter { $0 != (identity ?? identityContext.identity).account?.username }
                                 .map("@".appending))
 
             compositionViewModel.text = mentions.joined(separator: " ").appending(" ")
@@ -95,6 +96,10 @@ public final class NewStatusViewModel: ObservableObject {
         compositionEventsSubject
             .sink { [weak self] in self?.handle(event: $0) }
             .store(in: &cancellables)
+
+        if let identity = identity {
+            setIdentity(identity)
+        }
     }
 }
 
