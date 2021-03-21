@@ -119,7 +119,10 @@ private extension AddIdentityViewController {
 
         logInButton.setTitle(NSLocalizedString("add-identity.log-in", comment: ""), for: .normal)
         logInButton.addAction(
-            UIAction { [weak self] _ in self?.viewModel.logInTapped() },
+            UIAction { [weak self] _ in
+                self?.urlTextField.resignFirstResponder()
+                self?.viewModel.logInTapped()
+            },
             for: .touchUpInside)
 
         joinButton.addAction(UIAction { [weak self] _ in self?.join() }, for: .touchUpInside)
