@@ -96,7 +96,7 @@ private extension CompositionView {
         spoilerTextField.placeholder = NSLocalizedString("status.spoiler-text-placeholder", comment: "")
         spoilerTextField.inputAccessoryView = spoilerTextinputAccessoryView
         spoilerTextField.tag = spoilerTextinputAccessoryView.tagForInputView
-        spoilerTextField.isHidden_stackViewSafe = true
+        spoilerTextField.isHidden_stackViewSafe = !viewModel.displayContentWarning
         spoilerTextField.addAction(
             UIAction { [weak self] _ in self?.spoilerTextFieldEditingChanged() },
             for: .editingChanged)
