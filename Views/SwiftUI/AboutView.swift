@@ -43,7 +43,7 @@ struct AboutView: View {
                 }
                 Link(destination: Self.reviewURL) {
                     Label {
-                        Text("about.review-on-the-app-store").foregroundColor(.primary)
+                        Text("about.rate-the-app").foregroundColor(.primary)
                     } icon: {
                         Image(systemName: "star")
                     }
