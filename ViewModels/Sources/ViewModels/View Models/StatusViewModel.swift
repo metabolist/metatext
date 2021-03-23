@@ -315,14 +315,17 @@ public extension StatusViewModel {
     }
 
     func delete() {
+        let isContextParent = configuration.isContextParent
+
         eventsSubject.send(
             statusService.delete()
-                .map { _ in .ignorableOutput }
+                .map { _ in isContextParent ? .contextParentDeleted : .ignorableOutput }
                 .eraseToAnyPublisher())
     }
 
     func deleteAndRedraft() {
         let identityContext = self.identityContext
+        let isContextParent = configuration.isContextParent
 
         eventsSubject.send(
             statusService.deleteAndRedraft()
@@ -339,7 +342,9 @@ public extension StatusViewModel {
                         inReplyToViewModel = nil
                     }
 
-                    return .compose(inReplyTo: inReplyToViewModel, redraft: redraft)
+                    return .compose(inReplyTo: inReplyToViewModel,
+                                    redraft: redraft,
+                                    redraftWasContextParent: isContextParent)
                 }
                 .eraseToAnyPublisher())
     }
