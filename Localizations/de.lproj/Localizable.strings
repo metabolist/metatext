@@ -23,11 +23,11 @@
 "account.domain-unblock.confirm-%@" = "Entsperre Domain %@?";
 "account.field.verified" = "Verifiziere %@";
 "account.follow" = "Folgen";
-"account.following" = "Folge";
-"account.following-count" = "%ld Folge";
+"account.following" = "Folgen";
+"account.following-count" = "%ld werden gefolgt";
 "account.followed-by-%@" = "Gefolgt von %@";
 "account.follows-you" = "Folgt dir";
-"account.header.accessibility-label-%@" = "Kopfbild: %@";
+"account.header.accessibility-label-%@" = "Banner: %@";
 "account.hide-reblogs" = "Verstecke Boosts";
 "account.hide-reblogs.confirm-%@" = "Verstecke Boosts von %@?";
 "account.joined-%@" = "%@ beigetreten";
@@ -35,7 +35,7 @@
 "account.mute" = "Stumm";
 "account.mute.indefinite" = "Unbegrenzt";
 "account.mute.confirm-%@" = "Bist du sicher das du %@ stummschalten willst?";
-"account.mute.confirm.explanation" = "Dies wird Beiträge von ihnen bzw Beiträge die sie erwähnen ausblenden, aber deine Beiträge können immer noch gesehn werden und sie können dir folgen.";
+"account.mute.confirm.explanation" = "Dies wird Beiträge von ihnen bzw Beiträge die sie erwähnen ausblenden, aber deine Beiträge können immer noch gesehen werden und sie können dir folgen.";
 "account.mute.confirm.hide-notifications" = "Mitteilungen von diesem Nutzer ausblenden?";
 "account.mute.confirm.duration" = "Dauer";
 "account.mute.target-%@" = "%@ stummschalten";
@@ -111,7 +111,7 @@
 "compose.mark-media-sensitive" = "Medien als heikel markieren";
 "compose.photo-library" = "Fotobibliothek";
 "compose.poll.accessibility.multiple-choices-allowed" = "Mehrfachauswahl erlaubt";
-"compose.poll.add-choice" = "Auswahl hinzufügen";
+"compose.poll.add-choice" = "Hinzufügen";
 "compose.poll.allow-multiple-choices" = "Mehrfachauswahl erlauben";
 "compose.poll-button.accessibility-label" = "Umfrage hinzufügen";
 "compose.prompt" = "Woran denken Sie?";
@@ -142,7 +142,7 @@
 "error" = "Fehler";
 "favorites" = "Favoriten";
 "follow-requests" = "Anfragen zu Folgen";
-"registration.review-terms-of-use-and-privacy-policy-%@" = "Bitte lesen Sie die Nutzungsbedingungen und Datenschutzrichtlinien von %@ durch, um fortzufahren";
+"registration.review-terms-of-use-and-privacy-policy-%@" = "Bitte lesen Sie die Nutzungsbedingungen und Datenschutzrichtlinie von %@ durch, um fortzufahren";
 "registration.username" = "Benutzername";
 "registration.email" = "Email";
 "registration.password" = "Passwort";
@@ -187,7 +187,7 @@
 "notifications.mentions" = "Erwähnungen";
 "ok" = "OK";
 "pending.pending-confirmation" = "Ihr Konto ist noch nicht bestätigt";
-"post" = "posten";
+"post" = "Posten";
 "preferences" = "Einstellungen";
 "preferences.app" = "App Einstellungen";
 "preferences.app-icon" = "App Icon";
@@ -197,15 +197,15 @@
 "preferences.media.avatars" = "Avatare";
 "preferences.media.avatars.animate" = "Animierte Avatare";
 "preferences.media.avatars.animate.everywhere" = "Überall";
-"preferences.media.avatars.animate.profiles" = "Im Profile";
+"preferences.media.avatars.animate.profiles" = "Im Profil";
 "preferences.media.avatars.animate.never" = "Niemals";
 "preferences.media.custom-emojis.animate" = "Benutzerdefiniertes Emoji animieren";
-"preferences.media.headers.animate" = "Profilkopf animieren";
+"preferences.media.headers.animate" = "Profilbanner animieren";
 "preferences.media.autoplay" = "Automatische Wiedergabe";
 "preferences.media.autoplay.gifs" = "GIFs automatisch wiedergeben";
 "preferences.media.autoplay.videos" = "Videos automatisch wiedergeben";
 "preferences.media.autoplay.always" = "Immer";
-"preferences.media.autoplay.wifi" = "Im Wlan";
+"preferences.media.autoplay.wifi" = "Nur im WLAN";
 "preferences.media.autoplay.never" = "Niemals";
 "preferences.use-preferences-from-server" = "Voreinstellungen vom Server verwenden";
 "preferences.posting-default-visiblility" = "Standardsichtbarkeit";
@@ -231,7 +231,7 @@
 "preferences.notifications.include-pictures" = "Mit Bildern";
 "preferences.notifications.sounds" = "Töne";
 "preferences.muted-users" = "Stumme Nutzer";
-"preferences.home-timeline-position-on-startup" = "Position der Home-Zeitleiste beim Start";
+"preferences.home-timeline-position-on-startup" = "Position der eigenen Zeitleiste beim Start";
 "preferences.notifications-position-on-startup" = "Position der Benachrichtigungen beim Start";
 "preferences.position.remember-position" = "Position merken";
 "preferences.position.newest" = "Lade neuste";
@@ -274,7 +274,7 @@
 "report.additional-comments" = "Zusätzliche Anmerkungen";
 "report.hint" = "Der Bericht wird an die Moderatoren Ihres Servers gesendet. Sie können unten eine Erklärung angeben, warum Sie dieses Konto melden:";
 "report.target-%@" = "%@ melden";
-"report.forward.hint" = "Das Konto ist von einem anderen Server. Senden Sie eine anonymisierte Kopie des Berichts auch dorthin?";
+"report.forward.hint" = "Das Konto ist von einem anderen Server. Möchten Sie eine anonymisierte Kopie des Berichts auch dorthin senden?";
 "report.forward-%@" = "Bericht weiterleiten an %@";
 "report.select-additional.hint.post" = "Wählen Sie zusätzliche Beiträge zum Melden aus:";
 "report.select-additional.hint.toot" = "Wählen Sie zusätzliche Toots zum Melden aus:";
@@ -336,7 +336,7 @@
 "tag.accessibility-hint.post" = "Zeige mit Trend verbundene Beiträge";
 "tag.accessibility-hint.toot" = "Zeige mit Trend verbundene Toots";
 "tag.per-week-%ld" = "%ld pro Woche";
-"timelines.home" = "Zuhause";
+"timelines.home" = "Startseite";
 "timelines.local" = "Lokal";
 "timelines.federated" = "Föderiert";
 "toot" = "Toot";
