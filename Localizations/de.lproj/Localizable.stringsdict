@@ -13,9 +13,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Person sprechen</string>
+			<string>%ld Person sprechen drüber</string>
 			<key>other</key>
-			<string>%ld Personen sprechen</string>
+			<string>%ld Personen sprechen drüber</string>
 		</dict>
 	</dict>
 	<key>status.poll.participation-count</key>
@@ -125,9 +125,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>%ld Folgende</string>
+			<string>%ld folgt</string>
 			<key>other</key>
-			<string>%ld Folgende</string>
+			<string>%ld folgen</string>
 		</dict>
 	</dict>
 	<key>attachment.type.images-%ld</key>
