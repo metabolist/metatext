@@ -1,198 +1,198 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-	<key>tag.people-talking-%ld</key>
-	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@people@</string>
-		<key>people</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>ld</string>
-			<key>one</key>
-			<string>%ld Person sprechen drüber</string>
-			<key>other</key>
-			<string>%ld Personen sprechen drüber</string>
-		</dict>
-	</dict>
-	<key>status.poll.participation-count-%ld</key>
-	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@people@</string>
-		<key>people</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>ld</string>
-			<key>one</key>
-			<string>%ld Person</string>
-			<key>other</key>
-			<string>%ld Leute</string>
-		</dict>
-	</dict>
-	<key>status.reblogs-count-%ld</key>
-	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@reblogs@</string>
-		<key>reblogs</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>ld</string>
-			<key>one</key>
-			<string>%ld Boost</string>
-			<key>other</key>
-			<string>%ld Boosts</string>
-		</dict>
-	</dict>
-	<key>status.favorites-count-%ld</key>
-	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@favorites@</string>
-		<key>favorites</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>ld</string>
-			<key>one</key>
-			<string>%ld Favorit</string>
-			<key>other</key>
-			<string>%ld Favoriten</string>
-		</dict>
-	</dict>
-	<key>status.replies-count-%ld</key>
-	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@replies@</string>
-		<key>replies</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>ld</string>
-			<key>one</key>
-			<string>%ld Antwort</string>
-			<key>other</key>
-			<string>%ld Antworten</string>
-		</dict>
-	</dict>
-	<key>statuses.count.post-%ld</key>
-	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@posts@</string>
-		<key>posts</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>ld</string>
-			<key>one</key>
-			<string>%ld Beitrag</string>
-			<key>other</key>
-			<string>%ld Beiträge</string>
-		</dict>
-	</dict>
-	<key>statuses.count.toot-%ld</key>
-	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@toots@</string>
-		<key>toots</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>ld</string>
-			<key>one</key>
-			<string>%ld Toot</string>
-			<key>other</key>
-			<string>%ld Toots</string>
-		</dict>
-	</dict>
-	<key>account.followers-count-%ld</key>
-	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@followers@</string>
-		<key>followers</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>ld</string>
-			<key>one</key>
-			<string>%ld folgt</string>
-			<key>other</key>
-			<string>%ld folgen</string>
-		</dict>
-	</dict>
-	<key>attachment.type.images-%ld</key>
-	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@images@</string>
-		<key>images</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>ld</string>
-			<key>one</key>
-			<string>%ld Bild</string>
-			<key>other</key>
-			<string>%ld Bilder</string>
-		</dict>
-	</dict>
-	<key>attachment.type.audios-%ld</key>
-	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@audios@</string>
-		<key>audios</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>ld</string>
-			<key>one</key>
-			<string>%ld Audiodatei</string>
-			<key>other</key>
-			<string>%ld Audiodateien</string>
-		</dict>
-	</dict>
-	<key>attachment.type.videos-%ld</key>
-	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@videos@</string>
-		<key>videos</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>ld</string>
-			<key>one</key>
-			<string>%ld Videodatei</string>
-			<key>other</key>
-			<string>%ld Videodateien</string>
-		</dict>
-	</dict>
-	<key>attachment.type.unknowns-%ld</key>
-	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@unknowns@</string>
-		<key>unknowns</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>ld</string>
-			<key>one</key>
-			<string>%ld Anhang</string>
-			<key>other</key>
-			<string>%ld Anhänge</string>
-		</dict>
-	</dict>
-</dict>
+  <dict>
+    <key>tag.people-talking-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@people@</string>
+      <key>people</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld Person sprechen drüber</string>
+        <key>other</key>
+        <string>%ld Personen sprechen drüber</string>
+      </dict>
+    </dict>
+    <key>status.poll.participation-count-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@people@</string>
+      <key>people</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld Person</string>
+        <key>other</key>
+        <string>%ld Leute</string>
+      </dict>
+    </dict>
+    <key>status.reblogs-count-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@reblogs@</string>
+      <key>reblogs</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld Boost</string>
+        <key>other</key>
+        <string>%ld Boosts</string>
+      </dict>
+    </dict>
+    <key>status.favorites-count-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@favorites@</string>
+      <key>favorites</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld Favorit</string>
+        <key>other</key>
+        <string>%ld Favoriten</string>
+      </dict>
+    </dict>
+    <key>status.replies-count-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@replies@</string>
+      <key>replies</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld Antwort</string>
+        <key>other</key>
+        <string>%ld Antworten</string>
+      </dict>
+    </dict>
+    <key>statuses.count.post-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@posts@</string>
+      <key>posts</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld Beitrag</string>
+        <key>other</key>
+        <string>%ld Beiträge</string>
+      </dict>
+    </dict>
+    <key>statuses.count.toot-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@toots@</string>
+      <key>toots</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld Toot</string>
+        <key>other</key>
+        <string>%ld Toots</string>
+      </dict>
+    </dict>
+    <key>account.followers-count-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@followers@</string>
+      <key>followers</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld folgt</string>
+        <key>other</key>
+        <string>%ld folgen</string>
+      </dict>
+    </dict>
+    <key>attachment.type.images-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@images@</string>
+      <key>images</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld Bild</string>
+        <key>other</key>
+        <string>%ld Bilder</string>
+      </dict>
+    </dict>
+    <key>attachment.type.audios-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@audios@</string>
+      <key>audios</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld Audiodatei</string>
+        <key>other</key>
+        <string>%ld Audiodateien</string>
+      </dict>
+    </dict>
+    <key>attachment.type.videos-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@videos@</string>
+      <key>videos</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld Videodatei</string>
+        <key>other</key>
+        <string>%ld Videodateien</string>
+      </dict>
+    </dict>
+    <key>attachment.type.unknowns-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@unknowns@</string>
+      <key>unknowns</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld Anhang</string>
+        <key>other</key>
+        <string>%ld Anhänge</string>
+      </dict>
+    </dict>
+  </dict>
 </plist>
