@@ -61,6 +61,7 @@
 "account.unnotify" = "Mitteilungen ausschalten";
 "activity.open-in-default-browser" = "Im Standardbrowser öffnen";
 "add" = "Hinzufügen";
+"api-error.unable-to-fetch-remote-status" = "Unable to fetch remote status";
 "apns-default-message" = "Neue Mitteilungen";
 "app-icon.brutalist" = "Brutalist";
 "app-icon.rainbow-brutalist" = "Regenbogen Brutalist";
