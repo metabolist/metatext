@@ -186,10 +186,10 @@ final class AccountHeaderView: UIView {
                 noteTextView.isHidden = false
 
                 followingButton.setAttributedLocalizedTitle(
-                    localizationKey: "account.following-count",
+                    localizationKey: "account.following-count-%ld",
                     count: accountViewModel.followingCount)
                 followersButton.setAttributedLocalizedTitle(
-                    localizationKey: "account.followers-count",
+                    localizationKey: "account.followers-count-%ld",
                     count: accountViewModel.followersCount)
                 followStackView.isHidden = false
             } else {

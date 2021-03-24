@@ -2,7 +2,7 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>tag.people-talking</key>
+	<key>tag.people-talking-%ld</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@people@</string>
@@ -18,7 +18,7 @@
 			<string>%ld people talking</string>
 		</dict>
 	</dict>
-	<key>status.poll.participation-count</key>
+	<key>status.poll.participation-count-%ld</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@people@</string>
@@ -34,7 +34,7 @@
 			<string>%ld people</string>
 		</dict>
 	</dict>
-	<key>status.reblogs-count</key>
+	<key>status.reblogs-count-%ld</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@reblogs@</string>
@@ -50,7 +50,7 @@
 			<string>%ld Boosts</string>
 		</dict>
 	</dict>
-	<key>status.favorites-count</key>
+	<key>status.favorites-count-%ld</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@favorites@</string>
@@ -66,7 +66,7 @@
 			<string>%ld Favorites</string>
 		</dict>
 	</dict>
-	<key>status.replies-count</key>
+	<key>status.replies-count-%ld</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@replies@</string>
@@ -114,7 +114,7 @@
 			<string>%ld Toots</string>
 		</dict>
 	</dict>
-	<key>account.followers-count</key>
+	<key>account.followers-count-%ld</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@followers@</string>

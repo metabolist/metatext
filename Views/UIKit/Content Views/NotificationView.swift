@@ -170,21 +170,21 @@ private extension NotificationView {
 
         switch viewModel.type {
         case .follow:
-            typeLabel.attributedText = "notifications.followed-you".localizedBolding(
+            typeLabel.attributedText = "notifications.followed-you-%@".localizedBolding(
                 displayName: viewModel.accountViewModel.displayName,
                 emojis: viewModel.accountViewModel.emojis,
                 label: typeLabel,
                 identityContext: viewModel.identityContext)
             iconImageView.tintColor = nil
         case .reblog:
-            typeLabel.attributedText = "notifications.reblogged-your-status".localizedBolding(
+            typeLabel.attributedText = "notifications.reblogged-your-status-%@".localizedBolding(
                 displayName: viewModel.accountViewModel.displayName,
                 emojis: viewModel.accountViewModel.emojis,
                 label: typeLabel,
                 identityContext: viewModel.identityContext)
             iconImageView.tintColor = .systemGreen
         case .favourite:
-            typeLabel.attributedText = "notifications.favourited-your-status".localizedBolding(
+            typeLabel.attributedText = "notifications.favourited-your-status-%@".localizedBolding(
                 displayName: viewModel.accountViewModel.displayName,
                 emojis: viewModel.accountViewModel.emojis,
                 label: typeLabel,
@@ -198,7 +198,7 @@ private extension NotificationView {
                 comment: "")
             iconImageView.tintColor = nil
         default:
-            typeLabel.attributedText = "notifications.unknown".localizedBolding(
+            typeLabel.attributedText = "notifications.unknown-%@".localizedBolding(
                 displayName: viewModel.accountViewModel.displayName,
                 emojis: viewModel.accountViewModel.emojis,
                 label: typeLabel,

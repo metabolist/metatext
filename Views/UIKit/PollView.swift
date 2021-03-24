@@ -122,7 +122,7 @@ final class PollView: UIView {
             stackView.addArrangedSubview(bottomStackView)
 
             let votesCount = String.localizedStringWithFormat(
-                NSLocalizedString("status.poll.participation-count", comment: ""),
+                NSLocalizedString("status.poll.participation-count-%ld", comment: ""),
                 viewModel.pollVotersCount)
 
             votesCountLabel.text = votesCount
@@ -132,7 +132,7 @@ final class PollView: UIView {
 
             if !viewModel.isPollExpired, let pollTimeLeft = viewModel.pollTimeLeft {
                 expiryLabel.text = String.localizedStringWithFormat(
-                    NSLocalizedString("status.poll.time-left", comment: ""),
+                    NSLocalizedString("status.poll.time-left-%@", comment: ""),
                     pollTimeLeft)
                 refreshButton.isHidden = false
                 accessibilityCustomActions =

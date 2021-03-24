@@ -95,7 +95,7 @@ private extension TagView {
 
         if let accounts = viewModel.accounts {
             let accountsText = String.localizedStringWithFormat(
-                NSLocalizedString("tag.people-talking", comment: ""),
+                NSLocalizedString("tag.people-talking-%ld", comment: ""),
                 accounts)
             accountsLabel.text = accountsText
             accessibilityLabel.appendWithSeparator(accountsText)

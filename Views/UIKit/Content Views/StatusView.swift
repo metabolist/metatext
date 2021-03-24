@@ -482,7 +482,7 @@ private extension StatusView {
         hasReplyFollowingView.isHidden = !viewModel.configuration.hasReplyFollowing
 
         if viewModel.isReblog {
-            let attributedTitle = "status.reblogged-by".localizedBolding(
+            let attributedTitle = "status.reblogged-by-%@".localizedBolding(
                 displayName: viewModel.rebloggedByDisplayName,
                 emojis: viewModel.rebloggedByDisplayNameEmojis,
                 label: infoLabel,
@@ -576,11 +576,11 @@ private extension StatusView {
         let noInteractions = !isContextParent || (noReblogs && noFavorites)
 
         rebloggedByButton.setAttributedLocalizedTitle(
-            localizationKey: "status.reblogs-count",
+            localizationKey: "status.reblogs-count-%ld",
             count: viewModel.reblogsCount)
         rebloggedByButton.isHidden = noReblogs
         favoritedByButton.setAttributedLocalizedTitle(
-            localizationKey: "status.favorites-count",
+            localizationKey: "status.favorites-count-%ld",
             count: viewModel.favoritesCount)
         favoritedByButton.isHidden = noFavorites
 
@@ -793,7 +793,7 @@ private extension StatusView {
         if statusConfiguration.viewModel.repliesCount > 0 {
             accessibilityAttributedLabel.appendWithSeparator(
                 String.localizedStringWithFormat(
-                    NSLocalizedString("status.replies-count", comment: ""),
+                    NSLocalizedString("status.replies-count-%ld", comment: ""),
                     statusConfiguration.viewModel.repliesCount))
         }
 
@@ -801,14 +801,14 @@ private extension StatusView {
             if statusConfiguration.viewModel.reblogsCount > 0 {
                 accessibilityAttributedLabel.appendWithSeparator(
                     String.localizedStringWithFormat(
-                        NSLocalizedString("status.reblogs-count", comment: ""),
+                        NSLocalizedString("status.reblogs-count-%ld", comment: ""),
                         statusConfiguration.viewModel.reblogsCount))
             }
 
             if statusConfiguration.viewModel.favoritesCount > 0 {
                 accessibilityAttributedLabel.appendWithSeparator(
                     String.localizedStringWithFormat(
-                        NSLocalizedString("status.favorites-count", comment: ""),
+                        NSLocalizedString("status.favorites-count-%ld", comment: ""),
                         statusConfiguration.viewModel.favoritesCount))
             }
         }

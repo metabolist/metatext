@@ -101,7 +101,7 @@ final class AccountFieldView: UIView {
         if let verifiedAt = verifiedAt {
             checkButton.menu = UIMenu(
                 title: String.localizedStringWithFormat(
-                    NSLocalizedString("account.field.verified", comment: ""),
+                    NSLocalizedString("account.field.verified-%@", comment: ""),
                     Self.dateFormatter.string(from: verifiedAt)),
                 options: .displayInline,
                 children: [UIAction(title: NSLocalizedString("ok", comment: "")) { _ in }])
@@ -156,7 +156,7 @@ final class AccountFieldView: UIView {
         if let verifiedAt = verifiedAt {
             accessibilityAttributedLabel.appendWithSeparator(
                 String.localizedStringWithFormat(
-                    NSLocalizedString("account.field.verified", comment: ""),
+                    NSLocalizedString("account.field.verified-%@", comment: ""),
                     Self.dateFormatter.string(from: verifiedAt)))
         }
 
