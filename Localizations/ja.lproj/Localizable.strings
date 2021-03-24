@@ -61,6 +61,7 @@
 "account.unnotify" = "通知をオフにする";
 "activity.open-in-default-browser" = "デフォルトのブラウザで開く";
 "add" = "追加";
+"api-error.unable-to-fetch-remote-status" = "Unable to fetch remote status";
 "apns-default-message" = "新しい通知";
 "app-icon.brutalist" = "ブルータリスト";
 "app-icon.rainbow-brutalist" = "虹色ブルータリスト";
