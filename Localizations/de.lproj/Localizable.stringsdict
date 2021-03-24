@@ -13,9 +13,9 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
         <key>one</key>
-        <string>%ld person talking</string>
+        <string>%ld Person sprechen drüber</string>
         <key>other</key>
-        <string>%ld people talking</string>
+        <string>%ld Personen sprechen drüber</string>
       </dict>
     </dict>
     <key>status.poll.participation-count-%ld</key>
@@ -29,9 +29,9 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
         <key>one</key>
-        <string>%ld person</string>
+        <string>%ld Person</string>
         <key>other</key>
-        <string>%ld people</string>
+        <string>%ld Leute</string>
       </dict>
     </dict>
     <key>status.reblogs-count-%ld</key>
@@ -61,9 +61,9 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
         <key>one</key>
-        <string>%ld Favorite</string>
+        <string>%ld Favorit</string>
         <key>other</key>
-        <string>%ld Favorites</string>
+        <string>%ld Favoriten</string>
       </dict>
     </dict>
     <key>status.replies-count-%ld</key>
@@ -77,9 +77,9 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
         <key>one</key>
-        <string>%ld Reply</string>
+        <string>%ld Antwort</string>
         <key>other</key>
-        <string>%ld Replies</string>
+        <string>%ld Antworten</string>
       </dict>
     </dict>
     <key>statuses.count.post-%ld</key>
@@ -93,9 +93,9 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
         <key>one</key>
-        <string>%ld Post</string>
+        <string>%ld Beitrag</string>
         <key>other</key>
-        <string>%ld Posts</string>
+        <string>%ld Beiträge</string>
       </dict>
     </dict>
     <key>statuses.count.toot-%ld</key>
@@ -125,9 +125,9 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
         <key>one</key>
-        <string>%ld Follower</string>
+        <string>%ld folgt</string>
         <key>other</key>
-        <string>%ld Followers</string>
+        <string>%ld folgen</string>
       </dict>
     </dict>
     <key>attachment.type.images-%ld</key>
@@ -141,9 +141,9 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
         <key>one</key>
-        <string>%ld image</string>
+        <string>%ld Bild</string>
         <key>other</key>
-        <string>%ld images</string>
+        <string>%ld Bilder</string>
       </dict>
     </dict>
     <key>attachment.type.audios-%ld</key>
@@ -157,9 +157,9 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
         <key>one</key>
-        <string>%ld audio file</string>
+        <string>%ld Audiodatei</string>
         <key>other</key>
-        <string>%ld audio files</string>
+        <string>%ld Audiodateien</string>
       </dict>
     </dict>
     <key>attachment.type.videos-%ld</key>
@@ -173,9 +173,9 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
         <key>one</key>
-        <string>%ld video file</string>
+        <string>%ld Videodatei</string>
         <key>other</key>
-        <string>%ld video files</string>
+        <string>%ld Videodateien</string>
       </dict>
     </dict>
     <key>attachment.type.unknowns-%ld</key>
@@ -189,9 +189,9 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
         <key>one</key>
-        <string>%ld attachment</string>
+        <string>%ld Anhang</string>
         <key>other</key>
-        <string>%ld attachments</string>
+        <string>%ld Anhänge</string>
       </dict>
     </dict>
   </dict>
