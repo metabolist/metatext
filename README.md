@@ -8,6 +8,10 @@ A free, open-source iOS Mastodon client.
 
 GitHub is used for bug tracking. Please search [existing issues](https://github.com/metabolist/metatext/issues) and create a new one if the issue is not yet tracked.
 
+## Contributing Translations
+
+You can help translate Metatext on [CrowdIn](https://crowdin.com/project/metatext).
+
 ## Contributing Code
 
 See the [contribution guidelines](https://github.com/metabolist/metatext/blob/main/CONTRIBUTING.md).
