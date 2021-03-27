@@ -41,6 +41,13 @@ struct AboutView: View {
                         Image(systemName: "wrench.and.screwdriver")
                     }
                 }
+                Link(destination: Self.translationsURL) {
+                    Label {
+                        Text("about.translations").foregroundColor(.primary)
+                    } icon: {
+                        Image(systemName: "globe")
+                    }
+                }
                 Link(destination: Self.reviewURL) {
                     Label {
                         Text("about.rate-the-app").foregroundColor(.primary)
@@ -64,6 +71,7 @@ private extension AboutView {
     static let websiteURL = URL(string: "https://metabolist.org")!
     static let officialAccountURL = URL(string: "https://mastodon.social/@metabolist")!
     static let sourceCodeAndIssueTrackerURL = URL(string: "https://github.com/metabolist/metatext")!
+    static let translationsURL = URL(string: "https://crowdin.com/project/metatext")!
     static let reviewURL = URL(string: "https://apps.apple.com/app/metatext/id1523996615?mt=8&action=write-review")!
 
     static var version: String {
