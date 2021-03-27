@@ -6,6 +6,7 @@
 "about.official-account" = "Offizieller Account";
 "about.rate-the-app" = "Die App bewerten";
 "about.source-code-and-issue-tracker" = "Quellcode & Fehler Tracker";
+"about.translations" = "Übersetzungen";
 "about.website" = "Webseite";
 "accessibility.activate-link-%@" = "Link: %@";
 "accessibility.copy-text" = "Kopiere Text";
@@ -61,7 +62,7 @@
 "account.unnotify" = "Mitteilungen ausschalten";
 "activity.open-in-default-browser" = "Im Standardbrowser öffnen";
 "add" = "Hinzufügen";
-"api-error.unable-to-fetch-remote-status" = "Unable to fetch remote status";
+"api-error.unable-to-fetch-remote-status" = "Remote-Status konnte nicht abgerufen werden";
 "apns-default-message" = "Neue Mitteilungen";
 "app-icon.brutalist" = "Brutalist";
 "app-icon.rainbow-brutalist" = "Regenbogen Brutalist";
@@ -80,6 +81,7 @@
 "attachment.edit.description" = "Beschreiben Sie für Sehbehinderte";
 "attachment.edit.description.audio" = "Beschreiben Sie für Menschen mit Hörverlust";
 "attachment.edit.description.video" = "Beschreiben Sie für Menschen mit Hör- oder Sehbehinderung";
+"attachment.edit.detect-text-from-picture" = "Text aus Bild erkennen";
 "attachment.edit.title" = "Medien bearbeiten";
 "attachment.edit.thumbnail.prompt" = "Ziehen Sie den Kreis in der Vorschau auf den Punkt, welcher in allen Vorschaubildern sichtbar seinen soll.";
 "attachment.sensitive-content" = "Heikler Inhalt";
@@ -146,7 +148,7 @@
 "follow-requests" = "Anfragen zu Folgen";
 "registration.review-terms-of-use-and-privacy-policy-%@" = "Bitte lesen Sie die Nutzungsbedingungen und Datenschutzrichtlinie von %@ durch, um fortzufahren";
 "registration.username" = "Benutzername";
-"registration.email" = "Email";
+"registration.email" = "E-Mail";
 "registration.password" = "Passwort";
 "registration.password-confirmation" = "Passwort bestätigen";
 "registration.reason-%@" = "Warum möchten Sie %@ beitreten?";
@@ -160,8 +162,8 @@
 "secondary-navigation.my-profile" = "Mein Profil";
 "secondary-navigation.preferences" = "Einstellungen";
 "secondary-navigation-button.accessibility-title" = "Accountmenü";
-"http-error.non-http-response" = "HTTP Error: Non-HTTP response";
-"http-error.status-code-%ld" = "HTTP Error: %ld";
+"http-error.non-http-response" = "HTTP Fehler: Nicht-HTTP Antwort";
+"http-error.status-code-%ld" = "HTTP Fehler: %ld";
 "identities.accounts" = "Accounts";
 "identities.browsing" = "Durchsuchen";
 "identities.log-out" = "Ausloggen";
@@ -312,9 +314,9 @@
 "status.poll.time-left-%@" = "%@ übrig";
 "status.poll.refresh" = "Neuladen";
 "status.poll.closed" = "Geschlossen";
-"status.reblogged-by-%@" = "%@ boosted";
+"status.reblogged-by-%@" = "%@ geboostet";
 "status.reply-button.accessibility-label" = "Antworten";
-"status.reblog-button.accessibility-label" = "Boost";
+"status.reblog-button.accessibility-label" = "Boosten";
 "status.reblog-button.undo.accessibility-label" = "Unboost";
 "status.favorite-button.accessibility-label" = "Favorisieren";
 "status.favorite-button.undo.accessibility-label" = "Entfavorisieren";

@@ -450,6 +450,10 @@
 		D0E569DA2529319100FA1D72 /* LoadMoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreView.swift; sourceTree = "<group>"; };
 		D0E569DF252931B100FA1D72 /* LoadMoreContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreContentConfiguration.swift; sourceTree = "<group>"; };
 		D0E7AD3825870B13005F5E2D /* UIVIewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIVIewController+Extensions.swift"; sourceTree = "<group>"; };
+		D0E93285260FBE450087CC11 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		D0E93286260FBE450087CC11 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = pl; path = pl.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		D0E93287260FBE550087CC11 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		D0E93288260FBE550087CC11 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = es; path = es.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		D0E9F9A9258450B300EF503D /* CompositionInputAccessoryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompositionInputAccessoryView.swift; sourceTree = "<group>"; };
 		D0EA593F2522AC8700804347 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		D0EA59472522B8B600804347 /* ViewConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewConstants.swift; sourceTree = "<group>"; };
@@ -1020,6 +1024,8 @@
 				Base,
 				ja,
 				de,
+				pl,
+				es,
 			);
 			mainGroup = D047FA7F24C3E21000AF17C5;
 			packageReferences = (
@@ -1362,6 +1368,8 @@
 				D9E658692601CF76007C426E /* en */,
 				D9E658762601CF94007C426E /* ja */,
 				2805F2DF26044E8900670835 /* de */,
+				D0E93285260FBE450087CC11 /* pl */,
+				D0E93287260FBE550087CC11 /* es */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1372,6 +1380,8 @@
 				D9E658702601CF79007C426E /* en */,
 				D9E6587B2601CF94007C426E /* ja */,
 				2805F2E026044E8900670835 /* de */,
+				D0E93286260FBE450087CC11 /* pl */,
+				D0E93288260FBE550087CC11 /* es */,
 			);
 			name = Localizable.stringsdict;
 			sourceTree = "<group>";

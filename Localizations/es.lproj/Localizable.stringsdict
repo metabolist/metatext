@@ -12,8 +12,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld hay una persona hablando</string>
         <key>other</key>
-        <string>%ld 人が話しています</string>
+        <string>%ld hay personas hablando</string>
       </dict>
     </dict>
     <key>status.poll.participation-count-%ld</key>
@@ -26,8 +28,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld persona</string>
         <key>other</key>
-        <string>%ld 人</string>
+        <string>%ld people gente</string>
       </dict>
     </dict>
     <key>status.reblogs-count-%ld</key>
@@ -40,8 +44,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld Boost</string>
         <key>other</key>
-        <string>%ld ブースト</string>
+        <string>%ld Boosts</string>
       </dict>
     </dict>
     <key>status.favorites-count-%ld</key>
@@ -54,8 +60,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld Favorito</string>
         <key>other</key>
-        <string>%ld お気に入り</string>
+        <string>%ld Favoritos</string>
       </dict>
     </dict>
     <key>status.replies-count-%ld</key>
@@ -68,8 +76,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld Respuesta</string>
         <key>other</key>
-        <string>%ld 返信</string>
+        <string>%ld Respuestas</string>
       </dict>
     </dict>
     <key>statuses.count.post-%ld</key>
@@ -82,8 +92,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld Publicación</string>
         <key>other</key>
-        <string>%ld 投稿</string>
+        <string>%ld Publicaciones</string>
       </dict>
     </dict>
     <key>statuses.count.toot-%ld</key>
@@ -96,8 +108,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld Toot</string>
         <key>other</key>
-        <string>%ld トゥート</string>
+        <string>%ld Toots</string>
       </dict>
     </dict>
     <key>account.followers-count-%ld</key>
@@ -110,8 +124,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld Seguidor</string>
         <key>other</key>
-        <string>%ld フォロワー</string>
+        <string>%ld Seguidores</string>
       </dict>
     </dict>
     <key>attachment.type.images-%ld</key>
@@ -124,8 +140,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld Imagen</string>
         <key>other</key>
-        <string>%ld 枚の画像</string>
+        <string>%ld Imágenes</string>
       </dict>
     </dict>
     <key>attachment.type.audios-%ld</key>
@@ -138,8 +156,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld Archivo de audio</string>
         <key>other</key>
-        <string>%ld 個の音声ファイル</string>
+        <string>%ld Archivos de audio</string>
       </dict>
     </dict>
     <key>attachment.type.videos-%ld</key>
@@ -152,8 +172,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld Archivo de vídeo</string>
         <key>other</key>
-        <string>%ld 個の動画</string>
+        <string>%ld Archivos de vídeo</string>
       </dict>
     </dict>
     <key>attachment.type.unknowns-%ld</key>
@@ -166,8 +188,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld Archivo adjunto</string>
         <key>other</key>
-        <string>%ld 個の添付ファイル</string>
+        <string>%ld Archivos adjuntos</string>
       </dict>
     </dict>
   </dict>

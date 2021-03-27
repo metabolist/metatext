@@ -6,6 +6,7 @@
 "about.official-account" = "公式アカウント";
 "about.rate-the-app" = "このアプリを評価";
 "about.source-code-and-issue-tracker" = "ソースコードと課題追跡システム";
+"about.translations" = "翻訳";
 "about.website" = "ウェブサイト";
 "accessibility.activate-link-%@" = "リンク: %@";
 "accessibility.copy-text" = "テキストをコピー";
@@ -40,7 +41,7 @@
 "account.mute.confirm.hide-notifications" = "このユーザーからの通知を非表示にしますか？";
 "account.mute.confirm.duration" = "期限";
 "account.mute.target-%@" = "%@をミュート";
-"account.muted" = "ミュート";
+"account.muted" = "ミュート済み";
 "account.notify" = "通知をオンにする";
 "account.reject-follow-request-button.accessibility-label" = "フォローリクエストを拒否する";
 "account.request" = "リクエスト";
@@ -61,7 +62,7 @@
 "account.unnotify" = "通知をオフにする";
 "activity.open-in-default-browser" = "デフォルトのブラウザで開く";
 "add" = "追加";
-"api-error.unable-to-fetch-remote-status" = "Unable to fetch remote status";
+"api-error.unable-to-fetch-remote-status" = "リモートステータスを取得できません";
 "apns-default-message" = "新しい通知";
 "app-icon.brutalist" = "ブルータリスト";
 "app-icon.rainbow-brutalist" = "虹色ブルータリスト";
@@ -76,22 +77,23 @@
 "add-identity.request-invite" = "登録を申請する";
 "add-identity.unable-to-connect-to-instance" = "インスタンスへ接続できません";
 "add-identity.welcome" = "ようこそMetatextへ";
-"add-identity.what-is-mastodon" = "マストドンとは？";
-"attachment.edit.description" = "閲覧が難しいユーザーへの説明";
-"attachment.edit.description.audio" = "聴取が難しいユーザーへの説明";
-"attachment.edit.description.video" = "視聴が難しいユーザーへの説明";
+"add-identity.what-is-mastodon" = "Mastodonとは？";
+"attachment.edit.description" = "視覚障害者のための説明";
+"attachment.edit.description.audio" = "難聴者のための説明";
+"attachment.edit.description.video" = "難聴または視覚障害を持つ人のための説明";
+"attachment.edit.detect-text-from-picture" = "画像からテキストを検出";
 "attachment.edit.title" = "メディアを編集";
 "attachment.edit.thumbnail.prompt" = "サムネイルの焦点にしたい場所へ円形の枠をドラッグしてください。";
 "attachment.sensitive-content" = "閲覧注意";
 "attachment.media-hidden" = "隠されたメディア";
 "attachment.type.image" = "画像";
-"attachment.type.audio" = "オーディオファイル";
+"attachment.type.audio" = "音声ファイル";
 "attachment.type.video" = "動画";
 "attachment.type.unknown" = "添付ファイル";
 "attachment.unable-to-export-media" = "メディアをエクスポートできません";
 "bookmarks" = "ブックマーク";
 "card.link.accessibility-label" = "リンク";
-"camera-access.title" = "カメラへのアクセスが必要";
+"camera-access.title" = "カメラへのアクセスが必要です";
 "camera-access.description" = "システム設定を開いてカメラへのアクセスを許可する";
 "camera-access.open-system-settings" = "システム設定を開く";
 "cancel" = "キャンセル";
@@ -160,7 +162,7 @@
 "secondary-navigation.my-profile" = "マイプロフィール";
 "secondary-navigation.preferences" = "環境設定";
 "secondary-navigation-button.accessibility-title" = "アカウントメニュー";
-"http-error.non-http-response" = "HTTPエラー: Non-HTTP response";
+"http-error.non-http-response" = "HTTPエラー：HTTP以外の応答";
 "http-error.status-code-%ld" = "HTTPエラー: %ld";
 "identities.accounts" = "アカウント";
 "identities.browsing" = "拾い読み中";
@@ -184,7 +186,7 @@
 "notification.poll" = "あなたが投票したアンケートが終了しました";
 "notification.poll.own" = "あなたのアンケートが終了しました";
 "notification.poll.unknown" = "アンケートが終了しました";
-"notification.status-%@" = "%@さんがトゥートしました";
+"notification.status-%@" = "%@さんが投稿しました";
 "notifications.all" = "すべて";
 "notifications.mentions" = "メンション";
 "ok" = "OK";
@@ -220,7 +222,7 @@
 "preferences.filters" = "フィルター";
 "preferences.links.open-in-default-browser" = "デフォルトブラウザーでリンクを開く";
 "preferences.links.use-universal-links" = "他のアプリへのリンクが利用可能な場合は直接開く";
-"preferences.notification-types" = "通知のタイプ";
+"preferences.notification-types" = "通知するタイプ";
 "preferences.notification-types.follow" = "フォロー";
 "preferences.notification-types.favourite" = "お気に入り";
 "preferences.notification-types.follow-request" = "フォローリクエスト";
@@ -252,8 +254,7 @@
 "filter.irreversible" = "隠すのではなく除外する";
 "filter.irreversible-explanation" = "フィルターが後で削除されても、除外されたトゥートは元に戻せなくなります";
 "filter.whole-word" = "単語全体にマッチ";
-"filter.whole-word-explanation" = "キーワードまたはフレーズが英数字のみの場合、単語全体と一致する場合のみ適用されるようになります
-";
+"filter.whole-word-explanation" = "キーワードまたはフレーズが英数字のみの場合、単語全体と一致する場合のみ適用されるようになります";
 "filter.save-changes" = "変更を保存";
 "filter.context.home" = "ホームタイムライン";
 "filter.context.notifications" = "通知";
