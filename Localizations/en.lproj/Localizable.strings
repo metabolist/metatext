@@ -81,6 +81,7 @@
 "attachment.edit.description" = "Describe for the visually impaired";
 "attachment.edit.description.audio" = "Describe for people with hearing loss";
 "attachment.edit.description.video" = "Describe for people with hearing loss or visual impairment";
+"attachment.edit.detect-text-from-picture" = "Detect text from picture";
 "attachment.edit.title" = "Edit media";
 "attachment.edit.thumbnail.prompt" = "Drag the circle on the preview to choose the focal point which will always be in view on all thumbnails";
 "attachment.sensitive-content" = "Sensitive content";

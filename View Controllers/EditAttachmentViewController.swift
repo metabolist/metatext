@@ -2,10 +2,15 @@
 
 import AVKit
 import Combine
+import SDWebImage
 import UIKit
 import ViewModels
+import Vision
 
 final class EditAttachmentViewController: UIViewController {
+    private let textView = UITextView()
+    private let detectTextFromPictureButton = UIButton(type: .system)
+    private let detectTextFromPictureProgressView = UIProgressView()
     private let viewModel: AttachmentViewModel
     private let parentViewModel: CompositionViewModel
     private var cancellables = Set<AnyCancellable>()
@@ -88,8 +93,6 @@ final class EditAttachmentViewController: UIViewController {
             describeLabel.text = NSLocalizedString("attachment.edit.description", comment: "")
         }
 
-        let textView = UITextView()
-
         stackView.addArrangedSubview(textView)
         textView.adjustsFontForContentSizeCategory = true
         textView.font = .preferredFont(forTextStyle: .body)
@@ -100,11 +103,30 @@ final class EditAttachmentViewController: UIViewController {
         textView.text = viewModel.editingDescription
         textView.accessibilityLabel = describeLabel.text
 
+        let lowerStackView = UIStackView()
+
+        stackView.addArrangedSubview(lowerStackView)
+        lowerStackView.spacing = .defaultSpacing
+
         let remainingCharactersLabel = UILabel()
 
-        stackView.addArrangedSubview(remainingCharactersLabel)
+        lowerStackView.addArrangedSubview(remainingCharactersLabel)
         remainingCharactersLabel.adjustsFontForContentSizeCategory = true
         remainingCharactersLabel.font = .preferredFont(forTextStyle: .subheadline)
+
+        lowerStackView.addArrangedSubview(detectTextFromPictureButton)
+        detectTextFromPictureButton.setTitle(
+            NSLocalizedString("attachment.edit.detect-text-from-picture", comment: ""),
+            for: .normal)
+        detectTextFromPictureButton.titleLabel?.adjustsFontSizeToFitWidth = true
+        detectTextFromPictureButton.titleLabel?.numberOfLines = 0
+        detectTextFromPictureButton.addAction(
+            UIAction { [weak self] _ in self?.detectTextFromPicture() },
+            for: .touchUpInside)
+        detectTextFromPictureButton.isHidden = viewModel.attachment.type != .image
+
+        stackView.addArrangedSubview(detectTextFromPictureProgressView)
+        detectTextFromPictureProgressView.isHidden = true
 
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
@@ -155,5 +177,91 @@ final class EditAttachmentViewController: UIViewController {
 extension EditAttachmentViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         viewModel.editingDescription = textView.text
+    }
+}
+
+private extension EditAttachmentViewController {
+    enum TextDetectionOutput {
+        case progress(Double)
+        case result(String)
+    }
+
+    func detectTextFromPicture() {
+        SDWebImageManager.shared.loadImage(
+            with: viewModel.attachment.url,
+            options: [],
+            progress: nil) { image, _, _, _, _, _ in
+            guard let cgImage = image?.cgImage else { return }
+
+            self.detectText(cgImage: cgImage)
+                .sink { [weak self] in
+                    if case let .failure(error) = $0 {
+                        self?.present(alertItem: .init(error: error))
+                    }
+                } receiveValue: { [weak self] in
+                    guard let self = self else { return }
+
+                    switch $0 {
+                    case let .progress(progress):
+                        self.detectTextFromPictureButton.isHidden = true
+                        self.detectTextFromPictureProgressView.isHidden = false
+                        self.detectTextFromPictureProgressView.progress = Float(progress)
+                    case let .result(result):
+                        self.detectTextFromPictureButton.isHidden = false
+                        self.detectTextFromPictureProgressView.isHidden = true
+                        self.textView.text += result
+                        self.textViewDidChange(self.textView)
+                    }
+                }
+                .store(in: &self.cancellables)
+        }
+    }
+
+    func detectText(cgImage: CGImage) -> AnyPublisher<TextDetectionOutput, Error> {
+        let subject = PassthroughSubject<TextDetectionOutput, Error>()
+
+        let recognizeTextRequest = VNRecognizeTextRequest { request, error in
+            if let error = error {
+                DispatchQueue.main.async {
+                    subject.send(completion: .failure(error))
+                }
+
+                return
+            }
+
+            let recognizedTextObservations = request.results as? [VNRecognizedTextObservation] ?? []
+            let result = recognizedTextObservations
+                .compactMap { $0.topCandidates(1).first?.string }
+                .joined(separator: " ")
+
+            DispatchQueue.main.async {
+                subject.send(.result(result))
+                subject.send(completion: .finished)
+            }
+        }
+
+        recognizeTextRequest.recognitionLevel = .accurate
+        recognizeTextRequest.usesLanguageCorrection = true
+        recognizeTextRequest.progressHandler = { _, progress, error in
+            DispatchQueue.main.async {
+                if let error = error {
+                    subject.send(completion: .failure(error))
+
+                    return
+                }
+
+                subject.send(.progress(progress))
+            }
+        }
+
+        let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
+
+        do {
+            try handler.perform([recognizeTextRequest])
+        } catch {
+            subject.send(completion: .failure(error))
+        }
+
+        return subject.eraseToAnyPublisher()
     }
 }
