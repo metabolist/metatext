@@ -16,10 +16,10 @@ struct AccountRecord: ContentDatabaseRecord, Hashable {
     let statusesCount: Int
     let note: HTML
     let url: String
-    let avatar: URL
-    let avatarStatic: URL
-    let header: URL
-    let headerStatic: URL
+    let avatar: UnicodeURL
+    let avatarStatic: UnicodeURL
+    let header: UnicodeURL
+    let headerStatic: UnicodeURL
     let fields: [Account.Field]
     let emojis: [Emoji]
     let bot: Bool

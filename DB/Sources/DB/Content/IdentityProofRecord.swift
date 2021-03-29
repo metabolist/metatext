@@ -8,8 +8,8 @@ struct IdentityProofRecord: ContentDatabaseRecord, Hashable {
     let accountId: Account.Id
     let provider: String
     let providerUsername: String
-    let profileUrl: URL
-    let proofUrl: URL
+    let profileUrl: UnicodeURL
+    let proofUrl: UnicodeURL
     let updatedAt: Date
 }
 

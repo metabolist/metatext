@@ -69,7 +69,7 @@ private extension SecondaryNavigationTitleView {
             ? viewModel.identityContext.identity.account?.avatar
             : viewModel.identityContext.identity.account?.avatarStatic
 
-        avatarImageView.sd_setImage(with: avatarURL)
+        avatarImageView.sd_setImage(with: avatarURL?.url)
 
         if let displayName = viewModel.identityContext.identity.account?.displayName,
            !displayName.isEmpty {

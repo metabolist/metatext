@@ -77,7 +77,7 @@ private extension InstanceView {
     func applyInstanceConfiguration() {
         let viewModel = instanceConfiguration.viewModel
 
-        imageView.sd_setImage(with: viewModel.instance.thumbnail)
+        imageView.sd_setImage(with: viewModel.instance.thumbnail?.url)
         imageView.autoPlayAnimatedImage = !UIAccessibility.isReduceMotionEnabled
 
         titleLabel.text = viewModel.instance.title

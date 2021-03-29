@@ -138,7 +138,7 @@ private extension EditThumbnailView {
         previewImageView.contentMode = .scaleAspectFill
         previewImageView.clipsToBounds = true
         previewImageView.layer.cornerRadius = .defaultCornerRadius
-        previewImageView.sd_setImage(with: viewModel.attachment.previewUrl)
+        previewImageView.sd_setImage(with: viewModel.attachment.previewUrl?.url)
 
         switch viewModel.attachment.type {
         case .image:
@@ -151,10 +151,10 @@ private extension EditThumbnailView {
                 placeholderImage = nil
             }
 
-            imageView.sd_setImage(with: viewModel.attachment.previewUrl, placeholderImage: placeholderImage)
+            imageView.sd_setImage(with: viewModel.attachment.previewUrl?.url, placeholderImage: placeholderImage)
         case .gifv:
             imageView.isHidden = true
-            let player = PlayerCache.shared.player(url: viewModel.attachment.url)
+            let player = PlayerCache.shared.player(url: viewModel.attachment.url.url)
 
             player.isMuted = true
 

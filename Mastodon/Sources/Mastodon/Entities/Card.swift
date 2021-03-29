@@ -9,7 +9,7 @@ public struct Card: Codable, Hashable {
         public static var unknownCase: Self { .unknown }
     }
 
-    public let url: URL
+    public let url: UnicodeURL
     public let title: String
     public let description: String
     public let type: CardType
@@ -20,6 +20,6 @@ public struct Card: Codable, Hashable {
     public let html: String?
     public let width: Int?
     public let height: Int?
-    public let image: URL?
+    public let image: UnicodeURL?
     public let embedUrl: String?
 }

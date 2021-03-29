@@ -14,10 +14,10 @@ public final class Account: Codable, Identifiable {
     public let statusesCount: Int
     public let note: HTML
     public let url: String
-    public let avatar: URL
-    public let avatarStatic: URL
-    public let header: URL
-    public let headerStatic: URL
+    public let avatar: UnicodeURL
+    public let avatarStatic: UnicodeURL
+    public let header: UnicodeURL
+    public let headerStatic: UnicodeURL
     public let fields: [Field]
     public let emojis: [Emoji]
     @DecodableDefault.False public private(set) var bot: Bool
@@ -36,10 +36,10 @@ public final class Account: Codable, Identifiable {
                 statusesCount: Int,
                 note: HTML,
                 url: String,
-                avatar: URL,
-                avatarStatic: URL,
-                header: URL,
-                headerStatic: URL,
+                avatar: UnicodeURL,
+                avatarStatic: UnicodeURL,
+                header: UnicodeURL,
+                headerStatic: UnicodeURL,
                 fields: [Account.Field],
                 emojis: [Emoji],
                 bot: Bool,

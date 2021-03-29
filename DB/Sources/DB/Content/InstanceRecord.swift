@@ -17,7 +17,7 @@ struct InstanceRecord: ContentDatabaseRecord, Hashable {
     let invitesEnabled: Bool
     let urls: Instance.URLs
     let stats: Instance.Stats
-    let thumbnail: URL?
+    let thumbnail: UnicodeURL?
     let contactAccountId: Account.Id?
     let maxTootChars: Int?
 }

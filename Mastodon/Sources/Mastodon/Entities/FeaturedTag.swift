@@ -5,11 +5,11 @@ import Foundation
 public struct FeaturedTag: Codable, Hashable {
     public let id: Id
     public let name: String
-    public let url: URL
+    public let url: UnicodeURL
     public let statusesCount: Int
     public let lastStatusAt: Date
 
-    public init(id: FeaturedTag.Id, name: String, url: URL, statusesCount: Int, lastStatusAt: Date) {
+    public init(id: FeaturedTag.Id, name: String, url: UnicodeURL, statusesCount: Int, lastStatusAt: Date) {
         self.id = id
         self.name = name
         self.url = url

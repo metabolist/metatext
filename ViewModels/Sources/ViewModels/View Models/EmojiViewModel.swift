@@ -18,13 +18,13 @@ public extension EmojiViewModel {
 
     var system: Bool { emoji.system }
 
-    var url: String? {
+    var url: URL? {
         guard case let .custom(emoji, _) = emoji else { return nil }
 
         if identityContext.appPreferences.animateCustomEmojis {
-            return emoji.url
+            return emoji.url.url
         } else {
-            return emoji.staticUrl
+            return emoji.staticUrl.url
         }
     }
 }

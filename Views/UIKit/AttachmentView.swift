@@ -64,7 +64,7 @@ final class AttachmentView: UIView {
 
 extension AttachmentView {
     func play() {
-        let player = PlayerCache.shared.player(url: viewModel.attachment.url)
+        let player = PlayerCache.shared.player(url: viewModel.attachment.url.url)
 
         playerCancellable = NotificationCenter.default.publisher(
             for: .AVPlayerItemDidPlayToEndTime,
@@ -180,7 +180,7 @@ private extension AttachmentView {
             }
 
             imageView.sd_setImage(
-                with: viewModel.attachment.previewUrl,
+                with: viewModel.attachment.previewUrl?.url,
                 placeholderImage: placeholderImage) { [weak self] _, _, _, _ in
                 self?.layoutSubviews()
             }

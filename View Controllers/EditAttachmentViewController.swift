@@ -52,9 +52,9 @@ final class EditAttachmentViewController: UIViewController {
             let player: AVPlayer
 
             if viewModel.attachment.type == .video {
-                player = PlayerCache.shared.player(url: viewModel.attachment.url)
+                player = PlayerCache.shared.player(url: viewModel.attachment.url.url)
             } else {
-                player = AVPlayer(url: viewModel.attachment.url)
+                player = AVPlayer(url: viewModel.attachment.url.url)
             }
 
             player.isMuted = false
@@ -188,7 +188,7 @@ private extension EditAttachmentViewController {
 
     func detectTextFromPicture() {
         SDWebImageManager.shared.loadImage(
-            with: viewModel.attachment.url,
+            with: viewModel.attachment.url.url,
             options: [],
             progress: nil) { image, _, _, _, _, _ in
             guard let cgImage = image?.cgImage else { return }

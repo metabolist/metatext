@@ -4,7 +4,7 @@ import Foundation
 
 public struct Instance: Codable, Hashable {
     public struct URLs: Codable, Hashable {
-        public let streamingApi: URL
+        public let streamingApi: UnicodeURL
     }
 
     public struct Stats: Codable, Hashable {
@@ -25,7 +25,7 @@ public struct Instance: Codable, Hashable {
     @DecodableDefault.False public private(set) var invitesEnabled: Bool
     public let urls: URLs
     public let stats: Stats
-    public let thumbnail: URL?
+    public let thumbnail: UnicodeURL?
     public let contactAccount: Account?
     public let maxTootChars: Int?
 
@@ -37,7 +37,7 @@ public struct Instance: Codable, Hashable {
                 version: String,
                 urls: Instance.URLs,
                 stats: Instance.Stats,
-                thumbnail: URL?,
+                thumbnail: UnicodeURL?,
                 contactAccount: Account?,
                 maxTootChars: Int?) {
         self.uri = uri

@@ -13,7 +13,7 @@ public struct PushSubscription: Codable {
         @DecodableDefault.True public var status: Bool
     }
 
-    public let endpoint: URL
+    public let endpoint: UnicodeURL
     public let alerts: Alerts
     public let serverKey: String
 }

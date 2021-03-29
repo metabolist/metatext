@@ -127,7 +127,7 @@ final class ImageViewController: UIViewController {
                 playerView.isHidden = true
 
                 let placeholderImage: UIImage?
-                let cachedImageKey = viewModel.attachment.previewUrl?.absoluteString
+                let cachedImageKey = viewModel.attachment.previewUrl?.url.absoluteString
                 let cachedImage = SDImageCache.shared.imageFromCache(forKey: cachedImageKey)
 
                 if cachedImage != nil {
@@ -139,7 +139,7 @@ final class ImageViewController: UIViewController {
                     placeholderImage = nil
                 }
 
-                imageView.sd_setImage(with: viewModel.attachment.url,
+                imageView.sd_setImage(with: viewModel.attachment.url.url,
                                       placeholderImage: placeholderImage) { _, error, _, _ in
                     if error != nil {
                         let alertItem = AlertItem(error: ImageError.unableToLoad)
@@ -150,7 +150,7 @@ final class ImageViewController: UIViewController {
             case .gifv:
                 playerView.tag = viewModel.tag
                 imageView.isHidden = true
-                let player = PlayerCache.shared.player(url: viewModel.attachment.url)
+                let player = PlayerCache.shared.player(url: viewModel.attachment.url.url)
 
                 player.isMuted = true
 

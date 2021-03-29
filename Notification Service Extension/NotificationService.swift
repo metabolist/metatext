@@ -54,7 +54,7 @@ final class NotificationService: UNNotificationServiceExtension {
             bestAttemptContent.subtitle = handle
         }
 
-        Self.attachment(imageURL: pushNotification.icon)
+        Self.attachment(imageURL: pushNotification.icon.url)
             .map { [$0] }
             .replaceError(with: [])
             .handleEvents(receiveOutput: { bestAttemptContent.attachments = $0 })

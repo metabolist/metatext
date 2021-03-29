@@ -589,9 +589,9 @@ private extension TableViewController {
             let player: AVPlayer
 
             if attachmentViewModel.attachment.type == .video {
-                player = PlayerCache.shared.player(url: attachmentViewModel.attachment.url)
+                player = PlayerCache.shared.player(url: attachmentViewModel.attachment.url.url)
             } else {
-                player = AVPlayer(url: attachmentViewModel.attachment.url)
+                player = AVPlayer(url: attachmentViewModel.attachment.url.url)
             }
 
             playerViewController.delegate = self

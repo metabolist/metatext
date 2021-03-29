@@ -7,7 +7,7 @@ import Mastodon
 struct FeaturedTagRecord: ContentDatabaseRecord, Hashable {
     let id: FeaturedTag.Id
     let name: String
-    let url: URL
+    let url: UnicodeURL
     let statusesCount: Int
     let lastStatusAt: Date
     let accountId: Account.Id

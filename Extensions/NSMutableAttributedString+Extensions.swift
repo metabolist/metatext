@@ -12,15 +12,12 @@ extension NSMutableAttributedString {
 
             while let tokenRange = string.range(of: token) {
                 let attachment = AnimatedTextAttachment()
-                let imageURL: URL?
+                let imageURL: URL
 
-                if identityContext.appPreferences.animateCustomEmojis,
-                   let urlString = emoji.url {
-                    imageURL = URL(stringEscapingPath: urlString)
-                } else if let staticURLString = emoji.staticUrl {
-                    imageURL = URL(stringEscapingPath: staticURLString)
+                if identityContext.appPreferences.animateCustomEmojis {
+                    imageURL = emoji.url.url
                 } else {
-                    imageURL = nil
+                    imageURL = emoji.staticUrl.url
                 }
 
                 attachment.imageView.sd_setImage(with: imageURL) { image, _, _, _ in

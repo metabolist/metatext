@@ -12,11 +12,11 @@ public struct CardViewModel {
 }
 
 public extension CardViewModel {
-    var url: URL { card.url }
+    var url: URL { card.url.url }
 
     var title: String { card.title }
 
     var description: String { card.description }
 
-    var imageURL: URL? { card.image }
+    var imageURL: URL? { card.image?.url }
 }

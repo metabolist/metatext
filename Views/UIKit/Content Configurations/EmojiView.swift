@@ -76,16 +76,7 @@ private extension EmojiView {
             emojiLabel.isHidden = true
             emojiLabel.text = nil
             imageView.isHidden = false
-
-            let url: URL?
-
-            if let urlString = emojiConfiguration.viewModel.url {
-                url = URL(stringEscapingPath: urlString)
-            } else {
-                url = nil
-            }
-
-            imageView.sd_setImage(with: url)
+            imageView.sd_setImage(with: emojiConfiguration.viewModel.url)
         }
 
         accessibilityLabel = emojiConfiguration.viewModel.name

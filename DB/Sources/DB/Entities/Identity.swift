@@ -21,9 +21,9 @@ public extension Identity {
 
     struct Instance: Codable, Hashable {
         public let uri: String
-        public let streamingAPI: URL
+        public let streamingAPI: UnicodeURL
         public let title: String
-        public let thumbnail: URL?
+        public let thumbnail: UnicodeURL?
         public let version: String
         public let maxTootChars: Int?
     }
@@ -34,10 +34,10 @@ public extension Identity {
         public let username: String
         public let displayName: String
         public let url: String
-        public let avatar: URL
-        public let avatarStatic: URL
-        public let header: URL
-        public let headerStatic: URL
+        public let avatar: UnicodeURL
+        public let avatarStatic: UnicodeURL
+        public let header: UnicodeURL
+        public let headerStatic: UnicodeURL
         public let emojis: [Emoji]
         public let followRequestCount: Int
     }
@@ -59,7 +59,7 @@ public extension Identity {
         return instance?.title ?? url.host ?? url.absoluteString
     }
 
-    var image: URL? { account?.avatar ?? instance?.thumbnail }
+    var image: URL? { (account?.avatar ?? instance?.thumbnail)?.url }
 }
 
 public extension Identity.Preferences {

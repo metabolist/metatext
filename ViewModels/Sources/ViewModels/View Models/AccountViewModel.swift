@@ -29,9 +29,9 @@ public extension AccountViewModel {
 
     var headerURL: URL {
         if identityContext.appPreferences.animateHeaders {
-            return accountService.account.header
+            return accountService.account.header.url
         } else {
-            return accountService.account.headerStatic
+            return accountService.account.headerStatic.url
         }
     }
 
@@ -66,9 +66,9 @@ public extension AccountViewModel {
     func avatarURL(profile: Bool = false) -> URL {
         if identityContext.appPreferences.animateAvatars == .everywhere
             || (identityContext.appPreferences.animateAvatars == .profiles && profile) {
-            return accountService.account.avatar
+            return accountService.account.avatar.url
         } else {
-            return accountService.account.avatarStatic
+            return accountService.account.avatarStatic.url
         }
     }
 

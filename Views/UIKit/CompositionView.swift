@@ -199,7 +199,7 @@ private extension CompositionView {
                     ? $0.identity.account?.avatar
                     : $0.identity.account?.avatarStatic
 
-                self.avatarImageView.sd_setImage(with: avatarURL)
+                self.avatarImageView.sd_setImage(with: avatarURL?.url)
                 self.changeIdentityButton.accessibilityLabel = $0.identity.handle
                 self.changeIdentityButton.accessibilityHint =
                     NSLocalizedString("compose.change-identity-button.accessibility-hint", comment: "")

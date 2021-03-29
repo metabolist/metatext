@@ -4,7 +4,7 @@ import Foundation
 
 public struct Tag: Codable, Hashable {
     public let name: String
-    public let url: URL
+    public let url: UnicodeURL
     public let history: [History]?
 }
 
