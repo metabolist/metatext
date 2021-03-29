@@ -13,16 +13,7 @@ extension UnicodeURL: Codable {
 
         raw = try container.decode(String.self)
 
-        if let url = URL(string: raw) {
-            self.url = url
-        } else if let escaped = raw.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) {
-            let colonUnescaped = escaped.replacingOccurrences(
-                of: "%3A",
-                with: ":",
-                range: escaped.range(of: "%3A"))
-
-            guard let url = URL(string: colonUnescaped) else { throw URLError(.badURL) }
-
+        if let url = URL(unicodeString: raw) {
             self.url = url
         } else {
             throw URLError(.badURL)

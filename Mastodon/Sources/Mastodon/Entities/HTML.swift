@@ -93,7 +93,7 @@ extension HTMLParser: XMLParserDelegate {
                 attributes attributeDict: [String: String] = [:]) {
         attributesStack.append(attributeDict)
 
-        if elementName == "a", let hrefString = attributeDict["href"], let href = URL(string: hrefString) {
+        if elementName == "a", let hrefString = attributeDict["href"], let href = URL(unicodeString: hrefString) {
             currentLink = Link(href: href, location: constructedString.utf16.count)
         } else if elementName == "br" {
             constructedString.append("\n")
@@ -113,6 +113,7 @@ extension HTMLParser: XMLParserDelegate {
         if elementName == "a", var link = currentLink {
             link.length = constructedString.utf16.count - link.location
             links.insert(link)
+            currentLink = nil
         } else if elementName == "p", parser.columnNumber < parseStopColumn {
             constructedString.append("\n\n")
         }
