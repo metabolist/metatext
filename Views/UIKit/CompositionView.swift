@@ -15,7 +15,7 @@ final class CompositionView: UIView {
     let inReplyToView = UIView()
     let hasReplyFollowingView = UIView()
     let attachmentsView = AttachmentsView()
-    let attachmentUploadView: AttachmentUploadView
+    let attachmentUploadsStackView = UIStackView()
     let pollView: CompositionPollView
     let markAttachmentsSensitiveView: MarkAttachmentsSensitiveView
 
@@ -27,7 +27,6 @@ final class CompositionView: UIView {
         self.viewModel = viewModel
         self.parentViewModel = parentViewModel
 
-        attachmentUploadView = AttachmentUploadView(viewModel: viewModel)
         markAttachmentsSensitiveView = MarkAttachmentsSensitiveView(viewModel: viewModel)
         pollView = CompositionPollView(viewModel: viewModel, parentViewModel: parentViewModel)
 
@@ -128,8 +127,9 @@ private extension CompositionView {
 
         stackView.addArrangedSubview(attachmentsView)
         attachmentsView.isHidden_stackViewSafe = true
-        stackView.addArrangedSubview(attachmentUploadView)
-        attachmentUploadView.isHidden_stackViewSafe = true
+        stackView.addArrangedSubview(attachmentUploadsStackView)
+        attachmentUploadsStackView.axis = .vertical
+        attachmentUploadsStackView.isHidden_stackViewSafe = true
         stackView.addArrangedSubview(markAttachmentsSensitiveView)
         markAttachmentsSensitiveView.isHidden_stackViewSafe = true
         stackView.addArrangedSubview(pollView)
@@ -227,10 +227,22 @@ private extension CompositionView {
             .sink { [weak self] in self?.textView.canPasteImage = $0 }
             .store(in: &cancellables)
 
+        viewModel.$attachmentUploadViewModels
+            .throttle(for: .seconds(TimeInterval.zeroIfReduceMotion(.shortAnimationDuration)),
+                      scheduler: DispatchQueue.main,
+                      latest: true)
+            .sink { [weak self] attachmentUploadViewModels in
+                UIView.animate(withDuration: .zeroIfReduceMotion(.shortAnimationDuration)) {
+                    self?.attachmentUploadsStackView.isHidden_stackViewSafe = attachmentUploadViewModels.isEmpty
+                    self?.update(attachmentUploadViewModels: attachmentUploadViewModels)
+                }
+            }
+            .store(in: &cancellables)
+
         textView.pastedItemProviders.sink { [weak self] in
             guard let self = self else { return }
 
-            self.viewModel.attach(itemProvider: $0,
+            self.viewModel.attach(itemProviders: [$0],
                                   parentViewModel: self.parentViewModel)
         }
         .store(in: &cancellables)
@@ -365,5 +377,30 @@ private extension CompositionView {
             with: replaced,
             range: textToSelectedRangeRange)
         spoilerTextFieldEditingChanged()
+    }
+
+    func update(attachmentUploadViewModels: [AttachmentUploadViewModel]) {
+        let diff = attachmentUploadViewModels.map(\.id)
+            .difference(from: attachmentUploadsStackView
+                            .arrangedSubviews
+                            .compactMap { ($0 as? AttachmentUploadView)?.id })
+
+        for insertion in diff.insertions {
+            guard case let .insert(index, id, _) = insertion,
+                  let attachmentUploadViewModel = attachmentUploadViewModels.first(where: { $0.id == id })
+                  else { continue }
+
+            let attachmentUploadView = AttachmentUploadView(viewModel: attachmentUploadViewModel)
+
+            attachmentUploadsStackView.insertArrangedSubview(attachmentUploadView, at: index)
+        }
+
+        for removal in diff.removals {
+            guard case let .remove(_, id, _) = removal,
+                  let index = attachmentUploadsStackView.arrangedSubviews.firstIndex(where: { ($0 as? AttachmentUploadView)?.id == id })
+            else { continue }
+
+            attachmentUploadsStackView.arrangedSubviews[index].removeFromSuperview()
+        }
     }
 }

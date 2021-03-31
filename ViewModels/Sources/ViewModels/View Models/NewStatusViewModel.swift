@@ -187,8 +187,8 @@ public extension NewStatusViewModel {
         }
     }
 
-    func attach(itemProvider: NSItemProvider, to compositionViewModel: CompositionViewModel) {
-        compositionViewModel.attach(itemProvider: itemProvider, parentViewModel: self)
+    func attach(itemProviders: [NSItemProvider], to compositionViewModel: CompositionViewModel) {
+        compositionViewModel.attach(itemProviders: itemProviders, parentViewModel: self)
     }
 
     func post() {

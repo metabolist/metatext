@@ -22,7 +22,7 @@ public final class CompositionViewModel: AttachmentsRenderingViewModel, Observab
     @Published public private(set) var contentWarningAutocompleteQuery: String?
     @Published public private(set) var pollOptions = [PollOption(text: ""), PollOption(text: "")]
     @Published public private(set) var attachmentViewModels = [AttachmentViewModel]()
-    @Published public private(set) var attachmentUpload: AttachmentUpload?
+    @Published public private(set) var attachmentUploadViewModels = [AttachmentUploadViewModel]()
     @Published public private(set) var isPostable = false
     @Published public private(set) var canAddAttachment = true
     @Published public private(set) var canAddNonImageAttachment = true
@@ -30,7 +30,7 @@ public final class CompositionViewModel: AttachmentsRenderingViewModel, Observab
     public let canRemoveAttachments = true
 
     private let eventsSubject: PassthroughSubject<Event, Never>
-    private var attachmentUploadCancellable: AnyCancellable?
+    private var cancellables = Set<AnyCancellable>()
 
     init(eventsSubject: PassthroughSubject<Event, Never>) {
         self.eventsSubject = eventsSubject
@@ -44,11 +44,16 @@ public final class CompositionViewModel: AttachmentsRenderingViewModel, Observab
             .assign(to: &$isPostable)
 
         $attachmentViewModels
-            .combineLatest($attachmentUpload, $displayPoll)
-            .map { $0.count < Self.maxAttachmentCount && $1 == nil && !$2 }
+            .combineLatest($attachmentUploadViewModels, $displayPoll)
+            .map { $0.count < Self.maxAttachmentCount && $1.isEmpty && !$2 }
             .assign(to: &$canAddAttachment)
 
         $attachmentViewModels.map(\.isEmpty).assign(to: &$canAddNonImageAttachment)
+
+        $attachmentUploadViewModels
+            .compactMap(\.first)
+            .sink { [weak self] in self?.upload(viewModel: $0) }
+            .store(in: &cancellables)
 
         $text.map {
             let tokens = $0.components(separatedBy: " ")
@@ -83,6 +88,7 @@ public final class CompositionViewModel: AttachmentsRenderingViewModel, Observab
 
 public extension CompositionViewModel {
     static let maxCharacters = 500
+    static let maxAttachmentCount = 4
     static let minPollOptionCount = 2
     static let maxPollOptionCount = 4
 
@@ -172,7 +178,7 @@ public extension CompositionViewModel {
                 self.text = text
             }
         } else if let itemProvider = inputItem.attachments?.first {
-            attach(itemProvider: itemProvider, parentViewModel: parentViewModel)
+            attach(itemProviders: [itemProvider], parentViewModel: parentViewModel)
         }
     }
 
@@ -197,37 +203,37 @@ public extension CompositionViewModel {
         pollOptions.removeAll { $0 === pollOption }
     }
 
-    func attach(itemProvider: NSItemProvider, parentViewModel: NewStatusViewModel) {
-        attachmentUploadCancellable = MediaProcessingService.dataAndMimeType(itemProvider: itemProvider)
-            .flatMap { [weak self] data, mimeType -> AnyPublisher<Attachment, Error> in
-                guard let self = self else { return Empty().eraseToAnyPublisher() }
-
-                let progress = Progress(totalUnitCount: 1)
-
-                DispatchQueue.main.async {
-                    self.attachmentUpload = AttachmentUpload(progress: progress, data: data, mimeType: mimeType)
+    func attach(itemProviders: [NSItemProvider], parentViewModel: NewStatusViewModel) {
+        Publishers.MergeMany(itemProviders.map {
+            MediaProcessingService.dataAndMimeType(itemProvider: $0)
+                .receive(on: DispatchQueue.main)
+                .assignErrorsToAlertItem(to: \.alertItem, on: parentViewModel)
+                .map { result in
+                    AttachmentUploadViewModel(
+                        data: result.data,
+                        mimeType: result.mimeType,
+                        parentViewModel: parentViewModel)
                 }
+        })
+        .collect()
+        .assign(to: &$attachmentUploadViewModels)
+    }
 
-                return parentViewModel.identityContext.service.uploadAttachment(
-                    data: data,
-                    mimeType: mimeType,
-                    progress: progress)
-            }
+    func upload(viewModel: AttachmentUploadViewModel) {
+        viewModel.cancellable = viewModel.upload()
             .receive(on: DispatchQueue.main)
-            .assignErrorsToAlertItem(to: \.alertItem, on: parentViewModel)
-            .handleEvents(receiveCancel: { [weak self] in self?.attachmentUpload = nil })
+            .assignErrorsToAlertItem(to: \.alertItem, on: viewModel.parentViewModel)
+            .handleEvents(receiveCancel: { [weak self] in
+                self?.attachmentUploadViewModels.removeAll { $0 === viewModel }
+            })
             .sink { [weak self] _ in
-                self?.attachmentUpload = nil
+                self?.attachmentUploadViewModels.removeAll { $0 === viewModel }
             } receiveValue: { [weak self] in
                 self?.attachmentViewModels.append(
                     AttachmentViewModel(
                         attachment: $0,
-                        identityContext: parentViewModel.identityContext))
+                        identityContext: viewModel.parentViewModel.identityContext))
             }
-    }
-
-    func cancelUpload() {
-        attachmentUploadCancellable?.cancel()
     }
 
     func update(attachmentViewModel: AttachmentViewModel) {
@@ -259,7 +265,6 @@ public extension CompositionViewModel.PollOption {
 }
 
 private extension CompositionViewModel {
-    static let maxAttachmentCount = 4
     static let autocompleteQueryRegularExpression = #"([@#:]\S+)\z"#
     static let emojiOnlyAutocompleteQueryRegularExpression = #"(:\S+)\z"#
 

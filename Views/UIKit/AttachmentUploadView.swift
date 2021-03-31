@@ -9,12 +9,10 @@ final class AttachmentUploadView: UIView {
     let cancelButton = UIButton(type: .system)
     let progressView = UIProgressView(progressViewStyle: .default)
 
-    private let viewModel: CompositionViewModel
-    private var progressCancellable: AnyCancellable?
+    private let viewModel: AttachmentUploadViewModel
     private var cancellables = Set<AnyCancellable>()
 
-    // swiftlint:disable:next function_body_length
-    init(viewModel: CompositionViewModel) {
+    init(viewModel: AttachmentUploadViewModel) {
         self.viewModel = viewModel
 
         super.init(frame: .zero)
@@ -33,7 +31,7 @@ final class AttachmentUploadView: UIView {
         cancelButton.titleLabel?.adjustsFontForContentSizeCategory = true
         cancelButton.titleLabel?.font = .preferredFont(forTextStyle: .callout)
         cancelButton.setTitle(NSLocalizedString("cancel", comment: ""), for: .normal)
-        cancelButton.addAction(UIAction { _ in viewModel.cancelUpload() }, for: .touchUpInside)
+        cancelButton.addAction(UIAction { _ in viewModel.cancel() }, for: .touchUpInside)
         cancelButton.accessibilityLabel =
             NSLocalizedString("compose.attachment.cancel-upload.accessibility-label", comment: "")
 
@@ -53,25 +51,18 @@ final class AttachmentUploadView: UIView {
             progressView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
         ])
 
-        viewModel.$attachmentUpload.sink { [weak self] attachmentUpload in
-            guard let self = self else { return }
-
-            UIView.animate(withDuration: .zeroIfReduceMotion(.shortAnimationDuration)) {
-                if let attachmentUpload = attachmentUpload {
-                    self.progressCancellable = attachmentUpload.progress.publisher(for: \.fractionCompleted)
-                        .receive(on: DispatchQueue.main)
-                        .sink { self.progressView.progress = Float($0) }
-                    self.isHidden = false
-                } else {
-                    self.isHidden = true
-                }
-            }
-        }
-        .store(in: &cancellables)
+        viewModel.progress.publisher(for: \.fractionCompleted)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.progressView.progress = Float($0) }
+            .store(in: &cancellables)
     }
 
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+extension AttachmentUploadView {
+    var id: AttachmentUploadViewModel.Id { viewModel.id }
 }

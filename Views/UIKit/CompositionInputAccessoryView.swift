@@ -205,8 +205,8 @@ private extension CompositionInputAccessoryView {
             .store(in: &cancellables)
 
         viewModel.$attachmentViewModels
-            .combineLatest(viewModel.$attachmentUpload)
-            .sink { pollButton.isEnabled = $0.isEmpty && $1 == nil }
+            .combineLatest(viewModel.$attachmentUploadViewModels)
+            .sink { pollButton.isEnabled = $0.isEmpty && $1.isEmpty }
             .store(in: &cancellables)
 
         viewModel.$remainingCharacters.sink {

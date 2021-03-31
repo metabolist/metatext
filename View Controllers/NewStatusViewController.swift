@@ -17,7 +17,7 @@ final class NewStatusViewController: UIViewController {
     private let postButton = UIBarButtonItem(title: nil, style: .done, target: nil, action: nil)
     private let mediaSelections = PassthroughSubject<[PHPickerResult], Never>()
     private let imagePickerResults = PassthroughSubject<[UIImagePickerController.InfoKey: Any]?, Never>()
-    private let documentPickerResuls = PassthroughSubject<[URL]?, Never>()
+    private let documentPickerResults = PassthroughSubject<[URL]?, Never>()
     private var cancellables = Set<AnyCancellable>()
 
     init(viewModel: NewStatusViewModel, rootViewModel: RootViewModel?) {
@@ -127,11 +127,11 @@ extension NewStatusViewController: UIImagePickerControllerDelegate {
 
 extension NewStatusViewController: UIDocumentPickerDelegate {
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-        documentPickerResuls.send(urls)
+        documentPickerResults.send(urls)
     }
 
     func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
-        documentPickerResuls.send(nil)
+        documentPickerResults.send(nil)
     }
 }
 
@@ -282,19 +282,21 @@ private extension NewStatusViewController {
     }
 
     func presentMediaPicker(compositionViewModel: CompositionViewModel) {
-        mediaSelections.first().sink { [weak self] results in
-            guard let self = self, let result = results.first else { return }
-
-            self.viewModel.attach(itemProvider: result.itemProvider, to: compositionViewModel)
+        mediaSelections.first().sink { [weak self] in
+            self?.viewModel.attach(itemProviders: $0.map(\.itemProvider), to: compositionViewModel)
         }
         .store(in: &cancellables)
 
         var configuration = PHPickerConfiguration()
 
         configuration.preferredAssetRepresentationMode = .current
+        configuration.selectionLimit = CompositionViewModel.maxAttachmentCount
 
         if !compositionViewModel.canAddNonImageAttachment {
             configuration.filter = .images
+            configuration.selectionLimit = CompositionViewModel.maxAttachmentCount
+                - compositionViewModel.attachmentViewModels.count
+                - compositionViewModel.attachmentUploadViewModels.count
         }
 
         let picker = PHPickerViewController(configuration: configuration)
@@ -332,9 +334,9 @@ private extension NewStatusViewController {
             guard let self = self, let info = $0 else { return }
 
             if let url = info[.mediaURL] as? URL, let itemProvider = NSItemProvider(contentsOf: url) {
-                self.viewModel.attach(itemProvider: itemProvider, to: compositionViewModel)
+                self.viewModel.attach(itemProviders: [itemProvider], to: compositionViewModel)
             } else if let image = info[.editedImage] as? UIImage ?? info[.originalImage] as? UIImage {
-                self.viewModel.attach(itemProvider: NSItemProvider(object: image), to: compositionViewModel)
+                self.viewModel.attach(itemProviders: [NSItemProvider(object: image)], to: compositionViewModel)
             }
         }
         .store(in: &cancellables)
@@ -356,22 +358,27 @@ private extension NewStatusViewController {
     #endif
 
     func presentDocumentPicker(compositionViewModel: CompositionViewModel) {
-        documentPickerResuls.first().sink { [weak self] in
-            guard let self = self,
-                  let result = $0?.first,
-                  result.startAccessingSecurityScopedResource(),
-                  let itemProvider = NSItemProvider(contentsOf: result)
-            else { return }
+        documentPickerResults.first().sink { [weak self] in
+            guard let self = self, let results = $0 else { return }
 
-            self.viewModel.attach(itemProvider: itemProvider, to: compositionViewModel)
-            result.stopAccessingSecurityScopedResource()
+            let itemProviders = results.compactMap { result -> NSItemProvider? in
+                guard result.startAccessingSecurityScopedResource() else { return nil }
+
+                return NSItemProvider(contentsOf: result)
+            }
+
+            self.viewModel.attach(itemProviders: itemProviders, to: compositionViewModel)
+
+            for result in results {
+                result.stopAccessingSecurityScopedResource()
+            }
         }
         .store(in: &cancellables)
 
         let documentPickerController = UIDocumentPickerViewController(forOpeningContentTypes: [.image, .movie, .audio])
 
         documentPickerController.delegate = self
-        documentPickerController.allowsMultipleSelection = false
+        documentPickerController.allowsMultipleSelection = true
         documentPickerController.modalPresentationStyle = .overFullScreen
         present(documentPickerController, animated: true)
     }
