@@ -397,7 +397,8 @@ private extension CompositionView {
 
         for removal in diff.removals {
             guard case let .remove(_, id, _) = removal,
-                  let index = attachmentUploadsStackView.arrangedSubviews.firstIndex(where: { ($0 as? AttachmentUploadView)?.id == id })
+                  let index = attachmentUploadsStackView.arrangedSubviews
+                    .firstIndex(where: { ($0 as? AttachmentUploadView)?.id == id })
             else { continue }
 
             attachmentUploadsStackView.arrangedSubviews[index].removeFromSuperview()
