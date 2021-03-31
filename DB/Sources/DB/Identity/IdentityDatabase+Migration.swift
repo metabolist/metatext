@@ -44,6 +44,29 @@ extension IdentityDatabase {
             }
         }
 
+        migrator.registerMigration("1.2.0-pk-fix") { db in
+            try db.create(table: "new_account") { t in
+                t.column("id", .text).notNull()
+                t.column("identityId", .text).notNull()
+                    .references("identityRecord", onDelete: .cascade)
+                t.column("username", .text).notNull()
+                t.column("displayName", .text).notNull()
+                t.column("url", .text).notNull()
+                t.column("avatar", .text).notNull()
+                t.column("avatarStatic", .text).notNull()
+                t.column("header", .text).notNull()
+                t.column("headerStatic", .text).notNull()
+                t.column("emojis", .blob).notNull()
+                t.column("followRequestCount", .integer).notNull()
+
+                t.primaryKey(["id", "identityId"], onConflict: .replace)
+            }
+
+            try db.execute(sql: "INSERT INTO new_account SELECT * FROM account")
+            try db.drop(table: "account")
+            try db.rename(table: "new_account", to: "account")
+        }
+
         return migrator
     }
 }
