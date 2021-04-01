@@ -3,7 +3,9 @@
 import Combine
 import Foundation
 import ImageIO
+#if canImport(UIKit)
 import UIKit
+#endif
 import UniformTypeIdentifiers
 
 enum MediaProcessingError: Error {
@@ -84,7 +86,8 @@ private extension MediaProcessingService {
     }
 
     static func UIImagePNGDataPublisher(itemProvider: NSItemProvider) -> AnyPublisher<Data, Error> {
-        Future<Data, Error> { promise in
+        #if canImport(UIKit)
+        return Future<Data, Error> { promise in
             itemProvider.loadItem(forTypeIdentifier: UTType.image.identifier, options: nil) { item, error in
                 if let error = error {
                     promise(.failure(error))
@@ -103,6 +106,9 @@ private extension MediaProcessingService {
             }
         }
         .eraseToAnyPublisher()
+        #else
+        return Fail<Data, Error>(error: MediaProcessingError.invalidMimeType).eraseToAnyPublisher()
+        #endif
     }
 
     static func imageData(url: URL, type: UTType) throws -> Data {
