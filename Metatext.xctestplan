@@ -1,0 +1,91 @@
+{
+  "configurations" : [
+    {
+      "id" : "651608D9-8238-4174-8167-D49D950B50D1",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:Metatext.xcodeproj",
+      "identifier" : "D047FA8B24C3E21200AF17C5",
+      "name" : "Metatext"
+    }
+  },
+  "testTargets" : [
+    {
+      "enabled" : false,
+      "target" : {
+        "containerPath" : "container:Metatext.xcodeproj",
+        "identifier" : "D0666A2024C677B400F3F04B",
+        "name" : "Tests"
+      }
+    },
+    {
+      "enabled" : false,
+      "target" : {
+        "containerPath" : "container:DB",
+        "identifier" : "DBTests",
+        "name" : "DBTests"
+      }
+    },
+    {
+      "enabled" : false,
+      "target" : {
+        "containerPath" : "container:HTTP",
+        "identifier" : "HTTPTests",
+        "name" : "HTTPTests"
+      }
+    },
+    {
+      "enabled" : false,
+      "target" : {
+        "containerPath" : "container:Keychain",
+        "identifier" : "KeychainTests",
+        "name" : "KeychainTests"
+      }
+    },
+    {
+      "enabled" : false,
+      "target" : {
+        "containerPath" : "container:Mastodon",
+        "identifier" : "MastodonTests",
+        "name" : "MastodonTests"
+      }
+    },
+    {
+      "enabled" : false,
+      "target" : {
+        "containerPath" : "container:MastodonAPI",
+        "identifier" : "MastodonAPITests",
+        "name" : "MastodonAPITests"
+      }
+    },
+    {
+      "enabled" : false,
+      "target" : {
+        "containerPath" : "container:Secrets",
+        "identifier" : "SecretsTests",
+        "name" : "SecretsTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:ServiceLayer",
+        "identifier" : "ServiceLayerTests",
+        "name" : "ServiceLayerTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:ViewModels",
+        "identifier" : "ViewModelsTests",
+        "name" : "ViewModelsTests"
+      }
+    }
+  ],
+  "version" : 1
+}

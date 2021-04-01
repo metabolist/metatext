@@ -317,6 +317,7 @@
 		D036AA06254B6118009094DF /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		D036AA0B254B612B009094DF /* NotificationContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationContentConfiguration.swift; sourceTree = "<group>"; };
 		D036AA16254CA823009094DF /* StatusBodyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBodyView.swift; sourceTree = "<group>"; };
+		D039410D2615A71900E6E1B3 /* Metatext.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Metatext.xctestplan; sourceTree = "<group>"; };
 		D03D87F325C23C44004DCBB2 /* SecondaryNavigationTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondaryNavigationTitleView.swift; sourceTree = "<group>"; };
 		D0477F2B25C6EBAD005C5368 /* OpenInDefaultBrowserActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenInDefaultBrowserActivity.swift; sourceTree = "<group>"; };
 		D0477F4525C72E50005C5368 /* CapsuleLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleLabel.swift; sourceTree = "<group>"; };
@@ -680,8 +681,8 @@
 		D047FA7F24C3E21000AF17C5 = {
 			isa = PBXGroup;
 			children = (
-				D0D4301925F08CE600BE5504 /* App Icons */,
 				D0477F2A25C6EB90005C5368 /* Activities */,
+				D0D4301925F08CE600BE5504 /* App Icons */,
 				D0C7D45224F76169001EBDBB /* Assets.xcassets */,
 				D0FE1C9625368A15003EF1EB /* Caches */,
 				D0A1F4F5252E7D2A004435BF /* Data Sources */,
@@ -693,6 +694,7 @@
 				D0C7D45624F76169001EBDBB /* Localizations */,
 				D0E0F1E424FC49FC002C04BF /* Mastodon */,
 				D0BECB9D2501CBC3002C1B13 /* MastodonAPI */,
+				D039410D2615A71900E6E1B3 /* Metatext.xctestplan */,
 				D0E5361A24E3EB4D00FB1CE1 /* Notification Service Extension */,
 				D047FA8D24C3E21200AF17C5 /* Products */,
 				D0BECB962501BCE0002C1B13 /* Secrets */,
