@@ -74,7 +74,7 @@
 "add-identity.instance-not-supported" = "为了向所有用户提供安全的体验并遵守App Store 审核准则，该实例不可用。";
 "add-identity.join" = "加入";
 "add-identity.prompt" = "输入 Mastodon 实例的网址：";
-"add-identity.request-invite" = "请求一个邀请";
+"add-identity.request-invite" = "申请加入";
 "add-identity.unable-to-connect-to-instance" = "无法连接实例";
 "add-identity.welcome" = "欢迎使用Metatext";
 "add-identity.what-is-mastodon" = "什么是Mastodon？";
@@ -115,7 +115,7 @@
 "compose.mark-media-sensitive" = "将媒体标记为敏感的";
 "compose.photo-library" = "照片库";
 "compose.poll.accessibility.multiple-choices-allowed" = "已允许多选";
-"compose.poll.add-choice" = "添加一个选择";
+"compose.poll.add-choice" = "添加一个选项";
 "compose.poll.allow-multiple-choices" = "允许多选";
 "compose.poll-button.accessibility-label" = "添加投票";
 "compose.prompt" = "何事沉吟？";
@@ -165,7 +165,7 @@
 "http-error.non-http-response" = "HTTP 错误：非 HTTP 响应";
 "http-error.status-code-%ld" = "HTTP 错误： %ld";
 "identities.accounts" = "账户";
-"identities.browsing" = "浏览中";
+"identities.browsing" = "浏览";
 "identities.log-out" = "退出登录";
 "identities.pending" = "待处理";
 "image-error.unable-to-load" = "无法加载图片";
@@ -199,7 +199,7 @@
 "preferences.blocked-users" = "已屏蔽的用户";
 "preferences.media" = "媒体";
 "preferences.media.avatars" = "头像";
-"preferences.media.avatars.animate" = "动画头像";
+"preferences.media.avatars.animate" = "播放动画头像";
 "preferences.media.avatars.animate.everywhere" = "所有位置";
 "preferences.media.avatars.animate.profiles" = "个人资料中";
 "preferences.media.avatars.animate.never" = "从不显示";
@@ -303,8 +303,8 @@
 "status.delete-and-redraft.confirm.post" = "确定要删除此帖子并重新起草吗？ 点赞和转发将丢失，对原始帖子的回复将找不到原文。";
 "status.delete-and-redraft.confirm.toot" = "确定要删除此嘟文并重新起草吗？ 点赞和转发将丢失，对原始嘟文的回复将找不到原文。";
 "status.mute" = "将讨论静音";
-"status.new-items.post" = "新建帖子";
-"status.new-items.toot" = "新建嘟文";
+"status.new-items.post" = "有新帖子";
+"status.new-items.toot" = "有新嘟文";
 "status.pin" = "在个人资料中置顶";
 "status.pinned.post" = "置顶帖子";
 "status.pinned.toot" = "置顶嘟文";
@@ -332,8 +332,8 @@
 "status.visibility.unlisted" = "非公开";
 "status.visibility.private" = "仅限关注者";
 "status.visibility.direct" = "私信";
-"status.visibility.public.description" = "所有人可见，并会出现在公共时间轴上";
-"status.visibility.unlisted.description" = "所有人可见，但不会出现在公共时间轴上";
+"status.visibility.public.description" = "所有人可见，并出现在公共时间轴上";
+"status.visibility.unlisted.description" = "所有人可见，但不出现在公共时间轴上";
 "status.visibility.private.description" = "只有关注你的用户能看到";
 "status.visibility.direct.description" = "只有被提及的用户能看到";
 "tag.accessibility-recent-uses-%ld" = "%ld 次最近使用";

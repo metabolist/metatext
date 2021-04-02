@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>tag.people-talking-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@people@</string>
+      <key>people</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld человек обсуждает</string>
+        <key>few</key>
+        <string>%ld человека обсуждают</string>
+        <key>many</key>
+        <string>%ld человек обсуждают</string>
+        <key>other</key>
+        <string>%ld человек обсуждают</string>
+      </dict>
+    </dict>
+    <key>status.poll.participation-count-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@people@</string>
+      <key>people</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld человек</string>
+        <key>few</key>
+        <string>%ld человека</string>
+        <key>many</key>
+        <string>%ld человек</string>
+        <key>other</key>
+        <string>%ld человек</string>
+      </dict>
+    </dict>
+    <key>status.reblogs-count-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@reblogs@</string>
+      <key>reblogs</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld продвижение</string>
+        <key>few</key>
+        <string>%ld продвижения</string>
+        <key>many</key>
+        <string>%ld продвижений</string>
+        <key>other</key>
+        <string>%ld продвижений</string>
+      </dict>
+    </dict>
+    <key>status.favorites-count-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@favorites@</string>
+      <key>favorites</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld в избранном</string>
+        <key>few</key>
+        <string>%ld в избранном</string>
+        <key>many</key>
+        <string>%ld в избранном</string>
+        <key>other</key>
+        <string>%ld в избранном</string>
+      </dict>
+    </dict>
+    <key>status.replies-count-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@replies@</string>
+      <key>replies</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld ответил</string>
+        <key>few</key>
+        <string>%ld ответили</string>
+        <key>many</key>
+        <string>%ld ответили</string>
+        <key>other</key>
+        <string>%ld ответили</string>
+      </dict>
+    </dict>
+    <key>statuses.count.post-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@posts@</string>
+      <key>posts</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld пост</string>
+        <key>few</key>
+        <string>%ld поста</string>
+        <key>many</key>
+        <string>%ld постов</string>
+        <key>other</key>
+        <string>%ld постов</string>
+      </dict>
+    </dict>
+    <key>statuses.count.toot-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@toots@</string>
+      <key>toots</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld тут</string>
+        <key>few</key>
+        <string>%ld тута</string>
+        <key>many</key>
+        <string>%ld тутов</string>
+        <key>other</key>
+        <string>%ld тутов</string>
+      </dict>
+    </dict>
+    <key>account.followers-count-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@followers@</string>
+      <key>followers</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld подписчик</string>
+        <key>few</key>
+        <string>%ld подписчика</string>
+        <key>many</key>
+        <string>%ld подписчиков</string>
+        <key>other</key>
+        <string>%ld подписчиков</string>
+      </dict>
+    </dict>
+    <key>attachment.type.images-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@images@</string>
+      <key>images</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld изображение</string>
+        <key>few</key>
+        <string>%ld изображения</string>
+        <key>many</key>
+        <string>%ld изображений</string>
+        <key>other</key>
+        <string>%ld изображений</string>
+      </dict>
+    </dict>
+    <key>attachment.type.audios-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@audios@</string>
+      <key>audios</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld аудиозапись</string>
+        <key>few</key>
+        <string>%ld аудиозаписи</string>
+        <key>many</key>
+        <string>%ld аудиозаписей</string>
+        <key>other</key>
+        <string>%ld аудиозаписи</string>
+      </dict>
+    </dict>
+    <key>attachment.type.videos-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@videos@</string>
+      <key>videos</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld видео</string>
+        <key>few</key>
+        <string>%ld видео</string>
+        <key>many</key>
+        <string>%ld видео</string>
+        <key>other</key>
+        <string>%ld видео</string>
+      </dict>
+    </dict>
+    <key>attachment.type.unknowns-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@unknowns@</string>
+      <key>unknowns</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld вложение</string>
+        <key>few</key>
+        <string>%ld вложения</string>
+        <key>many</key>
+        <string>%ld вложений</string>
+        <key>other</key>
+        <string>%ld вложения</string>
+      </dict>
+    </dict>
+  </dict>
+</plist>
