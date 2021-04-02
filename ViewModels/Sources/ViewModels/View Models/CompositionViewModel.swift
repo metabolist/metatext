@@ -26,14 +26,16 @@ public final class CompositionViewModel: AttachmentsRenderingViewModel, Observab
     @Published public private(set) var isPostable = false
     @Published public private(set) var canAddAttachment = true
     @Published public private(set) var canAddNonImageAttachment = true
-    @Published public private(set) var remainingCharacters = CompositionViewModel.maxCharacters
+    @Published public private(set) var remainingCharacters = CompositionViewModel.defaultMaxCharacters
     public let canRemoveAttachments = true
 
     private let eventsSubject: PassthroughSubject<Event, Never>
+    private let maxCharacters: Int
     private var cancellables = Set<AnyCancellable>()
 
-    init(eventsSubject: PassthroughSubject<Event, Never>) {
+    init(eventsSubject: PassthroughSubject<Event, Never>, maxCharacters: Int?) {
         self.eventsSubject = eventsSubject
+        self.maxCharacters = maxCharacters ?? Self.defaultMaxCharacters
 
         $text.map { !$0.isEmpty }
             .removeDuplicates()
@@ -61,7 +63,7 @@ public final class CompositionViewModel: AttachmentsRenderingViewModel, Observab
             return tokens.map(\.countShorteningIfURL).reduce(tokens.count - 1, +)
         }
         .combineLatest($displayContentWarning, $contentWarning)
-        .map { Self.maxCharacters - ($0 + ($1 ? $2.count : 0)) }
+        .map { (maxCharacters ?? Self.defaultMaxCharacters) - ($0 + ($1 ? $2.count : 0)) }
         .assign(to: &$remainingCharacters)
 
         $displayContentWarning.filter { $0 }.assign(to: &$sensitive)
@@ -87,7 +89,7 @@ public final class CompositionViewModel: AttachmentsRenderingViewModel, Observab
 }
 
 public extension CompositionViewModel {
-    static let maxCharacters = 500
+    static let defaultMaxCharacters = 500
     static let maxAttachmentCount = 4
     static let minPollOptionCount = 2
     static let maxPollOptionCount = 4
@@ -111,7 +113,7 @@ public extension CompositionViewModel {
         public let id = Id()
         @Published public var text: String
         @Published public var textToSelectedRange = ""
-        @Published public private(set) var remainingCharacters = CompositionViewModel.maxCharacters
+        @Published public private(set) var remainingCharacters = PollOption.maxCharacters
         @Published public private(set) var autocompleteQuery: String?
 
         public init(text: String) {
@@ -129,7 +131,8 @@ public extension CompositionViewModel {
     convenience init(eventsSubject: PassthroughSubject<Event, Never>,
                      redraft: Status,
                      identityContext: IdentityContext) {
-        self.init(eventsSubject: eventsSubject)
+        self.init(eventsSubject: eventsSubject,
+                  maxCharacters: identityContext.identity.instance?.maxTootChars)
 
         if let text = redraft.text {
             self.text = text
@@ -152,7 +155,8 @@ public extension CompositionViewModel {
     convenience init(eventsSubject: PassthroughSubject<Event, Never>,
                      extensionContext: NSExtensionContext,
                      parentViewModel: NewStatusViewModel) {
-        self.init(eventsSubject: eventsSubject)
+        self.init(eventsSubject: eventsSubject,
+                  maxCharacters: parentViewModel.identityContext.identity.instance?.maxTootChars)
 
         guard let inputItem = extensionContext.inputItems.first as? NSExtensionItem else { return }
 

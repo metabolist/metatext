@@ -64,7 +64,8 @@ public final class NewStatusViewModel: ObservableObject {
                 extensionContext: extensionContext,
                 parentViewModel: self)
         } else {
-            compositionViewModel = CompositionViewModel(eventsSubject: compositionEventsSubject)
+            compositionViewModel = CompositionViewModel(eventsSubject: compositionEventsSubject,
+                                                        maxCharacters: identityContext.identity.instance?.maxTootChars)
         }
 
         if let inReplyTo = inReplyTo, redraft == nil {
@@ -162,7 +163,8 @@ public extension NewStatusViewModel {
         guard let index = compositionViewModels.firstIndex(where: { $0 === after })
         else { return }
 
-        let newViewModel = CompositionViewModel(eventsSubject: compositionEventsSubject)
+        let newViewModel = CompositionViewModel(eventsSubject: compositionEventsSubject,
+                                                maxCharacters: identityContext.identity.instance?.maxTootChars)
 
         newViewModel.contentWarning = after.contentWarning
         newViewModel.displayContentWarning = after.displayContentWarning
