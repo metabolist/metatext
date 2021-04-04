@@ -324,6 +324,7 @@
 "status.show-more-all-button.accessibilty-label" = "全てをもっと見る";
 "status.show-less" = "隠す";
 "status.show-less-all-button.accessibilty-label" = "全てを隠す";
+"status.show-thread" = "スレッドを表示";
 "status.spoiler-text-placeholder" = "ここに警告を書いてください";
 "status.unbookmark" = "ブックマーク解除";
 "status.unmute" = "会話のミュートを解除";

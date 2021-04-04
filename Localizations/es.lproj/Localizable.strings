@@ -324,6 +324,7 @@
 "status.show-more-all-button.accessibilty-label" = "Mostrar más para todos";
 "status.show-less" = "Mostrar menos";
 "status.show-less-all-button.accessibilty-label" = "Mostrar menos para todos";
+"status.show-thread" = "Mostrar hilo";
 "status.spoiler-text-placeholder" = "Escribe tu advertencia aquí";
 "status.unbookmark" = "Desmarcar";
 "status.unmute" = "Dejar de silenciar conversación";

@@ -324,6 +324,7 @@
 "status.show-more-all-button.accessibilty-label" = "显示所有正文";
 "status.show-less" = "隐藏正文";
 "status.show-less-all-button.accessibilty-label" = "隐藏所有正文";
+"status.show-thread" = "显示全部对话";
 "status.spoiler-text-placeholder" = "在此处写下预警";
 "status.unbookmark" = "取消书签";
 "status.unmute" = "取消讨论静音";

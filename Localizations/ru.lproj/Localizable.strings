@@ -324,6 +324,7 @@
 "status.show-more-all-button.accessibilty-label" = "Показать больше для всех";
 "status.show-less" = "Показать меньше";
 "status.show-less-all-button.accessibilty-label" = "Показать меньше для всех";
+"status.show-thread" = "Показать обсуждение";
 "status.spoiler-text-placeholder" = "Напишите предупреждение здесь";
 "status.unbookmark" = "Убрать из закладок";
 "status.unmute" = "Не заглушать диалог";
