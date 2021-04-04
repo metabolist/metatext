@@ -110,7 +110,7 @@ extension StatusView {
             configuration: configuration)
             + .compactSpacing
 
-        if !configuration.isContextParent && status.inReplyToId != nil {
+        if configuration.isReplyOutOfContext {
             height += UIFont.preferredFont(forTextStyle: .callout).lineHeight + .compactSpacing
         }
 
@@ -573,7 +573,7 @@ private extension StatusView {
 
         bodyView.viewModel = viewModel
 
-        showThreadIndicator.isHidden = !viewModel.isReplyOutOfContext
+        showThreadIndicator.isHidden = !viewModel.configuration.isReplyOutOfContext
 
         contextParentTimeLabel.text = viewModel.contextParentTime
         contextParentTimeLabel.accessibilityLabel = viewModel.accessibilityContextParentTime

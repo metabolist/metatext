@@ -77,10 +77,6 @@ public extension StatusViewModel {
         sensitive || identityContext.identity.preferences.readingExpandMedia == .hideAll
     }
 
-    var isReplyOutOfContext: Bool {
-        !configuration.isContextParent && statusService.status.displayStatus.inReplyToId != nil
-    }
-
     var id: Status.Id { statusService.status.displayStatus.id }
 
     var accountName: String { "@".appending(statusService.status.displayStatus.account.acct) }

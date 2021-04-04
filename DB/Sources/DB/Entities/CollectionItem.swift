@@ -21,6 +21,7 @@ public extension CollectionItem {
         public let isContextParent: Bool
         public let isPinned: Bool
         public let isReplyInContext: Bool
+        public let isReplyOutOfContext: Bool
         public let hasReplyFollowing: Bool
 
         init(showContentToggled: Bool,
@@ -28,12 +29,14 @@ public extension CollectionItem {
              isContextParent: Bool = false,
              isPinned: Bool = false,
              isReplyInContext: Bool = false,
+             isReplyOutOfContext: Bool = false,
              hasReplyFollowing: Bool = false) {
             self.showContentToggled = showContentToggled
             self.showAttachmentsToggled = showAttachmentsToggled
             self.isContextParent = isContextParent
             self.isPinned = isPinned
             self.isReplyInContext = isReplyInContext
+            self.isReplyOutOfContext = isReplyOutOfContext
             self.hasReplyFollowing = hasReplyFollowing
         }
     }

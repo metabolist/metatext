@@ -40,7 +40,8 @@ extension TimelineItemsInfo {
                 CollectionItem.status(
                     .init(info: $0),
                     .init(showContentToggled: $0.showContentToggled,
-                          showAttachmentsToggled: $0.showAttachmentsToggled),
+                          showAttachmentsToggled: $0.showAttachmentsToggled,
+                          isReplyOutOfContext: ($0.reblogRecord ?? $0.record).inReplyToId != nil),
                     $0.reblogRelationship ?? $0.relationship)
             }
 
@@ -67,7 +68,8 @@ extension TimelineItemsInfo {
                                 .init(info: $0),
                                 .init(showContentToggled: $0.showContentToggled,
                                       showAttachmentsToggled: $0.showAttachmentsToggled,
-                                      isPinned: true),
+                                      isPinned: true,
+                                      isReplyOutOfContext: ($0.reblogRecord ?? $0.record).inReplyToId != nil),
                                 $0.reblogRelationship ?? $0.relationship)
                         }),
                     .init(items: timelineItems)]
