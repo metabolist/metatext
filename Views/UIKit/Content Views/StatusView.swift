@@ -19,6 +19,7 @@ final class StatusView: UIView {
     let nameButton = UIButton()
     let timeLabel = UILabel()
     let bodyView = StatusBodyView()
+    let showThreadIndicator = UIButton(type: .system)
     let contextParentTimeLabel = UILabel()
     let visibilityImageView = UIImageView()
     let applicationButton = UIButton(type: .system)
@@ -108,6 +109,10 @@ extension StatusView {
             status: status,
             configuration: configuration)
             + .compactSpacing
+
+        if !configuration.isContextParent && status.inReplyToId != nil {
+            height += UIFont.preferredFont(forTextStyle: .callout).lineHeight + .compactSpacing
+        }
 
         return height
     }
@@ -253,6 +258,13 @@ private extension StatusView {
         nameAccountContainerStackView.addSubview(nameButton)
 
         mainStackView.addArrangedSubview(bodyView)
+
+        mainStackView.addArrangedSubview(showThreadIndicator)
+        showThreadIndicator.isHidden = true
+        showThreadIndicator.setTitle(NSLocalizedString("status.show-thread", comment: ""), for: .normal)
+        showThreadIndicator.titleLabel?.adjustsFontForContentSizeCategory = true
+        showThreadIndicator.titleLabel?.font = .preferredFont(forTextStyle: .callout)
+        showThreadIndicator.isUserInteractionEnabled = false
 
         contextParentTimeLabel.font = .preferredFont(forTextStyle: .footnote)
         contextParentTimeLabel.adjustsFontForContentSizeCategory = true
@@ -560,6 +572,8 @@ private extension StatusView {
         timeLabel.isHidden = isContextParent
 
         bodyView.viewModel = viewModel
+
+        showThreadIndicator.isHidden = !viewModel.isReplyOutOfContext
 
         contextParentTimeLabel.text = viewModel.contextParentTime
         contextParentTimeLabel.accessibilityLabel = viewModel.accessibilityContextParentTime
