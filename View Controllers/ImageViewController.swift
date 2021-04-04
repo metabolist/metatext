@@ -140,11 +140,11 @@ final class ImageViewController: UIViewController {
                 }
 
                 imageView.sd_setImage(with: viewModel.attachment.url.url,
-                                      placeholderImage: placeholderImage) { _, error, _, _ in
+                                      placeholderImage: placeholderImage) { [weak self] _, error, _, _ in
                     if error != nil {
                         let alertItem = AlertItem(error: ImageError.unableToLoad)
 
-                        self.present(alertItem: alertItem)
+                        self?.present(alertItem: alertItem)
                     }
                 }
             case .gifv:

@@ -190,13 +190,13 @@ private extension EditAttachmentViewController {
         SDWebImageManager.shared.loadImage(
             with: viewModel.attachment.url.url,
             options: [],
-            progress: nil) { image, _, _, _, _, _ in
-            guard let cgImage = image?.cgImage else { return }
+            progress: nil) { [weak self] image, _, _, _, _, _ in
+            guard let self = self, let cgImage = image?.cgImage else { return }
 
             self.detectText(cgImage: cgImage)
-                .sink { [weak self] in
+                .sink {
                     if case let .failure(error) = $0 {
-                        self?.present(alertItem: .init(error: error))
+                        self.present(alertItem: .init(error: error))
                     }
                 } receiveValue: { [weak self] in
                     guard let self = self else { return }
