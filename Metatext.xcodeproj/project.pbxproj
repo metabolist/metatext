@@ -228,6 +228,7 @@
 		D0F4362D25C10B9600E4F896 /* AddIdentityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F4362C25C10B9600E4F896 /* AddIdentityViewController.swift */; };
 		D0FCC105259C4E61000B67DF /* NewStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FCC104259C4E61000B67DF /* NewStatusViewController.swift */; };
 		D0FCC106259C4E62000B67DF /* NewStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FCC104259C4E61000B67DF /* NewStatusViewController.swift */; };
+		D0FCD6AD261AB2DD00113701 /* InstancePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FCD6AC261AB2DD00113701 /* InstancePickerViewController.swift */; };
 		D0FE1C8F253686F9003EF1EB /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FE1C8E253686F9003EF1EB /* PlayerView.swift */; };
 		D0FE1C9825368A9D003EF1EB /* PlayerCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FE1C9725368A9D003EF1EB /* PlayerCache.swift */; };
 		D0FE7C8025C4C79F00203957 /* PreviewViewModels in Frameworks */ = {isa = PBXBuildFile; productRef = D0FE7C7F25C4C79F00203957 /* PreviewViewModels */; };
@@ -469,6 +470,7 @@
 		D0F0B135251AA12700942152 /* CollectionItem+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CollectionItem+Extensions.swift"; sourceTree = "<group>"; };
 		D0F4362C25C10B9600E4F896 /* AddIdentityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIdentityViewController.swift; sourceTree = "<group>"; };
 		D0FCC104259C4E61000B67DF /* NewStatusViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewStatusViewController.swift; sourceTree = "<group>"; };
+		D0FCD6AC261AB2DD00113701 /* InstancePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstancePickerViewController.swift; sourceTree = "<group>"; };
 		D0FE1C8E253686F9003EF1EB /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		D0FE1C9725368A9D003EF1EB /* PlayerCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerCache.swift; sourceTree = "<group>"; };
 		D9E658692601CF76007C426E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -803,6 +805,7 @@
 				D08B8D49253FC36500B1EBEF /* ImageNavigationController.swift */,
 				D08B8D41253F92B600B1EBEF /* ImagePageViewController.swift */,
 				D08B8D3C253F929E00B1EBEF /* ImageViewController.swift */,
+				D0FCD6AC261AB2DD00113701 /* InstancePickerViewController.swift */,
 				D035F86825B7F2ED00DC75ED /* MainNavigationViewController.swift */,
 				D0FCC104259C4E61000B67DF /* NewStatusViewController.swift */,
 				D097F4C025BFA04C00859F2C /* NotificationsViewController.swift */,
@@ -1240,6 +1243,7 @@
 				D00702312555F4AE00F38136 /* ConversationView.swift in Sources */,
 				D0BEB21124FA2A91001B0F04 /* EditFilterView.swift in Sources */,
 				D08B8D4A253FC36500B1EBEF /* ImageNavigationController.swift in Sources */,
+				D0FCD6AD261AB2DD00113701 /* InstancePickerViewController.swift in Sources */,
 				D0070252255921B100F38136 /* AccountFieldView.swift in Sources */,
 				D0030982250C6C8500EACB32 /* URL+Extensions.swift in Sources */,
 				D0BE97A325CF44310057E161 /* CGRect+Extensions.swift in Sources */,

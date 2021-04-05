@@ -2,10 +2,10 @@
 
 import Combine
 import Mastodon
-import SafariServices
 import SDWebImage
 import SwiftUI
 import ViewModels
+import WebKit
 
 final class AddIdentityViewController: UIViewController {
     private let viewModel: AddIdentityViewModel
@@ -26,13 +26,23 @@ final class AddIdentityViewController: UIViewController {
     private let activityIndicator = UIActivityIndicatorView(style: .large)
     private let joinButton = CapsuleButton()
     private let browseButton = CapsuleButton()
-    private let whatIsMastodonButton = UIButton(type: .system)
+    private let whatIsMastodonBackgroundView = UIView()
+    private let whatIsMastodonStackView = UIStackView()
+    private let whatIsMastodonLabel = UILabel()
+    private let whatIsMastodonVideoView: WKWebView
+    private let getStartedButton = CapsuleButton()
     private var cancellables = Set<AnyCancellable>()
 
     init(viewModel: AddIdentityViewModel, rootViewModel: RootViewModel, displayWelcome: Bool) {
         self.viewModel = viewModel
         self.rootViewModel = rootViewModel
         self.displayWelcome = displayWelcome
+
+        let configuration = WKWebViewConfiguration()
+
+        configuration.allowsInlineMediaPlayback = true
+
+        whatIsMastodonVideoView = WKWebView(frame: .zero, configuration: configuration)
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -55,7 +65,7 @@ final class AddIdentityViewController: UIViewController {
 
 private extension AddIdentityViewController {
     static let verticalSpacing: CGFloat = 20
-    static let whatIsMastodonURL = URL(string: "https://joinmastodon.org")!
+    static let whatIsMastodonVideoURL = URL(string: "https://www.youtube.com/embed/IPSbNdBmWKE?playsinline=1")!
 
     // swiftlint:disable:next function_body_length
     func configureViews() {
@@ -134,14 +144,40 @@ private extension AddIdentityViewController {
             for: .touchUpInside)
         browseButton.isHidden_stackViewSafe = true
 
-        whatIsMastodonButton.setTitle(NSLocalizedString("add-identity.what-is-mastodon", comment: ""), for: .normal)
-        whatIsMastodonButton.addAction(
+        whatIsMastodonBackgroundView.backgroundColor = .secondarySystemBackground
+        whatIsMastodonBackgroundView.clipsToBounds = true
+        whatIsMastodonBackgroundView.layer.cornerRadius = .defaultCornerRadius
+
+        whatIsMastodonStackView.translatesAutoresizingMaskIntoConstraints = false
+        whatIsMastodonStackView.axis = .vertical
+        whatIsMastodonStackView.spacing = .defaultSpacing * 2
+
+        whatIsMastodonLabel.adjustsFontForContentSizeCategory = true
+        whatIsMastodonLabel.font = .preferredFont(forTextStyle: .headline)
+        whatIsMastodonLabel.textAlignment = .center
+        whatIsMastodonLabel.text = NSLocalizedString("add-identity.what-is-mastodon", comment: "")
+
+        getStartedButton.setTitle(NSLocalizedString("add-identity.get-started", comment: ""), for: .normal)
+        getStartedButton.addAction(
             UIAction { [weak self] _ in
-                self?.present(SFSafariViewController(url: Self.whatIsMastodonURL), animated: true)
+                self?.urlTextField.resignFirstResponder()
+                self?.present(
+                    UINavigationController(rootViewController: InstancePickerViewController {
+                        self?.viewModel.urlFieldText = $1
+                        self?.urlTextField.text = $1
+                        self?.urlTextField.becomeFirstResponder()
+                        self?.dismiss(animated: true)
+                    }),
+                    animated: true)
             },
             for: .touchUpInside)
 
-        for button in [logInButton, joinButton, browseButton, whatIsMastodonButton] {
+        whatIsMastodonVideoView.scrollView.isScrollEnabled = false
+        whatIsMastodonVideoView.clipsToBounds = true
+        whatIsMastodonVideoView.layer.cornerRadius = .defaultCornerRadius
+        whatIsMastodonVideoView.load(.init(url: Self.whatIsMastodonVideoURL))
+
+        for button in [logInButton, joinButton, browseButton] {
             button.setContentCompressionResistancePriority(.required, for: .vertical)
         }
     }
@@ -163,7 +199,11 @@ private extension AddIdentityViewController {
         buttonsStackView.addArrangedSubview(joinButton)
         buttonsStackView.addArrangedSubview(browseButton)
         buttonsStackView.addArrangedSubview(UIView())
-        stackView.addArrangedSubview(whatIsMastodonButton)
+        stackView.addArrangedSubview(whatIsMastodonBackgroundView)
+        whatIsMastodonBackgroundView.addSubview(whatIsMastodonStackView)
+        whatIsMastodonStackView.addArrangedSubview(whatIsMastodonLabel)
+        whatIsMastodonStackView.addArrangedSubview(whatIsMastodonVideoView)
+        whatIsMastodonStackView.addArrangedSubview(getStartedButton)
     }
 
     func setupConstraints() {
@@ -183,7 +223,17 @@ private extension AddIdentityViewController {
             stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             stackView.widthAnchor.constraint(equalTo: scrollView.readableContentGuide.widthAnchor),
             stackView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-            instanceImageViewWidthConstraint
+            instanceImageViewWidthConstraint,
+            whatIsMastodonStackView.leadingAnchor.constraint(equalTo: whatIsMastodonBackgroundView.leadingAnchor,
+                                                             constant: .defaultSpacing * 2),
+            whatIsMastodonStackView.topAnchor.constraint(equalTo: whatIsMastodonBackgroundView.topAnchor,
+                                                         constant: .defaultSpacing * 2),
+            whatIsMastodonStackView.trailingAnchor.constraint(equalTo: whatIsMastodonBackgroundView.trailingAnchor,
+                                                              constant: -.defaultSpacing * 2),
+            whatIsMastodonStackView.bottomAnchor.constraint(equalTo: whatIsMastodonBackgroundView.bottomAnchor,
+                                                            constant: -.defaultSpacing * 2),
+            whatIsMastodonVideoView.widthAnchor.constraint(equalTo: whatIsMastodonVideoView.heightAnchor,
+                                                           multiplier: 16 / 9)
         ])
     }
 
@@ -213,7 +263,7 @@ private extension AddIdentityViewController {
             promptLabel.alpha = 0
             urlTextField.alpha = 0
             logInButton.alpha = 0
-            whatIsMastodonButton.alpha = 0
+            whatIsMastodonBackgroundView.alpha = 0
 
             UIView.animate(withDuration: .longAnimationDuration * 2) {
                 self.welcomeLabel.alpha = 1
@@ -228,14 +278,13 @@ private extension AddIdentityViewController {
                         UIView.animate(withDuration: .longAnimationDuration) {
                             self.urlTextField.alpha = 1
                         } completion: { _ in
-                            self.urlTextField.becomeFirstResponder()
                             UIView.animate(withDuration: .longAnimationDuration) {
                                 self.logInButton.alpha = 1
                             } completion: { _ in
-                                self.whatIsMastodonButton.isHidden_stackViewSafe = false
-                                self.whatIsMastodonButton.alpha = 0
                                 UIView.animate(withDuration: .longAnimationDuration) {
-                                    self.whatIsMastodonButton.alpha = 1
+                                    self.whatIsMastodonBackgroundView.alpha = 1
+                                } completion: { _ in
+                                    self.urlTextField.becomeFirstResponder()
                                 }
                             }
                         }
@@ -244,7 +293,6 @@ private extension AddIdentityViewController {
             }
         } else {
             welcomeLabel.isHidden_stackViewSafe = true
-            whatIsMastodonButton.isHidden_stackViewSafe = !displayWelcome
             urlTextField.becomeFirstResponder()
         }
     }
@@ -281,13 +329,10 @@ private extension AddIdentityViewController {
                 }
 
                 self.browseButton.isHidden_stackViewSafe = !isPublicTimelineAvailable || loading
-                self.whatIsMastodonButton.isHidden_stackViewSafe = true
             } else {
                 self.instanceStackView.isHidden_stackViewSafe = true
                 self.joinButton.isHidden_stackViewSafe = true
                 self.browseButton.isHidden_stackViewSafe = true
-                self.whatIsMastodonButton.isHidden_stackViewSafe =
-                    !self.displayWelcome || self.logInButton.alpha < 1 || loading
             }
         }
     }

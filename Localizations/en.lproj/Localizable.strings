@@ -68,6 +68,7 @@
 "app-icon.rainbow-brutalist" = "Rainbow Brutalist";
 "app-icon.classic" = "Classic";
 "app-icon.rainbow" = "Rainbow";
+"add-identity.get-started" = "Get started";
 "add-identity.instance-url" = "Instance URL";
 "add-identity.log-in" = "Log in";
 "add-identity.browse" = "Browse";
