@@ -68,6 +68,7 @@
 "app-icon.rainbow-brutalist" = "虹色ブルータリスト";
 "app-icon.classic" = "クラシック";
 "app-icon.rainbow" = "虹色";
+"add-identity.get-started" = "始めよう";
 "add-identity.instance-url" = "インスタンスURL";
 "add-identity.log-in" = "ログイン";
 "add-identity.browse" = "拾い読み";

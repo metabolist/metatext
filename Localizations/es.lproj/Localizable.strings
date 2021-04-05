@@ -68,6 +68,7 @@
 "app-icon.rainbow-brutalist" = "Brutalista Arco Iris";
 "app-icon.classic" = "Clásico";
 "app-icon.rainbow" = "Arco Iris";
+"add-identity.get-started" = "Comenzá";
 "add-identity.instance-url" = "URL de la instancia";
 "add-identity.log-in" = "Iniciar sesión";
 "add-identity.browse" = "Navegar";

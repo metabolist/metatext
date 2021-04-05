@@ -68,6 +68,7 @@
 "app-icon.rainbow-brutalist" = "粗犷之虹";
 "app-icon.classic" = "经典";
 "app-icon.rainbow" = "彩虹";
+"add-identity.get-started" = "开始使用";
 "add-identity.instance-url" = "实例网址";
 "add-identity.log-in" = "登录";
 "add-identity.browse" = "浏览";
