@@ -471,6 +471,8 @@
 		D0F4362C25C10B9600E4F896 /* AddIdentityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIdentityViewController.swift; sourceTree = "<group>"; };
 		D0FCC104259C4E61000B67DF /* NewStatusViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewStatusViewController.swift; sourceTree = "<group>"; };
 		D0FCD6AC261AB2DD00113701 /* InstancePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstancePickerViewController.swift; sourceTree = "<group>"; };
+		D0FCD6C2261CC84D00113701 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
+		D0FCD6C3261CC84D00113701 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ko; path = ko.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		D0FE1C8E253686F9003EF1EB /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		D0FE1C9725368A9D003EF1EB /* PlayerCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerCache.swift; sourceTree = "<group>"; };
 		D9E658692601CF76007C426E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -1037,6 +1039,7 @@
 				es,
 				"zh-Hans",
 				ru,
+				ko,
 			);
 			mainGroup = D047FA7F24C3E21000AF17C5;
 			packageReferences = (
@@ -1384,6 +1387,7 @@
 				D0E93287260FBE550087CC11 /* es */,
 				D0B275972612B31D00BEE910 /* zh-Hans */,
 				D0A69EC02617CA7100ED97D3 /* ru */,
+				D0FCD6C2261CC84D00113701 /* ko */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1398,6 +1402,7 @@
 				D0E93288260FBE550087CC11 /* es */,
 				D0B275982612B31E00BEE910 /* zh-Hans */,
 				D0A69EC12617CA7100ED97D3 /* ru */,
+				D0FCD6C3261CC84D00113701 /* ko */,
 			);
 			name = Localizable.stringsdict;
 			sourceTree = "<group>";
