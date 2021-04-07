@@ -827,6 +827,11 @@ private extension StatusView {
             }
         }
 
+        if statusConfiguration.viewModel.configuration.isReplyOutOfContext {
+            accessibilityAttributedLabel.appendWithSeparator(
+                NSLocalizedString("status.accessibility.part-of-a-thread", comment: ""))
+        }
+
         return accessibilityAttributedLabel
     }
 
