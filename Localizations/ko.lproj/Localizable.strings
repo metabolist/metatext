@@ -119,7 +119,7 @@
 "compose.poll.add-choice" = "선택 항목 추가";
 "compose.poll.allow-multiple-choices" = "복수 선택 허용";
 "compose.poll-button.accessibility-label" = "설문 추가";
-"compose.prompt" = "무슨 일이 일어나고 있나요?";
+"compose.prompt" = "지금 무엇을 하고 있나요?";
 "compose.take-photo-or-video" = "사진 또는 비디오 촬영";
 "compose.visibility-button.accessibility-label-%@" = "공개 범위: %@";
 "compose-button.accessibility-label.post" = "게시글 작성";
@@ -294,7 +294,7 @@
 "share-extension-error.no-account-found" = "계정을 찾지 못했어요";
 "status.accessibility.view-author-profile" = "작성자 프로필 보기";
 "status.accessibility.view-reblogger-profile" = "부스트 한 사람의 프로필 보기";
-"status.accessibility.part-of-a-thread" = "Part of a thread";
+"status.accessibility.part-of-a-thread" = "스레드의 일부";
 "status.bookmark" = "북마크";
 "status.content-warning-abbreviation" = "CW";
 "status.content-warning.accessibility" = "콘텐츠 경고";
