@@ -10,7 +10,7 @@
 "about.website" = "Strona internetowa";
 "accessibility.activate-link-%@" = "Łącze: %@";
 "accessibility.copy-text" = "Kopiuj tekst";
-"account.%@-followers" = "%@'s obserwatorów";
+"account.%@-followers" = "%@'s obserwujących";
 "account.accept-follow-request-button.accessibility-label" = "Zgódź się na obserwowanie";
 "account.add-remove-lists" = "Dodaj/usuń z list";
 "account.avatar.accessibility-label-%@" = "Awatar: %@";
@@ -64,7 +64,7 @@
 "add" = "Dodaj";
 "api-error.unable-to-fetch-remote-status" = "Nie mogę pobrać zdalnego statusu";
 "apns-default-message" = "Nowe powiadomienie";
-"app-icon.brutalist" = "Brutalista";
+"app-icon.brutalist" = "Brutalist";
 "app-icon.rainbow-brutalist" = "Rainbow Brutalist";
 "app-icon.classic" = "Classic";
 "app-icon.rainbow" = "Rainbow";
@@ -197,7 +197,7 @@
 "preferences.app" = "Ustawienia aplikacji";
 "preferences.app-icon" = "Ikona aplikacji";
 "preferences.blocked-domains" = "Zablokowane domeny";
-"preferences.blocked-users" = "Zablokowani użytkownicy";
+"preferences.blocked-users" = "Zablokowane profile";
 "preferences.media" = "Media";
 "preferences.media.avatars" = "Awatary";
 "preferences.media.avatars.animate" = "Animowane awatary";
@@ -210,7 +210,7 @@
 "preferences.media.autoplay.gifs" = "Automatyczne odtwarzanie GIFów";
 "preferences.media.autoplay.videos" = "Automatyczne odtwarzanie filmów";
 "preferences.media.autoplay.always" = "Zawsze";
-"preferences.media.autoplay.wifi" = "Przy włącznym Wi-Fi";
+"preferences.media.autoplay.wifi" = "Przy włączonym Wi-Fi";
 "preferences.media.autoplay.never" = "Nigdy";
 "preferences.use-preferences-from-server" = "Stosuj ustawienia z serwera";
 "preferences.posting-default-visiblility" = "Domyślna widoczność";
@@ -294,7 +294,7 @@
 "share-extension-error.no-account-found" = "Nie znalazłem konta";
 "status.accessibility.view-author-profile" = "Wyświetl profil autora";
 "status.accessibility.view-reblogger-profile" = "Wyświetl profil podbijającego";
-"status.accessibility.part-of-a-thread" = "Part of a thread";
+"status.accessibility.part-of-a-thread" = "Część wątku";
 "status.bookmark" = "Zakładka";
 "status.content-warning-abbreviation" = "OZ";
 "status.content-warning.accessibility" = "Ostrzeżenie o zawartości";
