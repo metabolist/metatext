@@ -294,6 +294,7 @@
 "share-extension-error.no-account-found" = "계정을 찾지 못했어요";
 "status.accessibility.view-author-profile" = "작성자 프로필 보기";
 "status.accessibility.view-reblogger-profile" = "부스트 한 사람의 프로필 보기";
+"status.accessibility.part-of-a-thread" = "Part of a thread";
 "status.bookmark" = "북마크";
 "status.content-warning-abbreviation" = "CW";
 "status.content-warning.accessibility" = "콘텐츠 경고";

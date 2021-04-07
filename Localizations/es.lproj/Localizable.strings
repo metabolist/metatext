@@ -294,6 +294,7 @@
 "share-extension-error.no-account-found" = "No se ha encontrado ninguna cuenta";
 "status.accessibility.view-author-profile" = "Ver perfil del autor";
 "status.accessibility.view-reblogger-profile" = "Ver perifl del boosteador";
+"status.accessibility.part-of-a-thread" = "Part of a thread";
 "status.bookmark" = "Marcador";
 "status.content-warning-abbreviation" = "AC";
 "status.content-warning.accessibility" = "Advertencia de contenido";

@@ -294,6 +294,7 @@
 "share-extension-error.no-account-found" = "Nie znalazłem konta";
 "status.accessibility.view-author-profile" = "Wyświetl profil autora";
 "status.accessibility.view-reblogger-profile" = "Wyświetl profil podbijającego";
+"status.accessibility.part-of-a-thread" = "Part of a thread";
 "status.bookmark" = "Zakładka";
 "status.content-warning-abbreviation" = "OZ";
 "status.content-warning.accessibility" = "Ostrzeżenie o zawartości";
