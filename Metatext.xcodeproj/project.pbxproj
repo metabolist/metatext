@@ -1790,7 +1790,7 @@
 			repositoryURL = "https://github.com/SDWebImage/SDWebImage";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 5.11.0;
+				minimumVersion = 5.11.1;
 			};
 		};
 		D06FA32525F0659600C9639A /* XCRemoteSwiftPackageReference "blurhash" */ = {
