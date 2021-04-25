@@ -13,7 +13,7 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
         <key>other</key>
-        <string>%ld 말하고 있어요</string>
+        <string>%ld님이 입력하고 있어요</string>
       </dict>
     </dict>
     <key>status.poll.participation-count-%ld</key>
@@ -27,7 +27,7 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
         <key>other</key>
-        <string>%ld 사람</string>
+        <string>%ld명 참여</string>
       </dict>
     </dict>
     <key>status.reblogs-count-%ld</key>
@@ -41,7 +41,7 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
         <key>other</key>
-        <string>%ld 부스트</string>
+        <string>%ld개의 부스트</string>
       </dict>
     </dict>
     <key>status.favorites-count-%ld</key>
@@ -55,7 +55,7 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
         <key>other</key>
-        <string>%ld 즐겨찾기</string>
+        <string>%ld개의 즐겨찾기</string>
       </dict>
     </dict>
     <key>status.replies-count-%ld</key>
@@ -69,7 +69,7 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
         <key>other</key>
-        <string>%ld 답글</string>
+        <string>%ld개의 답글</string>
       </dict>
     </dict>
     <key>statuses.count.post-%ld</key>
@@ -83,7 +83,7 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
         <key>other</key>
-        <string>%ld 게시글</string>
+        <string>%ld개의 게시글</string>
       </dict>
     </dict>
     <key>statuses.count.toot-%ld</key>
@@ -97,7 +97,7 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
         <key>other</key>
-        <string>%ld 툿</string>
+        <string>%ld개의 툿</string>
       </dict>
     </dict>
     <key>account.followers-count-%ld</key>

@@ -27,7 +27,7 @@
 "account.follow" = "팔로우";
 "account.following" = "팔로잉";
 "account.following-count-%ld" = "%ld 팔로잉";
-"account.followed-by-%@" = "%@ 님이 팔로우 하고 있어요";
+"account.followed-by-%@" = "%@ 님이 팔로우 중이에요!";
 "account.follows-you" = "나를 팔로우 하고 있어요";
 "account.header.accessibility-label-%@" = "헤더 이미지: %@";
 "account.hide-reblogs" = "부스트 숨기기";
@@ -270,7 +270,7 @@
 "notifications" = "알림";
 "notifications.reblogged-your-status-%@" = "%@ 님이 부스트 했어요";
 "notifications.favourited-your-status-%@" = "%@ 님이 즐겨찾기 했어요";
-"notifications.followed-you-%@" = "%@ 님이 나를 팔로우 해요";
+"notifications.followed-you-%@" = "%@ 님이 나를 팔로우하고 있어요!";
 "notifications.poll-ended" = "투표한 설문이 종료되었어요";
 "notifications.your-poll-ended" = "내 설문이 종료되었어요";
 "notifications.unknown-%@" = "%@ 님이 보낸 알림이 도착했어요";
@@ -299,13 +299,13 @@
 "status.content-warning-abbreviation" = "CW";
 "status.content-warning.accessibility" = "콘텐츠 경고";
 "status.delete" = "삭제";
-"status.delete.confirm.post" = "정말 이 게시글을 삭제해도 될까요?";
+"status.delete.confirm.post" = "정말 이 게시글을 삭제하시겠어요?";
 "status.delete.confirm.toot" = "정말 이 툿을 삭제해도 될까요?";
 "status.delete-and-redraft" = "지우고 다시 쓰기";
 "status.delete-and-redraft.confirm.post" = "게시글을 지우고 다시 작성하면 이전에 받은 부스트와 즐겨찾기는 삭제되고 답글은 분리돼요. 그래도 진행할까요?";
 "status.delete-and-redraft.confirm.toot" = "툿을 지우고 다시 작성하면 이전에 받은 부스트와 즐겨찾기는 삭제되고 답글은 분리돼요. 그래도 진행할까요?";
 "status.mute" = "대화 뮤트";
-"status.new-items.post" = "새 게시글";
+"status.new-items.post" = "새로운 글이 있어요!";
 "status.new-items.toot" = "새 툿이 있어요!";
 "status.pin" = "프로필에 고정하기";
 "status.pinned.post" = "고정된 게시글";
@@ -313,9 +313,9 @@
 "status.poll.accessibility-label" = "설문";
 "status.poll.option-%ld" = "옵션 %ld";
 "status.poll.vote" = "투표";
-"status.poll.time-left-%@" = "나머지 %@";
-"status.poll.refresh" = "새로 고침";
-"status.poll.closed" = "종료";
+"status.poll.time-left-%@" = "%@ 남음";
+"status.poll.refresh" = "다시 불러오기";
+"status.poll.closed" = "마감됨";
 "status.reblogged-by-%@" = "%@ 님이 부스트 했어요";
 "status.reply-button.accessibility-label" = "답글 달기";
 "status.reblog-button.accessibility-label" = "부스트 하기";
@@ -346,4 +346,4 @@
 "timelines.home" = "홈";
 "timelines.local" = "로컬";
 "timelines.federated" = "연합";
-"toot" = "툿";
+"toot" = "툿!";

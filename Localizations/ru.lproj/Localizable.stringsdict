@@ -73,13 +73,13 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
         <key>one</key>
-        <string>%ld в избранном</string>
+        <string>%ld избранных</string>
         <key>few</key>
-        <string>%ld в избранном</string>
+        <string>%ld избранных</string>
         <key>many</key>
-        <string>%ld в избранном</string>
+        <string>%ld избранных</string>
         <key>other</key>
-        <string>%ld в избранном</string>
+        <string>%ld избранных</string>
       </dict>
     </dict>
     <key>status.replies-count-%ld</key>

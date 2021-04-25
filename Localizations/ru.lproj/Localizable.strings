@@ -5,7 +5,7 @@
 "about.made-by-metabolist" = "Сделано Metabolist";
 "about.official-account" = "Официальный аккаунт";
 "about.rate-the-app" = "Оценить приложение";
-"about.source-code-and-issue-tracker" = "Исходный код и отслеживание ошибок";
+"about.source-code-and-issue-tracker" = "Исходный код и отчёты об ошибках";
 "about.translations" = "Локализация";
 "about.website" = "Сайт";
 "accessibility.activate-link-%@" = "Ссылка: %@";
@@ -28,11 +28,11 @@
 "account.following" = "Подписки";
 "account.following-count-%ld" = "%ld подписан";
 "account.followed-by-%@" = "Подписаны %@";
-"account.follows-you" = "Подписался(-ась) на вас";
+"account.follows-you" = "Подписан(-а) на вас";
 "account.header.accessibility-label-%@" = "Изображение заголовка: %@";
 "account.hide-reblogs" = "Скрыть продвижения";
 "account.hide-reblogs.confirm-%@" = "Скрыть продвижения от %@?";
-"account.joined-%@" = "Присоединился(ась) %@";
+"account.joined-%@" = "В сети с %@";
 "account.locked.accessibility-label" = "Закрытый аккаунт";
 "account.mute" = "Игнорировать";
 "account.mute.indefinite" = "Бессрочный";
@@ -85,7 +85,7 @@
 "attachment.edit.detect-text-from-picture" = "Обнаружить текст на изображении";
 "attachment.edit.title" = "Редактировать медиафайлы";
 "attachment.edit.thumbnail.prompt" = "Для установки точки фокусировки во всех миниатюрах, переместите круг в области предварительного просмотра";
-"attachment.sensitive-content" = "Чувствительный контент";
+"attachment.sensitive-content" = "Деликатный контент";
 "attachment.media-hidden" = "Медиафайлы скрыты";
 "attachment.type.image" = "Изображение";
 "attachment.type.audio" = "Аудиозапись";
@@ -113,7 +113,7 @@
 "compose.content-warning-button.add" = "Добавить предупреждение о деликатном содержимом";
 "compose.content-warning-button.remove" = "Удалить предупреждение о деликатном содержимом";
 "compose.emoji-button" = "Выбор эмодзи";
-"compose.mark-media-sensitive" = "Пометить медиафайлы как чувствительные";
+"compose.mark-media-sensitive" = "Пометить медиафайлы как деликатные";
 "compose.photo-library" = "Медиатека Фото";
 "compose.poll.accessibility.multiple-choices-allowed" = "Разрешить выбор нескольких вариантов";
 "compose.poll.add-choice" = "Добавить вариант";
@@ -208,13 +208,13 @@
 "preferences.media.headers.animate" = "Анимировать заголовки профиля";
 "preferences.media.autoplay" = "Автовоспроизведение";
 "preferences.media.autoplay.gifs" = "Автовоспроизведение GIF";
-"preferences.media.autoplay.videos" = "Автозапуск видео";
+"preferences.media.autoplay.videos" = "Автовоспроизведение видео";
 "preferences.media.autoplay.always" = "Всегда";
 "preferences.media.autoplay.wifi" = "При Wi-Fi подключении";
 "preferences.media.autoplay.never" = "Никогда";
 "preferences.use-preferences-from-server" = "Использовать настройки сервера";
 "preferences.posting-default-visiblility" = "Видимость по умолчанию";
-"preferences.posting-default-sensitive" = "Помечать контент чувствительным по умолчанию";
+"preferences.posting-default-sensitive" = "Помечать контент деликатным по умолчанию";
 "preferences.reading-expand-media" = "Развернуть медиафайлы";
 "preferences.expand-media.default" = "Скрыть деликатные";
 "preferences.expand-media.show-all" = "Показать всё";
