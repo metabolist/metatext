@@ -6,6 +6,7 @@ import ViewModels
 
 final class TimelinesViewController: UIPageViewController {
     private let segmentedControl = UISegmentedControl()
+    private let announcementsButton = UIBarButtonItem()
     private let timelineViewControllers: [TableViewController]
     private let viewModel: NavigationViewModel
     private let rootViewModel: RootViewModel
@@ -39,6 +40,23 @@ final class TimelinesViewController: UIPageViewController {
             title: NSLocalizedString("main-navigation.timelines", comment: ""),
             image: UIImage(systemName: "newspaper"),
             selectedImage: nil)
+
+        announcementsButton.primaryAction = UIAction(
+            title: NSLocalizedString("main-navigation.announcements", comment: ""),
+            image: UIImage(systemName: "megaphone")) { [weak self] _ in
+            guard let self = self else { return }
+
+            let announcementsViewController = TableViewController(viewModel: viewModel.announcementsViewModel(),
+                                                                  rootViewModel: rootViewModel)
+
+            self.navigationController?.pushViewController(announcementsViewController, animated: true)
+        }
+
+        viewModel.$announcementCount
+            .sink { [weak self] in
+                self?.navigationItem.rightBarButtonItem = $0.total > 0 ? self?.announcementsButton : nil
+            }
+            .store(in: &cancellables)
     }
 
     @available(*, unavailable)

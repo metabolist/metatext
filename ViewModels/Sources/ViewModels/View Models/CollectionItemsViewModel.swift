@@ -195,6 +195,20 @@ public class CollectionItemsViewModel: ObservableObject {
             viewModelCache[item] = viewModel
 
             return viewModel
+        case let .announcement(announcement):
+            if let cachedViewModel = cachedViewModel {
+                return cachedViewModel
+            }
+
+            let viewModel = AnnouncementViewModel(
+                announcementService: collectionService.navigationService.announcementService(
+                    announcement: announcement),
+                identityContext: identityContext,
+                eventsSubject: eventsSubject)
+
+            viewModelCache[item] = viewModel
+
+            return viewModel
         case let .moreResults(moreResults):
             if let cachedViewModel = cachedViewModel {
                 return cachedViewModel
@@ -300,6 +314,8 @@ extension CollectionItemsViewModel: CollectionViewModel {
             send(event: .navigation(.collection(collectionService
                                                     .navigationService
                                                     .timelineService(timeline: .tag(tag.name)))))
+        case .announcement:
+            break
         case let .moreResults(moreResults):
             searchScopeChangesSubject.send(moreResults.scope)
         }
@@ -320,6 +336,8 @@ extension CollectionItemsViewModel: CollectionViewModel {
             return !configuration.isContextParent
         case .loadMore:
             return !((viewModel(indexPath: indexPath) as? LoadMoreViewModel)?.loading ?? false)
+        case .announcement:
+            return false
         default:
             return true
         }

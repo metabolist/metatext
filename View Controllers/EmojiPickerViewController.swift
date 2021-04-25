@@ -9,8 +9,8 @@ final class EmojiPickerViewController: UICollectionViewController {
 
     private let viewModel: EmojiPickerViewModel
     private let selectionAction: (EmojiPickerViewController, PickerEmoji) -> Void
-    private let deletionAction: (EmojiPickerViewController) -> Void
-    private let searchPresentationAction: (EmojiPickerViewController, UINavigationController) -> Void
+    private let deletionAction: ((EmojiPickerViewController) -> Void)?
+    private let searchPresentationAction: ((EmojiPickerViewController, UINavigationController) -> Void)?
     private let skinToneButton = UIBarButtonItem()
     private let deleteButton = UIBarButtonItem()
     private let closeButton = UIBarButtonItem(systemItem: .close)
@@ -64,8 +64,8 @@ final class EmojiPickerViewController: UICollectionViewController {
 
     init(viewModel: EmojiPickerViewModel,
          selectionAction: @escaping (EmojiPickerViewController, PickerEmoji) -> Void,
-         deletionAction: @escaping (EmojiPickerViewController) -> Void,
-         searchPresentationAction: @escaping (EmojiPickerViewController, UINavigationController) -> Void) {
+         deletionAction: ((EmojiPickerViewController) -> Void)?,
+         searchPresentationAction: ((EmojiPickerViewController, UINavigationController) -> Void)?) {
         self.viewModel = viewModel
         self.selectionAction = selectionAction
         self.deletionAction = deletionAction
@@ -98,6 +98,7 @@ final class EmojiPickerViewController: UICollectionViewController {
         presentSearchButton.translatesAutoresizingMaskIntoConstraints = false
         presentSearchButton.accessibilityLabel = NSLocalizedString("emoji.search", comment: "")
         presentSearchButton.addAction(UIAction { [weak self] _ in self?.presentSearch() }, for: .touchUpInside)
+        presentSearchButton.isHidden = searchPresentationAction == nil
 
         skinToneButton.accessibilityLabel =
             NSLocalizedString("emoji.default-skin-tone-button.accessibility-label", comment: "")
@@ -111,11 +112,15 @@ final class EmojiPickerViewController: UICollectionViewController {
         deleteButton.primaryAction = UIAction(image: UIImage(systemName: "delete.left")) { [weak self] _ in
             guard let self = self else { return }
 
-            self.deletionAction(self)
+            self.deletionAction?(self)
         }
         deleteButton.tintColor = .label
 
-        navigationItem.rightBarButtonItems = [deleteButton, skinToneButton]
+        if deletionAction != nil {
+            navigationItem.rightBarButtonItems = [deleteButton, skinToneButton]
+        } else {
+            navigationItem.rightBarButtonItem = skinToneButton
+        }
 
         closeButton.primaryAction = UIAction { [weak self] _ in
             self?.presentingViewController?.dismiss(animated: true)
@@ -228,7 +233,7 @@ private extension EmojiPickerViewController {
         navigationItem.leftBarButtonItem = closeButton
         navigationItem.rightBarButtonItems = [self.skinToneButton]
         collectionView.backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterial))
-        searchPresentationAction(self, navigationController)
+        searchPresentationAction?(self, navigationController)
     }
 
     func reloadVisibleItems() {

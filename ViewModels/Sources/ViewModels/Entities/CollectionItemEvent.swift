@@ -9,6 +9,8 @@ public enum CollectionItemEvent {
     case contextParentDeleted
     case refresh
     case navigation(Navigation)
+    case reload(CollectionItem)
+    case presentEmojiPicker(sourceViewTag: Int, selectionAction: (String) -> Void)
     case attachment(AttachmentViewModel, StatusViewModel)
     case compose(identity: Identity? = nil,
                  inReplyTo: StatusViewModel? = nil,

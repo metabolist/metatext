@@ -82,9 +82,7 @@ public extension IdentityService {
     }
 
     func refreshAnnouncements() -> AnyPublisher<Never, Error> {
-        mastodonAPIClient.request(AnnouncementsEndpoint.announcements)
-            .flatMap(contentDatabase.update(announcements:))
-            .eraseToAnyPublisher()
+        announcementsService().request(maxId: nil, minId: nil, search: nil)
     }
 
     func confirmIdentity() -> AnyPublisher<Never, Error> {
@@ -183,6 +181,10 @@ public extension IdentityService {
 
     func expiredFiltersPublisher() -> AnyPublisher<[Filter], Error> {
         contentDatabase.expiredFiltersPublisher()
+    }
+
+    func announcementCountPublisher() -> AnyPublisher<(total: Int, unread: Int), Error> {
+        contentDatabase.announcementCountPublisher()
     }
 
     func pickerEmojisPublisher() -> AnyPublisher<[Emoji], Error> {
@@ -294,6 +296,12 @@ public extension IdentityService {
 
     func domainBlocksService() -> DomainBlocksService {
         DomainBlocksService(mastodonAPIClient: mastodonAPIClient)
+    }
+
+    func announcementsService() -> AnnouncementsService {
+        AnnouncementsService(environment: environment,
+                             mastodonAPIClient: mastodonAPIClient,
+                             contentDatabase: contentDatabase)
     }
 
     func emojiPickerService() -> EmojiPickerService {

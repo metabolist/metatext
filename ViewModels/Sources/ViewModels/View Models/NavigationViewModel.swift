@@ -10,6 +10,7 @@ public final class NavigationViewModel: ObservableObject {
     public let navigations: AnyPublisher<Navigation, Never>
 
     @Published public private(set) var recentIdentities = [Identity]()
+    @Published public private(set) var announcementCount: (total: Int, unread: Int) = (0, 0)
     @Published public var presentedNewStatusViewModel: NewStatusViewModel?
     @Published public var presentingSecondaryNavigation = false
     @Published public var alertItem: AlertItem?
@@ -28,6 +29,10 @@ public final class NavigationViewModel: ObservableObject {
         identityContext.service.recentIdentitiesPublisher()
             .assignErrorsToAlertItem(to: \.alertItem, on: self)
             .assign(to: &$recentIdentities)
+
+        identityContext.service.announcementCountPublisher()
+            .assignErrorsToAlertItem(to: \.alertItem, on: self)
+            .assign(to: &$announcementCount)
     }
 }
 
@@ -190,5 +195,11 @@ public extension NavigationViewModel {
         conversationsViewModel.request(maxId: nil, minId: nil, search: nil)
 
         return conversationsViewModel
+    }
+
+    func announcementsViewModel() -> CollectionViewModel {
+        CollectionItemsViewModel(
+            collectionService: identityContext.service.announcementsService(),
+            identityContext: identityContext)
     }
 }

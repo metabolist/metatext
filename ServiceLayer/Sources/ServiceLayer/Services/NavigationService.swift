@@ -112,6 +112,13 @@ public extension NavigationService {
             contentDatabase: contentDatabase)
     }
 
+    func announcementService(announcement: Announcement) -> AnnouncementService {
+        AnnouncementService(announcement: announcement,
+                            environment: environment,
+                            mastodonAPIClient: mastodonAPIClient,
+                            contentDatabase: contentDatabase)
+    }
+
     func timelineService(timeline: Timeline) -> TimelineService {
         TimelineService(timeline: timeline,
                         environment: environment,

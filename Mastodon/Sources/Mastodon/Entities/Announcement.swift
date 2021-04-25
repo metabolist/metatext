@@ -3,7 +3,7 @@
 import Foundation
 
 public struct Announcement: Codable, Hashable {
-    public let id: String
+    public let id: Id
     public let content: HTML
     public let startsAt: Date?
     public let endsAt: Date?
@@ -15,4 +15,8 @@ public struct Announcement: Codable, Hashable {
     public let tags: [Tag]
     public let emojis: [Emoji]
     public let reactions: [AnnouncementReaction]
+}
+
+public extension Announcement {
+    typealias Id = String
 }

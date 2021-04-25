@@ -62,6 +62,7 @@
 "account.unnotify" = "Turn off notifications";
 "activity.open-in-default-browser" = "Open in default browser";
 "add" = "Add";
+"announcement.insert-emoji" = "Insert emoji";
 "api-error.unable-to-fetch-remote-status" = "Unable to fetch remote status";
 "apns-default-message" = "New notification";
 "app-icon.brutalist" = "Brutalist";
@@ -176,6 +177,7 @@
 "load-more.above.accessibility.toot" = "Load from toot above";
 "load-more.below.accessibility.post" = "Load from post below";
 "load-more.below.accessibility.toot" = "Load from toot below";
+"main-navigation.announcements" = "Announcements";
 "main-navigation.timelines" = "Timelines";
 "main-navigation.explore" = "Explore";
 "main-navigation.notifications" = "Notifications";

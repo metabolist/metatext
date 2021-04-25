@@ -605,6 +605,25 @@ public extension ContentDatabase {
             .eraseToAnyPublisher()
     }
 
+    func announcementCountPublisher() -> AnyPublisher<(total: Int, unread: Int), Error> {
+        ValueObservation.tracking(Announcement.fetchCount)
+            .removeDuplicates()
+            .publisher(in: databaseWriter)
+            .combineLatest(ValueObservation.tracking(Announcement.fetchCount)
+                            .removeDuplicates()
+                            .publisher(in: databaseWriter))
+            .map { (total: $0, unread: $1) }
+            .eraseToAnyPublisher()
+    }
+
+    func announcementsPublisher() -> AnyPublisher<[CollectionSection], Error> {
+        ValueObservation.tracking(Announcement.order(Announcement.Columns.publishedAt).fetchAll)
+            .removeDuplicates()
+            .publisher(in: databaseWriter)
+            .map { [CollectionSection(items: $0.map(CollectionItem.announcement))] }
+            .eraseToAnyPublisher()
+    }
+
     func pickerEmojisPublisher() -> AnyPublisher<[Emoji], Error> {
         ValueObservation.tracking(
             Emoji.filter(Emoji.Columns.visibleInPicker == true)

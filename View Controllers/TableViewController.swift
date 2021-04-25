@@ -331,6 +331,13 @@ extension TableViewController: AVPlayerViewControllerDelegate {
     }
 }
 
+extension TableViewController: UIPopoverPresentationControllerDelegate {
+    func adaptivePresentationStyle(for controller: UIPresentationController,
+                                   traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+        .none
+    }
+}
+
 extension TableViewController: ZoomAnimatorDelegate {
     func transitionWillStartWith(zoomAnimator: ZoomAnimator) {
         view.layoutIfNeeded()
@@ -533,6 +540,10 @@ private extension TableViewController {
             share(url: url)
         case let .navigation(navigation):
             handle(navigation: navigation)
+        case let .reload(collectionItem):
+            reload(collectionItem: collectionItem)
+        case let .presentEmojiPicker(sourceViewTag, selectionAction):
+            presentEmojiPicker(sourceViewTag: sourceViewTag, selectionAction: selectionAction)
         case let .attachment(attachmentViewModel, statusViewModel):
             present(attachmentViewModel: attachmentViewModel, statusViewModel: statusViewModel)
         case let .compose(identity, inReplyToViewModel, redraft, redraftWasContextParent, directMessageTo):
@@ -580,6 +591,40 @@ private extension TableViewController {
         tableView.scrollToRow(at: indexPath, at: .none, animated: !UIAccessibility.isReduceMotionEnabled)
 
         viewModel.select(indexPath: indexPath)
+    }
+
+    func reload(collectionItem: CollectionItem) {
+        var snapshot = dataSource.snapshot()
+
+        snapshot.reloadItems([collectionItem])
+
+        dataSource.apply(snapshot, animatingDifferences: false)
+    }
+
+    func presentEmojiPicker(sourceViewTag: Int, selectionAction: @escaping (String) -> Void) {
+        guard let fromView = view.viewWithTag(sourceViewTag) else { return }
+
+        let emojiPickerViewModel = EmojiPickerViewModel(identityContext: viewModel.identityContext)
+
+        let emojiPickerController = EmojiPickerViewController(
+            viewModel: emojiPickerViewModel,
+            selectionAction: { [weak self] in
+                selectionAction($1.name)
+                self?.dismiss(animated: true)
+            },
+            deletionAction: nil,
+            searchPresentationAction: nil)
+        let navigationController = UINavigationController(rootViewController: emojiPickerController)
+
+        navigationController.preferredContentSize = .init(
+            width: view.readableContentGuide.layoutFrame.width,
+            height: view.frame.height / 2)
+        navigationController.modalPresentationStyle = .popover
+        navigationController.popoverPresentationController?.delegate = self
+        navigationController.popoverPresentationController?.sourceView = fromView
+        navigationController.popoverPresentationController?.backgroundColor = .clear
+
+        present(navigationController, animated: true)
     }
 
     func present(attachmentViewModel: AttachmentViewModel, statusViewModel: StatusViewModel) {

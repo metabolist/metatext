@@ -12,6 +12,7 @@ extension CollectionItem {
         NotificationTableViewCell.self,
         ConversationTableViewCell.self,
         TagTableViewCell.self,
+        AnnouncementTableViewCell.self,
         SeparatorConfiguredTableViewCell.self]
 
     var cellClass: AnyClass {
@@ -28,6 +29,8 @@ extension CollectionItem {
             return ConversationTableViewCell.self
         case .tag:
             return TagTableViewCell.self
+        case .announcement:
+            return AnnouncementTableViewCell.self
         case .moreResults:
             return SeparatorConfiguredTableViewCell.self
         }
@@ -58,6 +61,8 @@ extension CollectionItem {
                 conversation: conversation)
         case let .tag(tag):
             return TagView.estimatedHeight(width: width, tag: tag)
+        case let .announcement(announcement):
+            return AnnouncementView.estimatedHeight(width: width, announcement: announcement)
         case .moreResults:
             return UITableView.automaticDimension
         }

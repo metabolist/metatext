@@ -33,6 +33,8 @@ final class TableViewDataSource: UITableViewDiffableDataSource<CollectionSection
                 conversationCell.viewModel = conversationViewModel
             case let (tagCell as TagTableViewCell, tagViewModel as TagViewModel):
                 tagCell.viewModel = tagViewModel
+            case let (announcementCell as AnnouncementTableViewCell, announcementViewModel as AnnouncementViewModel):
+                announcementCell.viewModel = announcementViewModel
             case let (_, moreResultsViewModel as MoreResultsViewModel):
                 var configuration = cell.defaultContentConfiguration()
                 let statusWord = viewModel.identityContext.appPreferences.statusWord
