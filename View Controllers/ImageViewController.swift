@@ -193,17 +193,26 @@ extension ImageViewController {
     }
 
     func presentActivityViewController() {
-        if let image = imageView.image {
-            let activityViewController = UIActivityViewController(
-                activityItems: [NSItemProvider(object: image)],
-                applicationActivities: [])
+        if let imageData = imageView.image?.sd_imageData(), let url = imageURL ?? viewModel?.attachment.url.url {
+            let tempURL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
+                .appendingPathComponent(url.lastPathComponent)
 
-            if UIDevice.current.userInterfaceIdiom == .pad {
-                activityViewController.popoverPresentationController?
-                    .barButtonItem = parent?.navigationItem.rightBarButtonItem
+            do {
+                try imageData.write(to: tempURL)
+
+                let activityViewController = UIActivityViewController(
+                    activityItems: [tempURL],
+                    applicationActivities: [])
+
+                if UIDevice.current.userInterfaceIdiom == .pad {
+                    activityViewController.popoverPresentationController?
+                        .barButtonItem = parent?.navigationItem.rightBarButtonItem
+                }
+
+                present(activityViewController, animated: true)
+            } catch {
+                alertUnableToExportMedia()
             }
-
-            present(activityViewController, animated: true)
         } else if let asset = playerView.player?.currentItem?.asset as? AVURLAsset {
             asset.exportWithoutAudioTrack { result in
                 DispatchQueue.main.async {
@@ -224,18 +233,7 @@ extension ImageViewController {
 
                         self.present(activityViewController, animated: true)
                     case .failure:
-                        let alertController = UIAlertController(
-                            title: nil,
-                            message: NSLocalizedString("attachment.unable-to-export-media", comment: ""),
-                            preferredStyle: .alert)
-
-                        let okAction = UIAlertAction(
-                            title: NSLocalizedString("ok", comment: ""),
-                            style: .default) { _ in }
-
-                        alertController.addAction(okAction)
-
-                        self.present(alertController, animated: true)
+                        self.alertUnableToExportMedia()
                     }
                 }
             }
@@ -290,5 +288,20 @@ private extension ImageViewController {
             } else {
                 scrollView.setZoomScale(scrollView.minimumZoomScale, animated: true)
             }
+    }
+
+    func alertUnableToExportMedia() {
+        let alertController = UIAlertController(
+            title: nil,
+            message: NSLocalizedString("attachment.unable-to-export-media", comment: ""),
+            preferredStyle: .alert)
+
+        let okAction = UIAlertAction(
+            title: NSLocalizedString("ok", comment: ""),
+            style: .default) { _ in }
+
+        alertController.addAction(okAction)
+
+        self.present(alertController, animated: true)
     }
 }
