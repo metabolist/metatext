@@ -67,6 +67,7 @@ enum AppIcon: String, CaseIterable {
     case rainbow = "AppIconRainbow"
     case brutalist = "AppIconBrutalist"
     case rainbowBrutalist = "AppIconRainbowBrutalist"
+    case malow = "AppIconMalow"
 }
 
 extension AppIcon {
@@ -82,6 +83,8 @@ extension AppIcon {
             return "app-icon.brutalist"
         case .rainbowBrutalist:
             return "app-icon.rainbow-brutalist"
+        case .malow:
+            return "app-icon.malow"
         }
     }
 

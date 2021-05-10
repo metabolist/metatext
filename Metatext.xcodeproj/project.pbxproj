@@ -171,6 +171,8 @@
 		D0C7D4D624F7616A001EBDBB /* NSMutableAttributedString+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D46B24F76169001EBDBB /* NSMutableAttributedString+Extensions.swift */; };
 		D0C7D4D724F7616A001EBDBB /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D46C24F76169001EBDBB /* UIColor+Extensions.swift */; };
 		D0C7D4DA24F7616A001EBDBB /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7D46F24F76169001EBDBB /* View+Extensions.swift */; };
+		D0CB5C6A264902E30040CA7E /* AppIconMalow@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D0CB5C68264902E30040CA7E /* AppIconMalow@3x.png */; };
+		D0CB5C6B264902E30040CA7E /* AppIconMalow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D0CB5C69264902E30040CA7E /* AppIconMalow@2x.png */; };
 		D0CE9F87258B076900E3A6B6 /* AttachmentUploadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CE9F86258B076900E3A6B6 /* AttachmentUploadView.swift */; };
 		D0CE9F88258B076900E3A6B6 /* AttachmentUploadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CE9F86258B076900E3A6B6 /* AttachmentUploadView.swift */; };
 		D0CEC0E125E0BB9700FEF5A6 /* NewItemsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CEC0E025E0BB9700FEF5A6 /* NewItemsView.swift */; };
@@ -427,6 +429,8 @@
 		D0C7D46B24F76169001EBDBB /* NSMutableAttributedString+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSMutableAttributedString+Extensions.swift"; sourceTree = "<group>"; };
 		D0C7D46C24F76169001EBDBB /* UIColor+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
 		D0C7D46F24F76169001EBDBB /* View+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
+		D0CB5C68264902E30040CA7E /* AppIconMalow@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIconMalow@3x.png"; sourceTree = "<group>"; };
+		D0CB5C69264902E30040CA7E /* AppIconMalow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIconMalow@2x.png"; sourceTree = "<group>"; };
 		D0CE9F86258B076900E3A6B6 /* AttachmentUploadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentUploadView.swift; sourceTree = "<group>"; };
 		D0CEC0E025E0BB9700FEF5A6 /* NewItemsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewItemsView.swift; sourceTree = "<group>"; };
 		D0CEC0F625E3303200FEF5A6 /* AnimatingLayoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatingLayoutManager.swift; sourceTree = "<group>"; };
@@ -895,14 +899,16 @@
 			children = (
 				D0D4306225F0B93700BE5504 /* AppIconBrutalist@2x.png */,
 				D0D4306325F0B93700BE5504 /* AppIconBrutalist@3x.png */,
-				D0D4306E25F0BBA900BE5504 /* AppIconRainbowBrutalist@2x.png */,
-				D0D4306F25F0BBA900BE5504 /* AppIconRainbowBrutalist@3x.png */,
 				D0D4303B25F0A30600BE5504 /* AppIconClassic@2x.png */,
 				D0D4303A25F0A30600BE5504 /* AppIconClassic@3x.png */,
 				D0D4301A25F08CFD00BE5504 /* AppIconLight@2x.png */,
 				D0D4301B25F08CFD00BE5504 /* AppIconLight@3x.png */,
-				D0D4304625F0AEE600BE5504 /* AppIconRainbow@3x.png */,
+				D0CB5C69264902E30040CA7E /* AppIconMalow@2x.png */,
+				D0CB5C68264902E30040CA7E /* AppIconMalow@3x.png */,
 				D0D4304725F0AEE600BE5504 /* AppIconRainbow@2x.png */,
+				D0D4304625F0AEE600BE5504 /* AppIconRainbow@3x.png */,
+				D0D4306E25F0BBA900BE5504 /* AppIconRainbowBrutalist@2x.png */,
+				D0D4306F25F0BBA900BE5504 /* AppIconRainbowBrutalist@3x.png */,
 			);
 			path = "App Icons";
 			sourceTree = "<group>";
@@ -1089,6 +1095,8 @@
 				D9E658662601CF76007C426E /* Localizable.strings in Resources */,
 				D0C7D4C224F7616A001EBDBB /* Assets.xcassets in Resources */,
 				D0D4304925F0AEE600BE5504 /* AppIconRainbow@2x.png in Resources */,
+				D0CB5C6B264902E30040CA7E /* AppIconMalow@2x.png in Resources */,
+				D0CB5C6A264902E30040CA7E /* AppIconMalow@3x.png in Resources */,
 				D0D4301C25F08CFD00BE5504 /* AppIconLight@2x.png in Resources */,
 				D0D4306525F0B93700BE5504 /* AppIconBrutalist@3x.png in Resources */,
 				D0D4303D25F0A30600BE5504 /* AppIconClassic@2x.png in Resources */,
