@@ -19,6 +19,15 @@
 				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
+			<key>AppIconMalow</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>AppIconMalow</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<false/>
+			</dict>
 			<key>AppIconRainbow</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
@@ -33,15 +42,6 @@
 				<key>CFBundleIconFiles</key>
 				<array>
 					<string>AppIconRainbowBrutalist</string>
-				</array>
-				<key>UIPrerenderedIcon</key>
-				<false/>
-			</dict>
-			<key>AppIconMalow</key>
-			<dict>
-				<key>CFBundleIconFiles</key>
-				<array>
-					<string>AppIconMalow</string>
 				</array>
 				<key>UIPrerenderedIcon</key>
 				<false/>
@@ -70,6 +70,15 @@
 				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
+			<key>AppIconMalow</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>AppIconMalow</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<false/>
+			</dict>
 			<key>AppIconRainbow</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
@@ -84,15 +93,6 @@
 				<key>CFBundleIconFiles</key>
 				<array>
 					<string>AppIconRainbowBrutalist</string>
-				</array>
-				<key>UIPrerenderedIcon</key>
-				<false/>
-			</dict>
-			<key>AppIconMalow</key>
-			<dict>
-				<key>CFBundleIconFiles</key>
-				<array>
-					<string>AppIconMalow</string>
 				</array>
 				<key>UIPrerenderedIcon</key>
 				<false/>
