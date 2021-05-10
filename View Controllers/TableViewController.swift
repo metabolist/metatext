@@ -141,6 +141,8 @@ class TableViewController: UITableViewController {
         if let loadMoreView = cell.contentView as? LoadMoreView {
             visibleLoadMoreViews.insert(loadMoreView)
         }
+
+        (cell.contentView as? AnnouncementView)?.dismissIfUnread()
     }
 
     override func tableView(_ tableView: UITableView,

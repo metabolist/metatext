@@ -33,7 +33,9 @@ public extension AnnouncementViewModel {
                 .eraseToAnyPublisher())
     }
 
-    func dismiss() {
+    func dismissIfUnread() {
+        guard !announcement.read else { return }
+
         eventsSubject.send(
             announcementService.dismiss()
                 .map { _ in .ignorableOutput }

@@ -41,7 +41,7 @@ final class TimelinesViewController: UIPageViewController {
             image: UIImage(systemName: "newspaper"),
             selectedImage: nil)
 
-        announcementsButton.primaryAction = UIAction(
+        let announcementsAction = UIAction(
             title: NSLocalizedString("main-navigation.announcements", comment: ""),
             image: UIImage(systemName: "megaphone")) { [weak self] _ in
             guard let self = self else { return }
@@ -52,8 +52,21 @@ final class TimelinesViewController: UIPageViewController {
             self.navigationController?.pushViewController(announcementsViewController, animated: true)
         }
 
+        announcementsButton.primaryAction = announcementsAction
+
         viewModel.$announcementCount
             .sink { [weak self] in
+                if $0.unread > 0 {
+                    announcementsAction.image = UIImage(systemName: "\($0.unread).circle.fill")
+                        ?? UIImage(systemName: "megaphone.fill")
+                    self?.announcementsButton.primaryAction = announcementsAction
+                    self?.announcementsButton.tintColor = .systemRed
+                } else {
+                    announcementsAction.image = UIImage(systemName: "megaphone")
+                    self?.announcementsButton.primaryAction = announcementsAction
+                    self?.announcementsButton.tintColor = nil
+                }
+
                 self?.navigationItem.rightBarButtonItem = $0.total > 0 ? self?.announcementsButton : nil
             }
             .store(in: &cancellables)

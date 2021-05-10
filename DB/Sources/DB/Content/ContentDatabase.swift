@@ -609,7 +609,7 @@ public extension ContentDatabase {
         ValueObservation.tracking(Announcement.fetchCount)
             .removeDuplicates()
             .publisher(in: databaseWriter)
-            .combineLatest(ValueObservation.tracking(Announcement.fetchCount)
+            .combineLatest(ValueObservation.tracking(Announcement.filter(Announcement.Columns.read == false).fetchCount)
                             .removeDuplicates()
                             .publisher(in: databaseWriter))
             .map { (total: $0, unread: $1) }

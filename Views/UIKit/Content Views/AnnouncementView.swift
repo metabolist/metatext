@@ -47,6 +47,10 @@ extension AnnouncementView {
     static func estimatedHeight(width: CGFloat, announcement: Announcement) -> CGFloat {
         UITableView.automaticDimension
     }
+
+    func dismissIfUnread() {
+        announcementConfiguration.viewModel.dismissIfUnread()
+    }
 }
 
 extension AnnouncementView: UIContentView {
@@ -166,10 +170,6 @@ private extension AnnouncementView {
 
         if snapshot.itemIdentifiers != dataSource.snapshot().itemIdentifiers {
             dataSource.apply(snapshot, animatingDifferences: false) { viewModel.reload() }
-        }
-
-        if !viewModel.announcement.read {
-            viewModel.dismiss()
         }
     }
 }
