@@ -155,7 +155,7 @@ private extension NavigationService {
     func webfinger(url: URL) -> AnyPublisher<Navigation, Never> {
         let navigationSubject = PassthroughSubject<Navigation, Never>()
 
-        let request = mastodonAPIClient.request(ResultsEndpoint.search(.init(query: url.absoluteString, resolve: true)))
+        let request = mastodonAPIClient.request(ResultsEndpoint.search(.init(query: url.absoluteString)))
             .handleEvents(
                 receiveSubscription: { _ in navigationSubject.send(.webfingerStart) },
                 receiveCompletion: { _ in navigationSubject.send(.webfingerEnd) })

@@ -21,7 +21,7 @@ public extension ResultsEndpoint {
         public init(query: String,
                     type: SearchType? = nil,
                     excludeUnreviewed: Bool = false,
-                    resolve: Bool = false,
+                    resolve: Bool = true,
                     limit: Int? = nil,
                     offset: Int? = nil,
                     following: Bool = false) {

@@ -173,7 +173,7 @@ private extension StatusService {
         }
 
         return client
-            .request(ResultsEndpoint.search(.init(query: status.displayStatus.uri, resolve: true, limit: 1)))
+            .request(ResultsEndpoint.search(.init(query: status.displayStatus.uri, limit: 1)))
             .tryMap {
                 guard let status = $0.statuses.first else { throw APIError.unableToFetchRemoteStatus }
 
