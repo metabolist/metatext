@@ -194,7 +194,9 @@ extension ImageViewController {
 
     func presentActivityViewController() {
         if let image = imageView.image {
-            let activityViewController = UIActivityViewController(activityItems: [image], applicationActivities: [])
+            let activityViewController = UIActivityViewController(
+                activityItems: [NSItemProvider(object: image)],
+                applicationActivities: [])
 
             if UIDevice.current.userInterfaceIdiom == .pad {
                 activityViewController.popoverPresentationController?
