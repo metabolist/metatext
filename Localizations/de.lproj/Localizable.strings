@@ -62,6 +62,7 @@
 "account.unnotify" = "Mitteilungen ausschalten";
 "activity.open-in-default-browser" = "Im Standardbrowser öffnen";
 "add" = "Hinzufügen";
+"announcement.insert-emoji" = "Emoji einfügen";
 "api-error.unable-to-fetch-remote-status" = "Remote-Status konnte nicht abgerufen werden";
 "apns-default-message" = "Neue Mitteilungen";
 "app-icon.brutalist" = "Brutalist";
@@ -176,6 +177,7 @@
 "load-more.above.accessibility.toot" = "Lade Toots von oben";
 "load-more.below.accessibility.post" = "Lade Beiträge von unten";
 "load-more.below.accessibility.toot" = "Lade Toots von unten";
+"main-navigation.announcements" = "Ankündigungen";
 "main-navigation.timelines" = "Zeitleisten";
 "main-navigation.explore" = "Erkunden";
 "main-navigation.notifications" = "Benachrichtigungen";

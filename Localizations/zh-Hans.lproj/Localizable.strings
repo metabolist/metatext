@@ -62,6 +62,7 @@
 "account.unnotify" = "关闭通知";
 "activity.open-in-default-browser" = "使用默认浏览器打开";
 "add" = "新增";
+"announcement.insert-emoji" = "加入表情符号";
 "api-error.unable-to-fetch-remote-status" = "无法获取远程状态";
 "apns-default-message" = "新的通知";
 "app-icon.brutalist" = "粗犷";
@@ -176,6 +177,7 @@
 "load-more.above.accessibility.toot" = "从上方的嘟文开始加载";
 "load-more.below.accessibility.post" = "从下方的帖子开始加载";
 "load-more.below.accessibility.toot" = "从下方的嘟文开始加载";
+"main-navigation.announcements" = "公告";
 "main-navigation.timelines" = "时间轴";
 "main-navigation.explore" = "探索";
 "main-navigation.notifications" = "通知";

@@ -62,6 +62,7 @@
 "account.unnotify" = "Desactivar notificaciones";
 "activity.open-in-default-browser" = "Abrir en el navegador predeterminado";
 "add" = "Añadir";
+"announcement.insert-emoji" = "Insertar emoji";
 "api-error.unable-to-fetch-remote-status" = "Imposible captar señal remota";
 "apns-default-message" = "Nueva notificación";
 "app-icon.brutalist" = "Brutalista";
@@ -176,6 +177,7 @@
 "load-more.above.accessibility.toot" = "Cargar desde el toot de arriba";
 "load-more.below.accessibility.post" = "Cargar desde la publicación de abajo";
 "load-more.below.accessibility.toot" = "Cargar desde el toot de abajo";
+"main-navigation.announcements" = "Anuncios";
 "main-navigation.timelines" = "Cronologías";
 "main-navigation.explore" = "Explorar";
 "main-navigation.notifications" = "Notificaciones";

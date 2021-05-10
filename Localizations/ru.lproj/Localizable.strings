@@ -62,6 +62,7 @@
 "account.unnotify" = "Выключить уведомления";
 "activity.open-in-default-browser" = "Открыть в браузере по умолчанию";
 "add" = "Добавить";
+"announcement.insert-emoji" = "Вставить эмодзи";
 "api-error.unable-to-fetch-remote-status" = "Не удалось получить статус";
 "apns-default-message" = "Новое уведомление";
 "app-icon.brutalist" = "Brutalist";
@@ -176,6 +177,7 @@
 "load-more.above.accessibility.toot" = "Загрузить c тута выше";
 "load-more.below.accessibility.post" = "Загрузить с поста ниже";
 "load-more.below.accessibility.toot" = "Загрузить с тута ниже";
+"main-navigation.announcements" = "Объявления";
 "main-navigation.timelines" = "Лента";
 "main-navigation.explore" = "Обзор";
 "main-navigation.notifications" = "Уведомления";
