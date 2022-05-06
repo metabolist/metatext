@@ -14,25 +14,49 @@ final class ExploreDataSource: UICollectionViewDiffableDataSource<ExploreViewMod
     init(collectionView: UICollectionView, viewModel: ExploreViewModel) {
         self.collectionView = collectionView
 
+        let tagRegistration = UICollectionView.CellRegistration<TagCollectionViewCell, TagViewModel> {
+            $0.viewModel = $2
+        }
+
+        let instanceRegistration = UICollectionView.CellRegistration<InstanceCollectionViewCell, InstanceViewModel> {
+            $0.viewModel = $2
+        }
+
+        let itemRegistration = UICollectionView.CellRegistration
+        <SeparatorConfiguredCollectionViewListCell, ExploreViewModel.Item> {
+            var configuration = $0.defaultContentConfiguration()
+
+            switch $2 {
+            case .profileDirectory:
+                configuration.text = NSLocalizedString("explore.profile-directory", comment: "")
+                configuration.image = UIImage(systemName: "person.crop.square.fill.and.at.rectangle")
+            default:
+                break
+            }
+
+            $0.contentConfiguration = configuration
+            $0.accessories = [.disclosureIndicator()]
+        }
+
         super.init(collectionView: collectionView) {
             switch $2 {
             case let .tag(tag):
                 return $0.dequeueConfiguredReusableCell(
-                    using: Self.tagRegistration,
+                    using: tagRegistration,
                     for: $1,
                     item: viewModel.viewModel(tag: tag))
             case .instance:
                 return $0.dequeueConfiguredReusableCell(
-                    using: Self.instanceRegistration,
+                    using: instanceRegistration,
                     for: $1,
                     item: viewModel.instanceViewModel)
             default:
-                return $0.dequeueConfiguredReusableCell(using: Self.itemRegistration, for: $1, item: $2)
+                return $0.dequeueConfiguredReusableCell(using: itemRegistration, for: $1, item: $2)
             }
         }
 
         let headerRegistration = UICollectionView.SupplementaryRegistration
-        <ExploreSectionHeaderView>(elementKind: "Header") { [weak self] in
+        <ExploreSectionHeaderView>(elementKind: UICollectionView.elementKindSectionHeader) { [weak self] in
             $0.label.text = self?.snapshot().sectionIdentifiers[$2.section].displayName
         }
 
@@ -55,30 +79,6 @@ final class ExploreDataSource: UICollectionViewDiffableDataSource<ExploreViewMod
 }
 
 private extension ExploreDataSource {
-    static let tagRegistration = UICollectionView.CellRegistration<TagCollectionViewCell, TagViewModel> {
-        $0.viewModel = $2
-    }
-
-    static let instanceRegistration = UICollectionView.CellRegistration<InstanceCollectionViewCell, InstanceViewModel> {
-        $0.viewModel = $2
-    }
-
-    static let itemRegistration = UICollectionView.CellRegistration
-    <SeparatorConfiguredCollectionViewListCell, ExploreViewModel.Item> {
-        var configuration = $0.defaultContentConfiguration()
-
-        switch $2 {
-        case .profileDirectory:
-            configuration.text = NSLocalizedString("explore.profile-directory", comment: "")
-            configuration.image = UIImage(systemName: "person.crop.square.fill.and.at.rectangle")
-        default:
-            break
-        }
-
-        $0.contentConfiguration = configuration
-        $0.accessories = [.disclosureIndicator()]
-    }
-
     func update(tags: [Tag], instanceViewModel: InstanceViewModel?) {
         var newsnapshot = NSDiffableDataSourceSnapshot<ExploreViewModel.Section, ExploreViewModel.Item>()
 

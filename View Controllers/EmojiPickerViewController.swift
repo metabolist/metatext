@@ -26,7 +26,7 @@ final class EmojiPickerViewController: UICollectionViewController {
         }
 
         let headerRegistration = UICollectionView.SupplementaryRegistration
-        <EmojiCategoryHeaderView>(elementKind: "Header") { [weak self] in
+        <EmojiCategoryHeaderView>(elementKind: UICollectionView.elementKindSectionHeader) { [weak self] in
             $0.label.text = self?.dataSource.snapshot().sectionIdentifiers[$2.section].displayName
         }
 
@@ -184,8 +184,6 @@ final class EmojiPickerViewController: UICollectionViewController {
 }
 
 private extension EmojiPickerViewController {
-    static let headerElementKind = "com.metabolist.metatext.emoji-picker.header"
-
     static func layout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .absolute(.minimumButtonDimension),
@@ -212,7 +210,7 @@ private extension EmojiPickerViewController {
             heightDimension: .estimated(.defaultSpacing))
         let header = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: headerSize,
-            elementKind: Self.headerElementKind,
+            elementKind: UICollectionView.elementKindSectionHeader,
             alignment: .top)
 
         section.boundarySupplementaryItems = [header]
