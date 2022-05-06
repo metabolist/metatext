@@ -27,6 +27,8 @@ extension AppDelegate: UIApplicationDelegate {
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         self.application = application
 
+        configureGlobalAppearance()
+
         return true
     }
 
@@ -38,5 +40,18 @@ extension AppDelegate: UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFailToRegisterForRemoteNotificationsWithError error: Error) {
         deviceTokenSubject.send(completion: .failure(error))
+    }
+}
+
+private extension AppDelegate {
+    func configureGlobalAppearance() {
+        if #available(iOS 15, *) {
+            let appearance = UINavigationBarAppearance()
+
+            appearance.configureWithDefaultBackground()
+
+            UINavigationBar.appearance().standardAppearance = appearance
+            UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        }
     }
 }
