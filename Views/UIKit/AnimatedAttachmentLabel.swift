@@ -24,19 +24,25 @@ final class AnimatedAttachmentLabel: UILabel, EmojiInsertable {
             .attachment,
             in: NSRange(location: 0, length: attributedText.length),
             options: .longestEffectiveRangeNotRequired) { attachment, _, _ in
-            guard let animatedAttachment = attachment as? AnimatedTextAttachment,
-                  let imageBounds = animatedAttachment.imageBounds
-            else { return }
+                guard let animatedAttachment = attachment as? AnimatedTextAttachment,
+                      let imageBounds = animatedAttachment.imageBounds
+                else { return }
 
-            animatedAttachment.imageView.frame = imageBounds
-            animatedAttachment.imageView.contentMode = .scaleAspectFit
+                animatedAttachment.imageView.frame = imageBounds
 
-            if animatedAttachment.imageView.superview != self {
-                addSubview(animatedAttachment.imageView)
+                // iOS 15 needs this for some inexplicable reason
+                if #available(iOS 15, *) {
+                    animatedAttachment.imageView.frame.origin.y -= font.lineHeight
+                }
+
+                animatedAttachment.imageView.contentMode = .scaleAspectFit
+
+                if animatedAttachment.imageView.superview != self {
+                    addSubview(animatedAttachment.imageView)
+                }
+
+                attachmentImageViews.insert(animatedAttachment.imageView)
             }
-
-            attachmentImageViews.insert(animatedAttachment.imageView)
-        }
 
         for subview in subviews {
             guard let attachmentImageView = subview as? SDAnimatedImageView else { continue }
