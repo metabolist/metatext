@@ -2,7 +2,7 @@
 
 import UIKit
 
-protocol ZoomAnimatorDelegate: class {
+protocol ZoomAnimatorDelegate: AnyObject {
     func transitionWillStartWith(zoomAnimator: ZoomAnimator)
     func transitionDidEndWith(zoomAnimator: ZoomAnimator)
     func referenceView(for zoomAnimator: ZoomAnimator) -> UIView?
