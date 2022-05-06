@@ -564,7 +564,7 @@ public extension ContentDatabase {
         excludeTypes: Set<MastodonNotification.NotificationType>) -> AnyPublisher<[CollectionSection], Error> {
         ValueObservation.tracking(
             NotificationInfo.request(
-                NotificationRecord.order(NotificationRecord.Columns.id.desc)
+                NotificationRecord.order(NotificationRecord.Columns.createdAt.desc)
                     .filter(!excludeTypes.map(\.rawValue).contains(NotificationRecord.Columns.type))).fetchAll)
             .removeDuplicates()
             .publisher(in: databaseWriter)
