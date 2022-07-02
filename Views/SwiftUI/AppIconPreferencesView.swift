@@ -64,6 +64,7 @@ private extension AppIconPreferencesView {
 
 enum AppIcon: String, CaseIterable {
     case classic = "AppIconClassic"
+    case light = "AppIconLight"
     case rainbow = "AppIconRainbow"
     case brutalist = "AppIconBrutalist"
     case rainbowBrutalist = "AppIconRainbowBrutalist"
@@ -77,6 +78,8 @@ extension AppIcon {
         switch self {
         case .classic:
             return "app-icon.classic"
+        case .light:
+            return "app-icon.light"
         case .rainbow:
             return "app-icon.rainbow"
         case .brutalist:
