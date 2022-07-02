@@ -67,9 +67,10 @@
 "apns-default-message" = "Nowe powiadomienie";
 "app-icon.brutalist" = "Brutalist";
 "app-icon.rainbow-brutalist" = "Rainbow Brutalist";
-"app-icon.classic" = "Classic";
+"app-icon.classic" = "Klasyczny";
+"app-icon.light" = "Światło";
 "app-icon.malow" = "Malow";
-"app-icon.rainbow" = "Rainbow";
+"app-icon.rainbow" = "Tęcza";
 "add-identity.get-started" = "Rozpocznij";
 "add-identity.instance-url" = "Adres instancji";
 "add-identity.log-in" = "Zaloguj";
