@@ -630,10 +630,12 @@ private extension StatusView {
         }
 
         setReblogButtonColor(reblogged: viewModel.reblogged)
+        reblogButton.setCountTitle(count: viewModel.reblogsCount, isContextParent: isContextParent)
         reblogButton.isEnabled = viewModel.canBeReblogged && isAuthenticated
         reblogButton.menu = authenticatedIdentitiesMenu { viewModel.toggleReblogged(identityId: $0.id) }
 
         setFavoriteButtonColor(favorited: viewModel.favorited)
+        favoriteButton.setCountTitle(count: viewModel.favoritesCount, isContextParent: isContextParent)
         favoriteButton.isEnabled = isAuthenticated
         favoriteButton.menu = authenticatedIdentitiesMenu { viewModel.toggleFavorited(identityId: $0.id) }
 
