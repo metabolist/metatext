@@ -156,7 +156,12 @@ private extension LoadMoreView {
             guard let self = self else { return }
 
             self.label.isHidden = $0
-            $0 ? self.activityIndicatorView.startAnimating() : self.activityIndicatorView.stopAnimating()
+
+            if $0 {
+                self.activityIndicatorView.startAnimating()
+            } else {
+                self.activityIndicatorView.stopAnimating()
+            }
         }
     }
 

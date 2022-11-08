@@ -116,18 +116,17 @@ private extension CompositionPollView {
 
             addChoiceButton.isEnabled = $0.count < CompositionViewModel.maxPollOptionCount
 
-            for (index, option) in $0.enumerated() {
-                if !self.pollOptionViews.contains(where: { $0.option === option }) {
-                    let optionView = CompositionPollOptionView(
-                        viewModel: self.viewModel,
-                        parentViewModel: self.parentViewModel,
-                        option: option)
+            for (index, option) in $0.enumerated()
+            where !self.pollOptionViews.contains(where: { $0.option === option }) {
+                let optionView = CompositionPollOptionView(
+                    viewModel: self.viewModel,
+                    parentViewModel: self.parentViewModel,
+                    option: option)
 
-                    optionView.textField.placeholder = String.localizedStringWithFormat(
-                        NSLocalizedString("status.poll.option-%ld", comment: ""),
-                        index + 1)
-                    self.stackView.insertArrangedSubview(optionView, at: index)
-                }
+                optionView.textField.placeholder = String.localizedStringWithFormat(
+                    NSLocalizedString("status.poll.option-%ld", comment: ""),
+                    index + 1)
+                self.stackView.insertArrangedSubview(optionView, at: index)
             }
 
             for (index, optionView) in self.pollOptionViews.enumerated() {

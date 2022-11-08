@@ -183,8 +183,12 @@ extension PollView {
             let open = !poll.expired && !poll.voted
 
             for option in poll.options {
-                height += open ? PollOptionButton.estimatedHeight(width: width, title: option.title)
-                    : PollResultView.estimatedHeight(width: width, title: option.title)
+                if open {
+                    height += PollOptionButton.estimatedHeight(width: width, title: option.title)
+                } else {
+                    height += PollResultView.estimatedHeight(width: width, title: option.title)
+                }
+
                 height += .defaultSpacing
             }
 

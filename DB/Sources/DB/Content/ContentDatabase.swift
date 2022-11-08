@@ -325,7 +325,7 @@ public extension ContentDatabase {
     }
 
     func createList(_ list: List) -> AnyPublisher<Never, Error> {
-        databaseWriter.mutatingPublisher{ try TimelineRecord(timeline: Timeline.list(list)).save($0) }
+        databaseWriter.mutatingPublisher { try TimelineRecord(timeline: Timeline.list(list)).save($0) }
     }
 
     func deleteList(id: List.Id) -> AnyPublisher<Never, Error> {
