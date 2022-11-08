@@ -169,7 +169,12 @@ private extension AnnouncementView {
         snapshot.appendItems(viewModel.announcement.reactions, toSection: 0)
 
         if snapshot.itemIdentifiers != dataSource.snapshot().itemIdentifiers {
-            dataSource.apply(snapshot, animatingDifferences: false) { viewModel.reload() }
+            dataSource.apply(snapshot, animatingDifferences: false) {
+                if self.contentTextView.frame.size == .zero
+                    || self.contentTextView.contentSize.height < self.contentTextView.frame.height {
+                    viewModel.reload()
+                }
+            }
         }
     }
 }
