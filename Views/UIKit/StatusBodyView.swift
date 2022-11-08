@@ -59,7 +59,7 @@ final class StatusBodyView: UIView {
             pollView.isAccessibilityElement = !isContextParent || viewModel.hasVotedInPoll || viewModel.isPollExpired
 
             cardView.viewModel = viewModel.cardViewModel
-            cardView.isHidden = viewModel.cardViewModel == nil
+            cardView.isHidden = viewModel.cardViewModel == nil || !viewModel.shouldShowContent
 
             accessibilityAttributedLabel = accessibilityAttributedLabel(forceShowContent: false)
 
