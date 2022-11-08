@@ -34,12 +34,11 @@ public struct SearchService {
 
 extension SearchService: CollectionService {
     public func request(maxId: String?, minId: String?, search: Search?) -> AnyPublisher<Never, Error> {
-        guard let search = search else { return Empty().eraseToAnyPublisher() }
+        guard
+            let search = search,
+            !search.query.trimmingCharacters(in: .whitespaces).isEmpty
+        else { return Empty().eraseToAnyPublisher() }
 
-        if (search.query.trimmingCharacters(in: .whitespaces).isEmpty){
-            return Empty().eraseToAnyPublisher()
-        }
-        
         return mastodonAPIClient.request(ResultsEndpoint.search(search))
             .flatMap { results in contentDatabase.insert(results: results).collect().map { _ in results } }
             .handleEvents(receiveOutput: { resultsSubject.send(($0, search)) })
