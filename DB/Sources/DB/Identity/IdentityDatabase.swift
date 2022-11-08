@@ -16,7 +16,7 @@ public struct IdentityDatabase {
 
     public init(inMemory: Bool, appGroup: String, keychain: Keychain.Type) throws {
         if inMemory {
-            databaseWriter = DatabaseQueue()
+            databaseWriter = try DatabaseQueue()
             try Self.migrator.migrate(databaseWriter)
         } else {
             let url = try FileManager.default.databaseDirectoryURL(
@@ -32,8 +32,8 @@ public struct IdentityDatabase {
 
 public extension IdentityDatabase {
     func createIdentity(id: Identity.Id, url: URL, authenticated: Bool, pending: Bool) -> AnyPublisher<Never, Error> {
-        databaseWriter.mutatingPublisher(
-            updates: IdentityRecord(
+        databaseWriter.mutatingPublisher {
+            try IdentityRecord(
                 id: id,
                 url: url,
                 authenticated: authenticated,
@@ -43,7 +43,8 @@ public extension IdentityDatabase {
                 instanceURI: nil,
                 lastRegisteredDeviceToken: nil,
                 pushSubscriptionAlerts: .initial)
-                .save)
+            .save($0)
+        }
     }
 
     func deleteIdentity(id: Identity.Id) -> AnyPublisher<Never, Error> {
@@ -75,8 +76,8 @@ public extension IdentityDatabase {
     }
 
     func updateAccount(_ account: Account, id: Identity.Id) -> AnyPublisher<Never, Error> {
-        databaseWriter.mutatingPublisher(
-            updates: Identity.Account(
+        databaseWriter.mutatingPublisher {
+            try Identity.Account(
                 id: account.id,
                 identityId: id,
                 username: account.username,
@@ -88,7 +89,8 @@ public extension IdentityDatabase {
                 headerStatic: account.headerStatic,
                 emojis: account.emojis,
                 followRequestCount: account.source?.followRequestsCount ?? 0)
-                .save)
+            .save($0)
+        }
     }
 
     func confirmIdentity(id: Identity.Id) -> AnyPublisher<Never, Error> {

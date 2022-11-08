@@ -21,7 +21,7 @@ public struct ContentDatabase {
         self.id = id
 
         if inMemory {
-            databaseWriter = DatabaseQueue()
+            databaseWriter = try DatabaseQueue()
             try Self.migrator.migrate(databaseWriter)
         } else {
             databaseWriter = try DatabasePool.withFileCoordinator(
@@ -325,7 +325,7 @@ public extension ContentDatabase {
     }
 
     func createList(_ list: List) -> AnyPublisher<Never, Error> {
-        databaseWriter.mutatingPublisher(updates: TimelineRecord(timeline: Timeline.list(list)).save)
+        databaseWriter.mutatingPublisher{ try TimelineRecord(timeline: Timeline.list(list)).save($0) }
     }
 
     func deleteList(id: List.Id) -> AnyPublisher<Never, Error> {
@@ -343,7 +343,7 @@ public extension ContentDatabase {
     }
 
     func createFilter(_ filter: Filter) -> AnyPublisher<Never, Error> {
-        databaseWriter.mutatingPublisher(updates: filter.save)
+        databaseWriter.mutatingPublisher { try filter.save($0) }
     }
 
     func deleteFilter(id: Filter.Id) -> AnyPublisher<Never, Error> {
@@ -351,7 +351,7 @@ public extension ContentDatabase {
     }
 
     func setLastReadId(_ id: String, timelineId: Timeline.Id) -> AnyPublisher<Never, Error> {
-        databaseWriter.mutatingPublisher(updates: LastReadIdRecord(timelineId: timelineId, id: id).save)
+        databaseWriter.mutatingPublisher { try LastReadIdRecord(timelineId: timelineId, id: id).save($0) }
     }
 
     func insert(notifications: [MastodonNotification]) -> AnyPublisher<Never, Error> {
