@@ -64,7 +64,7 @@ import PreviewViewModels
 struct ListsView_Previews: PreviewProvider {
     static var previews: some View {
         ListsView(viewModel: .init(identityContext: .preview))
-            .environmentObject(NavigationViewModel(identityContext: .preview))
+            .environmentObject(NavigationViewModel(identityContext: .preview, environment: .preview))
     }
 }
 #endif

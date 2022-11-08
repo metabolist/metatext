@@ -56,6 +56,10 @@ extension ContentDatabase {
         keychain: MockKeychain.self)
 }
 
+public extension AppEnvironment {
+    static let preview = environment
+}
+
 public extension URL {
     static let previewInstanceURL = URL(string: "https://mastodon.social")!
 }

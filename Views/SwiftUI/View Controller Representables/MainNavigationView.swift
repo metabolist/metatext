@@ -23,7 +23,7 @@ import PreviewViewModels
 
 struct MainNavigationView_Previews: PreviewProvider {
     static var previews: some View {
-        MainNavigationView { NavigationViewModel(identityContext: .preview) }
+        MainNavigationView { NavigationViewModel(identityContext: .preview, environment: .preview) }
             .environmentObject(RootViewModel.preview)
     }
 }

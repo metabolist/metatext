@@ -160,6 +160,7 @@
 "registration.agree-to-server-rules-and-terms-of-service" = "Zgadzam się na zasady stosowane na serwerze i warunki świadczenia usługi";
 "registration.password-confirmation-mismatch" = "Hasło i powtórzone hasło się nie zgadzają";
 "secondary-navigation.about" = "O aplikacji";
+"secondary-navigation.account-settings" = "Ustawienia konta";
 "secondary-navigation.accounts" = "Konta";
 "secondary-navigation.lists" = "Listy";
 "secondary-navigation.my-profile" = "Mój profil";

@@ -160,6 +160,7 @@
 "registration.agree-to-server-rules-and-terms-of-service" = "서버 규칙 및 개인정보처리방침에 동의해요";
 "registration.password-confirmation-mismatch" = "입력한 비밀번호가 일치하지 않아요";
 "secondary-navigation.about" = "이 앱에 대해서";
+"secondary-navigation.account-settings" = "계정 설정";
 "secondary-navigation.accounts" = "계정";
 "secondary-navigation.lists" = "목록";
 "secondary-navigation.my-profile" = "내 프로필";

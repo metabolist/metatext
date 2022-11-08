@@ -30,9 +30,8 @@ extension WebAuthSession {
                 }
             }
 
-            webAuthSession.presentationContextProvider = presentationContextProvider
-
             DispatchQueue.main.async {
+                webAuthSession.presentationContextProvider = presentationContextProvider
                 webAuthSession.start()
             }
         }

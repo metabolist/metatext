@@ -160,6 +160,7 @@
 "registration.agree-to-server-rules-and-terms-of-service" = "Estoy de acuerdo con las reglas del servidor y los términos del servicio";
 "registration.password-confirmation-mismatch" = "La contraseña no coincide con su confirmación";
 "secondary-navigation.about" = "Acerca de esta aplicación";
+"secondary-navigation.account-settings" = "Configuración de Cuenta";
 "secondary-navigation.accounts" = "Cuentas";
 "secondary-navigation.lists" = "Listas";
 "secondary-navigation.my-profile" = "Mi perfil";

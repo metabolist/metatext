@@ -160,6 +160,7 @@
 "registration.agree-to-server-rules-and-terms-of-service" = "サーバーのルールとプライバシーポリシーに同意します";
 "registration.password-confirmation-mismatch" = "パスワードと確認用パスワードが一致しません";
 "secondary-navigation.about" = "このアプリについて";
+"secondary-navigation.account-settings" = "アカウント設定";
 "secondary-navigation.accounts" = "アカウント";
 "secondary-navigation.lists" = "リスト";
 "secondary-navigation.my-profile" = "マイプロフィール";

@@ -88,7 +88,7 @@ import PreviewViewModels
 
 struct AboutView_Previews: PreviewProvider {
     static var previews: some View {
-        AboutView(viewModel: NavigationViewModel(identityContext: .preview))
+        AboutView(viewModel: NavigationViewModel(identityContext: .preview, environment: .preview))
     }
 }
 #endif
