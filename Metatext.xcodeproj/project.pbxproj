@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -126,7 +126,7 @@
 		D08DFB0125CE228E0005DA98 /* UIScrollView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08DFB0025CE228E0005DA98 /* UIScrollView+Extensions.swift */; };
 		D08E512125786A6600FA2C5F /* UIButton+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08E512025786A6600FA2C5F /* UIButton+Extensions.swift */; };
 		D08E52612579D2E100FA2C5F /* DomainBlocksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08E52602579D2E100FA2C5F /* DomainBlocksView.swift */; };
-		D08E5276257C36CA00FA2C5F /* Share Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D08E526C257C36CA00FA2C5F /* Share Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D08E5276257C36CA00FA2C5F /* Share Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D08E526C257C36CA00FA2C5F /* Share Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D08E52A6257C61C000FA2C5F /* ShareExtensionNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08E52A5257C61C000FA2C5F /* ShareExtensionNavigationViewController.swift */; };
 		D08E52C7257C7AEE00FA2C5F /* ShareErrorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08E52C6257C7AEE00FA2C5F /* ShareErrorViewController.swift */; };
 		D08E52D2257C811200FA2C5F /* ShareExtensionError+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08E52D1257C811200FA2C5F /* ShareExtensionError+Extensions.swift */; };
@@ -221,7 +221,7 @@
 		D0E39B7E25D9AF23009C10F8 /* AutocompleteDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E39B7D25D9AF23009C10F8 /* AutocompleteDataSource.swift */; };
 		D0E39B8725D9B7FD009C10F8 /* AutocompleteDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E39B7D25D9AF23009C10F8 /* AutocompleteDataSource.swift */; };
 		D0E5361C24E3EB4D00FB1CE1 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E5361B24E3EB4D00FB1CE1 /* NotificationService.swift */; };
-		D0E5362024E3EB4D00FB1CE1 /* Notification Service Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D0E5361924E3EB4D00FB1CE1 /* Notification Service Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D0E5362024E3EB4D00FB1CE1 /* Notification Service Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D0E5361924E3EB4D00FB1CE1 /* Notification Service Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D0E569DB2529319100FA1D72 /* LoadMoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E569DA2529319100FA1D72 /* LoadMoreView.swift */; };
 		D0E569E0252931B100FA1D72 /* LoadMoreContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E569DF252931B100FA1D72 /* LoadMoreContentConfiguration.swift */; };
 		D0E7AD3925870B13005F5E2D /* UIVIewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E7AD3825870B13005F5E2D /* UIVIewController+Extensions.swift */; };
@@ -272,16 +272,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		D0E5362424E3EB4D00FB1CE1 /* Embed App Extensions */ = {
+		D0E5362424E3EB4D00FB1CE1 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				D0E5362024E3EB4D00FB1CE1 /* Notification Service Extension.appex in Embed App Extensions */,
-				D08E5276257C36CA00FA2C5F /* Share Extension.appex in Embed App Extensions */,
+				D0E5362024E3EB4D00FB1CE1 /* Notification Service Extension.appex in Embed Foundation Extensions */,
+				D08E5276257C36CA00FA2C5F /* Share Extension.appex in Embed Foundation Extensions */,
 			);
-			name = "Embed App Extensions";
+			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -945,7 +945,7 @@
 				D047FA8924C3E21200AF17C5 /* Frameworks */,
 				D047FA8A24C3E21200AF17C5 /* Resources */,
 				D0666A2E24C67E6700F3F04B /* ShellScript */,
-				D0E5362424E3EB4D00FB1CE1 /* Embed App Extensions */,
+				D0E5362424E3EB4D00FB1CE1 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
@@ -1034,7 +1034,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1220;
-				LastUpgradeCheck = 1200;
+				LastUpgradeCheck = 1410;
 				ORGANIZATIONNAME = Metabolist;
 				TargetAttributes = {
 					D047FA8B24C3E21200AF17C5 = {
@@ -1136,6 +1136,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		D0666A2E24C67E6700F3F04B /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -1481,6 +1482,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -1541,6 +1543,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
