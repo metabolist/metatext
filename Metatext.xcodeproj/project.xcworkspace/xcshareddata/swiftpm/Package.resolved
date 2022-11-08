@@ -33,8 +33,8 @@
         "repositoryURL": "https://github.com/groue/CombineExpectations.git",
         "state": {
           "branch": null,
-          "revision": "5c36f3199960776fc055196a93ca04bfc00e1857",
-          "version": "0.7.0"
+          "revision": "04d4e4b21c9e8361925f03f64a7ecda89ef9974f",
+          "version": "0.10.0"
         }
       },
       {
@@ -51,8 +51,8 @@
         "repositoryURL": "https://github.com/SDWebImage/SDWebImage",
         "state": {
           "branch": null,
-          "revision": "76dd4b49110b8624317fc128e7fa0d8a252018bc",
-          "version": "5.11.1"
+          "revision": "318cca556b0489aede0cd98d8d0c7f1408ab7bd6",
+          "version": "5.13.5"
         }
       }
     ]
