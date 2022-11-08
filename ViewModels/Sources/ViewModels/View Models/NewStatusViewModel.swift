@@ -79,11 +79,10 @@ public final class NewStatusViewModel: ObservableObject {
                                 .filter { $0 != (identity ?? identityContext.identity).account?.username }
                                 .map("@".appending))
 
-            if !inReplyTo.isMine {
+            if !mentions.isEmpty {
                 compositionViewModel.text = mentions.joined(separator: " ").appending(" ")
-            } else {
-                compositionViewModel.text = ""
             }
+
             compositionViewModel.contentWarning = inReplyTo.spoilerText
             compositionViewModel.displayContentWarning = !inReplyTo.spoilerText.isEmpty
         } else if let directMessageTo = directMessageTo {
