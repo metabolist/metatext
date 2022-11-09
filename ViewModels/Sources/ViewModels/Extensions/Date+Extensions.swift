@@ -37,7 +37,7 @@ extension Date {
         if
             let oneWeekAgo = calendar.date(byAdding: DateComponents(weekOfMonth: -1), to: now),
             oneWeekAgo < self {
-            return Self.realtiveTimeFormatter.localizedString(for: self, relativeTo: Date())
+            return Self.relativeTimeFormatter.localizedString(for: self, relativeTo: Date())
         }
 
         return Self.accessibilityFullDateComponentsFormatter.string(from: self)
@@ -92,7 +92,7 @@ private extension Date {
         return dateFormatter
     }()
 
-    private static let realtiveTimeFormatter: RelativeDateTimeFormatter = {
+    private static let relativeTimeFormatter: RelativeDateTimeFormatter = {
         let dateFormatter = RelativeDateTimeFormatter()
 
         dateFormatter.unitsStyle = .full
