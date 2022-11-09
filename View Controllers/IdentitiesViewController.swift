@@ -37,7 +37,7 @@ final class IdentitiesViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        if case let .identitiy(identityViewModel) = dataSource.itemIdentifier(for: indexPath) {
+        if case let .identity(identityViewModel) = dataSource.itemIdentifier(for: indexPath) {
             return identityViewModel.id != viewModel.identityContext.identity.id
         }
 
@@ -55,7 +55,7 @@ final class IdentitiesViewController: UITableViewController {
             let addIdentityViewController = UIHostingController(rootView: addIdentityView)
 
             show(addIdentityViewController, sender: self)
-        case let .identitiy(identityViewModel):
+        case let .identity(identityViewModel):
             rootViewModel.identitySelected(id: identityViewModel.id)
         }
     }
@@ -68,7 +68,7 @@ final class IdentitiesViewController: UITableViewController {
         let logOutAction = UIContextualAction(
             style: .destructive,
             title: NSLocalizedString("identities.log-out", comment: "")) { [weak self] _, _, completionHandler in
-            guard let self = self, case let .identitiy(identity) = self.dataSource.itemIdentifier(for: indexPath) else {
+            guard let self = self, case let .identity(identity) = self.dataSource.itemIdentifier(for: indexPath) else {
                 completionHandler(false)
 
                 return
