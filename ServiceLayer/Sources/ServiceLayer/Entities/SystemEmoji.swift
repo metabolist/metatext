@@ -31,7 +31,7 @@ public extension SystemEmoji {
         case animalsAndNature
         case foodAndDrink
         case travelAndPlaces
-        case activites
+        case activities
         case objects
         case symbols
         case flags
