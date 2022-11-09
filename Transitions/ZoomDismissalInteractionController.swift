@@ -107,9 +107,9 @@ final class ZoomDismissalInteractionController: NSObject {
         let totalAvailableAlpha = startingAlpha - finalAlpha
 
         let maximumDelta = view.bounds.height / 4.0
-        let deltaAsPercentageOfMaximun = min(abs(verticalDelta) / maximumDelta, 1.0)
+        let deltaAsPercentageOfMaximum = min(abs(verticalDelta) / maximumDelta, 1.0)
 
-        return startingAlpha - (deltaAsPercentageOfMaximun * totalAvailableAlpha)
+        return startingAlpha - (deltaAsPercentageOfMaximum * totalAvailableAlpha)
     }
 
     func scaleFor(view: UIView, withPanningVerticalDelta verticalDelta: CGFloat) -> CGFloat {
@@ -118,9 +118,9 @@ final class ZoomDismissalInteractionController: NSObject {
         let totalAvailableScale = startingScale - finalScale
 
         let maximumDelta = view.bounds.height / 2.0
-        let deltaAsPercentageOfMaximun = min(abs(verticalDelta) / maximumDelta, 1.0)
+        let deltaAsPercentageOfMaximum = min(abs(verticalDelta) / maximumDelta, 1.0)
 
-        return startingScale - (deltaAsPercentageOfMaximun * totalAvailableScale)
+        return startingScale - (deltaAsPercentageOfMaximum * totalAvailableScale)
     }
 }
 
