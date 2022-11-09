@@ -142,6 +142,8 @@ struct PreferencesView: View {
                         }
                     }
                 }
+                Toggle("preferences.add-reply-prefix-cw",
+                       isOn: $identityContext.appPreferences.addReplyPrefixToContentWarning)
             }
         }
         .navigationTitle("preferences")

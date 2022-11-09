@@ -22,6 +22,8 @@ public final class NewStatusViewModel: ObservableObject {
     private let compositionEventsSubject = PassthroughSubject<CompositionViewModel.Event, Never>()
     private var cancellables = Set<AnyCancellable>()
 
+    private let REPLY_CONTENT_WARNING_PREFIX = "re: "
+
     // swiftlint:disable:next function_body_length
     public init(allIdentitiesService: AllIdentitiesService,
                 identityContext: IdentityContext,
@@ -83,8 +85,17 @@ public final class NewStatusViewModel: ObservableObject {
                 compositionViewModel.text = mentions.joined(separator: " ").appending(" ")
             }
 
-            compositionViewModel.contentWarning = inReplyTo.spoilerText
-            compositionViewModel.displayContentWarning = !inReplyTo.spoilerText.isEmpty
+            let contentWarning = inReplyTo.spoilerText
+            let hasContentWarning = !contentWarning.isEmpty
+
+            let needsPrefix =
+                hasContentWarning
+                && identityContext.appPreferences.addReplyPrefixToContentWarning
+                && !contentWarning.hasPrefix(REPLY_CONTENT_WARNING_PREFIX)
+            let prefix = needsPrefix ? REPLY_CONTENT_WARNING_PREFIX : ""
+
+            compositionViewModel.displayContentWarning = hasContentWarning
+            compositionViewModel.contentWarning = prefix + contentWarning
         } else if let directMessageTo = directMessageTo {
             compositionViewModel.text = directMessageTo.accountName.appending(" ")
             visibility = .direct

@@ -181,6 +181,11 @@ public extension AppPreferences {
         get { self[.useUniversalLinks] ?? true }
         set { self[.useUniversalLinks] = newValue }
     }
+
+    var addReplyPrefixToContentWarning: Bool {
+        get { self[.addReplyPrefixToContentWarning] ?? false }
+        set { self[.addReplyPrefixToContentWarning] = newValue }
+    }
 }
 
 private extension AppPreferences {
@@ -202,6 +207,7 @@ private extension AppPreferences {
         case notificationSounds
         case openLinksInDefaultBrowser
         case useUniversalLinks
+        case addReplyPrefixToContentWarning
     }
 
     subscript<T>(index: Item) -> T? {
