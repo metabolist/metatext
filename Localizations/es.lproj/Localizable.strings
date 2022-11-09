@@ -248,6 +248,7 @@
 "preferences.require-double-tap-to-favorite" = "Doble tap para añadir a favoritos";
 "preferences.show-reblog-and-favorite-counts" = "Mostrar boost y cuentas favoritas";
 "preferences.status-word" = "Palabra de estado";
+"preferences.add-reply-prefix-cw" = "Anteponer \"re: \" a las advertencias de contenido al responder";
 "filters.active" = "Activo";
 "filters.expired" = "Ha caducado";
 "filter.add-new" = "Añadir un filtro nuevo";

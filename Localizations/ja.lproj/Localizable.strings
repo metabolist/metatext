@@ -248,6 +248,7 @@
 "preferences.require-double-tap-to-favorite" = "ダブルタップでお気に入り";
 "preferences.show-reblog-and-favorite-counts" = "ブースト・お気に入り数を表示";
 "preferences.status-word" = "ステータスを表す言葉";
+"preferences.add-reply-prefix-cw" = "返信するとき警告に \"re: \"を付加する";
 "filters.active" = "有効";
 "filters.expired" = "期限切れ";
 "filter.add-new" = "新しいフィルターを追加";

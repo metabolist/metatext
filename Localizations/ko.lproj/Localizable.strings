@@ -248,6 +248,7 @@
 "preferences.require-double-tap-to-favorite" = "두 번 탭 해서 즐겨찾기";
 "preferences.show-reblog-and-favorite-counts" = "부스트 및 즐겨찾기 수 표시";
 "preferences.status-word" = "상태를 나타내는 말";
+"preferences.add-reply-prefix-cw" = "열람주의가 달린 글에 답장을 할 때 열람주의 문구 앞에 “re: ”를 추가합니다";
 "filters.active" = "활성화";
 "filters.expired" = "만료된 필터";
 "filter.add-new" = "새 필터 추가";
