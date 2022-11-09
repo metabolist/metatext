@@ -22,6 +22,17 @@ struct SecondaryNavigationView: View {
                         }
                     }
                 }
+                if let instanceURI = viewModel.identityContext.identity.instance?.uri {
+                    Button {
+                        viewModel.navigateToAccountSettings(instanceURI: instanceURI)
+                    } label: {
+                        Label {
+                            Text("secondary-navigation.account-settings").foregroundColor(.primary)
+                        } icon: {
+                            Image(systemName: "person.crop.square")
+                        }
+                    }
+                }
                 NavigationLink(
                     destination: IdentitiesView { .init(identityContext: viewModel.identityContext) }
                         .environmentObject(rootViewModel)) {
@@ -84,7 +95,7 @@ import PreviewViewModels
 
 struct SecondaryNavigationView_Previews: PreviewProvider {
     static var previews: some View {
-        SecondaryNavigationView(viewModel: NavigationViewModel(identityContext: .preview))
+        SecondaryNavigationView(viewModel: NavigationViewModel(identityContext: .preview, environment: .preview))
             .environmentObject(RootViewModel.preview)
     }
 }

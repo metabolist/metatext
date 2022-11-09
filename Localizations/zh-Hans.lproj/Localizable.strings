@@ -160,6 +160,7 @@
 "registration.agree-to-server-rules-and-terms-of-service" = "我同意实例规则和服务条款";
 "registration.password-confirmation-mismatch" = "密码和确认密码不匹配";
 "secondary-navigation.about" = "关于这个应用";
+"secondary-navigation.account-settings" = "账号设置";
 "secondary-navigation.accounts" = "账户";
 "secondary-navigation.lists" = "列表";
 "secondary-navigation.my-profile" = "我的个人资料";

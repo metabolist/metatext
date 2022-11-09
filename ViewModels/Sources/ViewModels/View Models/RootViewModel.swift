@@ -143,7 +143,7 @@ private extension RootViewModel {
                     self.notifyIdentityChange(identityContext: identityContext)
                 }
 
-                return NavigationViewModel(identityContext: identityContext)
+                return NavigationViewModel(identityContext: identityContext, environment: self.environment)
             }
             .assign(to: &$navigationViewModel)
     }

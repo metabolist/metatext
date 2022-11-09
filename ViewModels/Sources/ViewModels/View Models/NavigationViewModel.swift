@@ -16,10 +16,12 @@ public final class NavigationViewModel: ObservableObject {
     @Published public var alertItem: AlertItem?
 
     private let navigationsSubject = PassthroughSubject<Navigation, Never>()
+    private let environment: AppEnvironment
     private var cancellables = Set<AnyCancellable>()
 
-    public init(identityContext: IdentityContext) {
+    public init(identityContext: IdentityContext, environment: AppEnvironment) {
         self.identityContext = identityContext
+        self.environment = environment
         navigations = navigationsSubject.eraseToAnyPublisher()
 
         identityContext.$identity
@@ -102,6 +104,12 @@ public extension NavigationViewModel {
         presentingSecondaryNavigation = false
         presentedNewStatusViewModel = nil
         navigationsSubject.send(.profile(identityContext.service.navigationService.profileService(id: id)))
+    }
+
+    func navigateToAccountSettings(instanceURI: String) {
+        AccountSettingsService(instanceURI: instanceURI, environment: environment).openAccountSettings()
+            .sink { _ in } receiveValue: { _ in }
+            .store(in: &cancellables)
     }
 
     func navigate(timeline: Timeline) {
