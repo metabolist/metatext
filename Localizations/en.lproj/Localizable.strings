@@ -217,7 +217,7 @@
 "preferences.media.autoplay.wifi" = "On Wi-Fi";
 "preferences.media.autoplay.never" = "Never";
 "preferences.use-preferences-from-server" = "Use preferences from server";
-"preferences.posting-default-visiblility" = "Default visibility";
+"preferences.posting-default-visibility" = "Default visibility";
 "preferences.posting-default-sensitive" = "Mark content sensitive by default";
 "preferences.reading-expand-media" = "Expand media";
 "preferences.expand-media.default" = "Hide sensitive";
