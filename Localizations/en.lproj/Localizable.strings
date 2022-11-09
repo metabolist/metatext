@@ -117,7 +117,7 @@
 "compose.emoji-button" = "Emoji picker";
 "compose.mark-media-sensitive" = "Mark media as sensitive";
 "compose.photo-library" = "Photo Library";
-"compose.poll.accessibility.multiple-choices-allowed" = "Mutliple choices allowed";
+"compose.poll.accessibility.multiple-choices-allowed" = "Multiple choices allowed";
 "compose.poll.add-choice" = "Add a choice";
 "compose.poll.allow-multiple-choices" = "Allow multiple choices";
 "compose.poll-button.accessibility-label" = "Add a poll";
