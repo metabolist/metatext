@@ -59,6 +59,14 @@ final class TableViewDataSource: UITableViewDiffableDataSource<CollectionSection
         }
     }
 
+    override func applySnapshotUsingReloadData(
+        _ snapshot: NSDiffableDataSourceSnapshot<CollectionSection.Identifier, CollectionItem>,
+        completion: (() -> Void)? = nil) {
+            updateQueue.async {
+                super.applySnapshotUsingReloadData(snapshot, completion: completion)
+            }
+        }
+
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         let currentSnapshot = snapshot()
         let section = currentSnapshot.sectionIdentifiers[section]

@@ -497,7 +497,7 @@ private extension TableViewController {
             setPreviousOffset = true
         }
 
-        self.dataSource.apply(update.sections.snapshot(), animatingDifferences: false) { [weak self] in
+        self.dataSource.applySnapshotUsingReloadData(update.sections.snapshot()) { [weak self] in
             guard let self = self else { return }
 
             if let itemId = update.maintainScrollPositionItemId,
