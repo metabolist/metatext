@@ -197,7 +197,8 @@
 "notifications.mentions" = "提及";
 "ok" = "確定";
 "pending.pending-confirmation" = "您的帳號正在審核中";
-"post" = "嘟文";
+"post.action" = "嘟文";
+"post.noun" = "嘟文";
 "preferences" = "偏好設定";
 "preferences.app" = "偏好設定";
 "preferences.app-icon" = "應用程式圖標";
@@ -298,7 +299,7 @@
 "search.scope.statuses.toot" = "嘟文";
 "search.scope.tags" = "主題標籤";
 "selected" = "已選擇";
-"send" = "發送";
+"send.action" = "發送";
 "share" = "分享";
 "share-extension-error.no-account-found" = "未找到帳號";
 "status.accessibility.view-author-profile" = "查看作者的個人檔案";
@@ -355,4 +356,5 @@
 "timelines.home" = "首頁";
 "timelines.local" = "本站";
 "timelines.federated" = "聯邦宇宙";
-"toot" = "嘟出去";
+"toot.action" = "嘟出去";
+"toot.noun" = "嘟出去";

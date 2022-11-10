@@ -197,7 +197,8 @@
 "notifications.mentions" = "Aipamenak";
 "ok" = "Ados";
 "pending.pending-confirmation" = "Zure kontua baieztapenaren zain dago";
-"post" = "Bidali";
+"post.action" = "Bidali";
+"post.noun" = "Bidali";
 "preferences" = "Hobespenak";
 "preferences.app" = "Aplikazioaren hobespenak";
 "preferences.app-icon" = "Aplikazioaren ikonoa";
@@ -298,7 +299,7 @@
 "search.scope.statuses.toot" = "Tutak";
 "search.scope.tags" = "Traolak";
 "selected" = "Hautatuak";
-"send" = "Bidali";
+"send.action" = "Bidali";
 "share" = "Partekatu";
 "share-extension-error.no-account-found" = "Ez da konturik aurkitu";
 "status.accessibility.view-author-profile" = "Ikusi egilearen profila";
@@ -355,4 +356,5 @@
 "timelines.home" = "Hasiera";
 "timelines.local" = "Lokala";
 "timelines.federated" = "Federatua";
-"toot" = "Bidali";
+"toot.action" = "Bidali";
+"toot.noun" = "Bidali";

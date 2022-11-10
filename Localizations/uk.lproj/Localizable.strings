@@ -197,7 +197,8 @@
 "notifications.mentions" = "Згадування";
 "ok" = "Гаразд";
 "pending.pending-confirmation" = "Ваш обліковий запис очікує на підтвердження";
-"post" = "Допис";
+"post.action" = "Дописи";
+"post.noun" = "Допис";
 "preferences" = "Налаштування";
 "preferences.app" = "Налаштування додатку";
 "preferences.app-icon" = "Значок додатку";
@@ -298,7 +299,7 @@
 "search.scope.statuses.toot" = "Гуки";
 "search.scope.tags" = "Хештеги";
 "selected" = "Вибрано";
-"send" = "Надіслати";
+"send.action" = "Надіслати";
 "share" = "Поділитися";
 "share-extension-error.no-account-found" = "Обліковий запис не знайдено";
 "status.accessibility.view-author-profile" = "Переглянути профіль автора";
@@ -355,4 +356,5 @@
 "timelines.home" = "Головна";
 "timelines.local" = "Локальна";
 "timelines.federated" = "Глобальна";
-"toot" = "Гук";
+"toot.action" = "Гуки";
+"toot.noun" = "Гук";

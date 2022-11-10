@@ -197,7 +197,8 @@
 "notifications.mentions" = "Упоминания";
 "ok" = "ОК";
 "pending.pending-confirmation" = "Ваша учетная запись ожидает подтверждения";
-"post" = "Пост";
+"post.action" = "Пост";
+"post.noun" = "Пост";
 "preferences" = "Настройки";
 "preferences.app" = "Настройки приложения";
 "preferences.app-icon" = "Значок приложения";
@@ -298,7 +299,7 @@
 "search.scope.statuses.toot" = "Туты";
 "search.scope.tags" = "Хештеги";
 "selected" = "Выбрано";
-"send" = "Отправить";
+"send.action" = "Отправить";
 "share" = "Поделиться";
 "share-extension-error.no-account-found" = "Аккаунт не найден";
 "status.accessibility.view-author-profile" = "Просмотр профиля автора";
@@ -355,4 +356,5 @@
 "timelines.home" = "Главная";
 "timelines.local" = "Локальная";
 "timelines.federated" = "Глобальная";
-"toot" = "Отправить";
+"toot.action" = "Отправить";
+"toot.noun" = "Отправить";

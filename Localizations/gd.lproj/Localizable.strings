@@ -197,7 +197,8 @@
 "notifications.mentions" = "Iomraidhean";
 "ok" = "Ceart ma-thà";
 "pending.pending-confirmation" = "Tha an cunntas agad a’ feitheamh air dearbhadh";
-"post" = "Postaich";
+"post.action" = "Postadh";
+"post.noun" = "Postaich";
 "preferences" = "Roghainnean";
 "preferences.app" = "Roghainnean na h-aplacaide";
 "preferences.app-icon" = "Ìomhaigheag na h-aplacaide";
@@ -298,7 +299,7 @@
 "search.scope.statuses.toot" = "Postaichean";
 "search.scope.tags" = "Tagaichean hais";
 "selected" = "Air a thaghadh";
-"send" = "Cuir";
+"send.action" = "Cuir";
 "share" = "Co-roinn";
 "share-extension-error.no-account-found" = "Cha deach cunntas a lorg";
 "status.accessibility.view-author-profile" = "Seall pròifil an ùghdair";
@@ -355,4 +356,5 @@
 "timelines.home" = "Dachaigh";
 "timelines.local" = "Ionadail";
 "timelines.federated" = "Co-naisgte";
-"toot" = "Postaich";
+"toot.action" = "Postadh";
+"toot.noun" = "Postaich";

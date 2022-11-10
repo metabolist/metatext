@@ -197,7 +197,8 @@
 "notifications.mentions" = "提及";
 "ok" = "确定";
 "pending.pending-confirmation" = "你的帐户正在等待确认";
-"post" = "帖子";
+"post.action" = "帖子";
+"post.noun" = "帖子";
 "preferences" = "偏好设置";
 "preferences.app" = "应用偏好设置";
 "preferences.app-icon" = "应用图标";
@@ -298,7 +299,7 @@
 "search.scope.statuses.toot" = "嘟文";
 "search.scope.tags" = "标签";
 "selected" = "已选择";
-"send" = "发送";
+"send.action" = "发送";
 "share" = "分享";
 "share-extension-error.no-account-found" = "未找到账户";
 "status.accessibility.view-author-profile" = "查看作者的个人资料";
@@ -355,4 +356,5 @@
 "timelines.home" = "主页";
 "timelines.local" = "本地";
 "timelines.federated" = "联邦宇宙";
-"toot" = "嘟文";
+"toot.action" = "嘟文";
+"toot.noun" = "嘟文";

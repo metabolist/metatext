@@ -197,7 +197,8 @@
 "notifications.mentions" = "Αναφορές";
 "ok" = "Εντάξει";
 "pending.pending-confirmation" = "Ο λογαριασμός σας εκκρεμεί επιβεβαίωση";
-"post" = "Δημοσίευση";
+"post.action" = "Δημοσίευση";
+"post.noun" = "Δημοσίευση";
 "preferences" = "Προτιμήσεις";
 "preferences.app" = "Προτιμήσεις Εφαρμογής";
 "preferences.app-icon" = "Εικονίδιο Εφαρμογής";
@@ -298,7 +299,7 @@
 "search.scope.statuses.toot" = "Toots";
 "search.scope.tags" = "Hashtags";
 "selected" = "Επιλεγμένο";
-"send" = "Αποστολή";
+"send.action" = "Αποστολή";
 "share" = "Κοινοποίηση";
 "share-extension-error.no-account-found" = "Δε βρέθηκε λογαριασμός";
 "status.accessibility.view-author-profile" = "Προβολή προφίλ συγγραφέα";
@@ -355,4 +356,5 @@
 "timelines.home" = "Αρχική";
 "timelines.local" = "Τοπικό";
 "timelines.federated" = "Ομοσπονδιακό";
-"toot" = "Toot";
+"toot.action" = "Toot";
+"toot.noun" = "Toot";

@@ -197,7 +197,8 @@
 "notifications.mentions" = "Omnämnanden";
 "ok" = "OK";
 "pending.pending-confirmation" = "Ditt konto är ännu inte bekräftat";
-"post" = "Publicera";
+"post.action" = "Publicera";
+"post.noun" = "Publicera";
 "preferences" = "Inställningar";
 "preferences.app" = "Appinställningar";
 "preferences.app-icon" = "Appikon";
@@ -298,7 +299,7 @@
 "search.scope.statuses.toot" = "Toots";
 "search.scope.tags" = "Hashtaggar";
 "selected" = "Valda";
-"send" = "Skicka";
+"send.action" = "Skicka";
 "share" = "Dela";
 "share-extension-error.no-account-found" = "Inget konto hittades";
 "status.accessibility.view-author-profile" = "Visa författarens profil";
@@ -355,4 +356,5 @@
 "timelines.home" = "Hem";
 "timelines.local" = "Lokalt";
 "timelines.federated" = "Federerat";
-"toot" = "Toot";
+"toot.action" = "Toot";
+"toot.noun" = "Toot";

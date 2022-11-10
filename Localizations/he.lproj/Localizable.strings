@@ -197,7 +197,8 @@
 "notifications.mentions" = "איזכורים";
 "ok" = "אישור";
 "pending.pending-confirmation" = "החשבון שלך ממתין לאישור";
-"post" = "פרסום";
+"post.action" = "פרסום";
+"post.noun" = "פרסום";
 "preferences" = "העדפות";
 "preferences.app" = "העדפות אפליקציה";
 "preferences.app-icon" = "סמל אפליקציה";
@@ -298,7 +299,7 @@
 "search.scope.statuses.toot" = "חיצרוצים";
 "search.scope.tags" = "תגיות";
 "selected" = "נבחר";
-"send" = "שליחה";
+"send.action" = "שליחה";
 "share" = "שיתוף";
 "share-extension-error.no-account-found" = "לא נמצא חשבון";
 "status.accessibility.view-author-profile" = "צפיה בפרופיל של כותב הפוסט";
@@ -355,4 +356,5 @@
 "timelines.home" = "בית";
 "timelines.local" = "מקומי";
 "timelines.federated" = "בפדרציה";
-"toot" = "חיצרוץ";
+"toot.action" = "חיצרוץ";
+"toot.noun" = "חיצרוץ";

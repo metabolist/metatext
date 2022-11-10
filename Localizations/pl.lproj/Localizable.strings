@@ -197,7 +197,8 @@
 "notifications.mentions" = "Wzmianki";
 "ok" = "OK";
 "pending.pending-confirmation" = "Twoje konto oczekuje na potwierdzenie";
-"post" = "Post";
+"post.noun" = "Post";
+"post.action" = "Post";
 "preferences" = "Właściwości";
 "preferences.app" = "Ustawienia aplikacji";
 "preferences.app-icon" = "Ikona aplikacji";
@@ -298,7 +299,7 @@
 "search.scope.statuses.toot" = "Tooty";
 "search.scope.tags" = "Hashtagi";
 "selected" = "Wybrane";
-"send" = "Wyślij";
+"send.action" = "Wyślij";
 "share" = "Udostępnij";
 "share-extension-error.no-account-found" = "Nie znalazłem konta";
 "status.accessibility.view-author-profile" = "Wyświetl profil autora";
@@ -355,4 +356,5 @@
 "timelines.home" = "Domowa";
 "timelines.local" = "Lokalna";
 "timelines.federated" = "Globalna";
-"toot" = "Toot";
+"toot.action" = "Toot";
+"toot.noun" = "Toot";

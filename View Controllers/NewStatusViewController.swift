@@ -484,11 +484,11 @@ private extension NewStatusViewController {
     func postActionTitle(statusWord: AppPreferences.StatusWord, visibility: Status.Visibility) -> String {
         switch (statusWord, visibility) {
         case (_, .direct):
-            return NSLocalizedString("send", comment: "")
+            return NSLocalizedString("send.action", comment: "")
         case (.toot, _):
-            return NSLocalizedString("toot", comment: "")
+            return NSLocalizedString("toot.action", comment: "")
         case (.post, _):
-            return NSLocalizedString("post", comment: "")
+            return NSLocalizedString("post.action", comment: "")
         }
     }
 }

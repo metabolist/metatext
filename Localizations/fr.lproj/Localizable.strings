@@ -197,7 +197,8 @@
 "notifications.mentions" = "Mentions";
 "ok" = "D'accord";
 "pending.pending-confirmation" = "Votre compte est en attente de confirmation";
-"post" = "Publier";
+"post.action" = "Publier";
+"post.noun" = "Publication";
 "preferences" = "Paramètres";
 "preferences.app" = "Paramètres de l'application";
 "preferences.app-icon" = "Icône de l’application";
@@ -298,7 +299,7 @@
 "search.scope.statuses.toot" = "Pouets";
 "search.scope.tags" = "Mots clés";
 "selected" = "Sélectionné";
-"send" = "Envoyer";
+"send.action" = "Envoyer";
 "share" = "Partager";
 "share-extension-error.no-account-found" = "Aucun compte trouvé";
 "status.accessibility.view-author-profile" = "Voir le profil de l'auteur";
@@ -355,4 +356,5 @@
 "timelines.home" = "Global";
 "timelines.local" = "Local";
 "timelines.federated" = "Fédéré";
-"toot" = "Pouet";
+"toot.action" = "Pouet";
+"toot.noun" = "Pouet";
