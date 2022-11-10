@@ -106,8 +106,18 @@ public extension NavigationViewModel {
         navigationsSubject.send(.profile(identityContext.service.navigationService.profileService(id: id)))
     }
 
+    func navigateToEditProfile(instanceURI: String) {
+        guard let editProfileURL = editProfileURL(instanceURI: instanceURI) else { return }
+
+        AuthenticatedWebViewService(environment: environment).authenticatedWebViewPublisher(url: editProfileURL)
+            .sink { _ in } receiveValue: { _ in }
+            .store(in: &cancellables)
+    }
+
     func navigateToAccountSettings(instanceURI: String) {
-        AccountSettingsService(instanceURI: instanceURI, environment: environment).openAccountSettings()
+        guard let accountSettingsURL = accountSettingsURL(instanceURI: instanceURI) else { return }
+
+        AuthenticatedWebViewService(environment: environment).authenticatedWebViewPublisher(url: accountSettingsURL)
             .sink { _ in } receiveValue: { _ in }
             .store(in: &cancellables)
     }
@@ -209,5 +219,15 @@ public extension NavigationViewModel {
         CollectionItemsViewModel(
             collectionService: identityContext.service.announcementsService(),
             identityContext: identityContext)
+    }
+}
+
+private extension NavigationViewModel {
+    func accountSettingsURL(instanceURI: String) -> URL? {
+        URL(string: "https://\(instanceURI)/auth/edit")
+    }
+
+    func editProfileURL(instanceURI: String) -> URL? {
+        URL(string: "https://\(instanceURI)/settings/profile")
     }
 }

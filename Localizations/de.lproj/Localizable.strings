@@ -162,6 +162,7 @@
 "secondary-navigation.about" = "Über diese App";
 "secondary-navigation.account-settings" = "Kontoeinstellungen";
 "secondary-navigation.accounts" = "Accounts";
+"secondary-navigation.edit-profile" = "Profil bearbeiten";
 "secondary-navigation.lists" = "Listen";
 "secondary-navigation.my-profile" = "Mein Profil";
 "secondary-navigation.preferences" = "Einstellungen";

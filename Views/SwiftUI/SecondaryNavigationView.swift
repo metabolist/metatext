@@ -24,12 +24,21 @@ struct SecondaryNavigationView: View {
                 }
                 if let instanceURI = viewModel.identityContext.identity.instance?.uri {
                     Button {
+                        viewModel.navigateToEditProfile(instanceURI: instanceURI)
+                    } label: {
+                        Label {
+                            Text("secondary-navigation.edit-profile").foregroundColor(.primary)
+                        } icon: {
+                            Image(systemName: "pencil")
+                        }
+                    }
+                    Button {
                         viewModel.navigateToAccountSettings(instanceURI: instanceURI)
                     } label: {
                         Label {
                             Text("secondary-navigation.account-settings").foregroundColor(.primary)
                         } icon: {
-                            Image(systemName: "person.crop.square")
+                            Image(systemName: "person.crop.square.filled.and.at.rectangle")
                         }
                     }
                 }

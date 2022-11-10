@@ -162,6 +162,7 @@
 "secondary-navigation.about" = "О приложении";
 "secondary-navigation.account-settings" = "Настройки аккаунта";
 "secondary-navigation.accounts" = "Аккаунты";
+"secondary-navigation.edit-profile" = "Редактировать профиль";
 "secondary-navigation.lists" = "Списки";
 "secondary-navigation.my-profile" = "Профиль";
 "secondary-navigation.preferences" = "Настройки";

@@ -162,6 +162,7 @@
 "secondary-navigation.about" = "关于这个应用";
 "secondary-navigation.account-settings" = "账号设置";
 "secondary-navigation.accounts" = "账户";
+"secondary-navigation.edit-profile" = "修改个人资料";
 "secondary-navigation.lists" = "列表";
 "secondary-navigation.my-profile" = "我的个人资料";
 "secondary-navigation.preferences" = "偏好设置";

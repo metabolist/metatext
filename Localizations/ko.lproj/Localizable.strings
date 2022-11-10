@@ -162,6 +162,7 @@
 "secondary-navigation.about" = "이 앱에 대해서";
 "secondary-navigation.account-settings" = "계정 설정";
 "secondary-navigation.accounts" = "계정";
+"secondary-navigation.edit-profile" = "프로필 편집";
 "secondary-navigation.lists" = "목록";
 "secondary-navigation.my-profile" = "내 프로필";
 "secondary-navigation.preferences" = "설정";

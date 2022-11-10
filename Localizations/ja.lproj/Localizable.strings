@@ -162,6 +162,7 @@
 "secondary-navigation.about" = "このアプリについて";
 "secondary-navigation.account-settings" = "アカウント設定";
 "secondary-navigation.accounts" = "アカウント";
+"secondary-navigation.edit-profile" = "プロフィール編集";
 "secondary-navigation.lists" = "リスト";
 "secondary-navigation.my-profile" = "マイプロフィール";
 "secondary-navigation.preferences" = "環境設定";
