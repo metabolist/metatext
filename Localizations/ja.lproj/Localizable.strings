@@ -201,6 +201,10 @@
 "preferences" = "環境設定";
 "preferences.app" = "アプリ環境設定";
 "preferences.app-icon" = "アプリアイコン";
+"preferences.app.color-scheme" = "Appearance";
+"preferences.app.color-scheme.dark" = "Dark";
+"preferences.app.color-scheme.light" = "Light";
+"preferences.app.color-scheme.system" = "System";
 "preferences.blocked-domains" = "ブロックしたドメイン";
 "preferences.blocked-users" = "ブロックしたユーザー";
 "preferences.media" = "メディア";

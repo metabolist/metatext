@@ -201,6 +201,10 @@
 "preferences" = "Właściwości";
 "preferences.app" = "Ustawienia aplikacji";
 "preferences.app-icon" = "Ikona aplikacji";
+"preferences.app.color-scheme" = "Appearance";
+"preferences.app.color-scheme.dark" = "Dark";
+"preferences.app.color-scheme.light" = "Light";
+"preferences.app.color-scheme.system" = "System";
 "preferences.blocked-domains" = "Zablokowane domeny";
 "preferences.blocked-users" = "Zablokowane profile";
 "preferences.media" = "Media";

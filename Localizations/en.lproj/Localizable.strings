@@ -201,6 +201,10 @@
 "preferences" = "Preferences";
 "preferences.app" = "App Preferences";
 "preferences.app-icon" = "App Icon";
+"preferences.app.color-scheme" = "Appearance";
+"preferences.app.color-scheme.dark" = "Dark";
+"preferences.app.color-scheme.light" = "Light";
+"preferences.app.color-scheme.system" = "System";
 "preferences.blocked-domains" = "Blocked Domains";
 "preferences.blocked-users" = "Blocked Users";
 "preferences.media" = "Media";
@@ -344,6 +348,7 @@
 "status.visibility.unlisted.description" = "Visible for all, but not in public timelines";
 "status.visibility.private.description" = "Visible for followers only";
 "status.visibility.direct.description" = "Visible for mentioned users only";
+"system" = "System";
 "tag.accessibility-recent-uses-%ld" = "%ld recent uses";
 "tag.accessibility-hint.post" = "View posts associated with trend";
 "tag.accessibility-hint.toot" = "View toots associated with trend";
