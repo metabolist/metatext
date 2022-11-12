@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		75F7B3CC291F51D300FDE7C7 /* SwipeableNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F7B3CB291F51D300FDE7C7 /* SwipeableNavigationController.swift */; };
 		D0030982250C6C8500EACB32 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0030981250C6C8500EACB32 /* URL+Extensions.swift */; };
 		D005A1D825EF189A008B2E63 /* ReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D005A1D725EF189A008B2E63 /* ReportViewController.swift */; };
 		D005A1E625EF3D11008B2E63 /* ReportHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D005A1E525EF3D11008B2E63 /* ReportHeaderView.swift */; };
@@ -299,6 +300,7 @@
 		68865A2F292349BF001BF177 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = fr; path = fr.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		68865A3029234A68001BF177 /* gd */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gd; path = gd.lproj/Localizable.strings; sourceTree = "<group>"; };
 		68865A3129234A68001BF177 /* gd */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = gd; path = gd.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		75F7B3CB291F51D300FDE7C7 /* SwipeableNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeableNavigationController.swift; sourceTree = "<group>"; };
 		D0030981250C6C8500EACB32 /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
 		D005A1D725EF189A008B2E63 /* ReportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportViewController.swift; sourceTree = "<group>"; };
 		D005A1E525EF3D11008B2E63 /* ReportHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportHeaderView.swift; sourceTree = "<group>"; };
@@ -850,6 +852,7 @@
 				D005A1D725EF189A008B2E63 /* ReportViewController.swift */,
 				D0F0B12D251A97E400942152 /* TableViewController.swift */,
 				D035F87C25B7F61600DC75ED /* TimelinesViewController.swift */,
+				75F7B3CB291F51D300FDE7C7 /* SwipeableNavigationController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -1221,6 +1224,7 @@
 				D01F41D924F880C400D55A2D /* TouchFallthroughTextView.swift in Sources */,
 				D0C7D4D624F7616A001EBDBB /* NSMutableAttributedString+Extensions.swift in Sources */,
 				D08B9F1025CB8E060062D040 /* NotificationPreferencesView.swift in Sources */,
+				75F7B3CC291F51D300FDE7C7 /* SwipeableNavigationController.swift in Sources */,
 				D0E9F9AA258450B300EF503D /* CompositionInputAccessoryView.swift in Sources */,
 				D021A60A25C36B32008A0C0D /* IdentityTableViewCell.swift in Sources */,
 				D0849C7F25903C4900A5EBCC /* Status+Extensions.swift in Sources */,
