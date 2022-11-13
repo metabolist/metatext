@@ -8,29 +8,26 @@ struct RootView: View {
     @StateObject var viewModel: RootViewModel
 
     var body: some View {
-        Group {
-            if let navigationViewModel = viewModel.navigationViewModel {
-                MainNavigationView { navigationViewModel }
-                    .id(navigationViewModel.identityContext.identity.id)
-                    .environmentObject(viewModel)
-                    .transition(.opacity)
-                    .edgesIgnoringSafeArea(.all)
-                    .onReceive(navigationViewModel.identityContext.$appPreferences.map(\.colorScheme),
-                               perform: setColorScheme)
-            } else {
-                NavigationView {
-                    AddIdentityView(
-                        viewModelClosure: { viewModel.addIdentityViewModel() },
-                        displayWelcome: true)
-                    .navigationBarTitleDisplayMode(.inline)
-                    .navigationBarHidden(true)
-                }
+        if let navigationViewModel = viewModel.navigationViewModel {
+            MainNavigationView { navigationViewModel }
+                .id(navigationViewModel.identityContext.identity.id)
                 .environmentObject(viewModel)
-                .navigationViewStyle(StackNavigationViewStyle())
                 .transition(.opacity)
+                .edgesIgnoringSafeArea(.all)
+                .onReceive(navigationViewModel.identityContext.$appPreferences.map(\.colorScheme),
+                           perform: setColorScheme)
+        } else {
+            NavigationView {
+                AddIdentityView(
+                    viewModelClosure: { viewModel.addIdentityViewModel() },
+                    displayWelcome: true)
+                .navigationBarTitleDisplayMode(.inline)
+                .navigationBarHidden(true)
             }
+            .environmentObject(viewModel)
+            .navigationViewStyle(StackNavigationViewStyle())
+            .transition(.opacity)
         }
-
     }
 }
 
