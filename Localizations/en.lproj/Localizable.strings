@@ -348,7 +348,6 @@
 "status.visibility.unlisted.description" = "Visible for all, but not in public timelines";
 "status.visibility.private.description" = "Visible for followers only";
 "status.visibility.direct.description" = "Visible for mentioned users only";
-"system" = "System";
 "tag.accessibility-recent-uses-%ld" = "%ld recent uses";
 "tag.accessibility-hint.post" = "View posts associated with trend";
 "tag.accessibility-hint.toot" = "View toots associated with trend";

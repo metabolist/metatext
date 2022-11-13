@@ -6,7 +6,7 @@ import Mastodon
 import ServiceLayer
 
 public final class NavigationViewModel: ObservableObject {
-    @Published public private(set) var identityContext: IdentityContext
+    public let identityContext: IdentityContext
     public let navigations: AnyPublisher<Navigation, Never>
 
     @Published public private(set) var recentIdentities = [Identity]()

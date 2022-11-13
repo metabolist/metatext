@@ -6,11 +6,6 @@ import ViewModels
 
 struct RootView: View {
     @StateObject var viewModel: RootViewModel
-    @State private var previousColorScheme: AppPreferences.ColorScheme = .system
-    var appPreferencesPublisher: AnyPublisher<AppPreferences, Never> {
-        viewModel.navigationViewModel?.identityContext.$appPreferences.eraseToAnyPublisher()
-            ?? Empty<AppPreferences, Never>().eraseToAnyPublisher()
-    }
 
     var body: some View {
         Group {
@@ -20,6 +15,8 @@ struct RootView: View {
                     .environmentObject(viewModel)
                     .transition(.opacity)
                     .edgesIgnoringSafeArea(.all)
+                    .onReceive(navigationViewModel.identityContext.$appPreferences.map(\.colorScheme),
+                               perform: setColorScheme)
             } else {
                 NavigationView {
                     AddIdentityView(
@@ -33,19 +30,17 @@ struct RootView: View {
                 .transition(.opacity)
             }
         }
-        .onReceive(appPreferencesPublisher) { preferences in
-            if preferences.colorScheme != previousColorScheme {
-                self.previousColorScheme = preferences.colorScheme
-                setColorScheme(preferences.colorScheme)
+
+    }
+}
+
+private extension RootView {
+    func setColorScheme(_ colorScheme: AppPreferences.ColorScheme) {
+        for scene in UIApplication.shared.connectedScenes.compactMap({ $0 as? UIWindowScene }) {
+            for window in scene.windows {
+                window.overrideUserInterfaceStyle = colorScheme.uiKit
             }
         }
-    }
-
-    private func setColorScheme(_ colorScheme: AppPreferences.ColorScheme) {
-        let scenes = UIApplication.shared.connectedScenes
-        let windowScenes = scenes.first as? UIWindowScene
-        let window = windowScenes?.windows.first
-        window?.overrideUserInterfaceStyle = colorScheme.uiKit
     }
 }
 
