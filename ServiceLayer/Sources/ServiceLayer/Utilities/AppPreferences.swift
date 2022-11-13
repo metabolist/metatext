@@ -17,6 +17,14 @@ public struct AppPreferences {
 }
 
 public extension AppPreferences {
+    enum ColorScheme: String, CaseIterable, Identifiable {
+        case system
+        case light
+        case dark
+
+        public var id: String { rawValue }
+    }
+
     enum StatusWord: String, CaseIterable, Identifiable {
         case toot
         case post
@@ -45,6 +53,18 @@ public extension AppPreferences {
         case newest
 
         public var id: String { rawValue }
+    }
+
+    var colorScheme: ColorScheme {
+        get {
+            if let rawValue = self[.colorScheme] as String?,
+               let value = ColorScheme(rawValue: rawValue) {
+                return value
+            }
+
+            return .system
+        }
+        set { self[.colorScheme] = newValue.rawValue }
     }
 
     var statusWord: StatusWord {
@@ -185,6 +205,7 @@ public extension AppPreferences {
 
 private extension AppPreferences {
     enum Item: String {
+        case colorScheme
         case statusWord
         case requireDoubleTapToReblog
         case requireDoubleTapToFavorite

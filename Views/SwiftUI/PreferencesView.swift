@@ -88,6 +88,11 @@ struct PreferencesView: View {
                             }
                         }
                     }
+                    Picker("preferences.app.color-scheme", selection: $identityContext.appPreferences.colorScheme) {
+                        ForEach(AppPreferences.ColorScheme.allCases) { option in
+                            Text(option.localizedStringKey).tag(option)
+                        }
+                    }
                     NavigationLink("preferences.notifications",
                                    destination: NotificationPreferencesView(viewModel: viewModel))
                     Picker("preferences.status-word",
@@ -149,6 +154,19 @@ struct PreferencesView: View {
         .onReceive(NotificationCenter.default.publisher(
                     for: UIAccessibility.videoAutoplayStatusDidChangeNotification)) { _ in
             viewModel.objectWillChange.send()
+        }
+    }
+}
+
+extension AppPreferences.ColorScheme {
+    var localizedStringKey: LocalizedStringKey {
+        switch self {
+        case .system:
+            return "preferences.app.color-scheme.system"
+        case .light:
+            return "preferences.app.color-scheme.light"
+        case .dark:
+            return "preferences.app.color-scheme.dark"
         }
     }
 }

@@ -201,6 +201,10 @@
 "preferences" = "偏好设置";
 "preferences.app" = "应用偏好设置";
 "preferences.app-icon" = "应用图标";
+"preferences.app.color-scheme" = "Appearance";
+"preferences.app.color-scheme.dark" = "Dark";
+"preferences.app.color-scheme.light" = "Light";
+"preferences.app.color-scheme.system" = "System";
 "preferences.blocked-domains" = "已屏蔽的域名";
 "preferences.blocked-users" = "已屏蔽的用户";
 "preferences.media" = "媒体";

@@ -201,6 +201,10 @@
 "preferences" = "Einstellungen";
 "preferences.app" = "App Einstellungen";
 "preferences.app-icon" = "App Icon";
+"preferences.app.color-scheme" = "Erscheinungsbild";
+"preferences.app.color-scheme.dark" = "Dunkel";
+"preferences.app.color-scheme.light" = "Hell";
+"preferences.app.color-scheme.system" = "System";
 "preferences.blocked-domains" = "Gesperrte Domains";
 "preferences.blocked-users" = "Gesperrte Nutzer";
 "preferences.media" = "Medien";
