@@ -277,7 +277,7 @@
 "more-results.statuses.toot" = "Больше тутов";
 "more-results.tags" = "Больше хештегов";
 "notifications" = "Уведомления";
-"notifications.reblogged-your-status-%@" = "%@ продвинул ваш статус";
+"notifications.reblogged-your-status-%@" = "%@ продвинул(-а) ваш статус";
 "notifications.favourited-your-status-%@" = "%@ добавил(-а) ваш статус в избранное";
 "notifications.followed-you-%@" = "%@ подписался(-ась) на вас";
 "notifications.poll-ended" = "Опрос, в котором вы проголосовали, завершён";
@@ -325,7 +325,7 @@
 "status.poll.time-left-%@" = "Осталось %@";
 "status.poll.refresh" = "Обновить";
 "status.poll.closed" = "Закрыт";
-"status.reblogged-by-%@" = "%@ продвинул(а)";
+"status.reblogged-by-%@" = "%@ продвинул(-а)";
 "status.reply-button.accessibility-label" = "Ответить";
 "status.reblog-button.accessibility-label" = "Продвинуть";
 "status.reblog-button.undo.accessibility-label" = "Не продвигать";

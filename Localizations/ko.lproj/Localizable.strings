@@ -66,10 +66,10 @@
 "api-error.unable-to-fetch-remote-status" = "원격 상태를 가져올 수 없어요";
 "apns-default-message" = "새 알림";
 "app-icon.brutalist" = "브루탈리스트";
-"app-icon.rainbow-brutalist" = "무지개 브루탈리스트";
+"app-icon.rainbow-brutalist" = "레인보우 브루탈리스트";
 "app-icon.classic" = "클래식";
-"app-icon.malow" = "Malow";
-"app-icon.rainbow" = "무지개";
+"app-icon.malow" = "마로우";
+"app-icon.rainbow" = "레인보우";
 "add-identity.get-started" = "시작하기";
 "add-identity.instance-url" = "인스턴스 주소";
 "add-identity.log-in" = "로그인";
