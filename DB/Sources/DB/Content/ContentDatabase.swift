@@ -651,10 +651,52 @@ public extension ContentDatabase {
 
 private extension ContentDatabase {
     static let cleanAfterLastReadIdCount = 40
+    static let cleanLimit = 100
     static let ephemeralTimelines = NSCountedSet()
 
     static func fileURL(id: Identity.Id, appGroup: String) throws -> URL {
         try FileManager.default.databaseDirectoryURL(name: id.uuidString, appGroup: appGroup)
+    }
+
+    static func statusIdsToDeleteForPositionPreservingClean(db: Database) throws -> Set<Status.Id> {
+        var statusIds = try Status.Id.fetchAll(
+            db,
+            TimelineStatusJoin.select(TimelineStatusJoin.Columns.statusId)
+                .order(TimelineStatusJoin.Columns.statusId.desc))
+
+        if let lastReadId = try Status.Id.fetchOne(
+            db,
+            LastReadIdRecord.filter(LastReadIdRecord.Columns.timelineId == Timeline.home.id)
+                .select(LastReadIdRecord.Columns.id))
+            ?? statusIds.first,
+           let index = statusIds.firstIndex(of: lastReadId) {
+            statusIds = Array(statusIds.prefix(index + Self.cleanAfterLastReadIdCount))
+        }
+
+        let reblogStatusIds = try Status.Id.fetchSet(
+            db,
+            StatusRecord.filter(statusIds.contains(StatusRecord.Columns.id)
+                                    && StatusRecord.Columns.reblogId != nil)
+                .select(StatusRecord.Columns.reblogId))
+
+        let statusIdsToKeep = Set(statusIds).union(reblogStatusIds)
+        let allStatusIds = try Status.Id.fetchSet(db, StatusRecord.select(StatusRecord.Columns.id))
+        let staleStatusIds = allStatusIds.subtracting(statusIdsToKeep)
+
+        return Set(Array(staleStatusIds).prefix(Self.cleanLimit))
+    }
+
+    static func accountIdsToDeleteForPositionPreservingClean(db: Database) throws -> Set<Account.Id> {
+        var accountIdsToKeep = try Account.Id.fetchSet(db, StatusRecord.select(StatusRecord.Columns.accountId))
+        accountIdsToKeep.formUnion(try Account.Id.fetchSet(
+            db,
+            AccountRecord.filter(accountIdsToKeep.contains(AccountRecord.Columns.id)
+                                    && AccountRecord.Columns.movedId != nil)
+                .select(AccountRecord.Columns.movedId)))
+        let allAccountIds = try Account.Id.fetchSet(db, AccountRecord.select(AccountRecord.Columns.id))
+        let staleAccountIds = allAccountIds.subtracting(accountIdsToKeep)
+
+        return Set(Array(staleAccountIds).prefix(Self.cleanLimit))
     }
 
     static func clean(_ databaseWriter: DatabaseWriter,
@@ -668,33 +710,10 @@ private extension ContentDatabase {
 
             if useHomeTimelineLastReadId {
                 try TimelineRecord.filter(TimelineRecord.Columns.id != Timeline.home.id).deleteAll($0)
-                var statusIds = try Status.Id.fetchAll(
-                    $0,
-                    TimelineStatusJoin.select(TimelineStatusJoin.Columns.statusId)
-                        .order(TimelineStatusJoin.Columns.statusId.desc))
-
-                if let lastReadId = try Status.Id.fetchOne(
-                    $0,
-                    LastReadIdRecord.filter(LastReadIdRecord.Columns.timelineId == Timeline.home.id)
-                        .select(LastReadIdRecord.Columns.id))
-                    ?? statusIds.first,
-                   let index = statusIds.firstIndex(of: lastReadId) {
-                    statusIds = Array(statusIds.prefix(index + Self.cleanAfterLastReadIdCount))
-                }
-
-                statusIds += try Status.Id.fetchAll(
-                    $0,
-                    StatusRecord.filter(statusIds.contains(StatusRecord.Columns.id)
-                                            && StatusRecord.Columns.reblogId != nil)
-                        .select(StatusRecord.Columns.reblogId))
-                try StatusRecord.filter(!statusIds.contains(StatusRecord.Columns.id)).deleteAll($0)
-                var accountIds = try Account.Id.fetchAll($0, StatusRecord.select(StatusRecord.Columns.accountId))
-                accountIds += try Account.Id.fetchAll(
-                    $0,
-                    AccountRecord.filter(accountIds.contains(AccountRecord.Columns.id)
-                                            && AccountRecord.Columns.movedId != nil)
-                        .select(AccountRecord.Columns.movedId))
-                try AccountRecord.filter(!accountIds.contains(AccountRecord.Columns.id)).deleteAll($0)
+                try StatusRecord.filter(statusIdsToDeleteForPositionPreservingClean(db: $0)
+                    .contains(StatusRecord.Columns.id)).deleteAll($0)
+                try AccountRecord.filter(accountIdsToDeleteForPositionPreservingClean(db: $0)
+                    .contains(AccountRecord.Columns.id)).deleteAll($0)
             } else {
                 try TimelineRecord.deleteAll($0)
                 try StatusRecord.deleteAll($0)
