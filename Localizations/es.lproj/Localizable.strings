@@ -249,8 +249,8 @@
 "preferences.notifications-position-on-startup" = "Posición de las notificaciones al iniciar";
 "preferences.position.remember-position" = "Recordar posición";
 "preferences.position.newest" = "Cargar más reciente";
-"preferences.require-double-tap-to-reblog" = "Doble toque para rebloguear";
-"preferences.require-double-tap-to-favorite" = "Doble tap para añadir a favoritos";
+"preferences.require-double-tap-to-reblog" = "Requerir doble toque para rebloguear";
+"preferences.require-double-tap-to-favorite" = "Requerir doble toque para añadir a favoritos";
 "preferences.show-reblog-and-favorite-counts" = "Mostrar boost y cuentas favoritas";
 "preferences.status-word" = "Palabra de estado";
 "filters.active" = "Activo";
