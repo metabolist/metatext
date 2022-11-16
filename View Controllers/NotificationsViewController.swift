@@ -39,6 +39,11 @@ final class NotificationsViewController: UIPageViewController {
         }
 
         tabBarItem = NavigationViewModel.Tab.notifications.tabBarItem
+
+        if !viewModel.identityContext.appPreferences.showLabelsInTabBar {
+            tabBarItem.title = nil
+        }
+
     }
 
     @available(*, unavailable)

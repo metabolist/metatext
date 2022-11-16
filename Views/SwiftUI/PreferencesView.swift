@@ -113,6 +113,8 @@ struct PreferencesView: View {
                         Toggle("preferences.links.use-universal-links",
                                isOn: $identityContext.appPreferences.useUniversalLinks)
                     }
+                    Toggle("preferences.show-labels-in-tab-bar",
+                           isOn: $identityContext.appPreferences.showLabelsInTabBar)
                 }
                 Group {
                     Picker("preferences.media.autoplay.gifs",

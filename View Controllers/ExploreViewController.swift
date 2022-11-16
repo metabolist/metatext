@@ -20,8 +20,9 @@ final class ExploreViewController: UICollectionViewController {
 
         super.init(collectionViewLayout: Self.layout())
 
+        let showTabBarLabel = viewModel.identityContext.appPreferences.showLabelsInTabBar
         tabBarItem = UITabBarItem(
-            title: NSLocalizedString("main-navigation.explore", comment: ""),
+            title: showTabBarLabel ? NSLocalizedString("main-navigation.explore", comment: "") : nil,
             image: UIImage(systemName: "magnifyingglass"),
             selectedImage: nil)
     }

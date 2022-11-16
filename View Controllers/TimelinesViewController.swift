@@ -36,8 +36,9 @@ final class TimelinesViewController: UIPageViewController {
             setViewControllers([firstViewController], direction: .forward, animated: false)
         }
 
+        let showTabBarLabel = viewModel.identityContext.appPreferences.showLabelsInTabBar
         tabBarItem = UITabBarItem(
-            title: NSLocalizedString("main-navigation.timelines", comment: ""),
+            title: showTabBarLabel ? NSLocalizedString("main-navigation.timelines", comment: "") : nil,
             image: UIImage(systemName: "newspaper"),
             selectedImage: nil)
 

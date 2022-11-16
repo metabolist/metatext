@@ -201,6 +201,11 @@ public extension AppPreferences {
         get { self[.useUniversalLinks] ?? true }
         set { self[.useUniversalLinks] = newValue }
     }
+
+    var showLabelsInTabBar: Bool {
+        get { self[.showLabelsInTabBar] ?? true }
+        set { self[.showLabelsInTabBar] = newValue }
+    }
 }
 
 private extension AppPreferences {
@@ -223,6 +228,7 @@ private extension AppPreferences {
         case notificationSounds
         case openLinksInDefaultBrowser
         case useUniversalLinks
+        case showLabelsInTabBar
     }
 
     subscript<T>(index: Item) -> T? {

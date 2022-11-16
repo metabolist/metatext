@@ -127,6 +127,10 @@ private extension MainNavigationViewController {
             conversationsViewController.tabBarItem = NavigationViewModel.Tab.messages.tabBarItem
             conversationsViewController.navigationItem.title = NavigationViewModel.Tab.messages.title
 
+            if !viewModel.identityContext.appPreferences.showLabelsInTabBar {
+                conversationsViewController.tabBarItem.title = nil
+            }
+
             controllers.append(conversationsViewController)
 
             setupNewStatusButton()
