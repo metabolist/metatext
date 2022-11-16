@@ -183,7 +183,7 @@
 "main-navigation.announcements" = "公告";
 "main-navigation.timelines" = "時間軸";
 "main-navigation.explore" = "探索";
-"main-navigation.notifications" = "隱藏來自這位使用者的通知？";
+"main-navigation.notifications" = "通知";
 "main-navigation.conversations" = "私訊";
 "metatext" = "Metatext";
 "notification.accessibility.view-profile" = "查看個人資料";
