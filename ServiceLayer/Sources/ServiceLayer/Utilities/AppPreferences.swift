@@ -32,6 +32,14 @@ public extension AppPreferences {
         public var id: String { rawValue }
     }
 
+    enum FavoriteWord: String, CaseIterable, Identifiable {
+        case favorite
+        case favourite
+        case like
+
+        public var id: String { rawValue }
+    }
+
     enum AnimateAvatars: String, CaseIterable, Identifiable {
         case everywhere
         case profiles
@@ -77,6 +85,18 @@ public extension AppPreferences {
             return .toot
         }
         set { self[.statusWord] = newValue.rawValue }
+    }
+
+    var favoriteWord: FavoriteWord {
+        get {
+            if let rawValue = self[.favoriteWord] as String?,
+               let value = FavoriteWord(rawValue: rawValue) {
+                return value
+            }
+
+            return .favorite
+        }
+        set { self[.favoriteWord] = newValue.rawValue }
     }
 
     var animateAvatars: AnimateAvatars {
@@ -171,6 +191,11 @@ public extension AppPreferences {
         get { self[.showReblogAndFavoriteCounts] ?? false }
         set { self[.showReblogAndFavoriteCounts] = newValue }
     }
+    
+    var edgeToEdgeView: Bool {
+        get { self[.edgeToEdgeView] ?? false }
+        set { self[.edgeToEdgeView] = newValue }
+    }
 
     var requireDoubleTapToReblog: Bool {
         get { self[.requireDoubleTapToReblog] ?? false }
@@ -207,6 +232,7 @@ private extension AppPreferences {
     enum Item: String {
         case colorScheme
         case statusWord
+        case favoriteWord
         case requireDoubleTapToReblog
         case requireDoubleTapToFavorite
         case animateAvatars
@@ -223,6 +249,7 @@ private extension AppPreferences {
         case notificationSounds
         case openLinksInDefaultBrowser
         case useUniversalLinks
+        case edgeToEdgeView
     }
 
     subscript<T>(index: Item) -> T? {

@@ -207,6 +207,7 @@
 "preferences.app.color-scheme.system" = "System";
 "preferences.blocked-domains" = "Blocked Domains";
 "preferences.blocked-users" = "Blocked Users";
+"preferences.edge-to-edge-view" = "Edge to edge view";
 "preferences.media" = "Media";
 "preferences.media.avatars" = "Avatars";
 "preferences.media.avatars.animate" = "Animate avatars";
@@ -235,6 +236,7 @@
 "preferences.notification-types" = "Notification Types";
 "preferences.notification-types.follow" = "Follow";
 "preferences.notification-types.favourite" = "Favorite";
+"preferences.notification-types.like" = "Like";
 "preferences.notification-types.follow-request" = "Follow Request";
 "preferences.notification-types.reblog" = "Reblog";
 "preferences.notification-types.mention" = "Mention";
@@ -253,6 +255,7 @@
 "preferences.require-double-tap-to-favorite" = "Require double tap to favorite";
 "preferences.show-reblog-and-favorite-counts" = "Show boost and favorite counts";
 "preferences.status-word" = "Status word";
+"preferences.favorite-word" = "Favorite word";
 "filters.active" = "Active";
 "filters.expired" = "Expired";
 "filter.add-new" = "Add New Filter";
@@ -279,6 +282,7 @@
 "notifications" = "Notifications";
 "notifications.reblogged-your-status-%@" = "%@ boosted your status";
 "notifications.favourited-your-status-%@" = "%@ favorited your status";
+"notifications.liked-your-status-%@" = "%@ liked your status";
 "notifications.followed-you-%@" = "%@ followed you";
 "notifications.poll-ended" = "A poll you have voted in has ended";
 "notifications.your-poll-ended" = "Your poll has ended";

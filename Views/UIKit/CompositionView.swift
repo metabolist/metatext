@@ -88,7 +88,7 @@ private extension CompositionView {
             parentViewModel: parentViewModel,
             autocompleteQueryPublisher: viewModel.$contentWarningAutocompleteQuery.eraseToAnyPublisher())
 
-        stackView.addArrangedSubview(spoilerTextField)
+        stackView.addSubview(spoilerTextField)
         spoilerTextField.borderStyle = .roundedRect
         spoilerTextField.adjustsFontForContentSizeCategory = true
         spoilerTextField.font = .preferredFont(forTextStyle: .body)
@@ -106,7 +106,7 @@ private extension CompositionView {
             parentViewModel: parentViewModel,
             autocompleteQueryPublisher: viewModel.$autocompleteQuery.eraseToAnyPublisher())
 
-        stackView.addArrangedSubview(textView)
+        addSubview(textView)
         textView.keyboardType = .twitter
         textView.isScrollEnabled = false
         textView.adjustsFontForContentSizeCategory = true
@@ -125,6 +125,7 @@ private extension CompositionView {
         textViewPlaceholder.textColor = .secondaryLabel
         textViewPlaceholder.text = NSLocalizedString("compose.prompt", comment: "")
 
+        attachmentsView.displayEdgeToEdge(parentViewModel.identityContext.appPreferences.edgeToEdgeView)
         stackView.addArrangedSubview(attachmentsView)
         attachmentsView.isHidden_stackViewSafe = true
         stackView.addArrangedSubview(attachmentUploadsStackView)
@@ -282,8 +283,8 @@ private extension CompositionView {
             changeIdentityButton.bottomAnchor.constraint(equalTo: avatarImageView.bottomAnchor),
             changeIdentityButton.trailingAnchor.constraint(equalTo: avatarImageView.trailingAnchor),
             stackView.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: .defaultSpacing),
-            stackView.topAnchor.constraint(greaterThanOrEqualTo: guide.topAnchor),
-            stackView.bottomAnchor.constraint(lessThanOrEqualTo: guide.bottomAnchor),
+//            stackView.topAnchor.constraint(greaterThanOrEqualTo: guide.topAnchor),
+//            stackView.bottomAnchor.constraint(lessThanOrEqualTo: guide.bottomAnchor),
             textViewPlaceholder.leadingAnchor.constraint(equalTo: textView.leadingAnchor),
             textViewPlaceholder.topAnchor.constraint(equalTo: textView.topAnchor),
             textViewPlaceholder.trailingAnchor.constraint(equalTo: textView.trailingAnchor),

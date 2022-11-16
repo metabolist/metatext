@@ -18,6 +18,7 @@ final class StatusView: UIView {
     let accountLabel = UILabel()
     let nameButton = UIButton()
     let timeLabel = UILabel()
+    let timeSeparatorLabel = UILabel()
     let bodyView = StatusBodyView()
     let showThreadIndicator = UIButton(type: .system)
     let contextParentTimeLabel = UILabel()
@@ -39,6 +40,7 @@ final class StatusView: UIView {
     private let avatarContainerView = UIView()
     private let nameAccountContainerStackView = UIStackView()
     private let nameAccountTimeStackView = UIStackView()
+    private let nameTimeStackView = UIStackView()
     private let contextParentTimeApplicationStackView = UIStackView()
     private let timeVisibilityDividerLabel = UILabel()
     private let visibilityApplicationDividerLabel = UILabel()
@@ -211,14 +213,21 @@ private extension StatusView {
         displayNameLabel.setContentHuggingPriority(.required, for: .horizontal)
         displayNameLabel.setContentHuggingPriority(.required, for: .vertical)
         displayNameLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
-        nameAccountTimeStackView.addArrangedSubview(displayNameLabel)
+//        nameTimeStackView.addArrangedSubview(displayNameLabel)
 
         accountLabel.font = .preferredFont(forTextStyle: .subheadline)
         accountLabel.adjustsFontForContentSizeCategory = true
         accountLabel.textColor = .secondaryLabel
         accountLabel.setContentHuggingPriority(.required, for: .horizontal)
         accountLabel.setContentHuggingPriority(.required, for: .vertical)
-        nameAccountTimeStackView.addArrangedSubview(accountLabel)
+
+        timeSeparatorLabel.text = "∙ "
+        timeSeparatorLabel.font = .preferredFont(forTextStyle: .subheadline)
+        timeSeparatorLabel.adjustsFontForContentSizeCategory = true
+        timeSeparatorLabel.textColor = .secondaryLabel
+        timeSeparatorLabel.textAlignment = .right
+        timeSeparatorLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+        timeSeparatorLabel.setContentHuggingPriority(.required, for: .vertical)
 
         timeLabel.font = .preferredFont(forTextStyle: .subheadline)
         timeLabel.adjustsFontForContentSizeCategory = true
@@ -226,10 +235,14 @@ private extension StatusView {
         timeLabel.textAlignment = .right
         timeLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
         timeLabel.setContentHuggingPriority(.required, for: .vertical)
-        nameAccountTimeStackView.addArrangedSubview(timeLabel)
+        nameTimeStackView.addArrangedSubview(displayNameLabel)
+        nameTimeStackView.addArrangedSubview(timeSeparatorLabel)
+        nameTimeStackView.addArrangedSubview(timeLabel)
 
+        nameAccountTimeStackView.addArrangedSubview(nameTimeStackView)
         nameAccountContainerStackView.spacing = .defaultSpacing
         nameAccountContainerStackView.addArrangedSubview(nameAccountTimeStackView)
+        nameAccountTimeStackView.addArrangedSubview(accountLabel)
         mainStackView.addArrangedSubview(nameAccountContainerStackView)
 
         nameButton.translatesAutoresizingMaskIntoConstraints = false
@@ -475,7 +488,10 @@ private extension StatusView {
         rebloggerAvatarImageView.isHidden = !viewModel.isReblog
         rebloggerAvatarImageView.sd_setImage(with: viewModel.isReblog ? viewModel.rebloggerAvatarURL : nil)
 
-        if isContextParent, avatarContainerView.superview !== nameAccountContainerStackView {
+        if viewModel.identityContext.appPreferences.edgeToEdgeView {
+            nameAccountContainerStackView.insertArrangedSubview(avatarContainerView, at: 0)
+            sideStackView.isHidden = true
+        } else if isContextParent, avatarContainerView.superview !== nameAccountContainerStackView {
             nameAccountContainerStackView.insertArrangedSubview(avatarContainerView, at: 0)
         } else if avatarContainerView.superview !== sideStackView {
             sideStackView.insertArrangedSubview(avatarContainerView, at: 1)
@@ -553,9 +569,9 @@ private extension StatusView {
         nameButtonAccessibilityAttributedLabel.appendWithSeparator(viewModel.accountName)
         nameButton.accessibilityAttributedLabel = nameButtonAccessibilityAttributedLabel
 
-        nameAccountTimeStackView.axis = isContextParent ? .vertical : .horizontal
-        nameAccountTimeStackView.alignment = isContextParent ? .leading : .fill
-        nameAccountTimeStackView.spacing = isContextParent ? 0 : .compactSpacing
+        nameAccountTimeStackView.axis = .vertical
+        nameAccountTimeStackView.alignment = .leading
+        nameAccountTimeStackView.spacing = 0
 
         contextParentTopNameAccountSpacingView.removeFromSuperview()
         contextParentBottomNameAccountSpacingView.removeFromSuperview()
@@ -570,6 +586,8 @@ private extension StatusView {
         timeLabel.text = viewModel.time
         timeLabel.accessibilityLabel = viewModel.accessibilityTime
         timeLabel.isHidden = isContextParent
+
+        timeSeparatorLabel.isHidden = isContextParent
 
         bodyView.viewModel = viewModel
 

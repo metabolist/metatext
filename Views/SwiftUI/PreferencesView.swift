@@ -101,6 +101,8 @@ struct PreferencesView: View {
                             Text(option.localizedStringKey).tag(option)
                         }
                     }
+                    Toggle("preferences.edge-to-edge-view",
+                           isOn: $identityContext.appPreferences.edgeToEdgeView)
                     Toggle("preferences.show-reblog-and-favorite-counts",
                            isOn: $identityContext.appPreferences.showReblogAndFavoriteCounts)
                     Toggle("preferences.require-double-tap-to-reblog",
