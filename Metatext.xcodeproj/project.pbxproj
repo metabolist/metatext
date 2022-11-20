@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		14FC7D32292A556E00567DBC /* UIFont+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FC7D31292A556E00567DBC /* UIFont+Extensions.swift */; };
 		D0030982250C6C8500EACB32 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0030981250C6C8500EACB32 /* URL+Extensions.swift */; };
 		D005A1D825EF189A008B2E63 /* ReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D005A1D725EF189A008B2E63 /* ReportViewController.swift */; };
 		D005A1E625EF3D11008B2E63 /* ReportHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D005A1E525EF3D11008B2E63 /* ReportHeaderView.swift */; };
@@ -287,6 +288,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		14FC7D31292A556E00567DBC /* UIFont+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extensions.swift"; sourceTree = "<group>"; };
 		2805F2DF26044E8900670835 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2805F2E026044E8900670835 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = de; path = de.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		68865A28292346CF001BF177 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -900,6 +902,7 @@
 				D0E7AD3825870B13005F5E2D /* UIVIewController+Extensions.swift */,
 				D0030981250C6C8500EACB32 /* URL+Extensions.swift */,
 				D0C7D46F24F76169001EBDBB /* View+Extensions.swift */,
+				14FC7D31292A556E00567DBC /* UIFont+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1321,6 +1324,7 @@
 				D0DDA76B25C5F20800FA0F91 /* ExploreDataSource.swift in Sources */,
 				D0477F4625C72E50005C5368 /* CapsuleLabel.swift in Sources */,
 				D035F88725B8016000DC75ED /* NavigationViewModel+Extensions.swift in Sources */,
+				14FC7D32292A556E00567DBC /* UIFont+Extensions.swift in Sources */,
 				D0C7D49B24F7616A001EBDBB /* PreferencesView.swift in Sources */,
 				D09D972225C65682007E6394 /* SeparatorConfiguredCollectionViewListCell.swift in Sources */,
 				D088406D25AFBBE200BB749B /* EmojiPickerViewController.swift in Sources */,

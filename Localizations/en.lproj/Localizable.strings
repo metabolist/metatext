@@ -253,6 +253,7 @@
 "preferences.require-double-tap-to-favorite" = "Require double tap to favorite";
 "preferences.show-reblog-and-favorite-counts" = "Show boost and favorite counts";
 "preferences.status-word" = "Status word";
+"preferences.hide-content-warning-button" = "Hide \"Show Less\" content warning button";
 "filters.active" = "Active";
 "filters.expired" = "Expired";
 "filter.add-new" = "Add New Filter";

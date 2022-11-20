@@ -137,6 +137,8 @@ struct PreferencesView: View {
                            isOn: $identityContext.appPreferences.animateCustomEmojis)
                     Toggle("preferences.media.headers.animate",
                            isOn: $identityContext.appPreferences.animateHeaders)
+                    Toggle("preferences.hide-content-warning-button",
+                           isOn: $identityContext.appPreferences.hideContentWarningButton)
                 }
                 if viewModel.identityContext.identity.authenticated
                     && !viewModel.identityContext.identity.pending {

@@ -19,6 +19,7 @@ final class StatusBodyView: UIView {
             let isContextParent = viewModel.configuration.isContextParent
             let mutableContent = NSMutableAttributedString(attributedString: viewModel.content)
             let mutableSpoilerText = NSMutableAttributedString(string: viewModel.spoilerText)
+            let mutableSpoilerFont = UIFont.preferredFont(forTextStyle: isContextParent ? .title3 : .callout).bold()
             let contentFont = UIFont.preferredFont(forTextStyle: isContextParent ? .title3 : .callout)
             let contentRange = NSRange(location: 0, length: mutableContent.length)
 
@@ -39,7 +40,7 @@ final class StatusBodyView: UIView {
                                       view: spoilerTextLabel,
                                       identityContext: viewModel.identityContext)
             mutableSpoilerText.resizeAttachments(toLineHeight: spoilerTextLabel.font.lineHeight)
-            spoilerTextLabel.font = contentFont
+            spoilerTextLabel.font = mutableSpoilerFont
             spoilerTextLabel.attributedText = mutableSpoilerText
             spoilerTextLabel.isHidden = spoilerTextLabel.text == ""
             toggleShowContentButton.setTitle(
@@ -48,6 +49,7 @@ final class StatusBodyView: UIView {
                     : NSLocalizedString("status.show-more", comment: ""),
                 for: .normal)
             toggleShowContentButton.isHidden = viewModel.spoilerText.isEmpty
+                    || !viewModel.shouldShowContentWarningButton
 
             contentTextView.isHidden = !viewModel.shouldShowContent
 
