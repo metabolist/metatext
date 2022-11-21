@@ -451,6 +451,15 @@ private extension StatusView {
             .store(in: &cancellables)
     }
 
+    var favoriteCountLabel: String {
+        switch statusConfiguration.viewModel.identityContext.appPreferences.displayFavoritesAs {
+        case .favorites:
+            return "status.favorites-count-%ld"
+        case .likes:
+            return "status.likes-count-%ld"
+        }
+    }
+
     func applyStatusConfiguration() {
         let viewModel = statusConfiguration.viewModel
         let isContextParent = viewModel.configuration.isContextParent
@@ -593,8 +602,9 @@ private extension StatusView {
             localizationKey: "status.reblogs-count-%ld",
             count: viewModel.reblogsCount)
         rebloggedByButton.isHidden = noReblogs
+
         favoritedByButton.setAttributedLocalizedTitle(
-            localizationKey: "status.favorites-count-%ld",
+            localizationKey: favoriteCountLabel,
             count: viewModel.favoritesCount)
         favoritedByButton.isHidden = noFavorites
 
@@ -822,7 +832,7 @@ private extension StatusView {
             if statusConfiguration.viewModel.favoritesCount > 0 {
                 accessibilityAttributedLabel.appendWithSeparator(
                     String.localizedStringWithFormat(
-                        NSLocalizedString("status.favorites-count-%ld", comment: ""),
+                        NSLocalizedString(favoriteCountLabel, comment: ""),
                         statusConfiguration.viewModel.favoritesCount))
             }
         }
@@ -835,10 +845,24 @@ private extension StatusView {
         return accessibilityAttributedLabel
     }
 
+    var favoriteIcon: String {
+        switch statusConfiguration.viewModel.identityContext.appPreferences.displayFavoritesAs {
+        case .favorites: return "star"
+        case .likes: return "heart"
+        }
+    }
+
+    var favoritedIcon: String {
+        switch statusConfiguration.viewModel.identityContext.appPreferences.displayFavoritesAs {
+        case .favorites: return "star.fill"
+        case .likes: return "heart.fill"
+        }
+    }
+
     func setButtonImages(font: UIFont) {
         let visibility = statusConfiguration.viewModel.visibility
         let reblogSystemImageName: String
-
+        let isFavorited = statusConfiguration.viewModel.favorited
         if statusConfiguration.viewModel.configuration.isContextParent {
             reblogSystemImageName = "arrow.2.squarepath"
         } else {
@@ -858,7 +882,7 @@ private extension StatusView {
                                         pointSize: font.pointSize,
                                         weight: statusConfiguration.viewModel.reblogged ? .bold : .regular)),
                              for: .normal)
-        favoriteButton.setImage(UIImage(systemName: statusConfiguration.viewModel.favorited ? "star.fill" : "star",
+        favoriteButton.setImage(UIImage(systemName: isFavorited ? favoritedIcon : favoriteIcon,
                                         withConfiguration: UIImage.SymbolConfiguration(pointSize: font.pointSize)),
                                 for: .normal)
         shareButton.setImage(UIImage(systemName: "square.and.arrow.up",
@@ -905,17 +929,29 @@ private extension StatusView {
     }
 
     func setFavoriteButtonColor(favorited: Bool) {
-        let favoriteColor: UIColor = favorited ? .systemYellow : .secondaryLabel
+        var favoriteColor: UIColor
+        var favoriteLabel: String
+        var undoFavoriteLabel: String
+        switch statusConfiguration.viewModel.identityContext.appPreferences.displayFavoritesAs {
+        case .favorites:
+            favoriteColor = favorited ? .systemYellow : .secondaryLabel
+            favoriteLabel = "status.favorite-button.undo.accessibility-label"
+            undoFavoriteLabel = "status.favorite-button.accessibility-label"
+        case .likes:
+            favoriteColor = favorited ? .systemRed : .secondaryLabel
+            favoriteLabel = "status.like-button.undo.accessibility-label"
+            undoFavoriteLabel = "status.like-button.accessibility-label"
+        }
 
         favoriteButton.tintColor = favoriteColor
         favoriteButton.setTitleColor(favoriteColor, for: .normal)
 
         if favorited {
             favoriteButton.accessibilityLabel =
-                NSLocalizedString("status.favorite-button.undo.accessibility-label", comment: "")
+                NSLocalizedString(undoFavoriteLabel, comment: "")
         } else {
             favoriteButton.accessibilityLabel =
-                NSLocalizedString("status.favorite-button.accessibility-label", comment: "")
+                NSLocalizedString(favoriteLabel, comment: "")
         }
     }
 
@@ -938,20 +974,47 @@ private extension StatusView {
         statusConfiguration.viewModel.toggleReblogged()
     }
 
+    func animateFavorite() {
+        switch statusConfiguration.viewModel.identityContext.appPreferences.displayFavoritesAs {
+
+        case .favorites:
+            self.animateAsFavorite()
+        case .likes:
+            self.animateAsLike()
+        }
+    }
+
+    func animateAsFavorite() {
+        UIViewPropertyAnimator.runningPropertyAnimator(
+            withDuration: .defaultAnimationDuration,
+            delay: 0,
+            options: .curveLinear) {
+            self.setFavoriteButtonColor(favorited: !self.statusConfiguration.viewModel.favorited)
+            self.favoriteButton.imageView?.transform =
+                self.favoriteButton.imageView?.transform.rotated(by: .pi) ?? .identity
+        } completion: { _ in
+            self.favoriteButton.imageView?.transform = .identity
+        }
+    }
+
+    func animateAsLike() {
+        UIViewPropertyAnimator.runningPropertyAnimator(
+            withDuration: .defaultAnimationDuration,
+            delay: 0,
+            options: .curveEaseInOut) {
+            self.setFavoriteButtonColor(favorited: !self.statusConfiguration.viewModel.favorited)
+            self.favoriteButton.imageView?.transform =
+            self.favoriteButton.imageView?.transform.scaledBy(x: 0.7, y: 0.7) ?? .identity
+        } completion: { _ in
+            self.favoriteButton.imageView?.transform = .identity
+        }
+    }
+
     func favorite() {
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
 
         if !UIAccessibility.isReduceMotionEnabled {
-            UIViewPropertyAnimator.runningPropertyAnimator(
-                withDuration: .defaultAnimationDuration,
-                delay: 0,
-                options: .curveLinear) {
-                self.setFavoriteButtonColor(favorited: !self.statusConfiguration.viewModel.favorited)
-                self.favoriteButton.imageView?.transform =
-                    self.favoriteButton.imageView?.transform.rotated(by: .pi) ?? .identity
-            } completion: { _ in
-                self.favoriteButton.imageView?.transform = .identity
-            }
+            self.animateFavorite()
         }
 
         statusConfiguration.viewModel.toggleFavorited()

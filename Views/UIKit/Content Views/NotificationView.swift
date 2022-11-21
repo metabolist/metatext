@@ -163,9 +163,36 @@ private extension NotificationView {
         isAccessibilityElement = true
     }
 
+    var colorForFavoriteView: UIColor {
+        switch notificationConfiguration.viewModel.identityContext.appPreferences.displayFavoritesAs {
+        case .favorites:
+            return .systemYellow
+        case .likes:
+            return .systemRed
+        }
+    }
+
+    var labelForFavoriteView: String {
+        switch notificationConfiguration.viewModel.identityContext.appPreferences.displayFavoritesAs {
+        case .favorites:
+            return "notifications.favourited-your-status-%@"
+        case .likes:
+            return "notifications.liked-your-status-%@"
+        }
+    }
+
+    var imageNameForFavoriteView: String {
+        switch notificationConfiguration.viewModel.identityContext.appPreferences.displayFavoritesAs {
+        case .favorites:
+            return "star.fill"
+        case .likes:
+            return "heart.fill"
+        }
+    }
+
     func applyNotificationConfiguration() {
         let viewModel = notificationConfiguration.viewModel
-
+        var imageName = viewModel.type.systemImageName
         avatarImageView.sd_setImage(with: viewModel.accountViewModel.avatarURL())
 
         switch viewModel.type {
@@ -184,12 +211,13 @@ private extension NotificationView {
                 identityContext: viewModel.identityContext)
             iconImageView.tintColor = .systemGreen
         case .favourite:
-            typeLabel.attributedText = "notifications.favourited-your-status-%@".localizedBolding(
+            imageName = imageNameForFavoriteView
+            typeLabel.attributedText = labelForFavoriteView.localizedBolding(
                 displayName: viewModel.accountViewModel.displayName,
                 emojis: viewModel.accountViewModel.emojis,
                 label: typeLabel,
                 identityContext: viewModel.identityContext)
-            iconImageView.tintColor = .systemYellow
+            iconImageView.tintColor = colorForFavoriteView
         case .poll:
             typeLabel.text = NSLocalizedString(
                 viewModel.accountViewModel.isSelf
@@ -229,7 +257,7 @@ private extension NotificationView {
         timeLabel.accessibilityLabel = viewModel.accessibilityTime
 
         iconImageView.image = UIImage(
-            systemName: viewModel.type.systemImageName,
+            systemName: imageName,
             withConfiguration: UIImage.SymbolConfiguration(scale: .medium))
 
         let accessibilityAttributedLabel = NSMutableAttributedString(string: "")

@@ -687,12 +687,17 @@ private extension TableViewController {
         let deleteAndRedraftConfirmMessage: String
         let deleteConfirmMessage: String
 
+        let favoritesNoun = viewModel.identityContext.appPreferences.displayFavoritesAs.rawValue
+
         switch viewModel.identityContext.appPreferences.statusWord {
         case .toot:
-            deleteAndRedraftConfirmMessage = NSLocalizedString("status.delete-and-redraft.confirm.toot", comment: "")
+            deleteAndRedraftConfirmMessage = NSLocalizedString(
+                "status.delete-and-redraft.confirm.toot-".appending(favoritesNoun),
+                comment: "")
             deleteConfirmMessage = NSLocalizedString("status.delete.confirm.toot", comment: "")
         case .post:
-            deleteAndRedraftConfirmMessage = NSLocalizedString("status.delete-and-redraft.confirm.post", comment: "")
+            deleteAndRedraftConfirmMessage = NSLocalizedString(
+                "status.delete-and-redraft.confirm.post-".appending(favoritesNoun), comment: "")
             deleteConfirmMessage = NSLocalizedString("status.delete.confirm.post", comment: "")
         }
 

@@ -32,6 +32,13 @@ public extension AppPreferences {
         public var id: String { rawValue }
     }
 
+    enum DisplayFavoritesAs: String, CaseIterable, Identifiable {
+        case favorites
+        case likes
+
+        public var id: String { rawValue }
+    }
+
     enum AnimateAvatars: String, CaseIterable, Identifiable {
         case everywhere
         case profiles
@@ -77,6 +84,18 @@ public extension AppPreferences {
             return .toot
         }
         set { self[.statusWord] = newValue.rawValue }
+    }
+
+    var displayFavoritesAs: DisplayFavoritesAs {
+        get {
+            if let rawValue = self[.displayFavoritesAs] as String?,
+               let value = DisplayFavoritesAs(rawValue: rawValue) {
+                return value
+            }
+
+            return .favorites
+        }
+        set { self[.displayFavoritesAs] = newValue.rawValue }
     }
 
     var animateAvatars: AnimateAvatars {
@@ -207,6 +226,7 @@ private extension AppPreferences {
     enum Item: String {
         case colorScheme
         case statusWord
+        case displayFavoritesAs
         case requireDoubleTapToReblog
         case requireDoubleTapToFavorite
         case animateAvatars
