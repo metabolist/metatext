@@ -207,6 +207,7 @@
 "preferences.app.color-scheme.system" = "System";
 "preferences.blocked-domains" = "Blocked Domains";
 "preferences.blocked-users" = "Blocked Users";
+"preferences.edge-to-edge-view" = "Edge to edge view";
 "preferences.media" = "Media";
 "preferences.show-labels-in-tab-bar" = "Show labels in tab bar (requires restart)";
 "preferences.media.avatars" = "Avatars";
@@ -236,6 +237,7 @@
 "preferences.notification-types" = "Notification Types";
 "preferences.notification-types.follow" = "Follow";
 "preferences.notification-types.favourite" = "Favorite";
+"preferences.notification-types.like" = "Like";
 "preferences.notification-types.follow-request" = "Follow Request";
 "preferences.notification-types.reblog" = "Reblog";
 "preferences.notification-types.mention" = "Mention";
@@ -254,6 +256,7 @@
 "preferences.require-double-tap-to-favorite" = "Require double tap to favorite";
 "preferences.show-reblog-and-favorite-counts" = "Show boost and favorite counts";
 "preferences.status-word" = "Status word";
+"preferences.display-favorites-as" = "Display favorites as";
 "filters.active" = "Active";
 "filters.expired" = "Expired";
 "filter.add-new" = "Add New Filter";
@@ -280,6 +283,7 @@
 "notifications" = "Notifications";
 "notifications.reblogged-your-status-%@" = "%@ boosted your status";
 "notifications.favourited-your-status-%@" = "%@ favorited your status";
+"notifications.liked-your-status-%@" = "%@ liked your status";
 "notifications.followed-you-%@" = "%@ followed you";
 "notifications.poll-ended" = "A poll you have voted in has ended";
 "notifications.your-poll-ended" = "Your poll has ended";
@@ -312,8 +316,11 @@
 "status.delete.confirm.post" = "Are you sure you want to delete this post?";
 "status.delete.confirm.toot" = "Are you sure you want to delete this toot?";
 "status.delete-and-redraft" = "Delete & re-draft";
-"status.delete-and-redraft.confirm.post" = "Are you sure you want to delete this post and re-draft it? Favorites and boosts will be lost, and replies to the original post will be orphaned.";
-"status.delete-and-redraft.confirm.toot" = "Are you sure you want to delete this toot and re-draft it? Favorites and boosts will be lost, and replies to the original toot will be orphaned.";
+"status.delete-and-redraft.confirm.post-favorites" = "Are you sure you want to delete this post and re-draft it? Favorites and boosts will be lost, and replies to the original post will be orphaned.";
+"status.delete-and-redraft.confirm.toot-favorites" = "Are you sure you want to delete this toot and re-draft it? Favorites and boosts will be lost, and replies to the original toot will be orphaned.";
+"status.delete-and-redraft.confirm.post-likes" = "Are you sure you want to delete this post and re-draft it? Likes and boosts will be lost, and replies to the original post will be orphaned.";
+"status.delete-and-redraft.confirm.toot-likes" = "Are you sure you want to delete this toot and re-draft it? Likes and boosts will be lost, and replies to the original toot will be orphaned.";
+
 "status.mute" = "Mute conversation";
 "status.new-items.post" = "New posts";
 "status.new-items.toot" = "New toots";
@@ -332,6 +339,8 @@
 "status.reblog-button.undo.accessibility-label" = "Unboost";
 "status.favorite-button.accessibility-label" = "Favorite";
 "status.favorite-button.undo.accessibility-label" = "Unfavorite";
+"status.like-button.accessibility-label" = "Like";
+"status.like-button.undo.accessibility-label" = "Unlike";
 "status.show-more" = "Show More";
 "status.show-more-all-button.accessibilty-label" = "Show more for all";
 "status.show-less" = "Show Less";
@@ -357,3 +366,4 @@
 "timelines.local" = "Local";
 "timelines.federated" = "Federated";
 "toot" = "Toot";
+"likes" = "Likes";

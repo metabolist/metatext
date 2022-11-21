@@ -15,6 +15,7 @@ final class AttachmentsView: UIView {
     private let hideButton = UIButton()
     private var aspectRatioConstraint: NSLayoutConstraint?
     private var cancellables = Set<AnyCancellable>()
+    var identityContext: IdentityContext?
 
     var viewModel: AttachmentsRenderingViewModel? {
         didSet {
@@ -104,7 +105,7 @@ final class AttachmentsView: UIView {
 
         initialSetup()
     }
-
+    
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -126,6 +127,11 @@ extension AttachmentsView {
 
         return height
     }
+
+    func displayEdgeToEdge(_ edgeToEdge: Bool) {
+        layer.cornerRadius = edgeToEdge ? 0 : .defaultCornerRadius
+    }
+
     var shouldAutoplay: Bool {
         guard !isHidden, let viewModel = viewModel, viewModel.shouldShowAttachments else { return false }
 
@@ -148,10 +154,11 @@ extension AttachmentsView {
 private extension AttachmentsView {
     // swiftlint:disable:next function_body_length
     func initialSetup() {
+        let isEdgeToEdge = identityContext?.appPreferences.edgeToEdgeView ?? false
         backgroundColor = .clear
         layoutMargins = .zero
         clipsToBounds = true
-        layer.cornerRadius = .defaultCornerRadius
+        layer.cornerRadius = isEdgeToEdge ? 0 : .defaultCornerRadius
         addSubview(containerStackView)
         containerStackView.translatesAutoresizingMaskIntoConstraints = false
         containerStackView.distribution = .fillEqually
