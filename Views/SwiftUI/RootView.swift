@@ -13,6 +13,8 @@ struct RootView: View {
                 .id(navigationViewModel.identityContext.identity.id)
                 .environmentObject(viewModel)
                 .transition(.opacity)
+                .handlesExternalEvents(preferring: ["*"], allowing: ["*"])
+                .onOpenURL(perform: { openUrl(navigationViewModel, $0) })
                 .edgesIgnoringSafeArea(.all)
                 .onReceive(navigationViewModel.identityContext.$appPreferences.map(\.colorScheme),
                            perform: setColorScheme)
@@ -27,6 +29,37 @@ struct RootView: View {
             .environmentObject(viewModel)
             .navigationViewStyle(StackNavigationViewStyle())
             .transition(.opacity)
+            .handlesExternalEvents(preferring: ["*"], allowing: ["*"])
+            .onOpenURL(perform: { openUrl(nil, $0) })
+        }
+    }
+
+    /// Open `metatext:` URLs from the action extension.
+    private func openUrl(_ navigationViewModel: NavigationViewModel?, _ metatextUrl: URL) {
+        guard let navigationViewModel = navigationViewModel else {
+            // TODO: (Vyr) We haven't logged into an instance yet. Opening a URL should show an error message.
+            return
+        }
+        guard
+            let metatextComponents = URLComponents(url: metatextUrl, resolvingAgainstBaseURL: true),
+            metatextComponents.scheme == "metatext"
+        else {
+            return
+        }
+        switch metatextComponents.path {
+        case "search":
+            // Expecting `metatext:search?url=https://…`, which we open by searching for the wrapped URL.
+            guard
+                let searchUrlString = metatextComponents.queryItems?.first(where: { $0.name == "url" })?.value,
+                let searchComponents = URLComponents(string: searchUrlString),
+                searchComponents.scheme == "https",
+                let searchUrl = searchComponents.url
+            else {
+                return
+            }
+            navigationViewModel.navigateToURL(searchUrl)
+        default:
+            break
         }
     }
 }
