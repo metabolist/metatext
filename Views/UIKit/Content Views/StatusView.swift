@@ -835,10 +835,24 @@ private extension StatusView {
         return accessibilityAttributedLabel
     }
 
+    var favoriteIcon: String {
+        switch statusConfiguration.viewModel.identityContext.appPreferences.displayFavoritesAs {
+        case .favorites: return "star"
+        case .likes: return "heart"
+        }
+    }
+
+    var favoritedIcon: String {
+        switch statusConfiguration.viewModel.identityContext.appPreferences.displayFavoritesAs {
+        case .favorites: return "star.fill"
+        case .likes: return "heart.fill"
+        }
+    }
+
     func setButtonImages(font: UIFont) {
         let visibility = statusConfiguration.viewModel.visibility
         let reblogSystemImageName: String
-
+        let isFavorited = statusConfiguration.viewModel.favorited
         if statusConfiguration.viewModel.configuration.isContextParent {
             reblogSystemImageName = "arrow.2.squarepath"
         } else {
@@ -858,7 +872,7 @@ private extension StatusView {
                                         pointSize: font.pointSize,
                                         weight: statusConfiguration.viewModel.reblogged ? .bold : .regular)),
                              for: .normal)
-        favoriteButton.setImage(UIImage(systemName: statusConfiguration.viewModel.favorited ? "star.fill" : "star",
+        favoriteButton.setImage(UIImage(systemName: isFavorited ? favoritedIcon : favoriteIcon,
                                         withConfiguration: UIImage.SymbolConfiguration(pointSize: font.pointSize)),
                                 for: .normal)
         shareButton.setImage(UIImage(systemName: "square.and.arrow.up",
@@ -905,7 +919,11 @@ private extension StatusView {
     }
 
     func setFavoriteButtonColor(favorited: Bool) {
-        let favoriteColor: UIColor = favorited ? .systemYellow : .secondaryLabel
+        var favoriteColor: UIColor
+        switch statusConfiguration.viewModel.identityContext.appPreferences.displayFavoritesAs {
+        case .favorites: favoriteColor = favorited ? .systemYellow : .secondaryLabel
+        case .likes: favoriteColor = favorited ? .systemRed : .secondaryLabel
+        }
 
         favoriteButton.tintColor = favoriteColor
         favoriteButton.setTitleColor(favoriteColor, for: .normal)
@@ -938,20 +956,47 @@ private extension StatusView {
         statusConfiguration.viewModel.toggleReblogged()
     }
 
+    func animateFavorite() {
+        switch statusConfiguration.viewModel.identityContext.appPreferences.displayFavoritesAs {
+
+        case .favorites:
+            self.animateAsFavorite()
+        case .likes:
+            self.animateAsLike()
+        }
+    }
+
+    func animateAsFavorite() {
+        UIViewPropertyAnimator.runningPropertyAnimator(
+            withDuration: .defaultAnimationDuration,
+            delay: 0,
+            options: .curveLinear) {
+            self.setFavoriteButtonColor(favorited: !self.statusConfiguration.viewModel.favorited)
+            self.favoriteButton.imageView?.transform =
+                self.favoriteButton.imageView?.transform.rotated(by: .pi) ?? .identity
+        } completion: { _ in
+            self.favoriteButton.imageView?.transform = .identity
+        }
+    }
+
+    func animateAsLike() {
+        UIViewPropertyAnimator.runningPropertyAnimator(
+            withDuration: .defaultAnimationDuration,
+            delay: 0,
+            options: .curveEaseInOut) {
+            self.setFavoriteButtonColor(favorited: !self.statusConfiguration.viewModel.favorited)
+            self.favoriteButton.imageView?.transform =
+            self.favoriteButton.imageView?.transform.scaledBy(x: 0.7, y: 0.7) ?? .identity
+        } completion: { _ in
+            self.favoriteButton.imageView?.transform = .identity
+        }
+    }
+
     func favorite() {
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
 
         if !UIAccessibility.isReduceMotionEnabled {
-            UIViewPropertyAnimator.runningPropertyAnimator(
-                withDuration: .defaultAnimationDuration,
-                delay: 0,
-                options: .curveLinear) {
-                self.setFavoriteButtonColor(favorited: !self.statusConfiguration.viewModel.favorited)
-                self.favoriteButton.imageView?.transform =
-                    self.favoriteButton.imageView?.transform.rotated(by: .pi) ?? .identity
-            } completion: { _ in
-                self.favoriteButton.imageView?.transform = .identity
-            }
+            self.animateFavorite()
         }
 
         statusConfiguration.viewModel.toggleFavorited()

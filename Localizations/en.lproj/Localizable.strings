@@ -253,6 +253,7 @@
 "preferences.require-double-tap-to-favorite" = "Require double tap to favorite";
 "preferences.show-reblog-and-favorite-counts" = "Show boost and favorite counts";
 "preferences.status-word" = "Status word";
+"preferences.display-favorites-as" = "Display favorites as";
 "filters.active" = "Active";
 "filters.expired" = "Expired";
 "filter.add-new" = "Add New Filter";
@@ -279,6 +280,7 @@
 "notifications" = "Notifications";
 "notifications.reblogged-your-status-%@" = "%@ boosted your status";
 "notifications.favourited-your-status-%@" = "%@ favorited your status";
+"notifications.liked-your-status-%@" = "%@ liked your status";
 "notifications.followed-you-%@" = "%@ followed you";
 "notifications.poll-ended" = "A poll you have voted in has ended";
 "notifications.your-poll-ended" = "Your poll has ended";
@@ -356,3 +358,4 @@
 "timelines.local" = "Local";
 "timelines.federated" = "Federated";
 "toot" = "Toot";
+"likes" = "Likes";

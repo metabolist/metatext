@@ -101,6 +101,12 @@ struct PreferencesView: View {
                             Text(option.localizedStringKey).tag(option)
                         }
                     }
+                    Picker("preferences.display-favorites-as",
+                           selection: $identityContext.appPreferences.displayFavoritesAs) {
+                        ForEach(AppPreferences.DisplayFavoritesAs.allCases) { option in
+                            Text(option.localizedStringKey).tag(option)
+                        }
+                    }
                     Toggle("preferences.show-reblog-and-favorite-counts",
                            isOn: $identityContext.appPreferences.showReblogAndFavoriteCounts)
                     Toggle("preferences.require-double-tap-to-reblog",
@@ -178,6 +184,17 @@ extension AppPreferences.StatusWord {
             return "toot"
         case .post:
             return "post"
+        }
+    }
+}
+
+extension AppPreferences.DisplayFavoritesAs {
+    var localizedStringKey: LocalizedStringKey {
+        switch self {
+        case .favorites:
+            return "favorites"
+        case .likes:
+            return "likes"
         }
     }
 }
