@@ -313,8 +313,11 @@
 "status.delete.confirm.post" = "Are you sure you want to delete this post?";
 "status.delete.confirm.toot" = "Are you sure you want to delete this toot?";
 "status.delete-and-redraft" = "Delete & re-draft";
-"status.delete-and-redraft.confirm.post" = "Are you sure you want to delete this post and re-draft it? Favorites and boosts will be lost, and replies to the original post will be orphaned.";
-"status.delete-and-redraft.confirm.toot" = "Are you sure you want to delete this toot and re-draft it? Favorites and boosts will be lost, and replies to the original toot will be orphaned.";
+"status.delete-and-redraft.confirm.post-favorites" = "Are you sure you want to delete this post and re-draft it? Favorites and boosts will be lost, and replies to the original post will be orphaned.";
+"status.delete-and-redraft.confirm.toot-favorites" = "Are you sure you want to delete this toot and re-draft it? Favorites and boosts will be lost, and replies to the original toot will be orphaned.";
+"status.delete-and-redraft.confirm.post-likes" = "Are you sure you want to delete this post and re-draft it? Likes and boosts will be lost, and replies to the original post will be orphaned.";
+"status.delete-and-redraft.confirm.toot-likes" = "Are you sure you want to delete this toot and re-draft it? Likes and boosts will be lost, and replies to the original toot will be orphaned.";
+
 "status.mute" = "Mute conversation";
 "status.new-items.post" = "New posts";
 "status.new-items.toot" = "New toots";
@@ -333,6 +336,8 @@
 "status.reblog-button.undo.accessibility-label" = "Unboost";
 "status.favorite-button.accessibility-label" = "Favorite";
 "status.favorite-button.undo.accessibility-label" = "Unfavorite";
+"status.like-button.accessibility-label" = "Like";
+"status.like-button.undo.accessibility-label" = "Unlike";
 "status.show-more" = "Show More";
 "status.show-more-all-button.accessibilty-label" = "Show more for all";
 "status.show-less" = "Show Less";

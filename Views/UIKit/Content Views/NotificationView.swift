@@ -163,6 +163,33 @@ private extension NotificationView {
         isAccessibilityElement = true
     }
 
+    var colorForFavoriteView: UIColor {
+        switch notificationConfiguration.viewModel.identityContext.appPreferences.displayFavoritesAs {
+        case .favorites:
+            return .systemYellow
+        case .likes:
+            return .systemRed
+        }
+    }
+
+    var labelForFavoriteView: String {
+        switch notificationConfiguration.viewModel.identityContext.appPreferences.displayFavoritesAs {
+        case .favorites:
+            return "notifications.favourited-your-status-%@"
+        case .likes:
+            return "notifications.liked-your-status-%@"
+        }
+    }
+
+    var imageNameForFavoriteView: String {
+        switch notificationConfiguration.viewModel.identityContext.appPreferences.displayFavoritesAs {
+        case .favorites:
+            return "star.fill"
+        case .likes:
+            return "heart.fill"
+        }
+    }
+
     func applyNotificationConfiguration() {
         let viewModel = notificationConfiguration.viewModel
         var imageName = viewModel.type.systemImageName
@@ -184,23 +211,13 @@ private extension NotificationView {
                 identityContext: viewModel.identityContext)
             iconImageView.tintColor = .systemGreen
         case .favourite:
-            let label: String
-            let color: UIColor
-            switch viewModel.identityContext.appPreferences.displayFavoritesAs {
-            case .favorites:
-                label = "notifications.favourited-your-status-%@"
-                color = .systemYellow
-            case .likes:
-                label = "notifications.liked-your-status-%@"
-                color = .systemRed
-                imageName = "heart.fill"
-            }
-            typeLabel.attributedText = label.localizedBolding(
+            imageName = imageNameForFavoriteView
+            typeLabel.attributedText = labelForFavoriteView.localizedBolding(
                 displayName: viewModel.accountViewModel.displayName,
                 emojis: viewModel.accountViewModel.emojis,
                 label: typeLabel,
                 identityContext: viewModel.identityContext)
-            iconImageView.tintColor = color
+            iconImageView.tintColor = colorForFavoriteView
         case .poll:
             typeLabel.text = NSLocalizedString(
                 viewModel.accountViewModel.isSelf

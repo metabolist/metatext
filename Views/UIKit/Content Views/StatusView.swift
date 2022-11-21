@@ -451,6 +451,15 @@ private extension StatusView {
             .store(in: &cancellables)
     }
 
+    var favoriteCountLabel: String {
+        switch statusConfiguration.viewModel.identityContext.appPreferences.displayFavoritesAs {
+        case .favorites:
+            return "status.favorites-count-%ld"
+        case .likes:
+            return "status.likes-count-%ld"
+        }
+    }
+
     func applyStatusConfiguration() {
         let viewModel = statusConfiguration.viewModel
         let isContextParent = viewModel.configuration.isContextParent
@@ -593,8 +602,9 @@ private extension StatusView {
             localizationKey: "status.reblogs-count-%ld",
             count: viewModel.reblogsCount)
         rebloggedByButton.isHidden = noReblogs
+
         favoritedByButton.setAttributedLocalizedTitle(
-            localizationKey: "status.favorites-count-%ld",
+            localizationKey: favoriteCountLabel,
             count: viewModel.favoritesCount)
         favoritedByButton.isHidden = noFavorites
 
@@ -822,7 +832,7 @@ private extension StatusView {
             if statusConfiguration.viewModel.favoritesCount > 0 {
                 accessibilityAttributedLabel.appendWithSeparator(
                     String.localizedStringWithFormat(
-                        NSLocalizedString("status.favorites-count-%ld", comment: ""),
+                        NSLocalizedString(favoriteCountLabel, comment: ""),
                         statusConfiguration.viewModel.favoritesCount))
             }
         }
@@ -920,9 +930,17 @@ private extension StatusView {
 
     func setFavoriteButtonColor(favorited: Bool) {
         var favoriteColor: UIColor
+        var favoriteLabel: String
+        var undoFavoriteLabel: String
         switch statusConfiguration.viewModel.identityContext.appPreferences.displayFavoritesAs {
-        case .favorites: favoriteColor = favorited ? .systemYellow : .secondaryLabel
-        case .likes: favoriteColor = favorited ? .systemRed : .secondaryLabel
+        case .favorites:
+            favoriteColor = favorited ? .systemYellow : .secondaryLabel
+            favoriteLabel = "status.favorite-button.undo.accessibility-label"
+            undoFavoriteLabel = "status.favorite-button.accessibility-label"
+        case .likes:
+            favoriteColor = favorited ? .systemRed : .secondaryLabel
+            favoriteLabel = "status.like-button.undo.accessibility-label"
+            undoFavoriteLabel = "status.like-button.accessibility-label"
         }
 
         favoriteButton.tintColor = favoriteColor
@@ -930,10 +948,10 @@ private extension StatusView {
 
         if favorited {
             favoriteButton.accessibilityLabel =
-                NSLocalizedString("status.favorite-button.undo.accessibility-label", comment: "")
+                NSLocalizedString(undoFavoriteLabel, comment: "")
         } else {
             favoriteButton.accessibilityLabel =
-                NSLocalizedString("status.favorite-button.accessibility-label", comment: "")
+                NSLocalizedString(favoriteLabel, comment: "")
         }
     }
 
