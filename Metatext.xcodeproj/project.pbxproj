@@ -10,6 +10,7 @@
 		94B2C8C02929617A00087955 /* UniformTypeIdentifiers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94B2C8BF2929617A00087955 /* UniformTypeIdentifiers.framework */; };
 		94B2C8C52929617A00087955 /* ActionExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B2C8C42929617A00087955 /* ActionExtensionViewController.swift */; };
 		94B2C8CC2929617A00087955 /* Action Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 94B2C8BE2929617A00087955 /* Action Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		94B2C926292B2D1B00087955 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 94B2C928292B2D1B00087955 /* InfoPlist.strings */; };
 		D0030982250C6C8500EACB32 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0030981250C6C8500EACB32 /* URL+Extensions.swift */; };
 		D005A1D825EF189A008B2E63 /* ReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D005A1D725EF189A008B2E63 /* ReportViewController.swift */; };
 		D005A1E625EF3D11008B2E63 /* ReportHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D005A1E525EF3D11008B2E63 /* ReportHeaderView.swift */; };
@@ -315,6 +316,8 @@
 		94B2C8C42929617A00087955 /* ActionExtensionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionExtensionViewController.swift; sourceTree = "<group>"; };
 		94B2C8C92929617A00087955 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		94B2C8CD2929617A00087955 /* Action Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Action Extension.entitlements"; sourceTree = "<group>"; };
+		94B2C927292B2D1B00087955 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		94B2C929292B2D3F00087955 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D0030981250C6C8500EACB32 /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
 		D005A1D725EF189A008B2E63 /* ReportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportViewController.swift; sourceTree = "<group>"; };
 		D005A1E525EF3D11008B2E63 /* ReportHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportHeaderView.swift; sourceTree = "<group>"; };
@@ -580,6 +583,7 @@
 				94B2C8CD2929617A00087955 /* Action Extension.entitlements */,
 				94B2C8C42929617A00087955 /* ActionExtensionViewController.swift */,
 				94B2C8C92929617A00087955 /* Info.plist */,
+				94B2C928292B2D1B00087955 /* InfoPlist.strings */,
 			);
 			path = "Action Extension";
 			sourceTree = "<group>";
@@ -1164,6 +1168,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94B2C926292B2D1B00087955 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1508,6 +1513,15 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		94B2C928292B2D1B00087955 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				94B2C927292B2D1B00087955 /* en */,
+				94B2C929292B2D3F00087955 /* es */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 		D9E6586A2601CF76007C426E /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
