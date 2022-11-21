@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>tag.people-talking-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@people@</string>
+      <key>people</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld מדבר.ת</string>
+        <key>two</key>
+        <string>%ld א.נשים מדברים/ות</string>
+        <key>many</key>
+        <string>%ld א.נשים מדברים/ות</string>
+        <key>other</key>
+        <string>%ld א.נשים מדברים/ות</string>
+      </dict>
+    </dict>
+    <key>status.poll.participation-count-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@people@</string>
+      <key>people</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld איש.ה</string>
+        <key>two</key>
+        <string>%ld א.נשים</string>
+        <key>many</key>
+        <string>%ld א.נשים</string>
+        <key>other</key>
+        <string>%ld א.נשים</string>
+      </dict>
+    </dict>
+    <key>status.reblogs-count-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@reblogs@</string>
+      <key>reblogs</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld הידהוד</string>
+        <key>two</key>
+        <string>%ld הידהודים</string>
+        <key>many</key>
+        <string>%ld הידהודים</string>
+        <key>other</key>
+        <string>%ld הידהודים</string>
+      </dict>
+    </dict>
+    <key>status.favorites-count-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@favorites@</string>
+      <key>favorites</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld חיבוב</string>
+        <key>two</key>
+        <string>%ld חיבובים</string>
+        <key>many</key>
+        <string>%ld חיבובים</string>
+        <key>other</key>
+        <string>%ld חיבובים</string>
+      </dict>
+    </dict>
+    <key>status.replies-count-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@replies@</string>
+      <key>replies</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld תגובה</string>
+        <key>two</key>
+        <string>%ld תגובות</string>
+        <key>many</key>
+        <string>%ld תגובות</string>
+        <key>other</key>
+        <string>%ld תגובות</string>
+      </dict>
+    </dict>
+    <key>statuses.count.post-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@posts@</string>
+      <key>posts</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld פוסט</string>
+        <key>two</key>
+        <string>%ld תגובות</string>
+        <key>many</key>
+        <string>%ld תגובות</string>
+        <key>other</key>
+        <string>%ld פוסטים</string>
+      </dict>
+    </dict>
+    <key>statuses.count.toot-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@toots@</string>
+      <key>toots</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld חיצרוץ</string>
+        <key>two</key>
+        <string>%ld חיצרוצים</string>
+        <key>many</key>
+        <string>%ld חיצרוצים</string>
+        <key>other</key>
+        <string>%ld חיצרוצים</string>
+      </dict>
+    </dict>
+    <key>account.followers-count-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@followers@</string>
+      <key>followers</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld עוקב.ת</string>
+        <key>two</key>
+        <string>%ld עוקבים/ות</string>
+        <key>many</key>
+        <string>%ld עוקבים/ות</string>
+        <key>other</key>
+        <string>%ld עוקבים/ות</string>
+      </dict>
+    </dict>
+    <key>attachment.type.images-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@images@</string>
+      <key>images</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld תמונה</string>
+        <key>two</key>
+        <string>%ld תמונות</string>
+        <key>many</key>
+        <string>%ld תמונות</string>
+        <key>other</key>
+        <string>%ld תמונות</string>
+      </dict>
+    </dict>
+    <key>attachment.type.audios-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@audios@</string>
+      <key>audios</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld קובץ שמע</string>
+        <key>two</key>
+        <string>%ld קבצי שמע</string>
+        <key>many</key>
+        <string>%ld קבצי שמע</string>
+        <key>other</key>
+        <string>%ld קבצי שמע</string>
+      </dict>
+    </dict>
+    <key>attachment.type.videos-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@videos@</string>
+      <key>videos</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld קובץ וידיאו</string>
+        <key>two</key>
+        <string>%ld קבצי וידיאו</string>
+        <key>many</key>
+        <string>%ld קבצי וידיאו</string>
+        <key>other</key>
+        <string>%ld קבצי וידיאו</string>
+      </dict>
+    </dict>
+    <key>attachment.type.unknowns-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@unknowns@</string>
+      <key>unknowns</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>%ld קובץ מצורף</string>
+        <key>two</key>
+        <string>%ld קבצים מצורפים</string>
+        <key>many</key>
+        <string>%ld קבצים מצורפים</string>
+        <key>other</key>
+        <string>%ld קבצים מצורפים</string>
+      </dict>
+    </dict>
+  </dict>
+</plist>

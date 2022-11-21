@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>tag.people-talking-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@people@</string>
+      <key>people</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>Pertsona %ld hitz egiten</string>
+        <key>other</key>
+        <string>%ld pertsona hitz egiten</string>
+      </dict>
+    </dict>
+    <key>status.poll.participation-count-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@people@</string>
+      <key>people</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>Pertsona %ld</string>
+        <key>other</key>
+        <string>%ld pertsona</string>
+      </dict>
+    </dict>
+    <key>status.reblogs-count-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@reblogs@</string>
+      <key>reblogs</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>Bultzada %ld</string>
+        <key>other</key>
+        <string>%ld bultzada</string>
+      </dict>
+    </dict>
+    <key>status.favorites-count-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@favorites@</string>
+      <key>favorites</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>Gogoko %ld</string>
+        <key>other</key>
+        <string>%ld gogoko</string>
+      </dict>
+    </dict>
+    <key>status.replies-count-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@replies@</string>
+      <key>replies</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>Erantzun %ld</string>
+        <key>other</key>
+        <string>%ld erantzun</string>
+      </dict>
+    </dict>
+    <key>statuses.count.post-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@posts@</string>
+      <key>posts</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>Bidalketa %ld</string>
+        <key>other</key>
+        <string>%ld bidalketa</string>
+      </dict>
+    </dict>
+    <key>statuses.count.toot-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@toots@</string>
+      <key>toots</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>Tut %ld</string>
+        <key>other</key>
+        <string>%ld tut</string>
+      </dict>
+    </dict>
+    <key>account.followers-count-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@followers@</string>
+      <key>followers</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>Jarraitzaile %ld</string>
+        <key>other</key>
+        <string>%ld jarraitzaile</string>
+      </dict>
+    </dict>
+    <key>attachment.type.images-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@images@</string>
+      <key>images</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>Irudi %ld</string>
+        <key>other</key>
+        <string>%ld irudi</string>
+      </dict>
+    </dict>
+    <key>attachment.type.audios-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@audios@</string>
+      <key>audios</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>Audio fitxategi %ld</string>
+        <key>other</key>
+        <string>%ld audio fitxategi</string>
+      </dict>
+    </dict>
+    <key>attachment.type.videos-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@videos@</string>
+      <key>videos</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>Bideo fitxategi %ld</string>
+        <key>other</key>
+        <string>%ld bideo fitxategi</string>
+      </dict>
+    </dict>
+    <key>attachment.type.unknowns-%ld</key>
+    <dict>
+      <key>NSStringLocalizedFormatKey</key>
+      <string>%#@unknowns@</string>
+      <key>unknowns</key>
+      <dict>
+        <key>NSStringFormatSpecTypeKey</key>
+        <string>NSStringPluralRuleType</string>
+        <key>NSStringFormatValueTypeKey</key>
+        <string>ld</string>
+        <key>one</key>
+        <string>Eranskin %ld</string>
+        <key>other</key>
+        <string>%ld eranskin</string>
+      </dict>
+    </dict>
+  </dict>
+</plist>
