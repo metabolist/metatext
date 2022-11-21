@@ -24,7 +24,7 @@
 "account.domain-unblock-%@" = "Dì-bhac an àrainn %@";
 "account.domain-unblock.confirm-%@" = "A bheil thu airson an àrainn %@ a dhì-bhacadh?";
 "account.field.verified-%@" = "%@ air a dhearbhadh";
-"account.follow" = "Lean air";
+"account.follow" = "Lean";
 "account.following" = "’Ga leantainn";
 "account.following-count-%ld" = "Tha %ld ’ga leantainn";
 "account.followed-by-%@" = "’Ga leantainn le %@";
@@ -37,7 +37,7 @@
 "account.mute" = "Mùch";
 "account.mute.indefinite" = "Gun chrìoch";
 "account.mute.confirm-%@" = "A bheil thu cinnteach gu bheil thu airson %@ a mhùchadh?";
-"account.mute.confirm.explanation" = "Cuiridh seo na postaichean uapa ’s na postaichean a bheir iomradh orra am falach ach chì iad-san na postaichean agad fhathast is faodaidh iad leantainn ort.";
+"account.mute.confirm.explanation" = "Cuiridh seo na postaichean uapa ’s na postaichean a bheir iomradh orra am falach ach chì iad-san na postaichean agad fhathast is faodaidh iad ’gad leantainn.";
 "account.mute.confirm.hide-notifications" = "A bheil thu airson na brathan fhalach on chleachdaiche seo?";
 "account.mute.confirm.duration" = "Faide";
 "account.mute.target-%@" = "Mùch %@";
@@ -56,7 +56,7 @@
 "account.unavailable" = "Chan eil a’ phròifil ri làimh";
 "account.unblock" = "Dì-bhac";
 "account.unblock.confirm-%@" = "A bheil thu airson %@ a dhì-bhacadh?";
-"account.unfollow.confirm-%@" = "A bheil thu airson sgur de leantainn air %@?";
+"account.unfollow.confirm-%@" = "A bheil thu airson sgur de %@ a leantainn?";
 "account.unmute" = "Dì-mhùch";
 "account.unmute.confirm-%@" = "A bheil thu airson %@ a dhì-mhùchadh?";
 "account.unnotify" = "Cuir na brathan dheth";
@@ -160,9 +160,9 @@
 "registration.agree-to-server-rules-and-terms-of-service" = "Gabhaidh mi ri riaghailtean an fhrithealaiche ’s teirmichean na seirbheise";
 "registration.password-confirmation-mismatch" = "Chan eil an dà fhacal-faire co-ionnann";
 "secondary-navigation.about" = "Mun aplacaid seo";
-"secondary-navigation.account-settings" = "Account Settings";
+"secondary-navigation.account-settings" = "Roghainean a’ chunntais";
 "secondary-navigation.accounts" = "Cunntasan";
-"secondary-navigation.edit-profile" = "Edit Profile";
+"secondary-navigation.edit-profile" = "Deasaich a’ phroifil";
 "secondary-navigation.lists" = "Liostaichean";
 "secondary-navigation.my-profile" = "A’ phròifil agam";
 "secondary-navigation.preferences" = "Roghainnean";
@@ -201,10 +201,10 @@
 "preferences" = "Roghainnean";
 "preferences.app" = "Roghainnean na h-aplacaide";
 "preferences.app-icon" = "Ìomhaigheag na h-aplacaide";
-"preferences.app.color-scheme" = "Appearance";
-"preferences.app.color-scheme.dark" = "Dark";
-"preferences.app.color-scheme.light" = "Light";
-"preferences.app.color-scheme.system" = "System";
+"preferences.app.color-scheme" = "Coltas";
+"preferences.app.color-scheme.dark" = "Dorcha";
+"preferences.app.color-scheme.light" = "Soilleir";
+"preferences.app.color-scheme.system" = "Siostam";
 "preferences.blocked-domains" = "Àrainnean bacte";
 "preferences.blocked-users" = "Cleachdaichean bacte";
 "preferences.media" = "Meadhanan";
@@ -279,7 +279,7 @@
 "notifications" = "Brathan";
 "notifications.reblogged-your-status-%@" = "Bhrosnaich %@ am post agad";
 "notifications.favourited-your-status-%@" = "Chuir %@ am post agad ris na h-annsachdan";
-"notifications.followed-you-%@" = "Lean %@ ort";
+"notifications.followed-you-%@" = "Lean %@ thu";
 "notifications.poll-ended" = "Thàinig cunntas-bheachd sa bhòt thu gu crìoch";
 "notifications.your-poll-ended" = "Thàinig an cunntas-bheachd agad gu crìoch";
 "notifications.unknown-%@" = "Brath o %@";
@@ -346,7 +346,7 @@
 "status.visibility.direct" = "Dìreach";
 "status.visibility.public.description" = "Chì a h-uile duine seo ’s e ’ga shealltainn air loidhnichean-ama poblach";
 "status.visibility.unlisted.description" = "Chì a h-uile duine seo ach cha dèid a shealltainn air loidhnichean-ama poblach";
-"status.visibility.private.description" = "Chan fhaic ach na daoine a tha a’ leantainn ort seo";
+"status.visibility.private.description" = "Chan fhaic ach na daoine a tha ’gad leantainn seo";
 "status.visibility.direct.description" = "Chan fhaic ach na cleachdaichean le iomradh orra seo";
 "tag.accessibility-recent-uses-%ld" = "Chaidh a chleachdadh %ld tura(i)s o chionn ghoirid";
 "tag.accessibility-hint.post" = "Seall na postaichean co-cheangailte ris an treand";

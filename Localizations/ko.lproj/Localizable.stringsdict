@@ -13,7 +13,7 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
         <key>other</key>
-        <string>%ld님이 입력하고 있어요</string>
+        <string>%ld명이 말하고 있어요</string>
       </dict>
     </dict>
     <key>status.poll.participation-count-%ld</key>
@@ -69,7 +69,7 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
         <key>other</key>
-        <string>%ld개의 답글</string>
+        <string>%ld 답글</string>
       </dict>
     </dict>
     <key>statuses.count.post-%ld</key>
@@ -83,7 +83,7 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
         <key>other</key>
-        <string>%ld개의 게시글</string>
+        <string>%ld 게시글</string>
       </dict>
     </dict>
     <key>statuses.count.toot-%ld</key>
@@ -97,7 +97,7 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
         <key>other</key>
-        <string>%ld개의 툿</string>
+        <string>%ld 툿</string>
       </dict>
     </dict>
     <key>account.followers-count-%ld</key>
