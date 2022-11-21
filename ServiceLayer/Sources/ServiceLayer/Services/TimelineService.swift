@@ -28,7 +28,16 @@ public struct TimelineService {
         self.timeline = timeline
         self.mastodonAPIClient = mastodonAPIClient
         self.contentDatabase = contentDatabase
-        sections = contentDatabase.timelinePublisher(timeline)
+
+        if case .home = timeline {
+            sections = contentDatabase.cleanHomeTimelinePublisher()
+                .collect()
+                .flatMap { _ in contentDatabase.timelinePublisher(timeline) }
+                .eraseToAnyPublisher()
+        } else {
+            sections = contentDatabase.timelinePublisher(timeline)
+        }
+
         navigationService = NavigationService(environment: environment,
                                               mastodonAPIClient: mastodonAPIClient,
                                               contentDatabase: contentDatabase)
