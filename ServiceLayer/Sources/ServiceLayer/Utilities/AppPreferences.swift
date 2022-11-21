@@ -190,6 +190,11 @@ public extension AppPreferences {
         get { self[.showReblogAndFavoriteCounts] ?? false }
         set { self[.showReblogAndFavoriteCounts] = newValue }
     }
+    
+    var edgeToEdgeView: Bool {
+        get { self[.edgeToEdgeView] ?? false }
+        set { self[.edgeToEdgeView] = newValue }
+    }
 
     var requireDoubleTapToReblog: Bool {
         get { self[.requireDoubleTapToReblog] ?? false }
@@ -243,6 +248,7 @@ private extension AppPreferences {
         case notificationSounds
         case openLinksInDefaultBrowser
         case useUniversalLinks
+        case edgeToEdgeView
     }
 
     subscript<T>(index: Item) -> T? {

@@ -101,6 +101,8 @@ struct PreferencesView: View {
                             Text(option.localizedStringKey).tag(option)
                         }
                     }
+                    Toggle("preferences.edge-to-edge-view",
+                           isOn: $identityContext.appPreferences.edgeToEdgeView)
                     Picker("preferences.display-favorites-as",
                            selection: $identityContext.appPreferences.displayFavoritesAs) {
                         ForEach(AppPreferences.DisplayFavoritesAs.allCases) { option in

@@ -51,6 +51,7 @@ final class StatusBodyView: UIView {
 
             contentTextView.isHidden = !viewModel.shouldShowContent
 
+            attachmentsView.displayEdgeToEdge(viewModel.identityContext.appPreferences.edgeToEdgeView)
             attachmentsView.isHidden = viewModel.attachmentViewModels.isEmpty
             attachmentsView.viewModel = viewModel
 
