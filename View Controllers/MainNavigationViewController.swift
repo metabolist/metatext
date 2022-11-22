@@ -140,7 +140,7 @@ private extension MainNavigationViewController {
             controller.navigationItem.leftBarButtonItem = secondaryNavigationButton
         }
 
-        viewControllers = controllers.map(UINavigationController.init(rootViewController:))
+        viewControllers = controllers.map(SwipeableNavigationController.init(rootViewController:))
     }
 
     func setupNewStatusButton() {

@@ -224,10 +224,18 @@ public extension NavigationViewModel {
 
 private extension NavigationViewModel {
     func accountSettingsURL(instanceURI: String) -> URL? {
-        URL(string: "https://\(instanceURI)/auth/edit")
+        if instanceURI.hasPrefix("https://") {
+            return URL(string: "\(instanceURI)/auth/edit")
+        } else {
+            return URL(string: "https://\(instanceURI)/auth/edit")
+        }
     }
 
     func editProfileURL(instanceURI: String) -> URL? {
-        URL(string: "https://\(instanceURI)/settings/profile")
+        if instanceURI.hasPrefix("https://") {
+            return URL(string: "\(instanceURI)/settings/profile")
+        } else {
+            return URL(string: "https://\(instanceURI)/settings/profile")
+        }
     }
 }

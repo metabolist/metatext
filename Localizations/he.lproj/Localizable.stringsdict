@@ -12,8 +12,14 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld מדבר.ת</string>
+        <key>two</key>
+        <string>%ld א.נשים מדברים/ות</string>
+        <key>many</key>
+        <string>%ld א.נשים מדברים/ות</string>
         <key>other</key>
-        <string>%ld명이 말하고 있어요</string>
+        <string>%ld א.נשים מדברים/ות</string>
       </dict>
     </dict>
     <key>status.poll.participation-count-%ld</key>
@@ -26,8 +32,14 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld איש.ה</string>
+        <key>two</key>
+        <string>%ld א.נשים</string>
+        <key>many</key>
+        <string>%ld א.נשים</string>
         <key>other</key>
-        <string>%ld명 참여</string>
+        <string>%ld א.נשים</string>
       </dict>
     </dict>
     <key>status.reblogs-count-%ld</key>
@@ -40,8 +52,14 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld הידהוד</string>
+        <key>two</key>
+        <string>%ld הידהודים</string>
+        <key>many</key>
+        <string>%ld הידהודים</string>
         <key>other</key>
-        <string>%ld개의 부스트</string>
+        <string>%ld הידהודים</string>
       </dict>
     </dict>
     <key>status.favorites-count-%ld</key>
@@ -54,8 +72,14 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld חיבוב</string>
+        <key>two</key>
+        <string>%ld חיבובים</string>
+        <key>many</key>
+        <string>%ld חיבובים</string>
         <key>other</key>
-        <string>%ld개의 즐겨찾기</string>
+        <string>%ld חיבובים</string>
       </dict>
     </dict>
     <key>status.replies-count-%ld</key>
@@ -68,8 +92,14 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld תגובה</string>
+        <key>two</key>
+        <string>%ld תגובות</string>
+        <key>many</key>
+        <string>%ld תגובות</string>
         <key>other</key>
-        <string>%ld 답글</string>
+        <string>%ld תגובות</string>
       </dict>
     </dict>
     <key>statuses.count.post-%ld</key>
@@ -82,8 +112,14 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld פוסט</string>
+        <key>two</key>
+        <string>%ld תגובות</string>
+        <key>many</key>
+        <string>%ld תגובות</string>
         <key>other</key>
-        <string>%ld 게시글</string>
+        <string>%ld פוסטים</string>
       </dict>
     </dict>
     <key>statuses.count.toot-%ld</key>
@@ -96,8 +132,14 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld חיצרוץ</string>
+        <key>two</key>
+        <string>%ld חיצרוצים</string>
+        <key>many</key>
+        <string>%ld חיצרוצים</string>
         <key>other</key>
-        <string>%ld 툿</string>
+        <string>%ld חיצרוצים</string>
       </dict>
     </dict>
     <key>account.followers-count-%ld</key>
@@ -110,8 +152,14 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld עוקב.ת</string>
+        <key>two</key>
+        <string>%ld עוקבים/ות</string>
+        <key>many</key>
+        <string>%ld עוקבים/ות</string>
         <key>other</key>
-        <string>%ld 팔로워</string>
+        <string>%ld עוקבים/ות</string>
       </dict>
     </dict>
     <key>attachment.type.images-%ld</key>
@@ -124,8 +172,14 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld תמונה</string>
+        <key>two</key>
+        <string>%ld תמונות</string>
+        <key>many</key>
+        <string>%ld תמונות</string>
         <key>other</key>
-        <string>%ld장의 이미지</string>
+        <string>%ld תמונות</string>
       </dict>
     </dict>
     <key>attachment.type.audios-%ld</key>
@@ -138,8 +192,14 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld קובץ שמע</string>
+        <key>two</key>
+        <string>%ld קבצי שמע</string>
+        <key>many</key>
+        <string>%ld קבצי שמע</string>
         <key>other</key>
-        <string>%ld개의 음성 파일</string>
+        <string>%ld קבצי שמע</string>
       </dict>
     </dict>
     <key>attachment.type.videos-%ld</key>
@@ -152,8 +212,14 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld קובץ וידיאו</string>
+        <key>two</key>
+        <string>%ld קבצי וידיאו</string>
+        <key>many</key>
+        <string>%ld קבצי וידיאו</string>
         <key>other</key>
-        <string>%ld개의 비디오 파일</string>
+        <string>%ld קבצי וידיאו</string>
       </dict>
     </dict>
     <key>attachment.type.unknowns-%ld</key>
@@ -166,8 +232,14 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld קובץ מצורף</string>
+        <key>two</key>
+        <string>%ld קבצים מצורפים</string>
+        <key>many</key>
+        <string>%ld קבצים מצורפים</string>
         <key>other</key>
-        <string>%ld개의 첨부 파일</string>
+        <string>%ld קבצים מצורפים</string>
       </dict>
     </dict>
   </dict>

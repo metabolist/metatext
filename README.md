@@ -16,6 +16,8 @@ You can help translate Metatext on [CrowdIn](https://crowdin.com/project/metatex
 
 See the [contribution guidelines](https://github.com/metabolist/metatext/blob/main/CONTRIBUTING.md).
 
+Note that capacity for reviewing pull requests is currently very limited. For now, please limit the scope of proposed changes to fixing bugs and not added features, settings, or behavior, thanks. If you are interested in doing a larger scope change, please propose it via email at info@metabolist.org first.
+
 ## Building
 
 To build Metatext:

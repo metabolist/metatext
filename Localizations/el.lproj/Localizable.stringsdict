@@ -12,8 +12,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld άτομο μιλάει</string>
         <key>other</key>
-        <string>%ld명이 말하고 있어요</string>
+        <string>%ld άτομα μιλούν</string>
       </dict>
     </dict>
     <key>status.poll.participation-count-%ld</key>
@@ -26,8 +28,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld άτομο</string>
         <key>other</key>
-        <string>%ld명 참여</string>
+        <string>%ld άτομα</string>
       </dict>
     </dict>
     <key>status.reblogs-count-%ld</key>
@@ -40,8 +44,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld Boost</string>
         <key>other</key>
-        <string>%ld개의 부스트</string>
+        <string>%ld Boosts</string>
       </dict>
     </dict>
     <key>status.favorites-count-%ld</key>
@@ -54,8 +60,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld Αγαπημένο</string>
         <key>other</key>
-        <string>%ld개의 즐겨찾기</string>
+        <string>%ld Αγαπημένα</string>
       </dict>
     </dict>
     <key>status.replies-count-%ld</key>
@@ -68,8 +76,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld Απάντηση</string>
         <key>other</key>
-        <string>%ld 답글</string>
+        <string>%ld Απαντήσεις</string>
       </dict>
     </dict>
     <key>statuses.count.post-%ld</key>
@@ -82,8 +92,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld Δημοσίευση</string>
         <key>other</key>
-        <string>%ld 게시글</string>
+        <string>%ld Δημοσιεύσεις</string>
       </dict>
     </dict>
     <key>statuses.count.toot-%ld</key>
@@ -96,8 +108,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld Toot</string>
         <key>other</key>
-        <string>%ld 툿</string>
+        <string>%ld Toots</string>
       </dict>
     </dict>
     <key>account.followers-count-%ld</key>
@@ -110,8 +124,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld Ακόλουθος</string>
         <key>other</key>
-        <string>%ld 팔로워</string>
+        <string>%ld Ακόλουθοι</string>
       </dict>
     </dict>
     <key>attachment.type.images-%ld</key>
@@ -124,8 +140,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld εικόνα</string>
         <key>other</key>
-        <string>%ld장의 이미지</string>
+        <string>%ld εικόνες</string>
       </dict>
     </dict>
     <key>attachment.type.audios-%ld</key>
@@ -138,8 +156,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld αρχείο ήχου</string>
         <key>other</key>
-        <string>%ld개의 음성 파일</string>
+        <string>%ld αρχεία ήχου</string>
       </dict>
     </dict>
     <key>attachment.type.videos-%ld</key>
@@ -152,8 +172,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld αρχείο βίντεο</string>
         <key>other</key>
-        <string>%ld개의 비디오 파일</string>
+        <string>%ld αρχεία βίντεο</string>
       </dict>
     </dict>
     <key>attachment.type.unknowns-%ld</key>
@@ -166,8 +188,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>%ld συνημμένο</string>
         <key>other</key>
-        <string>%ld개의 첨부 파일</string>
+        <string>%ld συνημμένα</string>
       </dict>
     </dict>
   </dict>

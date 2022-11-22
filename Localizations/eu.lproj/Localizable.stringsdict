@@ -12,8 +12,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>Pertsona %ld hitz egiten</string>
         <key>other</key>
-        <string>%ld명이 말하고 있어요</string>
+        <string>%ld pertsona hitz egiten</string>
       </dict>
     </dict>
     <key>status.poll.participation-count-%ld</key>
@@ -26,8 +28,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>Pertsona %ld</string>
         <key>other</key>
-        <string>%ld명 참여</string>
+        <string>%ld pertsona</string>
       </dict>
     </dict>
     <key>status.reblogs-count-%ld</key>
@@ -40,8 +44,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>Bultzada %ld</string>
         <key>other</key>
-        <string>%ld개의 부스트</string>
+        <string>%ld bultzada</string>
       </dict>
     </dict>
     <key>status.favorites-count-%ld</key>
@@ -54,8 +60,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>Gogoko %ld</string>
         <key>other</key>
-        <string>%ld개의 즐겨찾기</string>
+        <string>%ld gogoko</string>
       </dict>
     </dict>
     <key>status.replies-count-%ld</key>
@@ -68,8 +76,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>Erantzun %ld</string>
         <key>other</key>
-        <string>%ld 답글</string>
+        <string>%ld erantzun</string>
       </dict>
     </dict>
     <key>statuses.count.post-%ld</key>
@@ -82,8 +92,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>Bidalketa %ld</string>
         <key>other</key>
-        <string>%ld 게시글</string>
+        <string>%ld bidalketa</string>
       </dict>
     </dict>
     <key>statuses.count.toot-%ld</key>
@@ -96,8 +108,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>Tut %ld</string>
         <key>other</key>
-        <string>%ld 툿</string>
+        <string>%ld tut</string>
       </dict>
     </dict>
     <key>account.followers-count-%ld</key>
@@ -110,8 +124,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>Jarraitzaile %ld</string>
         <key>other</key>
-        <string>%ld 팔로워</string>
+        <string>%ld jarraitzaile</string>
       </dict>
     </dict>
     <key>attachment.type.images-%ld</key>
@@ -124,8 +140,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>Irudi %ld</string>
         <key>other</key>
-        <string>%ld장의 이미지</string>
+        <string>%ld irudi</string>
       </dict>
     </dict>
     <key>attachment.type.audios-%ld</key>
@@ -138,8 +156,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>Audio fitxategi %ld</string>
         <key>other</key>
-        <string>%ld개의 음성 파일</string>
+        <string>%ld audio fitxategi</string>
       </dict>
     </dict>
     <key>attachment.type.videos-%ld</key>
@@ -152,8 +172,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>Bideo fitxategi %ld</string>
         <key>other</key>
-        <string>%ld개의 비디오 파일</string>
+        <string>%ld bideo fitxategi</string>
       </dict>
     </dict>
     <key>attachment.type.unknowns-%ld</key>
@@ -166,8 +188,10 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
+        <key>one</key>
+        <string>Eranskin %ld</string>
         <key>other</key>
-        <string>%ld개의 첨부 파일</string>
+        <string>%ld eranskin</string>
       </dict>
     </dict>
   </dict>
