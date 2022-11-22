@@ -12,6 +12,7 @@ public struct ContentDatabase {
 
     private let id: Identity.Id
     private let databaseWriter: DatabaseWriter
+    private let useHomeTimelineLastReadId: Bool
 
     public init(id: Identity.Id,
                 useHomeTimelineLastReadId: Bool,
@@ -19,6 +20,7 @@ public struct ContentDatabase {
                 appGroup: String,
                 keychain: Keychain.Type) throws {
         self.id = id
+        self.useHomeTimelineLastReadId = useHomeTimelineLastReadId
 
         if inMemory {
             databaseWriter = try DatabaseQueue()
@@ -30,10 +32,6 @@ public struct ContentDatabase {
                 try Secrets.databaseKey(identityId: id, keychain: keychain)
             }
         }
-
-        try Self.clean(
-            databaseWriter,
-            useHomeTimelineLastReadId: useHomeTimelineLastReadId)
 
         activeFiltersPublisher = ValueObservation.tracking {
             try Filter.filter(Filter.Columns.expiresAt == nil || Filter.Columns.expiresAt > Date()).fetchAll($0)
@@ -117,6 +115,28 @@ public extension ContentDatabase {
                         beforeStatusId: loadMore.beforeStatusId)
                         .save($0)
                 }
+            }
+        }
+    }
+
+    func cleanHomeTimelinePublisher() -> AnyPublisher<Never, Error> {
+        databaseWriter.mutatingPublisher {
+            try NotificationRecord.deleteAll($0)
+            try ConversationRecord.deleteAll($0)
+            try StatusAncestorJoin.deleteAll($0)
+            try StatusDescendantJoin.deleteAll($0)
+            try AccountList.deleteAll($0)
+
+            if useHomeTimelineLastReadId {
+                try TimelineRecord.filter(TimelineRecord.Columns.id != Timeline.home.id).deleteAll($0)
+                try StatusRecord.filter(Self.statusIdsToDeleteForPositionPreservingClean(db: $0)
+                    .contains(StatusRecord.Columns.id)).deleteAll($0)
+                try AccountRecord.filter(Self.accountIdsToDeleteForPositionPreservingClean(db: $0)
+                    .contains(AccountRecord.Columns.id)).deleteAll($0)
+            } else {
+                try TimelineRecord.deleteAll($0)
+                try StatusRecord.deleteAll($0)
+                try AccountRecord.deleteAll($0)
             }
         }
     }
@@ -697,28 +717,5 @@ private extension ContentDatabase {
         let staleAccountIds = allAccountIds.subtracting(accountIdsToKeep)
 
         return Set(Array(staleAccountIds).prefix(Self.cleanLimit))
-    }
-
-    static func clean(_ databaseWriter: DatabaseWriter,
-                      useHomeTimelineLastReadId: Bool) throws {
-        try databaseWriter.write {
-            try NotificationRecord.deleteAll($0)
-            try ConversationRecord.deleteAll($0)
-            try StatusAncestorJoin.deleteAll($0)
-            try StatusDescendantJoin.deleteAll($0)
-            try AccountList.deleteAll($0)
-
-            if useHomeTimelineLastReadId {
-                try TimelineRecord.filter(TimelineRecord.Columns.id != Timeline.home.id).deleteAll($0)
-                try StatusRecord.filter(statusIdsToDeleteForPositionPreservingClean(db: $0)
-                    .contains(StatusRecord.Columns.id)).deleteAll($0)
-                try AccountRecord.filter(accountIdsToDeleteForPositionPreservingClean(db: $0)
-                    .contains(AccountRecord.Columns.id)).deleteAll($0)
-            } else {
-                try TimelineRecord.deleteAll($0)
-                try StatusRecord.deleteAll($0)
-                try AccountRecord.deleteAll($0)
-            }
-        }
     }
 }

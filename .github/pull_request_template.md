@@ -13,3 +13,4 @@ request, mention that information here.
 Thanks for contributing to Metatext! -->
 
 - [ ] I have signed [Metabolist's Contributor License Agreement](https://metabolist.org/cla)
+- [ ] The proposed changes are limited in scope to fixing bugs, or I have discussed larger scope changes via email
