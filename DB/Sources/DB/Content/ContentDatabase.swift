@@ -671,7 +671,6 @@ public extension ContentDatabase {
 
 private extension ContentDatabase {
     static let cleanAfterLastReadIdCount = 40
-    static let cleanLimit = 100
     static let ephemeralTimelines = NSCountedSet()
 
     static func fileURL(id: Identity.Id, appGroup: String) throws -> URL {
@@ -701,9 +700,8 @@ private extension ContentDatabase {
 
         let statusIdsToKeep = Set(statusIds).union(reblogStatusIds)
         let allStatusIds = try Status.Id.fetchSet(db, StatusRecord.select(StatusRecord.Columns.id))
-        let staleStatusIds = allStatusIds.subtracting(statusIdsToKeep)
 
-        return Set(Array(staleStatusIds).prefix(Self.cleanLimit))
+        return  allStatusIds.subtracting(statusIdsToKeep)
     }
 
     static func accountIdsToDeleteForPositionPreservingClean(db: Database) throws -> Set<Account.Id> {
@@ -714,8 +712,7 @@ private extension ContentDatabase {
                                     && AccountRecord.Columns.movedId != nil)
                 .select(AccountRecord.Columns.movedId)))
         let allAccountIds = try Account.Id.fetchSet(db, AccountRecord.select(AccountRecord.Columns.id))
-        let staleAccountIds = allAccountIds.subtracting(accountIdsToKeep)
 
-        return Set(Array(staleAccountIds).prefix(Self.cleanLimit))
+        return allAccountIds.subtracting(accountIdsToKeep)
     }
 }
