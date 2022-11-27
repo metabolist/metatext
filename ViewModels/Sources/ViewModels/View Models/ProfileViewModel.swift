@@ -178,7 +178,7 @@ extension ProfileViewModel: CollectionViewModel {
         collectionViewModel.value.canSelect(indexPath: indexPath)
     }
 
-    public func viewModel(indexPath: IndexPath) -> Any {
+    public func viewModel(indexPath: IndexPath) -> Any? {
         collectionViewModel.value.viewModel(indexPath: indexPath)
     }
 
