@@ -97,7 +97,11 @@ public class CollectionItemsViewModel: ObservableObject {
     }
 
     // swiftlint:disable:next function_body_length cyclomatic_complexity
-    public func viewModel(indexPath: IndexPath) -> Any {
+    public func viewModel(indexPath: IndexPath) -> Any? {
+        guard indexPath.section < lastUpdate.sections.count,
+              indexPath.item < lastUpdate.sections[indexPath.section].items.count
+        else { return nil }
+
         let item = lastUpdate.sections[indexPath.section].items[indexPath.item]
         let cachedViewModel = viewModelCache[item]
 
