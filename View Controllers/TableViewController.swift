@@ -23,6 +23,7 @@ class TableViewController: UITableViewController {
     private var shouldKeepPlayingVideoAfterDismissal = false
     private var newItemsViewHiddenConstraint: NSLayoutConstraint?
     private var newItemsViewVisibleConstraint: NSLayoutConstraint?
+    private var isPastInitialAppearance = false
     private let insetBottom: Bool
     private weak var parentNavigationController: UINavigationController?
 
@@ -103,7 +104,11 @@ class TableViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        refreshIfAble()
+        if isPastInitialAppearance {
+            refreshIfAble()
+        }
+
+        isPastInitialAppearance = true
     }
 
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
