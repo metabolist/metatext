@@ -75,7 +75,7 @@ final public class EmojiPickerViewModel: ObservableObject {
                     emojis[.frequentlyUsed] = emojiUses.compactMap { use in
                         emojis.values.reduce([], +)
                             .first { use.system == $0.system && use.emoji == $0.name }
-                            .map(\.inFrequentlyUsed)
+                            .map(\.infrequentlyUsed)
                     }
                 }
 

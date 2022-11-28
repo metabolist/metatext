@@ -168,14 +168,14 @@ final class EmojiPickerViewController: UICollectionViewController {
                                  contextMenuConfigurationForItemAt indexPath: IndexPath,
                                  point: CGPoint) -> UIContextMenuConfiguration? {
         guard let item = dataSource.itemIdentifier(for: indexPath),
-              case let .system(emoji, inFrequentlyUsed) = item,
+              case let .system(emoji, infrequentlyUsed) = item,
               !emoji.skinToneVariations.isEmpty
         else { return nil }
 
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
             UIMenu(children: ([emoji] + emoji.skinToneVariations).map { skinToneVariation in
                 UIAction(title: skinToneVariation.emoji) { [weak self] _ in
-                    self?.select(emoji: .system(skinToneVariation, inFrequentlyUsed: inFrequentlyUsed))
+                    self?.select(emoji: .system(skinToneVariation, infrequentlyUsed: infrequentlyUsed))
                     self?.viewModel.updateUse(emoji: item)
                 }
             })

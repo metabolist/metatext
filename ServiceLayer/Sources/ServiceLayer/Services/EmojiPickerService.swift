@@ -34,9 +34,9 @@ public extension EmojiPickerService {
                 }
 
                 if typed[category] == nil {
-                    typed[category] = [.custom(emoji, inFrequentlyUsed: false)]
+                    typed[category] = [.custom(emoji, infrequentlyUsed: false)]
                 } else {
-                    typed[category]?.append(.custom(emoji, inFrequentlyUsed: false))
+                    typed[category]?.append(.custom(emoji, infrequentlyUsed: false))
                 }
             }
 
@@ -73,7 +73,7 @@ public extension EmojiPickerService {
                             .map {
                                 PickerEmoji.system(
                                     $0.withMaxVersionForSkinToneVariations(Self.maxEmojiVersion),
-                                    inFrequentlyUsed: false)
+                                    infrequentlyUsed: false)
                             }
                     }
 
