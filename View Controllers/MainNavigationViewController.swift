@@ -55,6 +55,7 @@ final class MainNavigationViewController: UITabBarController {
             .store(in: &cancellables)
 
         NotificationCenter.default.publisher(for: UIScene.willEnterForegroundNotification)
+            .debounce(for: .seconds(Self.refreshFromBackgroundDebounceInterval), scheduler: DispatchQueue.main)
             .sink { [weak self] _ in self?.viewModel.refreshIdentity() }
             .store(in: &cancellables)
     }
@@ -106,6 +107,7 @@ extension MainNavigationViewController: NavigationHandling {
 private extension MainNavigationViewController {
     static let secondaryNavigationViewTag = UUID().hashValue
     static let newStatusViewTag = UUID().hashValue
+    static let refreshFromBackgroundDebounceInterval: TimeInterval = 30
 
     func setupViewControllers(pending: Bool) {
         var controllers: [UIViewController] = [
