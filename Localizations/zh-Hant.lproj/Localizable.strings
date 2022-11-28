@@ -253,6 +253,9 @@
 "preferences.require-double-tap-to-favorite" = "需要點按兩次才能收藏";
 "preferences.show-reblog-and-favorite-counts" = "顯示轉嘟與收藏的次數";
 "preferences.status-word" = "狀態字";
+"preferences.keyboard-type" = "鍵盤";
+"preferences.keyboard-type.twitter" = "Twitter";
+"preferences.keyboard-type.default-text" = "默認";
 "filters.active" = "已啟用";
 "filters.expired" = "已過期";
 "filter.add-new" = "新增篩選器";

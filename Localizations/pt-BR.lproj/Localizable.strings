@@ -253,6 +253,9 @@
 "preferences.require-double-tap-to-favorite" = "Solicitar toque duplo para favoritar";
 "preferences.show-reblog-and-favorite-counts" = "Mostrar contagem de boosts e favoritos";
 "preferences.status-word" = "Estado da palavra";
+"preferences.keyboard-type" = "Teclado";
+"preferences.keyboard-type.twitter" = "Twitter";
+"preferences.keyboard-type.default-text" = "Predefinição";
 "filters.active" = "Ativo";
 "filters.expired" = "Expirados";
 "filter.add-new" = "Adicionar Novo Filtro";

@@ -253,6 +253,9 @@
 "preferences.require-double-tap-to-favorite" = "Cal que toquis dues vegades per fer-ho favorit";
 "preferences.show-reblog-and-favorite-counts" = "Mostra el recompte d’impulsos i favorits";
 "preferences.status-word" = "Paraula d’estat";
+"preferences.keyboard-type" = "Teclat";
+"preferences.keyboard-type.twitter" = "Twitter";
+"preferences.keyboard-type.default-text" = "Per defecte";
 "filters.active" = "Actiu";
 "filters.expired" = "Caducat";
 "filter.add-new" = "Afegeix un filtre nou";

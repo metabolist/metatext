@@ -40,6 +40,13 @@ public extension AppPreferences {
         public var id: String { rawValue }
     }
 
+    enum KeyboardType: String, CaseIterable, Identifiable {
+        case twitter
+        case defaultText
+
+        public var id: String { rawValue }
+    }
+
     enum Autoplay: String, CaseIterable, Identifiable {
         case always
         case wifi
@@ -89,6 +96,18 @@ public extension AppPreferences {
             return systemReduceMotion() ? .never : .everywhere
         }
         set { self[.animateAvatars] = newValue.rawValue }
+    }
+
+    var keyboardType: KeyboardType {
+        get {
+            if let rawValue = self[.keyboardType] as String?,
+               let value = KeyboardType(rawValue: rawValue) {
+                return value
+            }
+
+            return .twitter
+        }
+        set { self[.keyboardType] = newValue.rawValue }
     }
 
     var animateHeaders: Bool {
@@ -210,6 +229,7 @@ private extension AppPreferences {
         case requireDoubleTapToReblog
         case requireDoubleTapToFavorite
         case animateAvatars
+        case keyboardType
         case animateHeaders
         case animateCustomEmojis
         case autoplayGIFs

@@ -107,7 +107,9 @@ private extension CompositionView {
             autocompleteQueryPublisher: viewModel.$autocompleteQuery.eraseToAnyPublisher())
 
         stackView.addArrangedSubview(textView)
-        textView.keyboardType = .twitter
+        textView.keyboardType = parentViewModel.identityContext.appPreferences.keyboardType == .twitter
+            ? .twitter
+            : .default
         textView.isScrollEnabled = false
         textView.adjustsFontForContentSizeCategory = true
         textView.font = textViewFont

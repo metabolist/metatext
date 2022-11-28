@@ -253,6 +253,9 @@
 "preferences.require-double-tap-to-favorite" = "需要双击才能点赞";
 "preferences.show-reblog-and-favorite-counts" = "显示转发与点赞的计数";
 "preferences.status-word" = "表述状态用的词";
+"preferences.keyboard-type" = "键盘";
+"preferences.keyboard-type.twitter" = "Twitter";
+"preferences.keyboard-type.default-text" = "默认";
 "filters.active" = "已启用";
 "filters.expired" = "已过期";
 "filter.add-new" = "添加新筛选器";

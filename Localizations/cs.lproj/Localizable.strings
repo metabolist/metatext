@@ -253,6 +253,9 @@
 "preferences.require-double-tap-to-favorite" = "Vyžadovat dvojité klepnutí pro oblíbené";
 "preferences.show-reblog-and-favorite-counts" = "Zobrazit boostů a počet oblíbených";
 "preferences.status-word" = "Toot/Příspěvek";
+"preferences.keyboard-type" = "Klávesnice";
+"preferences.keyboard-type.twitter" = "Twitter";
+"preferences.keyboard-type.default-text" = "Výchozí";
 "filters.active" = "Aktivní";
 "filters.expired" = "Platnost vypršela";
 "filter.add-new" = "Přidat nový filtr";
