@@ -12,10 +12,8 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
-        <key>one</key>
-        <string>%ld Personen sprechen darüber</string>
         <key>other</key>
-        <string>%ld Personen sprechen drüber</string>
+        <string>%ld 人在討論</string>
       </dict>
     </dict>
     <key>status.poll.participation-count-%ld</key>
@@ -28,10 +26,8 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
-        <key>one</key>
-        <string>%ld Person</string>
         <key>other</key>
-        <string>%ld Leute</string>
+        <string>%ld 人</string>
       </dict>
     </dict>
     <key>status.reblogs-count-%ld</key>
@@ -44,10 +40,8 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
-        <key>one</key>
-        <string>%ld Boost</string>
         <key>other</key>
-        <string>%ld Boosts</string>
+        <string>%ld 次轉發</string>
       </dict>
     </dict>
     <key>status.favorites-count-%ld</key>
@@ -60,10 +54,8 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
-        <key>one</key>
-        <string>%ld Favorit</string>
         <key>other</key>
-        <string>%ld Favoriten</string>
+        <string>%ld 次加入最愛</string>
       </dict>
     </dict>
     <key>status.replies-count-%ld</key>
@@ -76,10 +68,8 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
-        <key>one</key>
-        <string>%ld Antwort</string>
         <key>other</key>
-        <string>%ld Antworten</string>
+        <string>%ld 則回覆</string>
       </dict>
     </dict>
     <key>statuses.count.post-%ld</key>
@@ -92,10 +82,8 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
-        <key>one</key>
-        <string>%ld Beitrag</string>
         <key>other</key>
-        <string>%ld Beiträge</string>
+        <string>%ld 則帖文</string>
       </dict>
     </dict>
     <key>statuses.count.toot-%ld</key>
@@ -108,10 +96,8 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
-        <key>one</key>
-        <string>%ld Toot</string>
         <key>other</key>
-        <string>%ld Toots</string>
+        <string>%ld 則帖文</string>
       </dict>
     </dict>
     <key>account.followers-count-%ld</key>
@@ -124,10 +110,8 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
-        <key>one</key>
-        <string>%ld folgt</string>
         <key>other</key>
-        <string>%ld folgen</string>
+        <string>%ld 位追蹤者</string>
       </dict>
     </dict>
     <key>attachment.type.images-%ld</key>
@@ -140,10 +124,8 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
-        <key>one</key>
-        <string>%ld Bild</string>
         <key>other</key>
-        <string>%ld Bilder</string>
+        <string>%ld 張圖片</string>
       </dict>
     </dict>
     <key>attachment.type.audios-%ld</key>
@@ -156,10 +138,8 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
-        <key>one</key>
-        <string>%ld Audiodatei</string>
         <key>other</key>
-        <string>%ld Audiodateien</string>
+        <string>%ld 個音訊檔案</string>
       </dict>
     </dict>
     <key>attachment.type.videos-%ld</key>
@@ -172,10 +152,8 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
-        <key>one</key>
-        <string>%ld Videodatei</string>
         <key>other</key>
-        <string>%ld Videodateien</string>
+        <string>%ld 影片檔案</string>
       </dict>
     </dict>
     <key>attachment.type.unknowns-%ld</key>
@@ -188,10 +166,8 @@
         <string>NSStringPluralRuleType</string>
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
-        <key>one</key>
-        <string>%ld Anhang</string>
         <key>other</key>
-        <string>%ld Anhänge</string>
+        <string>%ld 個附件</string>
       </dict>
     </dict>
   </dict>

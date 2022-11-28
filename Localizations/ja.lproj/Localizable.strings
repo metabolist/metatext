@@ -201,10 +201,10 @@
 "preferences" = "環境設定";
 "preferences.app" = "アプリ環境設定";
 "preferences.app-icon" = "アプリアイコン";
-"preferences.app.color-scheme" = "Appearance";
-"preferences.app.color-scheme.dark" = "Dark";
-"preferences.app.color-scheme.light" = "Light";
-"preferences.app.color-scheme.system" = "System";
+"preferences.app.color-scheme" = "外観モード";
+"preferences.app.color-scheme.dark" = "ダーク";
+"preferences.app.color-scheme.light" = "ライト";
+"preferences.app.color-scheme.system" = "システム";
 "preferences.blocked-domains" = "ブロックしたドメイン";
 "preferences.blocked-users" = "ブロックしたユーザー";
 "preferences.media" = "メディア";
@@ -303,7 +303,7 @@
 "share-extension-error.no-account-found" = "アカウントが見つかりません";
 "status.accessibility.view-author-profile" = "作者のプロフィールを見る";
 "status.accessibility.view-reblogger-profile" = "フーストした人のプロフィールを見る";
-"status.accessibility.part-of-a-thread" = "Part of a thread";
+"status.accessibility.part-of-a-thread" = "スレッドの一部";
 "status.bookmark" = "ブックマーク";
 "status.content-warning-abbreviation" = "CW";
 "status.content-warning.accessibility" = "コンテンツの警告";

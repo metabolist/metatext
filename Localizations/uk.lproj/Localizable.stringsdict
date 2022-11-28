@@ -13,9 +13,13 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
         <key>one</key>
-        <string>%ld Personen sprechen darüber</string>
+        <string>%ld людина говорить</string>
+        <key>few</key>
+        <string>%ld людини говорять</string>
+        <key>many</key>
+        <string>%ld людей говорять</string>
         <key>other</key>
-        <string>%ld Personen sprechen drüber</string>
+        <string>%ld людей говорять</string>
       </dict>
     </dict>
     <key>status.poll.participation-count-%ld</key>
@@ -29,9 +33,13 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
         <key>one</key>
-        <string>%ld Person</string>
+        <string>%ld людина</string>
+        <key>few</key>
+        <string>%ld людини</string>
+        <key>many</key>
+        <string>%ld людей</string>
         <key>other</key>
-        <string>%ld Leute</string>
+        <string>%ld людини</string>
       </dict>
     </dict>
     <key>status.reblogs-count-%ld</key>
@@ -45,9 +53,13 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
         <key>one</key>
-        <string>%ld Boost</string>
+        <string>%ld просування</string>
+        <key>few</key>
+        <string>%ld просування</string>
+        <key>many</key>
+        <string>%ld просувань</string>
         <key>other</key>
-        <string>%ld Boosts</string>
+        <string>%ld просування</string>
       </dict>
     </dict>
     <key>status.favorites-count-%ld</key>
@@ -61,9 +73,13 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
         <key>one</key>
-        <string>%ld Favorit</string>
+        <string>%ld вибраних</string>
+        <key>few</key>
+        <string>%ld вибраних</string>
+        <key>many</key>
+        <string>%ld вибраних</string>
         <key>other</key>
-        <string>%ld Favoriten</string>
+        <string>%ld вибраних</string>
       </dict>
     </dict>
     <key>status.replies-count-%ld</key>
@@ -77,9 +93,13 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
         <key>one</key>
-        <string>%ld Antwort</string>
+        <string>%ld відповів(-ла)</string>
+        <key>few</key>
+        <string>%ld відповіли</string>
+        <key>many</key>
+        <string>%ld відповіли</string>
         <key>other</key>
-        <string>%ld Antworten</string>
+        <string>%ld відповіли</string>
       </dict>
     </dict>
     <key>statuses.count.post-%ld</key>
@@ -93,9 +113,13 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
         <key>one</key>
-        <string>%ld Beitrag</string>
+        <string>%ld допис</string>
+        <key>few</key>
+        <string>%ld дописи</string>
+        <key>many</key>
+        <string>%ld дописів</string>
         <key>other</key>
-        <string>%ld Beiträge</string>
+        <string>%ld дописів</string>
       </dict>
     </dict>
     <key>statuses.count.toot-%ld</key>
@@ -109,9 +133,13 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
         <key>one</key>
-        <string>%ld Toot</string>
+        <string>%ld гук</string>
+        <key>few</key>
+        <string>%ld гуки</string>
+        <key>many</key>
+        <string>%ld гуків</string>
         <key>other</key>
-        <string>%ld Toots</string>
+        <string>%ld гука</string>
       </dict>
     </dict>
     <key>account.followers-count-%ld</key>
@@ -125,9 +153,13 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
         <key>one</key>
-        <string>%ld folgt</string>
+        <string>%ld підписник</string>
+        <key>few</key>
+        <string>%ld підписники</string>
+        <key>many</key>
+        <string>%ld підписників</string>
         <key>other</key>
-        <string>%ld folgen</string>
+        <string>%ld підписника</string>
       </dict>
     </dict>
     <key>attachment.type.images-%ld</key>
@@ -141,9 +173,13 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
         <key>one</key>
-        <string>%ld Bild</string>
+        <string>%ld зображення</string>
+        <key>few</key>
+        <string>%ld зображень</string>
+        <key>many</key>
+        <string>%ld зображень</string>
         <key>other</key>
-        <string>%ld Bilder</string>
+        <string>%ld зображень</string>
       </dict>
     </dict>
     <key>attachment.type.audios-%ld</key>
@@ -157,9 +193,13 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
         <key>one</key>
-        <string>%ld Audiodatei</string>
+        <string>%ld аудіофайл</string>
+        <key>few</key>
+        <string>%ld аудіофайли</string>
+        <key>many</key>
+        <string>%ld аудіофайлів</string>
         <key>other</key>
-        <string>%ld Audiodateien</string>
+        <string>%ld аудіофайлів</string>
       </dict>
     </dict>
     <key>attachment.type.videos-%ld</key>
@@ -173,9 +213,13 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
         <key>one</key>
-        <string>%ld Videodatei</string>
+        <string>%ld відеофайл</string>
+        <key>few</key>
+        <string>%ld відеофайли</string>
+        <key>many</key>
+        <string>%ld відеофайлів</string>
         <key>other</key>
-        <string>%ld Videodateien</string>
+        <string>%ld відеофайлів</string>
       </dict>
     </dict>
     <key>attachment.type.unknowns-%ld</key>
@@ -189,9 +233,13 @@
         <key>NSStringFormatValueTypeKey</key>
         <string>ld</string>
         <key>one</key>
-        <string>%ld Anhang</string>
+        <string>%ld вкладення</string>
+        <key>few</key>
+        <string>%ld вкладень</string>
+        <key>many</key>
+        <string>%ld вкладень</string>
         <key>other</key>
-        <string>%ld Anhänge</string>
+        <string>%ld вкладень</string>
       </dict>
     </dict>
   </dict>

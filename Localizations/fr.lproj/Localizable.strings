@@ -203,7 +203,7 @@
 "preferences.app-icon" = "Icône de l’application";
 "preferences.app.color-scheme" = "Apparence";
 "preferences.app.color-scheme.dark" = "Sombre";
-"preferences.app.color-scheme.light" = "Luminosité";
+"preferences.app.color-scheme.light" = "Clair";
 "preferences.app.color-scheme.system" = "Système";
 "preferences.blocked-domains" = "Domaines bloqués";
 "preferences.blocked-users" = "Utilisateur·ices bloqué·es";

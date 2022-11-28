@@ -331,7 +331,7 @@
 "status.reblog-button.undo.accessibility-label" = "Na brosnaich tuilleadh";
 "status.favorite-button.accessibility-label" = "Cuir ris na h-annsachdan";
 "status.favorite-button.undo.accessibility-label" = "Thoir air falbh o na h-annsachdan";
-"status.show-more" = "Seall barrachd dheth";
+"status.show-more" = "Faic barrachd";
 "status.show-more-all-button.accessibilty-label" = "Seall barrachd dhen a h-uile";
 "status.show-less" = "Seall nas lugha dheth";
 "status.show-less-all-button.accessibilty-label" = "Seall nas lugha dhen a h-uile";

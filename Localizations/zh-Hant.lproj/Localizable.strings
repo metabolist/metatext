@@ -33,7 +33,7 @@
 "account.hide-reblogs" = "隱藏轉嘟";
 "account.hide-reblogs.confirm-%@" = "隱藏來自 %@ 的轉嘟嗎？";
 "account.joined-%@" = "加入於 %@";
-"account.locked.accessibility-label" = "已鎖定帳戶";
+"account.locked.accessibility-label" = "已鎖定帳號";
 "account.mute" = "靜音";
 "account.mute.indefinite" = "永不過期";
 "account.mute.confirm-%@" = "確定要將 %@ 靜音嗎？";
@@ -108,7 +108,7 @@
 "compose.attachment.uncaptioned" = "無標題";
 "compose.attachment.uploading" = "上傳中";
 "compose.attachments-button.accessibility-label" = "新增附件";
-"compose.attachments-will-be-discarded" = "變更帳戶時，先前上傳的附件檔案將被刪除";
+"compose.attachments-will-be-discarded" = "變更帳號時，先前上傳的附件檔案將被刪除";
 "compose.browse" = "瀏覽";
 "compose.characters-remaining-accessibility-label-%ld" = "剩餘 %ld 個字";
 "compose.change-identity-button.accessibility-hint" = "點擊使用另一個帳號發佈";
@@ -161,15 +161,15 @@
 "registration.password-confirmation-mismatch" = "輸入的密碼與確認的密碼不相同";
 "secondary-navigation.about" = "關於此應用程式";
 "secondary-navigation.account-settings" = "帳號設定";
-"secondary-navigation.accounts" = "帳戶";
+"secondary-navigation.accounts" = "帳號";
 "secondary-navigation.edit-profile" = "編輯個人檔案";
 "secondary-navigation.lists" = "列表";
 "secondary-navigation.my-profile" = "我的個人資料";
 "secondary-navigation.preferences" = "偏好設定";
-"secondary-navigation-button.accessibility-title" = "帳戶列表";
+"secondary-navigation-button.accessibility-title" = "帳號列表";
 "http-error.non-http-response" = "HTTP 錯誤：非 HTTP 響應";
 "http-error.status-code-%ld" = "HTTP錯誤：%ld";
-"identities.accounts" = "帳戶";
+"identities.accounts" = "帳號";
 "identities.browsing" = "瀏覽";
 "identities.log-out" = "登出";
 "identities.pending" = "等待中";
@@ -196,7 +196,7 @@
 "notifications.all" = "全部";
 "notifications.mentions" = "提及";
 "ok" = "確定";
-"pending.pending-confirmation" = "您的帳戶正在審核中";
+"pending.pending-confirmation" = "您的帳號正在審核中";
 "post" = "嘟文";
 "preferences" = "偏好設定";
 "preferences.app" = "偏好設定";
@@ -241,7 +241,7 @@
 "preferences.notification-types.poll" = "投票";
 "preferences.notification-types.status" = "訂閱";
 "preferences.notifications" = "通知";
-"preferences.notifications.include-account-name" = "包含帳戶名稱";
+"preferences.notifications.include-account-name" = "包含帳號名稱";
 "preferences.notifications.include-pictures" = "包含圖片";
 "preferences.notifications.sounds" = "音效";
 "preferences.muted-users" = "已靜音用戶";
@@ -286,9 +286,9 @@
 "remove" = "刪除 ";
 "report" = "檢舉";
 "report.additional-comments" = "補充評論";
-"report.hint" = "這項訊息會發送到您伺服器的管理員。您可以提供檢舉這個帳戶的原因：";
+"report.hint" = "這項訊息會發送到您伺服器的管理員。您可以提供檢舉這個帳號的原因：";
 "report.target-%@" = "檢舉 %@";
-"report.forward.hint" = "這個帳戶屬於其他伺服器。要向該伺服器發送匿名的檢舉訊息嗎？";
+"report.forward.hint" = "這個帳號屬於其他伺服器，要向該伺服器發送匿名的檢舉訊息嗎？";
 "report.forward-%@" = "轉發檢舉至 %@";
 "report.select-additional.hint.post" = "選擇更多要檢舉的嘟文：";
 "report.select-additional.hint.toot" = "選擇更多要檢舉的嘟文：";
@@ -300,7 +300,7 @@
 "selected" = "已選擇";
 "send" = "發送";
 "share" = "分享";
-"share-extension-error.no-account-found" = "未找到帳戶";
+"share-extension-error.no-account-found" = "未找到帳號";
 "status.accessibility.view-author-profile" = "查看作者的個人檔案";
 "status.accessibility.view-reblogger-profile" = "查看轉嘟者的個人檔案";
 "status.accessibility.part-of-a-thread" = "討論串的其中一部分";

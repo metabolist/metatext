@@ -175,11 +175,11 @@
 "identities.pending" = "בהמתנה";
 "image-error.unable-to-load" = "לא ניתן לטעון את התמונה";
 "lists.new-list-title" = "כותרת הרשימה החדשה";
-"load-more" = "לטעון יותר";
-"load-more.above.accessibility.post" = "לטעון מהפוסט שלמעלה";
-"load-more.above.accessibility.toot" = "לטעון מהחיצרוץ שלמעלה";
-"load-more.below.accessibility.post" = "לטעון מהפוסט שלמטה";
-"load-more.below.accessibility.toot" = "לטעון מהחיצרוץ שלמטה";
+"load-more" = "טעינת פוסטים נוספים";
+"load-more.above.accessibility.post" = "טעינה מהפוסט שלמעלה";
+"load-more.above.accessibility.toot" = "טעינה מהחיצרוץ שלמעלה";
+"load-more.below.accessibility.post" = "טעינה מהפוסט שלמטה";
+"load-more.below.accessibility.toot" = "טעינה מהחיצרוץ שלמטה";
 "main-navigation.announcements" = "הכרזות";
 "main-navigation.timelines" = "פידים";
 "main-navigation.explore" = "דיפדוף";
@@ -197,7 +197,7 @@
 "notifications.mentions" = "איזכורים";
 "ok" = "אישור";
 "pending.pending-confirmation" = "החשבון שלך ממתין לאישור";
-"post" = "פוסט";
+"post" = "פרסום";
 "preferences" = "העדפות";
 "preferences.app" = "העדפות אפליקציה";
 "preferences.app-icon" = "סמל אפליקציה";
