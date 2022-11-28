@@ -877,8 +877,8 @@ private extension TableViewController {
     func hideNewItemsView() {
         UIView.animate(withDuration: .zeroIfReduceMotion(.defaultAnimationDuration)) {
             self.newItemsView.alpha = 0
-            self.newItemsViewHiddenConstraint?.isActive = true
             self.newItemsViewVisibleConstraint?.isActive = false
+            self.newItemsViewHiddenConstraint?.isActive = true
             self.view.layoutIfNeeded()
         } completion: { _ in
             self.reloadVisibleItems()
