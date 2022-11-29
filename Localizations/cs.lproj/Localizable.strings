@@ -254,8 +254,8 @@
 "preferences.show-reblog-and-favorite-counts" = "Zobrazit boostů a počet oblíbených";
 "preferences.status-word" = "Toot/Příspěvek";
 "preferences.keyboard-type" = "Klávesnice";
-"preferences.keyboard-type.twitter" = "Twitter";
-"preferences.keyboard-type.default-text" = "Výchozí";
+"preferences.keyboard-type.twitter" = "S hash klíčem";
+"preferences.keyboard-type.default-text" = "S klávesou enter";
 "filters.active" = "Aktivní";
 "filters.expired" = "Platnost vypršela";
 "filter.add-new" = "Přidat nový filtr";

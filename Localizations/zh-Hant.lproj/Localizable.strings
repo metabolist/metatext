@@ -254,8 +254,8 @@
 "preferences.show-reblog-and-favorite-counts" = "顯示轉嘟與收藏的次數";
 "preferences.status-word" = "狀態字";
 "preferences.keyboard-type" = "鍵盤";
-"preferences.keyboard-type.twitter" = "Twitter";
-"preferences.keyboard-type.default-text" = "默認";
+"preferences.keyboard-type.twitter" = "使用哈希鍵";
+"preferences.keyboard-type.default-text" = "用回車鍵";
 "filters.active" = "已啟用";
 "filters.expired" = "已過期";
 "filter.add-new" = "新增篩選器";

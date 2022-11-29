@@ -254,8 +254,8 @@
 "preferences.show-reblog-and-favorite-counts" = "Erakutsi bultzada eta gogoko kopurua";
 "preferences.status-word" = "Nahiago duzun hitza";
 "preferences.keyboard-type" = "Teklatua";
-"preferences.keyboard-type.twitter" = "Twitter";
-"preferences.keyboard-type.default-text" = "Lehenetsia";
+"preferences.keyboard-type.twitter" = "Hash giltzarekin";
+"preferences.keyboard-type.default-text" = "Sartu teklarekin";
 "filters.active" = "Aktibo";
 "filters.expired" = "Iraungita";
 "filter.add-new" = "Gehitu iragazki berria";

@@ -254,8 +254,8 @@
 "preferences.show-reblog-and-favorite-counts" = "Mostrar boost y cuentas favoritas";
 "preferences.status-word" = "Palabra de estado";
 "preferences.keyboard-type" = "Teclado";
-"preferences.keyboard-type.twitter" = "Twitter";
-"preferences.keyboard-type.default-text" = "Defecto";
+"preferences.keyboard-type.twitter" = "Con clave hash";
+"preferences.keyboard-type.default-text" = "Con tecla enter";
 "filters.active" = "Activo";
 "filters.expired" = "Ha caducado";
 "filter.add-new" = "Añadir un filtro nuevo";

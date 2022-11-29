@@ -254,8 +254,8 @@
 "preferences.show-reblog-and-favorite-counts" = "Boosts und Favoriten anzeigen";
 "preferences.status-word" = "Statuswort";
 "preferences.keyboard-type" = "Tastatur";
-"preferences.keyboard-type.twitter" = "Twitter";
-"preferences.keyboard-type.default-text" = "Standard";
+"preferences.keyboard-type.twitter" = "Mit Rautetaste";
+"preferences.keyboard-type.default-text" = "Mit Eingabetaste";
 "filters.active" = "Aktiv";
 "filters.expired" = "Abgelaufen";
 "filter.add-new" = "Neuer Filter";

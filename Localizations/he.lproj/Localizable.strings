@@ -254,8 +254,8 @@
 "preferences.show-reblog-and-favorite-counts" = "הצג מספר הדהודים וחיבובים";
 "preferences.status-word" = "מילת סטטוס";
 "preferences.keyboard-type" = "מקלדת";
-"preferences.keyboard-type.twitter" = "Twitter";
-"preferences.keyboard-type.default-text" = "בְּרִירַת מֶחדָל";
+"preferences.keyboard-type.twitter" = "עם מפתח hash";
+"preferences.keyboard-type.default-text" = "עם מקש אנטר";
 "filters.active" = "פעיל";
 "filters.expired" = "פג תוקף";
 "filter.add-new" = "הוספת מסנן חדש";

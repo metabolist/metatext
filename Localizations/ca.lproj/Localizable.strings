@@ -254,8 +254,8 @@
 "preferences.show-reblog-and-favorite-counts" = "Mostra el recompte d’impulsos i favorits";
 "preferences.status-word" = "Paraula d’estat";
 "preferences.keyboard-type" = "Teclat";
-"preferences.keyboard-type.twitter" = "Twitter";
-"preferences.keyboard-type.default-text" = "Per defecte";
+"preferences.keyboard-type.twitter" = "Amb clau hash";
+"preferences.keyboard-type.default-text" = "Amb la tecla enter";
 "filters.active" = "Actiu";
 "filters.expired" = "Caducat";
 "filter.add-new" = "Afegeix un filtre nou";

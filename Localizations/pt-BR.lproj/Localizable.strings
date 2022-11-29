@@ -254,7 +254,7 @@
 "preferences.show-reblog-and-favorite-counts" = "Mostrar contagem de boosts e favoritos";
 "preferences.status-word" = "Estado da palavra";
 "preferences.keyboard-type" = "Teclado";
-"preferences.keyboard-type.twitter" = "Twitter";
+"preferences.keyboard-type.twitter" = "Com chave hash";
 "preferences.keyboard-type.default-text" = "Predefinição";
 "filters.active" = "Ativo";
 "filters.expired" = "Expirados";

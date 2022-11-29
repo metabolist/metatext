@@ -254,7 +254,7 @@
 "preferences.show-reblog-and-favorite-counts" = "Visa antal boosts och favoritmarkeringar";
 "preferences.status-word" = "Statusord";
 "preferences.keyboard-type" = "Tangentbord";
-"preferences.keyboard-type.twitter" = "Twitter";
+"preferences.keyboard-type.twitter" = "Med hash-nyckel";
 "preferences.keyboard-type.default-text" = "Standard";
 "filters.active" = "Aktiv";
 "filters.expired" = "Upphört";

@@ -254,8 +254,8 @@
 "preferences.show-reblog-and-favorite-counts" = "Εμφάνιση μετρήσεων των boosts και αγαπημένων";
 "preferences.status-word" = "Λέξη κατάστασης";
 "preferences.keyboard-type" = "Πληκτρολόγιο";
-"preferences.keyboard-type.twitter" = "Twitter";
-"preferences.keyboard-type.default-text" = "Προκαθορισμένο";
+"preferences.keyboard-type.twitter" = "Με κλειδί κατακερματισμού";
+"preferences.keyboard-type.default-text" = "Με το πλήκτρο enter";
 "filters.active" = "Ενεργό";
 "filters.expired" = "Έληξε";
 "filter.add-new" = "Προσθήκη Νέου Φίλτρου";
