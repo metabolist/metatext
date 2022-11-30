@@ -4,6 +4,10 @@ A free, open-source iOS Mastodon client.
 
 [![Download on the App Store](https://metabolist.org/assets/images/download_on_the_app_store.svg)](https://apps.apple.com/us/app/metatext/id1523996615?mt=8)
 
+## Seeking Maintainers
+
+Development of this project is currently paused. Email info@metabolist.org if you or your organization are interested in taking ownership of the project.
+
 ## Contributing Bug Reports
 
 GitHub is used for bug tracking. Please search [existing issues](https://github.com/metabolist/metatext/issues) and create a new one if the issue is not yet tracked.
