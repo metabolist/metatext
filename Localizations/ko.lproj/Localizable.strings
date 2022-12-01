@@ -253,6 +253,9 @@
 "preferences.require-double-tap-to-favorite" = "두 번 탭 해서 즐겨찾기";
 "preferences.show-reblog-and-favorite-counts" = "부스트 및 즐겨찾기 수 표시";
 "preferences.status-word" = "상태를 나타내는 말";
+"preferences.keyboard-type" = "건반";
+"preferences.keyboard-type.twitter" = "해시 키 사용";
+"preferences.keyboard-type.default-text" = "엔터키로";
 "filters.active" = "활성화";
 "filters.expired" = "만료됨";
 "filter.add-new" = "새 필터 추가";

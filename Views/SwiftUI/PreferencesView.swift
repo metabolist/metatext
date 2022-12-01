@@ -101,6 +101,12 @@ struct PreferencesView: View {
                             Text(option.localizedStringKey).tag(option)
                         }
                     }
+                    Picker("preferences.keyboard-type",
+                           selection: $identityContext.appPreferences.keyboardType) {
+                        ForEach(AppPreferences.KeyboardType.allCases) { option in
+                            Text(option.localizedStringKey).tag(option)
+                        }
+                    }
                     Toggle("preferences.show-reblog-and-favorite-counts",
                            isOn: $identityContext.appPreferences.showReblogAndFavoriteCounts)
                     Toggle("preferences.require-double-tap-to-reblog",
@@ -191,6 +197,17 @@ extension AppPreferences.AnimateAvatars {
             return "preferences.media.avatars.animate.profiles"
         case .never:
             return "preferences.media.avatars.animate.never"
+        }
+    }
+}
+
+extension AppPreferences.KeyboardType {
+    var localizedStringKey: LocalizedStringKey {
+        switch self {
+        case .twitter:
+            return "preferences.keyboard-type.twitter"
+        case .defaultText:
+            return "preferences.keyboard-type.default-text"
         }
     }
 }

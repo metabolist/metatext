@@ -253,6 +253,9 @@
 "preferences.require-double-tap-to-favorite" = "Wymagaj podwójnego stuknięcia do polubienia";
 "preferences.show-reblog-and-favorite-counts" = "Pokazuj licznik podbić i polubień";
 "preferences.status-word" = "Używaj jako nazwy statusu";
+"preferences.keyboard-type" = "Klawiatura";
+"preferences.keyboard-type.twitter" = "Z kluczem krzyżykowym";
+"preferences.keyboard-type.default-text" = "Z klawiszem Enter";
 "filters.active" = "Aktywny";
 "filters.expired" = "Wygasły";
 "filter.add-new" = "Dodaj nowy filtr";

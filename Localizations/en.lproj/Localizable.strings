@@ -253,6 +253,9 @@
 "preferences.require-double-tap-to-favorite" = "Require double tap to favorite";
 "preferences.show-reblog-and-favorite-counts" = "Show boost and favorite counts";
 "preferences.status-word" = "Status word";
+"preferences.keyboard-type" = "Keyboard";
+"preferences.keyboard-type.twitter" = "With hash key";
+"preferences.keyboard-type.default-text" = "With enter key";
 "filters.active" = "Active";
 "filters.expired" = "Expired";
 "filter.add-new" = "Add New Filter";

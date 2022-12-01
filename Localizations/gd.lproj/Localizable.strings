@@ -253,6 +253,9 @@
 "preferences.require-double-tap-to-favorite" = "Thoir gnogag dhùbailte airson annsachd a chruthachadh";
 "preferences.show-reblog-and-favorite-counts" = "Seall cunntas nam brosnachaidhean ’s nan annsachdan";
 "preferences.status-word" = "Facal puist";
+"preferences.keyboard-type" = "Meur-chlàr";
+"preferences.keyboard-type.twitter" = "Le iuchair hash";
+"preferences.keyboard-type.default-text" = "Leis an iuchair cuir a-steach";
 "filters.active" = "Gnìomhach";
 "filters.expired" = "Thàinig e gu crìoch";
 "filter.add-new" = "Cuir criathrag ùr ris";

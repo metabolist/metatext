@@ -253,6 +253,9 @@
 "preferences.require-double-tap-to-favorite" = "Требуется двойное нажатие для добавления в избранное";
 "preferences.show-reblog-and-favorite-counts" = "Показать счётчик продвижений и добавлений в избранное";
 "preferences.status-word" = "Название статусов";
+"preferences.keyboard-type" = "Клавиатура";
+"preferences.keyboard-type.twitter" = "С хэш-ключом";
+"preferences.keyboard-type.default-text" = "С клавишей ввода";
 "filters.active" = "Активный";
 "filters.expired" = "Истёк";
 "filter.add-new" = "Добавить новый фильтр";
