@@ -11,7 +11,7 @@ enum IdentitiesSection: Hashable {
 
 enum IdentitiesItem: Hashable {
     case add
-    case identitiy(Identity)
+    case identity(Identity)
 }
 
 final class IdentitiesDataSource: UITableViewDiffableDataSource<IdentitiesSection, IdentitiesItem> {
@@ -39,7 +39,7 @@ final class IdentitiesDataSource: UITableViewDiffableDataSource<IdentitiesSectio
                 configuration.text = NSLocalizedString("add", comment: "")
                 configuration.image = UIImage(systemName: "plus.circle.fill")
                 cell.contentConfiguration = configuration
-            case let .identitiy(identity):
+            case let .identity(identity):
                 let viewModel = viewModelProvider(identity)
 
                 (cell as? IdentityTableViewCell)?.viewModel = viewModel
@@ -83,11 +83,11 @@ private extension IdentitiesDataSource {
         var newSnapshot = NSDiffableDataSourceSnapshot<IdentitiesSection, IdentitiesItem>()
         let sections = [
             (section: IdentitiesSection.identities(NSLocalizedString("identities.accounts", comment: "")),
-             identities: identities.filter { $0.authenticated && !$0.pending }.map(IdentitiesItem.identitiy)),
+             identities: identities.filter { $0.authenticated && !$0.pending }.map(IdentitiesItem.identity)),
             (section: IdentitiesSection.identities(NSLocalizedString("identities.browsing", comment: "")),
-             identities: identities.filter { !$0.authenticated && !$0.pending }.map(IdentitiesItem.identitiy)),
+             identities: identities.filter { !$0.authenticated && !$0.pending }.map(IdentitiesItem.identity)),
              (section: IdentitiesSection.identities(NSLocalizedString("identities.pending", comment: "")),
-             identities: identities.filter { $0.pending }.map(IdentitiesItem.identitiy))
+             identities: identities.filter { $0.pending }.map(IdentitiesItem.identity))
         ]
         .filter { !$0.identities.isEmpty }
 
@@ -107,7 +107,7 @@ private extension IdentitiesItem {
         switch self {
         case .add:
             return String(describing: UITableViewCell.self)
-        case .identitiy:
+        case .identity:
             return String(describing: IdentityTableViewCell.self)
         }
     }

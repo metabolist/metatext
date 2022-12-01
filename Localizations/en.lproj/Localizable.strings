@@ -117,7 +117,7 @@
 "compose.emoji-button" = "Emoji picker";
 "compose.mark-media-sensitive" = "Mark media as sensitive";
 "compose.photo-library" = "Photo Library";
-"compose.poll.accessibility.multiple-choices-allowed" = "Mutliple choices allowed";
+"compose.poll.accessibility.multiple-choices-allowed" = "Multiple choices allowed";
 "compose.poll.add-choice" = "Add a choice";
 "compose.poll.allow-multiple-choices" = "Allow multiple choices";
 "compose.poll-button.accessibility-label" = "Add a poll";
@@ -139,7 +139,7 @@
 "emoji.system-group.animals-and-nature" = "Animals & Nature";
 "emoji.system-group.food-and-drink" = "Food & Drink";
 "emoji.system-group.travel-and-places" = "Travel & Places";
-"emoji.system-group.activites" = "Activities";
+"emoji.system-group.activities" = "Activities";
 "emoji.system-group.objects" = "Objects";
 "emoji.system-group.symbols" = "Symbols";
 "emoji.system-group.flags" = "Flags";
@@ -222,7 +222,7 @@
 "preferences.media.autoplay.wifi" = "On Wi-Fi";
 "preferences.media.autoplay.never" = "Never";
 "preferences.use-preferences-from-server" = "Use preferences from server";
-"preferences.posting-default-visiblility" = "Default visibility";
+"preferences.posting-default-visibility" = "Default visibility";
 "preferences.posting-default-sensitive" = "Mark content sensitive by default";
 "preferences.reading-expand-media" = "Expand media";
 "preferences.expand-media.default" = "Hide sensitive";
@@ -332,9 +332,9 @@
 "status.favorite-button.accessibility-label" = "Favorite";
 "status.favorite-button.undo.accessibility-label" = "Unfavorite";
 "status.show-more" = "Show More";
-"status.show-more-all-button.accessibilty-label" = "Show more for all";
+"status.show-more-all-button.accessibility-label" = "Show more for all";
 "status.show-less" = "Show Less";
-"status.show-less-all-button.accessibilty-label" = "Show less for all";
+"status.show-less-all-button.accessibility-label" = "Show less for all";
 "status.show-thread" = "Show thread";
 "status.spoiler-text-placeholder" = "Write your warning here";
 "status.unbookmark" = "Unbookmark";

@@ -192,12 +192,12 @@ class TableViewController: UITableViewController {
             navigationItem.rightBarButtonItem = nil
         case .expand:
             navigationItem.rightBarButtonItem = UIBarButtonItem(
-                title: NSLocalizedString("status.show-more-all-button.accessibilty-label", comment: ""),
+                title: NSLocalizedString("status.show-more-all-button.accessibility-label", comment: ""),
                 image: UIImage(systemName: "eye"),
                 primaryAction: UIAction { [weak self] _ in self?.viewModel.toggleExpandAll() })
         case .collapse:
             navigationItem.rightBarButtonItem = UIBarButtonItem(
-                title: NSLocalizedString("status.show-less-all-button.accessibilty-label", comment: ""),
+                title: NSLocalizedString("status.show-less-all-button.accessibility-label", comment: ""),
                 image: UIImage(systemName: "eye.slash"),
                 primaryAction: UIAction { [weak self] _ in self?.viewModel.toggleExpandAll() })
         }

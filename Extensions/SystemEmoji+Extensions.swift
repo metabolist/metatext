@@ -36,8 +36,8 @@ extension SystemEmoji.Group {
             return "emoji.system-group.food-and-drink"
         case .travelAndPlaces:
             return "emoji.system-group.travel-and-places"
-        case .activites:
-            return "emoji.system-group.activites"
+        case .activities:
+            return "emoji.system-group.activities"
         case .objects:
             return "emoji.system-group.objects"
         case .symbols:

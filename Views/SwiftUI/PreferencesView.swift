@@ -42,7 +42,7 @@ struct PreferencesView: View {
                     Toggle("preferences.use-preferences-from-server",
                            isOn: $viewModel.preferences.useServerPostingReadingPreferences)
                     Group {
-                        Picker("preferences.posting-default-visiblility",
+                        Picker("preferences.posting-default-visibility",
                                selection: $viewModel.preferences.postingDefaultVisibility) {
                             Text("status.visibility.public").tag(Status.Visibility.public)
                             Text("status.visibility.unlisted").tag(Status.Visibility.unlisted)
