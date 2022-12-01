@@ -197,7 +197,8 @@
 "notifications.mentions" = "Mencions";
 "ok" = "D'acord";
 "pending.pending-confirmation" = "El vostre compte està pendent de confirmació";
-"post" = "Publicació";
+"post.action" = "Publicació";
+"post.noun" = "Publicació";
 "preferences" = "Preferències";
 "preferences.app" = "Preferències de l'App";
 "preferences.app-icon" = "Icona de la App";
@@ -298,7 +299,7 @@
 "search.scope.statuses.toot" = "Toots";
 "search.scope.tags" = "Etiquetes";
 "selected" = "Seleccionat";
-"send" = "Envia";
+"send.action" = "Envia";
 "share" = "Compartir";
 "share-extension-error.no-account-found" = "No s'ha trobat cap compte";
 "status.accessibility.view-author-profile" = "Veure el perfil de l'autor";
@@ -355,4 +356,5 @@
 "timelines.home" = "Inici";
 "timelines.local" = "Local";
 "timelines.federated" = "Federat";
-"toot" = "Toot";
+"toot.action" = "Toot";
+"toot.noun" = "Toot";

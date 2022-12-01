@@ -197,7 +197,8 @@
 "notifications.mentions" = "Zmínky";
 "ok" = "Ok";
 "pending.pending-confirmation" = "Váš účet čeká na potvrzení";
-"post" = "Příspěvek";
+"post.action" = "Příspěvek";
+"post.noun" = "Příspěvek";
 "preferences" = "Nastavení";
 "preferences.app" = "Nastavení aplikace";
 "preferences.app-icon" = "Ikona aplikace";
@@ -298,7 +299,7 @@
 "search.scope.statuses.toot" = "Tooty";
 "search.scope.tags" = "Hashtagy";
 "selected" = "Vybrané";
-"send" = "Odeslat";
+"send.action" = "Odeslat";
 "share" = "Sdílet";
 "share-extension-error.no-account-found" = "Nenalezen žádný účet";
 "status.accessibility.view-author-profile" = "Zobrazit profil autora";
@@ -355,4 +356,5 @@
 "timelines.home" = "Domů";
 "timelines.local" = "Lokální";
 "timelines.federated" = "Federované";
-"toot" = "Toot";
+"toot.action" = "Toot";
+"toot.noun" = "Toot";

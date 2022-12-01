@@ -197,7 +197,8 @@
 "notifications.mentions" = "メンション";
 "ok" = "OK";
 "pending.pending-confirmation" = "アカウントは確認待ちです";
-"post" = "投稿";
+"post.action" = "投稿";
+"post.noun" = "投稿";
 "preferences" = "環境設定";
 "preferences.app" = "アプリ環境設定";
 "preferences.app-icon" = "アプリアイコン";
@@ -298,7 +299,7 @@
 "search.scope.statuses.toot" = "トゥート";
 "search.scope.tags" = "ハッシュタグ";
 "selected" = "選択中";
-"send" = "送信";
+"send.action" = "送信";
 "share" = "共有";
 "share-extension-error.no-account-found" = "アカウントが見つかりません";
 "status.accessibility.view-author-profile" = "作者のプロフィールを見る";
@@ -355,4 +356,5 @@
 "timelines.home" = "ホーム";
 "timelines.local" = "ローカル";
 "timelines.federated" = "連合";
-"toot" = "トゥート";
+"toot.action" = "トゥート";
+"toot.noun" = "トゥート";

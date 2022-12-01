@@ -175,9 +175,9 @@ extension AppPreferences.StatusWord {
     var localizedStringKey: LocalizedStringKey {
         switch self {
         case .toot:
-            return "toot"
+            return "toot.noun"
         case .post:
-            return "post"
+            return "post.noun"
         }
     }
 }

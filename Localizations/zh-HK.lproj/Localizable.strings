@@ -197,7 +197,8 @@
 "notifications.mentions" = "提及";
 "ok" = "確定";
 "pending.pending-confirmation" = "你的帳號正在等待確認";
-"post" = "投稿";
+"post.action" = "投稿";
+"post.noun" = "投稿";
 "preferences" = "偏好設定";
 "preferences.app" = "程式偏好設定";
 "preferences.app-icon" = "應用程式圖示";
@@ -298,7 +299,7 @@
 "search.scope.statuses.toot" = "帖文";
 "search.scope.tags" = "標籤";
 "selected" = "已選擇";
-"send" = "發送";
+"send.action" = "發送";
 "share" = "分享";
 "share-extension-error.no-account-found" = "未找到帳戶";
 "status.accessibility.view-author-profile" = "查看作者的個人檔案";
@@ -355,4 +356,5 @@
 "timelines.home" = "首頁";
 "timelines.local" = "本站";
 "timelines.federated" = "聯邦宇宙";
-"toot" = "帖文";
+"toot.action" = "帖文";
+"toot.noun" = "帖文";

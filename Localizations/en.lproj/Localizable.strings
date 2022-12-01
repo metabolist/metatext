@@ -197,7 +197,8 @@
 "notifications.mentions" = "Mentions";
 "ok" = "OK";
 "pending.pending-confirmation" = "Your account is pending confirmation";
-"post" = "Post";
+"post.noun" = "Post";
+"post.action" = "Post";
 "preferences" = "Preferences";
 "preferences.app" = "App Preferences";
 "preferences.app-icon" = "App Icon";
@@ -298,7 +299,7 @@
 "search.scope.statuses.toot" = "Toots";
 "search.scope.tags" = "Hashtags";
 "selected" = "Selected";
-"send" = "Send";
+"send.action" = "Send";
 "share" = "Share";
 "share-extension-error.no-account-found" = "No account found";
 "status.accessibility.view-author-profile" = "View author's profile";
@@ -355,4 +356,5 @@
 "timelines.home" = "Home";
 "timelines.local" = "Local";
 "timelines.federated" = "Federated";
-"toot" = "Toot";
+"toot.action" = "Toot";
+"toot.noun" = "Toot";

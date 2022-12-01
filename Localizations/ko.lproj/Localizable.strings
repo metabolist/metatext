@@ -197,7 +197,8 @@
 "notifications.mentions" = "멘션";
 "ok" = "확인";
 "pending.pending-confirmation" = "계정이 확인 대기 중이에요";
-"post" = "게시글";
+"post.action" = "게시글";
+"post.noun" = "게시글";
 "preferences" = "설정";
 "preferences.app" = "앱 설정";
 "preferences.app-icon" = "앱 아이콘";
@@ -298,7 +299,7 @@
 "search.scope.statuses.toot" = "툿";
 "search.scope.tags" = "해시 태그";
 "selected" = "선택됨";
-"send" = "전송";
+"send.action" = "전송";
 "share" = "공유";
 "share-extension-error.no-account-found" = "계정을 찾지 못했어요";
 "status.accessibility.view-author-profile" = "작성자 프로필 보기";
@@ -355,4 +356,5 @@
 "timelines.home" = "홈";
 "timelines.local" = "로컬";
 "timelines.federated" = "연합";
-"toot" = "툿";
+"toot.action" = "툿";
+"toot.noun" = "툿";
