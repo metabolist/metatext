@@ -203,11 +203,14 @@ private extension CompositionView {
                 self.changeIdentityButton.accessibilityLabel = $0.identity.handle
                 self.changeIdentityButton.accessibilityHint =
                     NSLocalizedString("compose.change-identity-button.accessibility-hint", comment: "")
-            }
-            .store(in: &cancellables)
 
-        parentViewModel.identityContext.$authenticatedOtherIdentities
-            .sink { [weak self] in self?.changeIdentityButton.menu = self?.changeIdentityMenu(identities: $0) }
+                $0.$authenticatedOtherIdentities
+                    .sink { [weak self] authenticatedOtherIdentities in
+                        self?.changeIdentityButton.menu =
+                            self?.changeIdentityMenu(identities: authenticatedOtherIdentities)
+                    }
+                    .store(in: &self.cancellables)
+            }
             .store(in: &cancellables)
 
         viewModel.$attachmentViewModels

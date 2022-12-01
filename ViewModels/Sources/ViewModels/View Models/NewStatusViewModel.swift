@@ -101,6 +101,15 @@ public final class NewStatusViewModel: ObservableObject {
             .sink { [weak self] in self?.handle(event: $0) }
             .store(in: &cancellables)
 
+        $identityContext
+            .map { $0.identity.instance?.maxTootChars }
+            .sink { [weak self] maxTootChars in
+                self?.compositionViewModels.forEach { cvm in
+                    cvm.setMaxCharactersOrDefault(maxTootChars)
+                }
+            }
+            .store(in: &cancellables)
+
         if let identity = identity {
             setIdentity(identity)
         }

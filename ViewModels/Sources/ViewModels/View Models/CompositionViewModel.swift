@@ -30,7 +30,7 @@ public final class CompositionViewModel: AttachmentsRenderingViewModel, Observab
     public let canRemoveAttachments = true
 
     private let eventsSubject: PassthroughSubject<Event, Never>
-    private let maxCharacters: Int
+    @Published private var maxCharacters: Int
     private var cancellables = Set<AnyCancellable>()
 
     init(eventsSubject: PassthroughSubject<Event, Never>, maxCharacters: Int?) {
@@ -62,8 +62,8 @@ public final class CompositionViewModel: AttachmentsRenderingViewModel, Observab
 
             return tokens.map(\.countShorteningIfURL).reduce(tokens.count - 1, +)
         }
-        .combineLatest($displayContentWarning, $contentWarning)
-        .map { (maxCharacters ?? Self.defaultMaxCharacters) - ($0 + ($1 ? $2.count : 0)) }
+        .combineLatest($displayContentWarning, $contentWarning, $maxCharacters)
+        .map { ($3) - ($0 + ($1 ? $2.count : 0)) }
         .assign(to: &$remainingCharacters)
 
         $displayContentWarning.filter { $0 }.assign(to: &$sensitive)
@@ -85,6 +85,10 @@ public final class CompositionViewModel: AttachmentsRenderingViewModel, Observab
 
     public func removeAttachment(viewModel: AttachmentViewModel) {
         attachmentViewModels.removeAll { $0 === viewModel }
+    }
+
+    public func setMaxCharactersOrDefault(_ newMaxCharacters: Int?) {
+        maxCharacters = newMaxCharacters ?? Self.defaultMaxCharacters
     }
 }
 
