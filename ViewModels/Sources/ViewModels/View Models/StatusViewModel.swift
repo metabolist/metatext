@@ -62,6 +62,14 @@ public extension StatusViewModel {
         }
     }
 
+    var shouldShowContentWarningButton: Bool {
+        if self.shouldShowContent {
+            return !identityContext.appPreferences.hideContentWarningButton
+        } else {
+            return true
+        }
+    }
+
     var shouldShowAttachments: Bool {
         switch identityContext.identity.preferences.readingExpandMedia {
         case .default, .unknown:
