@@ -4,8 +4,8 @@ import Foundation
 import Mastodon
 
 public indirect enum PickerEmoji: Hashable {
-    case custom(Emoji, inFrequentlyUsed: Bool)
-    case system(SystemEmoji, inFrequentlyUsed: Bool)
+    case custom(Emoji, infrequentlyUsed: Bool)
+    case system(SystemEmoji, infrequentlyUsed: Bool)
 }
 
 public extension PickerEmoji {
@@ -43,12 +43,12 @@ public extension PickerEmoji {
         }
     }
 
-    var inFrequentlyUsed: Self {
+    var infrequentlyUsed: Self {
         switch self {
         case let .custom(emoji, _):
-            return .custom(emoji, inFrequentlyUsed: true)
+            return .custom(emoji, infrequentlyUsed: true)
         case let .system(emoji, _):
-            return .system(emoji, inFrequentlyUsed: true)
+            return .system(emoji, infrequentlyUsed: true)
         }
     }
 }
