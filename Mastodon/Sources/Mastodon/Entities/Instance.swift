@@ -13,6 +13,23 @@ public struct Instance: Codable, Hashable {
         public let domainCount: Int
     }
 
+    public struct Configuration: Codable, Hashable {
+        // swiftlint:disable:next nesting
+        public struct Statuses: Codable, Hashable {
+            public let maxCharacters: Int?
+
+            public init(maxCharacters: Int?) {
+                self.maxCharacters = maxCharacters
+            }
+        }
+
+        public let statuses: Statuses?
+
+        public init(statuses: Statuses?) {
+            self.statuses = statuses
+        }
+    }
+
     public let uri: String
     public let title: String
     public let description: String
@@ -27,7 +44,10 @@ public struct Instance: Codable, Hashable {
     public let stats: Stats
     public let thumbnail: UnicodeURL?
     public let contactAccount: Account?
-    public let maxTootChars: Int?
+    public var maxTootChars: Int? {
+        configuration?.statuses?.maxCharacters
+    }
+    public let configuration: Configuration?
 
     public init(uri: String,
                 title: String,
@@ -39,7 +59,7 @@ public struct Instance: Codable, Hashable {
                 stats: Instance.Stats,
                 thumbnail: UnicodeURL?,
                 contactAccount: Account?,
-                maxTootChars: Int?) {
+                configuration: Configuration?) {
         self.uri = uri
         self.title = title
         self.description = description
@@ -50,7 +70,7 @@ public struct Instance: Codable, Hashable {
         self.stats = stats
         self.thumbnail = thumbnail
         self.contactAccount = contactAccount
-        self.maxTootChars = maxTootChars
+        self.configuration = configuration
     }
 }
 

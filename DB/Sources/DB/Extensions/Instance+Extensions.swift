@@ -36,6 +36,6 @@ private extension Instance {
                   stats: record.stats,
                   thumbnail: record.thumbnail,
                   contactAccount: contactAccount,
-                  maxTootChars: record.maxTootChars)
+                  configuration: Configuration(statuses: Configuration.Statuses(maxCharacters: record.maxTootChars)))
     }
 }
